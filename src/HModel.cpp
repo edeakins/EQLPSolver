@@ -361,13 +361,15 @@ void HModel::computeEQs(){
 		}
 	}
 	// Equitable partitions phase (partition until discretized)
+	auto maxCoeffColor = max_element(coeffColor.begin(), coeffColor.end(), comp);
+	auto maxRhsColor = max_element(rhsColor.begin(), rhsColor.end(), comp);
 	int _FLAG_2 = 0;
 	int targ = -1;
 	int iso = -1;
 	int iter = 0;
 	int degSum = 0;
-	int conColor = numRow;
-	int varColor = 0;
+	int conColor = maxRhsColor->second;
+	int varColor = maxCoeffColor->second;
 	int summ = 0;
 	int numColorsUsed = colors.size();
 	set<int> isolates;
@@ -387,6 +389,10 @@ void HModel::computeEQs(){
 		colors.pop();
 		if (targ < numCol){
 			for (c = colorsUsed.begin(); c!= colorsUsed.end(); ++c){
+				// If numColorsUsed = numCol + numRow - We're Done
+				if(conColor == numRow + numCol - 1 && varColor == numRow - 1){
+					break;
+				}
 				_FLAG_2 = 0;
 				newColors.clear();
 				nodeSum.clear();
@@ -418,6 +424,7 @@ void HModel::computeEQs(){
 								eqPart[iter][it->first] = conColor;
 								degSumColor.insert(pair<double, int>(degSum, conColor));
 								newColors[conColor];
+								colorsUsed.insert(conColor);
 							}							
 							else{
 								eqPart[iter][it->first] = degSumColor.find(degSum)->second;
@@ -448,12 +455,16 @@ void HModel::computeEQs(){
 		// If target color is a row color
 		else{
 			for (c = colorsUsed.begin(); c!= colorsUsed.end(); ++c){
+				// If numColorsUsed = numCol + numRow - We're Done
+				if(conColor == numRow + numCol - 1 && varColor == numRow - 1){
+					break;
+				}
 				_FLAG_2 = 0;
 				newColors.clear();
 				nodeSum.clear();
 				degSums.clear();
 				degSumColor.clear();
-				if (*c < numCol){
+				if (*c < numCol){ 
 					for (int i = 0; i < numCol; i++){
 						if (eqPart[iter][i] == *c){
 							for (int j = 0; j < numRow; j++){
@@ -483,6 +494,7 @@ void HModel::computeEQs(){
 								eqPart[iter][it->first] = varColor;
 								degSumColor.insert(pair<double, int>(degSum, varColor));
 								newColors[varColor];
+								colorsUsed.insert(varColor);
 							}							
 							else{
 								eqPart[iter][it->first] = degSumColor.find(degSum)->second;
@@ -540,18 +552,23 @@ void HModel::computeEQs(){
 				else if (i >= numCol){
 					eqPart[iter][i] = eqPart[iter-1][i];
 					newColors[eqPart[iter][i]]++;
-					colorsUsed.insert(eqPart[iter][i]);
+					//colorsUsed.insert(eqPart[iter][i]);
 				}
 				else if (eqPart[iter-1][i] < eqPart[iter-1][iso]){
 					eqPart[iter][i] = eqPart[iter-1][i];
 					newColors[eqPart[iter][i]]++;
-					colorsUsed.insert(eqPart[iter][i]);
+					//colorsUsed.insert(eqPart[iter][i]);
 				}
 				else if (eqPart[iter-1][i] >= eqPart[iter-1][iso]){
 					eqPart[iter][i] = eqPart[iter-1][i] + 1;
 					newColors[eqPart[iter][i]]++;
 					varColors.insert(eqPart[iter][i]);
-					colorsUsed.insert(eqPart[iter][i]);
+					//colorsUsed.insert(eqPart[iter][i]);
+				}
+			}
+			for (itCol = newColors.begin(); itCol != newColors.end(); ++itCol){
+				if (itCol->second > 1){
+					colorsUsed.insert(itCol->first);
 				}
 			}
 			maxColor = max_element(newColors.begin(), newColors.end(), comp);
@@ -567,6 +584,34 @@ void HModel::computeEQs(){
 			numColorsUsed = colorsUsed.size();
 		}
 	}
+	// Test prints to compare against saucy.
+	set<int> comp;
+	vector<int> part;
+	vector<vector<int> > iPart;
+
+	for (int i = 0; i < numCol; ++i){
+		comp.insert(eqPart[0][i]);
+	}
+
+	for (set<int>::iterator com = comp.begin(); com != comp.end(); ++com){
+		for (int i = 0; i < numCol; ++i){
+			if (eqPart[0][i] == *com){
+				part.push_back(i);
+			}
+		}
+		iPart.push_back(part);
+		part.clear();
+	}
+
+	for (int i = 0; i < iPart.size(); ++i){
+		cout << "{ ";
+		for (int j = 0; j < iPart[i].size(); ++j){
+			cout << iPart[i][j] << " ";
+		}
+		cout << "}" << endl;
+	}
+
+	exit(1);
 }
 
 void HModel::setup_transposeLP() {
