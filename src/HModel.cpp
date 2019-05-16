@@ -269,6 +269,9 @@ void HModel::setup_loadMPS(const char *filename) {
             }
         }
     }
+    for (int i = 0; i < numCol; i++){
+        cout << colCost[i] << endl;
+    }
 
     // Load ENDATA and close file
     fclose(file);
@@ -279,6 +282,7 @@ bool comp(const pair<int, int> p1, const pair<int, int> p2){
 	return (p1.second < p2.second);
 }
 void HModel::computeEQs(){
+	
 	// // Print test code
 	// for (int i = 0; i < numCol; i++){
 	// 	cout << "x_" << i << " has obj coeff: " << colCost[i] << endl;
@@ -292,7 +296,13 @@ void HModel::computeEQs(){
 	// 	cout << "]" << endl;
 	// 	cin.get();
 	// }
-	// Intiialize nxn+1 matrix for partitions
+
+	// Initialize n + m vector for singleton status
+	sing = new bool[numRow + numCol];
+	for (int i = 0; i < numRow + numCol; ++i){
+		sing[i] = false;
+	}
+	// Intiialize n+m+1 x n+m matrix for partitions
 	eqPart = new int*[numRow + numCol + 1];
 	for (int i = 0; i < numRow + numCol + 1; i++){
 		eqPart[i] = new int [numRow + numCol];
@@ -303,78 +313,67 @@ void HModel::computeEQs(){
 			eqPart[i][j] = -1;
 		}
 	}
-	// for (int i = 0; i < numCol; i++){
-	// 	cout << "x_" << i << " has obj coeff: " << colCost[i] << endl;
-	// 	cin.get();
-	// }
-	// Produce initial partitions
-	map<double, int> coeffColor;
-	map<double, int> rhsColor;
-	set<double> coeff; 
-	set<double> rhs;
+	int color = 0;
 	set<int> colorsUsed;
-	pair<set<double>::iterator, bool> ret;
-	int currColor = -1;
-	int currCoeff = 0;
-	int currRhs = 0;
-	for (int i = 0; i < numCol + numRow; i++){
-		if (i < numCol){
-			if (colCost[i] != currCoeff){
-				currCoeff = colCost[i];
-				ret = coeff.insert(currCoeff);
-				if (ret.second == true){
-					currColor++;
-					colors.push(currColor);
-					colorsUsed.insert(currColor);
-					coeffColor.insert(pair<double, int>(currCoeff, currColor));
-					eqPart[0][i] = currColor;
-				}
-				else{
-					eqPart[0][i] = coeffColor.find(currCoeff)->second;
-				}
-			}
-			else{
-				eqPart[0][i] = coeffColor.find(currCoeff)->second;
-			}
-		}
-		else{
-			if (i == numCol){
-				currColor = numCol - 1;
-			}
-			if (Rhs[i - numCol] != currRhs){
-				currRhs = Rhs[i];
-				ret = rhs.insert(currRhs);
-				if (ret.second == true){
-					currColor++;
-					colors.push(currColor);
-					colorsUsed.insert(currColor);
-					rhsColor.insert(pair<double, int>(currRhs, currColor));
-					eqPart[0][i] = currColor;
-				}
-				else{
-					eqPart[0][i] = rhsColor.find(currRhs)->second;
-				}
-			}
-			else{
-				eqPart[0][i] = rhsColor.find(currRhs)->second;
-			}
-		}
+	set<int>::iterator itC;
+	set<double> varCoeff;
+	set<double> conRhs;
+	set<double>::iterator itF;
+	stack<int> colors;
+	for (int i = 0; i < numCol; ++i){
+		varCoeff.insert(colCost[i]);
 	}
+	for (int i = 0; i < numRow; ++i){
+		conRhs.insert(Rhs[i]);
+	}
+	for (itF = varCoeff.begin(); itF != varCoeff.end(); ++itF){
+		for (int i = 0; i < numCol; ++i){
+			if (colCost[i] == *itF){
+				eqPart[0][i] = color;
+			}
+		}
+		color++;
+	}
+	color = numCol;
+	for (itF = conRhs.begin(); itF != conRhs.end(); ++itF){
+		for (int i = 0; i < numRow; ++i){
+			if (Rhs[i] == *itF){
+				eqPart[0][i + numCol] = color;
+			}
+		}
+		color++;
+	}
+	for (int i = 0; i < numRow + numCol; ++i){
+		colorsUsed.insert(eqPart[0][i]);
+	}
+	for (itC = colorsUsed.begin(); itC != colorsUsed.end(); ++itC){
+		colors.push(*itC);
+	}
+	// cout << "[ ";
+	// for (int j = 0; j < numRow + numCol; j++){
+	// 	cout << eqPart[0][j] << " ";
+	// }
+	// cout << "]" << endl;
+	// cin.get();
+	// cout << "init colors: " << colors.size() << endl;
+	// cin.get();
 	// Equitable partitions phase (partition until discretized)
-	auto maxCoeffColor = max_element(coeffColor.begin(), coeffColor.end(), comp);
-	auto maxRhsColor = max_element(rhsColor.begin(), rhsColor.end(), comp);
+	auto maxCoeffColor = varCoeff.size() - 1;
+	auto maxRhsColor = numCol + conRhs.size() - 1;
 	int _FLAG_2 = 0;
 	int targ = -1;
 	int iso = -1;
 	int iter = 0;
-	int degSum = 0;
-	int conColor = maxRhsColor->second;
-	int varColor = maxCoeffColor->second;
-	int summ = 0;
+	double degSum = 0;
+	int conColor = maxRhsColor;
+	int varColor = maxCoeffColor;
+	double summ = 0;
 	int numColorsUsed = colors.size();
 	set<int> isolates;
 	set<double> degSums;
+	pair<set<double>::iterator, bool> ret;
 	set<int> varColors;
+	set<int> newVarColors;
 	map<double, int> degSumColor;
 	map<int, int> nodeColor;
 	map<int, double>::iterator dsc;
@@ -383,10 +382,15 @@ void HModel::computeEQs(){
 	map<int, double>::iterator it;
 	map<int, int>::iterator itCol;
 	set<int>::iterator c;
+	int cond = 0;
 	while(!colors.empty()){
+		if (cond == 1){
+			break;
+		}
 		targ = colors.top();
 		_FLAG_2 = 0;
 		colors.pop();
+		// cout << "targ: " << targ << endl;
 		if (targ < numCol){
 			for (c = colorsUsed.begin(); c!= colorsUsed.end(); ++c){
 				// If numColorsUsed = numCol + numRow - We're Done
@@ -399,15 +403,22 @@ void HModel::computeEQs(){
 				degSums.clear();
 				degSumColor.clear();
 				if (*c > numCol - 1){
-					for (int i = 0; i < numRow; i++){
+					// if (sing[*c]){
+					// 	continue;
+					// }
+					// cout << "color class: " << *c << endl;
+					for (int i = 0; i < numRow; ++i){
 						if (eqPart[iter][i + numCol] == *c){
-							for (int j = Astart[i]; j < Astart[i + 1]; j++){
-								if (eqPart[iter][Aindex[j]] == targ){
-									summ += Avalue[Aindex[j]];
+							nodeSum[i + numCol] = 0;
+						}
+					}
+					for (int i = 0; i < numCol; ++i){
+						if (eqPart[iter][i] == targ){
+							for (int j = Astart[i]; j < Astart[i + 1]; ++j){
+								if (eqPart[iter][Aindex[j] + numCol] == *c){
+									nodeSum[Aindex[j] + numCol] += Avalue[j];
 								}
 							}
-						nodeSum.insert(pair<int, double>(i + numCol, summ));
-						summ = 0;
 						}
 					}
 					it = nodeSum.begin();
@@ -415,6 +426,7 @@ void HModel::computeEQs(){
 					degSums.insert(degSum);
 					degSumColor.insert(pair<double, int>(degSum, eqPart[iter][it->first]));
 					for (it = nodeSum.begin(); it != nodeSum.end(); ++it){
+						// cout << "node: " << it->first << " sum: " << it->second << endl;
 						if (it->second != degSum){
 							degSum = it->second;
 							ret = degSums.insert(degSum);
@@ -434,6 +446,7 @@ void HModel::computeEQs(){
 							eqPart[iter][it->first] = degSumColor.find(degSum)->second;
 						}
 					}
+					// cout << " " << endl;
 					if (newColors.size()){
 						for (int i = numRow; i < numRow + numCol; i++){
 							if (newColors.find(eqPart[iter][i]) != newColors.end()){
@@ -448,9 +461,23 @@ void HModel::computeEQs(){
 							}
 							colors.push(itCol->first);
 						}
+						for (itCol = newColors.begin(); itCol != newColors.end(); ++itCol){
+							if (itCol->second == 1){
+								sing[itCol->first] = true;
+							}
+						}
 					}
 				}
 			}
+			// for (map<int, int>::iterator nCol = newColors.begin(); nCol != newColors.end(); ++nCol){
+			// 	colorsUsed.insert(nCol->first);
+			// }
+			// cout << "[ ";
+			// for (int j = 0; j < numRow + numCol; j++){
+			// 	cout << eqPart[iter][j] << " ";
+			// }
+			// cout << "]" << endl;
+			// cin.get();
 		}
 		// If target color is a row color
 		else{
@@ -465,15 +492,15 @@ void HModel::computeEQs(){
 				degSums.clear();
 				degSumColor.clear();
 				if (*c < numCol){ 
+					// if (sing[*c]){
+					// 	continue;
+					// }	
+					// cout << "color class: " << *c << endl;
 					for (int i = 0; i < numCol; i++){
 						if (eqPart[iter][i] == *c){
-							for (int j = 0; j < numRow; j++){
-								if (eqPart[iter][j + numCol] == targ){
-									for (int k = Astart[j]; k < Astart[j + 1]; k++){
-										if (Aindex[k] == i){
-											summ += Avalue[Aindex[k]];
-										}
-									}
+							for (int j = Astart[i]; j < Astart[i + 1]; ++j){
+								if (eqPart[iter][Aindex[j] + numCol] == targ){
+									summ += Avalue[j];
 								}
 							}
 							nodeSum.insert(pair<int, double>(i, summ));
@@ -485,6 +512,7 @@ void HModel::computeEQs(){
 					degSums.insert(degSum);
 					degSumColor.insert(pair<double, int>(degSum, eqPart[iter][it->first]));
 					for (it = nodeSum.begin(); it != nodeSum.end(); ++it){
+						// cout << "node: " << it->first << " sum: " << it->second << endl;
 						if (it->second != degSum){
 							degSum = it->second;
 							ret = degSums.insert(degSum);
@@ -504,6 +532,7 @@ void HModel::computeEQs(){
 							eqPart[iter][it->first] = degSumColor.find(degSum)->second;
 						}
 					}
+					// cout << " " << endl;
 					if (newColors.size()){
 						for (int i = numRow; i < numRow + numCol; i++){
 							if (newColors.find(eqPart[iter][i]) != newColors.end()){
@@ -518,9 +547,29 @@ void HModel::computeEQs(){
 							}
 							colors.push(itCol->first);
 						}
+						for (itCol = newColors.begin(); itCol != newColors.end(); ++itCol){
+							if (itCol->second == 1){
+								sing[itCol->first] = true;
+							}
+						}
 					}
 				}
+				//cout << "new Colors size:  " << newColors.size() << endl;
 			}
+			// cout << newColors.size() << endl;
+			// for (map<int, int>::iterator nCol = newColors.begin(); nCol != newColors.end(); ++nCol){
+			// 	cout << "new Colors: " << nCol->first << endl;
+			// 	colorsUsed.insert(nCol->first);
+			// }
+			// for (int i = 0; i < numCol; ++i){
+			// 	colorsUsed.insert(eqPart[iter][i]);
+			// }
+			// cout << "[ ";
+			// for (int j = 0; j < numRow + numCol; j++){
+			// 	cout << eqPart[iter][j] << " ";
+			// }
+			// cout << "]" << endl;
+			// cin.get();
 		}
 		// If numColorsUsed = numCol + numRow - We're Done
 		if(conColor == numRow + numCol - 1 && varColor == numRow - 1){
@@ -528,6 +577,7 @@ void HModel::computeEQs(){
 		}
 		// If colors is empty and not done then isolate a variable
 		if (colors.empty()){
+			cond = 1;
 			_FLAG_2 = 0;
 			newColors.clear();
 			colorsUsed.clear();
@@ -588,13 +638,14 @@ void HModel::computeEQs(){
 	set<int> comp;
 	vector<int> part;
 	vector<vector<int> > iPart;
+	int count = 0;
 
-	for (int i = 0; i < numCol; ++i){
+	for (int i = 0; i < numCol + numRow; ++i){
 		comp.insert(eqPart[0][i]);
 	}
 
 	for (set<int>::iterator com = comp.begin(); com != comp.end(); ++com){
-		for (int i = 0; i < numCol; ++i){
+		for (int i = 0; i < numCol + numRow; ++i){
 			if (eqPart[0][i] == *com){
 				part.push_back(i);
 			}
@@ -604,13 +655,14 @@ void HModel::computeEQs(){
 	}
 
 	for (int i = 0; i < iPart.size(); ++i){
+		count++;
 		cout << "{ ";
 		for (int j = 0; j < iPart[i].size(); ++j){
 			cout << iPart[i][j] << " ";
 		}
 		cout << "}" << endl;
 	}
-
+	cout << "num parts: " << count << endl;
 	exit(1);
 }
 

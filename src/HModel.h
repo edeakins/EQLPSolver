@@ -187,6 +187,7 @@ public:
     vector<double> rowUpper;
     double objOffset;
     int **eqPart;
+    bool *sing;
     stack<int> colors;
 
     // Associated data of original model
