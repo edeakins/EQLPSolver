@@ -269,17 +269,233 @@ void HModel::setup_loadMPS(const char *filename) {
             }
         }
     }
-    for (int i = 0; i < numCol; i++){
-        cout << colCost[i] << endl;
-    }
 
     // Load ENDATA and close file
     fclose(file);
 }
 
 // Optimize or Die add ins
-bool comp(const pair<int, int> p1, const pair<int, int> p2){
-	return (p1.second < p2.second);
+bool comp(const double p){
+	return !isnan(p);
+}
+void HModel::refineVar(){
+	cout << "color class: " << *color << endl;
+ 	degSum.clear();
+	degSums.clear();
+	degSums.resize(numCol, 0);
+	newColors.clear();	
+	for (int i = 0; i < numCol; i++){
+		if (eqPart[iter][i] == *color){
+			for (int j = Astart[i]; j < Astart[i + 1]; ++j){
+				if (eqPart[iter][Aindex[j] + numCol] == targ){
+					degSums[i] += Avalue[j];
+				}
+			}
+		}
+		else{
+			degSums[i] = NAN;
+		}
+	}
+	degSumItr = degSum.begin();
+	copy_if(degSums.begin(), degSums.end(), inserter(degSum, degSumItr), comp);
+	newColorsCount.clear();
+	newColorsCount.resize(degSum.size(), 0);
+	itr = 0;
+	init = -1;
+	for (degSumItr = degSum.begin(); degSumItr != degSum.end(); ++degSumItr){
+		cout << "degSumItr: " << *degSumItr << endl;
+		if (degSumItr == degSum.begin()){
+			for (int i = 0; i < degSums.size(); ++i){
+				if (degSums[i] == *degSumItr && eqPart[iter][i] == *color){
+					cout << "node: " << i << " degSums " << degSums[i] << endl;
+					init = eqPart[iter][i];
+					newColorsCount[itr]++;
+				}
+			}
+			newColors.push_back(init);
+		}
+		else{
+			for (int i = 0; i < degSums.size(); ++i){
+				if (degSums[i] == *degSumItr && eqPart[iter][i] == *color){
+					cout << "node: " << i << " degSums " << degSums[i] << endl;
+					eqPart[iter][i] = varColor + itr;
+					newColorsCount[itr]++;
+				}
+			}
+			colorsUsed.insert(varColor + itr);
+			newColors.push_back(varColor + itr);
+		}
+		itr++;
+	}
+	if (newColors.size() > 1){
+		it = colorsUsed.begin();
+		copy(newColors.begin(), newColors.end(), inserter(colorsUsed, it));
+		varColor = varColor + degSum.size() - 1;
+		auto idx = distance(newColorsCount.begin(), max_element(newColorsCount.begin(), newColorsCount.end()));
+		newColors.erase(newColors.begin() + idx);
+		for (int i = 0; i < newColors.size(); ++i){
+			colors.push(newColors[i]);
+		}
+	}	
+}
+void HModel::refineCon(){
+	cout << "color class: " << *color << endl;
+	degSum.clear();
+	degSums.clear();
+	degSums.resize(numRow, 0);
+	newColors.clear();
+	for (int i = 0; i < numRow; ++i){
+		if (eqPart[iter][i + numCol] != *color){
+			degSums[i] = NAN;
+		}
+	}
+	for (int i = 0; i < numCol; ++i){
+		if (eqPart[iter][i] == targ){
+			for (int j = Astart[i]; j < Astart[i + 1]; ++j){
+				if (eqPart[iter][Aindex[j] + numCol] == *color){
+					degSums[Aindex[j]] += Avalue[j];
+				}
+			}
+		}
+		// else{
+		// 	degSums[Aindex[j]] = NAN;
+		// }
+	}
+	degSumItr = degSum.begin();
+	copy_if(degSums.begin(), degSums.end(), inserter(degSum, degSumItr), comp);
+	newColorsCount.clear();
+	newColorsCount.resize(degSum.size(), 0);
+	itr = 0;
+	init = -1;
+	for (degSumItr = degSum.begin(); degSumItr != degSum.end(); ++degSumItr){
+		cout << "degSumItr: " << *degSumItr << endl;
+		if (degSumItr == degSum.begin()){
+			for (int i = 0; i < degSums.size(); ++i){
+				if (degSums[i] == *degSumItr && eqPart[iter][i + numCol] == *color){
+					cout << "node: " << i << " degSums " << degSums[i] << endl;
+					init = eqPart[iter][i + numCol];
+					newColorsCount[itr]++;
+				}
+			}
+			newColors.push_back(init);
+		}
+		else{
+			for (int i = 0; i < degSums.size(); ++i){
+				if (degSums[i] == *degSumItr && eqPart[iter][i + numCol] == *color){
+					cout << "node: " << i + numCol << " degSums " << degSums[i] << endl;
+					eqPart[iter][i + numCol] = conColor + itr;
+					newColorsCount[itr]++;
+				}
+			}
+			colorsUsed.insert(conColor + itr);
+			newColors.push_back(conColor + itr);
+		}
+		itr++;
+	}
+	cout << "[ ";
+	for (int j = 0; j < numRow + numCol; j++){
+		cout << eqPart[iter][j] << " ";
+	}
+	cout << "]" << endl;
+	cin.get();
+	if (newColors.size() > 1){
+		it = colorsUsed.begin();
+		copy(newColors.begin(), newColors.end(), inserter(colorsUsed, it));
+		conColor = conColor + degSum.size() - 1;
+		auto idx = distance(newColorsCount.begin(), max_element(newColorsCount.begin(), newColorsCount.end()));
+		newColors.erase(newColors.begin() + idx);
+		for (int i = 0; i < newColors.size(); ++i){
+			colors.push(newColors[i]);
+		}
+	}	
+}
+void HModel::isolateVar(){
+	cond++;
+	_FLAG_2 = 0;
+	nodeColor.clear();
+	nodeColor.resize(varColor + 1, 0);
+	cout << "{ ";
+	for (int i = 0; i < nodeColor.size(); ++i){
+		cout << nodeColor[i] << " ";
+	}	
+	cout << "}" << endl;
+	cin.get();
+	varColors.clear();
+	for (int i = 0; i < numCol; ++i){
+		nodeColor[eqPart[iter][i]]++;
+	}
+	auto maxColor = distance(nodeColor.begin(), max_element(nodeColor.begin(),	nodeColor.end()));
+	for (int i = 0; i < numCol; i++){
+		if (eqPart[iter][i] == maxColor){
+			iso = i;
+			cout << "iso: " << iso << endl;
+			isolates.insert(iso);
+			break;
+		}
+	}
+	iter++;
+	nodeColor.clear();
+	nodeColor.resize(numRow + numCol);
+	cout << "{ ";
+	for (int i = 0; i < nodeColor.size(); ++i){
+		cout << nodeColor[i] << " ";
+	}	
+	cout << "}" << endl;
+	cin.get();
+	for (int i = 0; i < numRow + numCol; i++){
+		if (i == iso){
+			eqPart[iter][i] = eqPart[iter-1][i];
+			nodeColor[eqPart[iter][i]]++;
+		}
+		else if (i >= numCol){
+			eqPart[iter][i] = eqPart[iter-1][i];
+			nodeColor[eqPart[iter][i]]++;
+			//colorsUsed.insert(eqPart[iter][i]);
+		}
+		else if (eqPart[iter-1][i] < eqPart[iter-1][iso]){
+			eqPart[iter][i] = eqPart[iter-1][i];
+			nodeColor[eqPart[iter][i]]++;
+			//colorsUsed.insert(eqPart[iter][i]);
+		}
+		else if (eqPart[iter-1][i] >= eqPart[iter-1][iso]){
+			eqPart[iter][i] = eqPart[iter-1][i] + 1;
+			nodeColor[eqPart[iter][i]]++;
+			varColors.insert(eqPart[iter][i]);
+			//colorsUsed.insert(eqPart[iter][i]);
+		}
+	}
+	cout << "[ ";
+	for (int j = 0; j < numRow + numCol; j++){
+		cout << eqPart[iter][j] << " ";
+	}
+	cout << "]" << endl;
+	cout << "nodeColor size: " << nodeColor.size() << endl;
+	cout << "{ ";
+	for (int i = 0; i < nodeColor.size(); ++i){
+		cout << nodeColor[i] << " ";
+	}	
+	cout << "}" << endl;
+	cin.get();
+	maxColor = distance(nodeColor.begin(), max_element(nodeColor.begin(), nodeColor.end()));
+	cout << maxColor << endl;
+	cin.get();
+	for (int i = 0; i < nodeColor.size(); ++i){
+		if (nodeColor[i] <= 1){
+			continue;
+		}
+		colorsUsed.insert(i);
+	}
+	for (int i = 0; i < nodeColor.size(); ++i){
+		if (i == maxColor){
+			continue;
+		}
+		else if(nodeColor[i] >= 1){
+			colors.push(i);
+		}
+	}
+	auto maxVColor = max_element(varColors.begin(), varColors.end());
+	varColor = *maxVColor;
+	cout << "varColor: " << varColor << endl;
 }
 void HModel::computeEQs(){
 	
@@ -313,35 +529,31 @@ void HModel::computeEQs(){
 			eqPart[i][j] = -1;
 		}
 	}
-	int color = 0;
-	set<int> colorsUsed;
-	set<int>::iterator itC;
-	set<double> varCoeff;
-	set<double> conRhs;
-	set<double>::iterator itF;
-	stack<int> colors;
+
+	// Do initial coloring scheme, obj coeff, rhs, and bounds
 	for (int i = 0; i < numCol; ++i){
 		varCoeff.insert(colCost[i]);
 	}
 	for (int i = 0; i < numRow; ++i){
 		conRhs.insert(Rhs[i]);
 	}
+	initColor = 0;
 	for (itF = varCoeff.begin(); itF != varCoeff.end(); ++itF){
 		for (int i = 0; i < numCol; ++i){
 			if (colCost[i] == *itF){
-				eqPart[0][i] = color;
+				eqPart[0][i] = initColor;
 			}
 		}
-		color++;
+		initColor++;
 	}
-	color = numCol;
+	initColor = numCol;
 	for (itF = conRhs.begin(); itF != conRhs.end(); ++itF){
 		for (int i = 0; i < numRow; ++i){
 			if (Rhs[i] == *itF){
-				eqPart[0][i + numCol] = color;
+				eqPart[0][i + numCol] = initColor;
 			}
 		}
-		color++;
+		initColor++;
 	}
 	for (int i = 0; i < numRow + numCol; ++i){
 		colorsUsed.insert(eqPart[0][i]);
@@ -349,289 +561,73 @@ void HModel::computeEQs(){
 	for (itC = colorsUsed.begin(); itC != colorsUsed.end(); ++itC){
 		colors.push(*itC);
 	}
-	// cout << "[ ";
-	// for (int j = 0; j < numRow + numCol; j++){
-	// 	cout << eqPart[0][j] << " ";
-	// }
-	// cout << "]" << endl;
-	// cin.get();
-	// cout << "init colors: " << colors.size() << endl;
-	// cin.get();
+
+	cout << "[ ";
+	for (int j = 0; j < numRow + numCol; j++){
+		cout << eqPart[0][j] << " ";
+	}
+	cout << "]" << endl;
+	cin.get();
+	cout << "init colors: " << colorsUsed.size() << endl;
+	cin.get();
 	// Equitable partitions phase (partition until discretized)
-	auto maxCoeffColor = varCoeff.size() - 1;
-	auto maxRhsColor = numCol + conRhs.size() - 1;
-	int _FLAG_2 = 0;
-	int targ = -1;
-	int iso = -1;
-	int iter = 0;
-	double degSum = 0;
-	int conColor = maxRhsColor;
-	int varColor = maxCoeffColor;
-	double summ = 0;
-	int numColorsUsed = colors.size();
-	set<int> isolates;
-	set<double> degSums;
-	pair<set<double>::iterator, bool> ret;
-	set<int> varColors;
-	set<int> newVarColors;
-	map<double, int> degSumColor;
-	map<int, int> nodeColor;
-	map<int, double>::iterator dsc;
-	map<int, double> nodeSum;
-	map<int, int> newColors;
-	map<int, double>::iterator it;
-	map<int, int>::iterator itCol;
-	set<int>::iterator c;
-	int cond = 0;
+	targ = -1;
+	iso = -1;
+	iter = 0;
+	varColor = varCoeff.size() - 1;
+   	conColor = numCol + conRhs.size() - 1;
+   	// Equitable partitions algorithm code
 	while(!colors.empty()){
-		if (cond == 1){
+		if (cond == 2){
 			break;
 		}
 		targ = colors.top();
 		_FLAG_2 = 0;
 		colors.pop();
-		// cout << "targ: " << targ << endl;
+		cout << "targ: " << targ << endl;
 		if (targ < numCol){
-			for (c = colorsUsed.begin(); c!= colorsUsed.end(); ++c){
-				// If numColorsUsed = numCol + numRow - We're Done
-				if(conColor == numRow + numCol - 1 && varColor == numRow - 1){
-					break;
-				}
-				_FLAG_2 = 0;
-				newColors.clear();
-				nodeSum.clear();
-				degSums.clear();
-				degSumColor.clear();
-				if (*c > numCol - 1){
-					// if (sing[*c]){
-					// 	continue;
-					// }
-					// cout << "color class: " << *c << endl;
-					for (int i = 0; i < numRow; ++i){
-						if (eqPart[iter][i + numCol] == *c){
-							nodeSum[i + numCol] = 0;
-						}
-					}
-					for (int i = 0; i < numCol; ++i){
-						if (eqPart[iter][i] == targ){
-							for (int j = Astart[i]; j < Astart[i + 1]; ++j){
-								if (eqPart[iter][Aindex[j] + numCol] == *c){
-									nodeSum[Aindex[j] + numCol] += Avalue[j];
-								}
-							}
-						}
-					}
-					it = nodeSum.begin();
-					degSum = it->second;
-					degSums.insert(degSum);
-					degSumColor.insert(pair<double, int>(degSum, eqPart[iter][it->first]));
-					for (it = nodeSum.begin(); it != nodeSum.end(); ++it){
-						// cout << "node: " << it->first << " sum: " << it->second << endl;
-						if (it->second != degSum){
-							degSum = it->second;
-							ret = degSums.insert(degSum);
-							if (ret.second == true){
-								newColors[eqPart[iter][it->first]];
-								conColor++;
-								eqPart[iter][it->first] = conColor;
-								degSumColor.insert(pair<double, int>(degSum, conColor));
-								newColors[conColor];
-								colorsUsed.insert(conColor);
-							}							
-							else{
-								eqPart[iter][it->first] = degSumColor.find(degSum)->second;
-							}
-						}
-						else{
-							eqPart[iter][it->first] = degSumColor.find(degSum)->second;
-						}
-					}
-					// cout << " " << endl;
-					if (newColors.size()){
-						for (int i = numRow; i < numRow + numCol; i++){
-							if (newColors.find(eqPart[iter][i]) != newColors.end()){
-								newColors[eqPart[iter][i]]++;
-							}
-						}
-						auto maxColor = max_element(newColors.begin(), newColors.end(), comp);
-						for (itCol = newColors.begin(); itCol != newColors.end(); ++itCol){
-							if (itCol->second == maxColor->second && _FLAG_2 == 0){
-								_FLAG_2 = 1; 
-								continue;
-							}
-							colors.push(itCol->first);
-						}
-						for (itCol = newColors.begin(); itCol != newColors.end(); ++itCol){
-							if (itCol->second == 1){
-								sing[itCol->first] = true;
-							}
-						}
-					}
+			for (color = colorsUsed.begin(); color!= colorsUsed.end(); ++color){
+				if (*color > numCol - 1){
+					refineCon();
 				}
 			}
-			// for (map<int, int>::iterator nCol = newColors.begin(); nCol != newColors.end(); ++nCol){
-			// 	colorsUsed.insert(nCol->first);
-			// }
-			// cout << "[ ";
-			// for (int j = 0; j < numRow + numCol; j++){
-			// 	cout << eqPart[iter][j] << " ";
-			// }
-			// cout << "]" << endl;
-			// cin.get();
+			cout << "[ ";
+			for (int j = 0; j < numRow + numCol; j++){
+				cout << eqPart[iter][j] << " ";
+			}
+			cout << "]" << endl;
+			cin.get();
 		}
 		// If target color is a row color
 		else{
-			for (c = colorsUsed.begin(); c!= colorsUsed.end(); ++c){
-				// If numColorsUsed = numCol + numRow - We're Done
-				if(conColor == numRow + numCol - 1 && varColor == numRow - 1){
-					break;
+			for (color = colorsUsed.begin(); color!= colorsUsed.end(); ++color){
+				if (*color < numCol){
+					refineVar();
 				}
-				_FLAG_2 = 0;
-				newColors.clear();
-				nodeSum.clear();
-				degSums.clear();
-				degSumColor.clear();
-				if (*c < numCol){ 
-					// if (sing[*c]){
-					// 	continue;
-					// }	
-					// cout << "color class: " << *c << endl;
-					for (int i = 0; i < numCol; i++){
-						if (eqPart[iter][i] == *c){
-							for (int j = Astart[i]; j < Astart[i + 1]; ++j){
-								if (eqPart[iter][Aindex[j] + numCol] == targ){
-									summ += Avalue[j];
-								}
-							}
-							nodeSum.insert(pair<int, double>(i, summ));
-							summ = 0;
-						}
-					}
-					it = nodeSum.begin();
-					degSum = it->second;
-					degSums.insert(degSum);
-					degSumColor.insert(pair<double, int>(degSum, eqPart[iter][it->first]));
-					for (it = nodeSum.begin(); it != nodeSum.end(); ++it){
-						// cout << "node: " << it->first << " sum: " << it->second << endl;
-						if (it->second != degSum){
-							degSum = it->second;
-							ret = degSums.insert(degSum);
-							if (ret.second == true){
-								newColors[eqPart[iter][it->first]];
-								varColor++;
-								eqPart[iter][it->first] = varColor;
-								degSumColor.insert(pair<double, int>(degSum, varColor));
-								newColors[varColor];
-								colorsUsed.insert(varColor);
-							}							
-							else{
-								eqPart[iter][it->first] = degSumColor.find(degSum)->second;
-							}
-						}
-						else{
-							eqPart[iter][it->first] = degSumColor.find(degSum)->second;
-						}
-					}
-					// cout << " " << endl;
-					if (newColors.size()){
-						for (int i = numRow; i < numRow + numCol; i++){
-							if (newColors.find(eqPart[iter][i]) != newColors.end()){
-								newColors[eqPart[iter][i]]++;
-							}
-						}
-						auto maxColor = max_element(newColors.begin(), newColors.end(), comp);
-						for (itCol = newColors.begin(); itCol != newColors.end(); ++itCol){
-							if (itCol->second == maxColor->second && _FLAG_2 == 0){
-								_FLAG_2 = 1; 
-								continue;
-							}
-							colors.push(itCol->first);
-						}
-						for (itCol = newColors.begin(); itCol != newColors.end(); ++itCol){
-							if (itCol->second == 1){
-								sing[itCol->first] = true;
-							}
-						}
-					}
-				}
-				//cout << "new Colors size:  " << newColors.size() << endl;
 			}
-			// cout << newColors.size() << endl;
-			// for (map<int, int>::iterator nCol = newColors.begin(); nCol != newColors.end(); ++nCol){
-			// 	cout << "new Colors: " << nCol->first << endl;
-			// 	colorsUsed.insert(nCol->first);
-			// }
-			// for (int i = 0; i < numCol; ++i){
-			// 	colorsUsed.insert(eqPart[iter][i]);
-			// }
-			// cout << "[ ";
-			// for (int j = 0; j < numRow + numCol; j++){
-			// 	cout << eqPart[iter][j] << " ";
-			// }
-			// cout << "]" << endl;
-			// cin.get();
+			cout << "[ ";
+			for (int j = 0; j < numRow + numCol; j++){
+				cout << eqPart[iter][j] << " ";
+			}
+			cout << "]" << endl;
+			cin.get();
 		}
 		// If numColorsUsed = numCol + numRow - We're Done
-		if(conColor == numRow + numCol - 1 && varColor == numRow - 1){
+		if(conColor == numRow + numCol - 1 && varColor == numCol - 1){
+			// cout << "true" << endl;
 			break;
 		}
+		cout << "conColor before iso: " << conColor << endl;
+		cout << "conColor needed: " << numRow + numCol - 1 << endl;
+		cout << "varColor before iso: " << varColor << endl;
+		cout << "varColor needed: " << numRow - 1 << endl;
 		// If colors is empty and not done then isolate a variable
 		if (colors.empty()){
+			// cout << "ISOLATION" << endl;
+			// cin.get();
+			isolateVar();
 			cond = 1;
-			_FLAG_2 = 0;
-			newColors.clear();
-			colorsUsed.clear();
-			nodeColor.clear();
-			for (int i = 0; i < numCol; i++){
-				nodeColor[eqPart[iter][i]]++;
-			}
-			auto maxColor = max_element(nodeColor.begin(),	nodeColor.end(), comp);
-			for (int i = 0; i < numCol; i++){
-				if (eqPart[iter][i] == maxColor->first){
-					iso = i;
-					isolates.insert(iso);
-					break;
-				}
-			}
-			iter++;
-			for (int i = 0; i < numRow + numCol; i++){
-				if (i == iso){
-					eqPart[iter][i] = eqPart[iter-1][i];
-					newColors[eqPart[iter][i]]++;
-				}
-				else if (i >= numCol){
-					eqPart[iter][i] = eqPart[iter-1][i];
-					newColors[eqPart[iter][i]]++;
-					//colorsUsed.insert(eqPart[iter][i]);
-				}
-				else if (eqPart[iter-1][i] < eqPart[iter-1][iso]){
-					eqPart[iter][i] = eqPart[iter-1][i];
-					newColors[eqPart[iter][i]]++;
-					//colorsUsed.insert(eqPart[iter][i]);
-				}
-				else if (eqPart[iter-1][i] >= eqPart[iter-1][iso]){
-					eqPart[iter][i] = eqPart[iter-1][i] + 1;
-					newColors[eqPart[iter][i]]++;
-					varColors.insert(eqPart[iter][i]);
-					//colorsUsed.insert(eqPart[iter][i]);
-				}
-			}
-			for (itCol = newColors.begin(); itCol != newColors.end(); ++itCol){
-				if (itCol->second > 1){
-					colorsUsed.insert(itCol->first);
-				}
-			}
-			maxColor = max_element(newColors.begin(), newColors.end(), comp);
-			for (itCol = newColors.begin(); itCol != newColors.end(); ++itCol){
-				if (itCol->second == maxColor->second && _FLAG_2 == 0){
-					_FLAG_2 = 1; 
-					continue;
-				}
-				colors.push(itCol->first);
-			}
-			auto maxVColor = max_element(varColors.begin(), varColors.end());
-			varColor = *maxVColor;
-			numColorsUsed = colorsUsed.size();
+			
 		}
 	}
 	// Test prints to compare against saucy.
@@ -663,6 +659,7 @@ void HModel::computeEQs(){
 		cout << "}" << endl;
 	}
 	cout << "num parts: " << count << endl;
+	cout << "num refinements: " << iter + 1 << endl;
 	exit(1);
 }
 

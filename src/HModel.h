@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <set>
 using namespace std;
 
 const int LP_Status_Unset = -1;
@@ -146,6 +147,9 @@ public:
 
     // Optimize or Die add ins
     void computeEQs();
+    void refineVar();
+    void refineCon();
+    void isolateVar();
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -186,9 +190,45 @@ public:
     vector<double> rowLower;
     vector<double> rowUpper;
     double objOffset;
+
+    /* Optimize or die add ins */
+    // ints
+    int targ;
+    int conColor;
+    int varColor;
+    int iter;
+    int iso;
+    int itr;
+    int init;
+    int initColor;
+    int cond;
+    int _FLAG_2;
+    int summ;
+    // arrays
     int **eqPart;
     bool *sing;
+    // color stack
     stack<int> colors;
+    // vectors and iterators
+    vector<double> degSums;
+    vector<int> degSumColor;
+    vector<int> newColors;
+    vector<int> newColorsCount;
+    vector<int> nodeColor;
+    vector<double>::iterator degSumsItr;
+    // sets and iterators
+    set<int> colorsUsed;
+    set<double> degSum;
+    set<double> varCoeff;
+    set<double> conRhs;
+    set<int> isolates;
+    set<int> varColors;
+    set<int> newVarColors;
+    set<int>::iterator itC;
+    set<int>::iterator color;
+    set<double>::iterator degSumItr;
+    set<double>::iterator itF;
+    set<int>::iterator it;
 
     // Associated data of original model
     vector<int> workRowPart; // Row partition
