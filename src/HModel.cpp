@@ -279,7 +279,7 @@ bool comp(const double p){
 	return !isnan(p);
 }
 void HModel::refineVar(){
-	cout << "color class: " << *color << endl;
+	// cout << "color class: " << *color << endl;
  	degSum.clear();
 	degSums.clear();
 	degSums.resize(numCol, 0);
@@ -303,11 +303,11 @@ void HModel::refineVar(){
 	itr = 0;
 	init = -1;
 	for (degSumItr = degSum.begin(); degSumItr != degSum.end(); ++degSumItr){
-		cout << "degSumItr: " << *degSumItr << endl;
+		// cout << "degSumItr: " << *degSumItr << endl;
 		if (degSumItr == degSum.begin()){
 			for (int i = 0; i < degSums.size(); ++i){
 				if (degSums[i] == *degSumItr && eqPart[iter][i] == *color){
-					cout << "node: " << i << " degSums " << degSums[i] << endl;
+					// cout << "node: " << i << " degSums " << degSums[i] << endl;
 					init = eqPart[iter][i];
 					newColorsCount[itr]++;
 				}
@@ -317,7 +317,7 @@ void HModel::refineVar(){
 		else{
 			for (int i = 0; i < degSums.size(); ++i){
 				if (degSums[i] == *degSumItr && eqPart[iter][i] == *color){
-					cout << "node: " << i << " degSums " << degSums[i] << endl;
+					// cout << "node: " << i << " degSums " << degSums[i] << endl;
 					eqPart[iter][i] = varColor + itr;
 					newColorsCount[itr]++;
 				}
@@ -339,7 +339,7 @@ void HModel::refineVar(){
 	}	
 }
 void HModel::refineCon(){
-	cout << "color class: " << *color << endl;
+	// cout << "color class: " << *color << endl;
 	degSum.clear();
 	degSums.clear();
 	degSums.resize(numRow, 0);
@@ -368,11 +368,11 @@ void HModel::refineCon(){
 	itr = 0;
 	init = -1;
 	for (degSumItr = degSum.begin(); degSumItr != degSum.end(); ++degSumItr){
-		cout << "degSumItr: " << *degSumItr << endl;
+		// cout << "degSumItr: " << *degSumItr << endl;
 		if (degSumItr == degSum.begin()){
 			for (int i = 0; i < degSums.size(); ++i){
 				if (degSums[i] == *degSumItr && eqPart[iter][i + numCol] == *color){
-					cout << "node: " << i << " degSums " << degSums[i] << endl;
+					// cout << "node: " << i << " degSums " << degSums[i] << endl;
 					init = eqPart[iter][i + numCol];
 					newColorsCount[itr]++;
 				}
@@ -382,7 +382,7 @@ void HModel::refineCon(){
 		else{
 			for (int i = 0; i < degSums.size(); ++i){
 				if (degSums[i] == *degSumItr && eqPart[iter][i + numCol] == *color){
-					cout << "node: " << i + numCol << " degSums " << degSums[i] << endl;
+					// cout << "node: " << i + numCol << " degSums " << degSums[i] << endl;
 					eqPart[iter][i + numCol] = conColor + itr;
 					newColorsCount[itr]++;
 				}
@@ -392,12 +392,12 @@ void HModel::refineCon(){
 		}
 		itr++;
 	}
-	cout << "[ ";
-	for (int j = 0; j < numRow + numCol; j++){
-		cout << eqPart[iter][j] << " ";
-	}
-	cout << "]" << endl;
-	cin.get();
+	// cout << "[ ";
+	// for (int j = 0; j < numRow + numCol; j++){
+	// 	cout << eqPart[iter][j] << " ";
+	// }
+	// cout << "]" << endl;
+	
 	if (newColors.size() > 1){
 		it = colorsUsed.begin();
 		copy(newColors.begin(), newColors.end(), inserter(colorsUsed, it));
@@ -414,12 +414,6 @@ void HModel::isolateVar(){
 	_FLAG_2 = 0;
 	nodeColor.clear();
 	nodeColor.resize(varColor + 1, 0);
-	cout << "{ ";
-	for (int i = 0; i < nodeColor.size(); ++i){
-		cout << nodeColor[i] << " ";
-	}	
-	cout << "}" << endl;
-	cin.get();
 	varColors.clear();
 	for (int i = 0; i < numCol; ++i){
 		nodeColor[eqPart[iter][i]]++;
@@ -428,7 +422,7 @@ void HModel::isolateVar(){
 	for (int i = 0; i < numCol; i++){
 		if (eqPart[iter][i] == maxColor){
 			iso = i;
-			cout << "iso: " << iso << endl;
+			// cout << "iso: " << iso << endl;
 			isolates.insert(iso);
 			break;
 		}
@@ -436,12 +430,6 @@ void HModel::isolateVar(){
 	iter++;
 	nodeColor.clear();
 	nodeColor.resize(numRow + numCol);
-	cout << "{ ";
-	for (int i = 0; i < nodeColor.size(); ++i){
-		cout << nodeColor[i] << " ";
-	}	
-	cout << "}" << endl;
-	cin.get();
 	for (int i = 0; i < numRow + numCol; i++){
 		if (i == iso){
 			eqPart[iter][i] = eqPart[iter-1][i];
@@ -464,21 +452,13 @@ void HModel::isolateVar(){
 			//colorsUsed.insert(eqPart[iter][i]);
 		}
 	}
-	cout << "[ ";
-	for (int j = 0; j < numRow + numCol; j++){
-		cout << eqPart[iter][j] << " ";
-	}
-	cout << "]" << endl;
-	cout << "nodeColor size: " << nodeColor.size() << endl;
-	cout << "{ ";
-	for (int i = 0; i < nodeColor.size(); ++i){
-		cout << nodeColor[i] << " ";
-	}	
-	cout << "}" << endl;
-	cin.get();
+	// cout << "[ ";
+	// for (int j = 0; j < numRow + numCol; j++){
+	// 	cout << eqPart[iter][j] << " ";
+	// }
 	maxColor = distance(nodeColor.begin(), max_element(nodeColor.begin(), nodeColor.end()));
-	cout << maxColor << endl;
-	cin.get();
+	// cout << maxColor << endl;
+	
 	for (int i = 0; i < nodeColor.size(); ++i){
 		if (nodeColor[i] <= 1){
 			continue;
@@ -495,14 +475,14 @@ void HModel::isolateVar(){
 	}
 	auto maxVColor = max_element(varColors.begin(), varColors.end());
 	varColor = *maxVColor;
-	cout << "varColor: " << varColor << endl;
+	// cout << "varColor: " << varColor << endl;
 }
 void HModel::computeEQs(){
 	
 	// // Print test code
 	// for (int i = 0; i < numCol; i++){
 	// 	cout << "x_" << i << " has obj coeff: " << colCost[i] << endl;
-	// 	cin.get();
+	// 	
 	// }
 	// for (int i = 0; i < numRow + numCol + 1; i++){
 	// 	cout << "[ ";
@@ -510,7 +490,7 @@ void HModel::computeEQs(){
 	// 		cout << eqPart[i][j] << " ";
 	// 	}
 	// 	cout << "]" << endl;
-	// 	cin.get();
+	// 	
 	// }
 
 	// Initialize n + m vector for singleton status
@@ -562,14 +542,14 @@ void HModel::computeEQs(){
 		colors.push(*itC);
 	}
 
-	cout << "[ ";
-	for (int j = 0; j < numRow + numCol; j++){
-		cout << eqPart[0][j] << " ";
-	}
-	cout << "]" << endl;
-	cin.get();
-	cout << "init colors: " << colorsUsed.size() << endl;
-	cin.get();
+	// cout << "[ ";
+	// for (int j = 0; j < numRow + numCol; j++){
+	// 	cout << eqPart[0][j] << " ";
+	// }
+	// cout << "]" << endl;
+	
+	// cout << "init colors: " << colorsUsed.size() << endl;
+	
 	// Equitable partitions phase (partition until discretized)
 	targ = -1;
 	iso = -1;
@@ -584,19 +564,19 @@ void HModel::computeEQs(){
 		targ = colors.top();
 		_FLAG_2 = 0;
 		colors.pop();
-		cout << "targ: " << targ << endl;
+		// cout << "targ: " << targ << endl;
 		if (targ < numCol){
 			for (color = colorsUsed.begin(); color!= colorsUsed.end(); ++color){
 				if (*color > numCol - 1){
 					refineCon();
 				}
 			}
-			cout << "[ ";
-			for (int j = 0; j < numRow + numCol; j++){
-				cout << eqPart[iter][j] << " ";
-			}
-			cout << "]" << endl;
-			cin.get();
+			// cout << "[ ";
+			// for (int j = 0; j < numRow + numCol; j++){
+			// 	cout << eqPart[iter][j] << " ";
+			// }
+			// cout << "]" << endl;
+			
 		}
 		// If target color is a row color
 		else{
@@ -605,26 +585,26 @@ void HModel::computeEQs(){
 					refineVar();
 				}
 			}
-			cout << "[ ";
-			for (int j = 0; j < numRow + numCol; j++){
-				cout << eqPart[iter][j] << " ";
-			}
-			cout << "]" << endl;
-			cin.get();
+			// cout << "[ ";
+			// for (int j = 0; j < numRow + numCol; j++){
+			// 	cout << eqPart[iter][j] << " ";
+			// }
+			// cout << "]" << endl;
+			
 		}
 		// If numColorsUsed = numCol + numRow - We're Done
 		if(conColor == numRow + numCol - 1 && varColor == numCol - 1){
 			// cout << "true" << endl;
 			break;
 		}
-		cout << "conColor before iso: " << conColor << endl;
-		cout << "conColor needed: " << numRow + numCol - 1 << endl;
-		cout << "varColor before iso: " << varColor << endl;
-		cout << "varColor needed: " << numRow - 1 << endl;
+		// cout << "conColor before iso: " << conColor << endl;
+		// cout << "conColor needed: " << numRow + numCol - 1 << endl;
+		// cout << "varColor before iso: " << varColor << endl;
+		// cout << "varColor needed: " << numCol - 1 << endl;
 		// If colors is empty and not done then isolate a variable
 		if (colors.empty()){
 			// cout << "ISOLATION" << endl;
-			// cin.get();
+			// 
 			isolateVar();
 			cond = 1;
 			
