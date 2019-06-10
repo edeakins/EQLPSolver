@@ -46,6 +46,13 @@ enum HSOL_STR_OPTIONS {
 
 class HModel {
 public:
+    /* Deakins - Classes */
+    class Node{
+    public:
+        int data;
+        Node *next;
+        Node *prev;
+    };
     HModel();
     void setup(const char *filename);
     void setup_loadMPS(const char *filename);
@@ -146,6 +153,10 @@ public:
     void writeMPS(const char *filename);
 
     // Deakins - functions
+    void push(Node **headRef, int newData);
+    void insertA(Node *prevNode, int newData);
+    void insertB(Node **headRef, Node *nextNode, int newData);
+    void append(Node **headRef, int newData);
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -180,7 +191,6 @@ public:
     vector<int> Aindex;
     vector<double> Avalue;
     vector<double> colCost;
-    vector<double> Rhs;
     vector<double> colLower;
     vector<double> colUpper;
     vector<double> rowLower;
@@ -188,6 +198,9 @@ public:
     double objOffset;
 
     /* Deakins - Objects and data structures */
+    // Storage
+    vector<double> Rhs;
+
 
     // Associated data of original model
     vector<int> workRowPart; // Row partition

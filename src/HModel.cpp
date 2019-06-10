@@ -274,7 +274,67 @@ void HModel::setup_loadMPS(const char *filename) {
     fclose(file);
 }
 
-// Optimize or Die add ins
+/* Deakins - TO DO: Speed this SHIT up */
+// Push function to insert to beginning of list
+void push(Node **headRef, int newData){
+	Node *newNode = new Node();
+	newNode->data = newData;
+	newNode->next = (*headRef);
+	newNode->prev = NULL;
+	if ((*headRef) != NULL){
+		(*headRef)->prev = newNode;
+	}
+	*(headRef) = newNode;
+}
+// Insert after a node in linked list
+void insertA(Node *prevNode, int newData){
+	if (prevNode == NULL){
+		cout << "the given previous node cannot be NULL" << endl;
+		return;
+	}
+	Node *newNode = new Node();
+	newNode->data = newData;
+	newNode->next = prevNode->next;
+	prevNode->next = newNode;
+	newNode->prev = prevNode;
+	if (newNode->next != NULL){
+		newNode->next->prev = newNode;
+	}
+}
+// Insert before a node in a linked list
+void insertB(Node **headRef, Node *nextNode, int newData){
+	if (nextNode == NULL){
+		cout << "the given next node cannot be NULL" << endl;
+		return;
+	}
+	Node *newNode = new Node();
+	newNode->data = newData;
+	newNode->prev = nextNode->prev;
+	nextNode->prev = newNode;
+	newNode->next = nextNode;
+	if (newNode->prev != NULL){
+		newNode->prev->next = newNode;
+	}
+	else{
+		(*headRef) = newNode;
+	}
+}
+// Append to the end of linked link
+void append(Node **headRef, int newData){
+	Node *newNode = new Node();
+	Node *last = (*head_ref);
+	newNode->data = newData;
+	newNode->next = NULL;
+	if ((*headRef) == NULL){
+		newNode->prev = NULL:
+		(*headRef) = newNode;
+		return;
+	}
+	while(last->next != NULL){
+		last = last->next;
+	}
+	last->next = newNode;
+}
 
 
 void HModel::setup_transposeLP() {
