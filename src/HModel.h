@@ -11,6 +11,7 @@
 #include <vector>
 #include <stack>
 #include <set>
+#include <list>
 using namespace std;
 
 const int LP_Status_Unset = -1;
@@ -52,6 +53,10 @@ public:
         int data;
         Node *next;
         Node *prev;
+        Node(){
+            next = NULL;
+            prev = NULL;
+        }
     };
     HModel();
     void setup(const char *filename);
@@ -157,6 +162,9 @@ public:
     void insertA(Node *prevNode, int newData);
     void insertB(Node **headRef, Node *nextNode, int newData);
     void append(Node **headRef, int newData);
+    void initEQs();
+    void computeEQs();
+    void printList(Node *node);
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -200,7 +208,10 @@ public:
     /* Deakins - Objects and data structures */
     // Storage
     vector<double> Rhs;
-
+    vector<Node *> C;
+    vector<list<int> *> A;
+    vector<double> maxcdeg;
+    vector<int> initialParts;
 
     // Associated data of original model
     vector<int> workRowPart; // Row partition

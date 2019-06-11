@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <map>
 #include <set>
+#include <list>
+#include <tuple>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -276,7 +278,7 @@ void HModel::setup_loadMPS(const char *filename) {
 
 /* Deakins - TO DO: Speed this SHIT up */
 // Push function to insert to beginning of list
-void push(Node **headRef, int newData){
+void HModel::push(Node **headRef, int newData){
 	Node *newNode = new Node();
 	newNode->data = newData;
 	newNode->next = (*headRef);
@@ -286,8 +288,9 @@ void push(Node **headRef, int newData){
 	}
 	*(headRef) = newNode;
 }
+
 // Insert after a node in linked list
-void insertA(Node *prevNode, int newData){
+void HModel::insertA(Node *prevNode, int newData){
 	if (prevNode == NULL){
 		cout << "the given previous node cannot be NULL" << endl;
 		return;
@@ -301,8 +304,9 @@ void insertA(Node *prevNode, int newData){
 		newNode->next->prev = newNode;
 	}
 }
+
 // Insert before a node in a linked list
-void insertB(Node **headRef, Node *nextNode, int newData){
+void HModel::insertB(Node **headRef, Node *nextNode, int newData){
 	if (nextNode == NULL){
 		cout << "the given next node cannot be NULL" << endl;
 		return;
@@ -319,14 +323,15 @@ void insertB(Node **headRef, Node *nextNode, int newData){
 		(*headRef) = newNode;
 	}
 }
+
 // Append to the end of linked link
-void append(Node **headRef, int newData){
+void HModel::append(Node **headRef, int newData){
 	Node *newNode = new Node();
-	Node *last = (*head_ref);
+	Node *last = (*headRef);
 	newNode->data = newData;
 	newNode->next = NULL;
 	if ((*headRef) == NULL){
-		newNode->prev = NULL:
+		newNode->prev = NULL;
 		(*headRef) = newNode;
 		return;
 	}
@@ -336,6 +341,82 @@ void append(Node **headRef, int newData){
 	last->next = newNode;
 }
 
+// Printer
+void HModel::printList(Node* node)  
+{  
+	if (!node){
+		return;
+	}
+    Node* last;  
+    cout << "\ncolor class: " << node->data << endl;  
+    while (node != NULL)  
+    {  
+        cout<<" "<< node->data <<" ";  
+        last = node;  
+        node = node->next;  
+    }  
+    cout << "\n";
+} 
+
+// Grab initial partitons (rhs, bounds, obj coeff)
+void HModel::initEQs(){
+	set<double> rhs;
+	set<double>::iterator rhsIdx;
+	set<tuple<double, double, double > > objBounds;
+	set<tuple<double, double, double > >::iterator objBoundsIdx;
+	int varColor = 0;
+	int conColor = numCol;
+	// Prefill vector 
+	for (int i = 0; i < numRow + numCol; ++i){
+		initialParts.push_back(0);
+	}
+	// Grab right hand sides of constraints
+	for (int i = 0; i < numRow; ++i){
+		rhs.insert(Rhs[i]);
+	}
+	// Tuples of obj coeff, lower and upper bounds
+	for (int i = 0; i < numCol; ++i){
+		objBounds.insert(make_tuple(colCost[i], colLower[i], colUpper[i]));
+	}
+	// Assign initial var colors
+	for (objBoundsIdx = objBounds.begin(); objBoundsIdx != objBounds.end(); ++objBoundsIdx){
+		for (int i = 0; i < numCol; ++i){
+			if (colCost[i] == get<0>(*objBoundsIdx) && colLower[i] == 
+				get<1>(*objBoundsIdx) && colUpper[i] == get<2>(*objBoundsIdx)){
+				initialParts[i] = varColor;
+			}
+		}
+		varColor++;
+	}
+	// Assign initial con colors;
+	for (rhsIdx = rhs.begin(); rhsIdx != rhs.end(); ++rhsIdx){
+		for (int i = 0; i < numRow; ++i){
+			if (Rhs[i] == *rhsIdx){
+				initialParts[i + numCol] = conColor;
+			}
+		}
+		conColor++;
+	}
+}
+
+// Discretize partitions
+void HModel::computeEQs(){
+	initEQs();
+	vector<Node *> CCopy(numRow + numCol);
+	C = CCopy;
+	vector<list<int> *> ACopy(numRow + numCol);
+	A = ACopy;
+	vector<double> maxcdeg(numRow + numCol);
+	cin.get();
+	list<int> *l = NULL;
+	for (int i = 0; i < numRow + numCol; ++i){
+		append(&C[initialParts[i]], i);
+	}
+	for (vector<Node *>::iterator it = C.begin(); it != C.end(); ++it){
+		printList(*it);
+	}
+
+}
 
 void HModel::setup_transposeLP() {
     if (intOption[INTOPT_TRANSPOSE_FLAG] == 0)
