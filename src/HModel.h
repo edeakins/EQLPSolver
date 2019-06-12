@@ -206,12 +206,23 @@ public:
     double objOffset;
 
     /* Deakins - Objects and data structures */
-    // Storage
+    // Ints
+    int k;
+    int l;
+    int r;
+    // Storage - vectors
     vector<double> Rhs;
     vector<Node *> C;
     vector<list<int> *> A;
     vector<double> maxcdeg;
     vector<int> initialParts;
+    vector<double> cdeg;
+    vector<int> color;
+    // Storage - stacks
+    stack<int> S;
+    // Doubly linked lists
+    Node *colorsAdj;
+    Node *v;
 
     // Associated data of original model
     vector<int> workRowPart; // Row partition

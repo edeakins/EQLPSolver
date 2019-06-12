@@ -386,6 +386,7 @@ void HModel::initEQs(){
 				initialParts[i] = varColor;
 			}
 		}
+		S.push(varColor);
 		varColor++;
 	}
 	// Assign initial con colors;
@@ -395,25 +396,45 @@ void HModel::initEQs(){
 				initialParts[i + numCol] = conColor;
 			}
 		}
+		S.push(conColor);
 		conColor++;
 	}
+	// Define number of colors used so far
+	l = S.size();
+	cout << "l: " << l << endl;
 }
 
 // Discretize partitions
 void HModel::computeEQs(){
+	/* Lines 33 - 36 */
 	initEQs();
 	vector<Node *> CCopy(numRow + numCol);
 	C = CCopy;
 	vector<list<int> *> ACopy(numRow + numCol);
 	A = ACopy;
-	vector<double> maxcdeg(numRow + numCol);
-	cin.get();
-	list<int> *l = NULL;
+	vector<double> maxcdegCopy(numRow + numCol);
+	maxcdeg = maxcdegCopy;
+	/* 37 - 40 */
 	for (int i = 0; i < numRow + numCol; ++i){
 		append(&C[initialParts[i]], i);
+		cdeg.push_back(0);
+		color.push_back(0);
 	}
 	for (vector<Node *>::iterator it = C.begin(); it != C.end(); ++it){
 		printList(*it);
+	}
+	/* 41 - 44 -- Note: Stack is already sorted because
+	of how it is created */ 
+	k = l;
+	colorsAdj = NULL;
+	/* 45 - */
+	while (!S.empty()){
+		r = S.top();
+		cout << "r: " << r << endl;
+		S.pop();
+		for (v = C[r]; v != NULL; v = v->next){
+			cout << v->data << endl;
+		}
 	}
 
 }
