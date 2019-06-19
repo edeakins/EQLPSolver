@@ -58,6 +58,15 @@ public:
             prev = NULL;
         }
     };
+    class adjNode{
+    public:
+        int label;
+        int w;
+        adjNode *next;
+        adjNode(){
+            next = NULL;
+        }
+    };
     HModel();
     void setup(const char *filename);
     void setup_loadMPS(const char *filename);
@@ -158,13 +167,23 @@ public:
     void writeMPS(const char *filename);
 
     // Deakins - functions
+    void initStorage();
     void push(Node **headRef, int newData);
     void insertA(Node *prevNode, int newData);
     void insertB(Node **headRef, Node *nextNode, int newData);
     void append(Node **headRef, int newData);
+    void appendAdj(adjNode **headRef, int newData, double newEntry);
+    Node *findNode(Node **headRef, int label);
+    void deleteNode(Node **headRef, Node *del);
+    bool exists(Node **headRef, int data);
+    int listSize(Node **headRef);
     void initEQs();
     void computeEQs();
-    void printList(Node *node);
+    void lp2Graph();
+    void splitColor(int s);
+    void printList(Node **headRef);
+    void isolate(int i);
+    void equitable();
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -207,22 +226,38 @@ public:
 
     /* Deakins - Objects and data structures */
     // Ints
-    int k;
-    int l;
+    int vCol;
+    int cCol;
+    int lvCol;
+    int lcCol;
     int r;
     // Storage - vectors
+    vector<adjNode *> adjList;
     vector<double> Rhs;
     vector<Node *> C;
     vector<list<int> *> A;
     vector<double> maxcdeg;
+    vector<double> mincdeg;
     vector<int> initialParts;
     vector<double> cdeg;
+    vector<int> isAdj;
     vector<int> color;
+    vector<bool> SCheck;
+    vector<bool> isolates;
     // Storage - stacks
     stack<int> S;
     // Doubly linked lists
     Node *colorsAdj;
     Node *v;
+    Node *c;
+    Node *del;
+    // Linked lists
+    adjNode *w;
+    // Lists
+    list<int>::iterator u;
+    list<int>::iterator s;
+    // Sets
+    
 
     // Associated data of original model
     vector<int> workRowPart; // Row partition

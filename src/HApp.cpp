@@ -22,7 +22,7 @@ void solvePlain(const char *filename) {
     HModel model;
     model.intOption[INTOPT_PRINT_FLAG] = 1;
     model.setup(filename);
-    model.computeEQs();
+    model.equitable();
     // Testing
     
     // Set solver and solve the model
