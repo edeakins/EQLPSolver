@@ -284,7 +284,10 @@ void HModel::initStorage(){
 	adjList = adjCopy;
 	vector<Node *> CCopy(numRow + numCol);
 	C = CCopy;
-	vector<list<int> *> ACopy(numRow + numCol, new list<int>);
+	vector<list<int> *> ACopy;
+	for (int i = 0; i < numRow + numCol; ++i){
+		ACopy.push_back(new list<int>);
+	}
 	A = ACopy;
 	vector<bool> SCheckCopy(numRow + numCol, false);
 	SCheck = SCheckCopy;
@@ -418,6 +421,7 @@ bool HModel::exists(Node **headRef, int data){
 		if (curr->data == data){
 			return true;
 		}
+		curr = curr->next;
 	}
 	return false;
 }
@@ -446,7 +450,6 @@ void HModel::printList(Node **headRef)
         //last = node;  
         node = node->next;  
     }  
-    cout << "\n";
 }
 
 // Initialize LP as adjacency list for ease of use
@@ -458,78 +461,6 @@ void HModel::lp2Graph(){
 		}
 	}
 } 
-
-// Color splitting (cell split) subroutine
-void HModel::splitColor(int s){
-	vector<double> cdegCopy;
-	vector<int> colorFreq(numRow + numCol, 0);
-	for (u = A[s]->begin(); u != A[s]->end(); ++u){
-		cdegCopy.push_back(cdeg[*u]);
-	}
-	sort(cdegCopy.begin(), cdegCopy.end());
-	cdegCopy.erase(unique(cdegCopy.begin(), cdegCopy.end()), cdegCopy.end());
-	map<double, int> degSumColor;
-	bool varOrCon = (s < numCol) ? true : false;
-	degSumColor.insert(pair<double, int>(0, s));
-	colorFreq[s] = listSize(&C[s]) - A[s]->size();
-	for (int i = 0; i < cdegCopy.size(); ++i){
-		if varOrCon{
-			degSumColor.insert(pair<double, int>(cdegCopy[i], vCol));
-			vCol ++;
-		}
-		else{
-			degSumColor.insert(pair<double, int>(cdegCopy[i], cCol));
-			cCol ++;
-		}
-	}
-	
-
-	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
-	int instack = (SCheck[s]) ? 1 : 0;
-	for (map<double, int>::iterator it = degSumColor.begin(); it != degSumColor.end(); ++it){
-		if (it->first == mincdeg[s]){
-			if (!instack && it->second != b) S.push(it->second);
-		}
-		else{
-			if (instack || it->second != b) S.push(it->second);
-		}
-	}
-	for (u = A[s]->begin(); u != A[s]->end(); ++u){
-		if (degSumColor[cdeg[*u]] != s){
-			del = findNode(&C[s], *u);
-			deleteNode(&C[s], del);
-			append(&C[degSumColor[cdeg[*u]]], *u);
-			color[*u] = degSumColor[cdeg[*u]];
-			//cout << "node u: " << *u << " has color: " << color[*u] << endl; 
-		}
-	}
-}
-
-// Isolation function
-void HModel::isolate(int i){
-	del = findNode(&C[color[i]], i);
-	int newCol = (i < numCol) ? vCol ++ : cCol ++;
-	//cout << "newCol: " << newCol << endl;
-	deleteNode(&C[color[i]], del);
-	append(&C[newCol], i);
-	for (int i = 0; i < C.size(); ++i){
-		if (C[i] != NULL){
-			//cout << "color: " << i << endl;
-			//printList(&C[i]);
-			if (listSize(&C[i]) == 1){
-				isolates[C[i]->data] = true;
-			}
-			cout << "\n" << endl;
-		}
-	}
-	//cin.get();
-	SCheck[newCol] = true;
-	S.push(newCol);
-	//cout << "stack size: " << S.size() << endl;
-	//cin.get();
-	computeEQs();
-
-}
 
 // Grab initial partitons (rhs, bounds, obj coeff)
 void HModel::initEQs(){
@@ -584,25 +515,36 @@ void HModel::initEQs(){
 		// cdeg.push_back(0);
 		color.push_back(initialParts[i]);
 	}
+	vCol = lvCol;
+	cCol = lcCol;
+	for (int i = 0; i < C.size(); ++i){
+		if (C[i] != NULL){
+			cout << "color: " << i << endl;
+			printList(&C[i]);
+			cout << "\n" << endl;
+			if (listSize(&C[i]) == 1){
+				isolates[C[i]->data] = true;
+			}
+		}
+	}
+	cin.get();
 }
 
 // Discretize partitions
 void HModel::computeEQs(){
 	/* 41 - 44 -- Note: Stack is already sorted because
 	of how it is created */ 
-	vCol = lvCol;
-	cCol = lcCol;
 	colorsAdj = NULL;
+	numParts = 0;
 	/* 45 - */
 	while (!S.empty()){
 		r = S.top();
 		S.pop();
-		cout << "r: " << r << endl;
 		SCheck[r] = false;
 		for (v = C[r]; v != NULL; v = v->next){
 			for (w = adjList[v->data]; w != NULL; w = w->next){
 				cdeg[w->label] += w->w;
-				isAdj[w->label] += 1;
+				isAdj[w->label] ++;
 				if (isAdj[w->label] == 1){
 					A[color[w->label]]->push_back(w->label);
 				}
@@ -614,10 +556,6 @@ void HModel::computeEQs(){
 				}
 			}
 		}
-		cout << "\n" << endl;
-		// for (int i = 0; i < cdeg.size(); ++i){
-		// 	cout << "node: " << i << " has degsum: " << cdeg[i] << endl;
-		// }
 		for (c = colorsAdj; c != NULL; c = c->next){
 			if (listSize(&C[c->data]) != A[c->data]->size()){
 				mincdeg[c->data] = 0;
@@ -658,6 +596,7 @@ void HModel::computeEQs(){
 		}
 		for (int i = 0; i < C.size(); ++i){
 			if (C[i] != NULL){
+				numParts++;
 				cout << "color: " << i << endl;
 				printList(&C[i]);
 				cout << "\n" << endl;
@@ -666,17 +605,90 @@ void HModel::computeEQs(){
 				}
 			}
 		}
-
-
+		cout << "numParts: " << numParts << endl;
+		cin.get();
 	}
+}
 
+// Color splitting (cell split) subroutine
+void HModel::splitColor(int s){
+	set<double> cdegCopy;
+	vector<int> colorFreq(numRow + numCol, 0);
+	map<double, int> degSumColor;
+	bool varOrCon = (s < numCol) ? true : false;
+	degSumColor.insert(pair<double, int>(mincdeg[s], s)); 
+	colorFreq[s] = listSize(&C[s]) - A[s]->size();
+	for (u = A[s]->begin(); u != A[s]->end(); ++u){
+		cdegCopy.insert(cdeg[*u]);
+	}
+	for (set<double>::iterator i = cdegCopy.begin(); i != cdegCopy.end(); ++i){
+		if (varOrCon){
+			degSumColor.insert(pair<double, int>(*i, vCol));
+			(mincdeg[s] == *i) ? vCol : vCol++;
+		}
+		else{
+			degSumColor.insert(pair<double, int>(*i, cCol));
+			(mincdeg[s] == *i) ? cCol : cCol++;
+		}
+	}
+	for (int i = 0; i < numRow + numCol; ++i){
+		if (cdeg[i] > 0){
+			colorFreq[degSumColor[cdeg[i]]]++;
+		}
+	}
+	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
+	int instack = (SCheck[s]) ? 1 : 0;
+	for (map<double, int>::iterator it = degSumColor.begin(); it != degSumColor.end(); ++it){
+		if (it->first == mincdeg[s]){
+			if (!instack && it->second != b){
+				S.push(it->second);
+				SCheck[s] = true;
+			}
+		}
+		else{
+			if (instack || it->second != b){
+				S.push(it->second);
+				SCheck[s] = true;
+			}
+		}
+	}
+	for (u = A[s]->begin(); u != A[s]->end(); ++u){
+		if (degSumColor[cdeg[*u]] != s){
+			del = findNode(&C[s], *u);
+			deleteNode(&C[s], del);
+			append(&C[degSumColor[cdeg[*u]]], *u);
+			color[*u] = degSumColor[cdeg[*u]];
+		}
+	}
+}
+
+// Isolation function
+void HModel::isolate(int i){
+	del = findNode(&C[color[i]], i);
+	int newCol = vCol;
+	vCol++;
+	deleteNode(&C[color[i]], del);
+	append(&C[newCol], i);
+	color[i] = newCol;
+	for (int i = 0; i < C.size(); ++i){
+		if (C[i] != NULL){
+			//cout << "color: " << i << endl;
+			//printList(&C[i]);
+			if (listSize(&C[i]) == 1){
+				isolates[C[i]->data] = true;
+			}
+		}
+	}
+	SCheck[newCol] = true;
+	S.push(newCol);
+	computeEQs();
 }
 
 // Call it all
 void HModel::equitable(){
 	initEQs();
 	computeEQs();
-	int idx = 0;
+	//int idx = 0;
 	for (int i = 0; i < isolates.size(); ++i){
 		if (isolates[i] == false){
 			isolate(i);

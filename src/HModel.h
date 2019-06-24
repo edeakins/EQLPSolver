@@ -231,6 +231,7 @@ public:
     int lvCol;
     int lcCol;
     int r;
+    int numParts;
     // Storage - vectors
     vector<adjNode *> adjList;
     vector<double> Rhs;
