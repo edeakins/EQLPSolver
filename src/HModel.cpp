@@ -302,52 +302,6 @@ void HModel::initStorage(){
 	vector<bool> isoCopy(numRow + numCol, false);
 	isolates = isoCopy;
 }
-// // Push function to insert to beginning of list
-// void HModel::push(Node **headRef, int newData){
-// 	Node *newNode = new Node();
-// 	newNode->data = newData;
-// 	newNode->next = (*headRef);
-// 	newNode->prev = NULL;
-// 	if ((*headRef) != NULL){
-// 		(*headRef)->prev = newNode;
-// 	}
-// 	*(headRef) = newNode;
-// }
-
-// // Insert after a node in linked list
-// void HModel::insertA(Node *prevNode, int newData){
-// 	if (prevNode == NULL){
-// 		cout << "the given previous node cannot be NULL" << endl;
-// 		return;
-// 	}
-// 	Node *newNode = new Node();
-// 	newNode->data = newData;
-// 	newNode->next = prevNode->next;
-// 	prevNode->next = newNode;
-// 	newNode->prev = prevNode;
-// 	if (newNode->next != NULL){
-// 		newNode->next->prev = newNode;
-// 	}
-// }
-
-// // Insert before a node in a linked list
-// void HModel::insertB(Node **headRef, Node *nextNode, int newData){
-// 	if (nextNode == NULL){
-// 		cout << "the given next node cannot be NULL" << endl;
-// 		return;
-// 	}
-// 	Node *newNode = new Node();
-// 	newNode->data = newData;
-// 	newNode->prev = nextNode->prev;
-// 	nextNode->prev = newNode;
-// 	newNode->next = nextNode;
-// 	if (newNode->prev != NULL){
-// 		newNode->prev->next = newNode;
-// 	}
-// 	else{
-// 		(*headRef) = newNode;
-// 	}
-// }
 
 // Append to the end of linked list
 void HModel::append(Node **headRef, int newData){
@@ -385,31 +339,31 @@ void HModel::appendAdj(adjNode **headRef, int newData, double newEntry){
 }
 
 // Delete from doubly linked list function
-void HModel::deleteNode(Node **headRef, Node *del){
-	if (*headRef == NULL || del == NULL){
+void HModel::deleteNode(Node **headRef, Node *delet){
+	if (*headRef == NULL || delet == NULL){
 		return;
 	}
-	if (*headRef == del){
-		*headRef = del->next;
+	if (*headRef == delet){
+		*headRef = delet->next;
 	}
-	if(del->next != NULL){
-		del->next->prev = del->prev;
+	if(delet->next != NULL){
+		delet->next->prev = delet->prev;
 	}
-	if (del->prev != NULL){
-		del->prev->next = del->next;
+	if (delet->prev != NULL){
+		delet->prev->next = delet->next;
 	}
-	free(del);
+	free(delet);
 	return;
 }
 
 // Delete from doubly linked list function
 HModel::Node *HModel::findNode(Node **headRef, int label){
-	Node *del = (*headRef);
-	while(del != NULL){
-		if (del->data == label){
-			return del;
+	Node *delet = (*headRef);
+	while(delet != NULL){
+		if (delet->data == label){
+			return delet;
 		}
-		del = del->next;
+		delet = delet->next;
 	}
 	return NULL;
 }
@@ -454,16 +408,29 @@ void HModel::printList(Node **headRef)
 
 // Initialize LP as adjacency list for ease of use
 void HModel::lp2Graph(){
-	for (int i = 0; i < numCol; ++i){
+	vector<double>AvalueCopy(Avalue.size(), 0);
+	vector<double>::iterator min = min_element(Avalue.begin(), Avalue.end());
+	if (*min < 0){
+		for (int i = 0; i < Avalue.size(); ++i){
+			AvalueCopy[i] = Avalue[i] + -2*(*min);
+		}
+	}
+	else{
+		for (int i = 0; i < Avalue.size(); ++i){
+			AvalueCopy[i] = Avalue[i];
+		}
+	}
+ 	for (int i = 0; i < numCol; ++i){
 		for (int j = Astart[i]; j < Astart[i + 1]; ++j){
-			appendAdj(&adjList[i], Aindex[j] + numCol, Avalue[j]);
-			appendAdj(&adjList[Aindex[j] + numCol], i, Avalue[j]); 
+			appendAdj(&adjList[i], Aindex[j] + numCol, AvalueCopy[j]);
+			appendAdj(&adjList[Aindex[j] + numCol], i, AvalueCopy[j]); 
 		}
 	}
 } 
 
 // Grab initial partitons (rhs, bounds, obj coeff)
 void HModel::initEQs(){
+	int numParts = 0;
 	initStorage();
 	lp2Graph();
 	set<double> rhs;
@@ -508,26 +475,12 @@ void HModel::initEQs(){
 		conColor++;
 	}
 	// Define number of colors used so far
-	lvCol = varColor;
-	lcCol = conColor;
+	vCol = varColor;
+	cCol = conColor;
 	for (int i = 0; i < numRow + numCol; ++i){
 		append(&C[initialParts[i]], i);
-		// cdeg.push_back(0);
 		color.push_back(initialParts[i]);
 	}
-	vCol = lvCol;
-	cCol = lcCol;
-	for (int i = 0; i < C.size(); ++i){
-		if (C[i] != NULL){
-			cout << "color: " << i << endl;
-			printList(&C[i]);
-			cout << "\n" << endl;
-			if (listSize(&C[i]) == 1){
-				isolates[C[i]->data] = true;
-			}
-		}
-	}
-	cin.get();
 }
 
 // Discretize partitions
@@ -544,7 +497,7 @@ void HModel::computeEQs(){
 		for (v = C[r]; v != NULL; v = v->next){
 			for (w = adjList[v->data]; w != NULL; w = w->next){
 				cdeg[w->label] += w->w;
-				isAdj[w->label] ++;
+				isAdj[w->label]++;
 				if (isAdj[w->label] == 1){
 					A[color[w->label]]->push_back(w->label);
 				}
@@ -562,10 +515,8 @@ void HModel::computeEQs(){
 			}
 			else{
 				mincdeg[c->data] = maxcdeg[c->data];
-			}
-			for (u = A[c->data]->begin(); u != A[c->data]->end(); ++u){
-				if (cdeg[*u] < mincdeg[c->data]){
-					mincdeg[c->data] = cdeg[*u];
+				for (u = A[c->data]->begin(); u != A[c->data]->end(); ++u){
+					if (cdeg[*u] < mincdeg[c->data]) mincdeg[c->data] = cdeg[*u];
 				}
 			}
 		}
@@ -579,11 +530,6 @@ void HModel::computeEQs(){
 		for (s = colorsSplit.begin(); s != colorsSplit.end(); ++s){
 			splitColor(*s);
 		}
-		// cout << "mincdeg entries" << endl;
-		// for (int i = 0; i < mincdeg.size(); ++i){
-		// 	cout << mincdeg[i] << endl;
-		// }
-		//for ()
 		// Reset attributes
 		for (c = colorsAdj; c != NULL; c = c->next){
 			for (u = A[c->data]->begin(); u != A[c->data]->end(); ++u){
@@ -596,18 +542,18 @@ void HModel::computeEQs(){
 		}
 		for (int i = 0; i < C.size(); ++i){
 			if (C[i] != NULL){
-				numParts++;
-				cout << "color: " << i << endl;
-				printList(&C[i]);
-				cout << "\n" << endl;
-				if (listSize(&C[i]) == 1){
-					isolates[C[i]->data] = true;
-				}
+				if (listSize(&C[i]) == 1) isolates[C[i]->data] = true;
 			}
 		}
-		cout << "numParts: " << numParts << endl;
-		cin.get();
 	}
+	// for (int i = 0; i < C.size(); ++i){
+	// 	if (C[i] != NULL){
+	// 		cout << "colors: " << i << endl;
+	// 		printList(&C[i]);
+	// 		cout << "\n" << endl;
+	// 	}
+	// }
+	// cin.get();
 }
 
 // Color splitting (cell split) subroutine
@@ -615,26 +561,22 @@ void HModel::splitColor(int s){
 	set<double> cdegCopy;
 	vector<int> colorFreq(numRow + numCol, 0);
 	map<double, int> degSumColor;
+	pair<map<double, int>::iterator, bool> ret;
 	bool varOrCon = (s < numCol) ? true : false;
 	degSumColor.insert(pair<double, int>(mincdeg[s], s)); 
-	colorFreq[s] = listSize(&C[s]) - A[s]->size();
+	colorFreq[0] = listSize(&C[s]) - A[s]->size(); 
 	for (u = A[s]->begin(); u != A[s]->end(); ++u){
-		cdegCopy.insert(cdeg[*u]);
-	}
-	for (set<double>::iterator i = cdegCopy.begin(); i != cdegCopy.end(); ++i){
 		if (varOrCon){
-			degSumColor.insert(pair<double, int>(*i, vCol));
-			(mincdeg[s] == *i) ? vCol : vCol++;
+			ret = degSumColor.insert(pair<double, int>(cdeg[*u], vCol));
+			ret.second ? vCol++ : vCol;
 		}
 		else{
-			degSumColor.insert(pair<double, int>(*i, cCol));
-			(mincdeg[s] == *i) ? cCol : cCol++;
+			ret = degSumColor.insert(pair<double, int>(cdeg[*u], cCol));
+			ret.second ? cCol++ : cCol;
 		}
 	}
-	for (int i = 0; i < numRow + numCol; ++i){
-		if (cdeg[i] > 0){
-			colorFreq[degSumColor[cdeg[i]]]++;
-		}
+	for (u = A[s]->begin(); u != A[s]->end(); ++u){
+			colorFreq[degSumColor[cdeg[*u]]]++;
 	}
 	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
 	int instack = (SCheck[s]) ? 1 : 0;
@@ -672,8 +614,6 @@ void HModel::isolate(int i){
 	color[i] = newCol;
 	for (int i = 0; i < C.size(); ++i){
 		if (C[i] != NULL){
-			//cout << "color: " << i << endl;
-			//printList(&C[i]);
 			if (listSize(&C[i]) == 1){
 				isolates[C[i]->data] = true;
 			}
@@ -688,13 +628,12 @@ void HModel::isolate(int i){
 void HModel::equitable(){
 	initEQs();
 	computeEQs();
-	//int idx = 0;
 	for (int i = 0; i < isolates.size(); ++i){
 		if (isolates[i] == false){
 			isolate(i);
 		}
 	}
-
+	exit(-1);
 }
 
 void HModel::setup_transposeLP() {

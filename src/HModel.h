@@ -228,8 +228,6 @@ public:
     // Ints
     int vCol;
     int cCol;
-    int lvCol;
-    int lcCol;
     int r;
     int numParts;
     // Storage - vectors
