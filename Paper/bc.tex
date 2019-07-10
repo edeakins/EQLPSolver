@@ -77,11 +77,20 @@
  \begin{document}
  	\maketitle
  	
- 	\section*{Background}
- 	The following document aims to lay out the steps of a basis construction algorithm for an aggregated LP.  For instance, using equitable partitions, if we are able to reduce the dimension of an LP with $m = 10$ and $n = 9$ to $m = 2$ and $n = 1$, then what steps must we take to construct a basis in the original dimensions.  From here on, we will be using a problem instance called "codbt02.mps" to lay the out the algorithm.
+ 	\section*{Introduction}
+ 	In the following, we aim to explain a basis construction algorithm for disaggregating (unfolding) aggregated Linear Programs (LP).  We may reduce the dimension of an LP using different means.  The reductions in this paper are the results of either orbits or equitable partitions.  Take note that our algorithm for unfolding an LP applies to both an LP aggregated based on the orbits of that instance, as well as, the equitable partition (EP) of that instance.  As for the algorithm, it makes uses of the initially aggregated basis of the instance, and then by isolating a variable in the problem and recomputing the EP.  Recomputing the EP layouts out a pathway in which to follow when unfolding the instance.  From here on, we aim to show that a basis in a reduced dimension can be lifted to a higher dimension, used a basic feasible solution (BFS) for the lifted LP, and that the instance can be solved to further unfold the instance, quickly.
  	
- 	\section*{Algorithm Sketch}
- 	The instance mentioned previously has the following form 
+ 	\section*{Background}
+ 	It has been known that LP instance can be aggregated based on their orbits or EPs.  However, when the instance is aggregated and solved, we are guaranteed an optimal solution--if one exists--but we are not guaranteed that this solution will be basic.  Basic solutions (vertices) are preferable for a few reasons.  Usually, these solutions are sparser than that of an interior point solution.  That is, usually, if $\bar{\bf{x}}$ and $\bar{\bf{y}}$ are a (BFS) and non-BFS to an LP instance, respectively, then $|\bar{\bf{x}}| \leq |\bar{\bf{y}}|$.  Further, a BFS is preferable to Integer Program (IP) solvers using branch and bound, as well as, branch and cut algorithms (state of the art algorithms for solving IPs).  This combination of reasons, among others, is why a BFS is preferable when solving LPs.  
+ 	
+ 	Now complex commercial solvers (Gurobi, CPLEX) have interior point algorithms for solving LPs.  Actually when you send an LP off to Gurobi to be solved, Gurobi will solve it using different methods (interior point, dual simplex, and primal simplex) and return the solution and output from the algorithm that finishes first.  I am not familiar with the methods of CPLEX "under the hood," but I would assume they take a similar approach to solving LPs.  Even though these solvers, and others, have interior point methods, they are computationally expensive.  To be specific, they are expensive in the crossover phase.  Crossover is the phase of interior point solutions that takes a near BFS and pushes it to a BFS (vertex).  According to Gurobi, over 30\% of their barrier algorithm is spent in crossover.  
+ 	
+ 	Essentially, crossover is similar to simplex.  It makes use of the concept of super basic variables and either pushes them in or out of the basis in order to obtain a BFS.  As mentioned previously this method is computationally expensive and speeding up the process of going from an interior point solution to a vertex will not only help to solve LPs faster, but will offer even more methods to more efficiently solve IPs using algorithms that make use of the LP relaxation.
+ 	
+ 	\section*{Algorithm Overview and Example}
+ 	For this section of the paper we will describe the algorithm at a high level while using a small example to demonstrate the algorithm with some concrete insights into its different phases.
+ 	\subsection*{Phase I--Initial Aggregation and BFS} 
+ 	From this point on we will be using the instance in (1) to as an example for stepping through the algorithm.  As the name for phase one suggests we, we will compute the coarsest EPs for the instance and aggregate the problem based on this.  To relate this to the example in the (1), look at the matrix in (2).
  	
 	 \begin{mini!}
 	 	{}{x_0 + x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + x_8}{}{}
@@ -99,7 +108,9 @@
 	 	\addConstraint{\bar{x}_i}{\geq 0, \quad}{i = 0, 1, \hdots, 8}
 	 \end{mini!}	
  
-	Constraint (1k) is added to the instance due to the fact that, when aggregated, the aggregated solution to the LP is a vertex.  This constraint prohibits this, and thus allows for this problem to be used as an example.
+	In this specific instance, constraint (1k) is added to the problem because otherwise the initial aggregation of the problem actually results in a optimal BFS in the original problem.  Adding this constraint produces and optimal interior point solution to the original problem.  Now computing the coarsest EP for this problem gives the results in the matrix in (2).  Here the  bars serve the purpose of separating the aggregated variables and constraints, as well as, the right hand sides of the constrains and objective value. 
+	
+	Here the columns grouped within a set of of bars correspond to an aggregated variable, and the rows within bars correspond to the aggregated constraints.  In any instance, the final vertical bar in the matrix separates the columns from the right hand sides of the constraints, and the final horizontal bar (lowest) separates the rows of constraints from the objective row.
 	
 \begin{equation}
  	\begin{pmatrix}
@@ -124,29 +135,33 @@
 	 The matrix format of the instance is given in (2).  The horizontal and vertical bars represent the aggregated constraints and variables. As is seen from the matrix in (2), the coarsest equitable partition for (1) is
 	 
 	 \begin{equation}
-	 	\mathcal{P}^1 = 
+	 	\mathcal{P}^0 = 
 	 	\begin{pmatrix} 
-	 	x_0 & x_1 & x_2 & x_3 & x_4 & x_5 & x_6 & x_7 & x_8 \\
-	 	c_0 & c_1 & c_2 & c_3 & c_4 & c_5 & c_6 & c_7 & c_8 \\
-	 	c_9
+	 	\begin{array}{c|ccccccccc}
+	 	\cC_0^0 & x_0 & x_1 & x_2 & x_3 & x_4 & x_5 & x_6 & x_7 & x_8 \\
+	 	\cC_1^0 & c_0 & c_1 & c_2 & c_3 & c_4 & c_5 & c_6 & c_7 & c_8 \\
+	 	\cC_2^0 & c_9
+	 	\end{array}
 	 	\end{pmatrix} 
 	 \end{equation}
 	 
-	 From $\mathcal{P}^1$ we have that the aggregated LP of (1) is  
+	 Here, $C_b^a$ is a class $b$ from the coarsest EP $b$.  From $\mathcal{P}^0$ we have that the aggregated LP of (1) is  
  
  \begin{mini!}
  	{}{\bar{x}_0^1}{}{}
- 	\addConstraint{9 \bar{x}_0^1 - \bar{s}_0^1}{= 2}
- 	\addConstraint{5 \bar{x}_0^1 - \bar{s}_1^1}{= 1}
-	\addConstraint{0 \leq }{\bar{x}_0^1, \bar{s}_0^1, \bar{s}_1^1}{\leq 1}
+ 	\addConstraint{9 \bar{x}_0^0 - \bar{s}_0^0}{= 2}
+ 	\addConstraint{5 \bar{x}_0^0 - \bar{s}_1^0}{= 1}
+	\addConstraint{0 \leq }{\bar{x}_0^0, \bar{s}_0^0, \bar{s}_1^0}{\leq 1}
  \end{mini!}
 
-	In (3), the variable $\bar{x}_0^1$ is the aggregated variable from (1) under the first coarsest equitable partition (superscript) where $x_0$ is the representative of that equitable partition (subscript).  Solving this aggregation results in the following solution: $\bar{x}_0^1 = \frac{2}{9}$, $\bar{s}_1^1 = \frac{1}{9}$, and $\bar{s}_0^1 = 0$ (non-basic).  Here, the variables denoted by $\bar{s}_i^j$ are the slack variables for the $i^{th}$ constraint under the $j^{th}$ coarsest equitable partition.  This solution gives the basis
+	In (4), $\bar{x}_0^0$ is aggregation of all the variables in $C_0^0$ representing the average of each of these variables.  The LP in (4) has been written in standard form for the sake of consistency. We will call this problem LP$^0$. Solving LP$^0$ results with the tableau in (5).  Here, $\bar{x}_0^0 \ \text{and} \ \bar{s}_1^0$ are the basic variables while $\bar{s}_0^0$ is non-basic.  This result gives an objective value in (1) of 2.
+	
+	Now, in general, it is possible that this aggregated solution could be a vertex in the original problem, however for this case it is not.  Further, in the case where the initial aggregation is a vertex solution in the original problem, we can add a constraint that causes the solution to not be a vertex.
 	
 	\begin{equation}
 	\begin{pmatrix}
 	\begin{array}{ccc|c}
-		\bar{x}_0^1 & \bar{s}_0^1 & \bar{s}_1^1 \\
+		\bar{x}_0^0 & \bar{s}_0^0 & \bar{s}_1^0 \\
 		\hline
 		1 & -\frac{1}{9} & 0 & \frac{2}{9} \\
 		0 & -\frac{5}{9} & 1 & \frac{1}{9} 
@@ -154,46 +169,134 @@
 	\end{pmatrix}
 	\end{equation}
 	
-	  To construct the next basis, we must first come back to our equitable partition $\mathcal{P}^1$.  Now we will choose variable $x_0$ from (1) and give it a new color (isolation).  After having done this, we will recompute the coarsest equitable partition for this instance.  This results in
+	At this point, we need to start unfolding the LP in (4) so that we may take the necessary steps to construct a vertex for the original problem in (1).  This essentially means that some of the variables in the original problem, while currently basic, must become non-basic to have a vertex solution to (1).  Now, we could simply recompute the EP of (1) after isolating the representative of $\cC_0^0$, aggregating based on this, and then let simplex handle the rest.  However, we can use some new tricks to speed up the unfolding process.
+	
+	We have a basis from the previous aggregation based on $\cP^0$.  We  may use this basis to construct a starting basis for a new aggregation that will based on a new EP of (1).  To determine this new EP, we isolate $x_0$ (give it a new color class alone) and then refine based off this new color.  This gives
 	
 	\begin{equation}
-	\mathcal{P}^2 = 
+	\mathcal{P}^1 = 
 	\begin{pmatrix}
 	\begin{array}{c|cccc}
-	\cC_1 & x_1 & x_2 & x_3 & x_6 \\
-	\cC_0 & x_0 &&& \\
-	\cC_3 & x_4 & x_5 & x_7 & x_8 \\
-	\cC_5 & c_4 & c_5 & c_7 & c_8 \\
-	\cC_4 & c_0 &&& \\
-	\cC_6 & c_1 & c_2 & c_3 & c_6 \\
-	\cC_7 & c_9 &&&
+	\cC_0^1 & x_0 &&& \\
+	\cC_1^1 & x_1 & x_2 & x_3 & x_6 \\
+	\cC_2^1& x_4 & x_5 & x_7 & x_8 \\
+	\cC_3^1 & c_0 &&& \\
+	\cC_4^1 & c_4 & c_5 & c_7 & c_8 \\
+	\cC_5^1 & c_1 & c_2 & c_3 & c_6 \\
+	\cC_6^1 & c_9 &&&
  	\end{array}
 	\end{pmatrix}
 	\end{equation}
 	
-	where $x_i$ is the $i^{th}$ variable in (1) and $c_i$ is the $i^{th}$ constraint in (1). From this equitable partition we now can construct the next aggregated LP.  It has the form
+	From $\cP^1$, our new aggregate LP is 
 	
 	\begin{mini!}
-		{}{\bar{x}_0^2 + 4 \bar{x}_1^2 + 4 \bar{x}_4^2}{}{}
-		\addConstraint{2\bar{x}_0^2 + 3 \bar{x}_4^2 - \bar{s}_0^2}{= 1}
-		\addConstraint{\bar{x}_0^2 + 3 \bar{x}_1^2 + \bar{x}_4^2 - \bar{s}_1^2}{= 1}
-		\addConstraint{\bar{x}_0^2 + 4 \bar{x}_1^2 - \bar{s}_2^2}{= 1}
-		\addConstraint{\bar{x}_0^2 -  \bar{x}_1^2 - \bar{r}_{01}}{= 0}
-		\addConstraint{\bar{x}_0^2 -  \bar{x}_4^2 - \bar{r}_{04}}{= 0}
-		\addConstraint{\bar{x}_0^2 + 4\bar{x}_1^2 + 4\bar{x}_4^2}{= {2}}
-		\addConstraint{\bar{x}_i^2}{\leq 1, \quad}{i = 0, 1, 4}
-		\addConstraint{\bar{x}_i^2}{\geq 0, \quad}{i = 0, 1, 4}
-		%\addConstraint{\bar{r}_{01} = \bar{r}_{04}}{= 0}
+		{}{\bar{x}_1^1 + 4 \bar{x}_1^1 + 4 \bar{x}_2^1}{}{}
+		\addConstraint{\bar{x}_0^1 + 4\bar{x}_1^1 + 4\bar{x}_2^1}{= {2}}
+		\addConstraint{\bar{x}_0^1 -  \bar{x}_1^1 - \bar{r}_{01}}{= 0}
+		\addConstraint{\bar{x}_0^1 -  \bar{x}_2^1 - \bar{r}_{02}}{= 0}
+		\addConstraint{\bar{x}_0^1 + 3 \bar{x}_1^1 + \bar{x}_2^1 - \bar{s}_3^1}{= 1}
+		\addConstraint{2\bar{x}_0^1 + 3 \bar{x}_2^1 - \bar{s}_4^1}{= 1}
+		\addConstraint{\bar{x}_0^1 + 4 \bar{x}_1^1 - \bar{s}_5^1}{= 1}
+		\addConstraint{\bar{x}_i^1}{\leq 1, \quad}{i = 0, 1, 2}
+		\addConstraint{\bar{x}_i^1}{\geq 0, \quad}{i = 0, 1, 2}
+		\addConstraint{\bar{r}_{ij}}{= 0, \quad}{i = 0, \ j = 1, 2}
+		%\addConstraint{\bar{r}_{01} = \bar{r}_{02}}{= 0}
 	\end{mini!}
 
-	Here, there are a few points to notice.  First, the active set from the previous aggregation have been brought forward, (6g).  Secondly new constraints have been added to show that, for the time being, The new aggregate variables should remain equal to each other, as they were all equal in the previous aggregation. 
+	We keep the consistency of writing the LP in standard form.  First, take note that we have brought forward the active set of constraint from the previous aggregation.  This is (7g), and it remains active in the new problem.  This is a process that allows us to build up the required number of active constraints for the problem (The same methodology applies to bounds as well).
 	
-	Now we may begin constructing the basis for this aggregation based on the solution from the previous aggregation.
+	Next, we take a look at the new variables introduced in (7).  It is the exact same idea as before with a few additional details.  Here each variable labeled by $\bar{x}_a^b$ is the aggregation of each new class of variables in $\cP^1$ representing the average of all the variables in that class.  Here, $a$ is the index on the class being aggregated, and $b$ is the index on which coarsest EP we are working with.  
+	
+	The slack variables here have the exact same notation as the aggregated variables except their subscript is the index on the the constraint class being aggregated by the constraint that slack variable is a part of.  Note that (7b) does not a have a slack variable because it is the aggregation of $\cC^1_6 \subset \cC^0_1$ whose aggregation in (4) was an active constraint.  Thus, as a result of maintaining active constraints (7g) must be active in the lifted starting basis of (7).
+	
+	Finally, the newly introduced variables labeled in the form $\bar{r}_{ab}$ are variables that maintain the equality of newly aggregated variables representing classes that are subset of a class whose aggregation was basic in the previous problem.  Here, $\cC^1_0, \ \cC^1_1, \ \cC^1_2 \subset \cC^0_0$ which is basic, so $\bar{x}_0^1 = \bar{x}_1^1 = \bar{x}_2^1$ and are going to basic in the starting basis for (7).  To ensure this we create variables $\bar{r}_{ab}$ representing the link between $\bar{x}_a^2$ and $\bar{x}_b^2$.  We set the bounds to these $r$ variables to 0 (lower and upper) and then uses constraints of the form (7c, 7d) to ensure the equality of the $\bar{x}$ variables.
+	
+	Now, at this point, we could feed this LP to a solver and let the solver give us a solution that would be used as the starting basis for the lifted LP, but this could take several pivots and we would not have made any progress unfolding the LP.  Instead, we now make use of the basis in (5) to construct a starting basis for (7). 
+	
+	We will do this step by step.  The first step is to set the basic variables.  We will begin with the aggregate variables that represent the variable classes in $\cP^1$.  As mentioned above, these variables whose columns are filled in are basic due to the previous aggregation of the problem.  We also know that all of the variables are equal because of the classes in $\cP^1$ that they represent.  This gives us the first three columns of the matrix in (8) as well as the first three right hand sides of (8)
 	
 	\begin{equation}
 	\begin{pmatrix}
-	\begin{array}{cccccccc|c}
-	\bar{x}^2_0 & \bar{x}^2_1 & \bar{x}^2_4 & \bar{s}^2_0 & \bar{s}^2_1 & \bar{s}^2_4 & \bar{r}_{01} & \bar{r}_{04} \\
+	\begin{array}{ccc|ccc|cc|c}
+	\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
+	\hline
+	1 & 0 & 0 & \_ & \_ &\_ & \_ & \_ & \frac{2}{9} \\ 
+	0 & 1 & 0 & \_ & \_ &\_ & \_ & \_ & \frac{2}{9} \\ 
+	0 & 0 & 1 & \_ & \_ &\_ & \_ & \_ & \frac{2}{9} \\ 
+	0 & 0 & 0 &\_ & \_ &\_ & \_ & \_& \_ \\ 
+	0 & 0 & 0 & \_ & \_ &\_ & \_ & \_& \_ \\
+	0 & 0 & 0 &\_ & \_ &\_ & \_& \_ & \_ \\
+	\end{array}
+	\end{pmatrix}
+	\end{equation}
+	 
+	 Next, we can construct the columns for the slack variables of the problem.  We know that $\cC_3^1, \cC_4^1, \cC_5^1 \subset \cC_1^0$, and that the constraint that aggregated $\cC_1^0$ was not active in (5), thus the constraints aggregating $\cC_3^1, \cC_4^1, \ \text{and} \  \cC_5^1$ will not be active in the starting basis for (7).  This means that all slack variables associated with these constraints (7e, 7f, 7g) will be basic in the starting basis of (7).  This gives
+	 
+	\begin{equation}
+	\begin{pmatrix}
+	\begin{array}{cccccc|cc|c}
+		\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
+	\hline
+	1 & 0 & 0 & 0 & 0 & 0 & \_ & \_ & \frac{2}{9} \\ 
+	0 & 1 & 0 & 0 & 0 & 0 & \_ & \_ & \frac{2}{9} \\ 
+	0 & 0 & 1 & 0 & 0 & 0 & \_ & \_ & \frac{2}{9} \\ 
+	0 & 0 & 0 & 1 & 0 & 0 & \_ & \_ & \frac{1}{9} \\ 
+	0 & 0 & 0 & 0 & 1 & 0 & \_ & \_ & \frac{1}{9} \\
+	0 & 0 & 0 & 0 & 0 & 1 & \_ & \_ & \frac{1}{9} \\
+	\end{array}
+	\end{pmatrix}
+	\end{equation}
+	
+	At this moment we have constructed the majority of the basis for (7) with little to know effort, however the upcoming columns that are left do require a bit more time to construct.  Although, it is only slight more time consuming than the previous columns.  From here on out will be using the standard form representation of the problem in (7) and our latest matrix in (10) in conjunction with one another to construct the final two columns of the starting basis.	
+	
+	First, we must determine the two missing entries in row 0 of (10).  This is actually very easy due to (7c, 7d).  For this example the row operations become
+	
+	\begin{equation}
+	\frac{1}{9}(7\text{b} + 4(7\text{c}) + 4(7\text{d}))
+	\end{equation}   
+	
+	These operations gives us exactly what we expect for the parts of row 0 that we had already constructed, as well as, the entries for the last two columns in this row.  Now that we have completely filled row 0, we can use it very easily to determine the next two rows.  For row 1 we simply take
+	
+	\begin{equation}
+	-1(7\text{b}) + \text{row} \ 0
+	\end{equation}
+	and similarly, for row 2, we have
+	
+	\begin{equation}
+	-1(7\text{c}) + \text{row} \ 0
+	\end{equation}
+	Once these row operations are complete we have the entries for the last two columns in each of the first three rows 
+	
+	\begin{equation}
+	\begin{pmatrix}
+	\begin{array}{cccccc|cc|c}
+		\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
+	\hline
+	1 & 0 & 0 & 0 & 0 & 0 & -\frac{4}{9} & -\frac{4}{9} & \frac{2}{9} \\ 
+	0 & 1 & 0 & 0 & 0 & 0 &  \frac{5}{9} & 0 & \frac{2}{9} \\ 
+	0 & 0 & 1 & 0 & 0 & 0 & 0 & \frac{5}{9} & \frac{2}{9} \\ 
+	0 & 0 & 0 & 1 & 0 & 0 & \_ & \_ & \frac{1}{9} \\ 
+	0 & 0 & 0 & 0 & 1 & 0 & \_ & \_ & \frac{1}{9} \\
+	0 & 0 & 0 & 0 & 0 & 1 & \_ & \_ & \frac{1}{9} \\
+	\end{array}
+	\end{pmatrix}
+	\end{equation}
+	
+	For the rows that contain the basic aggregate variables, determine the columns of the $r$ variables is very easy and quick.  Further, there is a closed form solution to what these rows in the starting basis will look like.  In (4), the active constraint was (4b).  After isolation and $\cP^1$ was computed, this constraint remained active and became (7b) in (7).  For this case, where active constraints are lifted from a basis for LP$^k$ to another, higher dimensional basis for an LP$^{k + 1}$, they will have the form 
+	
+	\begin{equation}
+	\text{row}_{k + 1} \ i \coloneqq \frac{|\cC_i^{k}|\bar{x}_i^{k + 1} - \sum_{l \in |\cP^{k + 1}| \backslash \{i\}}|\cC^{k + 1}_l|\bar{r}_{il} = |\cC^{k}_i|\beta}{|\cC_i^{k}|}
+	\end{equation}
+	
+	Here, $\cC_i^{k}$ is a class from from $\cP^k$ in which the variable in LP$^k$ representing the average of all variables within that class is basic.  Row$_{k + 1} \ i$ is a row representing an active constraint that has been lifted to the dimension of LP$^{k + 1}$.  These constraints and aggregated basic variables correspond to each other when lifted to dimensions of LP$^{k + 1}$.  Next, let $\cB$ be the set of indices on classes in $\cP^k$ whose aggregation became a basic variable in the solution to LP$^k$.  $\bar{x}_i^{k + 1}$ is an aggregated variable as a result of $\cP^{k + 1}$ that represents the first subclass $\cC_j^{k + 1}, \ j \in |\cP^{k + 1}|$ of a class $\cC_i^k , \ i \in \cB$.  In our example problem, this is the variable that represents the first subclass $\cC_0^1 \subseteq \cC_0^0$, denoted by $\bar{x}_0^1$.
+	
+	Once these rows are taken care of, we have left the rows that correspond to variables representing $\cC_l^{k + 1}, l \in |\cP^{k + 1}| \backslash \{i\}$.  
+	
+	\begin{equation}
+	\begin{pmatrix}
+	\begin{array}{cccccc|cc|c}
+	\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
 	\hline
 	1 & 0 & 0 & 0 & 0 & 0 & -\frac{4}{9} & -\frac{4}{9} & \frac{2}{9} \\ 
 	0 & 1 & 0 & 0 & 0 & 0 & \frac{5}{9} & 0 & \frac{2}{9} \\ 
@@ -204,30 +307,7 @@
 	\end{array}
 	\end{pmatrix}
 	\end{equation}
-	
-	Now, we shall explain how this basis is constructed.  First, as mentioned previously, the active set from (4) comes forward to (7).  Doing this creates (7g).  Inspection will show that (7g) is just the disaggregated version of (4b) based on $\cP^2$. Next, (7b, 7c, 7d) are the disaggregated constraints of (4c) based on $\cP^2$.  Since (4c), was not active in the solution to (4), its disaggregated constraints in (7) will not be active either and will have slacks (for the time being).  Finally, (7e, 7f) are called linking constraints and ensure that all aggregated variables in (7) remain equal in the new basis.
-	
-	Next, take note that $\bar{x}_0^2, \ \bar{x}_1^2, \ \text{and} \ \bar{x}_4^2$ are all the aggregated variables from each variable class within $\mathcal{P}^2$.  Because each variable class in $\cP^2$ is a subclass of the singular variable class in $\cP^1$, and because $\bar{x}_0^1 = \frac{2}{9}$, we know that $\bar{x}_0^2, \ \bar{x}_1^2, \ \text{and} \ \bar{x}_4^2$ must also be equal to $\frac{2}{9}$.  
-	
-	Similarly, we know that all new slack variables for constraints that are not active in the basis in (8) must be equal to $\frac{1}{9}$ because $\bar{s}_1^1 = \frac{1}{9}$ in (5).  The logic is the same as the variables, where, since each of the constraints where these slacks are located are subclasses of the singular class in $\cP^1$, and because the constraint that results from this singular class is not active in (5), the same must be true for the constrains which come from the subclasses of $\cP^1$ in $\cP^2$.
-	
-	Essentially, we brought forward all information forward from LP$^{k - 1}$.  We know that the matrix for the basic variables will be nothing more that an identity matrix.  Now all we have to do is take the correct steps to accomplish this while determining the values for the columns associated with the linking variables $\bar{r}$.  As it turns out, finding the entries in these column is not too difficult.
-	
-	First, we will take care of row 0, to which we will assign constraint (7g).  To construct (7g) in(8), all we must do is take $\frac{1}{9}(4 \times (7\text{e}) + 4 \times (7\text{f}) + (7\text{g}))$.  In general the rows that corresponds to active constraints that are the result of a previous aggregation have the following form.  Given an aggregated LP based on $\cP^k$, a known set of active constraints $\cA^{k - 1}$, and a set of basic variables $\cB^{k - 1}$ we have
-	
-	\begin{equation}
-	\text{row}_{i}^k \coloneqq \frac{|\cC_b^{k - 1}|\bar{x}_i^k - \sum_{i \in \cP^k}|\cC^k_i|\bar{r}_{il} = |\cC^{k - 1}_b|\beta}{|\cC_b^{k - 1}|}
-	\end{equation}
-	
-	Where $\bar{x}_i^k$ is a previously basic variable from LP$^{k - 1}$.  row$_j^k$ is an aggregated constraint of $C_i^k \subseteq C_\alpha^{k - 1}, \ \alpha \in \cA^{k - 1}$.  $\bar{r}_{il}$ is a linking variable that maintains equality between aggregated variables from LP$^{k - 1}$ and new aggregate variables in LP$^k$ which were the result of $\cC_i^k \subseteq \cC_b^{k - 1}$ where $\bar{x}_i^k$ was the aggregate of $\cC_b^{k - 1}$, a class which aggregated to become a basic variable in $\cP^{k - 1}$.  Finally, $\beta$ is the value of $\bar{x}_i^k$ in LP$^{k - 1}$.
-		
-	Once the rows of LP$^k$ that are associated with the active set of LP$^{k - 1}$ are determined, then the rows that are associated with the new linking constraints become very easy to determine.  They are of the form 
-	
-	\begin{equation}
-	\text{row}_{\bar{r}_{il}} \coloneqq \bar{x}_i^k - \sum_{i \in \cP^k}|\cC^k_i|\bar{r}_{il} + 1 =\beta
-	\end{equation} 
-	
-	Here $\bar{x}_i^k$ is a new variable from $\cP^k$ who shared a common class with a basic variable from LP$^{k - 1}$. 
+
 	
  \end{document}
 
