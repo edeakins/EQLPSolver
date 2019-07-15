@@ -36,7 +36,25 @@
 \usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
 \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
 % These packages are all incorporated in the memoir class to one degree or another...
+\usepackage{tikz}
+\usetikzlibrary{calc}
 
+%\usepackage[nodisplayskipstretch]{setspace} \setstretch{1.5}
+
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+\newcommand{\DrawBox}[4][]{%
+	\tikz[overlay,remember picture]{%
+		\coordinate (TopLeft)     at ($(#2)+(-0.2em,0.9em)$);
+		\coordinate (BottomRight) at ($(#3)+(0.2em,-0.3em)$);
+		%
+		\path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
+		\path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
+		\coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
+		%
+		\draw [red,#1] (TopLeft) rectangle (BottomRight);
+		\node [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
+	}
+}
 %%% HEADERS & FOOTERS
 \usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
 \pagestyle{fancy} % options: empty , plain , fancy
@@ -112,7 +130,7 @@
 	
 	Here the columns grouped within a set of of bars correspond to an aggregated variable, and the rows within bars correspond to the aggregated constraints.  In any instance, the final vertical bar in the matrix separates the columns from the right hand sides of the constraints, and the final horizontal bar (lowest) separates the rows of constraints from the objective row.
 	
-\begin{equation}
+\begin{equation}\setstretch{1.5}
  	\begin{pmatrix}
  		\begin{array}{ccccccccc|c}
  			1 & 1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\ 
@@ -127,14 +145,14 @@
  			\hline
  			1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 2 \\ 
  			\hline
- 			1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \infty
+ 			1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & -\infty
  		\end{array}
  	\end{pmatrix}
  \end{equation}
  
 	 The matrix format of the instance is given in (2).  The horizontal and vertical bars represent the aggregated constraints and variables. As is seen from the matrix in (2), the coarsest equitable partition for (1) is
 	 
-	 \begin{equation}
+	 \begin{equation}\setstretch{1.5}
 	 	\mathcal{P}^0 = 
 	 	\begin{pmatrix} 
 	 	\begin{array}{c|ccccccccc}
@@ -158,7 +176,7 @@
 	
 	Now, in general, it is possible that this aggregated solution could be a vertex in the original problem, however for this case it is not.  Further, in the case where the initial aggregation is a vertex solution in the original problem, we can add a constraint that causes the solution to not be a vertex.
 	
-	\begin{equation}
+	\begin{equation}\setstretch{1.5}
 	\begin{pmatrix}
 	\begin{array}{ccc|c}
 		\bar{x}_0^0 & \bar{s}_0^0 & \bar{s}_1^0 \\
@@ -173,7 +191,7 @@
 	
 	We have a basis from the previous aggregation based on $\cP^0$.  We  may use this basis to construct a starting basis for a new aggregation that will based on a new EP of (1).  To determine this new EP, we isolate $x_0$ (give it a new color class alone) and then refine based off this new color.  This gives
 	
-	\begin{equation}
+	\begin{equation}\setstretch{1.5}
 	\mathcal{P}^1 = 
 	\begin{pmatrix}
 	\begin{array}{c|cccc}
@@ -217,7 +235,7 @@
 	We will do this step by step.  The first step is to set the basic variables.  We will begin with the aggregate variables that represent the variable classes in $\cP^1$.  As mentioned above, these variables whose columns are filled in are basic due to the previous aggregation of the problem.  We also know that all of the variables are equal because of the classes in $\cP^1$ that they represent.  This gives us the first three columns of the matrix in (8) as well as the first three right hand sides of (8)
 	
 	\begin{equation}
-	\begin{pmatrix}
+	\begin{pmatrix}\setstretch{1.5}
 	\begin{array}{ccc|ccc|cc|c}
 	\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
 	\hline
@@ -233,7 +251,7 @@
 	 
 	 Next, we can construct the columns for the slack variables of the problem.  We know that $\cC_3^1, \cC_4^1, \cC_5^1 \subset \cC_1^0$, and that the constraint that aggregated $\cC_1^0$ was not active in (5), thus the constraints aggregating $\cC_3^1, \cC_4^1, \ \text{and} \  \cC_5^1$ will not be active in the starting basis for (7).  This means that all slack variables associated with these constraints (7e, 7f, 7g) will be basic in the starting basis of (7).  This gives
 	 
-	\begin{equation}
+	\begin{equation}\setstretch{1.5}
 	\begin{pmatrix}
 	\begin{array}{cccccc|cc|c}
 		\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
@@ -268,14 +286,14 @@
 	\end{equation}
 	Once these row operations are complete we have the entries for the last two columns in each of the first three rows 
 	
-	\begin{equation}
+	\begin{equation}\setstretch{1.5}
 	\begin{pmatrix}
 	\begin{array}{cccccc|cc|c}
 		\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
 	\hline
 	1 & 0 & 0 & 0 & 0 & 0 & -\frac{4}{9} & -\frac{4}{9} & \frac{2}{9} \\ 
-	0 & 1 & 0 & 0 & 0 & 0 &  \frac{5}{9} & 0 & \frac{2}{9} \\ 
-	0 & 0 & 1 & 0 & 0 & 0 & 0 & \frac{5}{9} & \frac{2}{9} \\ 
+	0 & 1 & 0 & 0 & 0 & 0 &  \frac{5}{9} & -\frac{4}{9} & \frac{2}{9} \\ 
+	0 & 0 & 1 & 0 & 0 & 0 & -\frac{4}{9} & \frac{5}{9} & \frac{2}{9} \\ 
 	0 & 0 & 0 & 1 & 0 & 0 & \_ & \_ & \frac{1}{9} \\ 
 	0 & 0 & 0 & 0 & 1 & 0 & \_ & \_ & \frac{1}{9} \\
 	0 & 0 & 0 & 0 & 0 & 1 & \_ & \_ & \frac{1}{9} \\
@@ -285,29 +303,79 @@
 	
 	For the rows that contain the basic aggregate variables, determine the columns of the $r$ variables is very easy and quick.  Further, there is a closed form solution to what these rows in the starting basis will look like.  In (4), the active constraint was (4b).  After isolation and $\cP^1$ was computed, this constraint remained active and became (7b) in (7).  For this case, where active constraints are lifted from a basis for LP$^k$ to another, higher dimensional basis for an LP$^{k + 1}$, they will have the form 
 	
-	\begin{equation}
-	\text{row}_{k + 1} \ i \coloneqq \frac{|\cC_i^{k}|\bar{x}_i^{k + 1} - \sum_{l \in |\cP^{k + 1}| \backslash \{i\}}|\cC^{k + 1}_l|\bar{r}_{il} = |\cC^{k}_i|\beta}{|\cC_i^{k}|}
+	\begin{equation}\setstretch{1.5}
+	\text{row}_{k + 1} \ j \coloneqq \frac{|\cC_i^{k}|\bar{x}_j^{k + 1} - \sum\limits_{l \in \{0, \dots, |\cP^{k + 1}_v| - 1\} \backslash \{j\}}|\cC^{k + 1}_l|\bar{r}_{jl} = |\cC^{k}_i|\beta_i}{|\cC_i^{k}|}
 	\end{equation}
 	
-	Here, $\cC_i^{k}$ is a class from from $\cP^k$ in which the variable in LP$^k$ representing the average of all variables within that class is basic.  Row$_{k + 1} \ i$ is a row representing an active constraint that has been lifted to the dimension of LP$^{k + 1}$.  These constraints and aggregated basic variables correspond to each other when lifted to dimensions of LP$^{k + 1}$.  Next, let $\cB$ be the set of indices on classes in $\cP^k$ whose aggregation became a basic variable in the solution to LP$^k$.  $\bar{x}_i^{k + 1}$ is an aggregated variable as a result of $\cP^{k + 1}$ that represents the first subclass $\cC_j^{k + 1}, \ j \in |\cP^{k + 1}|$ of a class $\cC_i^k , \ i \in \cB$.  In our example problem, this is the variable that represents the first subclass $\cC_0^1 \subseteq \cC_0^0$, denoted by $\bar{x}_0^1$.
+	Here, $\cC_i^{k}$ is a class from from $\cP^k_v$ (where $\cP^k_v$ are the classes of $\cP^k$ associated with variables)  in which the variable in LP$^k$ representing the average of all variables within that class is basic.  Row$_{k + 1} \ j$ is a row representing an active constraint that has been lifted to the dimension of LP$^{k + 1}$.  These constraints and aggregated basic variables correspond to each other when lifted to dimensions of LP$^{k + 1}$.  Next, let $\cB$ be the set of indices on classes in $\cP^k_v$ whose aggregation became a basic variable in the solution to LP$^k$.  $\bar{x}_j^{k + 1}$ is an aggregated variable as a result of $\cP^{k + 1}$ that represents the first subclass (by index) $\cC_j^{k + 1}, \ j  \in \{0, \dots, |\cP^{k + 1}_v| - 1\}$, of a class $\cC_i^k , \ i \in \cB$.  Let the indices on these first sublcasses be the set $\mathcal{D}$.  In our example problem, this is the variable that represents the first subclass $\cC_0^1 \subseteq \cC_0^0$, denoted by $\bar{x}_0^1$  Finally, $\beta_i$ represents the value of the aggregated variable representing $\cC_i^k$ in the basis of LP$^k$.
 	
-	Once these rows are taken care of, we have left the rows that correspond to variables representing $\cC_l^{k + 1}, l \in |\cP^{k + 1}| \backslash \{i\}$.  
+	Once these rows are taken care of, we have left the rows that correspond to variables representing $\cC_l^{k + 1},\ l \in  \{0, \dots, |\cP^{k + 1}_v| - 1\} \backslash \{\mathcal{D}\}$.  It is actually very easy to determine the rows that correspond to these variables as well.  When the initial aggregation for an EP $\cP^{k + 1}, \ k \geq 0$ is written, there will be at least one equation of the form (7c, 7d).  The variables $\bar{x}_l^k$ that aggregate $ \cC_l^k, \  l \in  \{0, \dots, |\cP^{k + 1}_v| - 1\} \backslash \{\mathcal{D}\}, \ \cC_l^k \subset \cC_i^{k - 1}, \ i \in \cB$ will correspond to the rows that have this form.  These rows will also have a closed form solution as follows
 	
 	\begin{equation}
+	 \text{row}_{k + 1} \ l \coloneqq \bar{x}_l^{k + 1} + \left(1 - \frac{|\cC^{k + 1}_l|}{|\cC_i^{k}|}\bar{r}_{jl}\right) - \frac{\sum\limits_{m \in \{0, \dots, |\cP^{k + 1}_v| - 1\} \backslash \{j, l\}}|\cC^{k + 1}_m|\bar{r}_{jm}}{|\cC_i^{k}|} = \beta_i, 
+	\end{equation}
+	where $j,l \in \{a|\cC_a^{k + 1} \subset \cC_i^{k} \}$.
+	
+	Essentially, what this equation says, is that a variable $\bar{x}_l^{k + 1}$ will be equal to the same value as $\bar{x}_j^{k + 1}, \ j \in \mathcal{D} \cap \{a| \cC_a^{k + 1} \subset \cC_i^k\}, \ l \in \{a| \cC_a^{k + 1} \subset \cC_i^k\} $ in the starting basis for LP$^{k + 1}$.  As for the $\bar{r}$ variables, their coefficients are easily determined as well.  Take the coefficient of a variable $\bar{r}_{jl}$ in $\text{row}_{k + 1} \ j$ and add 1 to it, otherwise the values of $\bar{r}_{jm}, \ m \neq l$ remain the same, and now theses rows are finished. 
+	
+	Once these rows are taken care of, we only have left the rows that correspond to slack variables that will be in the starting basis for LP$^{k + 1}$, if any exist.  For these variables, there is no closed form solution to what the rows will look like.  However, they are easily determined using elementary row operations from linear algebra.  Further, we have that $\bar{s}^{k + 1}_j = \bar{s}^k_i, \ j \in \{0, \dots, |\cP^{k + 1}_c| - 1\} \cap \{a|\cC_a^{k + 1} \subset \cC^k_i\} , \ \forall i \in \cA \ \text{where} \ \cA \ \text{is the set of non-active constraints in LP}^{k + 1}$.  For our example, the complete starting basis for LP$^1$ is as follows 
+	
+	\begin{equation}\setstretch{1.5}
 	\begin{pmatrix}
-	\begin{array}{cccccc|cc|c}
+	\begin{array}{cccccccc|c}
 	\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
 	\hline
 	1 & 0 & 0 & 0 & 0 & 0 & -\frac{4}{9} & -\frac{4}{9} & \frac{2}{9} \\ 
-	0 & 1 & 0 & 0 & 0 & 0 & \frac{5}{9} & 0 & \frac{2}{9} \\ 
-	0 & 0 & 1 & 0 & 0 & 0 & 0 & \frac{5}{9} & \frac{2}{9} \\ 
+	0 & 1 & 0 & 0 & 0 & 0 & \tikzmark{left}\frac{5}{9} & -\frac{4}{9} & \frac{2}{9} \\ 
+	0 & 0 & 1 & 0 & 0 & 0 & -\frac{4}{9} & \frac{5}{9}\tikzmark{right} & \frac{2}{9} \\ 
 	0 & 0 & 0 & 1 & 0 & 0 & -\frac{8}{9} & \frac{7}{9} & \frac{1}{9} \\ 
 	0 & 0 & 0 & 0 & 1 & 0 & \frac{11}{9} & \frac{1}{9} & \frac{1}{9} \\
 	0 & 0 & 0 & 0 & 0 & 1 & -\frac{16}{9} & \frac{4}{9} & \frac{1}{9} \\
 	\end{array}
 	\end{pmatrix}
 	\end{equation}
+	\DrawBox[dotted, thick]{left}{right}
 
+
+	Now that the entirety of the starting basis for LP$^1$ is finished, there is one interesting note to point out.  For the rows that correspond with the form given in (15), the coefficients on the $\bar{r}$ variables create a square submatrix which has been outline in (16.)  At this time, we are not sure about the usefulness of this occurence, but we would like to investigate deeper into this, since this will be the case in any basis for these specific rows. 
+	
+	At this moment, we have finally finished lifting the basis from LP$^0$ to become a starting basis for LP$^1$.  However, nothing about the solution to (1) has changed.  All of the variables are still equal to each other at this point and the same constraints are active, namely (1k).  Now, as stated previously, we know that this point is not a vertex solution to the original problem.  this is the point, where our algorithm starts to shine by pushing our solution toward a vertex in the original problem.  We know that, right now, the $\bar{r}$ variables are fixed to be zero, but if we let that change, we can allow these variables to enter the basis while others leave.
+	
+	As these variables move into the basis they push either slack variables or aggregated variables out of the basis, changing the active set of constraints and eventually pushing us towards a vertex solution to (1).  We simply do this by letting the simplex algorithm do what it does best.  However, we already know that the entering variables will be the $\bar{r}$ variables.  We may choose them perform a simplex pivot on these variables in whatever order we want, so from left to right is satisfactory for now.  This means our first entering variable will be $\bar{r}_{01}$.  After completeing a simplex pivot with this entering variable we obtain 
+	
+	\begin{equation}\setstretch{1.5}
+	\begin{pmatrix}
+	\begin{array}{cccccccc|c}
+	\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
+	\hline
+	1 & 0 & 0 & 0 & \frac{4}{11} & 0 & 0 & -\frac{40}{99} & \frac{26}{99} \\ 
+	0 & 1 & 0 & 0 & -\frac{5}{11} & 0 &  0 & -\frac{49}{99} & \frac{17}{99} \\ 
+	0 & 0 & 1 & 0 & \frac{4}{11} & 0 & 0 & \frac{59}{99} & \frac{26}{99} \\ 
+	0 & 0 & 0 & 1 & \frac{8}{11} & 0 & 0 & \frac{85}{99} & \frac{19}{99} \\ 
+	0 & 0 & 0 & 0 & \frac{9}{11} & 0 & 1 & \frac{1}{11} & \frac{1}{11} \\
+	0 & 0 & 0 & 0 & \frac{16}{11} & 1 & 0 & \frac{20}{33} & \frac{3}{11} \\
+	\end{array}
+	\end{pmatrix}
+	\end{equation}
+	
+	In (17), we see that $\bar{x}_0^1 = \bar{x}_2^1 \neq \bar{x}_1^1$ which is what we gain by allowing $\bar{r}_{01}$ enter the basis.  This is how the unfolding process works.  Allowing these linking variables to enter removes the restriction of the aggregated variables being equal to each other.  When this happens, another result is that we obtain new active constraints which we want to build up the necessary active set for a vertex solution to the original problem.  Here, during this pivot, (7f) became active and this actually means that in the original problem we have added 4 constraints to the active set.  Finally, at this stage, we allow $\bar{r}_{02}$ to enter the basis and obtain
+
+	\begin{equation}\setstretch{1.5}
+	\begin{pmatrix}
+		\begin{array}{cccccccc|c}
+			\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_3 & \bar{s}^1_4 & \bar{s}^1_5 & \bar{r}_{01} & \bar{r}_{02} \\
+			\hline
+			1 & 0 & 0 & \frac{8}{17} & \frac{12}{17} & 0 & 0 & 0 & \frac{6}{17} \\ 
+			0 & 1 & 0 & \frac{49}{85} & -\frac{5}{11} & 0 &  0 & 0 & \frac{24}{85} \\ 
+			0 & 0 & 1 & \frac{-59}{85} & \frac{-12}{85} & 0 & 0 & 0 & \frac{11}{85} \\ 
+			0 & 0 & 0 & \frac{99}{85} & \frac{72}{85} & 0 & 0 & 1 & \frac{19}{85} \\ 
+			0 & 0 & 0 & -\frac{9}{85} & \frac{63}{85} & 0 & 1 & 0 & \frac{6}{85} \\
+			0 & 0 & 0 & -\frac{12}{17} & \frac{16}{17} & 1 & 0 & 0 & \frac{7}{51} \\
+		\end{array}
+	\end{pmatrix}
+\end{equation}
+
+Now at this point, we have no further unfolding to be done, so we repeat this entire process beginning with isolating another variable and recomputing the EP of (1) with this new color scheme.  Following this process until the EP of an LP is discretized will result in a vertex solution to the original problem we started with.
 	
  \end{document}
 
