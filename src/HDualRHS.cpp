@@ -58,7 +58,6 @@ void HDualRHS::choose_normal(int *chIndex) {
             }
         }
         *chIndex = bestIndex;
-
     } else {
         // SPARSE mode
         if (workCount == 0) {
@@ -98,7 +97,6 @@ void HDualRHS::choose_normal(int *chIndex) {
         *chIndex = bestIndex;
     }
     workModel->timer.recordFinish(HTICK_CHUZR1);
-
 }
 
 void HDualRHS::choose_multi_global(int *chIndex, int *chCount, int chLimit) {
@@ -458,4 +456,3 @@ void HDualRHS::create_infeasList(double columnDensity) {
         workCutoff = 0;
     }
 }
-

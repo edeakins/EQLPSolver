@@ -328,6 +328,10 @@ void HDual::solve_phase2() {
         } else {
             solvePhase = 0;
             model->printMessage("problem-optimal");
+            for (int i = 0; i < model->basicIndex.size(); ++i){
+                if (model->basicIndex[i] < model->aggNumCol)
+                   model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
+            }
             model->reportStatus(LP_Status_Optimal);
         }
     } else if (columnIn == -1) {

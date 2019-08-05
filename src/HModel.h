@@ -12,6 +12,8 @@
 #include <stack>
 #include <set>
 #include <list>
+#include <map>
+#include <tuple>
 using namespace std;
 
 const int LP_Status_Unset = -1;
@@ -75,15 +77,16 @@ public:
     void setup_tightenBound();
     void setup_shuffleColumn();
     void setup_allocWorking();
+    void build();
 
     int getNumRow() {
-        return numRow;
+        return aggNumRow;
     }
     int getNumCol() {
-        return numCol;
+        return aggNumCol;
     }
     int getNumTot() {
-        return numTot;
+        return aggNumTot;
     }
     const HMatrix *getMatrix() {
         return &matrix;
@@ -184,6 +187,13 @@ public:
     void printList(Node **headRef);
     void isolate(int i);
     void equitable();
+    void aggClear();   
+    void aggregate();
+    vector<int> getCoeff(int color);
+    int getObj(int color);
+    void getNewRows();
+    bool discrete();
+    void collectHist();
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -226,12 +236,20 @@ public:
 
     /* Deakins - Objects and data structures */
     // Ints
+    int masterIter;
     int vCol;
     int cCol;
     int r;
     int numParts;
-    // Storage - vectors
+    int iso = -1;   
+    int prevColor; 
+    int numNewRows;
+    int numNewCols;
+    int targ; 
+    int maxColor;    
+    // Storage - vectors for EPs
     vector<adjNode *> adjList;
+    vector<adjNode *> aggAdjList;
     vector<double> Rhs;
     vector<Node *> C;
     vector<list<int> *> A;
@@ -243,6 +261,12 @@ public:
     vector<int> color;
     vector<bool> SCheck;
     vector<bool> isolates;
+    vector<bool> linkedByIso;
+    vector<int> vColor;
+    vector<int> colorsToLink;
+    vector<int> reps;
+    vector<int> oldColor;
+
     // Storage - stacks
     stack<int> S;
     // Doubly linked lists
@@ -255,7 +279,22 @@ public:
     // Lists
     list<int>::iterator u;
     list<int>::iterator s;
-    // Sets
+    // Storage for aggregate models
+    int aggNumCol;
+    int aggNumRow;
+    int aggNumTot;
+    vector<int> aggColIdx;
+    vector<int> aggRowIdx;
+    vector<int> aggAstart;
+    vector<int> aggAindex;
+    vector<double> aggAvalue;
+    vector<double> aggColCost;
+    vector<double> aggColLower;
+    vector<double> aggColUpper;
+    vector<double> aggRowLower;
+    vector<double> aggRowUpper;
+    vector<bool> startingBasis;
+    vector<bool> prevBasicColor;
     
 
     // Associated data of original model

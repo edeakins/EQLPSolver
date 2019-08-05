@@ -21,8 +21,8 @@ void solvePlain(const char *filename) {
     // Initialize Model
     HModel model;
     model.intOption[INTOPT_PRINT_FLAG] = 1;
+    model.intOption[INTOPT_SCALE_FLAG] = 0;
     model.setup(filename);
-    model.equitable();
     // Testing
     
     // Set solver and solve the model
@@ -30,6 +30,14 @@ void solvePlain(const char *filename) {
     solver.solve(&model);
     // Print the results -- writing functionality does not appear to be working
     model.printResult();
-    model.writePivots("plain");
+    model.writePivots("p");
+    model.discrete();
+    model.isolate(model.iso);
+    
+    model.build();
+    solver.solve(&model);
+    // for (int i = 0; i < model.aggNumCol; ++i){
+    //     cout << "var: " << i << " obj: " << model.aggColCost[i] << endl;;
+    // }
 }
 

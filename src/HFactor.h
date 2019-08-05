@@ -31,6 +31,10 @@ public:
 
     double realTick;
     double fakeTick;
+     // Basis matrix
+    vector<int> Bstart;
+    vector<int> Bindex;
+    vector<double> Bvalue;
 
 private:
     /**
@@ -52,11 +56,6 @@ private:
     int nwork;
     vector<int> iwork;
     vector<double> dwork;
-
-    // Basis matrix
-    vector<int> Bstart;
-    vector<int> Bindex;
-    vector<double> Bvalue;
 
     // Permutation
     vector<int> permute;

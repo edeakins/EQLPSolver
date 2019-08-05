@@ -41,6 +41,7 @@ void HModel::setup(const char *filename) {
     totalTime = 0;
     problemStatus = -1;
     numberIteration = 0;
+    masterIter = 0;
     modelName = filename;
 
     // Load the model
@@ -50,17 +51,28 @@ void HModel::setup(const char *filename) {
     numTot = numCol + numRow;
     if (numRow == 0)
         return;
-
+    
+ 	initEQs();
+    // init and build all working pieces of model
+    build();
+}
+// Split up setup func so that we could re initialize agg model attributes
+void HModel::build(){
+	startingBasis.assign(numCol, false);
+	// Compute EP refinement
+    equitable();
+    // Update Master iter count
+    masterIter++;
     // Setup random buffers: shuffle the break
-    intBreak.resize(numTot);
-    for (int i = 0; i < numTot; i++)
+    intBreak.resize(aggNumTot);
+    for (int i = 0; i < aggNumTot; i++)
         intBreak[i] = i;
-    for (int i = numTot - 1; i >= 1; i--) {
+    for (int i = aggNumTot - 1; i >= 1; i--) {
         int j = random.intRandom() % (i + 1);
         swap(intBreak[i], intBreak[j]);
     }
-    dblXpert.resize(numTot);
-    for (int i = 0; i < numTot; i++)
+    dblXpert.resize(aggNumTot);
+    for (int i = 0; i < aggNumTot; i++)
         dblXpert[i] = random.dblRandom();
 
     // Setup other part
@@ -77,7 +89,6 @@ void HModel::setup(const char *filename) {
 
     // Save the input time
     totalTime += timer.getTime();
-
 }
 
 bool load_mpsLine(FILE *file, int lmax, char *line, char *flag, double *data) {
@@ -185,7 +196,7 @@ void HModel::setup_loadMPS(const char *filename) {
     }
     Astart.push_back(Aindex.size());
 
-    // Load RHS
+    // Load model
     vector<double> RHS(numRow, 0);
     while (load_mpsLine(file, lmax, line, flag, data)) {
         if (data[2] != objName) {
@@ -280,27 +291,18 @@ void HModel::setup_loadMPS(const char *filename) {
 // Initialize storage containers that are accesible 
 // by the model class
 void HModel::initStorage(){
-	vector<adjNode *> adjCopy(numRow + numCol);
-	adjList = adjCopy;
-	vector<Node *> CCopy(numRow + numCol);
-	C = CCopy;
-	vector<list<int> *> ACopy;
+	adjList.assign(numRow + numCol, NULL);
+	C.assign(numRow + numCol, NULL);
 	for (int i = 0; i < numRow + numCol; ++i){
-		ACopy.push_back(new list<int>);
+		A.push_back(new list<int>);
 	}
-	A = ACopy;
-	vector<bool> SCheckCopy(numRow + numCol, false);
-	SCheck = SCheckCopy;
-	vector<double> mincdegCopy(numRow + numCol);
-	mincdeg = mincdegCopy;
-	vector<double> maxcdegCopy(numRow + numCol);
-	maxcdeg = maxcdegCopy;
-	vector<double> cdegCopy(numRow + numCol);
-	cdeg = cdegCopy;
-	vector<int> isAdjCopy(numRow + numCol);
-	isAdj = isAdjCopy;
-	vector<bool> isoCopy(numRow + numCol, false);
-	isolates = isoCopy;
+	SCheck.assign(numRow + numCol, false);
+	mincdeg.assign(numRow + numCol, 0);
+	maxcdeg.assign(numRow + numCol, 0);
+	cdeg.assign(numRow + numCol, 0);
+	isAdj.assign(numRow + numCol, 0);
+	isolates.assign(numRow + numCol, false);
+	prevBasicColor.assign(numCol, false);
 }
 
 // Append to the end of linked list
@@ -545,15 +547,28 @@ void HModel::computeEQs(){
 				if (listSize(&C[i]) == 1) isolates[C[i]->data] = true;
 			}
 		}
+	} 
+	aggClear();
+	for (int i = 0; i < C.size(); ++i){
+		if (C[i] != NULL){
+			if (i >= numCol){
+				aggNumRow ++;
+				aggNumTot ++;
+				aggRowIdx.push_back(i);
+			}
+			else{
+				reps.push_back(C[i]->data);
+				aggNumCol ++;
+				aggNumTot ++;
+				aggColIdx.push_back(i);
+				for (v = C[i]; v != NULL; v = v->next){
+					vColor[v->data] = i;
+				}
+			}
+		}
 	}
-	// for (int i = 0; i < C.size(); ++i){
-	// 	if (C[i] != NULL){
-	// 		cout << "colors: " << i << endl;
-	// 		printList(&C[i]);
-	// 		cout << "\n" << endl;
-	// 	}
-	// }
-	// cin.get();
+	getNewRows();
+	aggregate();
 }
 
 // Color splitting (cell split) subroutine
@@ -621,19 +636,187 @@ void HModel::isolate(int i){
 	}
 	SCheck[newCol] = true;
 	S.push(newCol);
-	computeEQs();
 }
 
-// Call it all
-void HModel::equitable(){
-	initEQs();
-	computeEQs();
-	for (int i = 0; i < isolates.size(); ++i){
-		if (isolates[i] == false){
-			isolate(i);
+// clear out storage for aggregated model
+void HModel::aggClear(){
+	aggNumRow = 0;
+	aggNumCol = 0;
+	aggNumTot = 0;
+	numNewRows = 0;
+	numNewCols = 0;
+	targ = -1;
+	vColor.assign(numCol, -1);
+	reps.clear();
+	aggAdjList.clear();
+	aggRowIdx.clear();
+	aggColIdx.clear();
+	aggAstart.clear();
+	aggAvalue.clear();
+	aggAindex.clear();
+	aggColCost.clear();
+ 	aggColLower.clear();
+    aggColUpper.clear();
+    aggRowLower.clear();
+    aggRowUpper.clear();
+}
+
+// Find coefficients for aggregated variables
+vector<int> HModel::getCoeff(int color){
+	vector<int> coeff;
+	int count = 0;
+	for (int i = 0; i < aggRowIdx.size(); ++i){
+		for (w = adjList[C[aggRowIdx[i]]->data]; w != NULL; w = w->next){
+			if (vColor[w->label] == color)
+				count += w->w;
+		}
+		coeff.push_back(count);
+		count = 0;
+	}
+	for (int i = 0; i < aggAdjList.size(); ++i){
+		for (w = aggAdjList[i]; w != NULL; w = w->next){
+			if (w->label == color)
+				count += w->w;
+		}
+		coeff.push_back(count);
+		count = 0;
+	}
+	return coeff;
+}
+
+// Find obj coefficients for aggregated variables
+int HModel::getObj(int color){
+	int obj = 0;
+	for (int i = 0; i < colCost.size(); ++i){
+		if (vColor[i] == color && colCost[i]){
+			obj += colCost[i];
 		}
 	}
-	exit(-1);
+	return obj;
+}
+
+// Aggregate variables based on current EP
+void HModel::aggregate(){
+	aggAstart.push_back(0);
+	for (int i = 0; i < aggColIdx.size(); ++i){
+		vector<int> coeff = getCoeff(aggColIdx[i]);
+		for (int j = 0; j < coeff.size(); ++j){
+			if (coeff[j]){
+				aggAvalue.push_back(coeff[j]);
+				aggAindex.push_back(j);
+			}
+		}
+		if (aggColIdx[i] < numCol){
+			if (masterIter){
+				for (int j = 0; j < prevBasicColor.size(); ++j){
+					if (prevBasicColor[j] && j == oldColor[reps[i]]){
+						startingBasis[i] = true;
+					}
+				}
+			}
+			aggColLower.push_back(colLower[C[aggColIdx[i]]->data]);
+			aggColUpper.push_back(colUpper[C[aggColIdx[i]]->data]);
+		}
+		else{
+			aggColLower.push_back(0);
+			aggColUpper.push_back(0);
+		}
+		aggAstart.push_back(aggAindex.size());
+	}
+	for (int i = 0; i < aggRowIdx.size() + numNewRows; ++i){
+		if (i < aggRowIdx.size()){
+			aggRowLower.push_back(rowLower[C[aggRowIdx[i]]->data - numCol]);
+			aggRowUpper.push_back(rowUpper[C[aggRowIdx[i]]->data - numCol]);
+		}
+		else{
+			aggRowLower.push_back(0);
+			aggRowUpper.push_back(0);
+		}
+	}
+	//if (!masterIter){
+	for (int i = 0; i < aggColIdx.size(); ++i){
+		if (aggColIdx[i] < numCol)
+			aggColCost.push_back(getObj(aggColIdx[i]));
+		else
+			aggColCost.push_back(0);
+	}
+	//}
+	// for (int i = 0; i < aggColIdx.size(); ++i){
+	// 	cout << "col: " << aggColIdx[i] << endl;
+	// 	for (int j = aggAstart[i]; j < aggAstart[i + 1]; ++j){
+	// 		cout << "coeff: " << aggAvalue[j] << " at row: " << aggAindex[j] << endl;
+	// 	}
+	// }
+	for (int i = 0; i < startingBasis.size(); ++i){
+			cout << startingBasis[i] << endl;
+	}
+	cout << "size: " << startingBasis.size() << endl;
+}
+
+// Check if parition is discretized
+bool HModel::discrete(){
+	for (int i = 0; i < isolates.size(); ++i){
+		if (!isolates[i]){
+			iso = i;
+			prevColor = color[i];
+			oldColor = color;
+			return false;
+		}
+	}
+	return true;
+}
+
+// Create pairs for residual variables
+void HModel::getNewRows(){
+	if (!masterIter)
+		return;
+	vector<int> leftOvers;
+	for (int i = 0; i < reps.size(); ++i){
+		if (oldColor[reps[i]] == oldColor[iso] && reps[i] != iso){
+			aggAdjList.push_back(NULL);
+			appendAdj(&aggAdjList[numNewRows], color[iso], 1);
+			appendAdj(&aggAdjList[numNewRows], color[reps[i]], -1);
+			appendAdj(&aggAdjList[numNewRows], numTot + numNewCols, -1);
+			aggColIdx.push_back(numTot + numNewCols - 1);
+			numNewRows++;
+			numNewCols++;
+		}
+		else if (oldColor[reps[i]] != oldColor[iso] && reps[i] != iso){
+			leftOvers.push_back(reps[i]);
+		}
+	}
+	sort(leftOvers.begin(), leftOvers.end(), greater<int>());
+ 	while(!leftOvers.empty()){
+		targ = leftOvers.back();
+		leftOvers.pop_back();
+		for (int i = 0; i < leftOvers.size(); ++i){
+			if (oldColor[targ] == oldColor[leftOvers[i]]){
+				aggAdjList.push_back(NULL);
+				appendAdj(&aggAdjList[numNewRows], color[targ], 1);
+				appendAdj(&aggAdjList[numNewRows], color[leftOvers[i]], -1);
+				appendAdj(&aggAdjList[numNewRows], numTot + numNewCols, -1);
+				aggColIdx.push_back(numTot + numNewCols - 1);
+				numNewRows++;
+				numNewCols++;
+			}
+		}
+	}
+	aggNumTot += numNewRows + numNewCols;
+	aggNumCol += numNewCols;
+	aggNumRow += numNewRows;
+}
+
+// EP until discrete partition
+void HModel::equitable(){
+	computeEQs();
+	// isoIter = 0;
+	// for (int i = 0; i < isolates.size(); ++i){
+	// 	if (isolates[i] == false){
+	// 		isoIter ++;
+	// 		isolate(i);
+	// 		cin.get();
+	// 	}
+	// }
 }
 
 void HModel::setup_transposeLP() {
@@ -641,7 +824,7 @@ void HModel::setup_transposeLP() {
         return;
 
     int transposeCancelled = 0;
-    if (1.0 * numCol / numRow > 0.2) {
+    if (1.0 * aggNumCol / aggNumRow > 0.2) {
 //        cout << "transpose-cancelled-by-ratio" << endl;
         transposeCancelled = 1;
         return;
@@ -649,11 +832,11 @@ void HModel::setup_transposeLP() {
 
     // Convert primal cost to dual bound
     const double inf = HSOL_CONST_INF;
-    vector<double> dualRowLower(numCol);
-    vector<double> dualRowUpper(numCol);
-    for (int j = 0; j < numCol; j++) {
-        double lower = colLower[j];
-        double upper = colUpper[j];
+    vector<double> dualRowLower(aggNumCol);
+    vector<double> dualRowUpper(aggNumCol);
+    for (int j = 0; j < aggNumCol; j++) {
+        double lower = aggColLower[j];
+        double upper = aggColUpper[j];
 
         /*
          * Primal      Dual
@@ -665,13 +848,13 @@ void HModel::setup_transposeLP() {
          */
 
         if (lower == -inf && upper == inf) {
-            dualRowLower[j] = colCost[j];
-            dualRowUpper[j] = colCost[j];
+            dualRowLower[j] = aggColCost[j];
+            dualRowUpper[j] = aggColCost[j];
         } else if (lower == 0 && upper == inf) {
             dualRowLower[j] = -inf;
-            dualRowUpper[j] = colCost[j];
+            dualRowUpper[j] = aggColCost[j];
         } else if (lower == -inf && upper == 0) {
-            dualRowLower[j] = colCost[j];
+            dualRowLower[j] = aggColCost[j];
             dualRowUpper[j] = +inf;
         } else if (lower == 0 && upper == 0) {
             dualRowLower[j] = -inf;
@@ -689,12 +872,12 @@ void HModel::setup_transposeLP() {
     }
 
     // Convert primal row bound to dual variable cost
-    vector<double> dualColLower(numRow);
-    vector<double> dualColUpper(numRow);
-    vector<double> dualCost(numRow);
-    for (int i = 0; i < numRow; i++) {
-        double lower = rowLower[i];
-        double upper = rowUpper[i];
+    vector<double> dualColLower(aggNumCol);
+    vector<double> dualColUpper(aggNumCol);
+    vector<double> dualCost(aggNumCol);
+    for (int i = 0; i < aggNumCol; i++) {
+        double lower = aggRowLower[i];
+        double upper = aggRowUpper[i];
 
         /*
          * Primal      Dual
@@ -734,36 +917,36 @@ void HModel::setup_transposeLP() {
     }
 
     // We can now really transpose things
-    vector<int> iwork(numRow, 0);
-    vector<int> ARstart(numRow + 1, 0);
-    int AcountX = Aindex.size();
+    vector<int> iwork(aggNumCol, 0);
+    vector<int> ARstart(aggNumCol + 1, 0);
+    int AcountX = aggAindex.size();
     vector<int> ARindex(AcountX);
     vector<double> ARvalue(AcountX);
     for (int k = 0; k < AcountX; k++)
-        iwork[Aindex[k]]++;
-    for (int i = 1; i <= numRow; i++)
+        iwork[aggAindex[k]]++;
+    for (int i = 1; i <= aggNumCol; i++)
         ARstart[i] = ARstart[i - 1] + iwork[i - 1];
-    for (int i = 0; i < numRow; i++)
+    for (int i = 0; i < aggNumCol; i++)
         iwork[i] = ARstart[i];
-    for (int iCol = 0; iCol < numCol; iCol++) {
-        for (int k = Astart[iCol]; k < Astart[iCol + 1]; k++) {
-            int iRow = Aindex[k];
+    for (int iCol = 0; iCol < aggNumCol; iCol++) {
+        for (int k = aggAstart[iCol]; k < aggAstart[iCol + 1]; k++) {
+            int iRow = aggAindex[k];
             int iPut = iwork[iRow]++;
             ARindex[iPut] = iCol;
-            ARvalue[iPut] = Avalue[k];
+            ARvalue[iPut] = aggAvalue[k];
         }
     }
 
     // Transpose the problem!
-    swap(numRow, numCol);
-    Astart.swap(ARstart);
-    Aindex.swap(ARindex);
-    Avalue.swap(ARvalue);
-    colLower.swap(dualColLower);
-    colUpper.swap(dualColUpper);
-    rowLower.swap(dualRowLower);
-    rowUpper.swap(dualRowUpper);
-    colCost.swap(dualCost);
+    swap(aggNumCol, aggNumCol);
+    aggAstart.swap(ARstart);
+    aggAindex.swap(ARindex);
+    aggAvalue.swap(ARvalue);
+    aggColLower.swap(dualColLower);
+    aggColUpper.swap(dualColUpper);
+    aggRowLower.swap(dualRowLower);
+    aggRowUpper.swap(dualRowUpper);
+    aggColCost.swap(dualCost);
 //    cout << "problem-transposed" << endl;
 }
 
@@ -772,14 +955,14 @@ void HModel::setup_scaleMatrix() {
         return;
 
     // Reset all scaling to 1
-    vector<double> colScale(numCol, 1);
-    vector<double> rowScale(numRow, 1);
+    vector<double> colScale(aggNumCol, 1);
+    vector<double> rowScale(aggNumRow, 1);
 
     // Find out min0 / max0, skip on if in [0.2, 5]
     const double inf = HSOL_CONST_INF;
     double min0 = inf, max0 = 0;
-    for (int k = 0, AnX = Astart[numCol]; k < AnX; k++) {
-        double value = fabs(Avalue[k]);
+    for (int k = 0, AnX = aggAstart[aggNumCol]; k < AnX; k++) {
+        double value = fabs(aggAvalue[k]);
         min0 = min(min0, value);
         max0 = max(max0, value);
     }
@@ -788,65 +971,65 @@ void HModel::setup_scaleMatrix() {
 
     // See if we want to include cost include if min-cost < 0.1
     double minc = inf;
-    for (int i = 0; i < numCol; i++)
-        if (colCost[i])
-            minc = min(minc, fabs(colCost[i]));
+    for (int i = 0; i < aggNumCol; i++)
+        if (aggColCost[i])
+            minc = min(minc, fabs(aggColCost[i]));
     bool doCost = minc < 0.1;
 
     // Search up to 6 times
-    vector<double> rowMin(numRow, inf);
-    vector<double> rowMax(numRow, 1 / inf);
+    vector<double> rowMin(aggNumRow, inf);
+    vector<double> rowMax(aggNumRow, 1 / inf);
     for (int search_count = 0; search_count < 6; search_count++) {
         // Find column scale, prepare row data
-        for (int iCol = 0; iCol < numCol; iCol++) {
+        for (int iCol = 0; iCol < aggNumCol; iCol++) {
             // For column scale (find)
             double colMin = inf;
             double colMax = 1 / inf;
-            double myCost = fabs(colCost[iCol]);
+            double myCost = fabs(aggColCost[iCol]);
             if (doCost && myCost != 0)
                 colMin = min(colMin, myCost), colMax = max(colMax, myCost);
-            for (int k = Astart[iCol]; k < Astart[iCol + 1]; k++) {
-                double value = fabs(Avalue[k]) * rowScale[Aindex[k]];
+            for (int k = aggAstart[iCol]; k < aggAstart[iCol + 1]; k++) {
+                double value = fabs(aggAvalue[k]) * rowScale[aggAindex[k]];
                 colMin = min(colMin, value), colMax = max(colMax, value);
             }
             colScale[iCol] = 1 / sqrt(colMin * colMax);
 
             // For row scale (only collect)
-            for (int k = Astart[iCol]; k < Astart[iCol + 1]; k++) {
-                int iRow = Aindex[k];
-                double value = fabs(Avalue[k]) * colScale[iCol];
+            for (int k = aggAstart[iCol]; k < aggAstart[iCol + 1]; k++) {
+                int iRow = aggAindex[k];
+                double value = fabs(aggAvalue[k]) * colScale[iCol];
                 rowMin[iRow] = min(rowMin[iRow], value);
                 rowMax[iRow] = max(rowMax[iRow], value);
             }
         }
 
         // For row scale (find)
-        for (int iRow = 0; iRow < numRow; iRow++)
+        for (int iRow = 0; iRow < aggNumRow; iRow++)
             rowScale[iRow] = 1 / sqrt(rowMin[iRow] * rowMax[iRow]);
-        rowMin.assign(numRow, inf);
-        rowMax.assign(numRow, 1 / inf);
+        rowMin.assign(aggNumRow, inf);
+        rowMax.assign(aggNumRow, 1 / inf);
     }
 
     // Make it numerical better
     const double ln2 = log(2.0);
-    for (int iCol = 0; iCol < numCol; iCol++)
+    for (int iCol = 0; iCol < aggNumCol; iCol++)
         colScale[iCol] = pow(2.0, floor(log(colScale[iCol]) / ln2 + 0.5));
-    for (int iRow = 0; iRow < numRow; iRow++)
+    for (int iRow = 0; iRow < aggNumRow; iRow++)
         rowScale[iRow] = pow(2.0, floor(log(rowScale[iRow]) / ln2 + 0.5));
 
     // Apply scaling to matrix and bounds
-    for (int iCol = 0; iCol < numCol; iCol++)
-        for (int k = Astart[iCol]; k < Astart[iCol + 1]; k++)
-            Avalue[k] *= (colScale[iCol] * rowScale[Aindex[k]]);
+    for (int iCol = 0; iCol < aggNumCol; iCol++)
+        for (int k = aggAstart[iCol]; k < aggAstart[iCol + 1]; k++)
+            aggAvalue[k] *= (colScale[iCol] * rowScale[aggAindex[k]]);
 
-    for (int iCol = 0; iCol < numCol; iCol++) {
-        colLower[iCol] /= colLower[iCol] == -inf ? 1 : colScale[iCol];
-        colUpper[iCol] /= colUpper[iCol] == +inf ? 1 : colScale[iCol];
-        colCost[iCol] *= colScale[iCol];
+    for (int iCol = 0; iCol < aggNumCol; iCol++) {
+        aggColLower[iCol] /= aggColLower[iCol] == -inf ? 1 : colScale[iCol];
+        aggColUpper[iCol] /= aggColUpper[iCol] == +inf ? 1 : colScale[iCol];
+        aggColCost[iCol] *= colScale[iCol];
     }
-    for (int iRow = 0; iRow < numRow; iRow++) {
-        rowLower[iRow] *= rowLower[iRow] == -inf ? 1 : rowScale[iRow];
-        rowUpper[iRow] *= rowUpper[iRow] == +inf ? 1 : rowScale[iRow];
+    for (int iRow = 0; iRow < aggNumRow; iRow++) {
+        aggRowLower[iRow] *= aggRowLower[iRow] == -inf ? 1 : rowScale[iRow];
+        aggRowUpper[iRow] *= aggRowUpper[iRow] == +inf ? 1 : rowScale[iRow];
     }
 }
 
@@ -855,37 +1038,37 @@ void HModel::setup_tightenBound() {
         return;
 
     // Make a AR copy
-    vector<int> iwork(numRow, 0);
-    vector<int> ARstart(numRow + 1, 0);
-    int AcountX = Aindex.size();
+    vector<int> iwork(aggNumCol, 0);
+    vector<int> ARstart(aggNumCol + 1, 0);
+    int AcountX = aggAindex.size();
     vector<int> ARindex(AcountX);
     vector<double> ARvalue(AcountX);
     for (int k = 0; k < AcountX; k++)
-        iwork[Aindex[k]]++;
-    for (int i = 1; i <= numRow; i++)
+        iwork[aggAindex[k]]++;
+    for (int i = 1; i <= aggNumCol; i++)
         ARstart[i] = ARstart[i - 1] + iwork[i - 1];
-    for (int i = 0; i < numRow; i++)
+    for (int i = 0; i < aggNumCol; i++)
         iwork[i] = ARstart[i];
-    for (int iCol = 0; iCol < numCol; iCol++) {
-        for (int k = Astart[iCol]; k < Astart[iCol + 1]; k++) {
-            int iRow = Aindex[k];
+    for (int iCol = 0; iCol < aggNumCol; iCol++) {
+        for (int k = aggAstart[iCol]; k < aggAstart[iCol + 1]; k++) {
+            int iRow = aggAindex[k];
             int iPut = iwork[iRow]++;
             ARindex[iPut] = iCol;
-            ARvalue[iPut] = Avalue[k];
+            ARvalue[iPut] = aggAvalue[k];
         }
     }
 
     // Save column bounds
-    vector<double> colLower0 = colLower;
-    vector<double> colUpper0 = colUpper;
+    vector<double> colLower0 = aggColLower;
+    vector<double> colUpper0 = aggColUpper;
 
     double big_B = 1e10;
     int iPass = 0;
     for (;;) {
         int numberChanged = 0;
-        for (int iRow = 0; iRow < numRow; iRow++) {
+        for (int iRow = 0; iRow < aggNumCol; iRow++) {
             // SKIP free rows
-            if (rowLower[iRow] < -big_B && rowUpper[iRow] > big_B)
+            if (aggRowLower[iRow] < -big_B && aggRowUpper[iRow] > big_B)
                 continue;
 
             // possible row
@@ -900,8 +1083,8 @@ void HModel::setup_tightenBound() {
             for (int k = myStart; k < myEnd; ++k) {
                 int iCol = ARindex[k];
                 double value = ARvalue[k];
-                double upper = value > 0 ? colUpper[iCol] : -colLower[iCol];
-                double lower = value > 0 ? colLower[iCol] : -colUpper[iCol];
+                double upper = value > 0 ? aggColUpper[iCol] : -aggColLower[iCol];
+                double lower = value > 0 ? aggColLower[iCol] : -aggColUpper[iCol];
                 value = fabs(value);
                 if (upper < big_B)
                     xmaxU += upper * value;
@@ -925,19 +1108,19 @@ void HModel::setup_tightenBound() {
             // Skip redundant row : also need to consider U < L  case
             double comp_U = xmaxU + ninfU * 1.0e31;
             double comp_L = xminL - ninfL * 1.0e31;
-            if (comp_U <= rowUpper[iRow] + 1e-7
-                    && comp_L >= rowLower[iRow] - 1e-7)
+            if (comp_U <= aggRowUpper[iRow] + 1e-7
+                    && comp_L >= aggRowLower[iRow] - 1e-7)
                 continue;
 
-            double row_L = rowLower[iRow];
-            double row_U = rowUpper[iRow];
+            double row_L = aggRowLower[iRow];
+            double row_U = aggRowUpper[iRow];
 
             // Now see if we can tighten column bounds
             for (int k = myStart; k < myEnd; ++k) {
                 double value = ARvalue[k];
                 int iCol = ARindex[k];
-                double col_L = colLower[iCol];
-                double col_U = colUpper[iCol];
+                double col_L = aggColLower[iCol];
+                double col_U = aggColUpper[iCol];
                 double new_L = -HSOL_CONST_INF;
                 double new_U = +HSOL_CONST_INF;
 
@@ -962,11 +1145,11 @@ void HModel::setup_tightenBound() {
                 }
 
                 if (new_U < col_U - 1.0e-12 && new_U < big_B) {
-                    colUpper[iCol] = max(new_U, col_L);
+                    aggColUpper[iCol] = max(new_U, col_L);
                     numberChanged++;
                 }
                 if (new_L > col_L + 1.0e-12 && new_L > -big_B) {
-                    colLower[iCol] = min(new_L, col_U);
+                    aggColLower[iCol] = min(new_L, col_U);
                     numberChanged++;
                 }
             }
@@ -981,19 +1164,19 @@ void HModel::setup_tightenBound() {
     }
 
     double useTolerance = 1.0e-3;
-    for (int iCol = 0; iCol < numCol; iCol++) {
+    for (int iCol = 0; iCol < aggNumCol; iCol++) {
         if (colUpper0[iCol] > colLower0[iCol] + useTolerance) {
             const double relax = 100.0 * useTolerance;
-            if (colUpper[iCol] - colLower[iCol] < useTolerance + 1.0e-8) {
-                colLower[iCol] = max(colLower0[iCol], colLower[iCol] - relax);
-                colUpper[iCol] = min(colUpper0[iCol], colUpper[iCol] + relax);
+            if (aggColUpper[iCol] - aggColLower[iCol] < useTolerance + 1.0e-8) {
+                aggColLower[iCol] = max(colLower0[iCol], aggColLower[iCol] - relax);
+                aggColUpper[iCol] = min(colUpper0[iCol], aggColUpper[iCol] + relax);
             } else {
-                if (colUpper[iCol] < colUpper0[iCol]) {
-                    colUpper[iCol] = min(colUpper[iCol] + relax,
+                if (aggColUpper[iCol] < colUpper0[iCol]) {
+                    aggColUpper[iCol] = min(aggColUpper[iCol] + relax,
                             colUpper0[iCol]);
                 }
-                if (colLower[iCol] > colLower0[iCol]) {
-                    colLower[iCol] = min(colLower[iCol] - relax,
+                if (aggColLower[iCol] > colLower0[iCol]) {
+                    aggColLower[iCol] = min(aggColLower[iCol] - relax,
                             colLower0[iCol]);
                 }
             }
@@ -1009,85 +1192,85 @@ void HModel::setup_shuffleColumn() {
     HRandom localRandom;
     for (int i = 0; i < 10; i++)
         localRandom.intRandom();
-    vector<int> iFrom(numCol);
-    for (int i = 0; i < numCol; i++)
+    vector<int> iFrom(aggNumCol);
+    for (int i = 0; i < aggNumCol; i++)
         iFrom[i] = i;
-    for (int i = numCol - 1; i >= 1; i--) {
+    for (int i = aggNumCol - 1; i >= 1; i--) {
         int j = localRandom.intRandom() % (i + 1);
         swap(iFrom[i], iFrom[j]);
     }
 
     // 2. Save original copy
-    vector<int> start = Astart;
-    vector<int> index = Aindex;
-    vector<double> value = Avalue;
-    vector<double> lower = colLower;
-    vector<double> upper = colUpper;
-    vector<double> xcost = colCost;
+    vector<int> start = aggAstart;
+    vector<int> index = aggAindex;
+    vector<double> value = aggAvalue;
+    vector<double> lower = aggColLower;
+    vector<double> upper = aggColUpper;
+    vector<double> xcost = aggColCost;
     vector<int> ibreak = intBreak;
     vector<double> dxpert = dblXpert;
 
     // 3. Generate the permuted matrix
     int countX = 0;
-    for (int i = 0; i < numCol; i++) {
+    for (int i = 0; i < aggNumCol; i++) {
         int ifrom = iFrom[i];
-        Astart[i] = countX;
+        aggAstart[i] = countX;
         for (int k = start[ifrom]; k < start[ifrom + 1]; k++) {
-            Aindex[countX] = index[k];
-            Avalue[countX] = value[k];
+            aggAindex[countX] = index[k];
+            aggAvalue[countX] = value[k];
             countX++;
         }
-        colLower[i] = lower[ifrom];
-        colUpper[i] = upper[ifrom];
-        colCost[i] = xcost[ifrom];
+        aggColLower[i] = lower[ifrom];
+        aggColUpper[i] = upper[ifrom];
+        aggColCost[i] = xcost[ifrom];
         intBreak[i] = ibreak[ifrom];
         dblXpert[i] = dxpert[ifrom];
     }
-    assert(Astart[numCol] == countX);
+    assert(aggAstart[aggNumCol] == countX);
 }
 
 void HModel::setup_allocWorking() {
     // Setup starting base
-    basicIndex.resize(numRow);
-    for (int iRow = 0; iRow < numRow; iRow++)
-        basicIndex[iRow] = iRow + numCol;
-    nonbasicFlag.assign(numTot, 0);
-    nonbasicMove.resize(numTot);
-    for (int i = 0; i < numCol; i++)
+    basicIndex.resize(aggNumRow);
+    for (int iRow = 0; iRow < aggNumRow; iRow++)
+        basicIndex[iRow] = iRow + aggNumCol;
+    nonbasicFlag.assign(aggNumTot, 0);
+    nonbasicMove.resize(aggNumTot);
+    for (int i = 0; i < aggNumCol; i++)
         nonbasicFlag[i] = 1;
 
     // Matrix, factor
-    matrix.setup(numCol, numRow, &Astart[0], &Aindex[0], &Avalue[0]);
-    factor.setup(numCol, numRow, &Astart[0], &Aindex[0], &Avalue[0],
+    matrix.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0]);
+    factor.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0],
             &basicIndex[0]);
     limitUpdate = 5000;
 
     // Setup other buffer
-    buffer.setup(numRow);
-    bufferLong.setup(numCol);
+    buffer.setup(aggNumRow);
+    bufferLong.setup(aggNumCol);
 
     // Setup bounds and solution spaces
-    workCost.resize(numTot);
-    workDual.resize(numTot);
-    workShift.assign(numTot, 0);
+    workCost.assign(aggNumTot, 0);
+    workDual.assign(aggNumTot, 0);
+    workShift.assign(aggNumTot, 0);
 
-    workLower.resize(numTot);
-    workUpper.resize(numTot);
-    workRange.resize(numTot);
-    workValue.resize(numTot);
+    workLower.assign(aggNumTot, 0);
+    workUpper.assign(aggNumTot, 0);
+    workRange.assign(aggNumTot, 0);
+    workValue.assign(aggNumTot, 0);
 
-    baseLower.resize(numRow);
-    baseUpper.resize(numRow);
-    baseValue.resize(numRow);
+    baseLower.assign(aggNumRow, 0);
+    baseUpper.assign(aggNumRow, 0);
+    baseValue.assign(aggNumRow, 0);
 }
 
 void HModel::initCost(int perturb) {
     // Copy the cost
-    for (int i = 0; i < numCol; i++)
-        workCost[i] = colCost[i];
-    for (int i = numCol; i < numTot; i++)
+    for (int i = 0; i < aggNumCol; i++)
+        workCost[i] = aggColCost[i];
+    for (int i = aggNumCol; i < aggNumTot; i++)
         workCost[i] = 0;
-    workShift.assign(numTot, 0);
+    workShift.assign(aggNumTot, 0);
 
     // See if we want to skip perturbation
     problemPerturbed = 0;
@@ -1097,16 +1280,16 @@ void HModel::initCost(int perturb) {
 
     // Perturb the original costs, scale down if is too big
     double bigc = 0;
-    for (int i = 0; i < numCol; i++)
+    for (int i = 0; i < aggNumCol; i++)
         bigc = max(bigc, fabs(workCost[i]));
     if (bigc > 100)
         bigc = sqrt(sqrt(bigc));
 
     // If there's few boxed variables, we will just use Simple perturbation
     double boxedRate = 0;
-    for (int i = 0; i < numTot; i++)
+    for (int i = 0; i < aggNumTot; i++)
         boxedRate += (workRange[i] < 1e30);
-    boxedRate /= numTot;
+    boxedRate /= aggNumTot;
     if (boxedRate < 0.01)
         bigc = min(bigc, 1.0);
     if (bigc < 1) {
@@ -1117,9 +1300,9 @@ void HModel::initCost(int perturb) {
     double base = 5e-7 * bigc;
 
     // Now do the perturbation
-    for (int i = 0; i < numCol; i++) {
-        double lower = colLower[i];
-        double upper = colUpper[i];
+    for (int i = 0; i < aggNumCol; i++) {
+        double lower = aggColLower[i];
+        double upper = aggColUpper[i];
         double xpert = (fabs(workCost[i]) + 1) * base * (1 + dblXpert[i]);
         if (lower == -HSOL_CONST_INF && upper == HSOL_CONST_INF) {
             // Free - no perturb
@@ -1134,30 +1317,30 @@ void HModel::initCost(int perturb) {
         }
     }
 
-    for (int i = numCol; i < numTot; i++) {
+    for (int i = aggNumCol; i < aggNumTot; i++) {
         workCost[i] += (0.5 - dblXpert[i]) * 1e-12;
     }
 }
 
 void HModel::initBound(int phase) {
     // Copy bounds
-    for (int i = 0; i < numCol; i++) {
-        workLower[i] = colLower[i];
-        workUpper[i] = colUpper[i];
+    for (int i = 0; i < aggNumCol; i++) {
+        workLower[i] = aggColLower[i];
+        workUpper[i] = aggColUpper[i];
     }
-    for (int i = 0, j = numCol; i < numRow; i++, j++) {
-        workLower[j] = -rowUpper[i];
-        workUpper[j] = -rowLower[i];
+    for (int i = 0, j = aggNumCol; i < aggNumRow; i++, j++) {
+        workLower[j] = -aggRowUpper[i];
+        workUpper[j] = -aggRowLower[i];
     }
 
     // Change to dual phase 1 bound
     if (phase == 1) {
         const double inf = HSOL_CONST_INF;
-        for (int i = 0; i < numTot; i++) {
+        for (int i = 0; i < aggNumTot; i++) {
             if (workLower[i] == -inf && workUpper[i] == inf) {
                 // Won't change for row variables: they should never
                 // Become non basic
-                if (i >= numCol)
+                if (i >= aggNumCol)
                     continue;
                 workLower[i] = -1000, workUpper[i] = 1000;  // FREE
             } else if (workLower[i] == -inf) {
@@ -1171,12 +1354,12 @@ void HModel::initBound(int phase) {
     }
 
     // Work out ranges
-    for (int i = 0; i < numTot; i++)
+    for (int i = 0; i < aggNumTot; i++)
         workRange[i] = workUpper[i] - workLower[i];
 }
 
 void HModel::initValue() {
-    for (int i = 0; i < numTot; i++) {
+    for (int i = 0; i < aggNumTot; i++) {
         if (nonbasicFlag[i]) {
             if (workLower[i] == workUpper[i]) {
                 // Fixed
@@ -1216,27 +1399,27 @@ void HModel::computeFactor() {
 
 void HModel::computeDual() {
     buffer.clear();
-    for (int iRow = 0; iRow < numRow; iRow++) {
+    for (int iRow = 0; iRow < aggNumRow; iRow++) {
         buffer.index[iRow] = iRow;
         buffer.array[iRow] = workCost[basicIndex[iRow]]
                 + workShift[basicIndex[iRow]];
     }
-    buffer.count = numRow;
+    buffer.count = aggNumRow;
     factor.btran(buffer, 1);
 
     bufferLong.clear();
     matrix.price_by_col(bufferLong, buffer);
-    for (int i = 0; i < numCol; i++)
+    for (int i = 0; i < aggNumCol; i++)
         workDual[i] = workCost[i] - bufferLong.array[i];
-    for (int i = numCol; i < numTot; i++)
-        workDual[i] = workCost[i] - buffer.array[i - numCol];
+    for (int i = aggNumCol; i < aggNumTot; i++)
+        workDual[i] = workCost[i] - buffer.array[i - aggNumCol];
 }
 
 void HModel::computeDualInfeasInDual(int *dualInfeasCount) {
     int workCount = 0;
     const double inf = HSOL_CONST_INF;
     const double tau_d = dblOption[DBLOPT_DUAL_TOL];
-    for (int i = 0; i < numTot; i++) {
+    for (int i = 0; i < aggNumTot; i++) {
         // Only for non basic variables
         if (!nonbasicFlag[i])
             continue;
@@ -1254,7 +1437,7 @@ void HModel::computeDualInfeasInPrimal(int *dualInfeasCount) {
     int workCount = 0;
     const double inf = HSOL_CONST_INF;
     const double tau_d = dblOption[DBLOPT_DUAL_TOL];
-    for (int i = 0; i < numTot; i++) {
+    for (int i = 0; i < aggNumTot; i++) {
         // Only for non basic variables
         if (!nonbasicFlag[i])
             continue;
@@ -1271,7 +1454,7 @@ void HModel::correctDual(int *freeInfeasCount) {
     const double tau_d = dblOption[DBLOPT_DUAL_TOL];
     const double inf = HSOL_CONST_INF;
     int workCount = 0;
-    for (int i = 0; i < numTot; i++) {
+    for (int i = 0; i < aggNumTot; i++) {
         if (nonbasicFlag[i]) {
             if (workLower[i] == -inf && workUpper[i] == inf) {
                 // FREE variable
@@ -1304,11 +1487,11 @@ void HModel::correctDual(int *freeInfeasCount) {
 
 void HModel::computePrimal() {
     buffer.clear();
-    for (int i = 0; i < numTot; i++)
+    for (int i = 0; i < aggNumTot; i++)
         if (nonbasicFlag[i] && workValue[i] != 0)
             matrix.collect_aj(buffer, i, workValue[i]);
     factor.ftran(buffer, 1);
-    for (int i = 0; i < numRow; i++) {
+    for (int i = 0; i < aggNumRow; i++) {
         int iCol = basicIndex[i];
         baseValue[i] = -buffer.array[i];
         baseLower[i] = workLower[iCol];
@@ -1318,7 +1501,7 @@ void HModel::computePrimal() {
 
 void HModel::computeObject(int phase) {
     objective = 0;
-    for (int i = 0; i < numTot; i++)
+    for (int i = 0; i < aggNumTot; i++)
         if (nonbasicFlag[i])
             objective += workValue[i] * workDual[i];
     if (phase != 1)

@@ -27,7 +27,7 @@ public:
 
     void compute_vecT_matB(const double *vec, const int *base, HVector *res);
     void compute_matB_vec(const double *vec, const int *base, HVector *res);
-private:
+public:
     int numCol;
     int numRow;
     vector<int> Astart;

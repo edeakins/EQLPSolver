@@ -317,6 +317,7 @@ void HFactor::btran(HVector& vector, double hist_dsty) const {
 
 void HFactor::update(HVector *aq, HVector *ep, int *iRow, int *hint) {
     // Special case
+    
     if (aq->next) {
         updateCFT(aq, ep, iRow, hint);
         return;
