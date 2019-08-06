@@ -328,9 +328,17 @@ void HDual::solve_phase2() {
         } else {
             solvePhase = 0;
             model->printMessage("problem-optimal");
+            int slackIdx = 0;
             for (int i = 0; i < model->basicIndex.size(); ++i){
-                if (model->basicIndex[i] < model->aggNumCol)
-                   model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
+                if (model->basicIndex[i] < model->aggNumCol){
+                    model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
+                    model->prevBasicValue[model->aggColIdx[model->basicIndex[i]]] = model->baseValue[i];
+                }
+                else{
+                    slackIdx = model->basicIndex[i] - model->aggNumCol;
+                    model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
+                    model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
+                }
             }
             model->reportStatus(LP_Status_Optimal);
         }

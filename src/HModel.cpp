@@ -58,7 +58,7 @@ void HModel::setup(const char *filename) {
 }
 // Split up setup func so that we could re initialize agg model attributes
 void HModel::build(){
-	startingBasis.assign(numCol, false);
+	startingBasis.clear();
 	// Compute EP refinement
     equitable();
     // Update Master iter count
@@ -302,7 +302,8 @@ void HModel::initStorage(){
 	cdeg.assign(numRow + numCol, 0);
 	isAdj.assign(numRow + numCol, 0);
 	isolates.assign(numRow + numCol, false);
-	prevBasicColor.assign(numCol, false);
+	prevBasicColor.assign(numCol + numRow, false);
+	prevBasicValue.assign(numCol + numRow, false);
 }
 
 // Append to the end of linked list
@@ -542,16 +543,21 @@ void HModel::computeEQs(){
 			A[c->data]->clear();
 			deleteNode(&colorsAdj, c);
 		}
-		for (int i = 0; i < C.size(); ++i){
-			if (C[i] != NULL){
-				if (listSize(&C[i]) == 1) isolates[C[i]->data] = true;
-			}
-		}
+		for (int i = 0; i < C.size(); ++i)
+			if (C[i] != NULL && listSize(&C[i]) == 1) isolates[C[i]->data] = true;
 	} 
+	// for (int i = 0; i < C.size(); ++i){
+	// 	if (C[i] != NULL){
+	// 		cout << "color: " << i << endl;
+	// 		printList(&C[i]);
+	// 		cout << "\n" << endl;
+	// 	}
+	// }
 	aggClear();
 	for (int i = 0; i < C.size(); ++i){
 		if (C[i] != NULL){
 			if (i >= numCol){
+				conColorReps.push_back(C[i]->data);
 				aggNumRow ++;
 				aggNumTot ++;
 				aggRowIdx.push_back(i);
@@ -648,6 +654,7 @@ void HModel::aggClear(){
 	targ = -1;
 	vColor.assign(numCol, -1);
 	reps.clear();
+	conColorReps.clear();
 	aggAdjList.clear();
 	aggRowIdx.clear();
 	aggColIdx.clear();
@@ -707,12 +714,9 @@ void HModel::aggregate(){
 			}
 		}
 		if (aggColIdx[i] < numCol){
-			if (masterIter){
-				for (int j = 0; j < prevBasicColor.size(); ++j){
-					if (prevBasicColor[j] && j == oldColor[reps[i]]){
-						startingBasis[i] = true;
-					}
-				}
+			if (masterIter && prevBasicColor[oldColor[reps[i]]]){
+				startingBasis.push_back(i);
+				startingBasicValue.push_back(prevBasicValue[oldColor[reps[i]]]);
 			}
 			aggColLower.push_back(colLower[C[aggColIdx[i]]->data]);
 			aggColUpper.push_back(colUpper[C[aggColIdx[i]]->data]);
@@ -725,6 +729,10 @@ void HModel::aggregate(){
 	}
 	for (int i = 0; i < aggRowIdx.size() + numNewRows; ++i){
 		if (i < aggRowIdx.size()){
+			if (masterIter && prevBasicColor[oldColor[conColorReps[i]]]){
+				startingBasis.push_back(i + aggNumCol);
+				startingBasicValue.push_back(prevBasicValue[oldColor[conColorReps[i]]]);
+			}
 			aggRowLower.push_back(rowLower[C[aggRowIdx[i]]->data - numCol]);
 			aggRowUpper.push_back(rowUpper[C[aggRowIdx[i]]->data - numCol]);
 		}
@@ -740,17 +748,16 @@ void HModel::aggregate(){
 		else
 			aggColCost.push_back(0);
 	}
-	//}
+	// for (int i = 0; i < startingBasis.size(); ++i)
+	// 	cout << "var: " << startingBasis[i] << " has basic value: " << startingBasicValue[i] << endl;
+
+	// cout << "matrix" << endl;
 	// for (int i = 0; i < aggColIdx.size(); ++i){
 	// 	cout << "col: " << aggColIdx[i] << endl;
 	// 	for (int j = aggAstart[i]; j < aggAstart[i + 1]; ++j){
 	// 		cout << "coeff: " << aggAvalue[j] << " at row: " << aggAindex[j] << endl;
 	// 	}
 	// }
-	for (int i = 0; i < startingBasis.size(); ++i){
-			cout << startingBasis[i] << endl;
-	}
-	cout << "size: " << startingBasis.size() << endl;
 }
 
 // Check if parition is discretized

@@ -265,6 +265,7 @@ public:
     vector<int> vColor;
     vector<int> colorsToLink;
     vector<int> reps;
+    vector<int> conColorReps;
     vector<int> oldColor;
 
     // Storage - stacks
@@ -293,8 +294,10 @@ public:
     vector<double> aggColUpper;
     vector<double> aggRowLower;
     vector<double> aggRowUpper;
-    vector<bool> startingBasis;
+    vector<int> startingBasis;
+    vector<double> startingBasicValue;
     vector<bool> prevBasicColor;
+    vector<double> prevBasicValue;
     
 
     // Associated data of original model
