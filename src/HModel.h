@@ -188,12 +188,13 @@ public:
     void isolate(int i);
     void equitable();
     void aggClear();   
-    void aggregate();
+    void aggregateA();
+    void aggregateCT(int newCol);
     vector<int> getCoeff(int color);
     int getObj(int color);
     void getNewRows();
     bool discrete();
-    void collectHist();
+
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -243,6 +244,8 @@ public:
     int numParts;
     int iso = -1;   
     int prevColor; 
+    int oldNumCols;
+    int oldNumRows;
     int numNewRows;
     int numNewCols;
     int targ; 
@@ -267,6 +270,7 @@ public:
     vector<int> reps;
     vector<int> conColorReps;
     vector<int> oldColor;
+    vector<int> residuals;
 
     // Storage - stacks
     stack<int> S;

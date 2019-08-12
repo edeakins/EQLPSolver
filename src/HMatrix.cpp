@@ -1,6 +1,10 @@
 #include "HMatrix.h"
 #include "HConst.h"
 #include <cmath>
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
 
 void HMatrix::setup(int numCol_, int numRow_, const int *Astart_,
         const int *Aindex_, const double *Avalue_) {

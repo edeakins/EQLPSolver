@@ -83,7 +83,8 @@ void HModel::build(){
     setup_allocWorking();
 
     // Initialize the values
-    initCost();
+    if (!masterIter - 1)
+    	initCost();
     initBound();
     initValue();
 
@@ -574,7 +575,7 @@ void HModel::computeEQs(){
 		}
 	}
 	getNewRows();
-	aggregate();
+	aggregateA();
 }
 
 // Color splitting (cell split) subroutine
@@ -703,7 +704,7 @@ int HModel::getObj(int color){
 }
 
 // Aggregate variables based on current EP
-void HModel::aggregate(){
+void HModel::aggregateA(){
 	aggAstart.push_back(0);
 	for (int i = 0; i < aggColIdx.size(); ++i){
 		vector<int> coeff = getCoeff(aggColIdx[i]);
@@ -741,15 +742,13 @@ void HModel::aggregate(){
 			aggRowUpper.push_back(0);
 		}
 	}
-	//if (!masterIter){
-	for (int i = 0; i < aggColIdx.size(); ++i){
-		if (aggColIdx[i] < numCol)
-			aggColCost.push_back(getObj(aggColIdx[i]));
-		else
-			aggColCost.push_back(0);
-	}
-	// for (int i = 0; i < startingBasis.size(); ++i)
-	// 	cout << "var: " << startingBasis[i] << " has basic value: " << startingBasicValue[i] << endl;
+	for (int i = 0; i < startingBasis.size(); ++i)
+		cout << "var: " << startingBasis[i] << " has basic value: " << startingBasicValue[i] << endl;
+	if (masterIter)
+		return;
+	for (int i = 0; i < aggNumCol; ++i)
+		aggColCost.push_back(getObj(aggColIdx[i]));
+	
 
 	// cout << "matrix" << endl;
 	// for (int i = 0; i < aggColIdx.size(); ++i){
@@ -758,6 +757,14 @@ void HModel::aggregate(){
 	// 		cout << "coeff: " << aggAvalue[j] << " at row: " << aggAindex[j] << endl;
 	// 	}
 	// }
+}
+
+void HModel::aggregateCT(int newCol){
+	if (masterIter){
+		aggColCost.assign(aggNumCol, 0);
+		aggColCost[newCol] = -1;
+	}
+	// Need to work here
 }
 
 // Check if parition is discretized
@@ -783,7 +790,7 @@ void HModel::getNewRows(){
 			aggAdjList.push_back(NULL);
 			appendAdj(&aggAdjList[numNewRows], color[iso], 1);
 			appendAdj(&aggAdjList[numNewRows], color[reps[i]], -1);
-			appendAdj(&aggAdjList[numNewRows], numTot + numNewCols, -1);
+			appendAdj(&aggAdjList[numNewRows], numTot + numNewCols - 1, -1);
 			aggColIdx.push_back(numTot + numNewCols - 1);
 			numNewRows++;
 			numNewCols++;
@@ -801,29 +808,25 @@ void HModel::getNewRows(){
 				aggAdjList.push_back(NULL);
 				appendAdj(&aggAdjList[numNewRows], color[targ], 1);
 				appendAdj(&aggAdjList[numNewRows], color[leftOvers[i]], -1);
-				appendAdj(&aggAdjList[numNewRows], numTot + numNewCols, -1);
+				appendAdj(&aggAdjList[numNewRows], numTot + numNewCols - 1, -1);
 				aggColIdx.push_back(numTot + numNewCols - 1);
 				numNewRows++;
 				numNewCols++;
 			}
 		}
 	}
+	oldNumCols = aggNumCol;
+	oldNumRows = aggNumRow;
 	aggNumTot += numNewRows + numNewCols;
 	aggNumCol += numNewCols;
 	aggNumRow += numNewRows;
+	for (int i = aggNumCol - numNewCols; i < aggNumCol; ++i)
+		residuals.push_back(i);
 }
 
 // EP until discrete partition
 void HModel::equitable(){
 	computeEQs();
-	// isoIter = 0;
-	// for (int i = 0; i < isolates.size(); ++i){
-	// 	if (isolates[i] == false){
-	// 		isoIter ++;
-	// 		isolate(i);
-	// 		cin.get();
-	// 	}
-	// }
 }
 
 void HModel::setup_transposeLP() {
@@ -945,7 +948,7 @@ void HModel::setup_transposeLP() {
     }
 
     // Transpose the problem!
-    swap(aggNumCol, aggNumCol);
+    swap(aggNumRow, aggNumCol);
     aggAstart.swap(ARstart);
     aggAindex.swap(ARindex);
     aggAvalue.swap(ARvalue);
@@ -1239,13 +1242,26 @@ void HModel::setup_shuffleColumn() {
 void HModel::setup_allocWorking() {
     // Setup starting base
     basicIndex.resize(aggNumRow);
-    for (int iRow = 0; iRow < aggNumRow; iRow++)
-        basicIndex[iRow] = iRow + aggNumCol;
-    nonbasicFlag.assign(aggNumTot, 0);
+    nonbasicFlag.assign(aggNumTot, 1);
     nonbasicMove.resize(aggNumTot);
-    for (int i = 0; i < aggNumCol; i++)
-        nonbasicFlag[i] = 1;
-
+    if (masterIter - 1){
+    	for (int iRow = 0; iRow < aggNumRow; iRow++){
+    		basicIndex[iRow] = startingBasis[iRow];
+    	}
+    	for (int i = 0; i < startingBasis.size(); ++i)
+    		nonbasicFlag[startingBasis[i]] = 0;
+    }
+    else{
+	    for (int iRow = 0; iRow < aggNumRow; iRow++)
+	        basicIndex[iRow] = iRow + aggNumCol;
+	    nonbasicFlag.assign(aggNumTot, 0);
+	    nonbasicMove.resize(aggNumTot);
+	    for (int i = 0; i < aggNumCol; i++)
+	        nonbasicFlag[i] = 1;
+	}
+	// for (int i = 0; i < nonbasicFlag.size(); ++i){
+	// 	cout << nonbasicFlag[i] << endl;
+	// }
     // Matrix, factor
     matrix.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0]);
     factor.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0],
@@ -1271,12 +1287,14 @@ void HModel::setup_allocWorking() {
     baseValue.assign(aggNumRow, 0);
 }
 
-void HModel::initCost(int perturb) {
+void HModel::initCost(int perturb){
     // Copy the cost
-    for (int i = 0; i < aggNumCol; i++)
+    for (int i = 0; i < aggNumCol; i++){
         workCost[i] = aggColCost[i];
-    for (int i = aggNumCol; i < aggNumTot; i++)
+    }
+    for (int i = aggNumCol; i < aggNumTot; i++){
         workCost[i] = 0;
+    }
     workShift.assign(aggNumTot, 0);
 
     // See if we want to skip perturbation

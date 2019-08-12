@@ -11,6 +11,7 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
     numCol = model->getNumCol();
     numRow = model->getNumRow();
     numTot = model->getNumTot();
+    model->computeFactor();
 
     // Setup update limits
     limitUpdate = min(100 + numRow / 100, 1000);
@@ -24,12 +25,46 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
     row_epDensity = 0;
 
     // Setup other buffers
+    if (model->masterIter - 1){
+        model->printMessage("unfolding algorithm-start");
+        cout << model->residuals.size() << endl;
+        for (int i = 0; i < model->residuals.size(); ++i){
+            columnIn = model->residuals[i];
+            model->workCost[columnIn] = 1;
+            int firstColor = model->aggAdjList[i]->label;
+            int secondColor = model->aggAdjList[i]->next->label;
+            int x1 = model->C[firstColor]->data;
+            int x2 = model->C[secondColor]->data;
+            model->workUpper[columnIn] = model->colUpper[x1] - model->colLower[x2];
+            model->workLower[columnIn] = -model->workUpper[columnIn]; 
+            model->workValue[columnIn] = model->workLower[columnIn];
+            model->nonbasicMove[columnIn] = 1;
+            if (columnIn == -1)
+                break;
+            primalChooseRow();
+            if (rowOut == -1)
+                break;
+            primalUpdate();
+            if (invertHint)
+                break;
+            for (int i = 0; i < model->baseValue.size(); ++i){
+                cout << "basic Index: " << model->basicIndex[i] << " value: " << model->baseValue[i] << endl;
+            }
+            for (int i = 0; i < model->historyColumnIn.size(); ++i){
+                cout << model->historyColumnIn[i] << endl;
+            }
+            primalRebuild();
+            cin.get();
+        }
+        return;
+    }
+
 
     model->printMessage("primal-start");
 
     for (;;) {
         primalRebuild();
-
+        cin.get();
         for (;;) {
             primalChooseColumn();
             if (columnIn == -1)
@@ -123,7 +158,8 @@ void HPrimal::primalChooseRow() {
 
     // Choose column pass 1
     double alphaTol = countUpdate < 10 ? 1e-9 : countUpdate < 20 ? 1e-8 : 1e-7;
-    const int *jMove = model->getNonbasicMove();
+    int *jMove = model->getNonbasicMove();
+    //jMove[columnIn] = 1;
     int moveIn = jMove[columnIn];
     if (moveIn == 0) {
         // If there's still free in the N
@@ -171,10 +207,13 @@ void HPrimal::primalChooseRow() {
         }
     }
 
+    cout << "rowOut: " << rowOut << endl;
+
 }
 
 void HPrimal::primalUpdate() {
     int *jMove = model->getNonbasicMove();
+   // jMove[columnIn] = 1;
     double *workDual = model->getWorkDual();
     const double *workLower = model->getWorkLower();
     const double *workUpper = model->getWorkUpper();
@@ -187,7 +226,9 @@ void HPrimal::primalUpdate() {
     // Compute thetaPrimal
     int moveIn = jMove[columnIn];
     int columnOut = model->getBaseIndex()[rowOut];
+    //cout << "column out: " << columnOut << endl;
     double alpha = column.array[rowOut];
+    //cout << "alpha: " << alpha << endl;
     double thetaPrimal = 0;
     if (alpha * moveIn > 0) {
         // Lower bound

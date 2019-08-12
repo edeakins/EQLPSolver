@@ -20,7 +20,7 @@ void HDual::solve(HModel *ptr_model, int variant, int num_threads) {
     // Initialise working environment
     init(num_threads);
 
-    model->initCost(1);
+    //model->initCost();
     model->computeFactor();
     model->computeDual();
     model->computeDualInfeasInDual(&dualInfeasCount);
@@ -89,6 +89,7 @@ void HDual::solve(HModel *ptr_model, int variant, int num_threads) {
                 model->modelName.c_str(), model->dblOption[DBLOPT_PAMI_CUTOFF],
                 model->numberIteration / (1.0 + multi_iteration));
     }
+
 
     // Use primal to clean up
     if (solvePhase == 4) {
@@ -463,6 +464,7 @@ void HDual::chooseRow() {
         // Choose row
         dualRHS.choose_normal(&rowOut);
         if (rowOut == -1) {
+            //cout << "rowOut: " << rowOut << endl;
             invertHint = 1;
             return;
         }
@@ -484,6 +486,7 @@ void HDual::chooseRow() {
 
     // Assign basic info
     columnOut = model->getBaseIndex()[rowOut];
+    //cout << "columnOut: " << columnOut << endl;
     if (baseValue[rowOut] < baseLower[rowOut])
         deltaPrimal = baseValue[rowOut] - baseLower[rowOut];
     else
@@ -527,6 +530,7 @@ void HDual::chooseColumn(HVector *row_ep) {
     columnIn = dualRow.workPivot;
     alphaRow = dualRow.workAlpha;
     thetaDual = dualRow.workTheta;
+    //cout << "columnIn: " << columnIn << endl; 
 }
 
 void HDual::chooseColumn_slice(HVector *row_ep) {

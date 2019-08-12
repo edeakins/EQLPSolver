@@ -405,13 +405,13 @@ void HFactor::buildSimple() {
       }
       Bstart[iCol + 1] = BcountX;
     }
-    cout << "printing out basis" << endl;
-      for (int i = 0; i < numRow; ++i){
-        cout << "column of basis" << endl;
-        for (int j = Bstart[i]; j < Bstart[i + 1]; ++j)
-            cout << Bvalue[j] << endl;
-      }
-      cin.get();
+    // cout << "printing out basis" << endl;
+    //   for (int i = 0; i < numRow; ++i){
+    //     cout << "column of basis" << endl;
+    //     for (int j = Bstart[i]; j < Bstart[i + 1]; ++j)
+    //         cout << Bvalue[j] << endl;
+    //   }
+    //   cin.get();
     BtotalX = numRow - nwork + BcountX;
     pseudoTick += (numRow - nwork) * 2;
     pseudoTick += BcountX * 1.5;
