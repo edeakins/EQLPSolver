@@ -653,6 +653,8 @@ void HModel::aggClear(){
 	numNewRows = 0;
 	numNewCols = 0;
 	targ = -1;
+	historyColumnIn.clear();
+	historyColumnOut.clear();
 	vColor.assign(numCol, -1);
 	reps.clear();
 	conColorReps.clear();
@@ -667,6 +669,7 @@ void HModel::aggClear(){
     aggColUpper.clear();
     aggRowLower.clear();
     aggRowUpper.clear();
+    residuals.clear();
 }
 
 // Find coefficients for aggregated variables
@@ -742,8 +745,8 @@ void HModel::aggregateA(){
 			aggRowUpper.push_back(0);
 		}
 	}
-	for (int i = 0; i < startingBasis.size(); ++i)
-		cout << "var: " << startingBasis[i] << " has basic value: " << startingBasicValue[i] << endl;
+	// for (int i = 0; i < startingBasis.size(); ++i)
+	// 	cout << startingBasis[i] << endl;
 	if (masterIter)
 		return;
 	for (int i = 0; i < aggNumCol; ++i)
@@ -759,12 +762,10 @@ void HModel::aggregateA(){
 	// }
 }
 
-void HModel::aggregateCT(int newCol){
+void HModel::aggregateCT(){
 	if (masterIter){
 		aggColCost.assign(aggNumCol, 0);
-		aggColCost[newCol] = -1;
 	}
-	// Need to work here
 }
 
 // Check if parition is discretized
@@ -1384,6 +1385,10 @@ void HModel::initBound(int phase) {
 }
 
 void HModel::initValue() {
+	// if (masterIter - 1){
+	// 	for (int i = 0; i < baseValue.size(); ++i)
+	// 		baseValue[i] = startingBasicValue[i];
+	// }
     for (int i = 0; i < aggNumTot; i++) {
         if (nonbasicFlag[i]) {
             if (workLower[i] == workUpper[i]) {

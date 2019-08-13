@@ -36,14 +36,20 @@ void solvePlain(const char *filename) {
     model.isolate(model.iso);
     
     model.build();
-    model.aggregateCT(model.residuals[0]);
+    model.aggregateCT();
     model.initCost();
     model.initValue();
-    for (int i = 0; i < model.baseValue.size(); ++i){
-        cout << model.baseValue[i] << endl;
-    }
+    primalSolver.solvePhase2(&model);
 
-    
+    model.discrete();
+    model.isolate(model.iso);
+    model.build();
+    for (int i = 0; i < model.reps.size(); ++i){
+    	cout << model.reps[i] << endl;
+    }
+    model.aggregateCT();
+    model.initCost();
+    model.initValue();
     primalSolver.solvePhase2(&model);
     // model.printResult();
     // for (int i = 0; i < model.aggNumCol; ++i){

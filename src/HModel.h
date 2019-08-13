@@ -189,7 +189,7 @@ public:
     void equitable();
     void aggClear();   
     void aggregateA();
-    void aggregateCT(int newCol);
+    void aggregateCT();
     vector<int> getCoeff(int color);
     int getObj(int color);
     void getNewRows();

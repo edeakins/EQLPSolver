@@ -26,8 +26,8 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
 
     // Setup other buffers
     if (model->masterIter - 1){
-        model->printMessage("unfolding algorithm-start");
-        cout << model->residuals.size() << endl;
+    	primalRebuild();
+        model->printMessage("unfolding-start");
         for (int i = 0; i < model->residuals.size(); ++i){
             columnIn = model->residuals[i];
             model->workCost[columnIn] = 1;
@@ -45,17 +45,22 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
             if (rowOut == -1)
                 break;
             primalUpdate();
-            if (invertHint)
-                break;
-            for (int i = 0; i < model->baseValue.size(); ++i){
-                cout << "basic Index: " << model->basicIndex[i] << " value: " << model->baseValue[i] << endl;
-            }
-            for (int i = 0; i < model->historyColumnIn.size(); ++i){
-                cout << model->historyColumnIn[i] << endl;
-            }
             primalRebuild();
+            model->workCost[columnIn] = 0;
             cin.get();
         }
+        int slackIdx = 0;
+        for (int i = 0; i < model->basicIndex.size(); ++i){
+            if (model->basicIndex[i] < model->aggNumCol){
+                model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
+                model->prevBasicValue[model->aggColIdx[model->basicIndex[i]]] = model->baseValue[i];
+            }
+            else{
+                slackIdx = model->basicIndex[i] - model->aggNumCol;
+                model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
+                model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
+            }
+       	}
         return;
     }
 
@@ -206,9 +211,6 @@ void HPrimal::primalChooseRow() {
             }
         }
     }
-
-    cout << "rowOut: " << rowOut << endl;
-
 }
 
 void HPrimal::primalUpdate() {
