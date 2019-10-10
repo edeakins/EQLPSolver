@@ -39,6 +39,11 @@ void HMatrix::setup(int numCol_, int numRow_, const int *Astart_,
             ARvalue[iPut] = Avalue[k];
         }
     }
+    // for (int i = 0; i < numRow; ++i){
+    // 	cout << "row: " << i << endl;
+    // 	for (int j = ARstart[i]; j < ARstart[i + 1]; ++j)
+    // 		cout << "column: " << ARindex[j] << " coeff = " << ARvalue[j] << endl;
+    // }
 }
 
 void HMatrix::update(int columnIn, int columnOut) {
@@ -79,9 +84,11 @@ double HMatrix::compute_dot(HVector& vector, int iCol) const {
 }
 
 void HMatrix::collect_aj(HVector& vector, int iCol, double multi) const {
+	//cout << "iCol: " << iCol << endl;
     if (iCol < numCol) {
         for (int k = Astart[iCol]; k < Astart[iCol + 1]; k++) {
             int index = Aindex[k];
+            //cout << "index: " << index << endl;
             double value0 = vector.array[index];
             double value1 = value0 + multi * Avalue[k];
             if (value0 == 0)
@@ -91,6 +98,7 @@ void HMatrix::collect_aj(HVector& vector, int iCol, double multi) const {
         }
     } else {
         int index = iCol - numCol;
+        //cout << "index: " << index << endl;
         double value0 = vector.array[index];
         double value1 = value0 + multi;
         if (value0 == 0)
@@ -119,6 +127,12 @@ void HMatrix::price_by_col(HVector& row_ap, HVector& row_ep) const {
         }
     }
     row_ap.count = ap_count;
+    // for (int i = 0; i < row_ap.array.size(); ++i){
+    // 	cout << row_ap.array[i] << endl;
+    // 	cout << "\n" << endl;
+    // }
+    // for (int i = 0; i < numCol; ++i)
+    // 	cout << ap_index[i] << endl;
 
 }
 

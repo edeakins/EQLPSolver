@@ -14,7 +14,13 @@
 #include <list>
 #include <map>
 #include <tuple>
+#include <numeric>
+#include <functional>
+#include <Eigen/Sparse>
+#include <Eigen/SparseQR>
+#include <Eigen/OrderingMethods>
 using namespace std;
+using namespace Eigen;
 
 const int LP_Status_Unset = -1;
 const int LP_Status_Optimal = 0;
@@ -49,6 +55,9 @@ enum HSOL_STR_OPTIONS {
 
 class HModel {
 public:
+    typedef Eigen::SparseMatrix<double> SpMat; 
+    typedef Eigen::Triplet<double> T;
+    typedef Eigen::SparseQR<SpMat, NaturalOrdering<int> > sQR;
     /* Deakins - Classes */
     class Node{
     public:
@@ -185,6 +194,7 @@ public:
     void lp2Graph();
     void splitColor(int s);
     void printList(Node **headRef);
+    void printAdjList(adjNode **headRef);
     void isolate(int i);
     void equitable();
     void aggClear();   
@@ -193,8 +203,18 @@ public:
     vector<int> getCoeff(int color);
     int getObj(int color);
     void getNewRows();
+    bool singularity();
     bool discrete();
-
+    void setVars();
+    void setConstrs();
+    void getNonBasicVars();
+    void getActiveConstrs();
+    void getBasis();
+    vector<double> project(vector<double> &v1, vector<double> &v2);
+    double findScal(vector<double> &v1, vector<double> &v2);
+    void gramSchmidt();
+    void subtract(vector<double> &v1, vector<double> &v2);
+    void collectActive();
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -249,7 +269,12 @@ public:
     int numNewRows;
     int numNewCols;
     int targ; 
-    int maxColor;    
+    int maxColor;  
+    int numBasicSlacks;
+    int degenerates;
+    int numActiveConstrs;
+    int numActiveVars;
+
     // Storage - vectors for EPs
     vector<adjNode *> adjList;
     vector<adjNode *> aggAdjList;
@@ -271,6 +296,8 @@ public:
     vector<int> conColorReps;
     vector<int> oldColor;
     vector<int> residuals;
+    vector<bool> basicSlacks;
+    vector<int> singularIdx;
 
     // Storage - stacks
     stack<int> S;
@@ -301,8 +328,16 @@ public:
     vector<int> startingBasis;
     vector<double> startingBasicValue;
     vector<bool> prevBasicColor;
-    vector<double> prevBasicValue;
-    
+    vector<bool> basicResiduals;
+    vector<double> prevBasicValue; 
+    vector<int> activeSet;
+    vector<bool> boundedVariables;
+    vector<bool> activeConstraints;
+    vector<vector<double> > ortho;
+
+    // // Eigen package sparse matrix for rank revealing decompositions
+    // SpMat nonBasicMat;
+    // vector<T> nonBasicCoeff;
 
     // Associated data of original model
     vector<int> workRowPart; // Row partition
@@ -312,10 +347,13 @@ public:
     // Working model
     int problemStatus;
     vector<int> basicIndex;
+    vector<int> testBasicIndex;
     vector<int> nonbasicFlag;
     vector<int> nonbasicMove;
+    vector<int> available;
     HMatrix matrix;
     HFactor factor;
+    HFactor testFactor;
     HVector buffer;
     HVector bufferLong;
 

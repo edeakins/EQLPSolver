@@ -185,6 +185,7 @@ void solveHyper(const int Hsize, const int *Hlookup, const int *HpivotIndex,
 
 void HFactor::setup(int numCol_, int numRow_, int *Astart_, int *Aindex_,
         double *Avalue_, int *baseIndex_, int updateMethod_) {
+	
 
     // Copy Problem size and (pointer to) coefficient matrix
     numRow = numRow_;
@@ -207,6 +208,7 @@ void HFactor::setup(int numCol_, int numRow_, int *Astart_, int *Aindex_,
     for (int i = numRow, counted = 0; i >= 0 && counted < numRow; i--)
         BlimitX += i * iwork[i], counted += iwork[i];
     BlimitX += numRow;
+    
 
     // Allocate spaces for basis matrix, L, U factor and Update buffer
     Bstart.resize(numRow + 1, 0);
@@ -409,8 +411,9 @@ void HFactor::buildSimple() {
     //   for (int i = 0; i < numRow; ++i){
     //     cout << "column of basis" << endl;
     //     for (int j = Bstart[i]; j < Bstart[i + 1]; ++j)
-    //         cout << Bvalue[j] << endl;
+    //         cout << Bvalue[j] << " in row: " << Bindex[j] << endl;
     //   }
+    //   cout << "Bvalue size: " << Bvalue.size() << endl;
     //   cin.get();
     BtotalX = numRow - nwork + BcountX;
     pseudoTick += (numRow - nwork) * 2;

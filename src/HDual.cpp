@@ -1,3 +1,4 @@
+
 #include "HDual.h"
 #include "HConst.h"
 #include "HTimer.h"
@@ -334,11 +335,16 @@ void HDual::solve_phase2() {
                 if (model->basicIndex[i] < model->aggNumCol){
                     model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
                     model->prevBasicValue[model->aggColIdx[model->basicIndex[i]]] = model->baseValue[i];
-                }
+                    bool upperBound = model->baseValue[i] == model->aggColUpper[model->basicIndex[i]];
+                    bool lowerBound = model->baseValue[i] == model->aggColUpper[model->basicIndex[i]];
+                    //model->boundedVariables[model->aggColIdx[model->basicIndex[i]]] = upperBound + lowerBound;
+                    
+                 }
                 else{
                     slackIdx = model->basicIndex[i] - model->aggNumCol;
                     model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
                     model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
+                    //model->activeConstraints[slackIdx] = false;
                 }
             }
             model->reportStatus(LP_Status_Optimal);
@@ -603,6 +609,9 @@ void HDual::updateFtran() {
     column.packFlag = true;
     matrix->collect_aj(column, columnIn, 1);
     factor->ftran(column, columnDensity);
+    // for (int i = 0; i < column.array.size(); ++i){
+    // 	cout << column.array[i] << endl;
+    // }
     alpha = column.array[rowOut];
     model->timer.recordFinish(HTICK_FTRAN);
 }

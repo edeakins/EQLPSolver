@@ -24,49 +24,16 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
     columnDensity = 0;
     row_epDensity = 0;
 
-    // Setup other buffers
+   	// Unfolding - Deakins, Ostrowski, Kneuven, Schrock
     if (model->masterIter - 1){
     	primalRebuild();
         model->printMessage("unfolding-start");
-        for (int i = 0; i < model->residuals.size(); ++i){
-            columnIn = model->residuals[i];
-            model->workCost[columnIn] = 1;
-            int firstColor = model->aggAdjList[i]->label;
-            int secondColor = model->aggAdjList[i]->next->label;
-            int x1 = model->C[firstColor]->data;
-            int x2 = model->C[secondColor]->data;
-            model->workUpper[columnIn] = model->colUpper[x1] - model->colLower[x2];
-            model->workLower[columnIn] = -model->workUpper[columnIn]; 
-            model->workValue[columnIn] = model->workLower[columnIn];
-            model->nonbasicMove[columnIn] = 1;
-            if (columnIn == -1)
-                break;
-            primalChooseRow();
-            if (rowOut == -1)
-                break;
-            primalUpdate();
-            primalRebuild();
-            model->workCost[columnIn] = 0;
-            cin.get();
-        }
-        int slackIdx = 0;
-        for (int i = 0; i < model->basicIndex.size(); ++i){
-            if (model->basicIndex[i] < model->aggNumCol){
-                model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
-                model->prevBasicValue[model->aggColIdx[model->basicIndex[i]]] = model->baseValue[i];
-            }
-            else{
-                slackIdx = model->basicIndex[i] - model->aggNumCol;
-                model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
-                model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
-            }
-       	}
+        primalChooseLinker();
+        primalCollect();
         return;
     }
-
-
+    // Setup other buffers - Huha
     model->printMessage("primal-start");
-
     for (;;) {
         primalRebuild();
         cin.get();
@@ -96,6 +63,53 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
         model->printMessage("primal-unbounded");
         model->reportStatus(LP_Status_Unbounded);
     }
+}
+
+// Choose Linker
+void HPrimal::primalChooseLinker(){
+	 for (int i = 0; i < model->residuals.size(); ++i){
+    	if (model->basicResiduals[i])
+    		continue;
+        columnIn = model->residuals[i]; 
+        cout << "columnIn = " << columnIn << endl;
+        //model->basicVars[columnIn] = true;
+        model->workCost[columnIn] = 1;
+        int x1 = model->C[model->aggAdjList[i]->label]->data;
+        int x2 = model->C[model->aggAdjList[i]->next->label]->data;
+        model->workUpper[columnIn] = model->colUpper[x1] - model->colLower[x2];
+        model->workLower[columnIn] = -model->workUpper[columnIn]; 
+        model->workValue[columnIn] = model->workLower[columnIn];
+        model->nonbasicMove[columnIn] = 1;
+        primalChooseRow();
+        primalUpdate();
+        primalRebuild();
+        model->workCost[columnIn] = 0;
+    }
+}
+
+void HPrimal::primalCollect(){
+	int slackIdx = 0;
+    for (int i = 0; i < model->basicIndex.size(); ++i){
+        if (model->basicIndex[i] < model->aggNumCol){
+        	if (model->basicIndex[i] < model->oldNumCols){
+                model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
+                model->prevBasicValue[model->aggColIdx[model->basicIndex[i]]] = model->baseValue[i];
+                bool upperBound = model->baseValue[i] == model->aggColUpper[model->basicIndex[i]];
+                bool lowerBound = model->baseValue[i] == model->aggColUpper[model->basicIndex[i]];
+                //model->boundedVariables[model->aggColIdx[model->basicIndex[i]]] = upperBound + lowerBound;
+            }
+        }
+        else{
+            slackIdx = model->basicIndex[i] - model->aggNumCol;
+            model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
+            model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
+            //model->activeConstraints[slackIdx] = false;
+        }
+   	}
+
+   	// for (int i = 0; i < model->activeConstraints.size(); ++i)
+   	// 	cout << model->activeConstraints[i] << endl;
+   	// cin.get();
 }
 
 void HPrimal::primalRebuild() {
@@ -228,6 +242,7 @@ void HPrimal::primalUpdate() {
     // Compute thetaPrimal
     int moveIn = jMove[columnIn];
     int columnOut = model->getBaseIndex()[rowOut];
+    cout << "columnOut: " << columnOut << endl;
     //cout << "column out: " << columnOut << endl;
     double alpha = column.array[rowOut];
     //cout << "alpha: " << alpha << endl;
@@ -319,6 +334,7 @@ void HPrimal::primalUpdate() {
     model->updateMatrix(columnIn, columnOut);
     if (++countUpdate >= limitUpdate)
         invertHint = true;
-
     model->reportPivots(columnIn, columnOut, alpha);
+    // for (int i = 0; i < column.array.size(); ++i)
+    // 	cout << "idx: " << column.index[i] << " = " << column.array[i] << endl;
 }
