@@ -28,13 +28,13 @@ void solvePlain(const char *filename) {
     HDual solver;
     HPrimal primalSolver;
     solver.solve(&model);
-    for (int i = 0; i < model.basicIndex.size(); ++i){
-	    	if (model.basicIndex[i] >= model.aggNumCol){
-	    		cout << model.aggRowIdx[model.basicIndex[i] - model.aggNumCol] << " has value: " << model.baseValue[i] << endl;
-	    		continue;
-	    	}
-    		cout << model.basicIndex[i] << " has value: " << model.baseValue[i] << endl;
-	    }
+ //    for (int i = 0; i < model.basicIndex.size(); ++i){
+ //    	if (model.basicIndex[i] >= model.aggNumCol){
+ //    		cout << model.aggRowIdx[model.basicIndex[i] - model.aggNumCol] << " has value: " << model.baseValue[i] << endl;
+ //    		continue;
+ //    	}
+	// 	cout << model.basicIndex[i] << " has value: " << model.baseValue[i] << endl;
+	// }
     // Print the results -- writing functionality does not appear to be working
     //model.printResult();
     //model.writePivots("p");
@@ -47,15 +47,16 @@ void solvePlain(const char *filename) {
 	    //model.initCost();
 	    //model.initValue();
 	   	primalSolver.solvePhase2(&model);
-	    for (int i = 0; i < model.basicIndex.size(); ++i){
-	    	if (model.basicIndex[i] >= model.aggNumCol){
-	    		cout << model.basicIndex[i] << " has value: " << model.baseValue[i] << endl;
-	    		continue;
-	    	}
-    		cout << model.basicIndex[i] << " has value: " << model.baseValue[i] << endl;
-	    }
 	}
-
+    // model.cleanUp();
+    cout << "equitable partition is discrete" << endl;
+    for (int i = 0; i < model.basicIndex.size(); ++i){
+        if (model.basicIndex[i] >= model.aggNumCol){
+            cout << model.basicIndex[i] << " has value: " << model.baseValue[i] << endl;
+            continue;
+        }
+        cout << model.basicIndex[i] << " has value: " << model.baseValue[i] << endl;
+    }
 	// cout << model.oldNumCols << endl;
 	// cin.get();
  //    for (int i = 0; i < model.basicVars.size(); ++i){

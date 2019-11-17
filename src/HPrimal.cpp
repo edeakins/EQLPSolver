@@ -32,6 +32,7 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
         primalCollect();
         return;
     }
+
     // Setup other buffers - Huha
     model->printMessage("primal-start");
     for (;;) {
@@ -71,14 +72,11 @@ void HPrimal::primalChooseLinker(){
     	if (model->basicResiduals[i])
     		continue;
         columnIn = model->residuals[i]; 
-        cout << "columnIn = " << columnIn << endl;
         //model->basicVars[columnIn] = true;
         model->workCost[columnIn] = 1;
-        int x1 = model->C[model->aggAdjList[i]->label]->data;
-        int x2 = model->C[model->aggAdjList[i]->next->label]->data;
-        model->workUpper[columnIn] = model->colUpper[x1] - model->colLower[x2];
-        model->workLower[columnIn] = -model->workUpper[columnIn]; 
-        model->workValue[columnIn] = model->workLower[columnIn];
+        model->workUpper[columnIn] = +HSOL_CONST_INF;
+        model->workLower[columnIn] = -HSOL_CONST_INF; 
+        model->workValue[columnIn] = 0;
         model->nonbasicMove[columnIn] = 1;
         primalChooseRow();
         primalUpdate();
@@ -92,6 +90,9 @@ void HPrimal::primalCollect(){
     for (int i = 0; i < model->basicIndex.size(); ++i){
         if (model->basicIndex[i] < model->aggNumCol){
         	if (model->basicIndex[i] < model->oldNumCols){
+                if (fabs(model->baseValue[i]) < 1e-5){
+                    continue;
+                }
                 model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
                 model->prevBasicValue[model->aggColIdx[model->basicIndex[i]]] = model->baseValue[i];
                 bool upperBound = model->baseValue[i] == model->aggColUpper[model->basicIndex[i]];
@@ -242,10 +243,7 @@ void HPrimal::primalUpdate() {
     // Compute thetaPrimal
     int moveIn = jMove[columnIn];
     int columnOut = model->getBaseIndex()[rowOut];
-    cout << "columnOut: " << columnOut << endl;
-    //cout << "column out: " << columnOut << endl;
     double alpha = column.array[rowOut];
-    //cout << "alpha: " << alpha << endl;
     double thetaPrimal = 0;
     if (alpha * moveIn > 0) {
         // Lower bound

@@ -16,11 +16,7 @@
 #include <tuple>
 #include <numeric>
 #include <functional>
-#include <Eigen/Sparse>
-#include <Eigen/SparseQR>
-#include <Eigen/OrderingMethods>
 using namespace std;
-using namespace Eigen;
 
 const int LP_Status_Unset = -1;
 const int LP_Status_Optimal = 0;
@@ -55,29 +51,34 @@ enum HSOL_STR_OPTIONS {
 
 class HModel {
 public:
-    typedef Eigen::SparseMatrix<double> SpMat; 
-    typedef Eigen::Triplet<double> T;
-    typedef Eigen::SparseQR<SpMat, NaturalOrdering<int> > sQR;
     /* Deakins - Classes */
-    class Node{
-    public:
-        int data;
-        Node *next;
-        Node *prev;
-        Node(){
-            next = NULL;
-            prev = NULL;
-        }
-    };
-    class adjNode{
+    typedef struct node{
     public:
         int label;
-        int w;
-        adjNode *next;
-        adjNode(){
-            next = NULL;
-        }
-    };
+        double weight;
+        
+    }node;
+    typedef vector<int> intVec;
+    typedef vector<node> nodeVec;
+    // class Node{
+    // public:
+    //     int data;
+    //     Node *next;
+    //     Node *prev;
+    //     Node(){
+    //         next = NULL;
+    //         prev = NULL;
+    //     }
+    // };
+    // class adjNode{
+    // public:
+    //     int label;
+    //     int w;
+    //     adjNode *next;
+    //     adjNode(){
+    //         next = NULL;
+    //     }
+    // };
     HModel();
     void setup(const char *filename);
     void setup_loadMPS(const char *filename);
@@ -180,21 +181,21 @@ public:
 
     // Deakins - functions
     void initStorage();
-    void push(Node **headRef, int newData);
-    void insertA(Node *prevNode, int newData);
-    void insertB(Node **headRef, Node *nextNode, int newData);
-    void append(Node **headRef, int newData);
-    void appendAdj(adjNode **headRef, int newData, double newEntry);
-    Node *findNode(Node **headRef, int label);
-    void deleteNode(Node **headRef, Node *del);
-    bool exists(Node **headRef, int data);
-    int listSize(Node **headRef);
+    //void push(Node **headRef, int newData);
+    // void insertA(Node *prevNode, int newData);
+    // void insertB(Node **headRef, Node *nextNode, int newData);
+    // void append(Node **headRef, int newData);
+    // void appendAdj(adjNode **headRef, int newData, double newEntry);
+    // Node *findNode(Node **headRef, int label);
+    // void deleteNode(Node **headRef, Node *del);
+    // bool exists(Node **headRef, int data);
+    // int listSize(Node **headRef);
     void initEQs();
     void computeEQs();
     void lp2Graph();
     void splitColor(int s);
-    void printList(Node **headRef);
-    void printAdjList(adjNode **headRef);
+    // void printList(Node **headRef);
+    // void printAdjList(adjNode **headRef);
     void isolate(int i);
     void equitable();
     void aggClear();   
@@ -211,10 +212,10 @@ public:
     void getActiveConstrs();
     void getBasis();
     vector<double> project(vector<double> &v1, vector<double> &v2);
-    double findScal(vector<double> &v1, vector<double> &v2);
     void gramSchmidt();
     void subtract(vector<double> &v1, vector<double> &v2);
-    void collectActive();
+    bool dependent(vector<double> &v);
+    void cleanUp();
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -276,11 +277,14 @@ public:
     int numActiveVars;
 
     // Storage - vectors for EPs
-    vector<adjNode *> adjList;
-    vector<adjNode *> aggAdjList;
+    vector<nodeVec> adjList2;
+    // vector<adjNode *> adjList;
+    // vector<adjNode *> aggAdjList;
+    vector<nodeVec> aggAdjList2;
     vector<double> Rhs;
-    vector<Node *> C;
-    vector<list<int> *> A;
+    // vector<Node *> C;
+    vector<intVec> CC;
+    vector<intVec> A;
     vector<double> maxcdeg;
     vector<double> mincdeg;
     vector<int> initialParts;
@@ -302,15 +306,26 @@ public:
     // Storage - stacks
     stack<int> S;
     // Doubly linked lists
-    Node *colorsAdj;
-    Node *v;
-    Node *c;
-    Node *del;
+    // Node *colorsAdj = (Node*) malloc(sizeof(Node));
+    // Node *v = (Node*) malloc(sizeof(Node));
+    // Node *c = (Node*) malloc(sizeof(Node));
+    // Node *del = (Node*) malloc(sizeof(Node));
+    // // Linked lists
+    // adjNode *w = (adjNode*) malloc(sizeof(adjNode));
+    vector<int> colorsAdj2;
+    vector<int>::iterator c2;
+    vector<int>::iterator v2;
+    vector<node>::iterator w2;
+    vector<int>::iterator u2;
+    // Node *colorsAdj;
+    // Node *v;
+    // Node *c;
+    // Node *del;
     // Linked lists
-    adjNode *w;
+    // adjNode *w;
     // Lists
-    list<int>::iterator u;
-    list<int>::iterator s;
+    vector<int>::iterator u;
+    vector<int>::iterator s;
     // Storage for aggregate models
     int aggNumCol;
     int aggNumRow;
