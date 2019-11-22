@@ -21,15 +21,10 @@
 \newcommand{\cF}{{\mathcal F}}
 \newcommand{\cG}{{\mathcal G}}
 \newcommand{\cO}{{\mathcal O}}
+\newcommand{\cC}{{\mathcal C}}
+\newcommand{\cV}{{\mathcal V}}
 \newcommand{\cL}{{\mathcal L}}
 \newcommand{\cR}{{\mathcal R}}
-
-
-
-%\theoremstyle{plain}% default
-%\newtheorem{thm}{Theorem}[section]
-%\newtheorem{corollary}{Corollary}[thm]
-
 
 \begin{document}
 %\title{Neighborhood-based Reductions and Cuts for Signed Graphs}
@@ -43,7 +38,7 @@
 
 
 Consider a linear program $LP(A,b,c)$ in the following form:
-\begin{align}
+\begin{align} \label{eq:LP}
   \max \ & c^t x \\
   \mbox{s.t. } & Ax \leq b\\
   & x \geq 0,
@@ -56,14 +51,16 @@ linear program, $RLP(A,B,c,\cP)$ to be:
 
 \begin{align}
   \max \ & c^t x \\
-  \mbox{s.t. } & Ax \leq b\\
+  \mbox{s.t. } & Ax \leq b \label{cons:orig}\\
   & x_i = x_i \ \ \forall\ i,j \ \in P_l,\  l= 1,\ \ldots,\ k \label{cons:equal}\\
   & x \geq 0,
   \end{align}
 
 \noindent Obviously can be written in such a way as to aggregate variables that
 belong in the same partition. Such an aggregation will yield a formulation with
-only $k$ variables and (potentially) fewer constraints. It is easier, however, to
+only $k$ variables and (potentially) fewer constraints. We will refer to the aggregated version as $ARLP(A,b,c,\cP)$.
+
+ It is easier, however, to
 discuss the proposed methods using the above formulation as both, as stated,  $LP(A,b,c)$ and
 $RLP(A,B,c,\cP)$ exist in the same dimension.
 
@@ -85,7 +82,7 @@ considerably easier than the more general crossover methods.
 
 \section{Background: Symmetry and Equitable Partitions}
 
-
+{\em Symmetries and Fractional Symmetries:}
 
 The symmetry group of $LP(A,b,c)$ is defined to
 be permutations that map feasible solutions to the LP to feasible solutions with
@@ -93,37 +90,199 @@ the same objective value. Let $\cG$ represent the symmetry group. A problem's
 symmetry group can be used to define equivalence classes on both the sets of
 variables as well as the set of feasible solutions. As permutations act on
 vectors, it is most natural to think of how symmetries act on solution vectors.
-We say two solutions are equivalent if there exists a permutation in $\cG$ that
-maps one solution to the other. We call the set of all solutions equivalent to a
+We say two solutions are equivalent if they have the same objective values and there exists a permutation in $\cG$ that
+maps one solution to the other. Computing $\cG$ is not practical, as it requires the knowledge of all feasible solutions. In practice, the {\em formulation group} $\cF$, is used to approximate $\cG$. Note that $\cF \subset \cG$. The formulation group of \eqref{eq:LP} contains the set of
+	permutations  $(P_\pi,\ P_\sigma)$ such that:
+	\begin{align}  \label{eq:formulation}
+	c  P_\pi = c, \\ \notag
+	P_\sigma b =b,\\ \notag
+	A  P_\pi = P_\sigma A, \\ \notag
+	P_\pi \in S^n,\ P_\sigma \in S^m,
+	\end{align}
+
+\noindent where $S_\pi$ and $S_\sigma$ are the sets of all permutation matrices of appropriate size. This ensures that integer solutions are mapped to other integer solutions, something that is important in integer programming but not in linear programming. Dropping the integrality restriction gives the set of {\em fractional symmetries}, $\cF$, that contain the set of doubly stochastic matrices that satisfy:
+	\begin{align}  \label{eq:fractional}
+c  P_\pi = c, \\ \notag
+P_\sigma b =b,\\ \notag
+A  P_\pi = P_\sigma A, \\ \notag
+P_\pi \in D^n,\ P_\sigma \in D^m,
+\end{align}
+where $D_\pi$ and $D_\sigma$ are the sets of all doubly stochastic matrices of appropriate size. Note that the set of all fractional symmetries can be thought of as a polyhedron (the no longer form a group). 
+
+{\em Orbits and Generalizations:}
+
+
+We call the set of all solutions equivalent to a
 solution $x$ an {\em orbit} of $x$ with respect to $\cG$. We use
 $\mbox{Orb}(x,\ \cG)$ to represent the orbit of $x$ with respect to $\cG$. We
 overload the $\mbox{Orb}$ notation to act on variables as well as vectors. The
 orbit of variable $x_i$ with respect to $\cG$ are those variables that are
 equivalent to $x_i$. We have that $j \in \mbox{Orb}(i,\cG)$ if and only if $e_j
 \in \mbox{Orb}(e_i,\cG)$. The variable orbits can be used to define a natural
-parition of the variables as $i,\ j \in \mbox{Orb}(h,\cG)$ implies that $h, j
-\in \mbox{Orb}(i,\cG)$. We let $\cO= \{O_1,\ldots,\ O_k\}$ represent the {\em orbital
-partition} of the variables. 
+partition of the variables as $i,\ j \in \mbox{Orb}(h,\cG)$ implies that $h, j
+\in \mbox{Orb}(i,\cG)$. We let $\cO= \{O_1,\ldots,\ O_k\}$ represent the {\em orbital partition} of the variables. 
 
+While not immediately obvious, equitable partitions are the fractional symmetry analog of orbits. Formally, an equitable partition $(\cV, \cC)$ with respect to $\cF$, which we denote as $EQ(\cP = (\cV,\cC), \cF)$, is a partition of the variables ($\cV = (V_1,\ \ldots,\ V_k)$) and constraints ($\cC = (C_1,\ \ldots,\ C_k)$) that satisfies the following constraints:
+\begin{align}
+\sum_{p \in C} A_{i,p} - A_{j,p} = 0 & \ \forall i,j \in V \in \cV,\ C \in \cC\\
+\sum_{i \in V} A_{i,p} - A_{i,q} = 0 & \ \forall p,q \in C \in \cC, V \in \cV 
+\end{align}
+
+
+We say that partition $\cP^2$ is a {\em refinement} of partition $\cP^1$ if for
+all $P_i^2 \in \cP^2$ there exists a $P_j^1 \in \cP^1$ with $P_i^2 \subseteq
+P_j^1$. It can be shown that any orbital partition is a refinement of an equitable partition. Conversely, $P^1$ is {\em coarser} than $P_2$. The coarsest equitable partition is easily computed and is often used as the first step in computing the formulation group of an instance. 
+
+In both orbits and equitable partitions, we choose one element from each partition and refer to it as the {\em representative}. For the sake of this paper, we will say that the representative of each partition is the variable/constraint with the smallest index.  Let $\cR(\cP)$ be the set of representatives associated with partition $\cP$. Further, we let $R(i,\cP)$ be the function that identifies the representative of $i$ given partition $\cP$, that is, the representative $j \in \cR(\cP)$ s.t. $i$ and $j$ are in the same partition.
+
+
+
+{\em Stabilizers and Generalizations:}
+
+The {\em stabilizer} of a group $\cG$ with respect to an element $v$, $stab(v,\cG)$ is defined to be:
+
+$$stab(v,\cG) := \{ \pi \in \cG\ | \ \pi(v) = v\}.$$ 
+
+\noindent Note that this definition allows for  $v$ to be either a vector or a variable. Using the constraints~\eqref{eq:formulation}, this can be thought of adding the constraint $P_\pi v = v$, or, in the case where $v$ represents a variable, say $x_i$, by fixing $P_\pi(i,i)$ to one. 
+
+Similar to the stabilizer, we wish to {\em isolate} elements of an equitable partition by creating a refinement where that element is in a singleton partition. Formally, we have $iso(v, \cF)$ is define to be:
+
+
+$$iso(v,\cF) := \{ \pi \in \cF\ | \ \pi(v) = v\}.$$ 
+\noindent Again, this can be thought of adding the constraint $P_\pi v = v$, or, in the case where $v$ represents a variable, say $x_i$, by fixing $P_\pi(i,i)$ to one. 
+
+
+
+\section{Stuff}
+
+A result from Grohe...
 \begin{theorem} \label{thm:set_equal}
-Let $\cG$ be the symmetry group acting on a linear program and let $\cO$ be the
-orbital partition with respect to $\cG$. The optimal solution
-value of $LP(A,b,c)$ is equal to the optimal solution value of $RLP(A,b,c, \cO)$
+	Let $\cF$ be the set of fractional symmetries acting on a linear program and let $\cP = (\cV, \cC)$ be the
+	equitable partition with respect to $\cF$. The optimal solution
+	value of $LP(A,b,c)$ is equal to the optimal solution value of $RLP(A,b,c, \cP)$
 \end{theorem}
 
 
-\begin{corollary}
-As a result of these fixings, an aggregated LP with the same optimal objective
-value can be written using $|\cO^V|$ many variables and $|\cO^C|$ many constraints.
-  \end{corollary}
 
-We say that partition $\cP^1$ is a {\em refinement} of partition $\cP^2$ if for
-all $P_i^1 \in \cP^1$ there exists a $P_j^2 \in \cP^2$ with $P_i^1 \subseteq
-P_j^2$. If $\cP^1$ is a refinement of $\cP^2$, then we have that the LP solution
+
+In general, if $\cP^2$ is a refinement of $\cP^1$, then the LP solution
 to $RLP(A,B,c,\cP_1)$ is no smaller than $RLP(A,B,c,\cP_2)$. Thus, for any
-partition that is a refinement of the problem's orbital partition $\cO$,
-Theorem~\ref{thm:set_equal} ensures that $RLP(A,b,c,\cP_1)$ has the same
-objective value of $LP(A,b,c)$.
+partition that is a refinement of the problem's equitable partition $\cP$,
+Theorem~\ref{thm:set_equal} ensures that $RLP(A,b,c,\cP)$ ($ARLP(A,b,c,\cP)$) has the same
+objective value of $LP(A,b,c)$. We will show how to efficiently map a vertex solution from $ARLP(A,b,c,\cP_1)$ to $ARLP(A,b,c,\cP_2)$. In doing so, we implicetly map vertices from $$ARLP(A,b,c,\cP_1) \rightarrow RLP(A,b,c,\cP_1) \rightarrow RLP(A,b,c,\cP_2) \rightarrow ARLP(A,b,c,\cP_2).$$
+
+
+\subsection{$ARLP(A,b,c,\cP) \leftrightarrow RLP(A,b,c,\cP) $}
+To do this, we must first describe how the aggregated LP relates to the restricted LP. Consider the following example:
+\begin{align}
+\max\ & x_1 + x_2 + x_3\\
+\mbox{s.t. } & x_1 + x_2 \leq 1& (c_1)\\
+& x_2 + x_3 \leq 1 & (c_2)\\
+& x_1 + x_3 \leq 1 & (c_3)\\
+& x_i \in \mathbb{R}^+.
+\end{align}
+
+\noindent The equitable partition of the above linear program is $\{(x_1, x_2, x_3), (c_1, c_2, c_3)\}$. As $x_1$ is the representative of the only variable parition, replacing $x_2$ and $x_3$ with $x_1$ gives the following 
+
+\begin{align}
+\max\ & 3x_1 \\
+\mbox{s.t. } & 2x_1  \leq 1 & (c_1)\\
+& 2x_1 \leq 1 & (c_2)\\
+& 2x_1  \leq 1 & (c_3)\\
+& x_1 \in \mathbb{R}^+.
+\end{align}
+\noindent Clearly, only the representative of $(c_1, c_2, c_3)$  ($c_1$) is required, as the variable aggregation makes the non representatives redundant. This is true in general~\cite{grohe} as the constraints~\eqref{cons:equal} imply that any two constraints in the same orbit are linearly dependent.
+
+
+\begin{corollary} \label{cor:cons_equal}
+	If constraint $c \in C_i$ is active for a given solution to the restricted LP, all constraints in $C_i$ are active at that solution.
+\end{corollary}
+
+
+\begin{corollary}
+	An aggregated LP with the same optimal objective
+	value as the original LP can be written using $|\cV|$ many variables and $|\cC|$ many constraints.
+\end{corollary}
+
+
+
+At the risk of some ambiguity, we will assume the indices of variables and constraints in both the aggregated and full models remain the same.
+
+
+Mapping a vertex from an aggregated LP to the restricted LP can be done as follows. Let $x^a$ be a vertex to the aggregated lp. We can let $x^r$ be defined as:
+$$x_i^r = x_{R(i,\cF)}^a \ \forall i \in \{1,\ \ldots,\ n\} $$
+
+\noindent The set of active constraints in the aggregated LP, $C^a$, are still  active constraints in the restricted LP, giving at least $n_\cP$-many linearly independent active constraints in the restriced LP. The linking constraints~\eqref{cons:equal} provide $n-n_\cP$-many additional linearly independent constraints, implying that $x^r$ is a vertex. Conversely, if $x^r$ is known to be a vertex in the restriced linear program, a vertex in the aggregated formulation can be found by truncating the variables that are not representatives. A set of $n$ linearly indepenedent active constraints in the aggregate can be formed by including $n-n_\cP$-many constraints of type~\eqref{cons:equal} and choosing the remaining $n_\cP$-many constraints from~\eqref{cons:orig}. In order for this set to be linearly independent, the constraints from~\eqref{cons:orig} must be from different constraint orbits. Choosing the representatives of each of these constraints will give $n_\cP$-many linearly independent active constraints in the aggregated model, implying that $x^a$ is a vertex.
+
+
+{\bf Formalize the above as a theorem/proof?}
+
+
+\subsection{$RLP(A,b,c,\cP_1) \rightarrow RLP(A,b,c,\cP_2)$}
+
+
+Let $\cP_2$ be a refinement of $\cP_1 = (\cV_1, \cC_1)$. We will show how to lift a basic solution from the restricted linear program using $\cP_1$ to a basic solution of the restricted solution using partition $\cP_2$. Consider a vertex $x^1$ of $RLP(A,b,c,\cP_1)$ and recall that the only difference between $RLP(A,b,c,\cP_1)$ and $RLP(A,b,c,\cP_2)$ is in the set of constraints~\eqref{cons:equal}. Outside of linearly dependent constraints, including the following constraints to $RLP(A,b,c,\cP_2)$ ,
+
+$$ x_i = x_{R(i,\cP_1)} \ \forall i\ \in \cR(\cP_2) \setminus \cR(\cP_1),$$
+
+\noindent meaning $x^1$ has at least $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many linearly independent constrants in $RLP(A,b,c,\cP_2)$ that are active. We construct an auxillary linear program problem that will take the vertex solution $x^1$ and, after at most $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many pivots, arrive at a vertex of  $RLP(A,b,c,\cP_2)$. This auxillary program will be defined as all the variables and constraints in $RLP(A,b,c,\cP_2)$, such that all constraints and bounds binding at $x^1$ are forced to be active, along with the following variable and constraints:
+
+\begin{align}
+x_{R(i,\cP_1)}  - x_i = r_{(R(i,\cP_1), i) } &\ \  \forall i\ \in \cR(\cP_2) \setminus \cR(\cP_1) \label{eq:linking}\\
+r_{i,j} \geq 0 \label{eq:bound}
+\end{align}
+
+\noindent The vertex $x^1$ can be lifted to this extended space by letting $r_{i,j}^1$ take the value of zero for all relevant $i$ and $j$. While the above adds $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many new variables, it also adds $2|\cR(\cP_2) \setminus \cR(\cP_1)|$-many linearly independent constraints that are binding at $(x^1,r^1=0)$, thus $(x^1,0)$, is a vertex solution for this auxillary problem.  
+
+
+Any basic solution to the auxillary problem with all $r$ variables in the basis can be truncated to achieve a basic solution $RLP(A,b,c,\cP_2)$. With this in mind, we propose to pivot on the $r$ variables in the auxillary LP to find a basic solution with all of them in the basis. We need to ensure, though, that as we pivot, no $r$ variables leave the basis. This is done by realizing that the variable bounds on $r$~\eqref{eq:bound} are artificial, and only included to ensure that $x^1$ can be lifted to a vertex of the aggregated problem. When we pivot of an $r$ variable, we can immediatly change its lower bound to $-\infty$ to ensure that it never reenters the basis. In this way, we can ensure that no more than $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many pivots are performed. 
+
+ 
+
+ -----
+ 
+
+
+
+First, though, we note how aggregation works. For all variables in a vertex partition $V \in \cV_1$, we replace all non-representative variables with its representative. In doing so, the constraints in each $C \in \cC_1$ become identical. 
+
+{\em Aside: Dimensions of RLP polyhedra:}
+
+Note that the polyhedra defined by the feasible region of both $LP(A,b,c)$ and
+$RLP(A,b,c,\cP)$ are both in $\mathbb{R}^n$. However, while the feasible
+region of $LP(A,b,c)$ can be fully dimensional, that of $RLP(A,b,c,\cP)$ is not
+(except for trivial partitions). Indeed, it is easy to see that the set of
+equalities defined in~\eqref{cons:equal} have a rank of $n - |\cP|$.
+
+
+------
+
+
+
+Consider an optimal vertex $v^{\cP_1}$ to $ARLP(A,b,c,\cP_1)$, the aggregated problem with $n_{\cP_1}$ many variables and $m_{\cP_1}$ many non-redundant constraints. Let $C_{\cP_1}$ be the set of active constraints and let $V_{P_1}^l$ and  $V_{P_1}^u$ be the set of variables that are at their lower and upper bounds respectively. Since $v^{\cP_1}$ is a vertex, we know that the enforcing the constraints $C_{\cP_1}$ to be active, the variables $V_{P_1}^l$ to be at their lower bound, and the variables $V_{P_1}^u$ to be at their upper bound gives a set of constraints with a rank of $n_{\cP_1}$.
+
+
+
+
+
+
+
+Now consider the $ARLP(A,b,c,\cP_2)$ with $n_{\cP_2} \geq n_{\cP_1}$ many variables and $m_{\cP_2}\geq m_{\cP_1}$ many constraints. If $n_{\cP_2} = n_{\cP_1}$, then $\cP_1 = \cP_2$, making $v^{\cP_1}$  a vertex $ARLP(A,b,c,\cP_2)$. Assume, then that $n_{\cP_2} > n_{\cP_1}$. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {\em Dimensions of RLP polyhedra:}
 
@@ -136,23 +295,32 @@ equalities defined in~\eqref{cons:equal} have a rank of $n - |\cP|$.
 {\em Hierarchy of  optimal restrictions:}
 
 We new define a hierarchy of restrictions that are all guaranteed to share the
-same optimal objective value (that of the original LP). First, we define the {\em
-  stabilizer} of a group $\cG$ with respect to an element $v$, $stab(v,\cG)$ to
-be:
-
-$$stab(v,g) := \{ \pi \in \cG\ | \ \pi(v) = v\}.$$ 
-
-\noindent That is, it consists of permutations in $\cG$ that fix the element
-$v$. The stabilizer of an element is still a group (in fact a subgroup of
-$\cG$). We define $stab^0$ to just be $\cG$ and recursively define $stab^k(\cG)$
-to be $stab( k , stab^{k-1}(\cG))$. As every $stab^k$ is a group, it can be used
-to generate an orbital partition $\cO^k$ (with respect to $stab^k$). As $stab^{k+1}$
-is a subset of $stab^k$, we have that $\cO^{k+1}$ is a refinement of $\cO^k$.
-Thus, $\{dim(RLP(A,b,c,\cO^k)\}_{ k }$ is a nondecreasing
-sequence and that $\cO^n$ consists of only singletons.
+same optimal objective value (that of the original LP). We define $iso^0$ to just be $\cF$ and recursively define $iso^k(\cF)$
+to be $iso( k , iso^{k-1}(\cF))$. As every $iso^k$ is a set of fractional symmetries, it can be used
+to generate the equitable partition $\cP^k$ (with respect to $iso^k$). As $iso^{k+1}$
+is a subset of $iso^k$, we have that $\cP^{k+1}$ is a refinement of $\cP^k$.
+Thus, $\{dim(RLP(A,b,c,\cP^k)\}_{ k }$ is a nondecreasing
+sequence and that $\cP^n$ consists of only singletons.
 
 
-Generalize notions to equitable partitions.
+
+{\em Crossover}
+
+We use the above facts to design a crossover strategy that will take a vertex
+solution from $ARLP(A,b,c,\cP^k\}$ and  lift it to a vertex solution to
+$ARLP(A,b,c,\cP^{k+1})$. By iterating through, this will eventually lead to a vertex to $ARLP(A,b,c,\cP^{n}) = LP(A,b,c)$
+
+
+
+
+
+
+
+This will be done iteratively by lifting each
+vertex solution of  $RLP(A,b,c,\cO^i\}$  to a vertex solution to
+$RLP(A,b,c,\cO^{i+1})$ 
+
+
 
 \section{Required Theory}
 
@@ -183,15 +351,6 @@ Things to show(?)
       \end{itemize}
       \end{itemize}
       
-
-{\em Crossover}
-
-We use the above facts to design a crossover strategy that will take a vertex
-solution to $RLP(A,b,c,\cO^0\}$ and  lift it to a vertex solution to
-  $RLP(A,b,c,\cO^n) = LP(A,b,c)$. This will be done iteratively by lifting each
-vertex solution of  $RLP(A,b,c,\cO^i\}$  to a vertex solution to
-  $RLP(A,b,c,\cO^{i+1})$ 
-
 
 
 {\em Not entirely sure why I put all of this here... Pick and choose...}
@@ -256,30 +415,55 @@ constraint is binding for all vertices in $\mbox{Orb}(x^i, \cG)$.
 
 
 \begin{algorithm}[H]
- \KwData{Aggregated solution $x^0$, set of active constraints $C$, coarsest equitable partition $\cP_0$}
+ \KwData{Aggregated solution $x^0$, set of active constraints $C$, group $\cG$}
  \KwResult{A vertex solution to the original LP}
 % initialization\;
-$\cP_0 \eqqcolon \cP$\\ 
- \While{$|\cP| \neq m + n$}{
- 	$\cP \eqqcolon \bar{\cP}$\;
- 	$\mbox{iso}(C, \cP)  = \{\cP^1, \dots, \cP^k\}$, a new partition\;
- 	\textbf{Refine($\{P^1, \dots, P^k\}$)}$\eqqcolon \cP$\;
-  $\{(x_i, x_j)|\cP^i, \cP^j \subseteq \cP^k \in \bar{\cP}, \ \forall \cP^j \subseteq \cP^k, j \neq i, \ \forall \cP^k \in \bar{\cP}\} \eqqcolon \cL$\;
-  Create $RLP(A,b,c,\cP)$\;
-\For{$(x_i, x_j) \in L$}{
-  $x_i - x_j \eqqcolon z$\;
-  $\max z$, alter objective of $RLP(A,b,c,\cP)$\;
-  Relax $x_i = x_j$\;
-  \textbf{Simplex}($RLP(A,b,c,\cP)$) $\eqqcolon \cR$\;
-  $C \cup \cR \eqqcolon C$\;
+ \While{$rank(C) < n$}{
+  Let $\cG = \mbox{Stab}(C, \cG)$, generate orbital partition of variables
+  $\cO = \{O^1,\ \ldots, O^k\}$\;
+  Create LP of type~\eqref{} using $\cO$\;
+
+\While{$rank(C) < n$}{
+  Select orbit $O^i = \{x_{i_1},\ \ldots,\ x_{i_p}\}$\;
+  Compute $\mbox{Stab}( x_{i_1},\cG)$ 
   }
 
  }
- \caption{Orbital Crossover}
- 
+ \caption{How to write algorithms}
+\end{algorithm}
 
+
+
+
+
+
+
+\begin{algorithm}[H]
+	\KwData{Aggregated solution $x^0$, set of active constraints $C$, coarsest equitable partition $\cP_0$}
+	\KwResult{A vertex solution to the original LP}
+	% initialization\;
+	$\cP_0 \eqqcolon \cP$\\ 
+	\While{$|\cP| \neq m + n$}{
+		$\cP \eqqcolon \bar{\cP}$\;
+		$\mbox{iso}(C, \cP)  = \{\cP^1, \dots, \cP^k\}$, a new partition\;
+		\textbf{Refine($\{P^1, \dots, P^k\}$)}$\eqqcolon \cP$\;
+		$\{(x_i, x_j)|\cP^i, \cP^j \subseteq \cP^k \in \bar{\cP}, \ \forall \cP^j \subseteq \cP^k, j \neq i, \ \forall \cP^k \in \bar{\cP}\} \eqqcolon \cL$\;
+		Create $RLP(A,b,c,\cP)$\;
+		\For{$(x_i, x_j) \in L$}{
+			$x_i - x_j \eqqcolon z$\;
+			$\max z$, alter objective of $RLP(A,b,c,\cP)$\;
+			Relax $x_i = x_j$\;
+			\textbf{Simplex}($RLP(A,b,c,\cP)$) $\eqqcolon \cR$\;
+			$C \cup \cR \eqqcolon C$\;
+		}
+	}
+	\caption{Orbital Crossover}
+	
+	
 \end{algorithm}
 
 See "cite Grohe" for the subroutine \textbf{Refine} and note that the \textbf{Simplex} subroutine is performing the \textit{Simplex Algorithm} and returning the active constraints of $LP(A,b,c)$ based of the active constraints in $RLP(A,b,c,\cP)$.
+
+
 
 \end{document}
