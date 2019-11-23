@@ -104,13 +104,13 @@ void HMatrix::setupOC(int numCol_, int numRow_, const int *Astart_,
             ARvalue[iPut] = Avalue[k];
         }
     }
-
-     cout << "ARindex: { ";
-        for (int k = 0; k < ARindex.size(); ++k){
-            cout << ARindex[k] << " ";
-        }
-        cout << "}" << endl;
-        cin.get();
+    // cout << "AR_Nend: { ";
+    //     for (int k = 0; k < AR_Nend.size(); ++k){
+    //         cout << AR_Nend[k] << " ";
+    //     }
+    //     cout << "}" << endl;
+    //     cin.get();
+    
     for (int i = 0; i < numRow; ++i){
         for (int j = ARstart[i]; j < ARstart[i + 1]; ++j){
             if (Basis[ARindex[j]]){
@@ -118,12 +118,12 @@ void HMatrix::setupOC(int numCol_, int numRow_, const int *Astart_,
             }
         }
     }
-    cout << "AR_Nend: { ";
-        for (int k = 0; k < AR_Nend.size(); ++k){
-            cout << AR_Nend[k] << " ";
-        }
-        cout << "}" << endl;
-        cin.get();
+    // cout << "AR_Nend: { ";
+    //     for (int k = 0; k < AR_Nend.size(); ++k){
+    //         cout << AR_Nend[k] << " ";
+    //     }
+    //     cout << "}" << endl;
+    //     cin.get();
     
 }
 
@@ -142,30 +142,57 @@ void HMatrix::update(int columnIn, int columnOut) {
 
     if (columnOut < numCol) {
         for (int k = Astart[columnOut]; k < Astart[columnOut + 1]; k++) {
-            cout << "k: " << k << endl;
             int iRow = Aindex[k];
             int iFind = AR_Nend[iRow];
+            // cout << "iRow: " << iRow << endl;
+            // cout << "ARstart: " << ARstart[iRow] << endl;
+            // cout << "AR_Nend: " << AR_Nend[iRow] << endl;
             int iSwap = AR_Nend[iRow]++;
+            // cout << "AR_Nend: " << AR_Nend[iRow] << endl;
+            // cin.get();
             while (ARindex[iFind] != columnOut)
                 iFind++;
+            // cout << "ARindex of col out: " << ARindex[iFind] << endl;
+            // cout << "ARindex of swap: " << ARindex[iSwap] << endl;
+            // cout << "ARvalue of col out: " << ARvalue[iFind] << endl;
+            // cout << "ARvalue of swap: " << ARvalue[iSwap] << endl;
+            // cout << "ARindex: { ";
+            // for (int j = ARstart[iRow]; j < ARstart[iRow + 1]; ++j){
+            //     cout << ARindex[j] << " ";
+            // }
+            // cout << "}" << endl;
+            // cin.get();
             swap(ARindex[iFind], ARindex[iSwap]);
             swap(ARvalue[iFind], ARvalue[iSwap]);
-        }
+            // cout << "ARindex: { ";
+            // for (int j = ARstart[iRow]; j < ARstart[iRow + 1]; ++j){
+            //     cout << ARindex[j] << " ";
+            // }
+            // cout << "}" << endl;
+            // cin.get();
+        } 
     }
-    for (int i = 0; i < numRow; ++i){
-        cout << "row: " << i << " { ";
-        for (int j = ARstart[i]; j < ARstart[i + 1]; ++j){
-            cout << ARvalue[j] << " ";
-        }
-        cout << "}" << endl;
-    }
-    cin.get();
-    cout << "ARindex: { ";
-        for (int k = 0; k < ARindex.size(); ++k){
-            cout << ARindex[k] << " ";
-        }
-        cout << "}" << endl;
-        cin.get();
+    // cout << "AR_Nend: { ";
+    //     for (int k = 0; k < AR_Nend.size(); ++k){
+    //         cout << AR_Nend[k] << " ";
+    //     }
+    //     cout << "}" << endl;
+    //     cin.get();
+    
+    // for (int i = 0; i < numRow; ++i){
+    //     cout << "row: " << i << " { ";
+    //     for (int j = ARstart[i]; j < ARstart[i + 1]; ++j){
+    //         cout << ARvalue[j] << " ";
+    //     }
+    //     cout << "}" << endl;
+    // }
+    // cin.get();
+    // cout << "ARindex: { ";
+    //     for (int k = 0; k < ARindex.size(); ++k){
+    //         cout << ARindex[k] << " ";
+    //     }
+    //     cout << "}" << endl;
+    //     cin.get();
 }
 
 double HMatrix::compute_dot(HVector& vector, int iCol) const {

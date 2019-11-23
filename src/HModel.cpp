@@ -66,6 +66,7 @@ void HModel::build(){
 	Basis.clear();
 	// Compute EP refinement
     equitable();
+    cout << "oldNumCols: " << oldNumCols << endl;
     // Update Master iter count
     masterIter++;
     // Setup random buffers: shuffle the break
@@ -944,7 +945,7 @@ void HModel::aggregateA(){
 		Basis.reserve(aggNumCol);
 		Basis.assign(aggNumCol, false);
 		for (int i = 0; i < startingBasis.size(); ++i){
-			if (startingBasis[i] < aggNumCol) Basis[i] = true;
+			if (startingBasis[i] < aggNumCol) Basis[startingBasis[i]] = true;
 		}
 	}
 }

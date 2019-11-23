@@ -6,6 +6,8 @@
 using namespace std;
 
 void HPrimal::solvePhase2(HModel *ptr_model) {
+    // cout << "numRegCol: " << model->oldNumCols << endl;
+    // cin.get();
     // Copy size
     model = ptr_model;
     numCol = model->getNumCol();
@@ -69,10 +71,12 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
 // Choose Linker
 void HPrimal::primalChooseLinker(){
 	 for (int i = 0; i < model->residuals.size(); ++i){
-    	if (model->basicResiduals[i])
+    	if (model->basicResiduals[i]){
+            // cout << i << endl;
     		continue;
+        }
         columnIn = model->residuals[i]; 
-        cout << "columnIn: " << columnIn << endl;   
+        // cout << "columnIn: " << columnIn << endl;   
         //model->basicVars[columnIn] = true;
         model->workCost[columnIn] = 1;
         model->workUpper[columnIn] = +HSOL_CONST_INF;
@@ -83,10 +87,10 @@ void HPrimal::primalChooseLinker(){
         primalUpdate();
         primalRebuild();
         //setNow();
-        for (int j = 0; j < model->aggRowIdx.size(); ++j){
-            cout << "row: " << j << " = " << model->aggRowUpper[j] << endl;
-        }
-        cin.get();
+        // for (int j = 0; j < model->aggRowIdx.size(); ++j){
+        //     cout << "row: " << j << " = " << model->aggRowUpper[j] << endl;
+        // }
+        // cin.get();
         model->workCost[columnIn] = 0;
     }
 }
@@ -264,7 +268,7 @@ void HPrimal::primalChooseRow() {
             }
         }
     }
-    cout << "rowOut: " << rowOut << endl;
+    // cout << "rowOut: " << rowOut << endl;
 }
 
 void HPrimal::primalUpdate() {
@@ -374,5 +378,5 @@ void HPrimal::primalUpdate() {
     model->reportPivots(columnIn, columnOut, alpha);
     // for (int i = 0; i < column.array.size(); ++i)
     // 	cout << "idx: " << column.index[i] << " = " << column.array[i] << endl;
-    cout << "columnOut: " << columnOut << endl;
+    // cout << "columnOut: " << columnOut << endl;
 }
