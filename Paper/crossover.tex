@@ -122,7 +122,7 @@ equivalent to $x_i$. We have that $j \in \mbox{Orb}(i,\cG)$ if and only if $e_j
 partition of the variables as $i,\ j \in \mbox{Orb}(h,\cG)$ implies that $h, j
 \in \mbox{Orb}(i,\cG)$. We let $\cO= \{O_1,\ldots,\ O_k\}$ represent the {\em orbital partition} of the variables. 
 
-While not immediately obvious, equitable partitions are the fractional symmetry analog of orbits. Formally, an equitable partition $(\cV, \cC)$ with respect to $\cF$, which we denote as $EQ(\cP = (\cV,\cC), \cF)$, is a partition of the variables ($\cV = (V_1,\ \ldots,\ V_k)$) and constraints ($\cC = (C_1,\ \ldots,\ C_k)$) that satisfies the following constraints:
+While not immediately obvious, equitable partitions are the fractional symmetry analog of orbits. Formally, an equitable partition $(\cV, \cC)$ with respect to $\cF$, which we denote as $\cP = (\cV,\cC) =  EQ( \cF)$, is a partition of the variables ($\cV = (V_1,\ \ldots,\ V_k)$) and constraints ($\cC = (C_1,\ \ldots,\ C_k)$) that satisfies the following constraints:
 \begin{align}
 \sum_{p \in C} A_{i,p} - A_{j,p} = 0 & \ \forall i,j \in V \in \cV,\ C \in \cC\\
 \sum_{i \in V} A_{i,p} - A_{i,q} = 0 & \ \forall p,q \in C \in \cC, V \in \cV 
@@ -235,9 +235,36 @@ r_{i,j} \geq 0 \label{eq:bound}
 \noindent The vertex $x^1$ can be lifted to this extended space by letting $r_{i,j}^1$ take the value of zero for all relevant $i$ and $j$. While the above adds $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many new variables, it also adds $2|\cR(\cP_2) \setminus \cR(\cP_1)|$-many linearly independent constraints that are binding at $(x^1,r^1=0)$, thus $(x^1,0)$, is a vertex solution for this auxillary problem.  
 
 
-Any basic solution to the auxillary problem with all $r$ variables in the basis can be truncated to achieve a basic solution $RLP(A,b,c,\cP_2)$. With this in mind, we propose to pivot on the $r$ variables in the auxillary LP to find a basic solution with all of them in the basis. We need to ensure, though, that as we pivot, no $r$ variables leave the basis. This is done by realizing that the variable bounds on $r$~\eqref{eq:bound} are artificial, and only included to ensure that $x^1$ can be lifted to a vertex of the aggregated problem. When we pivot of an $r$ variable, we can immediatly change its lower bound to $-\infty$ to ensure that it never reenters the basis. In this way, we can ensure that no more than $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many pivots are performed. 
+Any basic solution to the auxillary problem with all $r$ variables in the basis can be truncated to achieve a basic solution $RLP(A,b,c,\cP_2)$. With this in mind, we propose to pivot on the $r$ variables in the auxillary LP to find a basic solution with all of them in the basis. We need to ensure, though, that as we pivot, no $r$ variables leave the basis. This is done by realizing that the variable bounds on $r$~\eqref{eq:bound} are artificial, and only included to ensure that $x^1$ can be lifted to a vertex of the aggregated problem. When we pivot of an $r$ variable, we can immediatly change its lower bound to $-\infty$ to ensure that it never re-enters the basis. In this way, we can ensure that no more than $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many pivots are performed. 
 
+ {\bf Tableau Construction}
  
+ In this section, we will show how to construct the simplex tableau for the auxilary problem given an initial vertex and tableau in $ARLP(A,b,c,\cP_2)$. For each basic variable in $ARLP(A,b,c,\cP_2)$, the associated tableau of $ARLP(A,b,c,\cP_2)$ containts the constraints:
+ 
+ $$x_i + \sum_{j \in NB} \alpha_j x_j  = \overline{b}_i, \ \ \forall i \in B,$$
+ \noindent where $B$ represents the set of basic variables and $NB$ the set of non basic variables in the aggregated LP (note that slack variables can be treated as original variables whose partitions are those of their associated constraints). A dissaggregated varient of the above constraint can be written as:
+ 
+ $$\frac{\sum_{k \in P(i,\cP^1) }x_k}{|P(i,\cP^1)|}
+ 	 + \sum_{j \in NB} \alpha_j \frac{\sum_{l \in P(j,\cP^1) }x_l }{|P(j,\cP^1)|}  = \overline{b}_i, \ \ \forall i \in B,$$
+ 
+ {\bf Note: define $P(i,\cP)$ and $C(i,\cP)$ to be the variable and constraint partition containting i w.r.t. partion $\cP$}
+
+Aggregating the above in the auxiliary formulation gives:
+
+
+\begin{align}
+\frac{\sum_{k \in P(i,\cP^1) \cap \cR(\cP^2) } |P(k,\cP^2)|x_k}{|P(i,\cP^1)|}
++ \sum_{j \in NB} \alpha_j \frac{\sum_{l \in P(j,\cP^1) \cap \cR(\cP^2) } |P(l,\cP^2)|x_l }{|P(j,\cP^1)|} 
+ = \overline{b}_i, \ \ \forall i \in B, \label{eq:basis_mapping}
+\end{align}
+
+Recall that if $x_i$ is a basic variable, then all variables $x_k$ with $k \in P(i,\cP^1) \cap \cR(\cP^2)$ will start in the basis of the aggregated auxilliary problem. Using~\eqref{eq:basis_mapping} combined with the linking constraints~\eqref{eq:linking}, it can be shown that we can write the basic variables in $\cR(\cP^1)$ as:
+
+$$x_i + \sum_{j \in NB} \alpha_i \frac{\sum_{l \in P(j,\cP^1) \cap \cR(\cP^2) } |P(l,\cP^2)|x_l }{|P(j,\cP^1)|}  + \sum_{k \in P(i,\cP^1) \cap \cR(\cP^2)} \frac {r_{i,k} } {|P(k,\cP^2)|} = \overline{b}_i, \ \ \forall i \in B\cap \cR(\cP^1).$$
+
+For basic variable $x_{i'}$ with $i'\in \cR(\cP^2)$ with $i' \neq R(i',\cP^1) = i$, we can write $x_j$ in the tableau as: 
+$$x_{i'} + \sum_{j \in NB} \alpha_j \frac{\sum_{l \in P(j,\cP^1) \cap \cR(\cP^2) } |P(l,\cP^2)|x_l }{|P(j,\cP^1)|}  + \sum_{k \in P(i,\cP^1) \cap \cR(\cP^2)} \frac {r_{i,k} } {|P(k,\cP^2)|}  + r_{i,i'}= \overline{b}_i, \ \ \forall i \in B\cap \cR(\cP^1).$$
+
 
  -----
  
