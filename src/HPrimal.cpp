@@ -72,6 +72,7 @@ void HPrimal::primalChooseLinker(){
     	if (model->basicResiduals[i])
     		continue;
         columnIn = model->residuals[i]; 
+        cout << "columnIn: " << columnIn << endl;   
         //model->basicVars[columnIn] = true;
         model->workCost[columnIn] = 1;
         model->workUpper[columnIn] = +HSOL_CONST_INF;
@@ -81,11 +82,48 @@ void HPrimal::primalChooseLinker(){
         primalChooseRow();
         primalUpdate();
         primalRebuild();
+        //setNow();
+        for (int j = 0; j < model->aggRowIdx.size(); ++j){
+            cout << "row: " << j << " = " << model->aggRowUpper[j] << endl;
+        }
+        cin.get();
         model->workCost[columnIn] = 0;
     }
 }
 
+void HPrimal::setNow(){
+    vector<bool> activeCon(model->oldNumRows, true);
+    vector<bool> activeVar(model->oldNumCols, true);
+    int slackIdx = 0;
+    for (int i = 0; i < model->basicIndex.size(); ++i){
+        if (model->basicIndex[i] < model->aggNumCol){
+            if (model->basicIndex[i] < model->oldNumCols){
+                cout << "i: " << i << endl;
+                if (fabs(model->baseValue[i]) < 1e-5){
+                    continue;
+                }
+                else{
+                    activeVar[i] = false;
+                }
+                //model->boundedVariables[model->aggColIdx[model->basicIndex[i]]] = upperBound + lowerBound;
+            }
+        }
+        else{
+            slackIdx = model->basicIndex[i] - model->aggNumCol;
+            activeCon[slackIdx] = false;
+            //model->activeConstraints[slackIdx] = false;
+        }
+    }
+    for (int i = 0; i < activeCon.size(); ++i){
+        if (activeCon[i]){
+        model->aggRowUpper[i] = min(model->aggRowUpper[i], model->aggRowLower[i]);
+        model->aggRowLower[i] = min(model->aggRowUpper[i], model->aggRowLower[i]);
+    }
+    }
+}
+
 void HPrimal::primalCollect(){
+    vector<bool> active(model->aggNumRow, true);
 	int slackIdx = 0;
     for (int i = 0; i < model->basicIndex.size(); ++i){
         if (model->basicIndex[i] < model->aggNumCol){
@@ -226,6 +264,7 @@ void HPrimal::primalChooseRow() {
             }
         }
     }
+    cout << "rowOut: " << rowOut << endl;
 }
 
 void HPrimal::primalUpdate() {
@@ -335,4 +374,5 @@ void HPrimal::primalUpdate() {
     model->reportPivots(columnIn, columnOut, alpha);
     // for (int i = 0; i < column.array.size(); ++i)
     // 	cout << "idx: " << column.index[i] << " = " << column.array[i] << endl;
+    cout << "columnOut: " << columnOut << endl;
 }

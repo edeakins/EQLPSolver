@@ -330,6 +330,7 @@ public:
     int aggNumCol;
     int aggNumRow;
     int aggNumTot;
+    vector<bool> Basis;
     vector<int> aggColIdx;
     vector<int> aggRowIdx;
     vector<int> aggAstart;

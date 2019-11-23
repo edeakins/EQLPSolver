@@ -19,6 +19,8 @@ public:
     }
     void setup(int numCol, int numRow, const int *Astart, const int *Aindex,
             const double *Avalue);
+    void setupOC(int numCol, int numRow, const int *Astart, const int *Aindex,
+            const double *Avlaue, const vector<bool> &startingBasis);
     void price_by_col(HVector& row_ap, HVector& row_ep) const;
     void price_by_row(HVector& row_ap, HVector& row_ep) const;
     void update(int columnIn, int columnOut);

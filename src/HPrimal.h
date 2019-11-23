@@ -13,6 +13,7 @@ private:
     void primalUpdate();
     void primalChooseLinker();
     void primalCollect();
+    void setNow();
 
     // Model pointer
     HModel *model;
