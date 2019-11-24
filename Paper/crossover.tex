@@ -25,6 +25,8 @@
 \newcommand{\cV}{{\mathcal V}}
 \newcommand{\cL}{{\mathcal L}}
 \newcommand{\cR}{{\mathcal R}}
+\newcommand{\cS}{{\mathcal S}}
+\newcommand{\cD}{{\mathcal D}}
 
 \begin{document}
 %\title{Neighborhood-based Reductions and Cuts for Signed Graphs}
@@ -56,22 +58,22 @@ linear program, $RLP(A,B,c,\cP)$ to be:
   & x \geq 0,
   \end{align}
 
-\noindent Obviously can be written in such a way as to aggregate variables that
+\noindent Obviously $RLP(A,b,c,\cP)$ can be written in such a way as to aggregate variables that
 belong in the same partition. Such an aggregation will yield a formulation with
 only $k$ variables and (potentially) fewer constraints. We will refer to the aggregated version as $ARLP(A,b,c,\cP)$.
 
  It is easier, however, to
 discuss the proposed methods using the above formulation as both, as stated,  $LP(A,b,c)$ and
-$RLP(A,B,c,\cP)$ exist in the same dimension.
+$RLP(A,b,c,\cP)$ exist in the same dimension.
 
 For this work we are primarily focused on partitions $\cP$ such that the optimal
-solution to $LP(A,b,c)$ is equal to that of $RLP(A,B,c,\cP)$. We note that
+solution to $LP(A,b,c)$ is equal to that of $RLP(A,b,c,\cP)$. We note that
 techniques have been developed that attempt find such $\cP$, most notably those
 that seek to exploit symmetry and its generalization, equitable partitions. In
-such cases, the benefit of  $RLP(A,B,c,\cP)$ is clear, preprocessing will result
+such cases, the benefit of  $RLP(A,b,c,\cP)$ is clear, preprocessing will result
 in a smaller formulation that will likely be easier to solve. However, the
 solutions returned by solving the restricted problem will necessarily be in the
-interior of the optimal face (unless $\cP$ consists only of singletons). In many
+relative interior of the optimal face (unless $\cP$ consists only of singletons). {\bf BK: I added the word ``relative'' here, so as not to be incorrect when the optimal face of $LP(A,b,c)$ is a vertex.} In many
 cases it is desirable to find an optimal vertex to $LP(A,b,c)$. Various
 crossover methods have been developed to map an interior solution to an optimal
 vertex, but such methods tend to be very computationally taxing. We show here
@@ -97,17 +99,17 @@ maps one solution to the other. Computing $\cG$ is not practical, as it requires
 	c  P_\pi = c, \\ \notag
 	P_\sigma b =b,\\ \notag
 	A  P_\pi = P_\sigma A, \\ \notag
-	P_\pi \in S^n,\ P_\sigma \in S^m,
+	P_\pi \in \cS^n,\ P_\sigma \in \cS^m,
 	\end{align}
 
-\noindent where $S_\pi$ and $S_\sigma$ are the sets of all permutation matrices of appropriate size. This ensures that integer solutions are mapped to other integer solutions, something that is important in integer programming but not in linear programming. Dropping the integrality restriction gives the set of {\em fractional symmetries}, $\cF$, that contain the set of doubly stochastic matrices that satisfy:
+\noindent where $\cS^n$ and $\cS^m$ are the sets of all permutation matrices of appropriate size. This ensures that integer solutions are mapped to other integer solutions, something that is important in integer programming but not in linear programming. Dropping the integrality restriction on $(P_\pi, P_\sigma)$, gives the set of {\em fractional symmetries}, $\cF$, that contain the set of doubly stochastic matrices that satisfy:
 	\begin{align}  \label{eq:fractional}
 c  P_\pi = c, \\ \notag
 P_\sigma b =b,\\ \notag
 A  P_\pi = P_\sigma A, \\ \notag
-P_\pi \in D^n,\ P_\sigma \in D^m,
+P_\pi \in \cD^n,\ P_\sigma \in \cD^m,
 \end{align}
-where $D_\pi$ and $D_\sigma$ are the sets of all doubly stochastic matrices of appropriate size. Note that the set of all fractional symmetries can be thought of as a polyhedron (the no longer form a group). 
+where $\cD^n$ and $\cD^m$ are the sets of all doubly stochastic matrices of appropriate size. Note that the set of all fractional symmetries can be thought of as a polyhedron (the no longer form a group). 
 
 {\em Orbits and Generalizations:}
 
@@ -124,10 +126,10 @@ partition of the variables as $i,\ j \in \mbox{Orb}(h,\cG)$ implies that $h, j
 
 While not immediately obvious, equitable partitions are the fractional symmetry analog of orbits. Formally, an equitable partition $(\cV, \cC)$ with respect to $\cF$, which we denote as $\cP = (\cV,\cC) =  EQ( \cF)$, is a partition of the variables ($\cV = (V_1,\ \ldots,\ V_k)$) and constraints ($\cC = (C_1,\ \ldots,\ C_k)$) that satisfies the following constraints:
 \begin{align}
-\sum_{p \in C} A_{i,p} - A_{j,p} = 0 & \ \forall i,j \in V \in \cV,\ C \in \cC\\
-\sum_{i \in V} A_{i,p} - A_{i,q} = 0 & \ \forall p,q \in C \in \cC, V \in \cV 
+\sum_{p \in C} \left(A_{i,p} - A_{j,p}\right) = 0 & \ \forall i,j \in V \in \cV,\ C \in \cC\\
+\sum_{i \in V} \left(A_{i,p} - A_{i,q}\right) = 0 & \ \forall p,q \in C \in \cC, V \in \cV 
 \end{align}
-
+{\bf BK: what is the matrix A here? Is it from $LP(A,b,c)$, or somewhere else? If it is from $LP(A,b,c)$, we should say so, and it's interesting (wrong?) that the RHS and objective aren't involved here. Based on the Grohe paper, it seems this is the definition of equitable partitions of a matrix $A$, not a general linear program. Might be useful to introduce Grohe's $\tilde{A}$ matrix here, which links the two.}
 
 We say that partition $\cP^2$ is a {\em refinement} of partition $\cP^1$ if for
 all $P_i^2 \in \cP^2$ there exists a $P_j^1 \in \cP^1$ with $P_i^2 \subseteq
@@ -156,10 +158,10 @@ $$iso(v,\cF) := \{ \pi \in \cF\ | \ \pi(v) = v\}.$$
 \section{Stuff}
 
 A result from Grohe...
-\begin{theorem} \label{thm:set_equal}
+\begin{theorem}[Theorem ?? \cite{grohe}] \label{thm:set_equal}
 	Let $\cF$ be the set of fractional symmetries acting on a linear program and let $\cP = (\cV, \cC)$ be the
 	equitable partition with respect to $\cF$. The optimal solution
-	value of $LP(A,b,c)$ is equal to the optimal solution value of $RLP(A,b,c, \cP)$
+	value of $LP(A,b,c)$ is equal to the optimal solution value of $RLP(A,b,c, \cP)$.
 \end{theorem}
 
 
@@ -169,8 +171,8 @@ In general, if $\cP^2$ is a refinement of $\cP^1$, then the LP solution
 to $RLP(A,B,c,\cP_1)$ is no smaller than $RLP(A,B,c,\cP_2)$. Thus, for any
 partition that is a refinement of the problem's equitable partition $\cP$,
 Theorem~\ref{thm:set_equal} ensures that $RLP(A,b,c,\cP)$ ($ARLP(A,b,c,\cP)$) has the same
-objective value of $LP(A,b,c)$. We will show how to efficiently map a vertex solution from $ARLP(A,b,c,\cP_1)$ to $ARLP(A,b,c,\cP_2)$. In doing so, we implicetly map vertices from $$ARLP(A,b,c,\cP_1) \rightarrow RLP(A,b,c,\cP_1) \rightarrow RLP(A,b,c,\cP_2) \rightarrow ARLP(A,b,c,\cP_2).$$
-
+objective value of $LP(A,b,c)$. We will show how to efficiently map a vertex solution from $ARLP(A,b,c,\cP_1)$ to $ARLP(A,b,c,\cP_2)$. In doing so, we implicitly map vertices from $$ARLP(A,b,c,\cP_1) \rightarrow RLP(A,b,c,\cP_1) \rightarrow RLP(A,b,c,\cP_2) \rightarrow ARLP(A,b,c,\cP_2).$$
+{\bf BK: Not obvious to me why we need $RLP$ of the whole space. Can't we do *just enough* of the restriction to bump us out from $\cP_1$ to $\cP_2$? Maybe this is why a lot of the following theory doesn't make too much sense to me. In my mind, all we need show is how to get from $ARLP(A,b,c,\cP_1)$ to $ARLP(A,b,c,\cP_2)$, and that should just go though and LP that's the same dimension as $ARLP(A,b,c,\cP_2)$, with some added constraints...}
 
 \subsection{$ARLP(A,b,c,\cP) \leftrightarrow RLP(A,b,c,\cP) $}
 To do this, we must first describe how the aggregated LP relates to the restricted LP. Consider the following example:
@@ -182,7 +184,7 @@ To do this, we must first describe how the aggregated LP relates to the restrict
 & x_i \in \mathbb{R}^+.
 \end{align}
 
-\noindent The equitable partition of the above linear program is $\{(x_1, x_2, x_3), (c_1, c_2, c_3)\}$. As $x_1$ is the representative of the only variable parition, replacing $x_2$ and $x_3$ with $x_1$ gives the following 
+\noindent The equitable partition of the above linear program is $\{(x_1, x_2, x_3), (c_1, c_2, c_3)\}$. As $x_1$ is the representative of the only variable partition, replacing $x_2$ and $x_3$ with $x_1$ gives the following 
 
 \begin{align}
 \max\ & 3x_1 \\
@@ -209,61 +211,68 @@ To do this, we must first describe how the aggregated LP relates to the restrict
 At the risk of some ambiguity, we will assume the indices of variables and constraints in both the aggregated and full models remain the same.
 
 
-Mapping a vertex from an aggregated LP to the restricted LP can be done as follows. Let $x^a$ be a vertex to the aggregated lp. We can let $x^r$ be defined as:
-$$x_i^r = x_{R(i,\cF)}^a \ \forall i \in \{1,\ \ldots,\ n\} $$
+Mapping a vertex from an aggregated LP to the restricted LP can be done as follows. Let $x^a$ be a vertex to $ARLP(A,b,c,\cP)$. We can let $x^r$ be defined as:
+$$x_i^r = x_{R(i,\cP)}^a \ \forall i \in \{1,\ \ldots,\ n\}, $$
+recalling that $R(i,\cP)$ identifies the representative of $i$ in partition $\cP$.
 
-\noindent The set of active constraints in the aggregated LP, $C^a$, are still  active constraints in the restricted LP, giving at least $n_\cP$-many linearly independent active constraints in the restriced LP. The linking constraints~\eqref{cons:equal} provide $n-n_\cP$-many additional linearly independent constraints, implying that $x^r$ is a vertex. Conversely, if $x^r$ is known to be a vertex in the restriced linear program, a vertex in the aggregated formulation can be found by truncating the variables that are not representatives. A set of $n$ linearly indepenedent active constraints in the aggregate can be formed by including $n-n_\cP$-many constraints of type~\eqref{cons:equal} and choosing the remaining $n_\cP$-many constraints from~\eqref{cons:orig}. In order for this set to be linearly independent, the constraints from~\eqref{cons:orig} must be from different constraint orbits. Choosing the representatives of each of these constraints will give $n_\cP$-many linearly independent active constraints in the aggregated model, implying that $x^a$ is a vertex.
+ The set of active constraints in $ARLP(A,b,c,\cP)$, $C^a$, are still active constraints in $RLP(A,b,c)$, giving at least $n_\cP$-many linearly independent active constraints in $RLP(A,b,c)$. The linking constraints~\eqref{cons:equal} provide $(n-n_\cP)$-many additional linearly independent constraints, implying that $x^r$ is a vertex of $RLP(A,b,c)$.
+ 
+ Conversely, if $x^r$ is known to be a vertex to $RLP(A,b,c)$, a vertex of $ARLP(A,b,c,\cP)$ can be found by truncating, or eliminating, the variables that are not representative. A set of $n$ linearly independent active constraints in $ARLP(A,b,c,\cP)$ can be formed by including $n-n_\cP$-many constraints of type~\eqref{cons:equal} and choosing the remaining $n_\cP$-many constraints from~\eqref{cons:orig}. In order for this set to be linearly independent, the constraints from~\eqref{cons:orig} must be from different constraint orbits. Choosing the representatives of each of these constraints will give $n_\cP$-many linearly independent active constraints in the aggregated model, implying that $x^a$ is a vertex of $ARLP(A,b,c,\cP)$
 
-
-{\bf Formalize the above as a theorem/proof?}
+Hence, we arrive at the following theorem.
+\begin{theorem}\label{thm:VertexBijection}
+	The vertices of $ARLP(A,b,c,\cP)$ and $RLP(A,b,c,\cP)$ are in bijective correspondence.
+\end{theorem}
 
 
 \subsection{$RLP(A,b,c,\cP_1) \rightarrow RLP(A,b,c,\cP_2)$}
 
 
-Let $\cP_2$ be a refinement of $\cP_1 = (\cV_1, \cC_1)$. We will show how to lift a basic solution from the restricted linear program using $\cP_1$ to a basic solution of the restricted solution using partition $\cP_2$. Consider a vertex $x^1$ of $RLP(A,b,c,\cP_1)$ and recall that the only difference between $RLP(A,b,c,\cP_1)$ and $RLP(A,b,c,\cP_2)$ is in the set of constraints~\eqref{cons:equal}. Outside of linearly dependent constraints, including the following constraints to $RLP(A,b,c,\cP_2)$ ,
+Let $\cP_2$ be a refinement of $\cP_1 = (\cV_1, \cC_1)$. We will show how to lift a basic solution from the restricted linear program using $\cP_1$ to a basic solution of the restricted solution using partition $\cP_2$, a refinement of $\cP_1$. Consider a vertex $x^1$ of $RLP(A,b,c,\cP_1)$ and recall that the only difference between $RLP(A,b,c,\cP_1)$ and $RLP(A,b,c,\cP_2)$ is in the set of constraints~\eqref{cons:equal}, specifically, as $\cP_2$ is a refinement of $\cP_1$, $RLP(A,b,c,\cP_2)$ is a relaxation of $RLP(A,b,c,\cP_1)$. Outside of linearly dependent constraints {\bf BK: It's important to always be referring to a specific linear program, otherwise it's impossible to track what's going on}, including the following constraints to $RLP(A,b,c,\cP_2)$,
 
 $$ x_i = x_{R(i,\cP_1)} \ \forall i\ \in \cR(\cP_2) \setminus \cR(\cP_1),$$
 
-\noindent meaning $x^1$ has at least $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many linearly independent constrants in $RLP(A,b,c,\cP_2)$ that are active. We construct an auxillary linear program problem that will take the vertex solution $x^1$ and, after at most $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many pivots, arrive at a vertex of  $RLP(A,b,c,\cP_2)$. This auxillary program will be defined as all the variables and constraints in $RLP(A,b,c,\cP_2)$, such that all constraints and bounds binding at $x^1$ are forced to be active, along with the following variable and constraints:
+\noindent meaning $x^1$ has at least $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many linearly independent constraints in $RLP(A,b,c,\cP_2)$ that are active. {\bf BK: the preceding sentence needs to be re-worked for clarity.} We construct an auxiliary linear program problem that will take the vertex solution $x^1$ and, after at most $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many pivots, arrive at a vertex of  $RLP(A,b,c,\cP_2)$. This auxiliary program will be defined as all the variables and constraints in $RLP(A,b,c,\cP_2)$, such that all constraints and bounds binding at $x^1$ are forced to be active, along with the following variable and constraints:
 
 \begin{align}
 x_{R(i,\cP_1)}  - x_i = r_{(R(i,\cP_1), i) } &\ \  \forall i\ \in \cR(\cP_2) \setminus \cR(\cP_1) \label{eq:linking}\\
 r_{i,j} \geq 0 \label{eq:bound}
 \end{align}
 
-\noindent The vertex $x^1$ can be lifted to this extended space by letting $r_{i,j}^1$ take the value of zero for all relevant $i$ and $j$. While the above adds $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many new variables, it also adds $2|\cR(\cP_2) \setminus \cR(\cP_1)|$-many linearly independent constraints that are binding at $(x^1,r^1=0)$, thus $(x^1,0)$, is a vertex solution for this auxillary problem.  
+\noindent The vertex $x^1$ can be lifted to this extended space by letting $r_{i,j}^1$ take the value of zero for all relevant $i$ and $j$. While the above adds $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many new variables, it also adds $2|\cR(\cP_2) \setminus \cR(\cP_1)|$-many linearly independent constraints that are binding at $(x^1,r^1=0)$, thus $(x^1,0)$, is a vertex solution for this auxiliary problem.  
 
 
-Any basic solution to the auxillary problem with all $r$ variables in the basis can be truncated to achieve a basic solution $RLP(A,b,c,\cP_2)$. With this in mind, we propose to pivot on the $r$ variables in the auxillary LP to find a basic solution with all of them in the basis. We need to ensure, though, that as we pivot, no $r$ variables leave the basis. This is done by realizing that the variable bounds on $r$~\eqref{eq:bound} are artificial, and only included to ensure that $x^1$ can be lifted to a vertex of the aggregated problem. When we pivot of an $r$ variable, we can immediatly change its lower bound to $-\infty$ to ensure that it never re-enters the basis. In this way, we can ensure that no more than $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many pivots are performed. 
+Any basic solution to the auxiliary problem with all $r$ variables in the basis can be truncated to achieve a basic solution $RLP(A,b,c,\cP_2)$. With this in mind, we propose to pivot on the $r$ variables in the auxiliary LP to find a basic solution with all the $r$ variables in the basis. We need to ensure, though, that as we pivot, no $r$ variables leave the basis. This is done by realizing that the variable bounds on $r$~\eqref{eq:bound} are artificial, and only included to ensure that $x^1$ can be lifted to a vertex of the aggregated problem. When we pivot of an $r$ variable, we can immediately change its lower bound to $-\infty$ to ensure that it never re-enters the basis. In this way, we can ensure that no more than $|\cR(\cP_2) \setminus \cR(\cP_1)|$-many pivots are performed. {\bf BK: another way to say the above: as soon as an $r$ variable enters the basis, we immediately remove $r$ and the associated constraint \eqref{eq:linking} (if $r$ is a free variable, this is a valid  operation as each $r$ only appears in its own constraint). This is the same operation as making its bound $-\infty$, and it's clear how the lifting happens then (no need to speak of truncating)}
 
  {\bf Tableau Construction}
  
- In this section, we will show how to construct the simplex tableau for the auxilary problem given an initial vertex and tableau in $ARLP(A,b,c,\cP_2)$. For each basic variable in $ARLP(A,b,c,\cP_2)$, the associated tableau of $ARLP(A,b,c,\cP_2)$ containts the constraints:
+ {\bf BK: I'm really confused by the ``auxiliary problem'' in this section (it's not the same as the prior section, right?). Given what we're discussing, isn't it enough to talk about Tableau construction for $RLP(A,b,c,\cP)$ *given* a Tableau from $ARLP(A,b,c,\cP)$? And if so, shouldn't this go right after Theorem~\ref{thm:VertexBijection}?}
+ In this section, we will show how to construct the simplex tableau for the auxiliary problem given an initial vertex and tableau in $ARLP(A,b,c,\cP_2)$. For each basic variable in $ARLP(A,b,c,\cP_2)$, the associated tableau of $ARLP(A,b,c,\cP_2)$ is the constraints:
  
  $$x_i + \sum_{j \in NB} \alpha_j x_j  = \overline{b}_i, \ \ \forall i \in B,$$
- \noindent where $B$ represents the set of basic variables and $NB$ the set of non basic variables in the aggregated LP (note that slack variables can be treated as original variables whose partitions are those of their associated constraints). A dissaggregated varient of the above constraint can be written as:
+ \noindent where $B$ represents the set of basic variables and $NB$ the set of non basic variables in the aggregated LP (note that slack variables can be treated as original variables whose partitions are those of their associated constraints). A disaggregated variant of the above constraint can be written as:
  
- $$\frac{\sum_{k \in P(i,\cP^1) }x_k}{|P(i,\cP^1)|}
- 	 + \sum_{j \in NB} \alpha_j \frac{\sum_{l \in P(j,\cP^1) }x_l }{|P(j,\cP^1)|}  = \overline{b}_i, \ \ \forall i \in B,$$
+ $$\frac{\sum_{k \in P(i,\cP_1) }x_k}{|P(i,\cP_1)|}
+ 	 + \sum_{j \in NB} \alpha_j \frac{\sum_{l \in P(j,\cP_1) }x_l }{|P(j,\cP_1)|}  = \overline{b}_i, \ \ \forall i \in B,$$
  
- {\bf Note: define $P(i,\cP)$ and $C(i,\cP)$ to be the variable and constraint partition containting i w.r.t. partion $\cP$}
+ {\bf Note: define $P(i,\cP)$ and $C(i,\cP)$ to be the variable and constraint partition containing $i$ w.r.t. partition $\cP$}
 
 Aggregating the above in the auxiliary formulation gives:
 
 
 \begin{align}
-\frac{\sum_{k \in P(i,\cP^1) \cap \cR(\cP^2) } |P(k,\cP^2)|x_k}{|P(i,\cP^1)|}
-+ \sum_{j \in NB} \alpha_j \frac{\sum_{l \in P(j,\cP^1) \cap \cR(\cP^2) } |P(l,\cP^2)|x_l }{|P(j,\cP^1)|} 
+\frac{\sum_{k \in P(i,\cP_1) \cap \cR(\cP_2) } |P(k,\cP_2)|x_k}{|P(i,\cP_1)|}
++ \sum_{j \in NB} \alpha_j \frac{\sum_{l \in P(j,\cP_1) \cap \cR(\cP_2) } |P(l,\cP_2)|x_l }{|P(j,\cP_1)|} 
  = \overline{b}_i, \ \ \forall i \in B, \label{eq:basis_mapping}
 \end{align}
 
-Recall that if $x_i$ is a basic variable, then all variables $x_k$ with $k \in P(i,\cP^1) \cap \cR(\cP^2)$ will start in the basis of the aggregated auxilliary problem. Using~\eqref{eq:basis_mapping} combined with the linking constraints~\eqref{eq:linking}, it can be shown that we can write the basic variables in $\cR(\cP^1)$ as:
+Recall that if $x_i$ is a basic variable, then all variables $x_k$ with $k \in P(i,\cP_1) \cap \cR(\cP_2)$ will start in the basis of the aggregated auxiliary problem. Using~\eqref{eq:basis_mapping} combined with the linking constraints~\eqref{eq:linking}, it can be shown that we can write the basic variables in $\cR(\cP_1)$ as:
+{\bf BK: is this just saying how to write constraints~\eqref{eq:linking} for a given Tableau? I think this should be discussed with those constraints. The important thing here is how to get from $ARLP(A,b,c,\cP_1)$ to $RLP(A,b,c,\cP_1)$}
 
-$$x_i + \sum_{j \in NB} \alpha_i \frac{\sum_{l \in P(j,\cP^1) \cap \cR(\cP^2) } |P(l,\cP^2)|x_l }{|P(j,\cP^1)|}  + \sum_{k \in P(i,\cP^1) \cap \cR(\cP^2)} \frac {r_{i,k} } {|P(k,\cP^2)|} = \overline{b}_i, \ \ \forall i \in B\cap \cR(\cP^1).$$
+$$x_i + \sum_{j \in NB} \alpha_i \frac{\sum_{l \in P(j,\cP_1) \cap \cR(\cP_2) } |P(l,\cP_2)|x_l }{|P(j,\cP_1)|}  + \sum_{k \in P(i,\cP_1) \cap \cR(\cP_2)} \frac {r_{i,k} } {|P(k,\cP_2)|} = \overline{b}_i, \ \ \forall i \in B\cap \cR(\cP_1).$$
 
-For basic variable $x_{i'}$ with $i'\in \cR(\cP^2)$ with $i' \neq R(i',\cP^1) = i$, we can write $x_j$ in the tableau as: 
-$$x_{i'} + \sum_{j \in NB} \alpha_j \frac{\sum_{l \in P(j,\cP^1) \cap \cR(\cP^2) } |P(l,\cP^2)|x_l }{|P(j,\cP^1)|}  + \sum_{k \in P(i,\cP^1) \cap \cR(\cP^2)} \frac {r_{i,k} } {|P(k,\cP^2)|}  + r_{i,i'}= \overline{b}_i, \ \ \forall i \in B\cap \cR(\cP^1).$$
+For basic variable $x_{i'}$ with $i'\in \cR(\cP_2)$ with $i' \neq R(i',\cP_1) = i$, we can write $x_j$ in the tableau as: 
+$$x_{i'} + \sum_{j \in NB} \alpha_j \frac{\sum_{l \in P(j,\cP_1) \cap \cR(\cP_2) } |P(l,\cP_2)|x_l }{|P(j,\cP_1)|}  + \sum_{k \in P(i,\cP_1) \cap \cR(\cP_2)} \frac {r_{i,k} } {|P(k,\cP_2)|}  + r_{i,i'}= \overline{b}_i, \ \ \forall i \in B\cap \cR(\cP_1).$$
 
 
  -----
@@ -347,6 +356,16 @@ This will be done iteratively by lifting each
 vertex solution of  $RLP(A,b,c,\cO^i\}$  to a vertex solution to
 $RLP(A,b,c,\cO^{i+1})$ 
 
+{\bf BK: I don't think we can get away without mentioning **power iterated color refinement**, otherwise the above procedure does not make sense.}
+
+{\bf BK: I also think the above discussion could be much clarified by a few theorems. Here's another that's implicit in the above discussion, and is a corollary of Theorem~\ref{thm:VertexBijection}:}
+
+\begin{theorem}
+	The Tableaus of $ARLP(A,b,c,\cP)$ are in bijective correspondence with the Tableaus of $RLP(A,b,c,\cP)$.  
+\end{theorem}
+
+{\bf BK: Given that one of these implies the other, I would state this theorem and prove it using the construction argument above, given that the construction argument is much more useful from a computational perspective.
+Basically, it shows that doing pivots in this lower dimensional space is equivalent to pivots in the higher dimensional space, which is much more powerful, IMHO. Theorem~\ref{thm:VertexBijection} is just corollary of this, then.}
 
 
 \section{Required Theory}
@@ -491,6 +510,7 @@ constraint is binding for all vertices in $\mbox{Orb}(x^i, \cG)$.
 
 See "cite Grohe" for the subroutine \textbf{Refine} and note that the \textbf{Simplex} subroutine is performing the \textit{Simplex Algorithm} and returning the active constraints of $LP(A,b,c)$ based of the active constraints in $RLP(A,b,c,\cP)$.
 
-
+\bibliographystyle{plain}
+\bibliography{crossover}
 
 \end{document}
