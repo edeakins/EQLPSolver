@@ -26,6 +26,14 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
     columnDensity = 0;
     row_epDensity = 0;
 
+    // for (int i = 0; i < model->aggNumRow; ++i){
+    //     cout << "Row: " << i << " lower: " << model->aggRowLower[i] << " upper: " << model->aggRowUpper[i] << endl;
+    // }
+    // for (int i = model->oldNumCols; i < model->aggNumCol; ++i){
+    //     cout << "var: " << i << " lower: " << model->aggColLower[i] << " upper: " << model->aggColUpper[i] << endl;
+    // }
+    // cin.get();
+
    	// Unfolding - Deakins, Ostrowski, Kneuven, Schrock
     if (model->masterIter - 1){
     	primalRebuild();
@@ -130,6 +138,7 @@ void HPrimal::primalCollect(){
     vector<bool> active(model->aggNumRow, true);
 	int slackIdx = 0;
     for (int i = 0; i < model->basicIndex.size(); ++i){
+        //cout << "var: " << model->basicIndex[i] << " = " << model->baseValue[i] << endl;
         if (model->basicIndex[i] < model->aggNumCol){
         	if (model->basicIndex[i] < model->oldNumCols){
                 if (fabs(model->baseValue[i]) < 1e-5){
@@ -149,6 +158,7 @@ void HPrimal::primalCollect(){
             //model->activeConstraints[slackIdx] = false;
         }
    	}
+    //cin.get();
 
    	// for (int i = 0; i < model->activeConstraints.size(); ++i)
    	// 	cout << model->activeConstraints[i] << endl;

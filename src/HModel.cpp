@@ -1,3 +1,5 @@
+
+
 #include "HModel.h"
 #include "HConst.h"
 #include "HTimer.h"
@@ -66,7 +68,7 @@ void HModel::build(){
 	Basis.clear();
 	// Compute EP refinement
     equitable();
-    cout << "oldNumCols: " << oldNumCols << endl;
+    // cout << "oldNumCols: " << oldNumCols << endl;
     // Update Master iter count
     masterIter++;
     // Setup random buffers: shuffle the break
@@ -289,7 +291,7 @@ void HModel::setup_loadMPS(const char *filename) {
             }
         }
     }
-
+    cout << numCol << endl;
     // Load ENDATA and close file
     fclose(file);
 }
@@ -323,13 +325,20 @@ bool HModel::dependent(vector<double> &v){
 }
 // Gram - Schmidt vector space basis construction
 void HModel::gramSchmidt(){
+    // cout << "aggNumCol: " << aggNumCol << endl;
+    // cout << "oldNumCol: " << oldNumCols << endl;
+    // cout << "aggNumRow: " << aggNumRow << endl;
+    // cout << "oldNumRow: " << oldNumRows << endl;
 	int rIdx;
 	vector<double> u(aggNumCol, 0);
 	vector<double> temp;
 	vector<bool> linIndpendent(activeSet.size(), true); // Working Here
 	temp.reserve(aggNumCol);
 	ortho.reserve(aggNumCol);
+    // cout << "activeSet size: " << activeSet.size() << endl;
+    // cout << "activeSet" << endl;
 	for (int i = 0; i < activeSet.size(); ++i){
+       // cout << activeSet[i] << endl;
 		if (i){
 			if (activeSet[i] >= aggNumCol){
 				for (int j = 0; j < aggNumCol; ++j){
@@ -415,18 +424,26 @@ void HModel::gramSchmidt(){
 	}
 	for (int i =0; i < linIndpendent.size(); ++i){
 		if (!linIndpendent[i]){
-			if (activeSet[i] >= aggNumCol)
+           // cout << "dependent: " << activeSet[i] << endl;
+			if (activeSet[i] >= aggNumCol){
 				startingBasis.push_back(activeSet[i]);
+                int conIdx = activeSet[i] - aggNumCol;
+                aggRowUpper[conIdx] = +HSOL_CONST_INF;
+                aggRowLower[conIdx] = -HSOL_CONST_INF;
+            }
 			else if (activeSet[i] >= oldNumCols){
 				startingBasis.push_back(activeSet[i]);
 				basicResiduals[activeSet[i] - oldNumCols] = true;
 				aggColUpper[activeSet[i]] = +HSOL_CONST_INF;
 				aggColLower[activeSet[i]] = -HSOL_CONST_INF;
+                // aggColUpper[activeSet[i]] = 0;
+				// aggColLower[activeSet[i]] = 0;
 			}
 			else
 				startingBasis.push_back(activeSet[i]);
 		}
 	}
+    // cin.get();
 }
 void HModel::initStorage(){
 	
@@ -442,124 +459,6 @@ void HModel::initStorage(){
 	prevBasicColor.assign(numCol + numRow, false);
 	prevBasicValue.assign(numCol + numRow, false);
 }
-
-// // Append to the end of linked list
-// void HModel::append(Node **headRef, int newData){
-// 	Node *newNode = new Node();
-// 	Node *last = (*headRef);
-// 	newNode->data = newData;
-// 	newNode->next = NULL;
-// 	if ((*headRef) == NULL){
-// 		newNode->prev = NULL;
-// 		(*headRef) = newNode;
-// 		return;
-// 	}
-// 	while(last->next != NULL){
-// 		last = last->next;
-// 	}
-// 	last->next = newNode;
-// 	newNode->prev = last;
-// }
-
-// // Append func for adjacency list of graph
-// void HModel::appendAdj(adjNode **headRef, int newData, double newEntry){
-// 	adjNode *newNode = new adjNode();
-// 	adjNode *last = (*headRef);
-// 	newNode->label = newData;
-// 	newNode->w = newEntry;
-// 	newNode->next = NULL;
-// 	if ((*headRef) == NULL){
-// 		(*headRef) = newNode;
-// 		return;
-// 	}
-// 	while(last->next != NULL){
-// 		last = last->next;
-// 	}
-// 	last->next = newNode;
-// }
-
-// // Delete from doubly linked list function
-// void HModel::deleteNode(Node **headRef, Node *delet){
-// 	if (*headRef == NULL || delet == NULL){
-// 		return;
-// 	}
-// 	if (*headRef == delet){
-// 		*headRef = delet->next;
-// 	}
-// 	if(delet->next != NULL){
-// 		delet->next->prev = delet->prev;
-// 	}
-// 	if (delet->prev != NULL){
-// 		delet->prev->next = delet->next;
-// 	}
-// 	free(delet);
-// 	return;
-// }
-
-// // Delete from doubly linked list function
-// HModel::Node *HModel::findNode(Node **headRef, int label){
-// 	Node *delet = (*headRef);
-// 	while(delet != NULL){
-// 		if (delet->data == label){
-// 			return delet;
-// 		}
-// 		delet = delet->next;
-// 	}
-// 	return NULL;
-// }
-
-// // Doubly linked list searcher function
-// bool HModel::exists(Node **headRef, int data){
-// 	Node *curr = (*headRef);
-// 	while(curr != NULL){
-// 		if (curr->data == data){
-// 			return true;
-// 		}
-// 		curr = curr->next;
-// 	}
-// 	return false;
-// }
-
-// int HModel::listSize(Node **headRef){
-// 	Node *node = (*headRef);
-// 	int siz = 0;
-// 	while (node != NULL){
-// 		siz++;
-// 		node = node->next;
-// 	}
-// 	return siz;
-// }
-
-// // Printer
-// void HModel::printList(Node **headRef)  
-// {  
-// 	Node *node = (*headRef);
-// 	if (!node){
-// 		return;
-// 	} 
-//     //cout << "\ncolor class: " << node->data << endl;  
-//     while (node != NULL)  
-//     {  
-//         cout<<" "<< node->data <<" ";  
-//         //last = node;  
-//         node = node->next;  
-//     }  
-// }
-
-// void HModel::printAdjList(adjNode **headRef)  
-// {  
-// 	adjNode *node = (*headRef);
-// 	if (!node){
-// 		return;
-// 	} 
-//     //cout << "\ncolor class: " << node->data << endl;  
-//     while (node != NULL)  
-//     {  
-//         cout<<" "<< node->label <<" ";  
-//         //last = node;  
-//         node = node->next;  
-//     }  
-// }
 
 // Initialize LP as adjacency list for ease of use
 void HModel::lp2Graph(){
@@ -650,13 +549,10 @@ void HModel::computeEQs(){
 	/* 45 - */
 	while (!S.empty()){
 		r = S.top();
-		//cout << "r: " << r << endl;
 		S.pop();
 		SCheck[r] = false;
 		for (v2 = CC[r].begin(); v2 != CC[r].end(); ++v2){
-			//cout << "v2: " << *v2 << endl;
 			for (w2 = adjList2[*v2].begin(); w2 != adjList2[*v2].end(); ++w2){
-				//cout << "w2: " << w2->label << endl;
 				cdeg[w2->label] += w2->weight;
 				isAdj[w2->label]++;
 				if (isAdj[w2->label] == 1){
@@ -670,8 +566,6 @@ void HModel::computeEQs(){
 			}
 		}
 		for (c2 = colorsAdj2.begin(); c2 != colorsAdj2.end(); ++c2){
-			// cout << "CC size: " << CC[*c2].size() << " A size: " << A[*c2].size() << endl;
-			// cin.get(); 
 			if (CC[*c2].size() != A[*c2].size()){
 				mincdeg[*c2] = 0;
 			}
@@ -705,15 +599,6 @@ void HModel::computeEQs(){
 		for (int i = 0; i < CC.size(); ++i)
 			if (CC[i].size() == 1) isolates[CC[i].front()] = true;
 	} 
-	// for (int i = 0; i <CC.size(); ++i){
-	// 	if (CC[i].size() !=  0){
-	// 		cout << "color: " << i << endl;
-	// 		for (vector<int>::iterator it = CC[i].begin(); it != CC[i].end(); ++it)
-	// 			cout << *it << endl;
-	// 		cout << "\n" << endl;
-	// 	}
-	// }
-	// cin.get();
 	aggClear();
 	for (int i = 0; i < CC.size(); ++i){
 		if (CC[i].size() != 0){
@@ -745,13 +630,11 @@ void HModel::computeEQs(){
 
 // Color splitting (cell split) subroutine
 void HModel::splitColor(int s){
-	// cout << "color to be split: " << s << endl;
 	set<double> cdegCopy;
 	vector<int> colorFreq(numRow + numCol, 0);
 	map<double, int> degSumColor;
 	pair<map<double, int>::iterator, bool> ret;
 	bool varOrCon = (s < numCol) ? true : false;
-	// cout << "min cdeg: " << mincdeg[s] << endl;
 	degSumColor.insert(pair<double, int>(mincdeg[s], s)); 
 	colorFreq[0] = CC[s].size() - A[s].size(); 
 	for (u2 = A[s].begin(); u2 != A[s].end(); ++u2){
@@ -784,23 +667,12 @@ void HModel::splitColor(int s){
 		}
 	}
 	for (u2 = A[s].begin(); u2 != A[s].end(); ++u2){
-		// cout << "degree: " << cdeg[*u2] << " color: " << degSumColor[cdeg[*u2]] << endl;
-		// cin.get();
 		if (degSumColor[cdeg[*u2]] != s){
 			CC[s].erase(remove(CC[s].begin(), CC[s].end(), *u2), CC[s].end());
 			CC[degSumColor[cdeg[*u2]]].push_back(*u2);
 			color[*u2] = degSumColor[cdeg[*u2]];
 		}
 	}
-	// for (int i = 0; i <CC.size(); ++i){
-	// 	if (CC[i].size() !=  0){
-	// 		cout << "color: " << i << endl;
-	// 		for (vector<int>::iterator it = CC[i].begin(); it != CC[i].end(); ++it)
-	// 			cout << *it << endl;
-	// 		cout << "\n" << endl;
-	// 	}
-	// }
-	// cin.get();
 }
 
 // Isolation function
@@ -935,10 +807,6 @@ void HModel::aggregateA(){
 		}
 	}
 	if (masterIter){
-		// for (int i = 0; i < startingBasis.size(); ++i){
-		// 	cout << startingBasis[i] << endl;
-		// }
-		// cin.get();
 		setConstrs();
 		setVars();
 		gramSchmidt();
@@ -947,6 +815,10 @@ void HModel::aggregateA(){
 		for (int i = 0; i < startingBasis.size(); ++i){
 			if (startingBasis[i] < aggNumCol) Basis[startingBasis[i]] = true;
 		}
+        // for (int i = 0; i < startingBasis.size(); ++i){
+        //     cout << "var: " << startingBasis[i] << "  is in the basis " << endl;
+        // }
+        // cin.get();
 	}
 }
 
@@ -984,6 +856,8 @@ void HModel::setConstrs(){
 			aggRowLower[i] = min(rowLower[rep - numCol], rowUpper[rep - numCol]);
 			aggRowUpper[i] = min(rowLower[rep - numCol], rowUpper[rep - numCol]);
 		}
+        else{
+        }
 	}
 }
 
@@ -996,9 +870,6 @@ void HModel::aggregateCT(){
 		for(int i = 0; i < aggColIdx.size(); ++i){
 			aggColCost[i] = getObj(aggColIdx[i]);
 		}
-		// for (int i = 0; i < aggColCost.size(); ++i){
-		// 	cout << aggColCost[i] << endl;
-		// }
 	}
 }
 
