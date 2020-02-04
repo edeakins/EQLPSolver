@@ -4,6 +4,8 @@
 #include "HVector.h"
 
 #include <vector>
+#include <cmath> 
+#include <iostream> 
 using namespace std;
 
 class HMatrix {
@@ -21,6 +23,8 @@ public:
             const double *Avalue);
     void setupOC(int numCol, int numRow, const int *Astart, const int *Aindex,
             const double *Avlaue, const vector<bool> &startingBasis);
+    void getActiveConstraints(vector<int> &basicIndex, vector<double> &baseValue, 
+                              vector<bool> &activeConstraints, vector<double> &rhs, vector<double> &workValue);
     void price_by_col(HVector& row_ap, HVector& row_ep) const;
     void price_by_row(HVector& row_ap, HVector& row_ep) const;
     void update(int columnIn, int columnOut);

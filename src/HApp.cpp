@@ -47,12 +47,17 @@ void solvePlain(const char *filename) {
 	    //model.initCost();
 	    //model.initValue();
 	   	primalSolver.solvePhase2(&model);
+        for (int i = 0; i < model.basicIndex.size(); ++i){
+        // if (model.basicIndex[i] >= model.oldNumCols)
+        //     continue;
+        cout << model.basicIndex[i] << " has value: " << model.baseValue[i] << endl;
+    }
 	}
     // model.cleanUp();
     cout << "equitable partition is discrete" << endl;
     for (int i = 0; i < model.basicIndex.size(); ++i){
-        if (model.basicIndex[i] >= model.oldNumCols)
-            continue;
+        // if (model.basicIndex[i] >= model.oldNumCols)
+        //     continue;
         cout << model.basicIndex[i] << " has value: " << model.baseValue[i] << endl;
     }
 	// cout << model.oldNumCols << endl;

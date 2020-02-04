@@ -340,14 +340,23 @@ void HDual::solve_phase2() {
                     //model->boundedVariables[model->aggColIdx[model->basicIndex[i]]] = upperBound + lowerBound;
                     
                  }
-                else{
-                    slackIdx = model->basicIndex[i] - model->aggNumCol;
-                    model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
-                    model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
-                    //model->activeConstraints[slackIdx] = false;
-                }
+                // else{
+                //     slackIdx = model->basicIndex[i] - model->aggNumCol;
+                //     model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
+                //     model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
+                //     //model->activeConstraints[slackIdx] = false;
+                // }
             }
             model->reportStatus(LP_Status_Optimal);
+            model->collectActiveConstraints();
+            for (int i = 0; i < model->aggNumRow; ++i){
+                cout << "old row: " << i << endl;
+                if (!model->activeConstraints[i]){
+                    model->prevBasicColor[model->aggRowIdx[i]] = true;
+                    cout << "previous: " << model->prevBasicColor[model->aggRowIdx[i]] << endl;
+                }
+            }
+            // model->updateActiveConstraints();
         }
     } else if (columnIn == -1) {
         model->printMessage("dual-phase-2-unbounded");

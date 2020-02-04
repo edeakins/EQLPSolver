@@ -46,11 +46,11 @@ void HMatrix::setup(int numCol_, int numRow_, const int *Astart_,
     }
 
     // for (int i = 0; i < numRow; ++i){
-    //     cout << "row: " << i << " { ";
+    //     cout << "row: " << i << " [" ;
     //     for (int j = ARstart[i]; j < ARstart[i + 1]; ++j){
-    //         cout << ARindex[j] << " ";
+    //         cout << ARvalue[j] << " ";
     //     }
-    //     cout << "}" << endl;
+    //     cout << "]" << endl;
     // }
     // cin.get();
 }
@@ -124,7 +124,83 @@ void HMatrix::setupOC(int numCol_, int numRow_, const int *Astart_,
     //     }
     //     cout << "}" << endl;
     //     cin.get();
+    vector<vector<int> > mat;
+    vector<int> ins(numCol, 0);
+    for (int i = 0; i < numRow; ++i){
+        for (int j = ARstart[i]; j < ARstart[i + 1]; ++j){
+            ins[ARindex[j]] = ARvalue[j];
+        }
+        mat.push_back(ins);
+        ins.assign(numCol,0);
+    }
+    // cout << "[ " << endl;
+    // for (int i = 0; i < mat.size(); ++i){
+    //     for (int j = 0; j < mat[i].size(); ++j){
+    //         if (j == mat[i].size() - 1){
+    //             cout << mat[i][j] << "";
+    //             continue;
+    //         }
+    //         cout << mat[i][j] << ", ";
+    //     }
+    //     cout << ";" << endl;
+    // }
+    // cout << " ]" << endl;
+    // cin.get();
     
+}
+
+void HMatrix::getActiveConstraints(vector<int> &basicIndex, vector<double> &baseValue, 
+                                   vector<bool> &activeConstraints, vector<double> &rhs, vector<double> &workValue){
+    int i, j, k;
+    vector<double> trueRhs(rhs.size(), 0);
+    vector<bool> nonBasic(numCol, true);
+    // for (i = 0; i < rhs.size(); ++i){
+    //     cout << i << " is " << rhs[i] << endl;
+    // }
+    // cout << rhs.size() << endl;
+    // cin.get();
+    for (i = 0; i < basicIndex.size(); ++i){
+        if (basicIndex[i] < numCol)
+            nonBasic[basicIndex[i]] = false;
+    }
+    for (i = 0; i < nonBasic.size(); ++i){
+        //cout << "var: " << basicIndex[i] << " = " << baseValue[i] << endl;
+        //cin.get();
+        for (j = 0; j < rhs.size(); ++j){
+            for (k = ARstart[j]; k < ARstart[j + 1]; ++k){
+                if (nonBasic[i] && i == ARindex[k])
+                    trueRhs[j] += workValue[i] * ARvalue[k];
+            }
+        }
+    }
+    for (i = 0; i < basicIndex.size(); ++i){
+        if (basicIndex[i] >= numCol)
+            continue;
+        for (j = 0; j < rhs.size(); ++j){
+            for (k = ARstart[j]; k < ARstart[j + 1]; ++k){
+                if (basicIndex[i] == ARindex[k])
+                    trueRhs[j] += baseValue[i] * ARvalue[k];
+            }
+        }
+    }
+    for (i = 0; i < trueRhs.size(); ++i){
+        // cout << "i: " << i << endl;
+        if (fabs(trueRhs[i]) <= 1e-6)
+            trueRhs[i] = 0;
+        // cout << "row: " << i << " true: " << trueRhs[i] << "  given: " << rhs[i] << endl; 
+        // cin.get();
+        if (fabs(trueRhs[i] - rhs[i]) <= 1e-6){
+            activeConstraints[i] = true;
+            //cout << "row: " << i << endl;
+        }
+        // else{
+        //     cout << "weird row: " << i << endl;
+        // }
+    }
+    // for (i = 0; i < activeConstraints.size(); ++i){
+    //     cout << i << " is " << activeConstraints[i] << endl;
+    // }
+    // cin.get();
 }
 
 void HMatrix::update(int columnIn, int columnOut) {
@@ -207,7 +283,8 @@ double HMatrix::compute_dot(HVector& vector, int iCol) const {
 }
 
 void HMatrix::collect_aj(HVector& vector, int iCol, double multi) const {
-	//cout << "iCol: " << iCol << endl;
+	
+    //cout << "iCol: " << iCol << endl;
     if (iCol < numCol) {
         for (int k = Astart[iCol]; k < Astart[iCol + 1]; k++) {
             int index = Aindex[k];

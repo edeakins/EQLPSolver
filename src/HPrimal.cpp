@@ -79,12 +79,13 @@ void HPrimal::solvePhase2(HModel *ptr_model) {
 // Choose Linker
 void HPrimal::primalChooseLinker(){
 	 for (int i = 0; i < model->residuals.size(); ++i){
-    	if (model->basicResiduals[i]){
-            // cout << i << endl;
-    		continue;
-        }
+    	// if (model->basicResiduals[i]){
+     //        // cout << i << endl;
+    	// 	continue;
+     //    }
         columnIn = model->residuals[i]; 
-        // cout << "columnIn: " << columnIn << endl;   
+        //cout << "columnIN: " << columnIn << endl;
+        cout << "columnIn: " << columnIn << endl;   
         //model->basicVars[columnIn] = true;
         model->workCost[columnIn] = 1;
         model->workUpper[columnIn] = +HSOL_CONST_INF;
@@ -110,7 +111,7 @@ void HPrimal::setNow(){
     for (int i = 0; i < model->basicIndex.size(); ++i){
         if (model->basicIndex[i] < model->aggNumCol){
             if (model->basicIndex[i] < model->oldNumCols){
-                cout << "i: " << i << endl;
+                //cout << "i: " << i << endl;
                 if (fabs(model->baseValue[i]) < 1e-5){
                     continue;
                 }
@@ -136,14 +137,17 @@ void HPrimal::setNow(){
 
 void HPrimal::primalCollect(){
     vector<bool> active(model->aggNumRow, true);
+    vector<bool> nonBasic(model->oldNumCols, true);
 	int slackIdx = 0;
     for (int i = 0; i < model->basicIndex.size(); ++i){
         //cout << "var: " << model->basicIndex[i] << " = " << model->baseValue[i] << endl;
         if (model->basicIndex[i] < model->aggNumCol){
         	if (model->basicIndex[i] < model->oldNumCols){
                 if (fabs(model->baseValue[i]) < 1e-5){
+                    //cout << "degenerate: " << i << endl;
                     continue;
                 }
+                nonBasic[model->basicIndex[i]] = false;
                 model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
                 model->prevBasicValue[model->aggColIdx[model->basicIndex[i]]] = model->baseValue[i];
                 bool upperBound = model->baseValue[i] == model->aggColUpper[model->basicIndex[i]];
@@ -151,13 +155,28 @@ void HPrimal::primalCollect(){
                 //model->boundedVariables[model->aggColIdx[model->basicIndex[i]]] = upperBound + lowerBound;
             }
         }
-        else{
-            slackIdx = model->basicIndex[i] - model->aggNumCol;
-            model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
-            model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
-            //model->activeConstraints[slackIdx] = false;
-        }
+        // else{
+        //     slackIdx = model->basicIndex[i] - model->aggNumCol;
+        //     cout << slackIdx << endl;
+        //     cout << "row: " << model->aggRowIdx[slackIdx] << endl;
+        //     cin.get();
+        //     model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
+        //     model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
+        //     //model->activeConstraints[slackIdx] = false;
+        // }
    	}
+    // for (int i = 0; i < nonBasic.size(); ++i){
+    //     if (nonBasic[i])
+    //         model->prevBasicValue[i] = model->workValue[i];
+    // }
+    model->collectActiveConstraints();
+    for (int i = 0; i < model->oldNumRows; ++i){
+        if (!model->activeConstraints[i]){
+            model->prevBasicColor[model->aggRowIdx[i]] = true;
+            model->prevBasicValue[model->aggRowIdx[i]] = model->baseValue[i];
+        }
+    }
+
     //cin.get();
 
    	// for (int i = 0; i < model->activeConstraints.size(); ++i)
@@ -383,10 +402,14 @@ void HPrimal::primalUpdate() {
     // Update model->factor basis
     model->updateFactor(&column, &row_ep, &rowOut, &invertHint);
     model->updateMatrix(columnIn, columnOut);
+    model->collectActiveConstraints();
+    // model->updateActiveConstraints();
+
     if (++countUpdate >= limitUpdate)
         invertHint = true;
     model->reportPivots(columnIn, columnOut, alpha);
     // for (int i = 0; i < column.array.size(); ++i)
     // 	cout << "idx: " << column.index[i] << " = " << column.array[i] << endl;
-    // cout << "columnOut: " << columnOut << endl;
+    cout << "columnOut: " << columnOut << endl;
+    cin.get();
 }

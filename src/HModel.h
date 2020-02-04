@@ -16,6 +16,7 @@
 #include <tuple>
 #include <numeric>
 #include <functional>
+//#include <pair>
 using namespace std;
 
 const int LP_Status_Unset = -1;
@@ -146,6 +147,8 @@ public:
     double *getBaseValue() {
         return &baseValue[0];
     }
+    void collectActiveConstraints();
+    
 
     void initCost(int perturb = 0);
     void initBound(int phase = 2);
@@ -204,6 +207,7 @@ public:
     vector<int> getCoeff(int color);
     int getObj(int color);
     void getNewRows();
+    void createNewRows();
     bool singularity();
     bool discrete();
     void setVars();
@@ -212,10 +216,12 @@ public:
     void getActiveConstrs();
     void getBasis();
     vector<double> project(vector<double> &v1, vector<double> &v2);
-    void gramSchmidt();
+    void constructBasis();
     void subtract(vector<double> &v1, vector<double> &v2);
     bool dependent(vector<double> &v);
     void cleanUp();
+    void updateActiveConstraints();
+    void updateActiveVars();
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -246,6 +252,7 @@ public:
     int numCol;
     int numRow;
     int numTot;
+    int rCnt;
     vector<int> Astart;
     vector<int> Aindex;
     vector<double> Avalue;
@@ -302,6 +309,7 @@ public:
     vector<int> residuals;
     vector<bool> basicSlacks;
     vector<int> singularIdx;
+    vector<double> aggRhs;
 
     // Storage - stacks
     stack<int> S;
@@ -330,6 +338,9 @@ public:
     int aggNumCol;
     int aggNumRow;
     int aggNumTot;
+    int idxCnt;
+    vector<bool> linIndpendent;
+    vector<pair<int, int> > linkingPairs;
     vector<bool> Basis;
     vector<int> aggColIdx;
     vector<int> aggRowIdx;
@@ -350,6 +361,7 @@ public:
     vector<bool> boundedVariables;
     vector<bool> activeConstraints;
     vector<vector<double> > ortho;
+    map<int, bool> activeColors;
 
     // // Eigen package sparse matrix for rank revealing decompositions
     // SpMat nonBasicMat;
@@ -368,10 +380,12 @@ public:
     vector<int> nonbasicMove;
     vector<int> available;
     HMatrix matrix;
+    HMatrix testActive;
     HFactor factor;
     HFactor testFactor;
     HVector buffer;
     HVector bufferLong;
+    HVector bufferNonBasic;
 
     vector<double> workCost;
     vector<double> workDual;
@@ -385,6 +399,8 @@ public:
     vector<double> baseLower;
     vector<double> baseUpper;
     vector<double> baseValue;
+    vector<double> nonBaseValue;
+    vector<bool> activeVars;
 
     vector<int> historyColumnIn;
     vector<int> historyColumnOut;
