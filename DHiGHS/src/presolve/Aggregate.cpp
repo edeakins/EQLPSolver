@@ -1,10 +1,18 @@
 #include "Aggregate.h"
 using namespace std;
 
-void HighsAggregate::build(const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag){
-	iterations++;
-	cout << "\n\n Iteration: " << iterations << "\n\n" << endl;
-	flag_ = flag;
+HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag){
+	// From the original lp 
+	numRow = lp.numRow_;
+	numCol = lp.numCol_;
+	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
+	rowUpper.assign(lp.rowUpper_.begin(), lp.rowUpper_.end());
+	colUpper.assign(lp.colUpper_.begin(), lp.colUpper_.end());
+	colLower.assign(lp.colLower_.begin(), lp.colUpper_.end());
+	colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
+	Avalue.assign(lp.Avalue_.begin(), lp.Avalue_.end());
+	Aindex.assign(lp.Aindex_.begin(), lp.Aindex_.end());
+	Astart.assign(lp.Astart_.begin(), lp.Astart_.end());
 	//Equitable partition info
 	previousRowColoring.assign(ep.previousRowColoring.begin(), ep.previousRowColoring.end());
 	previousColumnColoring.assign(ep.previousColumnColoring.begin(), ep.previousColumnColoring.end());
@@ -19,49 +27,32 @@ void HighsAggregate::build(const HighsEquitable& ep, HighsSolution& solution, Hi
 	// Used for setting active set
 	activeBounds_.assign(numCol, false);
 	activeConstraints_.assign(numRow, false);
-	// Used for building aggregate lp
-	Avalue_.clear();
-	Aindex_.clear();
-	Astart_.clear();
-	colUpper_.clear();
-	colLower_.clear();
-	rowUpper_.clear();
-	rowLower_.clear();
-	colCost_.clear();
-	// Used for row copies
-	ARstart_.clear();
-	AR_Nend_.clear();
-	ARvalue_.clear();
-	ARindex_.clear();
-	previousRowInfo.clear();
-	previousRowValue.clear();
-	previousColumnInfo.clear();
-	previousColumnValue.clear();
 	// Preivous solution
 	col_value = (solution.col_value);
 	row_value = (solution.row_value);
 	// Previous basis
 	col_status = (basis.col_status);
 	row_status = (basis.row_status);
+	// flag status to find linkers or not 
+	flag_ = flag;
 	aggregateAMatrix();
 }
 
-void HighsAggregate::setup(HighsLp& lp){
-	// From the original lp 
-	numRow = lp.numRow_;
-	numCol = lp.numCol_;
-	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
-	rowUpper.assign(lp.rowUpper_.begin(), lp.rowUpper_.end());
-	colUpper.assign(lp.colUpper_.begin(), lp.colUpper_.end());
-	colLower.assign(lp.colLower_.begin(), lp.colUpper_.end());
-	colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
-	Avalue.assign(lp.Avalue_.begin(), lp.Avalue_.end());
-	Aindex.assign(lp.Aindex_.begin(), lp.Aindex_.end());
-	Astart.assign(lp.Astart_.begin(), lp.Astart_.end());
-}
+// void HighsAggregate::setup(HighsLp& lp){
+// 	// From the original lp 
+// 	numRow = lp.numRow_;
+// 	numCol = lp.numCol_;
+// 	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
+// 	rowUpper.assign(lp.rowUpper_.begin(), lp.rowUpper_.end());
+// 	colUpper.assign(lp.colUpper_.begin(), lp.colUpper_.end());
+// 	colLower.assign(lp.colLower_.begin(), lp.colUpper_.end());
+// 	colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
+// 	Avalue.assign(lp.Avalue_.begin(), lp.Avalue_.end());
+// 	Aindex.assign(lp.Aindex_.begin(), lp.Aindex_.end());
+// 	Astart.assign(lp.Astart_.begin(), lp.Astart_.end());
+// }
 
 HighsLp& HighsAggregate::getAlp(){
-	alp.clear();
 	alp.numRow_ = (numRow_);
 	alp.numCol_ = (numCol_);
 	alp.numInt_ = 0;

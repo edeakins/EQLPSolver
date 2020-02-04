@@ -4,8 +4,8 @@
 
 
 # Configuration directories and files
-SourceDirectory: /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS
-BuildDirectory: /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild
+SourceDirectory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS
+BuildDirectory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild
 
 # Where to place the cost data store
 CostDataFile: 
@@ -36,7 +36,7 @@ ScpCommand: /usr/bin/scp
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/local/Cellar/cmake/3.11.2/bin/cmake" "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS"
+ConfigureCommand: "/usr/local/Cellar/cmake/3.11.2/bin/cmake" "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS"
 MakeCommand: /usr/local/Cellar/cmake/3.11.2/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
 DefaultCTestConfigurationType: Release
 

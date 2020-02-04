@@ -3,4 +3,4 @@
 
 check/CMakeFiles/capi_unit_tests.dir/TestCAPI.c.o
  ../src/interfaces/highs_c_api.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/check/TestCAPI.c
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/check/TestCAPI.c

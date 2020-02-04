@@ -1,4 +1,4 @@
-# Install script for directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS
+# Install script for directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,9 +34,9 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/app/cmake_install.cmake")
-  include("/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/check/cmake_install.cmake")
-  include("/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src/cmake_install.cmake")
+  include("/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/app/cmake_install.cmake")
+  include("/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/check/cmake_install.cmake")
+  include("/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src/cmake_install.cmake")
 
 endif()
 
@@ -48,5 +48,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

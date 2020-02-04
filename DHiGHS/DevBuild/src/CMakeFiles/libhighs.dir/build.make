@@ -43,10 +43,10 @@ RM = /usr/local/Cellar/cmake/3.11.2/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS
+CMAKE_SOURCE_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild
+CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/libhighs.dir/depend.make
@@ -59,601 +59,601 @@ include src/CMakeFiles/libhighs.dir/flags.make
 
 src/CMakeFiles/libhighs.dir/io/Filereader.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/io/Filereader.cpp.o: ../src/io/Filereader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/libhighs.dir/io/Filereader.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/Filereader.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/Filereader.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/libhighs.dir/io/Filereader.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/Filereader.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/Filereader.cpp
 
 src/CMakeFiles/libhighs.dir/io/Filereader.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/io/Filereader.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/Filereader.cpp > CMakeFiles/libhighs.dir/io/Filereader.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/Filereader.cpp > CMakeFiles/libhighs.dir/io/Filereader.cpp.i
 
 src/CMakeFiles/libhighs.dir/io/Filereader.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/io/Filereader.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/Filereader.cpp -o CMakeFiles/libhighs.dir/io/Filereader.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/Filereader.cpp -o CMakeFiles/libhighs.dir/io/Filereader.cpp.s
 
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/io/FilereaderLp.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderLp.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderLp.cpp
 
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderLp.cpp > CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderLp.cpp > CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.i
 
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderLp.cpp -o CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderLp.cpp -o CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.s
 
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/io/FilereaderEms.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderEms.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderEms.cpp
 
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderEms.cpp > CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderEms.cpp > CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.i
 
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderEms.cpp -o CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderEms.cpp -o CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.s
 
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/FilereaderMps.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderMps.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderMps.cpp
 
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderMps.cpp > CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderMps.cpp > CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.i
 
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderMps.cpp -o CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderMps.cpp -o CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.s
 
 src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.o: ../src/io/HighsIO.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/HighsIO.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HighsIO.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/HighsIO.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HighsIO.cpp
 
 src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/io/HighsIO.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HighsIO.cpp > CMakeFiles/libhighs.dir/io/HighsIO.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HighsIO.cpp > CMakeFiles/libhighs.dir/io/HighsIO.cpp.i
 
 src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/io/HighsIO.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HighsIO.cpp -o CMakeFiles/libhighs.dir/io/HighsIO.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HighsIO.cpp -o CMakeFiles/libhighs.dir/io/HighsIO.cpp.s
 
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/io/HMPSIO.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HMPSIO.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HMPSIO.cpp
 
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/io/HMPSIO.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HMPSIO.cpp > CMakeFiles/libhighs.dir/io/HMPSIO.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HMPSIO.cpp > CMakeFiles/libhighs.dir/io/HMPSIO.cpp.i
 
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/io/HMPSIO.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HMPSIO.cpp -o CMakeFiles/libhighs.dir/io/HMPSIO.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HMPSIO.cpp -o CMakeFiles/libhighs.dir/io/HMPSIO.cpp.s
 
 src/CMakeFiles/libhighs.dir/io/HToyIO.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/io/HToyIO.cpp.o: ../src/io/HToyIO.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/libhighs.dir/io/HToyIO.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/HToyIO.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HToyIO.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/libhighs.dir/io/HToyIO.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/HToyIO.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HToyIO.cpp
 
 src/CMakeFiles/libhighs.dir/io/HToyIO.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/io/HToyIO.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HToyIO.cpp > CMakeFiles/libhighs.dir/io/HToyIO.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HToyIO.cpp > CMakeFiles/libhighs.dir/io/HToyIO.cpp.i
 
 src/CMakeFiles/libhighs.dir/io/HToyIO.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/io/HToyIO.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HToyIO.cpp -o CMakeFiles/libhighs.dir/io/HToyIO.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HToyIO.cpp -o CMakeFiles/libhighs.dir/io/HToyIO.cpp.s
 
 src/CMakeFiles/libhighs.dir/io/LoadProblem.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/io/LoadProblem.cpp.o: ../src/io/LoadProblem.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/libhighs.dir/io/LoadProblem.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/LoadProblem.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/LoadProblem.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/libhighs.dir/io/LoadProblem.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/io/LoadProblem.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/LoadProblem.cpp
 
 src/CMakeFiles/libhighs.dir/io/LoadProblem.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/io/LoadProblem.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/LoadProblem.cpp > CMakeFiles/libhighs.dir/io/LoadProblem.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/LoadProblem.cpp > CMakeFiles/libhighs.dir/io/LoadProblem.cpp.i
 
 src/CMakeFiles/libhighs.dir/io/LoadProblem.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/io/LoadProblem.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/LoadProblem.cpp -o CMakeFiles/libhighs.dir/io/LoadProblem.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/LoadProblem.cpp -o CMakeFiles/libhighs.dir/io/LoadProblem.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/Highs.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/Highs.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/Highs.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/Highs.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/Highs.cpp > CMakeFiles/libhighs.dir/lp_data/Highs.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/Highs.cpp > CMakeFiles/libhighs.dir/lp_data/Highs.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/Highs.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/Highs.cpp -o CMakeFiles/libhighs.dir/lp_data/Highs.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/Highs.cpp -o CMakeFiles/libhighs.dir/lp_data/Highs.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o: ../src/lp_data/HighsInfo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsInfo.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsInfo.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsInfo.cpp > CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsInfo.cpp > CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsInfo.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsInfo.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o: ../src/lp_data/HighsLp.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLp.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLp.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLp.cpp > CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLp.cpp > CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLp.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLp.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HighsLpUtils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLpUtils.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLpUtils.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLpUtils.cpp > CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLpUtils.cpp > CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLpUtils.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLpUtils.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/lp_data/HighsModelUtils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelUtils.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelUtils.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelUtils.cpp > CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelUtils.cpp > CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelUtils.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelUtils.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.o: ../src/lp_data/HighsModelBuilder.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelBuilder.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelBuilder.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelBuilder.cpp > CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelBuilder.cpp > CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelBuilder.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelBuilder.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/lp_data/HighsSolution.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolution.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolution.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolution.cpp > CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolution.cpp > CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolution.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolution.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/lp_data/HighsSolve.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolve.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolve.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolve.cpp > CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolve.cpp > CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolve.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolve.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o: ../src/lp_data/HighsStatus.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsStatus.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsStatus.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsStatus.cpp > CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsStatus.cpp > CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsStatus.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsStatus.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o: ../src/lp_data/HighsOptions.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsOptions.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsOptions.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsOptions.cpp > CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsOptions.cpp > CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsOptions.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsOptions.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.s
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.o: ../src/lp_data/HighsQRmodule.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsQRmodule.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsQRmodule.cpp
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsQRmodule.cpp > CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsQRmodule.cpp > CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.i
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsQRmodule.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsQRmodule.cpp -o CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.s
 
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/mip/HighsMipSolver.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/HighsMipSolver.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/HighsMipSolver.cpp
 
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/HighsMipSolver.cpp > CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/HighsMipSolver.cpp > CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.i
 
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/HighsMipSolver.cpp -o CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/HighsMipSolver.cpp -o CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.s
 
 src/CMakeFiles/libhighs.dir/mip/SolveMip.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/mip/SolveMip.cpp.o: ../src/mip/SolveMip.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/CMakeFiles/libhighs.dir/mip/SolveMip.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/mip/SolveMip.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/SolveMip.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/CMakeFiles/libhighs.dir/mip/SolveMip.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/mip/SolveMip.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/SolveMip.cpp
 
 src/CMakeFiles/libhighs.dir/mip/SolveMip.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/mip/SolveMip.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/SolveMip.cpp > CMakeFiles/libhighs.dir/mip/SolveMip.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/SolveMip.cpp > CMakeFiles/libhighs.dir/mip/SolveMip.cpp.i
 
 src/CMakeFiles/libhighs.dir/mip/SolveMip.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/mip/SolveMip.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/SolveMip.cpp -o CMakeFiles/libhighs.dir/mip/SolveMip.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/SolveMip.cpp -o CMakeFiles/libhighs.dir/mip/SolveMip.cpp.s
 
 src/CMakeFiles/libhighs.dir/presolve/ICrash.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/presolve/ICrash.cpp.o: ../src/presolve/ICrash.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/ICrash.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/ICrash.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrash.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/ICrash.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/ICrash.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrash.cpp
 
 src/CMakeFiles/libhighs.dir/presolve/ICrash.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/presolve/ICrash.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrash.cpp > CMakeFiles/libhighs.dir/presolve/ICrash.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrash.cpp > CMakeFiles/libhighs.dir/presolve/ICrash.cpp.i
 
 src/CMakeFiles/libhighs.dir/presolve/ICrash.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/presolve/ICrash.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrash.cpp -o CMakeFiles/libhighs.dir/presolve/ICrash.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrash.cpp -o CMakeFiles/libhighs.dir/presolve/ICrash.cpp.s
 
 src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o: ../src/presolve/ICrashUtil.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrashUtil.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrashUtil.cpp
 
 src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrashUtil.cpp > CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrashUtil.cpp > CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.i
 
 src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrashUtil.cpp -o CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrashUtil.cpp -o CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.s
 
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o: ../src/presolve/Presolve.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Presolve.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Presolve.cpp
 
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/presolve/Presolve.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Presolve.cpp > CMakeFiles/libhighs.dir/presolve/Presolve.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Presolve.cpp > CMakeFiles/libhighs.dir/presolve/Presolve.cpp.i
 
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/presolve/Presolve.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Presolve.cpp -o CMakeFiles/libhighs.dir/presolve/Presolve.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Presolve.cpp -o CMakeFiles/libhighs.dir/presolve/Presolve.cpp.s
 
 src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o: ../src/presolve/HPreData.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/HPreData.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HPreData.cpp
 
 src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/presolve/HPreData.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/HPreData.cpp > CMakeFiles/libhighs.dir/presolve/HPreData.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HPreData.cpp > CMakeFiles/libhighs.dir/presolve/HPreData.cpp.i
 
 src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/presolve/HPreData.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/HPreData.cpp -o CMakeFiles/libhighs.dir/presolve/HPreData.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HPreData.cpp -o CMakeFiles/libhighs.dir/presolve/HPreData.cpp.s
 
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/presolve/Aggregate.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Aggregate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.cpp
 
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Aggregate.cpp > CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.cpp > CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.i
 
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Aggregate.cpp -o CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.cpp -o CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o: ../src/simplex/HCrash.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HCrash.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HCrash.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HCrash.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HCrash.cpp > CMakeFiles/libhighs.dir/simplex/HCrash.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HCrash.cpp > CMakeFiles/libhighs.dir/simplex/HCrash.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HCrash.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HCrash.cpp -o CMakeFiles/libhighs.dir/simplex/HCrash.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HCrash.cpp -o CMakeFiles/libhighs.dir/simplex/HCrash.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o: ../src/simplex/HDual.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDual.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDual.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDual.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDual.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HDual.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDual.cpp > CMakeFiles/libhighs.dir/simplex/HDual.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDual.cpp > CMakeFiles/libhighs.dir/simplex/HDual.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HDual.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDual.cpp -o CMakeFiles/libhighs.dir/simplex/HDual.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDual.cpp -o CMakeFiles/libhighs.dir/simplex/HDual.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o: ../src/simplex/HDualRHS.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRHS.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRHS.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRHS.cpp > CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRHS.cpp > CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRHS.cpp -o CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRHS.cpp -o CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o: ../src/simplex/HDualRow.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRow.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRow.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRow.cpp > CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRow.cpp > CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRow.cpp -o CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRow.cpp -o CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o: ../src/simplex/HDualMulti.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualMulti.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualMulti.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualMulti.cpp > CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualMulti.cpp > CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualMulti.cpp -o CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualMulti.cpp -o CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o: ../src/simplex/HFactor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HFactor.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HFactor.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HFactor.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HFactor.cpp > CMakeFiles/libhighs.dir/simplex/HFactor.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HFactor.cpp > CMakeFiles/libhighs.dir/simplex/HFactor.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HFactor.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HFactor.cpp -o CMakeFiles/libhighs.dir/simplex/HFactor.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HFactor.cpp -o CMakeFiles/libhighs.dir/simplex/HFactor.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o: ../src/simplex/HighsSimplexAnalysis.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexAnalysis.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexAnalysis.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexAnalysis.cpp > CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexAnalysis.cpp > CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexAnalysis.cpp -o CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexAnalysis.cpp -o CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/simplex/HighsSimplexInterface.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexInterface.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexInterface.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexInterface.cpp > CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexInterface.cpp > CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexInterface.cpp -o CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexInterface.cpp -o CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o: ../src/simplex/HMatrix.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HMatrix.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HMatrix.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HMatrix.cpp > CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HMatrix.cpp > CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HMatrix.cpp -o CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HMatrix.cpp -o CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o: ../src/simplex/HPrimal.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HPrimal.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HPrimal.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HPrimal.cpp > CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HPrimal.cpp > CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HPrimal.cpp -o CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HPrimal.cpp -o CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o: ../src/simplex/HQPrimal.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HQPrimal.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HQPrimal.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HQPrimal.cpp > CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HQPrimal.cpp > CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HQPrimal.cpp -o CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HQPrimal.cpp -o CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/simplex/HSimplex.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HSimplex.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HSimplex.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HSimplex.cpp > CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HSimplex.cpp > CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HSimplex.cpp -o CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HSimplex.cpp -o CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.s
 
 src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.o: ../src/simplex/HVector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HVector.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HVector.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HVector.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HVector.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/simplex/HVector.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HVector.cpp > CMakeFiles/libhighs.dir/simplex/HVector.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HVector.cpp > CMakeFiles/libhighs.dir/simplex/HVector.cpp.i
 
 src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/simplex/HVector.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HVector.cpp -o CMakeFiles/libhighs.dir/simplex/HVector.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HVector.cpp -o CMakeFiles/libhighs.dir/simplex/HVector.cpp.s
 
 src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.o: ../src/test/KktCheck.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/test/KktCheck.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktCheck.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/test/KktCheck.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktCheck.cpp
 
 src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/test/KktCheck.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktCheck.cpp > CMakeFiles/libhighs.dir/test/KktCheck.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktCheck.cpp > CMakeFiles/libhighs.dir/test/KktCheck.cpp.i
 
 src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/test/KktCheck.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktCheck.cpp -o CMakeFiles/libhighs.dir/test/KktCheck.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktCheck.cpp -o CMakeFiles/libhighs.dir/test/KktCheck.cpp.s
 
 src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.o: ../src/test/KktChStep.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/test/KktChStep.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktChStep.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/test/KktChStep.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktChStep.cpp
 
 src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/test/KktChStep.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktChStep.cpp > CMakeFiles/libhighs.dir/test/KktChStep.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktChStep.cpp > CMakeFiles/libhighs.dir/test/KktChStep.cpp.i
 
 src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/test/KktChStep.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktChStep.cpp -o CMakeFiles/libhighs.dir/test/KktChStep.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktChStep.cpp -o CMakeFiles/libhighs.dir/test/KktChStep.cpp.s
 
 src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o: ../src/util/HighsSort.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/util/HighsSort.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsSort.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/util/HighsSort.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsSort.cpp
 
 src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/util/HighsSort.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsSort.cpp > CMakeFiles/libhighs.dir/util/HighsSort.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsSort.cpp > CMakeFiles/libhighs.dir/util/HighsSort.cpp.i
 
 src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/util/HighsSort.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsSort.cpp -o CMakeFiles/libhighs.dir/util/HighsSort.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsSort.cpp -o CMakeFiles/libhighs.dir/util/HighsSort.cpp.s
 
 src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o: ../src/util/HighsUtils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsUtils.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsUtils.cpp
 
 src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/util/HighsUtils.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsUtils.cpp > CMakeFiles/libhighs.dir/util/HighsUtils.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsUtils.cpp > CMakeFiles/libhighs.dir/util/HighsUtils.cpp.i
 
 src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/util/HighsUtils.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsUtils.cpp -o CMakeFiles/libhighs.dir/util/HighsUtils.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsUtils.cpp -o CMakeFiles/libhighs.dir/util/HighsUtils.cpp.s
 
 src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o: ../src/util/stringutil.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/util/stringutil.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/stringutil.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/util/stringutil.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/stringutil.cpp
 
 src/CMakeFiles/libhighs.dir/util/stringutil.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/util/stringutil.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/stringutil.cpp > CMakeFiles/libhighs.dir/util/stringutil.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/stringutil.cpp > CMakeFiles/libhighs.dir/util/stringutil.cpp.i
 
 src/CMakeFiles/libhighs.dir/util/stringutil.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/util/stringutil.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/stringutil.cpp -o CMakeFiles/libhighs.dir/util/stringutil.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/stringutil.cpp -o CMakeFiles/libhighs.dir/util/stringutil.cpp.s
 
 src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o: ../src/equitable/HighsEquitable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/equitable/HighsEquitable.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/equitable/HighsEquitable.cpp
 
 src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/equitable/HighsEquitable.cpp > CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/equitable/HighsEquitable.cpp > CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.i
 
 src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/equitable/HighsEquitable.cpp -o CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/equitable/HighsEquitable.cpp -o CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.s
 
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/interfaces/highs_c_api.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/interfaces/highs_c_api.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o -c /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/interfaces/highs_c_api.cpp
 
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.i"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/interfaces/highs_c_api.cpp > CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.i
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/interfaces/highs_c_api.cpp > CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.i
 
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.s"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/interfaces/highs_c_api.cpp -o CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.s
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/interfaces/highs_c_api.cpp -o CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.s
 
 # Object files for target libhighs
 libhighs_OBJECTS = \
@@ -755,9 +755,9 @@ lib/libhighs.1.0.0.dylib: src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.c
 lib/libhighs.1.0.0.dylib: src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o
 lib/libhighs.1.0.0.dylib: src/CMakeFiles/libhighs.dir/build.make
 lib/libhighs.1.0.0.dylib: src/CMakeFiles/libhighs.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Linking CXX shared library ../lib/libhighs.dylib"
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/libhighs.dir/link.txt --verbose=$(VERBOSE)
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && $(CMAKE_COMMAND) -E cmake_symlink_library ../lib/libhighs.1.0.0.dylib ../lib/libhighs.1.0.dylib ../lib/libhighs.dylib
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Linking CXX shared library ../lib/libhighs.dylib"
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/libhighs.dir/link.txt --verbose=$(VERBOSE)
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -E cmake_symlink_library ../lib/libhighs.1.0.0.dylib ../lib/libhighs.1.0.dylib ../lib/libhighs.dylib
 
 lib/libhighs.1.0.dylib: lib/libhighs.1.0.0.dylib
 	@$(CMAKE_COMMAND) -E touch_nocreate lib/libhighs.1.0.dylib
@@ -771,10 +771,10 @@ src/CMakeFiles/libhighs.dir/build: lib/libhighs.dylib
 .PHONY : src/CMakeFiles/libhighs.dir/build
 
 src/CMakeFiles/libhighs.dir/clean:
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src && $(CMAKE_COMMAND) -P CMakeFiles/libhighs.dir/cmake_clean.cmake
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -P CMakeFiles/libhighs.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/libhighs.dir/clean
 
 src/CMakeFiles/libhighs.dir/depend:
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake --color=$(COLOR)
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/libhighs.dir/depend
 

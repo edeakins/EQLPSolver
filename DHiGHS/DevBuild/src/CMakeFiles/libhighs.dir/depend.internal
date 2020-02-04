@@ -7,7 +7,7 @@ src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o
  ../src/lp_data/HighsLp.h
  ../src/simplex/SimplexConst.h
  ../src/util/HighsSimpleDec.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/equitable/HighsEquitable.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/equitable/HighsEquitable.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o
  ../src/Highs.h
@@ -32,8 +32,8 @@ src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/interfaces/highs_c_api.cpp
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/interfaces/highs_c_api.h
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/interfaces/highs_c_api.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/interfaces/highs_c_api.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/Filereader.cpp.o
  ../src/io/Filereader.h
@@ -47,7 +47,7 @@ src/CMakeFiles/libhighs.dir/io/Filereader.cpp.o
  ../src/lp_data/HighsOptions.h
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/Filereader.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/Filereader.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o
  ../src/io/Filereader.h
@@ -60,7 +60,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
  ../src/util/stringutil.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderEms.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderEms.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o
  ../src/io/Filereader.h
@@ -73,7 +73,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
  ../src/util/stringutil.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderLp.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderLp.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o
  ../src/Highs.h
@@ -106,7 +106,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderMps.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderMps.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o
  ../src/Highs.h
@@ -136,12 +136,12 @@ src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HMPSIO.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HMPSIO.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/HToyIO.cpp.o
  ../src/io/HToyIO.h
  ../src/lp_data/HConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HToyIO.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HToyIO.cpp
 src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.o
  ../src/io/HighsIO.h
  ../src/lp_data/HConst.h
@@ -149,8 +149,8 @@ src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.o
  ../src/lp_data/HighsOptions.h
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HighsIO.cpp
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HighsIO.h
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HighsIO.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HighsIO.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/LoadProblem.cpp.o
  ../src/io/Filereader.h
@@ -163,7 +163,7 @@ src/CMakeFiles/libhighs.dir/io/LoadProblem.cpp.o
  ../src/lp_data/HighsOptions.h
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/LoadProblem.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/LoadProblem.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o
  ../src/Highs.h
@@ -229,7 +229,7 @@ src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/Highs.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/Highs.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o
  ../src/io/HighsIO.h
@@ -239,13 +239,13 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o
  ../src/lp_data/HighsOptions.h
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsInfo.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsInfo.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o
  ../src/lp_data/HConst.h
  ../src/lp_data/HighsLp.h
  ../src/simplex/SimplexConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLp.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLp.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o
  ../src/Highs.h
@@ -276,14 +276,14 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o
  ../src/util/HighsSort.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLpUtils.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLpUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.o
  ../src/lp_data/HConst.h
  ../src/lp_data/HighsLp.h
  ../src/simplex/SimplexConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelBuilder.cpp
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelBuilder.h
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelBuilder.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelBuilder.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o
  ../src/Highs.h
@@ -309,7 +309,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelUtils.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o
  ../src/io/HighsIO.h
@@ -318,11 +318,11 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o
  ../src/lp_data/HighsOptions.h
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsOptions.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsOptions.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.o
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsQRmodule.cpp
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsQRmodule.h
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsQRmodule.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsQRmodule.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o
  ../src/Highs.h
  ../src/io/HighsIO.h
@@ -367,7 +367,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolution.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolution.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o
  ../src/io/HighsIO.h
@@ -387,7 +387,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolve.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolve.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o
  ../src/io/HighsIO.h
@@ -395,7 +395,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o
  ../src/lp_data/HighsLp.h
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsStatus.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsStatus.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o
  ../src/Highs.h
@@ -423,7 +423,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/HighsMipSolver.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/HighsMipSolver.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/mip/SolveMip.cpp.o
  ../src/io/HighsIO.h
@@ -432,7 +432,7 @@ src/CMakeFiles/libhighs.dir/mip/SolveMip.cpp.o
  ../src/lp_data/HighsStatus.h
  ../src/mip/SolveMip.h
  ../src/simplex/SimplexConst.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/SolveMip.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/SolveMip.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o
  ../src/equitable/HighsEquitable.h
@@ -441,14 +441,14 @@ src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o
  ../src/lp_data/HighsQRmodule.h
  ../src/simplex/SimplexConst.h
  ../src/util/HighsSimpleDec.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Aggregate.cpp
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Aggregate.h
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o
  ../src/lp_data/HConst.h
  ../src/presolve/HPreData.h
  ../src/test/KktChStep.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/HPreData.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HPreData.cpp
 src/CMakeFiles/libhighs.dir/presolve/ICrash.cpp.o
  ../src/io/HighsIO.h
  ../src/lp_data/HConst.h
@@ -460,7 +460,7 @@ src/CMakeFiles/libhighs.dir/presolve/ICrash.cpp.o
  ../src/simplex/SimplexConst.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrash.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrash.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o
  ../src/io/HighsIO.h
@@ -470,8 +470,8 @@ src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrashUtil.cpp
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrashUtil.h
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrashUtil.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrashUtil.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o
  ../src/io/HighsIO.h
@@ -482,7 +482,7 @@ src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o
  ../src/simplex/HTimerPre.h
  ../src/simplex/SimplexConst.h
  ../src/test/KktChStep.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Presolve.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Presolve.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o
  ../src/io/HighsIO.h
@@ -503,7 +503,7 @@ src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o
  ../src/util/HighsSort.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HCrash.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HCrash.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o
  ../src/io/HighsIO.h
@@ -528,8 +528,8 @@ src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDual.cpp
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDual.h
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDual.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDual.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o
  ../src/io/HighsIO.h
@@ -554,7 +554,7 @@ src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualMulti.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualMulti.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o
  ../src/io/HighsIO.h
@@ -573,8 +573,8 @@ src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRHS.cpp
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRHS.h
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRHS.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRHS.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o
  ../src/io/HighsIO.h
@@ -595,7 +595,7 @@ src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRow.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRow.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o
  ../src/io/HighsIO.h
@@ -610,13 +610,13 @@ src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o
  ../src/simplex/SimplexConst.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HFactor.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HFactor.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o
  ../src/lp_data/HConst.h
  ../src/simplex/HMatrix.h
  ../src/simplex/HVector.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HMatrix.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HMatrix.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o
  ../src/io/HighsIO.h
@@ -637,7 +637,7 @@ src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HPrimal.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HPrimal.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o
  ../src/io/HighsIO.h
@@ -658,7 +658,7 @@ src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HQPrimal.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HQPrimal.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o
  ../src/Highs.h
@@ -690,12 +690,12 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o
  ../src/util/HighsRandom.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HSimplex.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HSimplex.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.o
  ../src/lp_data/HConst.h
  ../src/simplex/HVector.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HVector.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HVector.cpp
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o
  ../src/io/HighsIO.h
  ../src/lp_data/HConst.h
@@ -709,7 +709,7 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o
  ../src/simplex/SimplexConst.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexAnalysis.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexAnalysis.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o
  ../src/Highs.h
@@ -742,26 +742,26 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o
  ../src/util/HighsSort.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexInterface.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexInterface.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.o
  ../src/lp_data/HConst.h
  ../src/test/KktChStep.h
  ../src/test/KktCheck.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktChStep.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktChStep.cpp
 src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.o
  ../src/lp_data/HConst.h
  ../src/test/KktCheck.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktCheck.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktCheck.cpp
 src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o
  ../src/lp_data/HConst.h
  ../src/util/HighsSort.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsSort.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsSort.cpp
 src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o
  ../src/lp_data/HConst.h
  ../src/util/HighsUtils.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsUtils.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o
  ../src/util/stringutil.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/stringutil.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/stringutil.cpp

@@ -54,10 +54,10 @@ RM = /usr/local/Cellar/cmake/3.11.2/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles/CheckFortran
+CMAKE_SOURCE_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles/CheckFortran
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles/CheckFortran
+CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles/CheckFortran
 
 #=============================================================================
 # Special targets to cleanup operation of make.

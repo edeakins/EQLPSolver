@@ -64,21 +64,21 @@ class HighsLp {
     numRow_ = 0;
     numInt_ = 0;
     nnz_ = 0;
-    Astart_.clear();
-    Aindex_.clear();
-    Avalue_.clear();
-    colCost_.clear();
-    colLower_.clear();
-    colUpper_.clear();
-    rowLower_.clear();
-    rowUpper_.clear();
+    Astart_.resize(0);
+    Aindex_.resize(0);
+    Avalue_.resize(0);
+    colCost_.resize(0);
+    colLower_.resize(0);
+    colUpper_.resize(0);
+    rowLower_.resize(0);
+    rowUpper_.resize(0);
     sense_ = 1;
     offset_ = 0;
     model_name_ = "";
     lp_name_ = "";
-    row_names_.clear();
-    col_names_.clear();
-    integrality_.clear();
+    row_names_.resize(0);
+    col_names_.resize(0);
+    integrality_.resize(0);
   }
   // Model data
   int numCol_ = 0;
@@ -356,10 +356,10 @@ struct HighsSolutionParams {
 
 struct HighsSolution {
   void clear(){
-    col_value.clear();
-    col_dual.clear();
-    row_value.clear();
-    row_dual.clear();
+    col_value.resize(0);
+    col_dual.resize(0);
+    row_value.resize(0);
+    row_dual.resize(0);
   }
   std::vector<double> col_value;
   std::vector<double> col_dual;
@@ -372,8 +372,8 @@ struct HighsSolution {
 struct HighsBasis {
   void clear(){
     valid_ = false;
-    col_status.clear();
-    row_status.clear();
+    col_status.resize(0);
+    row_status.resize(0);
   }
   bool valid_ = false;
   std::vector<HighsBasisStatus> col_status;

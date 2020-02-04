@@ -47,8 +47,8 @@ add_library(libhighs SHARED IMPORTED)
 # Import target "libhighs" for configuration "Debug"
 set_property(TARGET libhighs APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(libhighs PROPERTIES
-  IMPORTED_LOCATION_DEBUG "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/lib/libhighs.1.0.0.dylib"
-  IMPORTED_SONAME_DEBUG "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/lib/libhighs.1.0.dylib"
+  IMPORTED_LOCATION_DEBUG "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.1.0.0.dylib"
+  IMPORTED_SONAME_DEBUG "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.1.0.dylib"
   )
 
 # This file does not depend on other imported targets which have

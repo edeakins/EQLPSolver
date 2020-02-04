@@ -43,10 +43,10 @@ RM = /usr/local/Cellar/cmake/3.11.2/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS
+CMAKE_SOURCE_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild
+CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild
 
 # Utility rule file for NightlyConfigure.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild
 include check/CMakeFiles/NightlyConfigure.dir/progress.make
 
 check/CMakeFiles/NightlyConfigure:
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/check && /usr/local/Cellar/cmake/3.11.2/bin/ctest -D NightlyConfigure
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/check && /usr/local/Cellar/cmake/3.11.2/bin/ctest -D NightlyConfigure
 
 NightlyConfigure: check/CMakeFiles/NightlyConfigure
 NightlyConfigure: check/CMakeFiles/NightlyConfigure.dir/build.make
@@ -67,10 +67,10 @@ check/CMakeFiles/NightlyConfigure.dir/build: NightlyConfigure
 .PHONY : check/CMakeFiles/NightlyConfigure.dir/build
 
 check/CMakeFiles/NightlyConfigure.dir/clean:
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/NightlyConfigure.dir/cmake_clean.cmake
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/NightlyConfigure.dir/cmake_clean.cmake
 .PHONY : check/CMakeFiles/NightlyConfigure.dir/clean
 
 check/CMakeFiles/NightlyConfigure.dir/depend:
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/check /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/check /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/check/CMakeFiles/NightlyConfigure.dir/DependInfo.cmake --color=$(COLOR)
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/check /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/check /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/check/CMakeFiles/NightlyConfigure.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : check/CMakeFiles/NightlyConfigure.dir/depend
 

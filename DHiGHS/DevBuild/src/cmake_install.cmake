@@ -1,4 +1,4 @@
-# Install script for directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src
+# Install script for directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,11 +33,11 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/lib/libFortranHighs.dylib")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libFortranHighs.dylib")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libFortranHighs.dylib" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libFortranHighs.dylib")
     execute_process(COMMAND "/usr/bin/install_name_tool"
-      -change "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/lib/libhighs.1.0.dylib" "libhighs.1.0.dylib"
+      -change "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.1.0.dylib" "libhighs.1.0.dylib"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libFortranHighs.dylib")
     execute_process(COMMAND /usr/bin/install_name_tool
       -add_rpath "/usr/local/lib"
@@ -49,250 +49,250 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/ipm" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/ipm/IpxStatus.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/ipm" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/ipm/IpxStatus.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/Filereader.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/Filereader.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderLp.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderLp.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderEms.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderEms.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/FilereaderMps.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/FilereaderMps.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HMpsFF.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HMpsFF.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HMPSIO.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HMPSIO.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HToyIO_C.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HToyIO_C.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HToyIO.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HToyIO.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/HighsIO.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/HighsIO.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/LoadProblem.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/LoadProblem.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/io/LoadOptions.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/io" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/io/LoadOptions.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HConst.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HConst.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsInfo.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsInfo.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLp.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLp.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsLpUtils.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsLpUtils.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelUtils.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelUtils.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelObject.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelObject.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelObjectUtils.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelObjectUtils.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsOptions.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsOptions.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolution.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolution.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsSolve.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsSolve.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsStatus.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsStatus.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsQRmodule.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsQRmodule.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/lp_data/HighsModelBuilder.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/lp_data" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/lp_data/HighsModelBuilder.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/mip" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/HighsMipSolver.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/mip" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/HighsMipSolver.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/mip" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/mip/SolveMip.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/mip" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/mip/SolveMip.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HApp.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HApp.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/FactorTimer.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/FactorTimer.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HCrash.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HCrash.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDual.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDual.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRow.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRow.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HDualRHS.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HDualRHS.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HFactor.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HFactor.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexAnalysis.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexAnalysis.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HighsSimplexInterface.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HighsSimplexInterface.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HMatrix.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HMatrix.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HPrimal.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HPrimal.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HQPrimal.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HQPrimal.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HSimplex.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HSimplex.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/SimplexConst.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/SimplexConst.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrash.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrash.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/ICrashUtil.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/ICrashUtil.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Presolve.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Presolve.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/HPreData.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HPreData.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/presolve/Aggregate.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/presolve" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HTimerPre.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HTimerPre.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/simplex/HVector.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/simplex" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/simplex/HVector.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/test" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktCheck.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/test" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktCheck.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/test" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/test/KktChStep.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/test" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/test/KktChStep.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/stringutil.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/stringutil.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsRandom.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsRandom.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsSort.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsSort.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsTimer.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsTimer.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/util/HighsUtils.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/util" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/util/HighsUtils.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/equitable" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/equitable/HighsEqutiable.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/equitable" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/equitable/HighsEqutiable.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/Highs.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/Highs.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/interfaces" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/interfaces/highs_c_api.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/interfaces" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/interfaces/highs_c_api.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/ipm" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/src/ipm/IpxWrapperEmpty.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/ipm" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/ipm/IpxWrapperEmpty.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/HConfig.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/HConfig.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES
-    "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/lib/libhighs.1.0.0.dylib"
-    "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/lib/libhighs.1.0.dylib"
-    "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/lib/libhighs.dylib"
+    "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.1.0.0.dylib"
+    "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.1.0.dylib"
+    "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.dylib"
     )
   foreach(file
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libhighs.1.0.0.dylib"
@@ -315,7 +315,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/highs/highs-targets.cmake")
     file(DIFFERENT EXPORT_FILE_CHANGED FILES
          "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/highs/highs-targets.cmake"
-         "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src/CMakeFiles/Export/lib/cmake/highs/highs-targets.cmake")
+         "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/Export/lib/cmake/highs/highs-targets.cmake")
     if(EXPORT_FILE_CHANGED)
       file(GLOB OLD_CONFIG_FILES "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/highs/highs-targets-*.cmake")
       if(OLD_CONFIG_FILES)
@@ -324,17 +324,17 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
       endif()
     endif()
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/highs" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src/CMakeFiles/Export/lib/cmake/highs/highs-targets.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/highs" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/Export/lib/cmake/highs/highs-targets.cmake")
   if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/highs" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/src/CMakeFiles/Export/lib/cmake/highs/highs-targets-debug.cmake")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/highs" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/Export/lib/cmake/highs/highs-targets-debug.cmake")
   endif()
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/highs" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles/highs-config.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/highs" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles/highs-config.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkg-config" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/CMakeFiles/highs.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkg-config" TYPE FILE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles/highs.pc")
 endif()
 

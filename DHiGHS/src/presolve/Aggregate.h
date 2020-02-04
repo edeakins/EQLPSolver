@@ -8,6 +8,9 @@
 
 class HighsAggregate{
 public:
+	HighsAggregate(){
+	}
+	HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag);
 	~HighsAggregate(){
 		printf("\ndtor HighsAggregate called\n");
 		cin.get();

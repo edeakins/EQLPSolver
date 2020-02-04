@@ -1,4 +1,4 @@
-# Install script for directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/check
+# Install script for directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/check
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

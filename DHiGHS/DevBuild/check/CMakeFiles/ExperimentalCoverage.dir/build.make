@@ -43,10 +43,10 @@ RM = /usr/local/Cellar/cmake/3.11.2/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS
+CMAKE_SOURCE_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild
+CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild
 
 # Utility rule file for ExperimentalCoverage.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild
 include check/CMakeFiles/ExperimentalCoverage.dir/progress.make
 
 check/CMakeFiles/ExperimentalCoverage:
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/check && /usr/local/Cellar/cmake/3.11.2/bin/ctest -D ExperimentalCoverage
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/check && /usr/local/Cellar/cmake/3.11.2/bin/ctest -D ExperimentalCoverage
 
 ExperimentalCoverage: check/CMakeFiles/ExperimentalCoverage
 ExperimentalCoverage: check/CMakeFiles/ExperimentalCoverage.dir/build.make
@@ -67,10 +67,10 @@ check/CMakeFiles/ExperimentalCoverage.dir/build: ExperimentalCoverage
 .PHONY : check/CMakeFiles/ExperimentalCoverage.dir/build
 
 check/CMakeFiles/ExperimentalCoverage.dir/clean:
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ExperimentalCoverage.dir/cmake_clean.cmake
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ExperimentalCoverage.dir/cmake_clean.cmake
 .PHONY : check/CMakeFiles/ExperimentalCoverage.dir/clean
 
 check/CMakeFiles/ExperimentalCoverage.dir/depend:
-	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/check /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/check /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/check/CMakeFiles/ExperimentalCoverage.dir/DependInfo.cmake --color=$(COLOR)
+	cd /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/check /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/check /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/check/CMakeFiles/ExperimentalCoverage.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : check/CMakeFiles/ExperimentalCoverage.dir/depend
 

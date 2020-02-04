@@ -1,4 +1,4 @@
-# Install script for directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app
+# Install script for directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,11 +33,11 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/bin/highs")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/bin/highs")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/highs" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/highs")
     execute_process(COMMAND "/usr/bin/install_name_tool"
-      -change "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/DevBuild/lib/libhighs.1.0.dylib" "libhighs.1.0.dylib"
+      -change "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.1.0.dylib" "libhighs.1.0.dylib"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/highs")
     execute_process(COMMAND /usr/bin/install_name_tool
       -add_rpath "/usr/local/lib"

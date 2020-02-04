@@ -370,25 +370,25 @@ cstring
 string
 -
 
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/RunHighs.cpp
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/RunHighs.cpp
 Highs.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/Highs.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/Highs.h
 HighsIO.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/HighsIO.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsIO.h
 HighsMipSolver.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/HighsMipSolver.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsMipSolver.h
 HighsOptions.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/HighsOptions.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsOptions.h
 HighsRuntimeOptions.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/HighsRuntimeOptions.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsRuntimeOptions.h
 HighsTimer.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/HighsTimer.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsTimer.h
 HighsEquitable.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/HighsEquitable.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsEquitable.h
 Aggregate.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/Aggregate.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/Aggregate.h
 LoadProblem.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/LoadProblem.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/LoadProblem.h
 
 HConfig.h
 

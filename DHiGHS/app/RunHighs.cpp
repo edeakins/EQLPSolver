@@ -72,29 +72,32 @@ int main(int argc, char** argv) {
     return (int)HighsStatus::Error;
   // Initialize Equitable Partition and Aggregate classes
   HighsEquitable ep;
-  HighsAggregate fold;
-  HighsSolution solution;
-  HighsBasis basis;
   // Set initial status and turn off presolve (inteferes with our algorithm?)
   HighsStatus run_status = HighsStatus::Error;
-  options2.presolve = "off";
   // Compute initial equitable partition
   ep.setup(lp);
   ep.initialRefinement();
   ep.refine();
-  fold.setup(lp);
-  fold.build(ep, solution, basis, false);
+  HighsSolution solution;
+  HighsBasis basis;
+  HighsAggregate fold(lp, ep, solution, basis, false);
   HighsLp& alp = fold.getAlp();
   run_status = callLpSolver(options, lp, output, message_level, run_quiet, solution, basis);
+  solution = HighsSolution();
+  basis = HighsBasis();
   run_status = callLpSolver(options2, alp, output, message_level, run_quiet, solution, basis);
+  aggregateModels.push_back(alp);
+  aggregateSolutions.push_back(solution);
+  aggregateBases.push_back(basis);
   // // Build initial aggregate model and store the aggregate LP in alp;
   while(!ep.isPartitionDiscrete()){
     ep.findTarget();
     ep.refine();
-    fold.build(ep, solution, basis, false);
-    HighsLp& alp = fold.getAlp();
+    HighsAggregate fold(lp, ep, solution, basis, false);
+
+    //HighsLp& alp = fold.getAlp();
     run_status = callLpSolver(options, lp, output, message_level, run_quiet, solution, basis);
-    run_status = callLpSolver(options2, alp, output, message_level, run_quiet, solution, basis); 
+    //run_status = callLpSolver(options2, alp, output, message_level, run_quiet, solution, basis); 
   }
   // fold.build(ep, solution, basis, false);
   // alp = fold.getAlp();

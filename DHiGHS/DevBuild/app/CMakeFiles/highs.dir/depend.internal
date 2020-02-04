@@ -34,5 +34,5 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
- /Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS/app/RunHighs.cpp
+ /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/RunHighs.cpp
  HConfig.h

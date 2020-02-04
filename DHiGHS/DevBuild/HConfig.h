@@ -9,11 +9,11 @@
 #define CMAKE_BUILD_TYPE "Debug"
 /* #undef HiGHSRELEASE */
 /* #undef IPX_ON */
-#define HIGHS_GITHASH "204edebf-dirty"
-#define HIGHS_COMPILATION_DATE "2020-01-30"
+#define HIGHS_GITHASH "n/a"
+#define HIGHS_COMPILATION_DATE "2020-02-04"
 #define HIGHS_VERSION_MAJOR 1
 #define HIGHS_VERSION_MINOR 0
 #define HIGHS_VERSION_PATCH 0
-#define HIGHS_DIR "/Users/Chvatal/Documents/Thesis/EQLPSolver/HiGHS"
+#define HIGHS_DIR "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS"
 
 #endif /* HCONFIG_H_ */
