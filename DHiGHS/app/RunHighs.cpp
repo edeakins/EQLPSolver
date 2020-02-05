@@ -1,3 +1,4 @@
+  
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                       */
 /*    This file is part of the HiGHS linear optimization suite           */
@@ -17,9 +18,8 @@
 #include "HighsOptions.h"
 #include "HighsRuntimeOptions.h"
 #include "HighsTimer.h"
-#include "HighsEquitable.h"
-#include "Aggregate.h"
 #include "LoadProblem.h"
+#include "Aggregate.h"
 
 void printHighsVersionCopyright(FILE* output, const int message_level,
                                 const char* message = nullptr);
@@ -27,12 +27,8 @@ void reportLpStatsOrError(FILE* output, int message_level,
                           const HighsStatus read_status, const HighsLp& lp);
 void reportSolvedLpStats(FILE* output, int message_level,
                          const HighsStatus run_status, const Highs& highs);
-// void foldAndUnfoldIter(HighsLp& lp);
 HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
-                         FILE* output, int message_level, bool run_quiet, HighsSolution& solution, HighsBasis& basis);
-HighsStatus callLpSolverForOrbitalCrossover(const HighsOptions& options, const HighsLp& lp,
-                         FILE* output, int message_level, bool run_quiet,
-                         HighsSolution& solution, HighsBasis& basis);
+                         FILE* output, int message_level, bool run_quiet);
 HighsStatus callMipSolver(const HighsOptions& options, const HighsLp& lp,
                           FILE* output, int message_level, bool run_quiet);
 
@@ -41,7 +37,6 @@ int main(int argc, char** argv) {
 
   // Load user options.
   HighsOptions options;
-  HighsOptions options2;
   bool options_ok = loadOptions(argc, argv, options);
   if (!options_ok) return 0;
 
@@ -60,72 +55,29 @@ int main(int argc, char** argv) {
   output = options.output;
   message_level = options.message_level;
 
-  // Intialize LP(lp) and ALP(alp) classes to contains original and each aggregated model
+  // Load problem.
   HighsLp lp;
-  vector<HighsLp> aggregateModels;
-  vector<HighsBasis> aggregateBases;
-  vector<HighsSolution> aggregateSolutions;
-  // Read in the intial model and store it it in lp
   HighsStatus read_status = loadLpFromFile(options, lp);
   reportLpStatsOrError(output, message_level, read_status, lp);
-  if (read_status == HighsStatus::Error) 
-    return (int)HighsStatus::Error;
-  // Initialize Equitable Partition and Aggregate classes
-  HighsEquitable ep;
-  // Set initial status and turn off presolve (inteferes with our algorithm?)
-  HighsStatus run_status = HighsStatus::Error;
-  // Compute initial equitable partition
-  ep.setup(lp);
-  ep.initialRefinement();
-  ep.refine();
-  HighsSolution solution;
-  HighsBasis basis;
-  HighsAggregate fold(lp, ep, solution, basis, false);
-  HighsLp& alp = fold.getAlp();
-  run_status = callLpSolver(options, lp, output, message_level, run_quiet, solution, basis);
-  solution = HighsSolution();
-  basis = HighsBasis();
-  run_status = callLpSolver(options2, alp, output, message_level, run_quiet, solution, basis);
-  aggregateModels.push_back(alp);
-  aggregateSolutions.push_back(solution);
-  aggregateBases.push_back(basis);
-  // // Build initial aggregate model and store the aggregate LP in alp;
-  while(!ep.isPartitionDiscrete()){
-    ep.findTarget();
-    ep.refine();
-    HighsAggregate fold(lp, ep, solution, basis, false);
+  if (read_status == HighsStatus::Error) return (int)HighsStatus::Error;
 
-    //HighsLp& alp = fold.getAlp();
-    run_status = callLpSolver(options, lp, output, message_level, run_quiet, solution, basis);
-    //run_status = callLpSolver(options2, alp, output, message_level, run_quiet, solution, basis); 
-  }
-  // fold.build(ep, solution, basis, false);
-  // alp = fold.getAlp();
-  // alp = HighsLp();
-  // cin.get();
-  // run_status = callLpSolverForOrbitalCrossover(options, lp, output, message_level, 
-  //                                             run_quiet, solution, basis);
-  // ep.findTarget();
-  // ep.refine();
-  // fold.build(ep, solution, basis, true);
+  // Run LP or MIP solver.
+  HighsStatus run_status = HighsStatus::Error;
   // If no integrality constraints shrink member.
-  // bool mip = false;
-  // for  (unsigned int i=0; i < lp.integrality_.size(); i++) {
-  //   if (lp.integrality_[i]) {
-  //     mip = true;
-  //     break;
-  //   }
-  // }
-  // if (!mip) {
-  //   run_status = callLpSolver(options, lp, output, message_level, run_quiet);
-  //   // cout << "\n\n\n\n\n aggregate \n\n\n\n\n" << endl;
-  //   // options.presolve = "off";
-  //   // run_status = callLpSolverForOrbitalCrossover(options, lp, output, message_level, run_quiet);
-  // } else {
-  //   run_status = callMipSolver(options, lp, output, message_level, run_quiet);
-  // }
-  // return (int)run_status;
-  return 0;
+  bool mip = false;
+  for  (unsigned int i=0; i < lp.integrality_.size(); i++) {
+    if (lp.integrality_[i]) {
+      mip = true;
+      break;
+    }
+  }
+  if (!mip) {
+    run_status = callLpSolver(options, lp, output, message_level, run_quiet);
+  } else {
+    run_status = callMipSolver(options, lp, output, message_level, run_quiet);
+  }
+
+  return (int)run_status;
 }
 
 void printHighsVersionCopyright(FILE* output, const int message_level,
@@ -269,7 +221,13 @@ void reportSolvedLpStats(FILE* output, int message_level,
 // }
 
 HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
-                         FILE* output, int message_level, bool run_quiet, HighsSolution& solution, HighsBasis& basis) {
+                         FILE* output, int message_level, bool run_quiet) {
+  // Create partitioning tool/class
+  HighsEquitable ep;
+  ep.setup(lp);
+  // Basis and solution to store from unfold interations
+  HighsBasis basis;
+  HighsSolution solution;
   // Solve LP case.
   Highs highs;
   HighsStatus return_status = highs.passHighsOptions(options);
@@ -335,88 +293,6 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
   // Run HiGHS.
 
   HighsStatus run_status = highs.run();
-  solution = highs.getSolution();
-  basis = highs.getBasis();
-  cout << "solution: " << endl;
-  for (int i = 0; i < solution.col_value.size(); ++i){
-    cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  }
-  cin.get();
-
-  if (run_quiet)
-    HighsPrintMessage(output, message_level, ML_ALWAYS,
-                      "After calling highs.run()\n");
-
-  reportSolvedLpStats(output, message_level, run_status, highs);
-  return run_status;
-}
-
-HighsStatus callLpSolverForOrbitalCrossover(const HighsOptions& options, const HighsLp& lp,
-                                            FILE* output, int message_level, bool run_quiet,
-                                            const HighsSolution& solution, const HighsBasis& basis) {
-  // Solve LP case.
-  Highs highs;
-  HighsStatus return_status = highs.passHighsOptions(options);
-  if (return_status != HighsStatus::OK) {
-    if (return_status == HighsStatus::Warning) {
-#ifdef HiGHSDEV
-      HighsPrintMessage(output, message_level, ML_ALWAYS,
-                        "HighsStatus::Warning return from passHighsOptions\n");
-#endif
-    } else {
-      HighsPrintMessage(output, message_level, ML_ALWAYS,
-                        "In main: fail return from passHighsOptions\n");
-      return return_status;
-    }
-  }
-
-  if (run_quiet) {
-    highs.setHighsLogfile(NULL);
-    highs.setHighsOutput(NULL);
-  }
-
-  HighsStatus init_status = highs.passModel(lp);
-  if (init_status != HighsStatus::OK) {
-    if (init_status == HighsStatus::Warning) {
-#ifdef HiGHSDEV
-      HighsPrintMessage(output, message_level, ML_ALWAYS,
-                        "HighsStatus::Warning return setting HighsLp\n");
-#endif
-    } else {
-      HighsPrintMessage(output, message_level, ML_ALWAYS,
-                        "Error setting HighsLp\n");
-      return HighsStatus::Error;
-    }
-  }
-
-  /*
-  HighsStatus write_status;
-  write_status = highs.writeModel("write.mps");
-  if (write_status != HighsStatus::OK) {
-    if (write_status == HighsStatus::Warning) {
-#ifdef HiGHSDEV
-      HighsPrintMessage(output, message_level, ML_ALWAYS,
-                        "HighsStatus::Warning return from highs.writeModel\n");
-#endif
-    } else {
-      HighsPrintMessage(output, message_level, ML_ALWAYS,
-                        "Error return from highs.writeModel\n");
-    }
-  }
-  */
-
-  // Write all the options to an options file
-  // highs.writeHighsOptions("Highs.set", false);
-  // Write all the options as HTML
-  // highs.writeHighsOptions("Highs.html", false);
-  // Possibly report options settings
-  highs.writeHighsOptions("");  //, false);
-
-  if (run_quiet)
-    HighsPrintMessage(output, message_level, ML_ALWAYS,
-                      "Before calling highs.run()\n");
-  HighsStatus run_status = highs.run();
-  // Run HiGHS.
   // cout << "solution: " << endl;
   // for (int i = 0; i < solution.col_value.size(); ++i){
   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
@@ -428,6 +304,9 @@ HighsStatus callLpSolverForOrbitalCrossover(const HighsOptions& options, const H
                       "After calling highs.run()\n");
 
   reportSolvedLpStats(output, message_level, run_status, highs);
+  while(!ep.isPartitionDiscrete()){
+    ep.refine();
+  }
   return run_status;
 }
 

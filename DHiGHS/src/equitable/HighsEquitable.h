@@ -19,7 +19,7 @@ class HighsEquitable {
 public:
 	// Setup for equitable partition
 	void clear();
-	void setup(HighsLp& lp);
+	void setup(const HighsLp& lp);
 	void lp2Graph();
 	void initialRefinement();
 	void splitColor(int color);
@@ -45,6 +45,7 @@ public:
 	int r;
 	int s;
 	int isolated = -1;
+	int refinements = 0;
 
 	// (Sparse vectors)
 	vector<int> colorsToSplit;

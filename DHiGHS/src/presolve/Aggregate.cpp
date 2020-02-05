@@ -1,7 +1,7 @@
 #include "Aggregate.h"
 using namespace std;
 
-HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag){
+HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution* solution, HighsBasis* basis, bool flag){
 	// From the original lp 
 	numRow = lp.numRow_;
 	numCol = lp.numCol_;
@@ -28,11 +28,11 @@ HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, High
 	activeBounds_.assign(numCol, false);
 	activeConstraints_.assign(numRow, false);
 	// Preivous solution
-	col_value = (solution.col_value);
-	row_value = (solution.row_value);
+	col_value = (solution->col_value);
+	row_value = (solution->row_value);
 	// Previous basis
-	col_status = (basis.col_status);
-	row_status = (basis.row_status);
+	col_status = (basis->col_status);
+	row_status = (basis->row_status);
 	// flag status to find linkers or not 
 	flag_ = flag;
 	aggregateAMatrix();

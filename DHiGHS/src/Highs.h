@@ -181,6 +181,7 @@ class Highs {
    * @brief Returns the HighsSolution 
    */
   const HighsSolution& getSolution() const;
+  HighsSolution& getSolutionForOrbitalCrossover();
 
   const ICrashInfo& getICrashInfo() const;
 
@@ -188,6 +189,7 @@ class Highs {
    * @brief Returns the HighsBasis 
    */
   const HighsBasis& getBasis() const;
+  HighsBasis& getBasisForOrbitalCrossover();
 
   /**
    * @brief Returns the current model status

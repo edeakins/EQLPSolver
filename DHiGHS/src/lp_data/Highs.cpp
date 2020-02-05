@@ -502,8 +502,6 @@ HighsStatus Highs::run() {
     return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
     if (return_status == HighsStatus::Error) return return_status;
   }
-  cout << "call_status: " << (int)call_status << endl;
-  cin.get();
   // else if (reduced problem failed to solve) {
   //   todo: handle case when presolved problem failed to solve. Try to solve
   //   again with no presolve.
@@ -540,6 +538,9 @@ HighsStatus Highs::run() {
   return_status = interpretCallStatus(call_status, return_status);
   return return_status;
 }
+
+HighsSolution& Highs::getSolutionForOrbitalCrossover() { return solution_; }
+HighsBasis& Highs::getBasisForOrbitalCrossover() { return basis_; }
 
 const HighsLp& Highs::getLp() const { return lp_; }
 

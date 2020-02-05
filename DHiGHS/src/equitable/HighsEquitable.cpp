@@ -18,7 +18,7 @@
 #include <numeric>
 using namespace std;
 
-void HighsEquitable::setup(HighsLp& lp){
+void HighsEquitable::setup(const HighsLp& lp){
 	// From the lp 
 	numRow = (lp.numRow_);
 	numCol = (lp.numCol_);
@@ -49,6 +49,11 @@ void HighsEquitable::setup(HighsLp& lp){
 	adjListWeight.assign(numTot, vector<double>(0));
 	C.assign(numTot, vector<int>(0));
 	A.assign(numTot, vector<int>(0));
+
+	// Initial refinement
+	lp2Graph();
+	initialRefinement();
+	refine();
 }
 
 void HighsEquitable::lp2Graph(){
@@ -74,7 +79,6 @@ void HighsEquitable::lp2Graph(){
 }
 
 void HighsEquitable::initialRefinement(){
-	lp2Graph();
 	int i;
 	int numParts = 0;
 	int varColor = 0;
@@ -141,6 +145,8 @@ void HighsEquitable::initialRefinement(){
 }
 
 void HighsEquitable::refine(){
+	if (refinements) findTarget();
+	refinements++;
 	linkingPairs.clear();
 	columnColorReps.clear();
 	int i, j, k, u, v, w, adjColor, rep;

@@ -383,12 +383,10 @@ HighsRuntimeOptions.h
 /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsRuntimeOptions.h
 HighsTimer.h
 /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsTimer.h
-HighsEquitable.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsEquitable.h
-Aggregate.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/Aggregate.h
 LoadProblem.h
 /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/LoadProblem.h
+Aggregate.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/Aggregate.h
 
 HConfig.h
 
