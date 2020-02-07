@@ -221,13 +221,16 @@ void reportSolvedLpStats(FILE* output, int message_level,
 // }
 
 HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
-                         FILE* output, int message_level, bool run_quiet) {
+  		         FILE* output, int message_level, bool run_quiet) {
   // Create partitioning tool/class
   HighsEquitable ep;
   ep.setup(lp);
   // Basis and solution to store from unfold interations
   HighsBasis basis;
   HighsSolution solution;
+  // Use aggregator to obtain an aggreated lp and return it
+  HighsAggregate lpFolder(lp, ep, solution, basis, false); 
+  lpFolder = HighsAggregate(lp, ep, solution, basis, false);
   // Solve LP case.
   Highs highs;
   HighsStatus return_status = highs.passHighsOptions(options);
@@ -293,6 +296,12 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
   // Run HiGHS.
 
   HighsStatus run_status = highs.run();
+  basis = highs.getBasis();
+  solution = highs.getSolution();
+  cin.get();
+  basis = HighsBasis();
+  solution = HighsSolution();
+  cin.get();
   // cout << "solution: " << endl;
   // for (int i = 0; i < solution.col_value.size(); ++i){
   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
@@ -306,6 +315,8 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
   reportSolvedLpStats(output, message_level, run_status, highs);
   while(!ep.isPartitionDiscrete()){
     ep.refine();
+    lpFolder = HighsAggregate(lp, ep, solution, basis, false);
+    HighsLp& alp = lpFolder.getAlp();
   }
   return run_status;
 }

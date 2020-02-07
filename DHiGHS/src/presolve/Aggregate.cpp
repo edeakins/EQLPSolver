@@ -1,7 +1,7 @@
 #include "Aggregate.h"
 using namespace std;
 
-HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution* solution, HighsBasis* basis, bool flag){
+HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag){
 	// From the original lp 
 	numRow = lp.numRow_;
 	numCol = lp.numCol_;
@@ -19,20 +19,18 @@ HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, High
 	C.assign(ep.C.begin(), ep.C.end());
 	prevC.assign(ep.prevC.begin(), ep.prevC.end());
 	color.assign(ep.color.begin(), ep.color.end());
-	if (!flag_){
-		adjListLab.assign(ep.adjListLab.begin(), ep.adjListLab.end());
-		adjListWeight.assign(ep.adjListWeight.begin(), ep.adjListWeight.end());
-	}
+	adjListLab.assign(ep.adjListLab.begin(), ep.adjListLab.end());
+	adjListWeight.assign(ep.adjListWeight.begin(), ep.adjListWeight.end());
 	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());
 	// Used for setting active set
 	activeBounds_.assign(numCol, false);
 	activeConstraints_.assign(numRow, false);
 	// Preivous solution
-	col_value = (solution->col_value);
-	row_value = (solution->row_value);
+	col_value = (solution.col_value);
+	row_value = (solution.row_value);
 	// Previous basis
-	col_status = (basis->col_status);
-	row_status = (basis->row_status);
+	col_status = (basis.col_status);
+	row_status = (basis.row_status);
 	// flag status to find linkers or not 
 	flag_ = flag;
 	aggregateAMatrix();
@@ -100,7 +98,7 @@ void HighsAggregate::aggregateAMatrix(){
 		findPreviousBasisForColumns();
 		setAggregateRealRowsRhs();
 		setAggregateRealColsBounds();
-		createRowWiseAMatrix();
+		//createRowWiseAMatrix();
 		// createAlp();
 		return;
 	}

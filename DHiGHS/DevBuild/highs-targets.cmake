@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget libhighs)
+foreach(_expectedTarget libhighs libipx libbasiclu)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -44,11 +44,39 @@ unset(_expectedTargets)
 # Create imported target libhighs
 add_library(libhighs SHARED IMPORTED)
 
+set_target_properties(libhighs PROPERTIES
+  INTERFACE_LINK_LIBRARIES "libipx"
+)
+
+# Create imported target libipx
+add_library(libipx SHARED IMPORTED)
+
+set_target_properties(libipx PROPERTIES
+  INTERFACE_LINK_LIBRARIES "libbasiclu"
+)
+
+# Create imported target libbasiclu
+add_library(libbasiclu SHARED IMPORTED)
+
 # Import target "libhighs" for configuration "Debug"
 set_property(TARGET libhighs APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(libhighs PROPERTIES
-  IMPORTED_LOCATION_DEBUG "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.1.0.0.dylib"
-  IMPORTED_SONAME_DEBUG "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.1.0.dylib"
+  IMPORTED_LOCATION_DEBUG "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/lib/libhighs.so.1.0.0"
+  IMPORTED_SONAME_DEBUG "libhighs.so.1.0"
+  )
+
+# Import target "libipx" for configuration "Debug"
+set_property(TARGET libipx APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+set_target_properties(libipx PROPERTIES
+  IMPORTED_LOCATION_DEBUG "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/lib/libipx.so"
+  IMPORTED_SONAME_DEBUG "libipx.so"
+  )
+
+# Import target "libbasiclu" for configuration "Debug"
+set_property(TARGET libbasiclu APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+set_target_properties(libbasiclu PROPERTIES
+  IMPORTED_LOCATION_DEBUG "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/lib/libbasiclu.so"
+  IMPORTED_SONAME_DEBUG "libbasiclu.so"
   )
 
 # This file does not depend on other imported targets which have
