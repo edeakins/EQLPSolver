@@ -33,6 +33,9 @@ class Highs {
   // see if an empty lp should have Astart[0] = 0
   Highs();
   Highs(HighsOptions& options) { options_ = options; }
+  // ~Highs(){
+  //   delete hmo;
+  // }
 
   //  virtual ~Highs() { delete &hmos_; }
 

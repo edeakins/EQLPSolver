@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/FortranHighs.dir/interfaces/highs_lp_solver.f90.o"
   "../lib/libFortranHighs.pdb"
-  "../lib/libFortranHighs.so"
+  "../lib/libFortranHighs.dylib"
 )
 
 # Per-language clean rules from dependency scanning.

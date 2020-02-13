@@ -107,9 +107,9 @@ HighsStatus Highs::readHighsOptions(const std::string filename) {
 }
 
 HighsStatus Highs::passHighsOptions(const HighsOptions& options) {
-
-  if (passOptions(options_.logfile, options, options_) == OptionStatus::OK)
+  if (passOptions(options_.logfile, options, options_) == OptionStatus::OK){
     return HighsStatus::OK;
+  }
   return HighsStatus::Error;
 }
 
@@ -498,6 +498,7 @@ HighsStatus Highs::run() {
     // The problem has been solved before so we ignore presolve/postsolve/ipx.
     solved_hmo = original_hmo;
     hmos_[solved_hmo].lp_.lp_name_ = "Re-solved LP";
+    hmos_[solved_hmo].basis_ = basis_;
     call_status = runLpSolver(hmos_[solved_hmo], "Re-solving the LP");
     return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
     if (return_status == HighsStatus::Error) return return_status;

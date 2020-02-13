@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/app/RunHighs.cpp" "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/app/CMakeFiles/highs.dir/RunHighs.cpp.o"
+  "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/RunHighs.cpp" "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/app/CMakeFiles/highs.dir/RunHighs.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
@@ -28,9 +28,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake"
-  "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libipx.dir/DependInfo.cmake"
-  "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libbasiclu.dir/DependInfo.cmake"
+  "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

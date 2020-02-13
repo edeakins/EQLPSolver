@@ -4,17 +4,17 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/edeakins/ThesisWork/EQLPSolver/DHiGHS
-BuildDirectory: /home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild
+SourceDirectory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS
+BuildDirectory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild
 
 # Where to place the cost data store
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: ubuntu
+Site: DeakinsShire
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
-BuildName: Linux-c++
+BuildName: Darwin-c++
 
 # Subprojects
 LabelsForSubprojects: 
@@ -36,8 +36,8 @@ ScpCommand: /usr/bin/scp
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/bin/cmake" "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS"
-MakeCommand: /usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
+ConfigureCommand: "/usr/local/Cellar/cmake/3.11.2/bin/cmake" "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS"
+MakeCommand: /usr/local/Cellar/cmake/3.11.2/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
 DefaultCTestConfigurationType: Release
 
 # version control
@@ -49,7 +49,7 @@ CVSCommand: CVSCOMMAND-NOTFOUND
 CVSUpdateOptions: -d -A -P
 
 # Subversion options
-SVNCommand: SVNCOMMAND-NOTFOUND
+SVNCommand: /usr/bin/svn
 SVNOptions: 
 SVNUpdateOptions: 
 
@@ -72,8 +72,8 @@ UpdateOptions:
 UpdateType: 
 
 # Compiler info
-Compiler: /usr/bin/c++
-CompilerVersion: 7.4.0
+Compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
+CompilerVersion: 11.0.0.11000033
 
 # Dynamic analysis (MemCheck)
 PurifyCommand: 

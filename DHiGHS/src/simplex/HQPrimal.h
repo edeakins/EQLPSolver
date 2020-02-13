@@ -42,10 +42,12 @@ class HQPrimal {
    * @brief Perform Phase 2 primal simplex iterations
    */
   void solvePhase2();
+  void solvePhase3();
 
  private:
   void primalRebuild();
   void primalChooseColumn();
+  void unfold();
   void primalChooseRow();
   void primalUpdate();
 

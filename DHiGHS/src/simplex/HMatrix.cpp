@@ -88,6 +88,7 @@ void HMatrix::setup(int numCol_, int numRow_, const int* Astart_,
       }
     }
   }
+  int x = 5;
   // Initialise the density of the PRICE result
   //  row_apDensity = 0;
 #ifdef HiGHSDEV

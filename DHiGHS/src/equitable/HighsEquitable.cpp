@@ -210,10 +210,10 @@ void HighsEquitable::refine(){
 		for (i = 0; i < C.size(); ++i)
 			if (C[i].size() == 1) isolates[C[i].front()] = true;
 	}
-	cout << "\n\n Partition \n\n" << endl;
+	//cout << "\n\n Partition \n\n" << endl;
 	for (i = 0; i < C.size(); ++i){
 		if (C[i].size()){
-			cout << "color: " << i << endl;
+			//cout << "color: " << i << endl;
 			rep = C[i].front();
 			if (i < numCol && !targets[rep])
 				columnColorReps.push_back(rep);

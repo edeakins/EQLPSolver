@@ -157,12 +157,24 @@ HighsStatus HQPrimal::solve() {
     */
   }
   solvePhase = 2;
+  if (workHMO.options_.simplex_strategy == SIMPLEX_STRATEGY_UNFOLD)
+    solvePhase = 3;
   if (workHMO.scaled_model_status_ != HighsModelStatus::REACHED_TIME_LIMIT) {
     if (solvePhase == 2) {
       int it0 = scaled_solution_params.simplex_iteration_count;
 
       timer.start(simplex_info.clock_[SimplexPrimalPhase2Clock]);
       solvePhase2();
+      timer.stop(simplex_info.clock_[SimplexPrimalPhase2Clock]);
+
+      simplex_info.primal_phase2_iteration_count +=
+          (scaled_solution_params.simplex_iteration_count - it0);
+    }
+    else if (solvePhase == 3){
+      int it0 = scaled_solution_params.simplex_iteration_count;
+
+      timer.start(simplex_info.clock_[SimplexPrimalPhase2Clock]);
+      solvePhase3();
       timer.stop(simplex_info.clock_[SimplexPrimalPhase2Clock]);
 
       simplex_info.primal_phase2_iteration_count +=
@@ -176,6 +188,93 @@ HighsStatus HQPrimal::solve() {
   assert(ok);
   */
   return HighsStatus::OK;
+}
+
+void HQPrimal::solvePhase3() {
+  HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
+  HighsSimplexLpStatus& simplex_lp_status = workHMO.simplex_lp_status_;
+  HighsTimer& timer = workHMO.timer_;
+  printf("HQPrimal::solvePhase2\n");
+  // When starting a new phase the (updated) primal objective function
+  // value isn't known. Indicate this so that when the value
+  // computed from scratch in build() isn't checked against the the
+  // updated value
+  simplex_lp_status.has_primal_objective_value = 0;
+  // Set invertHint so that it's assigned when first tested
+  invertHint = INVERT_HINT_NO;
+  // Set solvePhase=2 so it's set if solvePhase2() is called directly
+  solvePhase = 2;
+  // Set up local copies of model dimensions
+  solver_num_col = workHMO.simplex_lp_.numCol_;
+  solver_num_row = workHMO.simplex_lp_.numRow_;
+  solver_num_tot = solver_num_col + solver_num_row;
+
+  analysis = &workHMO.simplex_analysis_;
+
+  // Setup update limits
+  simplex_info.update_limit =
+      min(100 + solver_num_row / 100,
+          1000);  // TODO: Consider allowing the dual limit to be used
+  simplex_info.update_count = 0;
+
+  // Setup local vectors
+  col_aq.setup(solver_num_row);
+  row_ep.setup(solver_num_row);
+  row_ap.setup(solver_num_col);
+
+  ph1SorterR.reserve(solver_num_row);
+  ph1SorterT.reserve(solver_num_row);
+
+#ifdef HiGHSDEV
+  printf("HQPrimal::solvePhase2 - WARNING: Setting analysis->col_aq_density = 0\n");
+  printf("HQPrimal::solvePhase2 - WARNING: Setting analysis->row_ep_density = 0\n");
+#endif
+  analysis->col_aq_density = 0;
+  analysis->row_ep_density = 0;
+
+  devexReset();
+
+  no_free_columns = true;
+  for (int iCol = 0; iCol < solver_num_tot; iCol++) {
+    if (highs_isInfinity(-workHMO.simplex_info_.workLower_[iCol])) {
+      if (highs_isInfinity(workHMO.simplex_info_.workUpper_[iCol])) {
+        // Free column
+        no_free_columns = false;
+        break;
+      }
+    }
+  }
+#ifdef HiGHSDEV
+  if (no_free_columns) {
+    printf("Model has no free columns\n");
+  } else {
+    printf("Model has free columns\n");
+  }
+#endif
+
+  // Setup other buffers
+
+  HighsPrintMessage(workHMO.options_.output, workHMO.options_.message_level, ML_DETAILED, 
+        "primal-phase2-start\n");
+  // Main solving structure
+  unfold();
+
+  if (workHMO.scaled_model_status_ == HighsModelStatus::REACHED_TIME_LIMIT) {
+    return;
+  }
+
+  if (columnIn == -1) {
+    HighsPrintMessage(workHMO.options_.output, workHMO.options_.message_level, ML_DETAILED, 
+          "primal-optimal\n");
+    HighsPrintMessage(workHMO.options_.output, workHMO.options_.message_level, ML_DETAILED, 
+          "problem-optimal\n");
+    workHMO.scaled_model_status_ = HighsModelStatus::OPTIMAL;
+  } else {
+    HighsPrintMessage(workHMO.options_.output, workHMO.options_.message_level, ML_MINIMAL, 
+          "primal-unbounded\n");
+    workHMO.scaled_model_status_ = HighsModelStatus::PRIMAL_UNBOUNDED;
+  }
+  computeDualObjectiveValue(workHMO);
 }
 
 void HQPrimal::solvePhase2() {
@@ -431,6 +530,25 @@ void HQPrimal::primalRebuild() {
   num_flip_since_rebuild = 0;
   // Data are fresh from rebuild
   simplex_lp_status.has_fresh_rebuild = true;
+}
+
+void HQPrimal::unfold() {
+  HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
+  HighsTimer& timer = workHMO.timer_;
+  for (int i = 0; i < workHMO.lp_.linkers.size(); ++i){
+    timer.start(simplex_info.clock_[ChuzcPrimalClock]);
+    columnIn = workHMO.lp_.linkers[i];
+    std::cout << "columnIn: " << columnIn << std::endl;
+    timer.stop(simplex_info.clock_[ChuzcPrimalClock]);
+    workHMO.simplex_info_.workCost_[columnIn] = 1;
+    workHMO.simplex_info_.workUpper_[columnIn] = +HIGHS_CONST_INF;
+    workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
+    workHMO.simplex_info_.workValue_[columnIn] = 0; 
+    workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
+    primalChooseRow();
+    primalUpdate();
+    primalRebuild();
+  }
 }
 
 void HQPrimal::primalChooseColumn() {

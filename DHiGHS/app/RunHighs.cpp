@@ -1,4 +1,4 @@
-  
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                       */
 /*    This file is part of the HiGHS linear optimization suite           */
@@ -222,7 +222,13 @@ void reportSolvedLpStats(FILE* output, int message_level,
 
 HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
   		         FILE* output, int message_level, bool run_quiet) {
-  // Create partitioning tool/class
+  // New options for aggregate models (work around for const input)
+  HighsOptions alpOpt;
+  alpOpt.presolve = string("off");
+  alpOpt.model_file = string("No File, Reduced Model");
+  alpOpt.solver = string("simplex");
+  alpOpt.parallel = string("off");
+  // initialize partitioning tool/class
   HighsEquitable ep;
   ep.setup(lp);
   // Basis and solution to store from unfold interations
@@ -230,10 +236,10 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
   HighsSolution solution;
   // Use aggregator to obtain an aggreated lp and return it
   HighsAggregate lpFolder(lp, ep, solution, basis, false); 
-  lpFolder = HighsAggregate(lp, ep, solution, basis, false);
+  HighsLp& alp = lpFolder.getAlp();
   // Solve LP case.
   Highs highs;
-  HighsStatus return_status = highs.passHighsOptions(options);
+  HighsStatus return_status = highs.passHighsOptions(alpOpt);
   if (return_status != HighsStatus::OK) {
     if (return_status == HighsStatus::Warning) {
 #ifdef HiGHSDEV
@@ -252,7 +258,7 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
     highs.setHighsOutput(NULL);
   }
 
-  HighsStatus init_status = highs.passModel(lp);
+  HighsStatus init_status = highs.passModel(alp);
   if (init_status != HighsStatus::OK) {
     if (init_status == HighsStatus::Warning) {
 #ifdef HiGHSDEV
@@ -298,15 +304,11 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
   HighsStatus run_status = highs.run();
   basis = highs.getBasis();
   solution = highs.getSolution();
+  cout << "solution: " << endl;
+  for (int i = 0; i < solution.col_value.size(); ++i){
+    cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  }
   cin.get();
-  basis = HighsBasis();
-  solution = HighsSolution();
-  cin.get();
-  // cout << "solution: " << endl;
-  // for (int i = 0; i < solution.col_value.size(); ++i){
-  //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  // }
-  // cin.get();
 
   if (run_quiet)
     HighsPrintMessage(output, message_level, ML_ALWAYS,
@@ -314,9 +316,52 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
 
   reportSolvedLpStats(output, message_level, run_status, highs);
   while(!ep.isPartitionDiscrete()){
+    //highs = Highs();
     ep.refine();
-    lpFolder = HighsAggregate(lp, ep, solution, basis, false);
+    lpFolder = HighsAggregate(lp, ep, solution, basis, true);
+    basis = HighsBasis();
+    solution = HighsSolution();
+    alpOpt = HighsOptions();
+    alpOpt.presolve = string("off");
+    alpOpt.model_file = string("No File, Reduced Model");
+    alpOpt.solver = string("simplex");
+    alpOpt.parallel = string("off");
+    alpOpt.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
+    return_status = highs.passHighsOptions(alpOpt);
+    if (return_status != HighsStatus::OK) {
+      if (return_status == HighsStatus::Warning) {
+        HighsPrintMessage(output, message_level, ML_ALWAYS,
+                        "HighsStatus::Warning return from passHighsOptions\n");
+      } 
+      else {
+        HighsPrintMessage(output, message_level, ML_ALWAYS,
+                        "In main: fail return from passHighsOptions\n");
+        return return_status;
+      }
+    }
     HighsLp& alp = lpFolder.getAlp();
+    HighsBasis& alpBasis = lpFolder.getAlpBasis();
+    HighsStatus init_status = highs.passModel(alp);
+    HighsStatus basisStatus = highs.setBasis(alpBasis);
+    if (init_status != HighsStatus::OK) {
+      if (init_status == HighsStatus::Warning) {
+        HighsPrintMessage(output, message_level, ML_ALWAYS,
+                        "HighsStatus::Warning return setting HighsLp\n");
+      } 
+      else {
+        HighsPrintMessage(output, message_level, ML_ALWAYS,
+                        "Error setting HighsLp\n");
+        return HighsStatus::Error;
+      }
+    }
+    run_status = highs.run();
+    basis = highs.getBasis();
+    solution = highs.getSolution();
+    cout << "solution: " << endl;
+    for (int i = 0; i < solution.col_value.size(); ++i){
+      cout << "var_" << i << " = " << solution.col_value[i] << endl;
+    }
+    cin.get();
   }
   return run_status;
 }

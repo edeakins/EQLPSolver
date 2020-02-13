@@ -11,15 +11,12 @@ public:
 	HighsAggregate(){
 	}
 	HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag);
-	~HighsAggregate(){
-		printf("\ndtor HighsAggregate called\n");
-		cin.get();
-	}
 	void clear();
-	void build(const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag);
-	void setup(HighsLp& lp);
 	void aggregateAMatrix();
-	void setLinkerMatrix();
+	void aggregateCVector();
+	void appendLinkersToAMatrix(vector<double>& row);
+	void appendLinkersToRowRhs();
+	void appendLinkersToColBounds();
 	void createRowWiseAMatrix();
 	void setAggregateRealRowsRhs();
 	void setAggregateRealColsBounds();
@@ -73,18 +70,18 @@ public:
     HighsQR QR;
 
     // (dense storage)
-	vector<vector<int>> C;
-	vector<vector<int>> prevC;
-	vector<vector<int>> adjListLab;
-	vector<vector<double>> adjListWeight;
+	vector<vector<int> > C;
+	vector<vector<int> > prevC;
+	vector<vector<int> > adjListLab;
+	vector<vector<double> > adjListWeight;
 
 	// For the new "smaller" lp
-	int numRow_;
-	int numCol_;
-	int numTot_;
-	int numActiveRows_;
-	int numActiveBounds_;
-	int numLinkers_;
+	int numRow_ = 0;
+	int numCol_ = 0;
+	int numTot_ = 0;
+	int numActiveRows_ = 0;
+	int numActiveBounds_ = 0;
+	int numLinkers_ = 0;
 	vector<int> startingBasicRows_;
 	vector<int> startingBasicColumns_;
 	vector<int> potentialBasicRows_;
@@ -94,6 +91,7 @@ public:
     vector<int> Aindex_;
     vector<int> ARindex_;
     vector<int> AR_Nend_;
+    vector<int> linkers;
     vector<bool> activeConstraints_;
     vector<bool> activeBounds_;
     vector<double> Avalue_;

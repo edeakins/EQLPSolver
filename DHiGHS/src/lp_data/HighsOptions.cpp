@@ -417,6 +417,16 @@ OptionStatus passOptions(FILE* logfile, const HighsOptions from_options, HighsOp
       return_status = setOptionValue(((OptionRecordBool*)to_options.records[index])[0], value);
       if (return_status != OptionStatus::OK) return return_status;
     } else if (type == HighsOptionType::INT) {
+      if (index == 13 && from_options.simplex_strategy == SIMPLEX_STRATEGY_UNFOLD){
+        return_status = setOptionValue(logfile, ((OptionRecordInt*)to_options.records[index])[0], 5);
+        if (return_status != OptionStatus::OK) return return_status;
+        continue;
+      }
+      else if (index == 14 && from_options.simplex_strategy == SIMPLEX_STRATEGY_UNFOLD){
+        return_status = setOptionValue(logfile, ((OptionRecordInt*)to_options.records[index])[0], 0);
+        if (return_status != OptionStatus::OK) return return_status;
+        continue;
+      }
       int value = *(((OptionRecordInt*)from_options.records[index])[0].value);
       return_status = setOptionValue(logfile, ((OptionRecordInt*)to_options.records[index])[0], value);
       if (return_status != OptionStatus::OK) return return_status;
@@ -429,6 +439,9 @@ OptionStatus passOptions(FILE* logfile, const HighsOptions from_options, HighsOp
       return_status = setOptionValue(logfile, ((OptionRecordString*)to_options.records[index])[0], value);
       if (return_status != OptionStatus::OK) return return_status;
     }
+  }
+  if (from_options.simplex_strategy == SIMPLEX_STRATEGY_UNFOLD){
+
   }
   return OptionStatus::OK;
 }

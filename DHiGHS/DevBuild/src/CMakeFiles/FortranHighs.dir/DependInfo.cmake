@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_Fortran
-  "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/src/interfaces/highs_lp_solver.f90" "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/FortranHighs.dir/interfaces/highs_lp_solver.f90.o"
+  "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/interfaces/highs_lp_solver.f90" "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/FortranHighs.dir/interfaces/highs_lp_solver.f90.o"
   )
 set(CMAKE_Fortran_COMPILER_ID "GNU")
 
@@ -32,10 +32,8 @@ set(CMAKE_Fortran_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake"
-  "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libipx.dir/DependInfo.cmake"
-  "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libbasiclu.dir/DependInfo.cmake"
+  "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.
-set(CMAKE_Fortran_TARGET_MODULE_DIR "/home/edeakins/ThesisWork/EQLPSolver/DHiGHS/DevBuild/modules")
+set(CMAKE_Fortran_TARGET_MODULE_DIR "/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/modules")

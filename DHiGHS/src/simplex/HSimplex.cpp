@@ -42,6 +42,8 @@ void setSimplexOptions(HighsModelObject& highs_model_object) {
   // that will need converting into a specific simplex strategy value.
   //
   simplex_info.simplex_strategy = options.simplex_strategy;
+  // std::cout << simplex_info.simplex_strategy << std::endl;
+  // std::cin.get();
   simplex_info.dual_edge_weight_strategy =
       options.simplex_dual_edge_weight_strategy;
   simplex_info.price_strategy = options.simplex_price_strategy;
@@ -99,6 +101,8 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
   const HighsOptions& options = highs_model_object.options_;
   const HighsSolution& solution = highs_model_object.solution_;
   HighsBasis& basis = highs_model_object.basis_;
+  for (int i = 0; i < basis.col_status.size(); ++i)
+    std::cout << "i: " << i << " is " << (int)basis.col_status[i] << std::endl;
   HighsLp& simplex_lp = highs_model_object.simplex_lp_;
   HighsSimplexInfo& simplex_info = highs_model_object.simplex_info_;
   HighsSimplexLpStatus& simplex_lp_status =
@@ -535,7 +539,12 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
   HighsSolutionParams& scaled_solution_params = highs_model_object.scaled_solution_params_;
   bool primal_feasible = scaled_solution_params.num_primal_infeasibilities == 0;
   bool dual_feasible = scaled_solution_params.num_dual_infeasibilities == 0;
-  if (primal_feasible && dual_feasible) {
+  if (highs_model_object.options_.simplex_strategy == SIMPLEX_STRATEGY_UNFOLD){
+    highs_model_object.scaled_model_status_ = HighsModelStatus::NOTSET;
+    scaled_solution_params.primal_status = PrimalDualStatus::STATUS_UNKNOWN;
+    scaled_solution_params.dual_status = PrimalDualStatus::STATUS_UNKNOWN;
+  }
+  else if (primal_feasible && dual_feasible) {
     highs_model_object.scaled_model_status_ = HighsModelStatus::OPTIMAL;
     scaled_solution_params.primal_status = PrimalDualStatus::STATUS_FEASIBLE_POINT;
     scaled_solution_params.dual_status = PrimalDualStatus::STATUS_FEASIBLE_POINT;

@@ -122,8 +122,10 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
   int use_simplex_strategy = illegal_simplex_strategy;
   HighsSolutionParams& scaled_solution_params = highs_model_object.scaled_solution_params_;
   if (scaled_solution_params.num_primal_infeasibilities == 0) {
+    if (highs_model_object.options_.simplex_strategy == SIMPLEX_STRATEGY_UNFOLD)
+      use_simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
     // Primal feasible
-    if (scaled_solution_params.num_dual_infeasibilities == 0) {
+    else if (scaled_solution_params.num_dual_infeasibilities == 0) {
       // Dual feasible
       // Simplex solution is optimal
       highs_model_object.scaled_model_status_ = HighsModelStatus::OPTIMAL;
@@ -191,6 +193,7 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
 #ifdef HiGHSDEV
   // reportSimplexLpStatus(simplex_lp_status, "After transition");
 #endif
+  
   if (highs_model_object.scaled_model_status_ != HighsModelStatus::OPTIMAL) {
     assert(use_simplex_strategy > illegal_simplex_strategy);
     if (use_simplex_strategy <= illegal_simplex_strategy) {
@@ -214,7 +217,13 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
       call_status = primal_solver.solve();
       return_status = interpretCallStatus(call_status, return_status, "HQPrimal::solve");
       if (return_status == HighsStatus::Error) return return_status;
-    } else {
+    }
+    else if (use_simplex_strategy == SIMPLEX_STRATEGY_UNFOLD){
+      HighsLogMessage(highs_model_object.options_.logfile, HighsMessageType::INFO,
+                      "Using unfold technique (DOKS)");
+      HQPrimal primal_solver(highs_model_object);
+    } 
+    else {
       // Use dual simplex solver
       HDual dual_solver(highs_model_object);
       dual_solver.options();

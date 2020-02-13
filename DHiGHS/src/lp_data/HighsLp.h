@@ -94,6 +94,7 @@ class HighsLp {
   std::vector<double> colUpper_;
   std::vector<double> rowLower_;
   std::vector<double> rowUpper_;
+  std::vector<int> linkers;
 
   // sense 1 = minimize, -1 = maximize
   int sense_ = 1;
