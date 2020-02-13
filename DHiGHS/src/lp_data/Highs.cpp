@@ -4,7 +4,7 @@
 /*                                                                       */
 /*    Written and engineered 2008-2020 at the University of Edinburgh    */
 /*                                                                       */
-/*    Available as open-source under the MIT License       
+/*    Available as open-source under the MIT License
 
               */
 /*                                                                       */
@@ -103,7 +103,7 @@ HighsStatus Highs::readHighsOptions(const std::string filename) {
   }
   options_.options_file = filename;
   if (!loadOptionsFromFile(options_)) return HighsStatus::Error;
-  return HighsStatus::OK;    
+  return HighsStatus::OK;
 }
 
 HighsStatus Highs::passHighsOptions(const HighsOptions& options) {
@@ -149,7 +149,7 @@ HighsStatus Highs::writeHighsOptions(const std::string filename,
   call_status = openWriteFile(filename, "writeHighsOptions", file, html);
   return_status = interpretCallStatus(call_status, return_status, "openWriteFile");
   if (return_status == HighsStatus::Error) return return_status;
-  
+
   call_status = writeOptionsToFile(file, options_.records,
 				   report_only_non_default_values, html);
   return_status = interpretCallStatus(call_status, return_status, "writeOptionsToFile");
@@ -181,7 +181,7 @@ HighsStatus Highs::writeHighsInfo(const std::string filename) {
   call_status = openWriteFile(filename, "writeHighsInfo", file, html);
   return_status = interpretCallStatus(call_status, return_status, "openWriteFile");
   if (return_status == HighsStatus::Error) return return_status;
-  
+
   call_status = writeInfoToFile(file, info_.records, html);
   return_status = interpretCallStatus(call_status, return_status, "writeInfoToFile");
   return return_status;
@@ -274,7 +274,7 @@ HighsStatus Highs::run() {
   hmos_[0].unscaled_model_status_ = HighsModelStatus::NOTSET;
   model_status_ = hmos_[0].scaled_model_status_;
   scaled_model_status_ = hmos_[0].unscaled_model_status_;
-  
+
 #ifdef HIGHSDEV
   // Shouldn't have to check validity of the LP since this is done when it is
   // loaded or modified
@@ -304,7 +304,7 @@ HighsStatus Highs::run() {
 	options_.logfile,
 	options_.output,
         options_.message_level};
- 
+
     // todo: timing. some strange compile issue.
     HighsStatus icrash_status = callICrash(lp_, icrash_options, icrash_info_);
     return icrash_status;
@@ -497,9 +497,9 @@ HighsStatus Highs::run() {
   } else {
     // The problem has been solved before so we ignore presolve/postsolve/ipx.
     solved_hmo = original_hmo;
-    hmos_[solved_hmo].lp_.lp_name_ = "Re-solved LP";
+    hmos_[solved_hmo].lp_.lp_name_ = "Aggregate LP";
     hmos_[solved_hmo].basis_ = basis_;
-    call_status = runLpSolver(hmos_[solved_hmo], "Re-solving the LP");
+    call_status = runLpSolver(hmos_[solved_hmo], "Unfolding the current aggregate");
     return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
     if (return_status == HighsStatus::Error) return return_status;
   }
@@ -1272,7 +1272,7 @@ HighsStatus Highs::writeSolution(const std::string filename, const bool pretty) 
   call_status = openWriteFile(filename, "writeSolution", file, html);
   return_status = interpretCallStatus(call_status, return_status, "openWriteFile");
   if (return_status == HighsStatus::Error) return return_status;
-  
+
   writeSolutionToFile(file, lp, basis, solution, pretty);
   return HighsStatus::OK;
 }
@@ -1296,16 +1296,16 @@ bool Highs::updateHighsSolutionBasis() {
     basis_.row_status.resize(lp_.numRow_);
   }
   return true;
-}  
+}
 
 bool Highs::getHighsModelStatusAndInfo(const int solved_hmo) {
   if (!haveHmo("getHighsModelStatusAndInfo")) return false;
-  
+
   model_status_ = hmos_[solved_hmo].unscaled_model_status_;
   scaled_model_status_ = hmos_[solved_hmo].scaled_model_status_;
-  
+
   HighsSolutionParams& solution_params = hmos_[solved_hmo].unscaled_solution_params_;
-  
+
   // Get the total simplex IPM and crossover iteration counts over all HMO
   info_.simplex_iteration_count = 0;
   info_.ipm_iteration_count = 0;
@@ -1355,7 +1355,7 @@ bool Highs::haveHmo(const string method_name) {
     HighsLogMessage(options_.logfile, HighsMessageType::ERROR,
 		    "Method %s called without any HighsModelObject",
 		    method_name.c_str());
-#endif  
+#endif
   return have_hmo;
 }
 

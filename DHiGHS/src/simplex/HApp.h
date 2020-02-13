@@ -45,7 +45,7 @@
 #ifdef HiGHSDEV
 void reportAnalyseInvertForm(const HighsModelObject& highs_model_object) {
   const HighsSimplexInfo& simplex_info = highs_model_object.simplex_info_;
-  
+
   printf("grep_kernel,%s,%s,%d,%d,%d,",
 	 highs_model_object.lp_.model_name_.c_str(),
 	 highs_model_object.lp_.lp_name_.c_str(),
@@ -193,7 +193,7 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
 #ifdef HiGHSDEV
   // reportSimplexLpStatus(simplex_lp_status, "After transition");
 #endif
-  
+
   if (highs_model_object.scaled_model_status_ != HighsModelStatus::OPTIMAL) {
     assert(use_simplex_strategy > illegal_simplex_strategy);
     if (use_simplex_strategy <= illegal_simplex_strategy) {
@@ -222,7 +222,8 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
       HighsLogMessage(highs_model_object.options_.logfile, HighsMessageType::INFO,
                       "Using unfold technique (DOKS)");
       HQPrimal primal_solver(highs_model_object);
-    } 
+      std::cout << "Hey" << std::endl;
+    }
     else {
       // Use dual simplex solver
       HDual dual_solver(highs_model_object);
@@ -319,7 +320,7 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
     HighsSimplexInterface simplex_interface(highs_model_object);
     simplex_interface.convertSimplexToHighsSolution();
     simplex_interface.convertSimplexToHighsBasis();
-    call_status = 
+    call_status =
       analyseHighsBasicSolution(highs_model_object.options_.logfile,
 				highs_model_object, "to check simplex basic solution");
     return_status = interpretCallStatus(call_status, return_status, "analyseHighsBasicSolution");
@@ -348,7 +349,7 @@ HighsStatus tryToSolveUnscaledLp(HighsModelObject& highs_model_object) {
 #endif
     // Deduce the unscaled solution parameters, and new fasibility tolerances if not primal and/or dual feasible
     call_status =
-      getNewPrimalDualInfeasibilityTolerancesFromSimplexBasicSolution(highs_model_object, 
+      getNewPrimalDualInfeasibilityTolerancesFromSimplexBasicSolution(highs_model_object,
 								      highs_model_object.unscaled_solution_params_,
 								      new_primal_feasibility_tolerance,
 								      new_dual_feasibility_tolerance);
@@ -468,7 +469,7 @@ HighsStatus solveLpSimplex(HighsModelObject& highs_model_object) {
     highs_model_object.unscaled_model_status_ = highs_model_object.scaled_model_status_;
     invalidateSolutionInfeasibilityParams(highs_model_object.scaled_solution_params_);
   }
-    
+
 #ifdef HiGHSDEV
   if (simplex_info.analyse_iterations) simplex_analysis.summaryReport();
 #endif
@@ -480,7 +481,7 @@ HighsStatus solveLpSimplex(HighsModelObject& highs_model_object) {
 
   copySolutionIterationCountAndObjectiveParams(highs_model_object.scaled_solution_params_,
 					       highs_model_object.unscaled_solution_params_);
-  
+
   // Assess success according to the scaled model status, unless
   // something worse has happened earlier
   call_status = highsStatusFromHighsModelStatus(highs_model_object.scaled_model_status_);
