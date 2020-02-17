@@ -33,6 +33,9 @@ HighsStatus callMipSolver(const HighsOptions& options, const HighsLp& lp,
                           FILE* output, int message_level, bool run_quiet);
 
 int main(int argc, char** argv) {
+  std::clock_t start;
+  start = std::clock();
+  double duration;
   printHighsVersionCopyright(stdout, ML_ALWAYS);
 
   // Load user options.
@@ -76,7 +79,8 @@ int main(int argc, char** argv) {
   } else {
     run_status = callMipSolver(options, lp, output, message_level, run_quiet);
   }
-
+  duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+  cout << "total time: " << duration << endl;
   return (int)run_status;
 }
 
@@ -235,7 +239,7 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
   HighsBasis basis;
   HighsSolution solution;
   // Use aggregator to obtain an aggreated lp and return it
-  HighsAggregate lpFolder(lp, ep, solution, basis, false); 
+  HighsAggregate lpFolder(lp, ep, solution, basis, false);
   HighsLp& alp = lpFolder.getAlp();
   // Solve LP case.
   Highs highs;
@@ -304,11 +308,6 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
   HighsStatus run_status = highs.run();
   basis = highs.getBasis();
   solution = highs.getSolution();
-  cout << "solution: " << endl;
-  for (int i = 0; i < solution.col_value.size(); ++i){
-    cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  }
-  cin.get();
 
   if (run_quiet)
     HighsPrintMessage(output, message_level, ML_ALWAYS,
@@ -332,7 +331,7 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
       if (return_status == HighsStatus::Warning) {
         HighsPrintMessage(output, message_level, ML_ALWAYS,
                         "HighsStatus::Warning return from passHighsOptions\n");
-      } 
+      }
       else {
         HighsPrintMessage(output, message_level, ML_ALWAYS,
                         "In main: fail return from passHighsOptions\n");
@@ -347,7 +346,7 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
       if (init_status == HighsStatus::Warning) {
         HighsPrintMessage(output, message_level, ML_ALWAYS,
                         "HighsStatus::Warning return setting HighsLp\n");
-      } 
+      }
       else {
         HighsPrintMessage(output, message_level, ML_ALWAYS,
                         "Error setting HighsLp\n");
@@ -357,12 +356,12 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
     run_status = highs.run();
     basis = highs.getBasis();
     solution = highs.getSolution();
-    cout << "solution: " << endl;
-    for (int i = 0; i < solution.col_value.size(); ++i){
-      cout << "var_" << i << " = " << solution.col_value[i] << endl;
-    }
-    cin.get();
   }
+  cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+  for (int i = 0; i < solution.col_value.size(); ++i){
+    cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  }
+  cout << "\nUnfold iterations: " << highs.totIter_ << endl;
   return run_status;
 }
 

@@ -333,8 +333,6 @@ std::string utilHighsModelStatusToString(const HighsModelStatus model_status) {
 // Deduce the HighsStatus value corresponding to a HighsModelStatus value.
 HighsStatus highsStatusFromHighsModelStatus(HighsModelStatus model_status) {
   switch (model_status) {
-    std::cout << "model_status: " << (int)model_status << std::endl;
-    std::cin.get();
   case HighsModelStatus::NOTSET:
     return HighsStatus::Error;
   case HighsModelStatus::LOAD_ERROR:
@@ -365,5 +363,5 @@ HighsStatus highsStatusFromHighsModelStatus(HighsModelStatus model_status) {
     return HighsStatus::Error;
   }
 }
-  
+
 

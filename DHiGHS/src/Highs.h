@@ -52,6 +52,9 @@ class Highs {
       const HighsLp& lp  //!< The HighsLp instance for this LP
   );
 
+  double totUnfoldTime_ = 0;
+  int totIter_ = 0;
+
   /**
    * @brief reads in a model and initializes the HighsModelObject
    */
@@ -143,14 +146,14 @@ class Highs {
 				  const std::string& option, //!< The option name
                                   std::string& value         //!< The option value
 				  );
-  
+
   const HighsOptions& getHighsOptions() const;
-  
+
   HighsStatus writeHighsOptions(
 				const std::string filename,  //!< The filename
 				const bool report_only_non_default_values=true
 				);
-  
+
    /**
    * @brief Gets an option value as int/double, and only if it's of the correct type.
    */
@@ -161,12 +164,12 @@ class Highs {
 				const std::string& info, //!< The info name
 				int& value               //!< The info value
 				);
-  
+
   HighsStatus getHighsInfoValue(
 				const std::string& info, //!< The info name
 				double& value            //!< The info value
 				) const;
-  
+
   HighsStatus writeHighsInfo(
 			     const std::string filename  //!< The filename
 			     );
@@ -181,7 +184,7 @@ class Highs {
   const HighsLp& getLp() const;
 
   /**
-   * @brief Returns the HighsSolution 
+   * @brief Returns the HighsSolution
    */
   const HighsSolution& getSolution() const;
   HighsSolution& getSolutionForOrbitalCrossover();
@@ -189,7 +192,7 @@ class Highs {
   const ICrashInfo& getICrashInfo() const;
 
   /**
-   * @brief Returns the HighsBasis 
+   * @brief Returns the HighsBasis
    */
   const HighsBasis& getBasis() const;
   HighsBasis& getBasisForOrbitalCrossover();
@@ -226,7 +229,7 @@ class Highs {
 				 double* row_vector,     //!< Row required
 				 int* row_num_nz = NULL, //!< Number of nonzeros
 				 int* row_indices = NULL //!< Indices of nonzeros
-				 );  
+				 );
 
   /**
    * @brief Gets a column of \f$B^{-1}\f$ for basis matrix \f$B\f$
@@ -242,7 +245,7 @@ class Highs {
    * @brief Forms \f$\mathbf{x}=B^{-1}\mathbf{b}\f$ for a given vector \f$\mathbf{b}\f$
    */
   HighsStatus getBasisSolve(
-			    const double* rhs,           //!< RHS \f$\mathbf{b}\f$ 
+			    const double* rhs,           //!< RHS \f$\mathbf{b}\f$
 			    double* solution_vector,     //!< Solution  \f$\mathbf{x}\f$
 			    int* solution_num_nz = NULL, //!< Number of nonzeros
 			    int* solution_indices = NULL //!< Indices of nonzeros
@@ -252,8 +255,8 @@ class Highs {
    * @brief Forms \f$\mathbf{x}=B^{-T}\mathbf{b}\f$ for a given vector \f$\mathbf{b}\f$
    */
   HighsStatus getBasisTransposeSolve(
-				     const double* rhs,           //!< RHS \f$\mathbf{b}\f$ 
-				     double* solution_vector,     //!< Solution  \f$\mathbf{x}\f$ 
+				     const double* rhs,           //!< RHS \f$\mathbf{b}\f$
+				     double* solution_vector,     //!< Solution  \f$\mathbf{x}\f$
 				     int* solution_nz = NULL,     //!< Number of nonzeros
 				     int* solution_indices = NULL //!< Indices of nonzeros
 				     );
@@ -278,7 +281,7 @@ class Highs {
 			       int* col_indices = NULL //!< Indices of nonzeros
 			       );
 
-  
+
   /**
    * @brief Get the number of columns in the LP of the (first?)
    * HighsModelObject
@@ -696,9 +699,9 @@ class Highs {
 #endif
 
   std::string highsModelStatusToString(const HighsModelStatus model_status) const;
-  
+
   std::string highsPrimalDualStatusToString(const int primal_dual_status);
-  
+
 #ifdef OSI_FOUND
   friend class OsiHiGHSSolverInterface;
 #endif
@@ -713,7 +716,6 @@ class Highs {
 
   HighsOptions options_;
   HighsInfo info_;
-
   // Have copies in the HiGHS class so that const references to them
   // can be passed back, regardless of whether there is a HMO, or not,
   // and also to make objective_value and iteration_count independent
@@ -746,7 +748,7 @@ class Highs {
 
   void underDevelopmentLogMessage(const string method_name);
 
-  friend class HighsMipSolver; 
+  friend class HighsMipSolver;
 };
 
 #endif

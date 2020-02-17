@@ -51,6 +51,7 @@ class HighsModelObject {
   HighsRandom random_;
 
   bool report_model_operations_clock = false;
+  int unfoldCount_ = 0;
 };
 
 #endif  // LP_DATA_HIGHS_MODEL_OBJECT_H_

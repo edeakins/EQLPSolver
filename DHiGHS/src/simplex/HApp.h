@@ -222,7 +222,9 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
       HighsLogMessage(highs_model_object.options_.logfile, HighsMessageType::INFO,
                       "Using unfold technique (DOKS)");
       HQPrimal primal_solver(highs_model_object);
-      std::cout << "Hey" << std::endl;
+      call_status = primal_solver.solve();
+      return_status = interpretCallStatus(call_status, return_status, "HQPrimal::solve");
+      if (return_status == HighsStatus::Error) return return_status;
     }
     else {
       // Use dual simplex solver

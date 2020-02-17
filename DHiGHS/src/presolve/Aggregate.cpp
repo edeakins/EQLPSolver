@@ -2,7 +2,7 @@
 using namespace std;
 
 HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag){
-	// From the original lp 
+	// From the original lp
 	numRow = lp.numRow_;
 	numCol = lp.numCol_;
 	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
@@ -31,7 +31,7 @@ HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, High
 	// Previous basis
 	col_status = (basis.col_status);
 	row_status = (basis.row_status);
-	// flag status to find linkers or not 
+	// flag status to find linkers or not
 	flag_ = flag;
 	aggregateAMatrix();
 }
@@ -182,6 +182,14 @@ void HighsAggregate::findMissingBasicColumns(){
 	}
 	vector<vector<double> > QRmat = AM;
 	QR.gramSchmidt(QRmat);
+	// cout << "[ " << endl;
+	// for (i = 0; i < AM.size(); ++i){
+	// 	for (j = 0; j < AM[i].size(); ++j)
+	// 		cout << QRmat[i][j] << " ";
+	// 	cout << ";" << endl;
+	// }
+	// cout << "]" << endl;
+	// cin.get();
 	for (i = numActiveRows_ + numActiveBounds_; i < numRowsToTest; ++i){
 		if(!dependanceCheck(QRmat[i])){
 			numLinkers_++;
@@ -234,11 +242,14 @@ HighsBasis& HighsAggregate::getAlpBasis(){
 }
 
 bool HighsAggregate::dependanceCheck(vector<double> &v){
+	bool cond = true;
 	for (int i = 0; i < v.size(); ++i){
-		if (fabs(v[i]) > 1e-5)
-			return false;
+		if (fabs(v[i]) > 1e-3)
+			cond = false;
+		else
+			v[i] = 0;
 	}
-	return true;
+	return cond;
 }
 
 void HighsAggregate::setAggregateRealRowsRhs(){
@@ -359,7 +370,7 @@ void HighsAggregate::findPreviousBasisForColumns(){
 				previousColumnValue.insert(pair<int, double>(i, col_value[i]));
 			}
 		}
-	} 
+	}
 }
 
 doubleVec HighsAggregate::rowCoeff(int column){
@@ -377,5 +388,5 @@ doubleVec HighsAggregate::rowCoeff(int column){
 		coeffs[i] = colWeight;
 		colWeight = 0;
 	}
-	return coeffs;	
+	return coeffs;
 }

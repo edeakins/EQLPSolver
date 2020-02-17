@@ -1,7 +1,7 @@
 #include "HighsQRmodule.h"
 
 double HighsQR::norm(vector<double>& Aj){
-	double sum = 0; 
+	double sum = 0;
 	for (int i = 0; i < Aj.size(); ++i)
 		sum += Aj[i] * Aj[i];
 	return sqrt(sum);
@@ -27,7 +27,7 @@ void HighsQR::vectorSub(vector<double>& Aj, vector<double>& projection){
 }
 
 double HighsQR::dotProduct(vector<double>& Aj, vector<double>& Ak){
-	double sum = 0; 
+	double sum = 0;
 	for (int i = 0; i < Aj.size(); ++i){
 		sum += Aj[i] * Ak[i];
 	}
