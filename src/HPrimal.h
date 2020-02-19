@@ -11,6 +11,9 @@ private:
     void primalChooseColumn();
     void primalChooseRow();
     void primalUpdate();
+    void primalChooseLinker();
+    void primalCollect();
+    void setNow();
 
     // Model pointer
     HModel *model;

@@ -1,6 +1,9 @@
+
+
 #include "HModel.h"
 #include "HConst.h"
 #include "HTimer.h"
+#include "HGramSchmidt.h"
 
 #include <cctype>
 #include <cmath>
@@ -51,6 +54,9 @@ void HModel::setup(const char *filename) {
     numTot = numCol + numRow;
     if (numRow == 0)
         return;
+
+    boundedVariables.assign(numCol, false);
+    activeSet.reserve(2*numCol);
     
  	initEQs();
     // init and build all working pieces of model
@@ -59,8 +65,10 @@ void HModel::setup(const char *filename) {
 // Split up setup func so that we could re initialize agg model attributes
 void HModel::build(){
 	startingBasis.clear();
+	Basis.clear();
 	// Compute EP refinement
     equitable();
+    // cout << "oldNumCols: " << oldNumCols << endl;
     // Update Master iter count
     masterIter++;
     // Setup random buffers: shuffle the break
@@ -83,7 +91,8 @@ void HModel::build(){
     setup_allocWorking();
 
     // Initialize the values
-    initCost();
+    if (!masterIter - 1)
+    	initCost();
     initBound();
     initValue();
 
@@ -282,7 +291,7 @@ void HModel::setup_loadMPS(const char *filename) {
             }
         }
     }
-
+    // cout << numCol << endl;
     // Load ENDATA and close file
     fclose(file);
 }
@@ -290,12 +299,122 @@ void HModel::setup_loadMPS(const char *filename) {
 /* Deakins - TO DO: Speed this SHIT up */
 // Initialize storage containers that are accesible 
 // by the model class
-void HModel::initStorage(){
-	adjList.assign(numRow + numCol, NULL);
-	C.assign(numRow + numCol, NULL);
-	for (int i = 0; i < numRow + numCol; ++i){
-		A.push_back(new list<int>);
+vector<double> HModel::project(vector<double> &v1, vector<double> &v2){
+	double scale = 0.0;
+	scale = inner_product(v1.begin(), v1.end(), v2.begin(), 0.0)/
+	inner_product(v2.begin(), v2.end(), v2.begin(), 0.0);
+	if (isnan(scale))
+		scale = 0;
+	vector<double> scalar(v1.size(), scale);
+	vector<double> out(v1.size(), 0);
+	transform(v2.begin(), v2.end(), scalar.begin(), out.begin(), multiplies<double>());
+	return out;
+}
+
+bool HModel::dependent(vector<double> &v){
+	bool dep = true;
+	for (int i = 0; i < v.size(); ++i){
+		if (fabs(v[i]) > 1e-5){
+			dep = false;
+		}
+		else{
+			v[i] = 0;
+		}
 	}
+	return dep;
+}
+// Gram - Schmidt vector space basis construction
+void HModel::constructBasis(){
+	int cnt = 0;
+    // cin.get();
+	int rIdx;
+	vector<vector<double> > Aactive;
+	vector<int> basis;
+	vector<double> u(aggNumCol, 0);
+	vector<double> temp;
+	linIndpendent.assign(activeSet.size(), true); 
+	temp.reserve(aggNumCol);
+	ortho.reserve(aggNumCol);
+	cout << "aggNumCol: " << aggNumCol << endl;
+	cout << "aggNumRow: " << aggNumRow << endl;
+	cin.get();
+	HGramSchmidt GS;
+	cout << "activeSet" << endl;
+	for (int i = 0; i < activeSet.size(); ++i){
+		cout << activeSet[i] << endl;
+	}
+	cin.get();
+    // cout << "activeSet size: " << activeSet.size() << endl;
+    // cout << "activeSet" << endl;
+    rCnt = 0;
+	for (int i = 0; i < activeSet.size(); ++i){
+       // cout << activeSet[i] << endl;
+		if (activeSet[i] >= aggNumTot){
+			rIdx = activeSet[i] - aggNumTot;
+			int dominantLink = linkingPairs[rIdx].first;
+			int slaveLink = linkingPairs[rIdx].second;
+			// cout << "dom: " << dominantLink << endl;
+			// cout << "slav: " << slaveLink << endl;
+			// cin.get();
+			u[dominantLink] = 1;
+			u[slaveLink] = -1;
+			Aactive.push_back(u);
+		}
+		else if (activeSet[i] >= aggNumCol){
+			for (int j = 0; j < aggNumCol; ++j){
+				for (int k = aggAstart[j]; k < aggAstart[j + 1]; ++k){
+					if (aggAindex[k] == activeSet[i] - aggNumCol){
+ 						u[j] = aggAvalue[k];
+					}
+				}
+			}
+			Aactive.push_back(u);
+		}
+		else{
+			u[activeSet[i]] = 1;
+			Aactive.push_back(u);
+		}
+		for (int j = 0; j < u.size(); ++j)
+			u[j] = 0;
+	}
+	// cout << "active Mat size: " << Aactive.size() << endl;
+	GS.gramSchmidt(Aactive, startingBasis, activeSet, aggNumCol, aggNumRow, aggNumTot, rCnt, residuals);
+	// cin.get();
+	// cout << "num r variables: " << newVarCnt << endl;
+	// for (int i  = 0; i < linIndpendent.size(); ++i){
+	// 	if (linIndpendent[i]) cnt++;
+	// }
+	// cout << "lin independent active rows: " << cnt << endl;
+	// cout << "num Active: " << activeSet.size() << endl;
+	// for (int i = 0; i < startingBasis.size(); ++i){
+	// 	if (startingBasis[i] >= aggNumCol)
+	// 		startingBasis[i] += newVarCnt;
+	// }
+	// cin.get();
+	// cout << "gramSchmidt Basis" << endl;
+	// for (int i = 0; i < startingBasis.size(); ++i){
+	// 	cout << "var: " << startingBasis[i] << endl;
+	// }
+	// for (int i = 0; i < linIndpendent.size(); ++i)
+	// 	cout << "var: " << activeSet[i] << " linStat: " << linIndpendent[i] << endl;
+	// cout << "rows ----------------------------------------------" << endl;
+	// cout << "[ " << endl;
+	// for (int i = 0; i < Aactive.size(); ++i){
+	// 	for (int j = 0; j < Aactive[i].size(); ++ j){
+	// 		cout << Aactive[i][j] << " ";
+	// 	}
+	// 	cout << ";" << endl;
+	// }
+	// cout << " ]" << endl;
+ //    cin.get();
+	cout << "aggNumRow: " << aggNumRow << endl;
+	cout << "size: " << startingBasis.size() << endl;
+	cin.get();
+}
+void HModel::initStorage(){
+	adjList2.assign(numRow + numCol, vector<node>(0));
+	CC.assign(numRow + numCol, vector<int>(0));
+	A.assign(numRow + numCol, vector<int>(0));
 	SCheck.assign(numRow + numCol, false);
 	mincdeg.assign(numRow + numCol, 0);
 	maxcdeg.assign(numRow + numCol, 0);
@@ -303,110 +422,12 @@ void HModel::initStorage(){
 	isAdj.assign(numRow + numCol, 0);
 	isolates.assign(numRow + numCol, false);
 	prevBasicColor.assign(numCol + numRow, false);
-	prevBasicValue.assign(numCol + numRow, false);
-}
-
-// Append to the end of linked list
-void HModel::append(Node **headRef, int newData){
-	Node *newNode = new Node();
-	Node *last = (*headRef);
-	newNode->data = newData;
-	newNode->next = NULL;
-	if ((*headRef) == NULL){
-		newNode->prev = NULL;
-		(*headRef) = newNode;
-		return;
+	prevBasicValue.assign(numCol + numRow, 0);
+	activeVars.assign(numCol, true);
+	activeConstraints.assign(numRow, false);
+	for (int i = 0; i < numCol + numRow; ++i){
+		activeColors.insert(pair<int, bool>(i, false));
 	}
-	while(last->next != NULL){
-		last = last->next;
-	}
-	last->next = newNode;
-	newNode->prev = last;
-}
-
-// Append func for adjacency list of graph
-void HModel::appendAdj(adjNode **headRef, int newData, double newEntry){
-	adjNode *newNode = new adjNode();
-	adjNode *last = (*headRef);
-	newNode->label = newData;
-	newNode->w = newEntry;
-	newNode->next = NULL;
-	if ((*headRef) == NULL){
-		(*headRef) = newNode;
-		return;
-	}
-	while(last->next != NULL){
-		last = last->next;
-	}
-	last->next = newNode;
-}
-
-// Delete from doubly linked list function
-void HModel::deleteNode(Node **headRef, Node *delet){
-	if (*headRef == NULL || delet == NULL){
-		return;
-	}
-	if (*headRef == delet){
-		*headRef = delet->next;
-	}
-	if(delet->next != NULL){
-		delet->next->prev = delet->prev;
-	}
-	if (delet->prev != NULL){
-		delet->prev->next = delet->next;
-	}
-	free(delet);
-	return;
-}
-
-// Delete from doubly linked list function
-HModel::Node *HModel::findNode(Node **headRef, int label){
-	Node *delet = (*headRef);
-	while(delet != NULL){
-		if (delet->data == label){
-			return delet;
-		}
-		delet = delet->next;
-	}
-	return NULL;
-}
-
-// Doubly linked list searcher function
-bool HModel::exists(Node **headRef, int data){
-	Node *curr = (*headRef);
-	while(curr != NULL){
-		if (curr->data == data){
-			return true;
-		}
-		curr = curr->next;
-	}
-	return false;
-}
-
-int HModel::listSize(Node **headRef){
-	Node *node = (*headRef);
-	int siz = 0;
-	while (node != NULL){
-		siz++;
-		node = node->next;
-	}
-	return siz;
-}
-
-// Printer
-void HModel::printList(Node **headRef)  
-{  
-	Node *node = (*headRef);
-	if (!node){
-		return;
-	} 
-    //cout << "\ncolor class: " << node->data << endl;  
-    while (node != NULL)  
-    {  
-        cout<<" "<< node->data <<" ";  
-        //last = node;  
-        node = node->next;  
-    }  
 }
 
 // Initialize LP as adjacency list for ease of use
@@ -423,10 +444,13 @@ void HModel::lp2Graph(){
 			AvalueCopy[i] = Avalue[i];
 		}
 	}
+	node elemNode;
  	for (int i = 0; i < numCol; ++i){
 		for (int j = Astart[i]; j < Astart[i + 1]; ++j){
-			appendAdj(&adjList[i], Aindex[j] + numCol, AvalueCopy[j]);
-			appendAdj(&adjList[Aindex[j] + numCol], i, AvalueCopy[j]); 
+			elemNode.label = Aindex[j] + numCol; elemNode.weight = AvalueCopy[j];
+			adjList2[i].push_back(elemNode);
+			elemNode.label = i; elemNode.weight = AvalueCopy[j];
+			adjList2[Aindex[j] + numCol].push_back(elemNode);
 		}
 	}
 } 
@@ -481,7 +505,7 @@ void HModel::initEQs(){
 	vCol = varColor;
 	cCol = conColor;
 	for (int i = 0; i < numRow + numCol; ++i){
-		append(&C[initialParts[i]], i);
+		CC[initialParts[i]].push_back(i);
 		color.push_back(initialParts[i]);
 	}
 }
@@ -490,91 +514,98 @@ void HModel::initEQs(){
 void HModel::computeEQs(){
 	/* 41 - 44 -- Note: Stack is already sorted because
 	of how it is created */ 
-	colorsAdj = NULL;
+	colorsAdj2.clear();
 	numParts = 0;
 	/* 45 - */
 	while (!S.empty()){
 		r = S.top();
 		S.pop();
 		SCheck[r] = false;
-		for (v = C[r]; v != NULL; v = v->next){
-			for (w = adjList[v->data]; w != NULL; w = w->next){
-				cdeg[w->label] += w->w;
-				isAdj[w->label]++;
-				if (isAdj[w->label] == 1){
-					A[color[w->label]]->push_back(w->label);
+		for (v2 = CC[r].begin(); v2 != CC[r].end(); ++v2){
+			for (w2 = adjList2[*v2].begin(); w2 != adjList2[*v2].end(); ++w2){
+				cdeg[w2->label] += w2->weight;
+				isAdj[w2->label]++;
+				if (isAdj[w2->label] == 1){
+					A[color[w2->label]].push_back(w2->label);
 				}
-				if (!exists(&colorsAdj, color[w->label])){
-					append(&colorsAdj, color[w->label]);
-				}
-				if (cdeg[w->label] > maxcdeg[color[w->label]]){
-					maxcdeg[color[w->label]] = cdeg[w->label];
+				if (!(find(colorsAdj2.begin(), colorsAdj2.end(), color[w2->label]) != colorsAdj2.end()))
+					colorsAdj2.push_back(color[w2->label]);
+				if (cdeg[w2->label] > maxcdeg[color[w2->label]]){
+					maxcdeg[color[w2->label]] = cdeg[w2->label];
 				}
 			}
 		}
-		for (c = colorsAdj; c != NULL; c = c->next){
-			if (listSize(&C[c->data]) != A[c->data]->size()){
-				mincdeg[c->data] = 0;
+		for (c2 = colorsAdj2.begin(); c2 != colorsAdj2.end(); ++c2){
+			if (CC[*c2].size() != A[*c2].size()){
+				mincdeg[*c2] = 0;
 			}
 			else{
-				mincdeg[c->data] = maxcdeg[c->data];
-				for (u = A[c->data]->begin(); u != A[c->data]->end(); ++u){
-					if (cdeg[*u] < mincdeg[c->data]) mincdeg[c->data] = cdeg[*u];
+				mincdeg[*c2] = maxcdeg[*c2];
+				for (u2 = A[*c2].begin(); u2 != A[*c2].end(); ++u2){
+					if (cdeg[*u2] < mincdeg[*c2]) mincdeg[*c2] = cdeg[*u2];
 				}
 			}
 		}
-		list<int> colorsSplit;
-		for (c = colorsAdj; c!= NULL; c = c->next){
-			if (mincdeg[c->data] < maxcdeg[c->data]){
-				colorsSplit.push_back(c->data);
+		vector<int> colorsSplit;
+		for (c2 = colorsAdj2.begin(); c2 != colorsAdj2.end(); ++c2){
+			if (mincdeg[*c2] < maxcdeg[*c2]){
+				colorsSplit.push_back(*c2);
 			}
 		}
-		colorsSplit.sort();
+		sort(colorsSplit.begin(), colorsSplit.end());
 		for (s = colorsSplit.begin(); s != colorsSplit.end(); ++s){
 			splitColor(*s);
 		}
 		// Reset attributes
-		for (c = colorsAdj; c != NULL; c = c->next){
-			for (u = A[c->data]->begin(); u != A[c->data]->end(); ++u){
-				cdeg[*u] = 0;
-				isAdj[*u] = 0;
+		for (c2 = colorsAdj2.begin(); c2 != colorsAdj2.end(); ++c2){
+			for (u2 = A[*c2].begin(); u2 != A[*c2].end(); ++u2){
+				cdeg[*u2] = 0;
+				isAdj[*u2] = 0;
 			}
-			maxcdeg[c->data] = 0;
-			A[c->data]->clear();
-			deleteNode(&colorsAdj, c);
+			maxcdeg[*c2] = 0;
+			A[*c2].clear();
 		}
-		for (int i = 0; i < C.size(); ++i)
-			if (C[i] != NULL && listSize(&C[i]) == 1) isolates[C[i]->data] = true;
+		colorsAdj2.clear();
+		for (int i = 0; i < CC.size(); ++i)
+			if (CC[i].size() == 1) isolates[CC[i].front()] = true;
 	} 
-	// for (int i = 0; i < C.size(); ++i){
-	// 	if (C[i] != NULL){
-	// 		cout << "color: " << i << endl;
-	// 		printList(&C[i]);
-	// 		cout << "\n" << endl;
-	// 	}
-	// }
 	aggClear();
-	for (int i = 0; i < C.size(); ++i){
-		if (C[i] != NULL){
+	for (int i = 0; i < CC.size(); ++i){
+		if (CC[i].size() != 0){
 			if (i >= numCol){
-				conColorReps.push_back(C[i]->data);
+				conColorReps.push_back(CC[i].front());
 				aggNumRow ++;
 				aggNumTot ++;
 				aggRowIdx.push_back(i);
 			}
 			else{
-				reps.push_back(C[i]->data);
+				reps.push_back(CC[i].front());
 				aggNumCol ++;
 				aggNumTot ++;
 				aggColIdx.push_back(i);
-				for (v = C[i]; v != NULL; v = v->next){
-					vColor[v->data] = i;
+				for (v2 = CC[i].begin(); v2 != CC[i].end(); ++v2){
+					vColor[*v2] = i;
 				}
 			}
 		}
+		// if (CC[i].size() > 0){
+		// cout << "color: " << i << endl;
+		// for (int j = 0; j < CC[i].size(); ++j){
+		// 	cout << CC[i][j] << " ";
+		// }
+		// cout << endl;
+		// cin.get();
+		// }
 	}
+	//cin.get();
 	getNewRows();
-	aggregate();
+	aggregateA();
+	// activeConstraints.assign(aggNumRow, false);
+	aggregateCT();
+	if (masterIter){
+    	prevBasicColor.assign(numCol + numRow, false);
+		prevBasicValue.assign(numCol + numRow, 0);
+	}
 }
 
 // Color splitting (cell split) subroutine
@@ -585,19 +616,19 @@ void HModel::splitColor(int s){
 	pair<map<double, int>::iterator, bool> ret;
 	bool varOrCon = (s < numCol) ? true : false;
 	degSumColor.insert(pair<double, int>(mincdeg[s], s)); 
-	colorFreq[0] = listSize(&C[s]) - A[s]->size(); 
-	for (u = A[s]->begin(); u != A[s]->end(); ++u){
+	colorFreq[0] = CC[s].size() - A[s].size(); 
+	for (u2 = A[s].begin(); u2 != A[s].end(); ++u2){
 		if (varOrCon){
-			ret = degSumColor.insert(pair<double, int>(cdeg[*u], vCol));
+			ret = degSumColor.insert(pair<double, int>(cdeg[*u2], vCol));
 			ret.second ? vCol++ : vCol;
 		}
 		else{
-			ret = degSumColor.insert(pair<double, int>(cdeg[*u], cCol));
+			ret = degSumColor.insert(pair<double, int>(cdeg[*u2], cCol));
 			ret.second ? cCol++ : cCol;
 		}
 	}
-	for (u = A[s]->begin(); u != A[s]->end(); ++u){
-			colorFreq[degSumColor[cdeg[*u]]]++;
+	for (u2 = A[s].begin(); u2 != A[s].end(); ++u2){
+			colorFreq[degSumColor[cdeg[*u2]]]++;
 	}
 	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
 	int instack = (SCheck[s]) ? 1 : 0;
@@ -615,28 +646,26 @@ void HModel::splitColor(int s){
 			}
 		}
 	}
-	for (u = A[s]->begin(); u != A[s]->end(); ++u){
-		if (degSumColor[cdeg[*u]] != s){
-			del = findNode(&C[s], *u);
-			deleteNode(&C[s], del);
-			append(&C[degSumColor[cdeg[*u]]], *u);
-			color[*u] = degSumColor[cdeg[*u]];
+	for (u2 = A[s].begin(); u2 != A[s].end(); ++u2){
+		if (degSumColor[cdeg[*u2]] != s){
+			CC[s].erase(remove(CC[s].begin(), CC[s].end(), *u2), CC[s].end());
+			CC[degSumColor[cdeg[*u2]]].push_back(*u2);
+			color[*u2] = degSumColor[cdeg[*u2]];
 		}
 	}
 }
 
 // Isolation function
 void HModel::isolate(int i){
-	del = findNode(&C[color[i]], i);
+	CC[color[i]].erase(remove(CC[color[i]].begin(), CC[color[i]].end(), i), CC[color[i]].end());
 	int newCol = vCol;
 	vCol++;
-	deleteNode(&C[color[i]], del);
-	append(&C[newCol], i);
+	CC[newCol].push_back(i);
 	color[i] = newCol;
-	for (int i = 0; i < C.size(); ++i){
-		if (C[i] != NULL){
-			if (listSize(&C[i]) == 1){
-				isolates[C[i]->data] = true;
+	for (int i = 0; i < CC.size(); ++i){
+		if (CC[i].size() != 0){
+			if (CC[i].size() == 1){
+				isolates[CC[i].front()] = true;
 			}
 		}
 	}
@@ -652,10 +681,12 @@ void HModel::aggClear(){
 	numNewRows = 0;
 	numNewCols = 0;
 	targ = -1;
+	historyColumnIn.clear();
+	historyColumnOut.clear();
 	vColor.assign(numCol, -1);
 	reps.clear();
 	conColorReps.clear();
-	aggAdjList.clear();
+	aggAdjList2.clear();
 	aggRowIdx.clear();
 	aggColIdx.clear();
 	aggAstart.clear();
@@ -666,6 +697,13 @@ void HModel::aggClear(){
     aggColUpper.clear();
     aggRowLower.clear();
     aggRowUpper.clear();
+    residuals.clear();
+    startingBasicValue.clear();
+    basicSlacks.assign(numRow, false);
+    activeSet.clear();
+	ortho.clear();
+	linkingPairs.clear();
+	// activeConstraints.clear();
 }
 
 // Find coefficients for aggregated variables
@@ -673,17 +711,17 @@ vector<int> HModel::getCoeff(int color){
 	vector<int> coeff;
 	int count = 0;
 	for (int i = 0; i < aggRowIdx.size(); ++i){
-		for (w = adjList[C[aggRowIdx[i]]->data]; w != NULL; w = w->next){
-			if (vColor[w->label] == color)
-				count += w->w;
+		for (w2 = adjList2[CC[aggRowIdx[i]].front()].begin(); w2 != adjList2[CC[aggRowIdx[i]].front()].end(); ++w2){
+			if (vColor[w2->label] == color)
+				count += w2->weight;
 		}
 		coeff.push_back(count);
 		count = 0;
 	}
-	for (int i = 0; i < aggAdjList.size(); ++i){
-		for (w = aggAdjList[i]; w != NULL; w = w->next){
-			if (w->label == color)
-				count += w->w;
+	for (int i = 0; i < aggAdjList2.size(); ++i){
+		for (w2 = aggAdjList2[i].begin(); w2 != aggAdjList2[i].end(); ++w2){
+			if (w2->label == color)
+				count += w2->weight;
 		}
 		coeff.push_back(count);
 		count = 0;
@@ -703,7 +741,8 @@ int HModel::getObj(int color){
 }
 
 // Aggregate variables based on current EP
-void HModel::aggregate(){
+void HModel::aggregateA(){
+	aggColCost.assign(aggNumCol, 0);
 	aggAstart.push_back(0);
 	for (int i = 0; i < aggColIdx.size(); ++i){
 		vector<int> coeff = getCoeff(aggColIdx[i]);
@@ -716,10 +755,11 @@ void HModel::aggregate(){
 		if (aggColIdx[i] < numCol){
 			if (masterIter && prevBasicColor[oldColor[reps[i]]]){
 				startingBasis.push_back(i);
+				historyColumnIn.push_back(i);
 				startingBasicValue.push_back(prevBasicValue[oldColor[reps[i]]]);
 			}
-			aggColLower.push_back(colLower[C[aggColIdx[i]]->data]);
-			aggColUpper.push_back(colUpper[C[aggColIdx[i]]->data]);
+			aggColLower.push_back(colLower[CC[aggColIdx[i]].front()]);
+			aggColUpper.push_back(colUpper[CC[aggColIdx[i]].front()]);
 		}
 		else{
 			aggColLower.push_back(0);
@@ -727,37 +767,238 @@ void HModel::aggregate(){
 		}
 		aggAstart.push_back(aggAindex.size());
 	}
+	numBasicSlacks = 0;
 	for (int i = 0; i < aggRowIdx.size() + numNewRows; ++i){
-		if (i < aggRowIdx.size()){
+		if (i < aggRowIdx.size()){ 
 			if (masterIter && prevBasicColor[oldColor[conColorReps[i]]]){
 				startingBasis.push_back(i + aggNumCol);
-				startingBasicValue.push_back(prevBasicValue[oldColor[conColorReps[i]]]);
+				basicSlacks[i] = true;
+				numBasicSlacks ++;
+				historyColumnIn.push_back(i + aggNumCol);
+				//startingBasicValue.push_back(prevBasicValue[oldColor[conColorReps[i]]]);
 			}
-			aggRowLower.push_back(rowLower[C[aggRowIdx[i]]->data - numCol]);
-			aggRowUpper.push_back(rowUpper[C[aggRowIdx[i]]->data - numCol]);
+			else{
+				available.push_back(i + aggNumCol);
+			}
+			aggRowLower.push_back(rowLower[CC[aggRowIdx[i]].front() - numCol]);
+			aggRowUpper.push_back(rowUpper[CC[aggRowIdx[i]].front() - numCol]);
+			aggRhs.push_back(Rhs[CC[aggRowIdx[i]][0] - numCol]);
 		}
 		else{
 			aggRowLower.push_back(0);
 			aggRowUpper.push_back(0);
 		}
 	}
-	//if (!masterIter){
-	for (int i = 0; i < aggColIdx.size(); ++i){
-		if (aggColIdx[i] < numCol)
-			aggColCost.push_back(getObj(aggColIdx[i]));
-		else
-			aggColCost.push_back(0);
+	if (masterIter){
+		setConstrs();
+		setVars();
+		constructBasis();
+		cin.get();
+		createNewRows();
+		aggAstart.clear();
+		aggAindex.clear();
+		aggAvalue.clear();
+		aggRowUpper.clear();
+		aggRowLower.clear();
+		aggColUpper.clear();
+		aggColLower.clear();
+		aggColCost.assign(aggNumCol, 0);
+		aggAstart.push_back(0);
+		for (int i = 0; i < aggColIdx.size(); ++i){
+			vector<int> coeff = getCoeff(aggColIdx[i]);
+			for (int j = 0; j < coeff.size(); ++j){
+				if (coeff[j]){
+					aggAvalue.push_back(coeff[j]);
+					aggAindex.push_back(j);
+				}
+			}
+			if (aggColIdx[i] < numCol){
+				if (masterIter && prevBasicColor[oldColor[reps[i]]]){
+					//startingBasis.push_back(i);
+					historyColumnIn.push_back(i);
+					startingBasicValue.push_back(prevBasicValue[oldColor[reps[i]]]);
+				}
+				aggColLower.push_back(colLower[CC[aggColIdx[i]].front()]);
+				aggColUpper.push_back(colUpper[CC[aggColIdx[i]].front()]);
+				aggRhs.push_back(Rhs[CC[aggRowIdx[i]][0] - numCol]);
+			}
+			else{
+				aggColLower.push_back(0);
+				aggColUpper.push_back(0);
+			}
+			aggAstart.push_back(aggAindex.size());
+		}
+		aggRhs.clear();
+		numBasicSlacks = 0;
+		for (int i = 0; i < aggRowIdx.size() + numNewRows; ++i){
+			if (i < aggRowIdx.size()){ 
+				if (masterIter && prevBasicColor[oldColor[conColorReps[i]]]){
+					startingBasis.push_back(i + aggNumCol);
+					basicSlacks[i] = true;
+					numBasicSlacks ++;
+					historyColumnIn.push_back(i + aggNumCol);
+					//startingBasicValue.push_back(prevBasicValue[oldColor[conColorReps[i]]]);
+				}
+				else{
+					available.push_back(i + aggNumCol);
+				}
+				aggRowLower.push_back(rowLower[CC[aggRowIdx[i]].front() - numCol]);
+				aggRowUpper.push_back(rowUpper[CC[aggRowIdx[i]].front() - numCol]);
+				aggRhs.push_back(Rhs[CC[aggRowIdx[i]][0] - numCol]);
+			}
+			else{
+				aggRowLower.push_back(0);
+				aggRowUpper.push_back(0);
+			}
+		}
+		setVars();
+		setConstrs();
+		// for (int i = 0; i < aggRhs.size(); ++i){
+		// 	cout << aggRhs[i] << endl;
+		// }
+		Basis.reserve(aggNumCol);
+		Basis.assign(aggNumCol, false);
+		for (int i = 0; i < startingBasis.size(); ++i){
+			if (startingBasis[i] < aggNumCol) Basis[startingBasis[i]] = true;
+		}
+        // for (int i = 0; i < startingBasis.size(); ++i){
+        //     cout << "var: " << startingBasis[i] << "  is in the basis " << endl;
+        // }
+        // for (int i  = 0; i < aggNumCol; ++i){
+        // 	cout << "var: " << i << endl;
+        // 	for (int j = aggAstart[i]; j < aggAstart[i + 1]; ++j){
+        // 		cout << "entry: " << aggAvalue[j] << endl;
+        // 	}
+        // }
+  //       cout << aggNumCol << endl;
+		// cout << aggNumRow << endl;
+		// cout << newVarCnt << endl;
+  //       cin.get();
+		// for (int i = 0; i < aggNumRow; ++i){
+		// 	cout << "row: " << i << " upper: " << aggRowUpper[i] << " lower: " << aggRowLower[i] << endl;
+		// }
+		// cin.get();
 	}
-	// for (int i = 0; i < startingBasis.size(); ++i)
-	// 	cout << "var: " << startingBasis[i] << " has basic value: " << startingBasicValue[i] << endl;
+}
 
-	// cout << "matrix" << endl;
-	// for (int i = 0; i < aggColIdx.size(); ++i){
-	// 	cout << "col: " << aggColIdx[i] << endl;
-	// 	for (int j = aggAstart[i]; j < aggAstart[i + 1]; ++j){
-	// 		cout << "coeff: " << aggAvalue[j] << " at row: " << aggAindex[j] << endl;
-	// 	}
+void HModel::setVars(){
+	int rep = 0;
+	numActiveVars = 0;
+	for (int i = 0; i < reps.size(); ++i){
+		rep = reps[i];
+		// cout << "rep: " << i << endl; 
+		// cout << "newColor: " << color[rep] << endl;
+		// cin.get();
+		if (!prevBasicColor[oldColor[rep]]){
+			// cout << "oldColor: " << oldColor[rep] << endl;
+			// cin.get();
+			boundedVariables[color[rep]] = true;
+			activeSet.push_back(i);
+			numActiveVars ++;
+			//eigenMap[aggNumRow + i] = numActiveVars - 1;
+			aggColLower[i] = prevBasicValue[oldColor[rep]];
+			aggColUpper[i] = prevBasicValue[oldColor[rep]];
+		}
+	}
+	// for (int i = 0; i < reps.size(); ++i){
+	// 	cout << "rep: " << color[reps[i]] << endl;
+	// 	cout << "upper bound: " << aggColUpper[color[reps[i]]] << endl;
+	// 	cout << "lower bound: " << aggColLower[color[reps[i]]] << endl;
+	// 	cout << " " << endl;
 	// }
+	// cin.get();
+	for (int i = 0; i < linkingPairs.size(); ++i){
+		activeSet.push_back(i + idxCnt + 1);
+	}
+}
+
+void HModel::setConstrs(){
+	cout << "active size" << activeConstraints.size() << endl;
+	int rep = 0;
+	double absLower, absUpper;
+	double minVal;
+	numActiveConstrs = 0;
+	idxCnt = 0;
+	for (int i = 0; i < conColorReps.size(); ++i){
+		idxCnt = i + aggNumCol;
+		rep = conColorReps[i];
+		// for (int j = 0; j < activeConstraints.size(); ++j){
+		// 	cout << "constraint color: " << j << " active stat: " << activeConstraints[j] << endl;
+		// }
+		// cout << oldColor[rep] << endl;
+		// cin.get();
+		if (!prevBasicColor[oldColor[rep]]){
+				// cout << "activeConstraints: " << color[rep] << endl;
+				// cout << color[rep] - numCol << endl;
+				// cin.get();
+			//activeConstraints[color[rep] - numCol] = true;
+			activeSet.push_back(idxCnt);
+			numActiveConstrs ++;
+			absLower = fabs(rowLower[rep - numCol]);
+			absUpper = fabs(rowUpper[rep - numCol]);
+			minVal = min(absLower, absUpper);
+			aggRowLower[i] = minVal;
+			aggRowUpper[i] = minVal;
+		}
+	}
+	// for (int i = 0; i < aggNumRow; ++i){
+	// 	cout << "row: " << i << " upper: " << aggRowUpper[i] << " lower: " << aggRowLower[i] << endl;
+	// }
+	// cin.get();
+}
+
+void HModel::collectActiveConstraints(){
+	testActive.getActiveConstraints(basicIndex, baseValue, activeConstraints, aggRhs, workValue);
+	for (int i = 0; i < basicIndex.size(); ++i){
+		if (basicIndex[i] >= oldNumCols)
+			continue;
+		else if (fabs(baseValue[i] - aggColLower[basicIndex[i]]) < 1e-6)
+			continue;
+		else if (fabs(baseValue[i] - aggColUpper[basicIndex[i]]) < 1e-6)
+			continue;
+		activeVars[basicIndex[i]] = false;
+	}
+	for (int i = 0; i < oldNumCols; ++i){
+		if (activeVars[i]){
+			prevBasicValue[i] = workValue[i];
+		}
+	}
+	// for (int i = 0; i < oldNumCols; ++i){
+	// 	cout << "var: " << i << " = " << prevBasicValue[i] << endl;
+	// }
+	// cin.get();
+}
+
+void HModel::updateActiveConstraints(){
+	for (int i = 0; i < oldNumRows; ++i){
+		if (activeConstraints[i]){
+			aggRowUpper[i] = aggRhs[i];
+			aggRowLower[i] = aggRhs[i];
+			activeColors[aggRowIdx[i]] = true;
+		}
+	}
+}
+
+void HModel::updateActiveVars(){
+	for (int i = 0; i < oldNumCols; ++i){
+		if (activeVars[i]){
+			aggColUpper[i] = 0;
+			aggColLower[i] = 0;
+			activeColors[i] = true;
+		}
+	}
+}
+
+// Aggregate c^Tx 
+void HModel::aggregateCT(){
+	if (masterIter){
+		aggColCost.assign(aggNumCol, 0);
+	}
+	else{
+		for(int i = 0; i < aggColIdx.size(); ++i){
+			aggColCost[i] = getObj(aggColIdx[i]);
+		}
+	}
 }
 
 // Check if parition is discretized
@@ -775,55 +1016,129 @@ bool HModel::discrete(){
 
 // Create pairs for residual variables
 void HModel::getNewRows(){
-	if (!masterIter)
+	if (!masterIter){
+		oldNumCols = aggNumCol;
+		oldNumRows = aggNumRow;
 		return;
+	}
 	vector<int> leftOvers;
+	vector<node> pushBackList;
+	aggAdjList2.reserve(numCol);
 	for (int i = 0; i < reps.size(); ++i){
-		if (oldColor[reps[i]] == oldColor[iso] && reps[i] != iso){
-			aggAdjList.push_back(NULL);
-			appendAdj(&aggAdjList[numNewRows], color[iso], 1);
-			appendAdj(&aggAdjList[numNewRows], color[reps[i]], -1);
-			appendAdj(&aggAdjList[numNewRows], numTot + numNewCols, -1);
-			aggColIdx.push_back(numTot + numNewCols - 1);
-			numNewRows++;
-			numNewCols++;
+ 		if (oldColor[reps[i]] == oldColor[iso] && reps[i] != iso){// && !isolates[reps[i]]){
+ 			linkingPairs.push_back(make_pair(color[iso], color[reps[i]]));
+			// nodeElem.label = color[iso]; nodeElem.weight = 1;
+			// pushBackList.push_back(nodeElem);
+			// nodeElem.label = color[reps[i]]; nodeElem.weight = -1;
+			// pushBackList.push_back(nodeElem);
+			// nodeElem.label = numTot + numNewCols; nodeElem.weight = -1;
+			// pushBackList.push_back(nodeElem);
+			// aggAdjList2.push_back(pushBackList);
+			// aggColIdx.push_back(numTot + numNewCols);
+			// numNewRows++;
+			// numNewCols++;
+			// pushBackList.clear();
 		}
-		else if (oldColor[reps[i]] != oldColor[iso] && reps[i] != iso){
+		else if (oldColor[reps[i]] != oldColor[iso] && reps[i] != iso){ // && !isolates[reps[i]]){
 			leftOvers.push_back(reps[i]);
 		}
 	}
-	sort(leftOvers.begin(), leftOvers.end(), greater<int>());
+	//sort(leftOvers.begin(), leftOvers.end(), greater<int>());
  	while(!leftOvers.empty()){
 		targ = leftOvers.back();
 		leftOvers.pop_back();
 		for (int i = 0; i < leftOvers.size(); ++i){
 			if (oldColor[targ] == oldColor[leftOvers[i]]){
-				aggAdjList.push_back(NULL);
-				appendAdj(&aggAdjList[numNewRows], color[targ], 1);
-				appendAdj(&aggAdjList[numNewRows], color[leftOvers[i]], -1);
-				appendAdj(&aggAdjList[numNewRows], numTot + numNewCols, -1);
-				aggColIdx.push_back(numTot + numNewCols - 1);
-				numNewRows++;
-				numNewCols++;
+				linkingPairs.push_back(make_pair(color[targ], color[leftOvers[i]]));
+				// nodeElem.label = color[targ]; nodeElem.weight = 1;
+				// pushBackList.push_back(nodeElem);
+				// nodeElem.label = color[leftOvers[i]]; nodeElem.weight = -1;
+				// pushBackList.push_back(nodeElem);
+				// nodeElem.label = numTot + numNewCols; nodeElem.weight = -1;
+				// pushBackList.push_back(nodeElem);
+				// aggAdjList2.push_back(pushBackList);
+				// aggColIdx.push_back(numTot + numNewCols);
+				// numNewRows++;
+				// numNewCols++;
+				// pushBackList.clear();
 			}
 		}
 	}
-	aggNumTot += numNewRows + numNewCols;
-	aggNumCol += numNewCols;
-	aggNumRow += numNewRows;
+	oldNumCols = aggNumCol;
+	oldNumRows = aggNumRow;
+	// for (int i = 0; i < linkingPairs.size(); ++i){
+	// 	cout << "var_" << linkingPairs[i].first << " linked to var_" << linkingPairs[i].second << endl; 
+	// }
+	// cin.get();
+	// for (int i = 0; i < linkingPairs.size(); ++i){
+	// 	cout << "linkingPairs: " << linkingPairs[i].first << ", " << linkingPairs[i].second << endl;
+	// }
+	// cin.get();
+	// aggNumTot += numNewRows + numNewCols;
+	// aggNumCol += numNewCols;
+	// aggNumRow += numNewRows;
+	// for (int i = aggNumCol - numNewCols; i < aggNumCol; ++i){
+	// 	residuals.push_back(i);
+	// }
+	// basicResiduals.assign(numNewCols, false);
+}
+
+// Create the rows that are actually needed
+void HModel::createNewRows(){
+	node nodeElem;
+	vector<node> pushBackList;
+	int idx;
+	int linkRow;
+	int dominantLink;
+	int slaveLink;
+	for (int i = 0; i < rCnt; ++i){
+		idx = residuals[i];
+		residuals[i] += oldNumCols;
+		// cout << "oldNumCols: " << oldNumCols << endl;
+		// cout << "residual: " << residuals[i] << endl;
+		// cout << "idx: " << idx << endl;
+		dominantLink = linkingPairs[idx].first;
+		slaveLink = linkingPairs[idx].second;
+		// cout << "dom: " << dominantLink << endl;
+		// cout << "slav: " << slaveLink << endl;
+		// cin.get();
+		nodeElem.label = dominantLink; nodeElem.weight = 1;
+		pushBackList.push_back(nodeElem);
+		nodeElem.label = slaveLink; nodeElem.weight = -1;
+		pushBackList.push_back(nodeElem);
+		nodeElem.label = numTot + numNewCols; nodeElem.weight = -1;
+		// cout << "new Color: " << numTot + numNewCols << endl;
+		// cin.get();
+		pushBackList.push_back(nodeElem);
+		aggAdjList2.push_back(pushBackList);
+		aggColIdx.push_back(numTot + numNewCols);
+		numNewRows++;
+		numNewCols++;
+		pushBackList.clear();
+	}
+	// for (int i = 0; i < aggAdjList2.size(); ++i){
+	// 	for (int j = 0; j < aggAdjList2[i].size(); ++j){
+	// 		cout << aggAdjList2[i][j].label << " with weight: " << aggAdjList2[i][j].weight << endl;
+	// 	}
+	// }
+	// cin.get();
+	// aggNumRow += numNewRows;
+	// aggNumCol += numNewCols;
+	// aggNumTot = aggNumCol + aggNumRow;
+	// cout << "aggNumTot: " << aggNumTot << endl;
+	// cout << "aggNumCol: " << aggNumCol << endl;
+	// cout << "aggNumRow: " << aggNumRow << endl;
+	// cin.get();
+	// for (int i = aggNumCol - numNewCols; i < aggNumCol; ++i){
+	// 	// cout << i << endl;
+	// 	residuals.push_back(i);
+	// }
+	// cin.get();
 }
 
 // EP until discrete partition
 void HModel::equitable(){
 	computeEQs();
-	// isoIter = 0;
-	// for (int i = 0; i < isolates.size(); ++i){
-	// 	if (isolates[i] == false){
-	// 		isoIter ++;
-	// 		isolate(i);
-	// 		cin.get();
-	// 	}
-	// }
 }
 
 void HModel::setup_transposeLP() {
@@ -945,7 +1260,7 @@ void HModel::setup_transposeLP() {
     }
 
     // Transpose the problem!
-    swap(aggNumCol, aggNumCol);
+    swap(aggNumRow, aggNumCol);
     aggAstart.swap(ARstart);
     aggAindex.swap(ARindex);
     aggAvalue.swap(ARvalue);
@@ -1239,15 +1554,45 @@ void HModel::setup_shuffleColumn() {
 void HModel::setup_allocWorking() {
     // Setup starting base
     basicIndex.resize(aggNumRow);
-    for (int iRow = 0; iRow < aggNumRow; iRow++)
-        basicIndex[iRow] = iRow + aggNumCol;
-    nonbasicFlag.assign(aggNumTot, 0);
+    nonbasicFlag.assign(aggNumTot, 1);
     nonbasicMove.resize(aggNumTot);
-    for (int i = 0; i < aggNumCol; i++)
-        nonbasicFlag[i] = 1;
-
+    if (masterIter - 1){
+    	matrix.setupOC(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0], Basis);
+    	testActive.setupOC(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0], Basis);
+    }
+    else{
+    	matrix.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0]);
+    	testActive.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0]);
+    }
+    // cout << "startingBasis size = " << startingBasis.size() << endl;
+    if (masterIter - 1){
+    	for (int iRow = 0; iRow < aggNumRow; iRow++){
+    		basicIndex[iRow] = startingBasis[iRow];
+    	}
+    	for (int i = 0; i < startingBasis.size(); ++i)
+    		nonbasicFlag[startingBasis[i]] = 0;
+    }
+    else{
+	    for (int iRow = 0; iRow < aggNumRow; iRow++)
+	        basicIndex[iRow] = iRow + aggNumCol;
+	    nonbasicFlag.assign(aggNumTot, 0);
+	    nonbasicMove.resize(aggNumTot);
+	    for (int i = 0; i < aggNumCol; i++)
+	        nonbasicFlag[i] = 1;
+	}
+	// for (int i  = 0; i < basicIndex.size(); ++i){
+	// 	cout << "var_" << basicIndex[i] << endl;
+	// }
     // Matrix, factor
-    matrix.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0]);
+    /* Deakins */
+    // if (masterIter - 1){
+    // 	matrix.setupOC(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0], Basis);
+    // 	testActive.setupOC(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0], Basis);
+    // }
+    // else{
+    // 	matrix.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0]);
+    // 	testActive.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0]);
+    // }
     factor.setup(aggNumCol, aggNumRow, &aggAstart[0], &aggAindex[0], &aggAvalue[0],
             &basicIndex[0]);
     limitUpdate = 5000;
@@ -1255,6 +1600,7 @@ void HModel::setup_allocWorking() {
     // Setup other buffer
     buffer.setup(aggNumRow);
     bufferLong.setup(aggNumCol);
+    bufferNonBasic.setup(aggNumRow);
 
     // Setup bounds and solution spaces
     workCost.assign(aggNumTot, 0);
@@ -1269,14 +1615,20 @@ void HModel::setup_allocWorking() {
     baseLower.assign(aggNumRow, 0);
     baseUpper.assign(aggNumRow, 0);
     baseValue.assign(aggNumRow, 0);
+    nonBaseValue.assign(aggNumRow, 0);
 }
 
-void HModel::initCost(int perturb) {
+void HModel::initCost(int perturb){
+	// for (int i = 0; i < aggNumCol; ++i){
+	// 	cout << "var_" << i << " obj = " << aggColCost[i] << endl;
+	// }
     // Copy the cost
-    for (int i = 0; i < aggNumCol; i++)
+    for (int i = 0; i < aggNumCol; i++){
         workCost[i] = aggColCost[i];
-    for (int i = aggNumCol; i < aggNumTot; i++)
-        workCost[i] = 0;
+    }
+    // for (int i = aggNumCol; i < aggNumTot; i++){
+    //     workCost[i] = 0;
+    // }
     workShift.assign(aggNumTot, 0);
 
     // See if we want to skip perturbation
@@ -1366,6 +1718,10 @@ void HModel::initBound(int phase) {
 }
 
 void HModel::initValue() {
+	// if (masterIter - 1){
+	// 	for (int i = 0; i < baseValue.size(); ++i)
+	// 		baseValue[i] = startingBasicValue[i];
+	// }
     for (int i = 0; i < aggNumTot; i++) {
         if (nonbasicFlag[i]) {
             if (workLower[i] == workUpper[i]) {
@@ -1389,6 +1745,8 @@ void HModel::initValue() {
             nonbasicMove[i] = 0;
         }
     }
+    // for (int i = 0; i < aggNumTot; ++i)
+    // 	cout << "var_" << i << " workValue = " << workValue[i] << endl;
 }
 
 void HModel::computeFactor() {
@@ -1493,24 +1851,36 @@ void HModel::correctDual(int *freeInfeasCount) {
 }
 
 void HModel::computePrimal() {
+	// cout << "aggNumTot: " << aggNumTot << endl;
+	// cout << "aggNumRow: " << aggNumRow << endl;
+	// cout << "aggNumCol: " << aggNumCol << endl;
+	// cin.get();
     buffer.clear();
-    for (int i = 0; i < aggNumTot; i++)
+    bufferNonBasic.clear();
+    for (int i = 0; i < aggNumTot; i++){
         if (nonbasicFlag[i] && workValue[i] != 0)
             matrix.collect_aj(buffer, i, workValue[i]);
+    }
+    
     factor.ftran(buffer, 1);
+    //cout << "nonbasis vals" << endl;
     for (int i = 0; i < aggNumRow; i++) {
         int iCol = basicIndex[i];
         baseValue[i] = -buffer.array[i];
         baseLower[i] = workLower[iCol];
         baseUpper[i] = workUpper[iCol];
+        // cout << -buffer.array[i] << endl;
     }
+    // cin.get();
 }
 
 void HModel::computeObject(int phase) {
     objective = 0;
     for (int i = 0; i < aggNumTot; i++)
-        if (nonbasicFlag[i])
+        if (nonbasicFlag[i]){
+        	//cout << "var_" << i << " workDual = " << workValue[i] << endl;
             objective += workValue[i] * workDual[i];
+        }
     if (phase != 1)
         objective -= objOffset;
 }
@@ -1548,6 +1918,10 @@ void HModel::updateMatrix(int columnIn, int columnOut) {
 
 void HModel::updatePivots(int columnIn, int rowOut, int sourceOut) {
     int columnOut = basicIndex[rowOut];
+ //    if (masterIter - 1){
+	//     if (columnOut >= 0)
+	// 		basicVars[columnOut] = false;
+	// }
 
     // Incoming variable
     basicIndex[rowOut] = columnIn;
@@ -1568,8 +1942,10 @@ void HModel::updatePivots(int columnIn, int rowOut, int sourceOut) {
         workValue[columnOut] = workUpper[columnOut];
         nonbasicMove[columnOut] = -1;
     }
-
     countUpdate++;
+    // cout << "columnOut: " << columnOut << endl;
+    // cout << "workValue: " << workValue[columnOut] << endl;
+    // cin.get();
 }
 
 void HModel::changeUpdate(int updateMethod) {
@@ -1645,3 +2021,8 @@ void HModel::writePivots(const char *suffix) {
 void HModel::writeMPS(const char *filename) {
 
 }
+
+void HModel::cleanUp(){
+	adjList2.clear();
+	aggAdjList2.clear();
+ }

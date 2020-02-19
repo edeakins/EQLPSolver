@@ -1,0 +1,1 @@
+/usr/local/bin/gfortran -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -dynamiclib -Wl,-headerpad_max_install_names  -o ../lib/libFortranHighs.dylib -install_name @rpath/libFortranHighs.dylib CMakeFiles/FortranHighs.dir/interfaces/highs_lp_solver.f90.o ../lib/libhighs.1.0.0.dylib 

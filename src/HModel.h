@@ -14,6 +14,9 @@
 #include <list>
 #include <map>
 #include <tuple>
+#include <numeric>
+#include <functional>
+//#include <pair>
 using namespace std;
 
 const int LP_Status_Unset = -1;
@@ -50,25 +53,33 @@ enum HSOL_STR_OPTIONS {
 class HModel {
 public:
     /* Deakins - Classes */
-    class Node{
-    public:
-        int data;
-        Node *next;
-        Node *prev;
-        Node(){
-            next = NULL;
-            prev = NULL;
-        }
-    };
-    class adjNode{
+    typedef struct node{
     public:
         int label;
-        int w;
-        adjNode *next;
-        adjNode(){
-            next = NULL;
-        }
-    };
+        double weight;
+        
+    }node;
+    typedef vector<int> intVec;
+    typedef vector<node> nodeVec;
+    // class Node{
+    // public:
+    //     int data;
+    //     Node *next;
+    //     Node *prev;
+    //     Node(){
+    //         next = NULL;
+    //         prev = NULL;
+    //     }
+    // };
+    // class adjNode{
+    // public:
+    //     int label;
+    //     int w;
+    //     adjNode *next;
+    //     adjNode(){
+    //         next = NULL;
+    //     }
+    // };
     HModel();
     void setup(const char *filename);
     void setup_loadMPS(const char *filename);
@@ -136,6 +147,8 @@ public:
     double *getBaseValue() {
         return &baseValue[0];
     }
+    void collectActiveConstraints();
+    
 
     void initCost(int perturb = 0);
     void initBound(int phase = 2);
@@ -171,29 +184,44 @@ public:
 
     // Deakins - functions
     void initStorage();
-    void push(Node **headRef, int newData);
-    void insertA(Node *prevNode, int newData);
-    void insertB(Node **headRef, Node *nextNode, int newData);
-    void append(Node **headRef, int newData);
-    void appendAdj(adjNode **headRef, int newData, double newEntry);
-    Node *findNode(Node **headRef, int label);
-    void deleteNode(Node **headRef, Node *del);
-    bool exists(Node **headRef, int data);
-    int listSize(Node **headRef);
+    //void push(Node **headRef, int newData);
+    // void insertA(Node *prevNode, int newData);
+    // void insertB(Node **headRef, Node *nextNode, int newData);
+    // void append(Node **headRef, int newData);
+    // void appendAdj(adjNode **headRef, int newData, double newEntry);
+    // Node *findNode(Node **headRef, int label);
+    // void deleteNode(Node **headRef, Node *del);
+    // bool exists(Node **headRef, int data);
+    // int listSize(Node **headRef);
     void initEQs();
     void computeEQs();
     void lp2Graph();
     void splitColor(int s);
-    void printList(Node **headRef);
+    // void printList(Node **headRef);
+    // void printAdjList(adjNode **headRef);
     void isolate(int i);
     void equitable();
     void aggClear();   
-    void aggregate();
+    void aggregateA();
+    void aggregateCT();
     vector<int> getCoeff(int color);
     int getObj(int color);
     void getNewRows();
+    void createNewRows();
+    bool singularity();
     bool discrete();
-    void collectHist();
+    void setVars();
+    void setConstrs();
+    void getNonBasicVars();
+    void getActiveConstrs();
+    void getBasis();
+    vector<double> project(vector<double> &v1, vector<double> &v2);
+    void constructBasis();
+    void subtract(vector<double> &v1, vector<double> &v2);
+    bool dependent(vector<double> &v);
+    void cleanUp();
+    void updateActiveConstraints();
+    void updateActiveVars();
 
     // Solving options
     int intOption[INTOPT_COUNT];
@@ -224,6 +252,7 @@ public:
     int numCol;
     int numRow;
     int numTot;
+    int rCnt;
     vector<int> Astart;
     vector<int> Aindex;
     vector<double> Avalue;
@@ -243,16 +272,26 @@ public:
     int numParts;
     int iso = -1;   
     int prevColor; 
+    int oldNumCols;
+    int oldNumRows;
     int numNewRows;
     int numNewCols;
     int targ; 
-    int maxColor;    
+    int maxColor;  
+    int numBasicSlacks;
+    int degenerates;
+    int numActiveConstrs;
+    int numActiveVars;
+
     // Storage - vectors for EPs
-    vector<adjNode *> adjList;
-    vector<adjNode *> aggAdjList;
+    vector<nodeVec> adjList2;
+    // vector<adjNode *> adjList;
+    // vector<adjNode *> aggAdjList;
+    vector<nodeVec> aggAdjList2;
     vector<double> Rhs;
-    vector<Node *> C;
-    vector<list<int> *> A;
+    // vector<Node *> C;
+    vector<intVec> CC;
+    vector<intVec> A;
     vector<double> maxcdeg;
     vector<double> mincdeg;
     vector<int> initialParts;
@@ -267,23 +306,42 @@ public:
     vector<int> reps;
     vector<int> conColorReps;
     vector<int> oldColor;
+    vector<int> residuals;
+    vector<bool> basicSlacks;
+    vector<int> singularIdx;
+    vector<double> aggRhs;
 
     // Storage - stacks
     stack<int> S;
     // Doubly linked lists
-    Node *colorsAdj;
-    Node *v;
-    Node *c;
-    Node *del;
+    // Node *colorsAdj = (Node*) malloc(sizeof(Node));
+    // Node *v = (Node*) malloc(sizeof(Node));
+    // Node *c = (Node*) malloc(sizeof(Node));
+    // Node *del = (Node*) malloc(sizeof(Node));
+    // // Linked lists
+    // adjNode *w = (adjNode*) malloc(sizeof(adjNode));
+    vector<int> colorsAdj2;
+    vector<int>::iterator c2;
+    vector<int>::iterator v2;
+    vector<node>::iterator w2;
+    vector<int>::iterator u2;
+    // Node *colorsAdj;
+    // Node *v;
+    // Node *c;
+    // Node *del;
     // Linked lists
-    adjNode *w;
+    // adjNode *w;
     // Lists
-    list<int>::iterator u;
-    list<int>::iterator s;
+    vector<int>::iterator u;
+    vector<int>::iterator s;
     // Storage for aggregate models
     int aggNumCol;
     int aggNumRow;
     int aggNumTot;
+    int idxCnt;
+    vector<bool> linIndpendent;
+    vector<pair<int, int> > linkingPairs;
+    vector<bool> Basis;
     vector<int> aggColIdx;
     vector<int> aggRowIdx;
     vector<int> aggAstart;
@@ -297,8 +355,17 @@ public:
     vector<int> startingBasis;
     vector<double> startingBasicValue;
     vector<bool> prevBasicColor;
-    vector<double> prevBasicValue;
-    
+    vector<bool> basicResiduals;
+    vector<double> prevBasicValue; 
+    vector<int> activeSet;
+    vector<bool> boundedVariables;
+    vector<bool> activeConstraints;
+    vector<vector<double> > ortho;
+    map<int, bool> activeColors;
+
+    // // Eigen package sparse matrix for rank revealing decompositions
+    // SpMat nonBasicMat;
+    // vector<T> nonBasicCoeff;
 
     // Associated data of original model
     vector<int> workRowPart; // Row partition
@@ -308,12 +375,17 @@ public:
     // Working model
     int problemStatus;
     vector<int> basicIndex;
+    vector<int> testBasicIndex;
     vector<int> nonbasicFlag;
     vector<int> nonbasicMove;
+    vector<int> available;
     HMatrix matrix;
+    HMatrix testActive;
     HFactor factor;
+    HFactor testFactor;
     HVector buffer;
     HVector bufferLong;
+    HVector bufferNonBasic;
 
     vector<double> workCost;
     vector<double> workDual;
@@ -327,6 +399,8 @@ public:
     vector<double> baseLower;
     vector<double> baseUpper;
     vector<double> baseValue;
+    vector<double> nonBaseValue;
+    vector<bool> activeVars;
 
     vector<int> historyColumnIn;
     vector<int> historyColumnOut;

@@ -21,12 +21,24 @@
 \newcommand{\cF}{{\mathcal F}}
 \newcommand{\cG}{{\mathcal G}}
 \newcommand{\cO}{{\mathcal O}}
+<<<<<<< HEAD
 \newcommand{\cC}{{\mathcal C}}
 \newcommand{\cV}{{\mathcal V}}
 \newcommand{\cL}{{\mathcal L}}
 \newcommand{\cR}{{\mathcal R}}
 \newcommand{\cS}{{\mathcal S}}
 \newcommand{\cD}{{\mathcal D}}
+=======
+\newcommand{\cL}{{\mathcal L}}
+\newcommand{\cR}{{\mathcal R}}
+
+
+
+%\theoremstyle{plain}% default
+%\newtheorem{thm}{Theorem}[section]
+%\newtheorem{corollary}{Corollary}[thm]
+
+>>>>>>> primal
 
 \begin{document}
 %\title{Neighborhood-based Reductions and Cuts for Signed Graphs}
@@ -40,7 +52,11 @@
 
 
 Consider a linear program $LP(A,b,c)$ in the following form:
+<<<<<<< HEAD
 \begin{align} \label{eq:LP}
+=======
+\begin{align}
+>>>>>>> primal
   \max \ & c^t x \\
   \mbox{s.t. } & Ax \leq b\\
   & x \geq 0,
@@ -53,11 +69,16 @@ linear program, $RLP(A,B,c,\cP)$ to be:
 
 \begin{align}
   \max \ & c^t x \\
+<<<<<<< HEAD
   \mbox{s.t. } & Ax \leq b \label{cons:orig}\\
+=======
+  \mbox{s.t. } & Ax \leq b\\
+>>>>>>> primal
   & x_i = x_i \ \ \forall\ i,j \ \in P_l,\  l= 1,\ \ldots,\ k \label{cons:equal}\\
   & x \geq 0,
   \end{align}
 
+<<<<<<< HEAD
 \noindent Obviously $RLP(A,b,c,\cP)$ can be written in such a way as to aggregate variables that
 belong in the same partition. Such an aggregation will yield a formulation with
 only $k$ variables and (potentially) fewer constraints. We will refer to the aggregated version as $ARLP(A,b,c,\cP)$.
@@ -74,6 +95,22 @@ such cases, the benefit of  $RLP(A,b,c,\cP)$ is clear, preprocessing will result
 in a smaller formulation that will likely be easier to solve. However, the
 solutions returned by solving the restricted problem will necessarily be in the
 relative interior of the optimal face (unless $\cP$ consists only of singletons). {\bf BK: I added the word ``relative'' here, so as not to be incorrect when the optimal face of $LP(A,b,c)$ is a vertex.} In many
+=======
+\noindent Obviously can be written in such a way as to aggregate variables that
+belong in the same partition. Such an aggregation will yield a formulation with
+only $k$ variables and (potentially) fewer constraints. It is easier, however, to
+discuss the proposed methods using the above formulation as both, as stated,  $LP(A,b,c)$ and
+$RLP(A,B,c,\cP)$ exist in the same dimension.
+
+For this work we are primarily focused on partitions $\cP$ such that the optimal
+solution to $LP(A,b,c)$ is equal to that of $RLP(A,B,c,\cP)$. We note that
+techniques have been developed that attempt find such $\cP$, most notably those
+that seek to exploit symmetry and its generalization, equitable partitions. In
+such cases, the benefit of  $RLP(A,B,c,\cP)$ is clear, preprocessing will result
+in a smaller formulation that will likely be easier to solve. However, the
+solutions returned by solving the restricted problem will necessarily be in the
+interior of the optimal face (unless $\cP$ consists only of singletons). In many
+>>>>>>> primal
 cases it is desirable to find an optimal vertex to $LP(A,b,c)$. Various
 crossover methods have been developed to map an interior solution to an optimal
 vertex, but such methods tend to be very computationally taxing. We show here
@@ -84,7 +121,11 @@ considerably easier than the more general crossover methods.
 
 \section{Background: Symmetry and Equitable Partitions}
 
+<<<<<<< HEAD
 {\em Symmetries and Fractional Symmetries:}
+=======
+
+>>>>>>> primal
 
 The symmetry group of $LP(A,b,c)$ is defined to
 be permutations that map feasible solutions to the LP to feasible solutions with
@@ -92,6 +133,7 @@ the same objective value. Let $\cG$ represent the symmetry group. A problem's
 symmetry group can be used to define equivalence classes on both the sets of
 variables as well as the set of feasible solutions. As permutations act on
 vectors, it is most natural to think of how symmetries act on solution vectors.
+<<<<<<< HEAD
 We say two solutions are equivalent if they have the same objective values and there exists a permutation in $\cG$ that
 maps one solution to the other. Computing $\cG$ is not practical, as it requires the knowledge of all feasible solutions. In practice, the {\em formulation group} $\cF$, is used to approximate $\cG$. Note that $\cF \subset \cG$. The formulation group of \eqref{eq:LP} contains the set of
 	permutations  $(P_\pi,\ P_\sigma)$ such that:
@@ -115,12 +157,17 @@ where $\cD^n$ and $\cD^m$ are the sets of all doubly stochastic matrices of appr
 
 
 We call the set of all solutions equivalent to a
+=======
+We say two solutions are equivalent if there exists a permutation in $\cG$ that
+maps one solution to the other. We call the set of all solutions equivalent to a
+>>>>>>> primal
 solution $x$ an {\em orbit} of $x$ with respect to $\cG$. We use
 $\mbox{Orb}(x,\ \cG)$ to represent the orbit of $x$ with respect to $\cG$. We
 overload the $\mbox{Orb}$ notation to act on variables as well as vectors. The
 orbit of variable $x_i$ with respect to $\cG$ are those variables that are
 equivalent to $x_i$. We have that $j \in \mbox{Orb}(i,\cG)$ if and only if $e_j
 \in \mbox{Orb}(e_i,\cG)$. The variable orbits can be used to define a natural
+<<<<<<< HEAD
 partition of the variables as $i,\ j \in \mbox{Orb}(h,\cG)$ implies that $h, j
 \in \mbox{Orb}(i,\cG)$. We let $\cO= \{O_1,\ldots,\ O_k\}$ represent the {\em orbital partition} of the variables. 
 
@@ -319,6 +366,31 @@ Now consider the $ARLP(A,b,c,\cP_2)$ with $n_{\cP_2} \geq n_{\cP_1}$ many variab
 
 
 
+=======
+parition of the variables as $i,\ j \in \mbox{Orb}(h,\cG)$ implies that $h, j
+\in \mbox{Orb}(i,\cG)$. We let $\cO= \{O_1,\ldots,\ O_k\}$ represent the {\em orbital
+partition} of the variables. 
+
+\begin{theorem} \label{thm:set_equal}
+Let $\cG$ be the symmetry group acting on a linear program and let $\cO$ be the
+orbital partition with respect to $\cG$. The optimal solution
+value of $LP(A,b,c)$ is equal to the optimal solution value of $RLP(A,b,c, \cO)$
+\end{theorem}
+
+
+\begin{corollary}
+As a result of these fixings, an aggregated LP with the same optimal objective
+value can be written using $|\cO^V|$ many variables and $|\cO^C|$ many constraints.
+  \end{corollary}
+
+We say that partition $\cP^1$ is a {\em refinement} of partition $\cP^2$ if for
+all $P_i^1 \in \cP^1$ there exists a $P_j^2 \in \cP^2$ with $P_i^1 \subseteq
+P_j^2$. If $\cP^1$ is a refinement of $\cP^2$, then we have that the LP solution
+to $RLP(A,B,c,\cP_1)$ is no smaller than $RLP(A,B,c,\cP_2)$. Thus, for any
+partition that is a refinement of the problem's orbital partition $\cO$,
+Theorem~\ref{thm:set_equal} ensures that $RLP(A,b,c,\cP_1)$ has the same
+objective value of $LP(A,b,c)$.
+>>>>>>> primal
 
 {\em Dimensions of RLP polyhedra:}
 
@@ -331,6 +403,7 @@ equalities defined in~\eqref{cons:equal} have a rank of $n - |\cP|$.
 {\em Hierarchy of  optimal restrictions:}
 
 We new define a hierarchy of restrictions that are all guaranteed to share the
+<<<<<<< HEAD
 same optimal objective value (that of the original LP). We define $iso^0$ to just be $\cF$ and recursively define $iso^k(\cF)$
 to be $iso( k , iso^{k-1}(\cF))$. As every $iso^k$ is a set of fractional symmetries, it can be used
 to generate the equitable partition $\cP^k$ (with respect to $iso^k$). As $iso^{k+1}$
@@ -367,6 +440,25 @@ $RLP(A,b,c,\cO^{i+1})$
 {\bf BK: Given that one of these implies the other, I would state this theorem and prove it using the construction argument above, given that the construction argument is much more useful from a computational perspective.
 Basically, it shows that doing pivots in this lower dimensional space is equivalent to pivots in the higher dimensional space, which is much more powerful, IMHO. Theorem~\ref{thm:VertexBijection} is just corollary of this, then.}
 
+=======
+same optimal objective value (that of the original LP). First, we define the {\em
+  stabilizer} of a group $\cG$ with respect to an element $v$, $stab(v,\cG)$ to
+be:
+
+$$stab(v,g) := \{ \pi \in \cG\ | \ \pi(v) = v\}.$$ 
+
+\noindent That is, it consists of permutations in $\cG$ that fix the element
+$v$. The stabilizer of an element is still a group (in fact a subgroup of
+$\cG$). We define $stab^0$ to just be $\cG$ and recursively define $stab^k(\cG)$
+to be $stab( k , stab^{k-1}(\cG))$. As every $stab^k$ is a group, it can be used
+to generate an orbital partition $\cO^k$ (with respect to $stab^k$). As $stab^{k+1}$
+is a subset of $stab^k$, we have that $\cO^{k+1}$ is a refinement of $\cO^k$.
+Thus, $\{dim(RLP(A,b,c,\cO^k)\}_{ k }$ is a nondecreasing
+sequence and that $\cO^n$ consists of only singletons.
+
+
+Generalize notions to equitable partitions.
+>>>>>>> primal
 
 \section{Required Theory}
 
@@ -398,6 +490,18 @@ Things to show(?)
       \end{itemize}
       
 
+<<<<<<< HEAD
+=======
+{\em Crossover}
+
+We use the above facts to design a crossover strategy that will take a vertex
+solution to $RLP(A,b,c,\cO^0\}$ and  lift it to a vertex solution to
+  $RLP(A,b,c,\cO^n) = LP(A,b,c)$. This will be done iteratively by lifting each
+vertex solution of  $RLP(A,b,c,\cO^i\}$  to a vertex solution to
+  $RLP(A,b,c,\cO^{i+1})$ 
+
+
+>>>>>>> primal
 
 {\em Not entirely sure why I put all of this here... Pick and choose...}
 
@@ -461,6 +565,7 @@ constraint is binding for all vertices in $\mbox{Orb}(x^i, \cG)$.
 
 
 \begin{algorithm}[H]
+<<<<<<< HEAD
  \KwData{Aggregated solution $x^0$, set of active constraints $C$, group $\cG$}
  \KwResult{A vertex solution to the original LP}
 % initialization\;
@@ -506,11 +611,38 @@ constraint is binding for all vertices in $\mbox{Orb}(x^i, \cG)$.
 	\caption{Orbital Crossover}
 	
 	
+=======
+ \KwData{Aggregated solution $x^0$, set of active constraints $C$, coarsest equitable partition $\cP_0$}
+ \KwResult{A vertex solution to the original LP}
+% initialization\;
+$\cP_0 \eqqcolon \cP$\\ 
+ \While{$|\cP| \neq m + n$}{
+ 	$\cP \eqqcolon \bar{\cP}$\;
+ 	$\mbox{iso}(C, \cP)  = \{\cP^1, \dots, \cP^k\}$, a new partition\;
+ 	\textbf{Refine($\{P^1, \dots, P^k\}$)}$\eqqcolon \cP$\;
+  $\{(x_i, x_j)|\cP^i, \cP^j \subseteq \cP^k \in \bar{\cP}, \ \forall \cP^j \subseteq \cP^k, j \neq i, \ \forall \cP^k \in \bar{\cP}\} \eqqcolon \cL$\;
+  Create $RLP(A,b,c,\cP)$\;
+\For{$(x_i, x_j) \in L$}{
+  $x_i - x_j \eqqcolon z$\;
+  $\max z$, alter objective of $RLP(A,b,c,\cP)$\;
+  Relax $x_i = x_j$\;
+  \textbf{Simplex}($RLP(A,b,c,\cP)$) $\eqqcolon \cR$\;
+  $C \cup \cR \eqqcolon C$\;
+  }
+
+ }
+ \caption{Orbital Crossover}
+ 
+
+>>>>>>> primal
 \end{algorithm}
 
 See "cite Grohe" for the subroutine \textbf{Refine} and note that the \textbf{Simplex} subroutine is performing the \textit{Simplex Algorithm} and returning the active constraints of $LP(A,b,c)$ based of the active constraints in $RLP(A,b,c,\cP)$.
 
+<<<<<<< HEAD
 \bibliographystyle{plain}
 \bibliography{crossover}
 
+=======
+>>>>>>> primal
 \end{document}

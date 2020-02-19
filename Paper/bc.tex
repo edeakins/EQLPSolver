@@ -93,87 +93,87 @@
 
 \title{LP Aggregation and Higher Dimensional Basis Construction}
 \author{Ethan Deakins}
- 
- \begin{document}
- 	\maketitle
- 	
- 	\section*{Introduction}
- 	In the following, we aim to explain a basis construction algorithm for disaggregating (unfolding) aggregated Linear Programs (LP).  We may reduce the dimension of an LP using different means.  The reductions in this paper are the results of either orbits or equitable partitions.  Take note that our algorithm for unfolding an LP applies to both an LP aggregated based on the orbits of that instance, as well as, the equitable partition (EP) of that instance.  As for the algorithm, it makes uses of the initially aggregated basis of the instance, and then by isolating a variable in the problem and recomputing the EP.  Recomputing the EP layouts out a pathway in which to follow when unfolding the instance.  From here on, we aim to show that a basis in a reduced dimension can be lifted to a higher dimension, used a basic feasible solution (BFS) for the lifted LP, and that the instance can be solved to further unfold the instance, quickly.
- 	
- 	\section*{Background}
- 	It has been known that LP instance can be aggregated based on their orbits or EPs.  However, when the instance is aggregated and solved, we are guaranteed an optimal solution--if one exists--but we are not guaranteed that this solution will be basic.  Basic solutions (vertices) are preferable for a few reasons.  Usually, these solutions are sparser than that of an interior point solution.  That is, usually, if $\bar{\bf{x}}$ and $\bar{\bf{y}}$ are a (BFS) and non-BFS to an LP instance, respectively, then $|\bar{\bf{x}}| \leq |\bar{\bf{y}}|$.  Further, a BFS is preferable to Integer Program (IP) solvers using branch and bound, as well as, branch and cut algorithms (state of the art algorithms for solving IPs).  This combination of reasons, among others, is why a BFS is preferable when solving LPs.  
- 	
- 	Now complex commercial solvers (Gurobi, CPLEX) have interior point algorithms for solving LPs.  Actually when you send an LP off to Gurobi to be solved, Gurobi will solve it using different methods (interior point, dual simplex, and primal simplex) and return the solution and output from the algorithm that finishes first.  I am not familiar with the methods of CPLEX "under the hood," but I would assume they take a similar approach to solving LPs.  Even though these solvers, and others, have interior point methods, they are computationally expensive.  To be specific, they are expensive in the crossover phase.  Crossover is the phase of interior point solutions that takes a near BFS and pushes it to a BFS (vertex).  According to Gurobi, over 30\% of their barrier algorithm is spent in crossover.  
- 	
- 	Essentially, crossover is similar to simplex.  It makes use of the concept of super basic variables and either pushes them in or out of the basis in order to obtain a BFS.  As mentioned previously this method is computationally expensive and speeding up the process of going from an interior point solution to a vertex will not only help to solve LPs faster, but will offer even more methods to more efficiently solve IPs using algorithms that make use of the LP relaxation.
- 	
- 	\section*{Algorithm Overview and Example}
- 	For this section of the paper we will describe the algorithm at a high level while using a small example to demonstrate the algorithm with some concrete insights into its different phases.
- 	\subsection*{Phase I--Initial Aggregation and BFS} 
- 	From this point on we will be using the instance in (1) to as an example for stepping through the algorithm.  As the name for phase one suggests we, we will compute the coarsest EPs for the instance and aggregate the problem based on this.  To relate this to the example in the (1), look at the matrix in (2).
- 	
-	 \begin{mini!}
-	 	{}{x_0 + x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + x_8}{}{}
-	 	\addConstraint{x_0 + x_1 + x_2 + x_3 + x_6}{\geq 1}{}
-	 	\addConstraint{x_0 + x_1 + x_2 +  x_4 + x_7}{\geq 1}{}
-	 	\addConstraint{x_0 + x_1 + x_2 +  x_5 + x_8}{\geq 1}{}
-	 	\addConstraint{x_0 + x_3 + x_4 +  x_5 + x_6}{\geq 1}{}
-	 	\addConstraint{x_1 + x_3 + x_4 +  x_5 + x_7}{\geq 1}{}
-	 	\addConstraint{x_2 + x_3 + x_4 +  x_5 + x_8}{\geq 1}{}
-	 	\addConstraint{x_0 + x_3 + x_6 +  x_7 + x_8}{\geq 1}{}
-	 	\addConstraint{x_1 + x_4 + x_6 +  x_7 + x_8}{\geq 1}{}
-	 	\addConstraint{x_2 + x_5 + x_6 +  x_7 + x_8}{\geq 1}{}
-	 	\addConstraint{x_0 + x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + x_8}{\geq 2}{}
-	 	\addConstraint{\bar{x}_i}{\leq 1, \quad}{i = 0, 1, \hdots, 8}
-	 	\addConstraint{\bar{x}_i}{\geq 0, \quad}{i = 0, 1, \hdots, 8}
-	 \end{mini!}	
- 
+
+\begin{document}
+	\maketitle
+	
+	\section*{Introduction}
+	In the following, we aim to explain a basis construction algorithm for disaggregating (unfolding) aggregated Linear Programs (LP).  We may reduce the dimension of an LP using different means.  The reductions in this paper are the results of either orbits or equitable partitions.  Take note that our algorithm for unfolding an LP applies to both an LP aggregated based on the orbits of that instance, as well as, the equitable partition (EP) of that instance.  As for the algorithm, it makes uses of the initially aggregated basis of the instance, and then by isolating a variable in the problem and recomputing the EP.  Recomputing the EP layouts out a pathway in which to follow when unfolding the instance.  From here on, we aim to show that a basis in a reduced dimension can be lifted to a higher dimension, used a basic feasible solution (BFS) for the lifted LP, and that the instance can be solved to further unfold the instance, quickly.
+	
+	\section*{Background}
+	It has been known that LP instance can be aggregated based on their orbits or EPs.  However, when the instance is aggregated and solved, we are guaranteed an optimal solution--if one exists--but we are not guaranteed that this solution will be basic.  Basic solutions (vertices) are preferable for a few reasons.  Usually, these solutions are sparser than that of an interior point solution.  That is, usually, if $\bar{\bf{x}}$ and $\bar{\bf{y}}$ are a (BFS) and non-BFS to an LP instance, respectively, then $|\bar{\bf{x}}| \leq |\bar{\bf{y}}|$.  Further, a BFS is preferable to Integer Program (IP) solvers using branch and bound, as well as, branch and cut algorithms (state of the art algorithms for solving IPs).  This combination of reasons, among others, is why a BFS is preferable when solving LPs.  
+	
+	Now complex commercial solvers (Gurobi, CPLEX) have interior point algorithms for solving LPs.  Actually when you send an LP off to Gurobi to be solved, Gurobi will solve it using different methods (interior point, dual simplex, and primal simplex) and return the solution and output from the algorithm that finishes first.  I am not familiar with the methods of CPLEX "under the hood," but I would assume they take a similar approach to solving LPs.  Even though these solvers, and others, have interior point methods, they are computationally expensive.  To be specific, they are expensive in the crossover phase.  Crossover is the phase of interior point solutions that takes a near BFS and pushes it to a BFS (vertex).  According to Gurobi, over 30\% of their barrier algorithm is spent in crossover.  
+	
+	Essentially, crossover is similar to simplex.  It makes use of the concept of super basic variables and either pushes them in or out of the basis in order to obtain a BFS.  As mentioned previously this method is computationally expensive and speeding up the process of going from an interior point solution to a vertex will not only help to solve LPs faster, but will offer even more methods to more efficiently solve IPs using algorithms that make use of the LP relaxation.
+	
+	\section*{Algorithm Overview and Example}
+	For this section of the paper we will describe the algorithm at a high level while using a small example to demonstrate the algorithm with some concrete insights into its different phases.
+	\subsection*{Phase I--Initial Aggregation and BFS} 
+	From this point on we will be using the instance in (1) to as an example for stepping through the algorithm.  As the name for phase one suggests we, we will compute the coarsest EPs for the instance and aggregate the problem based on this.  To relate this to the example in the (1), look at the matrix in (2).
+	
+	\begin{mini!}
+		{}{x_0 + x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + x_8}{}{}
+		\addConstraint{x_0 + x_1 + x_2 + x_3 + x_6}{\geq 1}{}
+		\addConstraint{x_0 + x_1 + x_2 +  x_4 + x_7}{\geq 1}{}
+		\addConstraint{x_0 + x_1 + x_2 +  x_5 + x_8}{\geq 1}{}
+		\addConstraint{x_0 + x_3 + x_4 +  x_5 + x_6}{\geq 1}{}
+		\addConstraint{x_1 + x_3 + x_4 +  x_5 + x_7}{\geq 1}{}
+		\addConstraint{x_2 + x_3 + x_4 +  x_5 + x_8}{\geq 1}{}
+		\addConstraint{x_0 + x_3 + x_6 +  x_7 + x_8}{\geq 1}{}
+		\addConstraint{x_1 + x_4 + x_6 +  x_7 + x_8}{\geq 1}{}
+		\addConstraint{x_2 + x_5 + x_6 +  x_7 + x_8}{\geq 1}{}
+		\addConstraint{x_0 + x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + x_8}{\geq 2}{}
+		\addConstraint{\bar{x}_i}{\leq 1, \quad}{i = 0, 1, \hdots, 8}
+		\addConstraint{\bar{x}_i}{\geq 0, \quad}{i = 0, 1, \hdots, 8}
+	\end{mini!}	
+	
 	In this specific instance, constraint (1k) is added to the problem because otherwise the initial aggregation of the problem actually results in a optimal BFS in the original problem.  Adding this constraint produces and optimal interior point solution to the original problem.  Now computing the coarsest EP for this problem gives the results in the matrix in (2).  Here the  bars serve the purpose of separating the aggregated variables and constraints, as well as, the right hand sides of the constrains and objective value. 
 	
 	Here the columns grouped within a set of of bars correspond to an aggregated variable, and the rows within bars correspond to the aggregated constraints.  In any instance, the final vertical bar in the matrix separates the columns from the right hand sides of the constraints, and the final horizontal bar (lowest) separates the rows of constraints from the objective row.
 	
-\begin{equation}\setstretch{1.5}
- 	\begin{pmatrix}
- 		\begin{array}{ccccccccc|c}
- 			1 & 1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\ 
- 			1 & 1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 &  1 \\ 
- 			1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 1 \\ 
- 			1 & 0 & 0 & 1 & 1 & 1 & 1 & 0 & 0 & 1 \\ 
- 			0 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 1 \\ 
- 			0 & 0 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 \\ 
- 			1 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 1 & 1 \\ 
- 			0 & 1 & 0 & 0 & 1 & 0 & 1 & 1 & 1 & 1 \\ 
- 			0 & 0 & 1 & 0 & 0 & 1 & 1 & 1 & 1 & 1 \\ 
- 			\hline
- 			1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 2 \\ 
- 			\hline
- 			1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & -\infty
- 		\end{array}
- 	\end{pmatrix}
- \end{equation}
- 
-	 The matrix format of the instance is given in (2).  The horizontal and vertical bars represent the aggregated constraints and variables. As is seen from the matrix in (2), the coarsest equitable partition for (1) is
-	 
-	 \begin{equation}\setstretch{1.5}
-	 	\mathcal{P}^0 = 
-	 	\begin{pmatrix} 
-	 	\begin{array}{c|ccccccccc}
-	 	\cS_0^0 & x_0 & x_1 & x_2 & x_3 & x_4 & x_5 & x_6 & x_7 & x_8 \\
-	 	\cC_0^0 & c_0 & c_1 & c_2 & c_3 & c_4 & c_5 & c_6 & c_7 & c_8 \\
-	 	\cC_1^0 & c_9
-	 	\end{array}
-	 	\end{pmatrix} 
-	 \end{equation}
-	 
-	 Here, $\cS_a^b$ is a class from $\cP^b$ containing variables, and $\cC_b^a$ is a class from $\cP^b$ containing constraints.  From $\mathcal{P}^0$ we have that the aggregated LP of (1) is  
- 
- \begin{mini!}
- 	{}{\bar{x}_0^1}{}{}
- 	\addConstraint{9 \bar{x}_0^0 - \bar{s}_0^0}{= 2}
- 	\addConstraint{5 \bar{x}_0^0 - \bar{s}_1^0}{= 1}
-	\addConstraint{0 \leq }{\bar{x}_0^0, \bar{s}_0^0, \bar{s}_1^0}{\leq 1}
- \end{mini!}
-
+	\begin{equation}\setstretch{1.5}
+	\begin{pmatrix}
+	\begin{array}{ccccccccc|c}
+	1 & 1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\ 
+	1 & 1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 &  1 \\ 
+	1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 1 \\ 
+	1 & 0 & 0 & 1 & 1 & 1 & 1 & 0 & 0 & 1 \\ 
+	0 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 1 \\ 
+	0 & 0 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 \\ 
+	1 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 1 & 1 \\ 
+	0 & 1 & 0 & 0 & 1 & 0 & 1 & 1 & 1 & 1 \\ 
+	0 & 0 & 1 & 0 & 0 & 1 & 1 & 1 & 1 & 1 \\ 
+	\hline
+	1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 2 \\ 
+	\hline
+	1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & -\infty
+	\end{array}
+	\end{pmatrix}
+	\end{equation}
+	
+	The matrix format of the instance is given in (2).  The horizontal and vertical bars represent the aggregated constraints and variables. As is seen from the matrix in (2), the coarsest equitable partition for (1) is
+	
+	\begin{equation}\setstretch{1.5}
+	\mathcal{P}^0 = 
+	\begin{pmatrix} 
+	\begin{array}{c|ccccccccc}
+	\cS_0^0 & x_0 & x_1 & x_2 & x_3 & x_4 & x_5 & x_6 & x_7 & x_8 \\
+	\cC_0^0 & c_0 & c_1 & c_2 & c_3 & c_4 & c_5 & c_6 & c_7 & c_8 \\
+	\cC_1^0 & c_9
+	\end{array}
+	\end{pmatrix} 
+	\end{equation}
+	
+	Here, $\cS_a^b$ is a class from $\cP^b$ containing variables, and $\cC_b^a$ is a class from $\cP^b$ containing constraints.  From $\mathcal{P}^0$ we have that the aggregated LP of (1) is  
+	
+	\begin{mini!}
+		{}{\bar{x}_0^1}{}{}
+		\addConstraint{9 \bar{x}_0^0 - \bar{s}_0^0}{= 2}
+		\addConstraint{5 \bar{x}_0^0 - \bar{s}_1^0}{= 1}
+		\addConstraint{0 \leq }{\bar{x}_0^0, \bar{s}_0^0, \bar{s}_1^0}{\leq 1}
+	\end{mini!}
+	
 	In (4), $\bar{x}_0^0$ is aggregation of all the variables in $C_0^0$ representing the average of each of these variables.  The LP in (4) has been written in standard form for the sake of consistency. We will call this problem LP$^0$. Solving LP$^0$ results with the tableau in (5).  Here, $\bar{x}_0^0 \ \text{and} \ \bar{s}_1^0$ are the basic variables while $\bar{s}_0^0$ is non-basic.  This result gives an objective value in (1) of 2.
 	
 	Now, in general, it is possible that this aggregated solution could be a vertex in the original problem, however for this case it is not.  Further, in the case where the initial aggregation is a vertex solution in the original problem, we can add a constraint that causes the solution to not be a vertex.
@@ -181,10 +181,10 @@
 	\begin{equation}\setstretch{1.5}
 	\begin{pmatrix}
 	\begin{array}{ccc|c}
-		\bar{x}_0^0 & \bar{s}_0^0 & \bar{s}_1^0 \\
-		\hline
-		1 & -\frac{1}{9} & 0 & \frac{2}{9} \\
-		0 & -\frac{5}{9} & 1 & \frac{1}{9} 
+	\bar{x}_0^0 & \bar{s}_0^0 & \bar{s}_1^0 \\
+	\hline
+	1 & -\frac{1}{9} & 0 & \frac{2}{9} \\
+	0 & -\frac{5}{9} & 1 & \frac{1}{9} 
 	\end{array}
 	\end{pmatrix}
 	\end{equation}
@@ -204,7 +204,7 @@
 	\cC_1^1 & c_1 & c_2 & c_3 & c_6 \\
 	\cC_2^1 & c_4 & c_5 & c_7 & c_8 \\
 	\cC_3^1 & c_9 &&&
- 	\end{array}
+	\end{array}
 	\end{pmatrix}
 	\end{equation}
 	
@@ -216,14 +216,14 @@
 		\addConstraint{\bar{x}_0^1 -  \bar{x}_1^1 - \bar{r}_{01}}{= 0}
 		\addConstraint{\bar{x}_0^1 -  \bar{x}_2^1 - \bar{r}_{02}}{= 0}
 		\addConstraint{\bar{x}_0^1 + 4 \bar{x}_1^1 - \bar{s}_0^1}{= 1}
-			\addConstraint{\bar{x}_0^1 + 2 \bar{x}_1^1 + 2\bar{x}_2^1 - \bar{s}_1^1}{= 1}
+		\addConstraint{\bar{x}_0^1 + 2 \bar{x}_1^1 + 2\bar{x}_2^1 - \bar{s}_1^1}{= 1}
 		\addConstraint{2\bar{x}_1^1 + 3 \bar{x}_2^1 - \bar{s}_2^1}{= 1}
 		\addConstraint{\bar{x}_i^1}{\leq 1, \quad}{i = 0, 1, 2}
 		\addConstraint{\bar{x}_i^1}{\geq 0, \quad}{i = 0, 1, 2}
 		\addConstraint{\bar{r}_{ij}}{= 0, \quad}{i = 0, \ j = 1, 2}
 		%\addConstraint{\bar{r}_{01} = \bar{r}_{02}}{= 0}
 	\end{mini!}
-
+	
 	We keep the consistency of writing the LP in standard form.  First, take note that we have brought forward the active set of constraints from the previous aggregation.  This is (7b), and it remains active in the new problem.  This is a process that allows us to build up the required number of active constraints for the problem (The same methodology applies to bounds as well).
 	
 	Next, we take a look at the new variables introduced in (7).  It is the exact same idea as before with a few additional details.  Here each variable labeled by $\bar{x}_a^b$ is the aggregation of each new class of variables in $\cP^1$ representing the average of all the variables in that class.  Here, $a$ is the index on the class being aggregated, and $b$ is the index on which coarsest EP we are working with.  
@@ -250,13 +250,13 @@
 	\end{array}
 	\end{pmatrix}
 	\end{equation}
-	 
-	 Next, we can construct the columns for the slack variables of the problem.  We know that $\cC_0^1, \cC_1^1, \cC_2^1 \subset \cC_1^0$, and that the constraint that aggregated $\cC_1^0$ was not active in (5), thus the constraints aggregating $\cC_0^1, \cC_1^1, \ \text{and} \  \cC_2^1$ will not be active in the starting basis for (7).  This means that all slack variables associated with these constraints (7e, 7f, 7g) will be basic in the starting basis of (7).  This gives
-	 
+	
+	Next, we can construct the columns for the slack variables of the problem.  We know that $\cC_0^1, \cC_1^1, \cC_2^1 \subset \cC_1^0$, and that the constraint that aggregated $\cC_1^0$ was not active in (5), thus the constraints aggregating $\cC_0^1, \cC_1^1, \ \text{and} \  \cC_2^1$ will not be active in the starting basis for (7).  This means that all slack variables associated with these constraints (7e, 7f, 7g) will be basic in the starting basis of (7).  This gives
+	
 	\begin{equation}\setstretch{1.5}
 	\begin{pmatrix}
 	\begin{array}{cccccc|ccc|c}
-		\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_0 & \bar{s}^1_1 & \bar{s}^1_2 & \bar{s}^1_3 & \bar{r}_{01} & \bar{r}_{02} \\
+	\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_0 & \bar{s}^1_1 & \bar{s}^1_2 & \bar{s}^1_3 & \bar{r}_{01} & \bar{r}_{02} \\
 	\hline
 	1 & 0 & 0 & 0 & 0 & 0 & \_ & \_ & \_ & \frac{2}{9} \\ 
 	0 & 1 & 0 & 0 & 0 & 0 & \_ & \_ & \_ & \frac{2}{9} \\ 
@@ -291,7 +291,7 @@
 	\begin{equation}\setstretch{1.5}
 	\begin{pmatrix}
 	\begin{array}{cccccc|ccc|c}
-		\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_0 & \bar{s}^1_1 & \bar{s}^1_2 & \bar{s}^1_3 & \bar{r}_{01} & \bar{r}_{02} \\
+	\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_0 & \bar{s}^1_1 & \bar{s}^1_2 & \bar{s}^1_3 & \bar{r}_{01} & \bar{r}_{02} \\
 	\hline
 	1 & 0 & 0 & 0 & 0 & 0 & -\frac{1}{9} & -\frac{4}{9} & -\frac{4}{9} & \frac{2}{9} \\ 
 	0 & 1 & 0 & 0 & 0 & 0 & -\frac{1}{9} &  \frac{5}{9} & -\frac{4}{9} & \frac{2}{9} \\ 
@@ -314,7 +314,7 @@
 	Once these rows are taken care of, we have left the rows that correspond to variables representing $\cS_l^{k + 1},\ l \in  \{0, \dots, |\cP^{k + 1}_v| - 1\} \backslash \{\mathcal{D}\}$.  It is actually very easy to determine the rows that correspond to these variables as well.  When the initial aggregation for an EP $\cP^{k + 1}, \ k \geq 0$ is written, there will be at least one equation of the form (7c, 7d).  The variables $\bar{x}_l^k$ that aggregate $ \cS_l^k, \  l \in  \{0, \dots, |\cP^{k + 1}_v| - 1\} \backslash \{\mathcal{D}\}, \ \cS_l^k \subset \cS_i^{k - 1}, \ i \in \cB$ will correspond to the rows that have this form.  These rows will also have a closed form solution as follows
 	
 	\begin{equation}
-	 \text{row}_{k + 1} \ l \coloneqq \bar{x}_l^{k + 1} + \left(1 - \frac{|\cS^{k + 1}_l|}{|\cS_i^{k}|}\bar{r}_{jl}\right) - \frac{\sum\limits_{m \in \{0, \dots, |\cP^{k + 1}_v| - 1\} \backslash \{j, l\}}|\cS^{k + 1}_m|\bar{r}_{jm}}{|\cS_i^{k}|} = \beta_i, 
+	\text{row}_{k + 1} \ l \coloneqq \bar{x}_l^{k + 1} + \left(1 - \frac{|\cS^{k + 1}_l|}{|\cS_i^{k}|}\bar{r}_{jl}\right) - \frac{\sum\limits_{m \in \{0, \dots, |\cP^{k + 1}_v| - 1\} \backslash \{j, l\}}|\cS^{k + 1}_m|\bar{r}_{jm}}{|\cS_i^{k}|} = \beta_i, 
 	\end{equation}
 	where $j,l \in \{a|\cS_a^{k + 1} \subset \cS_i^{k} \}$.
 	
@@ -337,9 +337,9 @@
 	\end{array}
 	\end{pmatrix}
 	\end{equation}
-\DrawBox[dotted, thick]{left}{right}
-
-
+	\DrawBox[dotted, thick]{left}{right}
+	
+	
 	Now that the entirety of the starting tableau for LP$^1$ is finished, there is one interesting note to point out.  For the rows that correspond with the form given in (15), the coefficients on the $\bar{r}$ variables create a square sub-matrix which has been outline in (16.)  At this time, we are not sure about the usefulness of this occurrence, but we would like to investigate deeper into this, since this will be the case in any basis for these specific rows. 
 	
 	At this moment, we have finally finished lifting the final tableau from LP$^0$ to become a starting tableau for LP$^1$.  However, nothing about the solution to (1) has changed.  All of the variables are still equal to each other at this point and the same constraints are active, namely (1k).  Now, as stated previously, we know that this point is not a vertex solution to the original problem.  this is the point, where our algorithm starts to shine by pushing our solution toward a vertex in the original problem.  We know that, right now, the $\bar{r}$ variables are fixed to be zero, but if we let that change, we can allow these variables to enter the basis while others leave.
@@ -362,25 +362,25 @@
 	\end{equation}
 	
 	In (17), we see that $\bar{x}_0^1 = \bar{x}_2^1 \neq \bar{x}_1^1$ which is what we gain by allowing $\bar{r}_{01}$ enter the basis.  This is how the unfolding process works.  Allowing these linking variables to enter removes the restriction of the aggregated variables being equal to each other.  When this happens, another result is that we obtain new active constraints which we want to build up the necessary active set for a vertex solution to the original problem.  Here, during this pivot, (7f) became active and this actually means that in the original problem we have added 4 constraints to the active set.  Finally, at this stage, we allow $\bar{r}_{02}$ to enter the basis and obtain
-
+	
 	\begin{equation}\setstretch{1.5}
 	\begin{pmatrix}
-		\begin{array}{ccccccccc|c}
-			\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_0 & \bar{s}^1_1 & \bar{s}^1_2 & \bar{s}^1_3 & \bar{r}_{01} & \bar{r}_{02} \\
-			\hline
-			1 & 0 & 0 & \frac{1}{2} & 0 & 2 & -\frac{3}{2} & 0 & 0 & \frac{1}{2} \\ 
-			0 & 1 & 0 & -\frac{3}{8} & 0 & -\frac{1}{2} & \frac{3}{8} &  0 & 0 & \frac{1}{8} \\ 
-			0 & 0 & 1 & \frac{1}{4} & 0 & 0 & -\frac{1}{4} & 0 & 0 & \frac{1}{4} \\ 
-			0 & 0 & 0 & \frac{1}{4} & 1 & 1 & -\frac{5}{4} & 0 & 0 & \frac{1}{4} \\ 
-			0 & 0 & 0 & \frac{7}{8} & 0 & \frac{5}{2} & -\frac{15}{8} & 1 & 0 & \frac{3}{8} \\
-			0 & 0 & 0 & \frac{1}{4} & 0 & 2 & -\frac{5}{4} & 0 & 1 & \frac{1}{4} \\
-		\end{array}
+	\begin{array}{ccccccccc|c}
+	\bar{x}^1_0 & \bar{x}^1_1 & \bar{x}^1_2 & \bar{s}^1_0 & \bar{s}^1_1 & \bar{s}^1_2 & \bar{s}^1_3 & \bar{r}_{01} & \bar{r}_{02} \\
+	\hline
+	1 & 0 & 0 & \frac{1}{2} & 0 & 2 & -\frac{3}{2} & 0 & 0 & \frac{1}{2} \\ 
+	0 & 1 & 0 & -\frac{3}{8} & 0 & -\frac{1}{2} & \frac{3}{8} &  0 & 0 & \frac{1}{8} \\ 
+	0 & 0 & 1 & \frac{1}{4} & 0 & 0 & -\frac{1}{4} & 0 & 0 & \frac{1}{4} \\ 
+	0 & 0 & 0 & \frac{1}{4} & 1 & 1 & -\frac{5}{4} & 0 & 0 & \frac{1}{4} \\ 
+	0 & 0 & 0 & \frac{7}{8} & 0 & \frac{5}{2} & -\frac{15}{8} & 1 & 0 & \frac{3}{8} \\
+	0 & 0 & 0 & \frac{1}{4} & 0 & 2 & -\frac{5}{4} & 0 & 1 & \frac{1}{4} \\
+	\end{array}
 	\end{pmatrix}
-\end{equation}
-
-At this moment there is no unfolding left to do.  Here we have equal objective, optimal basic feasible solution to (7), but we were able to add to the number of active constraints in the original problem in (1).  The basis here is $B = (\bar{x}_0^1, \bar{x}_1^1, \bar{x}_2^1, \bar{s}_2^1, \bar{r}_{01}, \bar{r}_{02})$.  By unfolding using this methodology, we have accumulated 5 more active constraints for the original problem, namely (1b, 1f, 1g, 1i, 1j).
-
-We conclude our example, but from completing the entire expansion process, in practice, we know that after one more round of EPs and unfolding, this problem has a optimal basic feasible solution, and we are finished.  What this shows is that we can lift an aggregated LP to its original dimensions in at most $\mathcal{O}(|\bar{R}|)$ of our modified simplex pivots where $\bar{R}$ is the set of all linking variables $\bar{r}_{ij}$ that might be created along the way.
- \end{document}
+	\end{equation}
+	
+	At this moment there is no unfolding left to do.  Here we have equal objective, optimal basic feasible solution to (7), but we were able to add to the number of active constraints in the original problem in (1).  The basis here is $B = (\bar{x}_0^1, \bar{x}_1^1, \bar{x}_2^1, \bar{s}_2^1, \bar{r}_{01}, \bar{r}_{02})$.  By unfolding using this methodology, we have accumulated 5 more active constraints for the original problem, namely (1b, 1f, 1g, 1i, 1j).
+	
+	We conclude our example, but from completing the entire expansion process, in practice, we know that after one more round of EPs and unfolding, this problem has a optimal basic feasible solution, and we are finished.  What this shows is that we can lift an aggregated LP to its original dimensions in at most $\mathcal{O}(|\bar{R}|)$ of our modified simplex pivots where $\bar{R}$ is the set of all linking variables $\bar{r}_{ij}$ that might be created along the way.
+\end{document}
 
 

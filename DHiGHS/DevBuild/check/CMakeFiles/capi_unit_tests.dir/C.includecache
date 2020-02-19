@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/interfaces/highs_c_api.h
+
+/home/edeakins/Thesis/EQLPSolver/DHiGHS/check/TestCAPI.c
+interfaces/highs_c_api.h
+/home/edeakins/Thesis/EQLPSolver/DHiGHS/check/interfaces/highs_c_api.h
+stdio.h
+-
+stdlib.h
+-
+assert.h
+-
+

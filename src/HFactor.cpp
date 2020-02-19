@@ -185,6 +185,7 @@ void solveHyper(const int Hsize, const int *Hlookup, const int *HpivotIndex,
 
 void HFactor::setup(int numCol_, int numRow_, int *Astart_, int *Aindex_,
         double *Avalue_, int *baseIndex_, int updateMethod_) {
+	
 
     // Copy Problem size and (pointer to) coefficient matrix
     numRow = numRow_;
@@ -207,6 +208,7 @@ void HFactor::setup(int numCol_, int numRow_, int *Astart_, int *Aindex_,
     for (int i = numRow, counted = 0; i >= 0 && counted < numRow; i--)
         BlimitX += i * iwork[i], counted += iwork[i];
     BlimitX += numRow;
+    
 
     // Allocate spaces for basis matrix, L, U factor and Update buffer
     Bstart.resize(numRow + 1, 0);
@@ -358,11 +360,14 @@ void HFactor::buildSimple() {
     nwork = 0;
     for (int iCol = 0; iCol < numRow; iCol++) {
       int iMat = baseIndex[iCol];
+      cout << "iMat :" << iMat << endl;
       int iRow = -1;
       if (iMat >= numCol) {
 	// 1.1 Logical column
 	// Check for double pivot
 	int lc_iRow = iMat - numCol;
+    cout << "lc_iRow: " << lc_iRow << endl;
+    cin.get(); 
 	if (MRcountb4[lc_iRow] >= 0) {
 	  iRow = lc_iRow;
 	} else {
@@ -405,13 +410,26 @@ void HFactor::buildSimple() {
       }
       Bstart[iCol + 1] = BcountX;
     }
-    cout << "printing out basis" << endl;
-      for (int i = 0; i < numRow; ++i){
-        cout << "column of basis" << endl;
-        for (int j = Bstart[i]; j < Bstart[i + 1]; ++j)
-            cout << Bvalue[j] << endl;
-      }
-      cin.get();
+    vector<vector<double > > B;
+    vector<double> tmp(numRow);
+    cout << "Basis" << endl;
+    for (int i = 0; i < numRow; ++i){
+        cout << "column of Basis" << endl;
+        for (int j = Bstart[i]; j < Bstart[i + 1]; ++j){
+            cout << Bvalue[j] << " in row: " << Bindex[j] << endl;
+            tmp[Bindex[j]] = Bvalue[j];
+        }
+        B.push_back(tmp);
+        tmp.assign(numRow, 0);
+    }
+    cout << "transposed B" << endl;
+    cout << "[ ";
+    for (int i = 0; i < B.size(); ++i){
+        for (int j = 0; j  < B[i].size(); ++j)
+            cout << B[i][j] << " ";
+        cout << ";" << endl;
+    }
+    cout << " ]" << endl;
     BtotalX = numRow - nwork + BcountX;
     pseudoTick += (numRow - nwork) * 2;
     pseudoTick += BcountX * 1.5;

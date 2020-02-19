@@ -1,3 +1,4 @@
+
 #include "HDual.h"
 #include "HConst.h"
 #include "HTimer.h"
@@ -20,7 +21,7 @@ void HDual::solve(HModel *ptr_model, int variant, int num_threads) {
     // Initialise working environment
     init(num_threads);
 
-    model->initCost(1);
+    //model->initCost();
     model->computeFactor();
     model->computeDual();
     model->computeDualInfeasInDual(&dualInfeasCount);
@@ -89,6 +90,7 @@ void HDual::solve(HModel *ptr_model, int variant, int num_threads) {
                 model->modelName.c_str(), model->dblOption[DBLOPT_PAMI_CUTOFF],
                 model->numberIteration / (1.0 + multi_iteration));
     }
+
 
     // Use primal to clean up
     if (solvePhase == 4) {
@@ -333,14 +335,28 @@ void HDual::solve_phase2() {
                 if (model->basicIndex[i] < model->aggNumCol){
                     model->prevBasicColor[model->aggColIdx[model->basicIndex[i]]] = true;
                     model->prevBasicValue[model->aggColIdx[model->basicIndex[i]]] = model->baseValue[i];
-                }
-                else{
-                    slackIdx = model->basicIndex[i] - model->aggNumCol;
-                    model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
-                    model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
-                }
+                    bool upperBound = model->baseValue[i] == model->aggColUpper[model->basicIndex[i]];
+                    bool lowerBound = model->baseValue[i] == model->aggColUpper[model->basicIndex[i]];
+                    //model->boundedVariables[model->aggColIdx[model->basicIndex[i]]] = upperBound + lowerBound;
+                    
+                 }
+                // else{
+                //     slackIdx = model->basicIndex[i] - model->aggNumCol;
+                //     model->prevBasicColor[model->aggRowIdx[slackIdx]] = true;
+                //     model->prevBasicValue[model->aggRowIdx[slackIdx]] = model->baseValue[i];
+                //     //model->activeConstraints[slackIdx] = false;
+                // }
             }
             model->reportStatus(LP_Status_Optimal);
+            model->collectActiveConstraints();
+            for (int i = 0; i < model->aggNumRow; ++i){
+                cout << "old row: " << i << endl;
+                if (!model->activeConstraints[i]){
+                    model->prevBasicColor[model->aggRowIdx[i]] = true;
+                    cout << "previous: " << model->prevBasicColor[model->aggRowIdx[i]] << endl;
+                }
+            }
+            // model->updateActiveConstraints();
         }
     } else if (columnIn == -1) {
         model->printMessage("dual-phase-2-unbounded");
@@ -463,6 +479,7 @@ void HDual::chooseRow() {
         // Choose row
         dualRHS.choose_normal(&rowOut);
         if (rowOut == -1) {
+            //cout << "rowOut: " << rowOut << endl;
             invertHint = 1;
             return;
         }
@@ -484,6 +501,7 @@ void HDual::chooseRow() {
 
     // Assign basic info
     columnOut = model->getBaseIndex()[rowOut];
+    //cout << "columnOut: " << columnOut << endl;
     if (baseValue[rowOut] < baseLower[rowOut])
         deltaPrimal = baseValue[rowOut] - baseLower[rowOut];
     else
@@ -527,6 +545,7 @@ void HDual::chooseColumn(HVector *row_ep) {
     columnIn = dualRow.workPivot;
     alphaRow = dualRow.workAlpha;
     thetaDual = dualRow.workTheta;
+    //cout << "columnIn: " << columnIn << endl; 
 }
 
 void HDual::chooseColumn_slice(HVector *row_ep) {
@@ -599,6 +618,9 @@ void HDual::updateFtran() {
     column.packFlag = true;
     matrix->collect_aj(column, columnIn, 1);
     factor->ftran(column, columnDensity);
+    // for (int i = 0; i < column.array.size(); ++i){
+    // 	cout << column.array[i] << endl;
+    // }
     alpha = column.array[rowOut];
     model->timer.recordFinish(HTICK_FTRAN);
 }

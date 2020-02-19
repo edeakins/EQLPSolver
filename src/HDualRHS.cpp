@@ -37,7 +37,10 @@ void HDualRHS::setup_partition(const char *filename) {
 void HDualRHS::choose_normal(int *chIndex) {
     workModel->timer.recordStart(HTICK_CHUZR1);
     int random = workModel->random.intRandom();
+    //cout << "workCount: " << workCount << endl;
     if (workCount < 0) {
+        //cout << "dense" << endl;
+        //cin.get();
         // DENSE mode
         const int numRow = -workCount;
         int randomStart = random % numRow;
@@ -58,7 +61,8 @@ void HDualRHS::choose_normal(int *chIndex) {
             }
         }
         *chIndex = bestIndex;
-    } else {
+        } else {
+            //cout << "sparse" << endl;
         // SPARSE mode
         if (workCount == 0) {
             *chIndex = -1;
@@ -379,11 +383,21 @@ void HDualRHS::create_infeasArray() {
     const double *baseLower = workModel->getBaseLower();
     const double *baseUpper = workModel->getBaseUpper();
     const double Tp = workModel->dblOption[DBLOPT_PRIMAL_TOL];
+    // cout << "Tp: " << Tp << endl;
+    // cin.get();
     for (int i = 0; i < numRow; i++) {
         const double value = baseValue[i];
         const double less = baseLower[i] - value;
         const double more = value - baseUpper[i];
+        // cout << "value: " << value << endl;
+        // cout << "valueLower: " << baseLower[i] << endl;
+        // cout << "valueUpper: " << baseUpper[i] << endl;
+        // cout << "more: " << more << endl;
+        // cout << "less: " << less << endl;
+        // cin.get();
         double infeas = less > Tp ? less : (more > Tp ? more : 0);
+        // cout << "infeas: " << infeas << endl;
+        // cin.get();
         workArray[i] = infeas * infeas;
     }
 }
