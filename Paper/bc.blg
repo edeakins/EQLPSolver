@@ -1,19 +1,17 @@
-This is BibTeX, Version 0.99d (TeX Live 2017)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2019)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: bc.aux
 The style file: splncs04.bst
-Database file #1: bc.bib.bib
-I was expecting a `,' or a `}'---line 14 of file bc.bib.bib
+Database file #1: bc.bib
+I was expecting a `,' or a `}'---line 14 of file bc.bib
  : 
  : year = {2014}}
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-Warning--I didn't find a database entry for "ER59"
-Warning--I didn't find a database entry for "DIMACSwebsite"
 Warning--empty year in gurobi2014crossover
 You've used 2 entries,
             2850 wiz_defined-function locations,
-            609 strings with 4865 characters,
+            605 strings with 4831 characters,
 and the built_in function-call counts, 1186 in all, are:
 = -- 94
 > -- 44
