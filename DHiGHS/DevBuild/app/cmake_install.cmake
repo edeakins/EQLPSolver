@@ -1,4 +1,4 @@
-# Install script for directory: /home/edeakins/Thesis/EQLPSolver/DHiGHS/app
+# Install script for directory: /home/edeak/EQLPSolver/DHiGHS/app
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,12 +44,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/highs"
          RPATH "/usr/local/lib")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/bin/highs")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/edeak/EQLPSolver/DHiGHS/DevBuild/bin/highs")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/highs" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/highs")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/highs"
-         OLD_RPATH "/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/lib:"
+         OLD_RPATH "/home/edeak/EQLPSolver/DHiGHS/DevBuild/lib:"
          NEW_RPATH "/usr/local/lib")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/highs")

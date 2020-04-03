@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/edeakins/Thesis/EQLPSolver/DHiGHS
+CMAKE_SOURCE_DIR = /home/edeak/EQLPSolver/DHiGHS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild
+CMAKE_BINARY_DIR = /home/edeak/EQLPSolver/DHiGHS/DevBuild
 
 #=============================================================================
 # Directory level rules for directory app
@@ -86,7 +86,7 @@ app/CMakeFiles/highs.dir/all: src/CMakeFiles/libhighs.dir/all
 app/CMakeFiles/highs.dir/all: src/CMakeFiles/libbasiclu.dir/all
 	$(MAKE) -f app/CMakeFiles/highs.dir/build.make app/CMakeFiles/highs.dir/depend
 	$(MAKE) -f app/CMakeFiles/highs.dir/build.make app/CMakeFiles/highs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=2,3 "Built target highs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=2,3 "Built target highs"
 .PHONY : app/CMakeFiles/highs.dir/all
 
 # Include target in all.
@@ -96,9 +96,9 @@ all: app/CMakeFiles/highs.dir/all
 
 # Build rule for subdir invocation for target.
 app/CMakeFiles/highs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 87
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 87
 	$(MAKE) -f CMakeFiles/Makefile2 app/CMakeFiles/highs.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : app/CMakeFiles/highs.dir/rule
 
 # Convenience name for target.
@@ -171,14 +171,14 @@ check/preinstall:
 check/CMakeFiles/ExperimentalBuild.dir/all:
 	$(MAKE) -f check/CMakeFiles/ExperimentalBuild.dir/build.make check/CMakeFiles/ExperimentalBuild.dir/depend
 	$(MAKE) -f check/CMakeFiles/ExperimentalBuild.dir/build.make check/CMakeFiles/ExperimentalBuild.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalBuild"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalBuild"
 .PHONY : check/CMakeFiles/ExperimentalBuild.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ExperimentalBuild.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ExperimentalBuild.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ExperimentalBuild.dir/rule
 
 # Convenience name for target.
@@ -203,14 +203,14 @@ clean: check/CMakeFiles/ExperimentalBuild.dir/clean
 check/CMakeFiles/ContinuousUpdate.dir/all:
 	$(MAKE) -f check/CMakeFiles/ContinuousUpdate.dir/build.make check/CMakeFiles/ContinuousUpdate.dir/depend
 	$(MAKE) -f check/CMakeFiles/ContinuousUpdate.dir/build.make check/CMakeFiles/ContinuousUpdate.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousUpdate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousUpdate"
 .PHONY : check/CMakeFiles/ContinuousUpdate.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ContinuousUpdate.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ContinuousUpdate.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ContinuousUpdate.dir/rule
 
 # Convenience name for target.
@@ -235,14 +235,14 @@ clean: check/CMakeFiles/ContinuousUpdate.dir/clean
 check/CMakeFiles/ExperimentalStart.dir/all:
 	$(MAKE) -f check/CMakeFiles/ExperimentalStart.dir/build.make check/CMakeFiles/ExperimentalStart.dir/depend
 	$(MAKE) -f check/CMakeFiles/ExperimentalStart.dir/build.make check/CMakeFiles/ExperimentalStart.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalStart"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalStart"
 .PHONY : check/CMakeFiles/ExperimentalStart.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ExperimentalStart.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ExperimentalStart.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ExperimentalStart.dir/rule
 
 # Convenience name for target.
@@ -267,14 +267,14 @@ clean: check/CMakeFiles/ExperimentalStart.dir/clean
 check/CMakeFiles/Nightly.dir/all:
 	$(MAKE) -f check/CMakeFiles/Nightly.dir/build.make check/CMakeFiles/Nightly.dir/depend
 	$(MAKE) -f check/CMakeFiles/Nightly.dir/build.make check/CMakeFiles/Nightly.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target Nightly"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target Nightly"
 .PHONY : check/CMakeFiles/Nightly.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/Nightly.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/Nightly.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/Nightly.dir/rule
 
 # Convenience name for target.
@@ -299,14 +299,14 @@ clean: check/CMakeFiles/Nightly.dir/clean
 check/CMakeFiles/ContinuousCoverage.dir/all:
 	$(MAKE) -f check/CMakeFiles/ContinuousCoverage.dir/build.make check/CMakeFiles/ContinuousCoverage.dir/depend
 	$(MAKE) -f check/CMakeFiles/ContinuousCoverage.dir/build.make check/CMakeFiles/ContinuousCoverage.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousCoverage"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousCoverage"
 .PHONY : check/CMakeFiles/ContinuousCoverage.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ContinuousCoverage.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ContinuousCoverage.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ContinuousCoverage.dir/rule
 
 # Convenience name for target.
@@ -331,14 +331,14 @@ clean: check/CMakeFiles/ContinuousCoverage.dir/clean
 check/CMakeFiles/ContinuousStart.dir/all:
 	$(MAKE) -f check/CMakeFiles/ContinuousStart.dir/build.make check/CMakeFiles/ContinuousStart.dir/depend
 	$(MAKE) -f check/CMakeFiles/ContinuousStart.dir/build.make check/CMakeFiles/ContinuousStart.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousStart"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousStart"
 .PHONY : check/CMakeFiles/ContinuousStart.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ContinuousStart.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ContinuousStart.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ContinuousStart.dir/rule
 
 # Convenience name for target.
@@ -363,14 +363,14 @@ clean: check/CMakeFiles/ContinuousStart.dir/clean
 check/CMakeFiles/ExperimentalCoverage.dir/all:
 	$(MAKE) -f check/CMakeFiles/ExperimentalCoverage.dir/build.make check/CMakeFiles/ExperimentalCoverage.dir/depend
 	$(MAKE) -f check/CMakeFiles/ExperimentalCoverage.dir/build.make check/CMakeFiles/ExperimentalCoverage.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalCoverage"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalCoverage"
 .PHONY : check/CMakeFiles/ExperimentalCoverage.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ExperimentalCoverage.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ExperimentalCoverage.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ExperimentalCoverage.dir/rule
 
 # Convenience name for target.
@@ -395,14 +395,14 @@ clean: check/CMakeFiles/ExperimentalCoverage.dir/clean
 check/CMakeFiles/NightlyConfigure.dir/all:
 	$(MAKE) -f check/CMakeFiles/NightlyConfigure.dir/build.make check/CMakeFiles/NightlyConfigure.dir/depend
 	$(MAKE) -f check/CMakeFiles/NightlyConfigure.dir/build.make check/CMakeFiles/NightlyConfigure.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyConfigure"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyConfigure"
 .PHONY : check/CMakeFiles/NightlyConfigure.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/NightlyConfigure.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/NightlyConfigure.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/NightlyConfigure.dir/rule
 
 # Convenience name for target.
@@ -427,14 +427,14 @@ clean: check/CMakeFiles/NightlyConfigure.dir/clean
 check/CMakeFiles/NightlyCoverage.dir/all:
 	$(MAKE) -f check/CMakeFiles/NightlyCoverage.dir/build.make check/CMakeFiles/NightlyCoverage.dir/depend
 	$(MAKE) -f check/CMakeFiles/NightlyCoverage.dir/build.make check/CMakeFiles/NightlyCoverage.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyCoverage"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyCoverage"
 .PHONY : check/CMakeFiles/NightlyCoverage.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/NightlyCoverage.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/NightlyCoverage.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/NightlyCoverage.dir/rule
 
 # Convenience name for target.
@@ -459,14 +459,14 @@ clean: check/CMakeFiles/NightlyCoverage.dir/clean
 check/CMakeFiles/Experimental.dir/all:
 	$(MAKE) -f check/CMakeFiles/Experimental.dir/build.make check/CMakeFiles/Experimental.dir/depend
 	$(MAKE) -f check/CMakeFiles/Experimental.dir/build.make check/CMakeFiles/Experimental.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target Experimental"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target Experimental"
 .PHONY : check/CMakeFiles/Experimental.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/Experimental.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/Experimental.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/Experimental.dir/rule
 
 # Convenience name for target.
@@ -491,14 +491,14 @@ clean: check/CMakeFiles/Experimental.dir/clean
 check/CMakeFiles/Continuous.dir/all:
 	$(MAKE) -f check/CMakeFiles/Continuous.dir/build.make check/CMakeFiles/Continuous.dir/depend
 	$(MAKE) -f check/CMakeFiles/Continuous.dir/build.make check/CMakeFiles/Continuous.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target Continuous"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target Continuous"
 .PHONY : check/CMakeFiles/Continuous.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/Continuous.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/Continuous.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/Continuous.dir/rule
 
 # Convenience name for target.
@@ -523,14 +523,14 @@ clean: check/CMakeFiles/Continuous.dir/clean
 check/CMakeFiles/ContinuousBuild.dir/all:
 	$(MAKE) -f check/CMakeFiles/ContinuousBuild.dir/build.make check/CMakeFiles/ContinuousBuild.dir/depend
 	$(MAKE) -f check/CMakeFiles/ContinuousBuild.dir/build.make check/CMakeFiles/ContinuousBuild.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousBuild"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousBuild"
 .PHONY : check/CMakeFiles/ContinuousBuild.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ContinuousBuild.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ContinuousBuild.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ContinuousBuild.dir/rule
 
 # Convenience name for target.
@@ -555,14 +555,14 @@ clean: check/CMakeFiles/ContinuousBuild.dir/clean
 check/CMakeFiles/ExperimentalUpdate.dir/all:
 	$(MAKE) -f check/CMakeFiles/ExperimentalUpdate.dir/build.make check/CMakeFiles/ExperimentalUpdate.dir/depend
 	$(MAKE) -f check/CMakeFiles/ExperimentalUpdate.dir/build.make check/CMakeFiles/ExperimentalUpdate.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalUpdate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalUpdate"
 .PHONY : check/CMakeFiles/ExperimentalUpdate.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ExperimentalUpdate.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ExperimentalUpdate.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ExperimentalUpdate.dir/rule
 
 # Convenience name for target.
@@ -587,14 +587,14 @@ clean: check/CMakeFiles/ExperimentalUpdate.dir/clean
 check/CMakeFiles/ContinuousTest.dir/all:
 	$(MAKE) -f check/CMakeFiles/ContinuousTest.dir/build.make check/CMakeFiles/ContinuousTest.dir/depend
 	$(MAKE) -f check/CMakeFiles/ContinuousTest.dir/build.make check/CMakeFiles/ContinuousTest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousTest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousTest"
 .PHONY : check/CMakeFiles/ContinuousTest.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ContinuousTest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ContinuousTest.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ContinuousTest.dir/rule
 
 # Convenience name for target.
@@ -619,14 +619,14 @@ clean: check/CMakeFiles/ContinuousTest.dir/clean
 check/CMakeFiles/NightlySubmit.dir/all:
 	$(MAKE) -f check/CMakeFiles/NightlySubmit.dir/build.make check/CMakeFiles/NightlySubmit.dir/depend
 	$(MAKE) -f check/CMakeFiles/NightlySubmit.dir/build.make check/CMakeFiles/NightlySubmit.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlySubmit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlySubmit"
 .PHONY : check/CMakeFiles/NightlySubmit.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/NightlySubmit.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/NightlySubmit.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/NightlySubmit.dir/rule
 
 # Convenience name for target.
@@ -651,14 +651,14 @@ clean: check/CMakeFiles/NightlySubmit.dir/clean
 check/CMakeFiles/NightlyBuild.dir/all:
 	$(MAKE) -f check/CMakeFiles/NightlyBuild.dir/build.make check/CMakeFiles/NightlyBuild.dir/depend
 	$(MAKE) -f check/CMakeFiles/NightlyBuild.dir/build.make check/CMakeFiles/NightlyBuild.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyBuild"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyBuild"
 .PHONY : check/CMakeFiles/NightlyBuild.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/NightlyBuild.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/NightlyBuild.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/NightlyBuild.dir/rule
 
 # Convenience name for target.
@@ -683,14 +683,14 @@ clean: check/CMakeFiles/NightlyBuild.dir/clean
 check/CMakeFiles/NightlyMemoryCheck.dir/all:
 	$(MAKE) -f check/CMakeFiles/NightlyMemoryCheck.dir/build.make check/CMakeFiles/NightlyMemoryCheck.dir/depend
 	$(MAKE) -f check/CMakeFiles/NightlyMemoryCheck.dir/build.make check/CMakeFiles/NightlyMemoryCheck.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyMemoryCheck"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyMemoryCheck"
 .PHONY : check/CMakeFiles/NightlyMemoryCheck.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/NightlyMemoryCheck.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/NightlyMemoryCheck.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/NightlyMemoryCheck.dir/rule
 
 # Convenience name for target.
@@ -715,14 +715,14 @@ clean: check/CMakeFiles/NightlyMemoryCheck.dir/clean
 check/CMakeFiles/NightlyStart.dir/all:
 	$(MAKE) -f check/CMakeFiles/NightlyStart.dir/build.make check/CMakeFiles/NightlyStart.dir/depend
 	$(MAKE) -f check/CMakeFiles/NightlyStart.dir/build.make check/CMakeFiles/NightlyStart.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyStart"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyStart"
 .PHONY : check/CMakeFiles/NightlyStart.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/NightlyStart.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/NightlyStart.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/NightlyStart.dir/rule
 
 # Convenience name for target.
@@ -747,14 +747,14 @@ clean: check/CMakeFiles/NightlyStart.dir/clean
 check/CMakeFiles/NightlyUpdate.dir/all:
 	$(MAKE) -f check/CMakeFiles/NightlyUpdate.dir/build.make check/CMakeFiles/NightlyUpdate.dir/depend
 	$(MAKE) -f check/CMakeFiles/NightlyUpdate.dir/build.make check/CMakeFiles/NightlyUpdate.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyUpdate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyUpdate"
 .PHONY : check/CMakeFiles/NightlyUpdate.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/NightlyUpdate.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/NightlyUpdate.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/NightlyUpdate.dir/rule
 
 # Convenience name for target.
@@ -779,14 +779,14 @@ clean: check/CMakeFiles/NightlyUpdate.dir/clean
 check/CMakeFiles/ExperimentalTest.dir/all:
 	$(MAKE) -f check/CMakeFiles/ExperimentalTest.dir/build.make check/CMakeFiles/ExperimentalTest.dir/depend
 	$(MAKE) -f check/CMakeFiles/ExperimentalTest.dir/build.make check/CMakeFiles/ExperimentalTest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalTest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalTest"
 .PHONY : check/CMakeFiles/ExperimentalTest.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ExperimentalTest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ExperimentalTest.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ExperimentalTest.dir/rule
 
 # Convenience name for target.
@@ -811,14 +811,14 @@ clean: check/CMakeFiles/ExperimentalTest.dir/clean
 check/CMakeFiles/ExperimentalMemCheck.dir/all:
 	$(MAKE) -f check/CMakeFiles/ExperimentalMemCheck.dir/build.make check/CMakeFiles/ExperimentalMemCheck.dir/depend
 	$(MAKE) -f check/CMakeFiles/ExperimentalMemCheck.dir/build.make check/CMakeFiles/ExperimentalMemCheck.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalMemCheck"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalMemCheck"
 .PHONY : check/CMakeFiles/ExperimentalMemCheck.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ExperimentalMemCheck.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ExperimentalMemCheck.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ExperimentalMemCheck.dir/rule
 
 # Convenience name for target.
@@ -843,14 +843,14 @@ clean: check/CMakeFiles/ExperimentalMemCheck.dir/clean
 check/CMakeFiles/NightlyMemCheck.dir/all:
 	$(MAKE) -f check/CMakeFiles/NightlyMemCheck.dir/build.make check/CMakeFiles/NightlyMemCheck.dir/depend
 	$(MAKE) -f check/CMakeFiles/NightlyMemCheck.dir/build.make check/CMakeFiles/NightlyMemCheck.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyMemCheck"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyMemCheck"
 .PHONY : check/CMakeFiles/NightlyMemCheck.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/NightlyMemCheck.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/NightlyMemCheck.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/NightlyMemCheck.dir/rule
 
 # Convenience name for target.
@@ -875,14 +875,14 @@ clean: check/CMakeFiles/NightlyMemCheck.dir/clean
 check/CMakeFiles/ExperimentalSubmit.dir/all:
 	$(MAKE) -f check/CMakeFiles/ExperimentalSubmit.dir/build.make check/CMakeFiles/ExperimentalSubmit.dir/depend
 	$(MAKE) -f check/CMakeFiles/ExperimentalSubmit.dir/build.make check/CMakeFiles/ExperimentalSubmit.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalSubmit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalSubmit"
 .PHONY : check/CMakeFiles/ExperimentalSubmit.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ExperimentalSubmit.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ExperimentalSubmit.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ExperimentalSubmit.dir/rule
 
 # Convenience name for target.
@@ -907,14 +907,14 @@ clean: check/CMakeFiles/ExperimentalSubmit.dir/clean
 check/CMakeFiles/ContinuousConfigure.dir/all:
 	$(MAKE) -f check/CMakeFiles/ContinuousConfigure.dir/build.make check/CMakeFiles/ContinuousConfigure.dir/depend
 	$(MAKE) -f check/CMakeFiles/ContinuousConfigure.dir/build.make check/CMakeFiles/ContinuousConfigure.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousConfigure"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousConfigure"
 .PHONY : check/CMakeFiles/ContinuousConfigure.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ContinuousConfigure.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ContinuousConfigure.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ContinuousConfigure.dir/rule
 
 # Convenience name for target.
@@ -939,14 +939,14 @@ clean: check/CMakeFiles/ContinuousConfigure.dir/clean
 check/CMakeFiles/ContinuousMemCheck.dir/all:
 	$(MAKE) -f check/CMakeFiles/ContinuousMemCheck.dir/build.make check/CMakeFiles/ContinuousMemCheck.dir/depend
 	$(MAKE) -f check/CMakeFiles/ContinuousMemCheck.dir/build.make check/CMakeFiles/ContinuousMemCheck.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousMemCheck"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousMemCheck"
 .PHONY : check/CMakeFiles/ContinuousMemCheck.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ContinuousMemCheck.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ContinuousMemCheck.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ContinuousMemCheck.dir/rule
 
 # Convenience name for target.
@@ -971,14 +971,14 @@ clean: check/CMakeFiles/ContinuousMemCheck.dir/clean
 check/CMakeFiles/ExperimentalConfigure.dir/all:
 	$(MAKE) -f check/CMakeFiles/ExperimentalConfigure.dir/build.make check/CMakeFiles/ExperimentalConfigure.dir/depend
 	$(MAKE) -f check/CMakeFiles/ExperimentalConfigure.dir/build.make check/CMakeFiles/ExperimentalConfigure.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalConfigure"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ExperimentalConfigure"
 .PHONY : check/CMakeFiles/ExperimentalConfigure.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ExperimentalConfigure.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ExperimentalConfigure.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ExperimentalConfigure.dir/rule
 
 # Convenience name for target.
@@ -1003,14 +1003,14 @@ clean: check/CMakeFiles/ExperimentalConfigure.dir/clean
 check/CMakeFiles/ContinuousSubmit.dir/all:
 	$(MAKE) -f check/CMakeFiles/ContinuousSubmit.dir/build.make check/CMakeFiles/ContinuousSubmit.dir/depend
 	$(MAKE) -f check/CMakeFiles/ContinuousSubmit.dir/build.make check/CMakeFiles/ContinuousSubmit.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousSubmit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target ContinuousSubmit"
 .PHONY : check/CMakeFiles/ContinuousSubmit.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/ContinuousSubmit.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/ContinuousSubmit.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/ContinuousSubmit.dir/rule
 
 # Convenience name for target.
@@ -1037,7 +1037,7 @@ check/CMakeFiles/unit_tests.dir/all: src/CMakeFiles/libhighs.dir/all
 check/CMakeFiles/unit_tests.dir/all: src/CMakeFiles/libbasiclu.dir/all
 	$(MAKE) -f check/CMakeFiles/unit_tests.dir/build.make check/CMakeFiles/unit_tests.dir/depend
 	$(MAKE) -f check/CMakeFiles/unit_tests.dir/build.make check/CMakeFiles/unit_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=89,90,91,92,93,94,95,96,97,98,99,100 "Built target unit_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=89,90,91,92,93,94,95,96,97,98,99,100 "Built target unit_tests"
 .PHONY : check/CMakeFiles/unit_tests.dir/all
 
 # Include target in all.
@@ -1047,9 +1047,9 @@ all: check/CMakeFiles/unit_tests.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/unit_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 97
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 97
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/unit_tests.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/unit_tests.dir/rule
 
 # Convenience name for target.
@@ -1076,7 +1076,7 @@ check/CMakeFiles/capi_unit_tests.dir/all: src/CMakeFiles/libhighs.dir/all
 check/CMakeFiles/capi_unit_tests.dir/all: src/CMakeFiles/libbasiclu.dir/all
 	$(MAKE) -f check/CMakeFiles/capi_unit_tests.dir/build.make check/CMakeFiles/capi_unit_tests.dir/depend
 	$(MAKE) -f check/CMakeFiles/capi_unit_tests.dir/build.make check/CMakeFiles/capi_unit_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=1 "Built target capi_unit_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=1 "Built target capi_unit_tests"
 .PHONY : check/CMakeFiles/capi_unit_tests.dir/all
 
 # Include target in all.
@@ -1086,9 +1086,9 @@ all: check/CMakeFiles/capi_unit_tests.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/capi_unit_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 86
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 86
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/capi_unit_tests.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/capi_unit_tests.dir/rule
 
 # Convenience name for target.
@@ -1113,14 +1113,14 @@ clean: check/CMakeFiles/capi_unit_tests.dir/clean
 check/CMakeFiles/NightlyTest.dir/all:
 	$(MAKE) -f check/CMakeFiles/NightlyTest.dir/build.make check/CMakeFiles/NightlyTest.dir/depend
 	$(MAKE) -f check/CMakeFiles/NightlyTest.dir/build.make check/CMakeFiles/NightlyTest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyTest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num= "Built target NightlyTest"
 .PHONY : check/CMakeFiles/NightlyTest.dir/all
 
 # Build rule for subdir invocation for target.
 check/CMakeFiles/NightlyTest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 check/CMakeFiles/NightlyTest.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : check/CMakeFiles/NightlyTest.dir/rule
 
 # Convenience name for target.
@@ -1167,7 +1167,7 @@ src/preinstall:
 src/CMakeFiles/libipx.dir/all: src/CMakeFiles/libbasiclu.dir/all
 	$(MAKE) -f src/CMakeFiles/libipx.dir/build.make src/CMakeFiles/libipx.dir/depend
 	$(MAKE) -f src/CMakeFiles/libipx.dir/build.make src/CMakeFiles/libipx.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88 "Built target libipx"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88 "Built target libipx"
 .PHONY : src/CMakeFiles/libipx.dir/all
 
 # Include target in all.
@@ -1177,9 +1177,9 @@ all: src/CMakeFiles/libipx.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/libipx.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 48
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 48
 	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/libipx.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : src/CMakeFiles/libipx.dir/rule
 
 # Convenience name for target.
@@ -1205,7 +1205,7 @@ src/CMakeFiles/libhighs.dir/all: src/CMakeFiles/libipx.dir/all
 src/CMakeFiles/libhighs.dir/all: src/CMakeFiles/libbasiclu.dir/all
 	$(MAKE) -f src/CMakeFiles/libhighs.dir/build.make src/CMakeFiles/libhighs.dir/depend
 	$(MAKE) -f src/CMakeFiles/libhighs.dir/build.make src/CMakeFiles/libhighs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63 "Built target libhighs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63 "Built target libhighs"
 .PHONY : src/CMakeFiles/libhighs.dir/all
 
 # Include target in all.
@@ -1215,9 +1215,9 @@ all: src/CMakeFiles/libhighs.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/libhighs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 85
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 85
 	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/libhighs.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : src/CMakeFiles/libhighs.dir/rule
 
 # Convenience name for target.
@@ -1242,7 +1242,7 @@ clean: src/CMakeFiles/libhighs.dir/clean
 src/CMakeFiles/libbasiclu.dir/all:
 	$(MAKE) -f src/CMakeFiles/libbasiclu.dir/build.make src/CMakeFiles/libbasiclu.dir/depend
 	$(MAKE) -f src/CMakeFiles/libbasiclu.dir/build.make src/CMakeFiles/libbasiclu.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26 "Built target libbasiclu"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26 "Built target libbasiclu"
 .PHONY : src/CMakeFiles/libbasiclu.dir/all
 
 # Include target in all.
@@ -1252,9 +1252,9 @@ all: src/CMakeFiles/libbasiclu.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/libbasiclu.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 23
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 23
 	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/libbasiclu.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles 0
 .PHONY : src/CMakeFiles/libbasiclu.dir/rule
 
 # Convenience name for target.

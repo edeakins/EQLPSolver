@@ -19,10 +19,10 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_factorize.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_factorize.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -41,9 +41,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_get_factors.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_get_factors.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -62,9 +62,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_initialize.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_initialize.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -83,9 +83,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_object.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_object.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -104,9 +104,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_dense.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_dense.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -125,9 +125,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_for_update.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_for_update.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -146,9 +146,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_sparse.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_sparse.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -167,9 +167,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_update.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_update.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -188,11 +188,11 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_build_factors.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_build_factors.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -211,9 +211,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_condest.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_condest.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -232,9 +232,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_dfs.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_dfs.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -253,10 +253,10 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_factorize_bump.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_factorize_bump.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -275,10 +275,10 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -297,9 +297,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_garbage_perm.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_garbage_perm.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -318,9 +318,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_initialize.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_initialize.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -339,9 +339,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -360,11 +360,11 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_markowitz.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_markowitz.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -383,9 +383,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_matrix_norm.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_matrix_norm.c
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -404,12 +404,12 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_pivot.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_pivot.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -428,9 +428,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_residual_test.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_residual_test.c
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -449,11 +449,11 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_setup_bump.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_setup_bump.c
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -472,10 +472,10 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_singletons.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_singletons.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -494,9 +494,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_dense.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_dense.c
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -515,10 +515,10 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_for_update.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_for_update.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -537,10 +537,10 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_sparse.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_sparse.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -559,9 +559,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_symbolic.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_symbolic.c
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -580,12 +580,12 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_triangular.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_triangular.c
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.o
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.c
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o
  ../src/ipm/basiclu/include/basiclu.h
  ../src/ipm/basiclu/include/basiclu_factorize.h
@@ -604,9 +604,9 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o
  ../src/ipm/basiclu/include/basiclu_solve_for_update.h
  ../src/ipm/basiclu/include/basiclu_solve_sparse.h
  ../src/ipm/basiclu/include/basiclu_update.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
- /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_update.c
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_def.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_list.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.h
+ /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_update.c

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/edeakins/Thesis/EQLPSolver/DHiGHS
+CMAKE_SOURCE_DIR = /home/edeak/EQLPSolver/DHiGHS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild
+CMAKE_BINARY_DIR = /home/edeak/EQLPSolver/DHiGHS/DevBuild
 
 # Utility rule file for ExperimentalUpdate.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild
 include check/CMakeFiles/ExperimentalUpdate.dir/progress.make
 
 check/CMakeFiles/ExperimentalUpdate:
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/check && /usr/bin/ctest -D ExperimentalUpdate
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/check && /usr/bin/ctest -D ExperimentalUpdate
 
 ExperimentalUpdate: check/CMakeFiles/ExperimentalUpdate
 ExperimentalUpdate: check/CMakeFiles/ExperimentalUpdate.dir/build.make
@@ -67,10 +67,10 @@ check/CMakeFiles/ExperimentalUpdate.dir/build: ExperimentalUpdate
 .PHONY : check/CMakeFiles/ExperimentalUpdate.dir/build
 
 check/CMakeFiles/ExperimentalUpdate.dir/clean:
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ExperimentalUpdate.dir/cmake_clean.cmake
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ExperimentalUpdate.dir/cmake_clean.cmake
 .PHONY : check/CMakeFiles/ExperimentalUpdate.dir/clean
 
 check/CMakeFiles/ExperimentalUpdate.dir/depend:
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/Thesis/EQLPSolver/DHiGHS /home/edeakins/Thesis/EQLPSolver/DHiGHS/check /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/check /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/check/CMakeFiles/ExperimentalUpdate.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeak/EQLPSolver/DHiGHS /home/edeak/EQLPSolver/DHiGHS/check /home/edeak/EQLPSolver/DHiGHS/DevBuild /home/edeak/EQLPSolver/DHiGHS/DevBuild/check /home/edeak/EQLPSolver/DHiGHS/DevBuild/check/CMakeFiles/ExperimentalUpdate.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : check/CMakeFiles/ExperimentalUpdate.dir/depend
 

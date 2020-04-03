@@ -98,9 +98,9 @@ ipx_config.h
 
 ../src/ipm/ipx/include/ipx_status.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.cc
 basiclu_kernel.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.h
 cassert
 -
 new
@@ -108,15 +108,15 @@ new
 stdexcept
 -
 basiclu.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.h
 lu_factorization.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.cc
 basiclu_wrapper.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.h
 cassert
 -
 cmath
@@ -124,17 +124,17 @@ cmath
 stdexcept
 -
 basiclu.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.h
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 lu_update.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.cc
 basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
 algorithm
 -
 cmath
@@ -142,65 +142,65 @@ cmath
 tuple
 -
 basiclu_kernel.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.h
 basiclu_wrapper.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.h
 forrest_tomlin.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.h
 guess_basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.h
 power_method.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/power_method.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/power_method.h
 symbolic_invert.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.h
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
 memory
 -
 vector
 -
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 indexed_vector.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
 lu_update.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 sparse_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
 cassert
 -
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.cc
 conjugate_residuals.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.h
 algorithm
 -
 cmath
 -
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.h
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 linear_operator.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.cc
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 iostream
 -
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 fstream
 -
 ostream
@@ -210,15 +210,15 @@ sstream
 string
 -
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 multistream.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/multistream.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/multistream.h
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.cc
 crossover.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.h
 algorithm
 -
 cassert
@@ -228,23 +228,23 @@ stdexcept
 valarray
 -
 time.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/time.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/time.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.h
 vector
 -
 basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 indexed_vector.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.cc
 diagonal_precond.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.h
 cassert
 -
 cmath
@@ -252,19 +252,19 @@ cmath
 vector
 -
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.h
 linear_operator.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 sparse_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.cc
 forrest_tomlin.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.h
 algorithm
 -
 cassert
@@ -272,51 +272,51 @@ cassert
 utility
 -
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.h
 memory
 -
 vector
 -
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 lu_factorization.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.h
 lu_update.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.cc
 guess_basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.h
 cassert
 -
 cmath
 -
 sparse_utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.h
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.cc
 indexed_vector.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
 vector
 -
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.cc
 info.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.h
 cstring
 -
 map
@@ -324,19 +324,19 @@ map
 string
 -
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.h
 ostream
 -
 string
 -
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.cc
 ipm.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.h
 algorithm
 -
 cmath
@@ -346,125 +346,125 @@ cassert
 limits
 -
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.h
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 kkt_solver.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
 iterate.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.cc
 ipx_c.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.h
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 lp_solver.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 ipx_config.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_config.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_config.h
 ipx_info.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_info.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_info.h
 ipx_parameters.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_parameters.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_parameters.h
 ipx_status.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_status.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_status.h
 valarray
 -
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.cc
 iterate.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
 cassert
 -
 cmath
 -
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
 vector
 -
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.cc
 kkt_solver.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
 basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
 iterate.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.cc
 kkt_solver_basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.h
 cassert
 -
 cmath
 -
 conjugate_residuals.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.h
 maxvolume.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.h
 starting_basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.h
 basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 kkt_solver.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 splitted_normal_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.cc
 kkt_solver_diag.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.h
 cassert
 -
 cmath
 -
 conjugate_residuals.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.h
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 diagonal_precond.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.h
 kkt_solver.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.h
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 normal_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.cc
 linear_operator.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.cc
 lp_solver.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.h
 algorithm
 -
 cassert
@@ -474,65 +474,65 @@ vector
 utility
 -
 crossover.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.h
 info.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.h
 kkt_solver_basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.h
 kkt_solver_diag.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.h
 starting_basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.h
 memory
 -
 basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 ipm.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.h
 iterate.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.cc
 lu_factorization.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.h
 algorithm
 -
 cassert
 -
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.h
 vector
 -
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 sparse_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.cc
 lu_update.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.h
 vector
 -
 indexed_vector.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.h
 sparse_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.cc
 maxvolume.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.h
 algorithm
 -
 cmath
@@ -540,19 +540,19 @@ cmath
 vector
 -
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.h
 basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.cc
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 algorithm
 -
 cassert
@@ -560,49 +560,49 @@ cassert
 cmath
 -
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 vector
 -
 control.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.h
 sparse_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/multistream.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/multistream.h
 ostream
 -
 vector
 -
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.cc
 normal_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.h
 cassert
 -
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.h
 linear_operator.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/power_method.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/power_method.h
 cmath
 -
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.cc
 sparse_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
 algorithm
 -
 cassert
@@ -612,51 +612,51 @@ cmath
 utility
 -
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
 vector
 -
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.cc
 sparse_utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.h
 cassert
 -
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.h
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.cc
 splitted_normal_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.h
 cassert
 -
 cmath
 -
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.h
 vector
 -
 basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
 linear_operator.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.h
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 sparse_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.cc
 starting_basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.h
 cassert
 -
 cmath
@@ -664,17 +664,17 @@ cmath
 vector
 -
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.h
 basis.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.h
 iterate.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.cc
 symbolic_invert.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.h
 algorithm
 -
 cassert
@@ -682,29 +682,29 @@ cassert
 random
 -
 sparse_matrix.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.h
 sparse_utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.h
 vector
 -
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 model.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.cc
 timer.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.h
 chrono
 -
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.cc
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.cc
 utils.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 algorithm
 -
 cassert
@@ -714,9 +714,9 @@ cmath
 utility
 -
 
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.h
 vector
 -
 ipx_internal.h
-/home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
+/home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_internal.h
 

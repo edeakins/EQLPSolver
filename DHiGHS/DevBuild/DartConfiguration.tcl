@@ -4,14 +4,14 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/edeakins/Thesis/EQLPSolver/DHiGHS
-BuildDirectory: /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild
+SourceDirectory: /home/edeak/EQLPSolver/DHiGHS
+BuildDirectory: /home/edeak/EQLPSolver/DHiGHS/DevBuild
 
 # Where to place the cost data store
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: DESKTOP-2M7DVJ8
+Site: DESKTOP-O2H4E5Q
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
 BuildName: Linux-c++
@@ -36,7 +36,7 @@ ScpCommand: /usr/bin/scp
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/bin/cmake" "/home/edeakins/Thesis/EQLPSolver/DHiGHS"
+ConfigureCommand: "/usr/bin/cmake" "/home/edeak/EQLPSolver/DHiGHS"
 MakeCommand: /usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
 DefaultCTestConfigurationType: Release
 

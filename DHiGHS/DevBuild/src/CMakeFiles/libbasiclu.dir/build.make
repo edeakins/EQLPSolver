@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/edeakins/Thesis/EQLPSolver/DHiGHS
+CMAKE_SOURCE_DIR = /home/edeak/EQLPSolver/DHiGHS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild
+CMAKE_BINARY_DIR = /home/edeak/EQLPSolver/DHiGHS/DevBuild
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/libbasiclu.dir/depend.make
@@ -59,16 +59,16 @@ include src/CMakeFiles/libbasiclu.dir/flags.make
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.o: ../src/ipm/basiclu/src/basiclu_factorize.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_factorize.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_factorize.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_factorize.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_factorize.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_factorize.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_factorize.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.o.requires:
 
@@ -83,16 +83,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_factorize.c.o.provides.bui
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o: ../src/ipm/basiclu/src/basiclu_solve_dense.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_dense.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_dense.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_dense.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_dense.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_dense.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_dense.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o.requires:
 
@@ -107,16 +107,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_dense.c.o.provides.b
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o: ../src/ipm/basiclu/src/lu_build_factors.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_build_factors.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_build_factors.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_build_factors.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_build_factors.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_build_factors.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_build_factors.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o.requires:
 
@@ -131,16 +131,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_build_factors.c.o.provides.buil
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o: ../src/ipm/basiclu/src/lu_factorize_bump.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_factorize_bump.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_factorize_bump.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_factorize_bump.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_factorize_bump.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_factorize_bump.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_factorize_bump.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o.requires:
 
@@ -155,16 +155,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_factorize_bump.c.o.provides.bui
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o: ../src/ipm/basiclu/src/lu_initialize.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_initialize.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_initialize.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_initialize.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_initialize.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_initialize.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_initialize.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o.requires:
 
@@ -179,16 +179,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_initialize.c.o.provides.build: 
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o: ../src/ipm/basiclu/src/lu_markowitz.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_markowitz.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_markowitz.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_markowitz.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_markowitz.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_markowitz.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_markowitz.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o.requires:
 
@@ -203,16 +203,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_markowitz.c.o.provides.build: s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o: ../src/ipm/basiclu/src/lu_setup_bump.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_setup_bump.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_setup_bump.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_setup_bump.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_setup_bump.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_setup_bump.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_setup_bump.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o.requires:
 
@@ -227,16 +227,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_setup_bump.c.o.provides.build: 
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o: ../src/ipm/basiclu/src/lu_solve_sparse.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_sparse.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_sparse.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_sparse.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_sparse.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_sparse.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_sparse.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o.requires:
 
@@ -251,16 +251,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_sparse.c.o.provides.build
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o: ../src/ipm/basiclu/src/basiclu_get_factors.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_get_factors.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_get_factors.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_get_factors.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_get_factors.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_get_factors.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_get_factors.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o.requires:
 
@@ -275,16 +275,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_get_factors.c.o.provides.b
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o: ../src/ipm/basiclu/src/basiclu_solve_for_update.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_for_update.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_for_update.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_for_update.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_for_update.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_for_update.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_for_update.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o.requires:
 
@@ -299,16 +299,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_for_update.c.o.provi
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o: ../src/ipm/basiclu/src/lu_condest.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_condest.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_condest.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_condest.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_condest.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_condest.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_condest.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o.requires:
 
@@ -323,16 +323,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_condest.c.o.provides.build: src
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o: ../src/ipm/basiclu/src/lu_file.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_file.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o.requires:
 
@@ -347,16 +347,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_file.c.o.provides.build: src/CM
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o: ../src/ipm/basiclu/src/lu_internal.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_internal.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o.requires:
 
@@ -371,16 +371,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_internal.c.o.provides.build: sr
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o: ../src/ipm/basiclu/src/lu_matrix_norm.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_matrix_norm.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_matrix_norm.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_matrix_norm.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_matrix_norm.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_matrix_norm.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_matrix_norm.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o.requires:
 
@@ -395,16 +395,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_matrix_norm.c.o.provides.build:
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o: ../src/ipm/basiclu/src/lu_singletons.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_singletons.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_singletons.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_singletons.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_singletons.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_singletons.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_singletons.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o.requires:
 
@@ -419,16 +419,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_singletons.c.o.provides.build: 
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o: ../src/ipm/basiclu/src/lu_solve_symbolic.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_symbolic.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_symbolic.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_symbolic.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_symbolic.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_symbolic.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_symbolic.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o.requires:
 
@@ -443,16 +443,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_symbolic.c.o.provides.bui
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o: ../src/ipm/basiclu/src/lu_update.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_update.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_update.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_update.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_update.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_update.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_update.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o.requires:
 
@@ -467,16 +467,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_update.c.o.provides.build: src/
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o: ../src/ipm/basiclu/src/basiclu_initialize.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_initialize.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_initialize.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_initialize.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_initialize.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_initialize.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_initialize.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o.requires:
 
@@ -491,16 +491,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_initialize.c.o.provides.bu
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o: ../src/ipm/basiclu/src/basiclu_solve_sparse.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_sparse.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_sparse.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_sparse.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_sparse.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_sparse.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_solve_sparse.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o.requires:
 
@@ -515,16 +515,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_solve_sparse.c.o.provides.
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o: ../src/ipm/basiclu/src/lu_pivot.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_pivot.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_pivot.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_pivot.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_pivot.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_pivot.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_pivot.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o.requires:
 
@@ -539,16 +539,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_pivot.c.o.provides.build: src/C
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o: ../src/ipm/basiclu/src/lu_solve_dense.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_dense.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_dense.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_dense.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_dense.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_dense.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_dense.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o.requires:
 
@@ -563,16 +563,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_dense.c.o.provides.build:
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o: ../src/ipm/basiclu/src/lu_solve_triangular.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_triangular.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_triangular.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_triangular.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_triangular.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_triangular.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_triangular.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o.requires:
 
@@ -587,16 +587,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_triangular.c.o.provides.b
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o: ../src/ipm/basiclu/src/basiclu_object.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_object.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_object.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_object.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_object.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_object.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_object.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o.requires:
 
@@ -611,16 +611,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_object.c.o.provides.build:
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o: ../src/ipm/basiclu/src/basiclu_update.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_update.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_update.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_update.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_update.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_update.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/basiclu_update.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o.requires:
 
@@ -635,16 +635,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/basiclu_update.c.o.provides.build:
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o: ../src/ipm/basiclu/src/lu_dfs.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_dfs.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_dfs.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_dfs.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_dfs.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_dfs.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_dfs.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o.requires:
 
@@ -659,16 +659,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_dfs.c.o.provides.build: src/CMa
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o: ../src/ipm/basiclu/src/lu_garbage_perm.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_garbage_perm.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_garbage_perm.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_garbage_perm.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_garbage_perm.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_garbage_perm.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_garbage_perm.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o.requires:
 
@@ -683,16 +683,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_garbage_perm.c.o.provides.build
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o: ../src/ipm/basiclu/src/lu_residual_test.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_residual_test.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_residual_test.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_residual_test.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_residual_test.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_residual_test.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_residual_test.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o.requires:
 
@@ -707,16 +707,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_residual_test.c.o.provides.buil
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o: ../src/ipm/basiclu/src/lu_solve_for_update.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_for_update.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_for_update.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_for_update.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_for_update.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_for_update.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_solve_for_update.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o.requires:
 
@@ -731,16 +731,16 @@ src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_update.c.o.provides.b
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.o: src/CMakeFiles/libbasiclu.dir/flags.make
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.o: ../src/ipm/basiclu/src/lu_timer.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.o   -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building C object src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.o   -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.c
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.c > CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.i
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/basiclu/src/lu_timer.c -o CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.s
 
 src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.o.requires:
 
@@ -819,8 +819,8 @@ lib/libbasiclu.so: src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_solve_for_up
 lib/libbasiclu.so: src/CMakeFiles/libbasiclu.dir/ipm/basiclu/src/lu_timer.c.o
 lib/libbasiclu.so: src/CMakeFiles/libbasiclu.dir/build.make
 lib/libbasiclu.so: src/CMakeFiles/libbasiclu.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Linking C shared library ../lib/libbasiclu.so"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/libbasiclu.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Linking C shared library ../lib/libbasiclu.so"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/libbasiclu.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/libbasiclu.dir/build: lib/libbasiclu.so
@@ -860,10 +860,10 @@ src/CMakeFiles/libbasiclu.dir/requires: src/CMakeFiles/libbasiclu.dir/ipm/basicl
 .PHONY : src/CMakeFiles/libbasiclu.dir/requires
 
 src/CMakeFiles/libbasiclu.dir/clean:
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -P CMakeFiles/libbasiclu.dir/cmake_clean.cmake
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -P CMakeFiles/libbasiclu.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/libbasiclu.dir/clean
 
 src/CMakeFiles/libbasiclu.dir/depend:
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/Thesis/EQLPSolver/DHiGHS /home/edeakins/Thesis/EQLPSolver/DHiGHS/src /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libbasiclu.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeak/EQLPSolver/DHiGHS /home/edeak/EQLPSolver/DHiGHS/src /home/edeak/EQLPSolver/DHiGHS/DevBuild /home/edeak/EQLPSolver/DHiGHS/DevBuild/src /home/edeak/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libbasiclu.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/libbasiclu.dir/depend
 

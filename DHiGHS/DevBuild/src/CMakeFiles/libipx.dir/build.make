@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/edeakins/Thesis/EQLPSolver/DHiGHS
+CMAKE_SOURCE_DIR = /home/edeak/EQLPSolver/DHiGHS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild
+CMAKE_BINARY_DIR = /home/edeak/EQLPSolver/DHiGHS/DevBuild
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/libipx.dir/depend.make
@@ -59,16 +59,16 @@ include src/CMakeFiles/libipx.dir/flags.make
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.o: ../src/ipm/ipx/src/basiclu_kernel.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.cc > CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.cc > CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_kernel.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.o.requires:
 
@@ -83,16 +83,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_kernel.cc.o.provides.build: src/CM
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.o: ../src/ipm/ipx/src/basiclu_wrapper.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.cc > CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.cc > CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basiclu_wrapper.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.o.requires:
 
@@ -107,16 +107,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/basiclu_wrapper.cc.o.provides.build: src/C
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.o: ../src/ipm/ipx/src/basis.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.cc > CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.cc > CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/basis.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.o.requires:
 
@@ -131,16 +131,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/basis.cc.o.provides.build: src/CMakeFiles/
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.o: ../src/ipm/ipx/src/conjugate_residuals.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.cc > CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.cc > CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/conjugate_residuals.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.o.requires:
 
@@ -155,16 +155,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/conjugate_residuals.cc.o.provides.build: s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.o: ../src/ipm/ipx/src/control.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.cc > CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.cc > CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/control.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.o.requires:
 
@@ -179,16 +179,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/control.cc.o.provides.build: src/CMakeFile
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.o: ../src/ipm/ipx/src/crossover.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.cc > CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.cc > CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/crossover.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.o.requires:
 
@@ -203,16 +203,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/crossover.cc.o.provides.build: src/CMakeFi
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.o: ../src/ipm/ipx/src/diagonal_precond.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.cc > CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.cc > CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/diagonal_precond.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.o.requires:
 
@@ -227,16 +227,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/diagonal_precond.cc.o.provides.build: src/
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.o: ../src/ipm/ipx/src/forrest_tomlin.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.cc > CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.cc > CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/forrest_tomlin.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.o.requires:
 
@@ -251,16 +251,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/forrest_tomlin.cc.o.provides.build: src/CM
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.o: ../src/ipm/ipx/src/guess_basis.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.cc > CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.cc > CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/guess_basis.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.o.requires:
 
@@ -275,16 +275,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/guess_basis.cc.o.provides.build: src/CMake
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.o: ../src/ipm/ipx/src/indexed_vector.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.cc > CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.cc > CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/indexed_vector.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.o.requires:
 
@@ -299,16 +299,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/indexed_vector.cc.o.provides.build: src/CM
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.o: ../src/ipm/ipx/src/info.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.cc > CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.cc > CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/info.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.o.requires:
 
@@ -323,16 +323,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/info.cc.o.provides.build: src/CMakeFiles/l
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.o: ../src/ipm/ipx/src/ipm.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.cc > CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.cc > CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipm.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.o.requires:
 
@@ -347,16 +347,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/ipm.cc.o.provides.build: src/CMakeFiles/li
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.o: ../src/ipm/ipx/src/ipx_c.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.cc > CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.cc > CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/ipx_c.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.o.requires:
 
@@ -371,16 +371,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/ipx_c.cc.o.provides.build: src/CMakeFiles/
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.o: ../src/ipm/ipx/src/iterate.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.cc > CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.cc > CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/iterate.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.o.requires:
 
@@ -395,16 +395,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/iterate.cc.o.provides.build: src/CMakeFile
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.o: ../src/ipm/ipx/src/kkt_solver.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.cc > CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.cc > CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.o.requires:
 
@@ -419,16 +419,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver.cc.o.provides.build: src/CMakeF
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.o: ../src/ipm/ipx/src/kkt_solver_basis.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.cc > CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.cc > CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_basis.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.o.requires:
 
@@ -443,16 +443,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_basis.cc.o.provides.build: src/
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.o: ../src/ipm/ipx/src/kkt_solver_diag.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.cc > CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.cc > CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/kkt_solver_diag.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.o.requires:
 
@@ -467,16 +467,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/kkt_solver_diag.cc.o.provides.build: src/C
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.o: ../src/ipm/ipx/src/linear_operator.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.cc > CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.cc > CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/linear_operator.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.o.requires:
 
@@ -491,16 +491,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/linear_operator.cc.o.provides.build: src/C
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.o: ../src/ipm/ipx/src/lp_solver.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.cc > CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.cc > CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lp_solver.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.o.requires:
 
@@ -515,16 +515,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/lp_solver.cc.o.provides.build: src/CMakeFi
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.o: ../src/ipm/ipx/src/lu_factorization.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.cc > CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.cc > CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_factorization.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.o.requires:
 
@@ -539,16 +539,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_factorization.cc.o.provides.build: src/
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.o: ../src/ipm/ipx/src/lu_update.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.cc > CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.cc > CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/lu_update.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.o.requires:
 
@@ -563,16 +563,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/lu_update.cc.o.provides.build: src/CMakeFi
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.o: ../src/ipm/ipx/src/maxvolume.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.cc > CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.cc > CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/maxvolume.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.o.requires:
 
@@ -587,16 +587,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/maxvolume.cc.o.provides.build: src/CMakeFi
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.o: ../src/ipm/ipx/src/model.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.cc > CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.cc > CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/model.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.o.requires:
 
@@ -611,16 +611,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/model.cc.o.provides.build: src/CMakeFiles/
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.o: ../src/ipm/ipx/src/normal_matrix.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.cc > CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.cc > CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/normal_matrix.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.o.requires:
 
@@ -635,16 +635,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/normal_matrix.cc.o.provides.build: src/CMa
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.o: ../src/ipm/ipx/src/sparse_matrix.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.cc > CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.cc > CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_matrix.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.o.requires:
 
@@ -659,16 +659,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_matrix.cc.o.provides.build: src/CMa
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.o: ../src/ipm/ipx/src/sparse_utils.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.cc > CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.cc > CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/sparse_utils.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.o.requires:
 
@@ -683,16 +683,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/sparse_utils.cc.o.provides.build: src/CMak
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.o: ../src/ipm/ipx/src/splitted_normal_matrix.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.cc > CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.cc > CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/splitted_normal_matrix.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.o.requires:
 
@@ -707,16 +707,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/splitted_normal_matrix.cc.o.provides.build
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.o: ../src/ipm/ipx/src/starting_basis.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.cc > CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.cc > CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/starting_basis.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.o.requires:
 
@@ -731,16 +731,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/starting_basis.cc.o.provides.build: src/CM
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.o: ../src/ipm/ipx/src/symbolic_invert.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.cc > CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.cc > CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/symbolic_invert.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.o.requires:
 
@@ -755,16 +755,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/symbolic_invert.cc.o.provides.build: src/C
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.o: ../src/ipm/ipx/src/timer.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.cc > CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.cc > CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/timer.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.o.requires:
 
@@ -779,16 +779,16 @@ src/CMakeFiles/libipx.dir/ipm/ipx/src/timer.cc.o.provides.build: src/CMakeFiles/
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.o: src/CMakeFiles/libipx.dir/flags.make
 src/CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.o: ../src/ipm/ipx/src/utils.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.o"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.o -c /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object src/CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.o"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.o -c /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.cc
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.i"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.cc > CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.i
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.cc > CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.i
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.s"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/Thesis/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.s
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeak/EQLPSolver/DHiGHS/src/ipm/ipx/src/utils.cc -o CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.s
 
 src/CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.o.requires:
 
@@ -872,8 +872,8 @@ lib/libipx.so: src/CMakeFiles/libipx.dir/ipm/ipx/src/utils.cc.o
 lib/libipx.so: src/CMakeFiles/libipx.dir/build.make
 lib/libipx.so: lib/libbasiclu.so
 lib/libipx.so: src/CMakeFiles/libipx.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Linking CXX shared library ../lib/libipx.so"
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/libipx.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edeak/EQLPSolver/DHiGHS/DevBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Linking CXX shared library ../lib/libipx.so"
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/libipx.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/libipx.dir/build: lib/libipx.so
@@ -915,10 +915,10 @@ src/CMakeFiles/libipx.dir/requires: src/CMakeFiles/libipx.dir/ipm/ipx/src/utils.
 .PHONY : src/CMakeFiles/libipx.dir/requires
 
 src/CMakeFiles/libipx.dir/clean:
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -P CMakeFiles/libipx.dir/cmake_clean.cmake
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild/src && $(CMAKE_COMMAND) -P CMakeFiles/libipx.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/libipx.dir/clean
 
 src/CMakeFiles/libipx.dir/depend:
-	cd /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/Thesis/EQLPSolver/DHiGHS /home/edeakins/Thesis/EQLPSolver/DHiGHS/src /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src /home/edeakins/Thesis/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libipx.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/edeak/EQLPSolver/DHiGHS/DevBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeak/EQLPSolver/DHiGHS /home/edeak/EQLPSolver/DHiGHS/src /home/edeak/EQLPSolver/DHiGHS/DevBuild /home/edeak/EQLPSolver/DHiGHS/DevBuild/src /home/edeak/EQLPSolver/DHiGHS/DevBuild/src/CMakeFiles/libipx.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/libipx.dir/depend
 

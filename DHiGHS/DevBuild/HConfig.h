@@ -10,10 +10,10 @@
 /* #undef HiGHSRELEASE */
 #define IPX_ON
 #define HIGHS_GITHASH "n/a"
-#define HIGHS_COMPILATION_DATE "2020-02-13"
+#define HIGHS_COMPILATION_DATE "2020-04-03"
 #define HIGHS_VERSION_MAJOR 1
 #define HIGHS_VERSION_MINOR 0
 #define HIGHS_VERSION_PATCH 0
-#define HIGHS_DIR "/home/edeakins/Thesis/EQLPSolver/DHiGHS"
+#define HIGHS_DIR "/home/edeak/EQLPSolver/DHiGHS"
 
 #endif /* HCONFIG_H_ */

@@ -1,4 +1,4 @@
-# Install script for directory: /home/edeakins/Thesis/EQLPSolver/DHiGHS/check
+# Install script for directory: /home/edeak/EQLPSolver/DHiGHS/check
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
