@@ -318,6 +318,7 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
     //highs = Highs();
     ep.refine();
     lpFolder = HighsAggregate(lp, ep, solution, basis, true);
+    cout << "lpFolder done" << endl;
     basis = HighsBasis();
     solution = HighsSolution();
     alpOpt = HighsOptions();
@@ -356,6 +357,11 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
     run_status = highs.run();
     basis = highs.getBasis();
     solution = highs.getSolution();
+    cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+    for (int i = 0; i < solution.col_value.size(); ++i){
+      cout << "var_" << i << " = " << solution.col_value[i] << endl;
+    }
+    cout << "hey fucker" << endl;
   }
   cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
   for (int i = 0; i < solution.col_value.size(); ++i){

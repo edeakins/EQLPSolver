@@ -33,6 +33,7 @@ HighsAggregate::HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, High
 	row_status = (basis.row_status);
 	// flag status to find linkers or not
 	flag_ = flag;
+	numSplits.assign(numRow, 0);
 	aggregateAMatrix();
 }
 
@@ -58,16 +59,23 @@ HighsLp& HighsAggregate::getAlp(){
 }
 
 void HighsAggregate::aggregateAMatrix(){
-	int i, j;
+	int i, j, rep;
 	numCol_ = 0;
 	numRow_ = 0;
 	for (i = 0; i < C.size(); ++i){
-		if (C[i].size() && i < numCol)
+		if (C[i].size() && i < numCol){
 			numCol_++;
-		else if (C[i].size())
+			realNumCol_++;
+		}
+		else if (C[i].size()){
 			numRow_++;
+			realNumRow_++;
+			rep = C[i].front();
+			numSplits[previousRowColoring[rep - numCol] - numCol]++;
+		}
 	}
 	numTot_ = numCol_ + numRow_;
+	realNumTot_ = numTot_;
 	Astart_.push_back(0);
 	for (i = 0; i < numCol_; ++i){
 		vector<double> coeff = rowCoeff(i);
@@ -92,6 +100,7 @@ void HighsAggregate::aggregateAMatrix(){
 		findPreviousBasisForColumns();
 		setAggregateRealRowsRhs();
 		setAggregateRealColsBounds();
+		eraseLinkersIfNotNeeded();
 		findMissingBasicColumns();
 	}
 }
@@ -158,20 +167,46 @@ void HighsAggregate::createRowWiseAMatrix(){
 
 void HighsAggregate::findMissingBasicColumns(){
 	createRowWiseAMatrix();
-	int i, j;
-	int rowIdx = 0;
-	int numRowsToTest = linkingPairs.size() + numActiveBounds_ + numActiveRows_;
-	vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_, 0.0));
-	for (i = 0; i < numRow_; ++i){
-		if (activeConstraints_[i]){
-			for (j = ARstart_[i]; j < ARstart_[i + 1]; ++j)
-				AM[rowIdx][ARindex_[j]] = ARvalue_[j];
-			rowIdx++;
-		}
+	int i, j, parent, child;
+	for (i = 0; i < partsForGS.size(); ++i){
+		cout << "part: " << partsForGS[i] << endl;
+		doGramSchmidt(partsForGS[i]);
 	}
-	for (i = 0; i < numCol_; ++i){
-		if (activeBounds_[i]){
-			AM[rowIdx][i] = 1;
+	for (i = 0; i < linkingPairs.size(); ++i){
+		parent = linkingPairs[i].first;
+		child = linkingPairs[i].second;
+		vector<double> linkRow(realNumCol_,  0);
+		linkRow[parent] = 1;
+		linkRow[child] = -1;
+		numLinkers_++;
+		appendLinkersToAMatrix(linkRow);
+		appendLinkersToColBounds();
+		appendLinkersToRowRhs();
+	}
+	// for (i = numActiveRows_; i < numActiveRows_ + numActiveBounds_; ++i){
+	// 	if (dependanceCheck(QRmat[i]))
+	// 		startingBasicColumns_.push_back(potentialBasicColumns_[i - numActiveRows_]);
+	// }
+	numTot_ = numRow_ + numCol_;
+	colCost_.assign(numCol_, 0);
+}
+
+void HighsAggregate::doGramSchmidt(int oldPart){
+	int i, j, rep, prevColor;;
+	int rowIdx = 0;
+	int numNonLinkRows = numSplits[oldPart - numCol];
+	int numRowsToTest = linkingPairs.size() + numNonLinkRows;
+	vector<int> currentRowColors;
+	vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_, 0.0));
+	for (i = 0; i < linkingPairs.size(); ++i)
+		cout << "link: " << linkingPairs[i].first << " " << linkingPairs[i].second << endl;
+	for (i = 0; i < numRow_; ++i){
+		rep = C[i + numCol].front();
+		prevColor = previousRowColoring[rep - numCol];
+		if (activeConstraints_[i] && prevColor == oldPart){
+			currentRowColors.push_back(i + numCol);
+			for (j = ARstart_[i]; j < ARstart_[i + 1]; ++j)
+				AM[rowIdx][ARindex_[j]] = /* activeBounds_[ARindex_[j]] ? 0 :*/ ARvalue_[j];
 			rowIdx++;
 		}
 	}
@@ -181,33 +216,39 @@ void HighsAggregate::findMissingBasicColumns(){
 		rowIdx++;
 	}
 	vector<vector<double> > QRmat = AM;
+	cout << "[ " << endl;
+	for (i = 0; i < AM.size(); ++i){
+		for (j = 0; j < AM[i].size(); ++j)
+			cout << QRmat[i][j] << " ";
+		cout << ";" << endl;
+	}
+	cout << "]" << endl;
+	cin.get();
 	QR.gramSchmidt(QRmat);
-	// cout << "[ " << endl;
-	// for (i = 0; i < AM.size(); ++i){
-	// 	for (j = 0; j < AM[i].size(); ++j)
-	// 		cout << QRmat[i][j] << " ";
-	// 	cout << ";" << endl;
-	// }
-	// cout << "]" << endl;
-	// cin.get();
-	for (i = numActiveRows_ + numActiveBounds_; i < numRowsToTest; ++i){
-		if(!dependanceCheck(QRmat[i])){
-			numLinkers_++;
-			appendLinkersToAMatrix(AM[i]);
-			appendLinkersToColBounds();
-			appendLinkersToRowRhs();
-		}
+	cout << "[ " << endl;
+	for (i = 0; i < AM.size(); ++i){
+		for (j = 0; j < AM[i].size(); ++j)
+			cout << QRmat[i][j] << " ";
+		cout << ";" << endl;
 	}
-	for (i = numActiveRows_; i < numActiveRows_ + numActiveBounds_; ++i){
+	cout << "]" << endl;
+	cin.get();
+	for (i = 0; i < numNonLinkRows; ++i)
 		if (dependanceCheck(QRmat[i]))
-			startingBasicColumns_.push_back(potentialBasicColumns_[i - numActiveRows_]);
-	}
-	for (i = 0; i < numActiveRows_; ++i){
+			startingBasicRows_.push_back(currentRowColors[i]);
+	for (i = numNonLinkRows; i < numRowsToTest; ++i)
 		if (dependanceCheck(QRmat[i]))
-			startingBasicRows_.push_back(potentialBasicRows_[i]);
+			linkIsNeeded[i - numNonLinkRows] = false;
+	i = 0;
+	while (i < linkingPairs.size()){
+		cout << "i: " << i << endl;
+		if (!linkIsNeeded[i])
+			linkingPairs.erase(linkingPairs.begin() + i);
+		else
+			++i;
 	}
-	numTot_ = numRow_ + numCol_;
-	colCost_.assign(numCol_, 0);
+	for (i = 0; i < linkingPairs.size(); ++i)
+		cout << "link: " << linkingPairs[i].first << " " << linkingPairs[i].second << endl;
 }
 
 HighsBasis& HighsAggregate::getAlpBasis(){
@@ -244,7 +285,7 @@ HighsBasis& HighsAggregate::getAlpBasis(){
 bool HighsAggregate::dependanceCheck(vector<double> &v){
 	bool cond = true;
 	for (int i = 0; i < v.size(); ++i){
-		if (fabs(v[i]) > 1e-3)
+		if (fabs(v[i]) > 1e-6)
 			cond = false;
 		else
 			v[i] = 0;
@@ -279,7 +320,8 @@ void HighsAggregate::setAggregateRealRowsRhs(){
 
 void HighsAggregate::setAggregateRealColsBounds(){
 	int i, j;
-	int rep, previousColumnColor;
+	int rep, previousColumnColor, oldRep;
+	double lb, ub;
 	for (i = 0; i < numCol_; ++i){
 		rep = C[i].front();
  		previousColumnColor = previousColumnColoring[rep];
@@ -295,11 +337,53 @@ void HighsAggregate::setAggregateRealColsBounds(){
 			potentialBasicColumns_.push_back(i);
 			numActiveBounds_++;
 		}
+		else if (previousColumnInfo[previousColumnColor] == HighsBasisStatus::BASIC &&
+			     previousColumnValue[previousColumnColor] == colLower[prevC[previousColumnColor].front()]){
+			colUpper_.push_back(previousColumnValue[previousColumnColor]);
+			colLower_.push_back(previousColumnValue[previousColumnColor]);
+			activeBounds_[i] = true;
+			potentialBasicColumns_.push_back(i);
+			numActiveBounds_++;
+		}
+		else if (previousColumnInfo[previousColumnColor] == HighsBasisStatus::BASIC &&
+			     previousColumnValue[previousColumnColor] == colUpper[prevC[previousColumnColor].front()]){
+			colUpper_.push_back(previousColumnValue[previousColumnColor]);
+			colLower_.push_back(previousColumnValue[previousColumnColor]);
+			activeBounds_[i] = true;
+			potentialBasicColumns_.push_back(i);
+			numActiveBounds_++;
+		}
 		else{
 			colUpper_.push_back(colUpper[rep]);
 			colLower_.push_back(colLower[rep]);
 		}
 	}
+}
+
+bool HighsAggregate::varIsBounded(pair<int, int> link){
+	int rep = C[link.first].front();
+	int previousColumnColor = previousColumnColoring[rep];
+	if (previousColumnInfo[previousColumnColor] == HighsBasisStatus::LOWER ||
+		previousColumnInfo[previousColumnColor] == HighsBasisStatus::UPPER)
+		return true;
+	else if (previousColumnInfo[previousColumnColor] == HighsBasisStatus::BASIC &&
+			 previousColumnValue[previousColumnColor] == colLower[prevC[previousColumnColor].front()])	
+		return true;
+	else if (previousColumnInfo[previousColumnColor] == HighsBasisStatus::BASIC &&
+			 previousColumnValue[previousColumnColor] == colUpper[prevC[previousColumnColor].front()])
+		return true;
+	return false;
+}
+
+void HighsAggregate::eraseLinkersIfNotNeeded(){
+	int i = 0;
+	while (i < linkingPairs.size()){
+		if (varIsBounded(linkingPairs[i]))
+			linkingPairs.erase(linkingPairs.begin() + i);
+		else
+			++i;
+	}
+	linkIsNeeded.assign(linkingPairs.size(), true);
 }
 
 void HighsAggregate::findPreviousBasisForRows(){
@@ -312,9 +396,11 @@ void HighsAggregate::findPreviousBasisForRows(){
 			if (row_status[i] == HighsBasisStatus::LOWER){
 				previousRowInfo.insert(pair<int, HighsBasisStatus>(i + numCol, HighsBasisStatus::LOWER));
 				previousRowValue.insert(pair<int, double>(i + numCol, row_value[i]));
+				if (!(prevC[i + numCol].size() == 1))
+					partsForGS.push_back(i + numCol);
 			}
 			else if (rhs == row_value[i]){
-				previousRowInfo.insert(pair<int, HighsBasisStatus>(i + numCol, HighsBasisStatus::LOWER));
+				previousRowInfo.insert(pair<int, HighsBasisStatus>(i + numCol, col_status[i]));
 				previousRowValue.insert(pair<int, double>(i + numCol, row_value[i]));
 			}
 			else if (row_status[i] == HighsBasisStatus::UPPER){
@@ -342,7 +428,8 @@ void HighsAggregate::findPreviousBasisForRows(){
 }
 
 void HighsAggregate::findPreviousBasisForColumns(){
-	int i;
+	int i, rep;
+	double lb, ub;
 	for (i = 0; i < col_value.size(); ++i){
 		if (prevC[i].size()){
 			if (col_status[i] == HighsBasisStatus::UPPER){
