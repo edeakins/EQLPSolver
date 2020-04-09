@@ -9,9 +9,7 @@
 class HighsAggregate{
 public:
 	HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag);
-	~HighsAggregate(){
-		cout << "dtor called" << endl;
-	}
+	//virtual ~HighsAggregate(){};
 	void clear();
 	void aggregateAMatrix();
 	void aggregateCVector();

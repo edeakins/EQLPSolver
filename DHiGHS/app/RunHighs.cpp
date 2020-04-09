@@ -33,9 +33,9 @@ HighsStatus callMipSolver(const HighsOptions& options, const HighsLp& lp,
                           FILE* output, int message_level, bool run_quiet);
 
 int main(int argc, char** argv) {
-  std::clock_t start;
-  start = std::clock();
-  double duration;
+  // std::clock_t start;
+  // start = std::clock();
+  // double duration;
   printHighsVersionCopyright(stdout, ML_ALWAYS);
 
   // Load user options.
@@ -79,8 +79,8 @@ int main(int argc, char** argv) {
   } else {
     run_status = callMipSolver(options, lp, output, message_level, run_quiet);
   }
-  duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-  cout << "total time: " << duration << endl;
+  // duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+  // cout << "total time: " << duration << endl;
   return (int)run_status;
 }
 
@@ -317,8 +317,12 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
   while(!ep.isPartitionDiscrete()){
     //highs = Highs();
     ep.refine();
-    lpFolder = HighsAggregate(lp, ep, solution, basis, true);
-    cout << "lpFolder done" << endl;
+    try{
+      lpFolder = HighsAggregate(lp, ep, solution, basis, true);
+    }
+    catch(exception& e){
+      cout << e.what() << endl;
+    }
     basis = HighsBasis();
     solution = HighsSolution();
     alpOpt = HighsOptions();
@@ -361,7 +365,6 @@ HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
     for (int i = 0; i < solution.col_value.size(); ++i){
       cout << "var_" << i << " = " << solution.col_value[i] << endl;
     }
-    cout << "hey fucker" << endl;
   }
   cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
   for (int i = 0; i < solution.col_value.size(); ++i){

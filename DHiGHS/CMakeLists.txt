@@ -10,8 +10,10 @@ set(HIGHS_VERSION_MAJOR 1)
 set(HIGHS_VERSION_MINOR 0)
 set(HIGHS_VERSION_PATCH 0)
 
-set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_DEBUG} ${CMAKE_C_FLAGS_RELEASE}")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS_RELEASE}")
+SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -O0")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -O0")
+
+
 
 include(CPack)
 set(CPACK_RESOURCE_FILE_LICENSE "${HIGHS_SOURCE_DIR}/COPYING")
@@ -183,9 +185,9 @@ enable_cxx_compiler_flag_if_supported("-Wextra")
 enable_cxx_compiler_flag_if_supported("-Wno-unused-parameter")
 enable_cxx_compiler_flag_if_supported("-pedantic")
 
-#if(CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL debug)
-#    enable_cxx_compiler_flag_if_supported("-D_GLIBCXX_DEBUG")
-#endif()
+if(CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL debug)
+    enable_cxx_compiler_flag_if_supported("-D_GLIBCXX_DEBUG")
+endif()
 
 if (IPX_ON)
     # use, i.e. don't skip the full RPATH for the build tree
