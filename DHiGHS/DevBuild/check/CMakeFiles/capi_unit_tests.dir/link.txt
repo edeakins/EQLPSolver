@@ -1,1 +1,1 @@
-/usr/bin/cc -g  -rdynamic CMakeFiles/capi_unit_tests.dir/TestCAPI.c.o  -o ../bin/capi_unit_tests -Wl,-rpath,/home/edeak/EQLPSolver/DHiGHS/DevBuild/lib ../lib/libhighs.so.1.0.0 ../lib/libipx.so ../lib/libbasiclu.so 
+/usr/bin/cc -g -O0 -D_DEBUG -O0  -rdynamic CMakeFiles/capi_unit_tests.dir/TestCAPI.c.o  -o ../bin/capi_unit_tests -Wl,-rpath,/home/edeak/EQLPSolver/DHiGHS/DevBuild/lib ../lib/libhighs.so.1.0.0 ../lib/libipx.so ../lib/libbasiclu.so 
