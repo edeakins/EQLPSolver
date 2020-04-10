@@ -171,7 +171,7 @@ void HighsAggregate::findMissingBasicColumns(){
 	createRowWiseAMatrix();
 	int i, j, parent, child;
 	for (i = 0; i < partsForGS.size(); ++i){
-		if (numSplits[partsForGS[i] - numCol] <= 1) continue;
+		//if (numSplits[partsForGS[i] - numCol] <= 1) continue;
 		doGramSchmidt(partsForGS[i]);
 	}
 	for (i = 0; i < linkingPairs.size(); ++i){
@@ -204,7 +204,7 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 	for (i = 0; i < numRow_; ++i){
 		rep = C[i + numCol].front();
 		prevColor = previousRowColoring[rep - numCol];
-		if (activeConstraints_[i] && prevColor == oldPart){
+		if ((activeConstraints_[i] && prevColor == oldPart)){
 			cout << "row: " << i << " being tested " << endl;
 			currentRows.push_back(i);
 			for (j = ARstart_[i]; j < ARstart_[i + 1]; ++j){
