@@ -52,9 +52,9 @@ public:
 	// (sparse storage) Original lp
 	vector<int> Astart;
     vector<int> Aindex;
+    vector<double> Avalue;
     vector<int> color;
     vector<int> linkerColor;
-    vector<double> Avalue;
     vector<double> colCost;
     vector<double> colLower;
     vector<double> colUpper;
@@ -93,14 +93,17 @@ public:
 	vector<int> potentialBasicColumns_;
 	vector<int> Astart_;
 	vector<int> ARstart_;
+	vector<int> ARstartSub_;
     vector<int> Aindex_;
     vector<int> ARindex_;
+    vector<int> ARindexSub_;
     vector<int> AR_Nend_;
     vector<int> linkers;
     vector<bool> activeConstraints_;
     vector<bool> activeBounds_;
     vector<double> Avalue_;
     vector<double> ARvalue_;
+    vector<double> ARvalueSub_;
     vector<double> colCost_;
     vector<double> colLower_;
     vector<double> colUpper_;

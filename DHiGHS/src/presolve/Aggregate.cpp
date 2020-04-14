@@ -165,6 +165,9 @@ void HighsAggregate::createRowWiseAMatrix(){
             ARvalue_[iPut] = Avalue_[k];
 		}
 	}
+	ARstartSub_ = ARstart_;
+	ARindexSub_ = ARindex_;
+	ARvalueSub_ = ARvalue_;
 }
 
 void HighsAggregate::findMissingBasicColumns(){
@@ -195,7 +198,7 @@ void HighsAggregate::findMissingBasicColumns(){
 
 void HighsAggregate::doGramSchmidt(int oldPart){
 	cout << "oldPart: " << oldPart << endl;
-	int i, j, rep, prevColor;;
+	int i, j, k, x, rep, prevColor, domLink, slavLink;
 	int rowIdx = 0;
 	int numNonLinkRows = numSplits[oldPart - numCol];
 	int numRowsToTest = linkingPairs.size() + numNonLinkRows;
@@ -207,9 +210,9 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 		if ((activeConstraints_[i] && prevColor == oldPart)){
 			cout << "row: " << i << " being tested " << endl;
 			currentRows.push_back(i);
-			for (j = ARstart_[i]; j < ARstart_[i + 1]; ++j){
+			for (j = ARstartSub_[i]; j < ARstartSub_[i + 1]; ++j){
 				cout << "var: " << ARindex_[j] << endl;
-				AM[rowIdx][ARindex_[j]] = activeBounds_[ARindex_[j]] ? 0 : ARvalue_[j];
+				AM[rowIdx][ARindexSub_[j]] = activeBounds_[ARindexSub_[j]] ? 0 : ARvalueSub_[j];
 			}
 			rowIdx++;
 		}
@@ -244,9 +247,31 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 		if (dependanceCheck(QRmat[i]))
 			linkIsNeeded[i - numNonLinkRows] = false;
 	i = 0;
+	vector<double> sub(numRow_, 0);
 	while (i < linkingPairs.size()){
-		if (!linkIsNeeded[i])
+		if (!linkIsNeeded[i]){
+			domLink = linkingPairs[i].first;
+			slavLink = linkingPairs[i].second;
+			for (j = 0; j < numRow_; ++j){
+				for (k = ARstartSub_[j]; k < ARstartSub_[j + 1]; ++k){
+					if (ARindexSub_[k] == slavLink){
+						sub[j] += ARvalueSub_[k];
+						ARvalueSub_.erase(ARvalueSub_.begin() + k);
+						ARindexSub_.erase(ARindexSub_.begin() + k);
+						for (x = j + 1; x < numRow_; ++x){
+							cout << "x: " << x << endl;
+							ARstartSub_[x]--;
+						}
+					}
+				}
+			}
+			for (j = 0; j < numRow_; ++j){
+				for (k = ARstartSub_[j]; k < ARstartSub_[j + 1]; ++k)
+					if (ARindexSub_[k] == domLink)
+						ARvalueSub_[k] += sub[j];
+			}
 			linkingPairs.erase(linkingPairs.begin() + i);
+		}
 		else
 			++i;
 	}
