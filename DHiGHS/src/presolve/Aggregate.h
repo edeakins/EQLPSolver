@@ -23,7 +23,7 @@ public:
 	void setAggregateLinkerRowsRhs();
 	void findLinks();
 	void findMissingBasicColumns();
-	void doGramSchmidt(int oldPart);
+	bool doGramSchmidt(int oldPart);
 	void setAlpBasis();
 	HighsLp& getAlp();
 	HighsBasis& getAlpBasis();
@@ -33,6 +33,7 @@ public:
 	vector<double> rowCoeff(int column);
 	void eraseLinkersIfNotNeeded();
 	bool varIsBounded(pair<int, int> link);
+	void editRowWiseMatrix(int domLink, int slavLink);
 
 	// Lp to store the aggregate LP into
 	HighsLp alp;

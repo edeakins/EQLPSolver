@@ -173,9 +173,14 @@ void HighsAggregate::createRowWiseAMatrix(){
 void HighsAggregate::findMissingBasicColumns(){
 	createRowWiseAMatrix();
 	int i, j, parent, child;
-	for (i = 0; i < partsForGS.size(); ++i){
-		//if (numSplits[partsForGS[i] - numCol] <= 1) continue;
-		doGramSchmidt(partsForGS[i]);
+	bool change = true;
+	while (change){
+		if (!linkingPairs.size())
+			break;
+		for (i = 0; i < partsForGS.size(); ++i){
+			//if (numSplits[partsForGS[i] - numCol] <= 1) continue;
+			change = doGramSchmidt(partsForGS[i]);
+		}
 	}
 	for (i = 0; i < linkingPairs.size(); ++i){
 		parent = linkingPairs[i].first;
@@ -196,8 +201,8 @@ void HighsAggregate::findMissingBasicColumns(){
 	colCost_.assign(numCol_, 0);
 }
 
-void HighsAggregate::doGramSchmidt(int oldPart){
-	cout << "oldPart: " << oldPart << endl;
+bool HighsAggregate::doGramSchmidt(int oldPart){
+	bool change = false;
 	int i, j, k, x, rep, prevColor, domLink, slavLink;
 	int rowIdx = 0;
 	int numNonLinkRows = numSplits[oldPart - numCol];
@@ -208,10 +213,8 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 		rep = C[i + numCol].front();
 		prevColor = previousRowColoring[rep - numCol];
 		if ((activeConstraints_[i] && prevColor == oldPart)){
-			cout << "row: " << i << " being tested " << endl;
 			currentRows.push_back(i);
 			for (j = ARstartSub_[i]; j < ARstartSub_[i + 1]; ++j){
-				cout << "var: " << ARindex_[j] << endl;
 				AM[rowIdx][ARindexSub_[j]] = activeBounds_[ARindexSub_[j]] ? 0 : ARvalueSub_[j];
 			}
 			rowIdx++;
@@ -223,22 +226,22 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 		rowIdx++;
 	}
 	vector<vector<double> > QRmat = AM;
-	cout << "[ " << endl;
-	for (i = 0; i < AM.size(); ++i){
-		for (j = 0; j < AM[i].size(); ++j)
+	for (i = 0; i < QRmat.size(); ++i){
+		cout << "[ ";
+		for (j = 0; j < QRmat[i].size(); ++j){
 			cout << QRmat[i][j] << " ";
-		cout << ";" << endl;
+		}
+		cout << "]" << endl;
 	}
-	cout << "]" << endl;
-	cin.get();
 	QR.gramSchmidt(QRmat);
-	cout << "[ " << endl;
-	for (i = 0; i < AM.size(); ++i){
-		for (j = 0; j < AM[i].size(); ++j)
+	cout << endl;
+	for (i = 0; i < QRmat.size(); ++i){
+		cout << "[ ";
+		for (j = 0; j < QRmat[i].size(); ++j){
 			cout << QRmat[i][j] << " ";
-		cout << ";" << endl;
+		}
+		cout << "]" << endl;
 	}
-	cout << "]" << endl;
 	cin.get();
 	for (i = 0; i < numNonLinkRows; ++i)
 		if (dependanceCheck(QRmat[i]))
@@ -247,34 +250,71 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 		if (dependanceCheck(QRmat[i]))
 			linkIsNeeded[i - numNonLinkRows] = false;
 	i = 0;
-	vector<double> sub(numRow_, 0);
 	while (i < linkingPairs.size()){
 		if (!linkIsNeeded[i]){
+			change = true;
 			domLink = linkingPairs[i].first;
 			slavLink = linkingPairs[i].second;
-			for (j = 0; j < numRow_; ++j){
-				for (k = ARstartSub_[j]; k < ARstartSub_[j + 1]; ++k){
-					if (ARindexSub_[k] == slavLink){
-						sub[j] += ARvalueSub_[k];
-						ARvalueSub_.erase(ARvalueSub_.begin() + k);
-						ARindexSub_.erase(ARindexSub_.begin() + k);
-						for (x = j + 1; x < numRow_; ++x){
-							cout << "x: " << x << endl;
-							ARstartSub_[x]--;
-						}
-					}
-				}
-			}
-			for (j = 0; j < numRow_; ++j){
-				for (k = ARstartSub_[j]; k < ARstartSub_[j + 1]; ++k)
-					if (ARindexSub_[k] == domLink)
-						ARvalueSub_[k] += sub[j];
-			}
+			editRowWiseMatrix(domLink, slavLink);
 			linkingPairs.erase(linkingPairs.begin() + i);
+			linkIsNeeded.erase(linkIsNeeded.begin() + i);
 		}
 		else
 			++i;
 	}
+	return change;
+}
+
+void HighsAggregate::editRowWiseMatrix(int domLink, int slavLink){
+	int i, j, k;
+	bool isDom, isSlav;
+	vector<int> ARstartTemp;
+	vector<int> ARindexTemp;
+	vector<double> ARvalueTemp;
+	vector<bool> need(numRow_, false);
+	vector<double> sub;
+	ARstartTemp.push_back(0);
+	for (i = 0; i < numRow_; ++i){
+		isDom = false, isSlav = false;
+		for (j = ARstartSub_[i]; j < ARstartSub_[i + 1]; ++j){
+			if (ARindexSub_[j] == domLink) isDom = true;
+			if (ARindexSub_[j] == slavLink) isSlav = true;
+		}
+		if (isDom && isSlav)
+			need[i] = true;
+	}
+	for (i = 0; i < numRow_; ++i){
+		for (j = ARstartSub_[i]; j < ARstartSub_[i + 1]; ++j){
+			if (ARindexSub_[j] != slavLink){
+				ARindexTemp.push_back(ARindexSub_[j]);
+				ARvalueTemp.push_back(ARvalueSub_[j]);
+			}
+			else{
+				if (need[i])
+					sub.push_back(ARvalueSub_[j]);
+				else{
+					ARindexTemp.push_back(ARindexSub_[j]);
+					ARvalueTemp.push_back(ARvalueSub_[j]);
+				}
+			}
+		}
+		ARstartTemp.push_back(ARvalueTemp.size());
+	}
+	k= 0;	
+	for (i = 0; i < numRow_; ++i){
+		if (need[i]){
+			for (j = ARstartTemp[i]; j < ARstartTemp[i + 1]; ++j){
+				if (ARindexTemp[j] == domLink){
+					ARvalueTemp[j] += sub[k];
+					++k;
+					break;
+				}
+			}
+		}
+	}
+	ARstartSub_ = ARstartTemp;
+	ARvalueSub_ = ARvalueTemp;
+	ARindexSub_ = ARindexTemp;
 }
 
 HighsBasis& HighsAggregate::getAlpBasis(){
