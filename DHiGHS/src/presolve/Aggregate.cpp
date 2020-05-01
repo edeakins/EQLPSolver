@@ -225,24 +225,24 @@ bool HighsAggregate::doGramSchmidt(int oldPart){
 		AM[rowIdx][linkingPairs[i].second] = -1;
 		rowIdx++;
 	}
-	vector<vector<double> > QRmat = AM;
-	for (i = 0; i < QRmat.size(); ++i){
-		cout << "[ ";
-		for (j = 0; j < QRmat[i].size(); ++j){
-			cout << QRmat[i][j] << " ";
-		}
-		cout << "]" << endl;
-	}
+	// vector<vector<double> > QRmat = AM;
+	// for (i = 0; i < QRmat.size(); ++i){
+	// 	cout << "[ ";
+	// 	for (j = 0; j < QRmat[i].size(); ++j){
+	// 		cout << QRmat[i][j] << " ";
+	// 	}
+	// 	cout << "]" << endl;
+	// }
 	QR.gramSchmidt(QRmat);
-	cout << endl;
-	for (i = 0; i < QRmat.size(); ++i){
-		cout << "[ ";
-		for (j = 0; j < QRmat[i].size(); ++j){
-			cout << QRmat[i][j] << " ";
-		}
-		cout << "]" << endl;
-	}
-	cin.get();
+	// cout << endl;
+	// for (i = 0; i < QRmat.size(); ++i){
+	// 	cout << "[ ";
+	// 	for (j = 0; j < QRmat[i].size(); ++j){
+	// 		cout << QRmat[i][j] << " ";
+	// 	}
+	// 	cout << "]" << endl;
+	// }
+	// cin.get();
 	for (i = 0; i < numNonLinkRows; ++i)
 		if (dependanceCheck(QRmat[i]))
 			startingBasicRows_.push_back(currentRows[i]);
