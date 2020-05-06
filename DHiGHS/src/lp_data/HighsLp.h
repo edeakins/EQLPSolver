@@ -82,13 +82,18 @@ class HighsLp {
   }
   // Model data
   int numCol_ = 0;
+  int addNumCol_ = 0;
   int numRow_ = 0;
+  int addNumRow_ = 0;
   int numInt_ = 0;
   int nnz_ = 0;
 
   std::vector<int> Astart_;
+  std::vector<int> addARstart_;
   std::vector<int> Aindex_;
+  std::vector<int> addARindex_;
   std::vector<double> Avalue_;
+  std::vector<double> addARvalue_;
   std::vector<double> colCost_;
   std::vector<double> colLower_;
   std::vector<double> colUpper_;

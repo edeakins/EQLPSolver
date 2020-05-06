@@ -8,7 +8,7 @@
 
 class HighsAggregate{
 public:
-	HighsAggregate(const HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag);
+	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag);
 	//virtual ~HighsAggregate(){};
 	void clear();
 	void aggregateAMatrix();
@@ -23,7 +23,7 @@ public:
 	void setAggregateLinkerRowsRhs();
 	void findLinks();
 	void findMissingBasicColumns();
-	bool doGramSchmidt(int oldPart);
+	void doGramSchmidt(int oldPart);
 	void setAlpBasis();
 	HighsLp& getAlp();
 	HighsBasis& getAlpBasis();
@@ -33,7 +33,10 @@ public:
 	vector<double> rowCoeff(int column);
 	void eraseLinkersIfNotNeeded();
 	bool varIsBounded(pair<int, int> link);
-	void editRowWiseMatrix(int domLink, int slavLink);
+	void editRowWiseMatrix(int domLink, int slavLink, int idx);
+	void createImpliedRows(HighsLp& lp);
+	vector<double> aggregateImpliedRow(int impliedRow);
+	void getAggImpliedRows();
 
 	// Lp to store the aggregate LP into
 	HighsLp alp;
@@ -45,6 +48,7 @@ public:
 	// Copy original lp data from equitable partition
 	// scalars
 	int numRow;
+	int impliedNumRow;
 	int numCol;
 	int numTot;
 	string model_name_;
@@ -52,8 +56,11 @@ public:
 
 	// (sparse storage) Original lp
 	vector<int> Astart;
+	vector<int> impliedARstart;
     vector<int> Aindex;
+    vector<int> impliedARindex;
     vector<double> Avalue;
+    vector<double> impliedARvalue;
     vector<int> color;
     vector<int> linkerColor;
     vector<double> colCost;
@@ -132,6 +139,12 @@ public:
 
 	// Tells whether GS ruled out a linker or not
 	vector<bool> linkIsNeeded;
+
+	// Collect implied linkers for constraint manipulation
+	vector<pair<int, int> > equalColors;
+
+	// Holds all aggregated implied rows
+	vector<vector<double> > aggImpliedRows;
 };
 
 #endif

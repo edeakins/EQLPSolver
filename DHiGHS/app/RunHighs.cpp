@@ -27,7 +27,7 @@ void reportLpStatsOrError(FILE* output, int message_level,
                           const HighsStatus read_status, const HighsLp& lp);
 void reportSolvedLpStats(FILE* output, int message_level,
                          const HighsStatus run_status, const Highs& highs);
-HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
+HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
                          FILE* output, int message_level, bool run_quiet);
 HighsStatus callMipSolver(const HighsOptions& options, const HighsLp& lp,
                           FILE* output, int message_level, bool run_quiet);
@@ -224,7 +224,7 @@ void reportSolvedLpStats(FILE* output, int message_level,
 //   HighsBasis basis;
 // }
 
-HighsStatus callLpSolver(const HighsOptions& options, const HighsLp& lp,
+HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   		         FILE* output, int message_level, bool run_quiet) {
   // New options for aggregate models (work around for const input)
   HighsOptions alpOpt;
