@@ -129,7 +129,7 @@ void HighsAggregate::aggregateAMatrix(){
 		setAggregateRealRowsRhs();
 		setAggregateRealColsBounds();
 		eraseLinkersIfNotNeeded();
-		//getAggImpliedRows();
+		getAggImpliedRows();
 		findMissingBasicColumns();
 	}
 }
@@ -203,6 +203,13 @@ void HighsAggregate::findMissingBasicColumns(){
 	currSize = linkingPairs.size();
 	prevSize = 0;
 	while (currSize != prevSize && linkingPairs.size()){
+		if (partsForGS.size() == 1){
+			for (i = 0; i < partsForGS.size(); ++i){
+				//if (numSplits[partsForGS[i] - numCol] <= 1) continue;
+				doGramSchmidt(partsForGS[i]);
+			}
+			break;
+		}
 		prevSize = currSize;
 		for (i = 0; i < partsForGS.size(); ++i){
 			//if (numSplits[partsForGS[i] - numCol] <= 1) continue;
@@ -262,13 +269,14 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 		rowIdx++;
 	}
 	vector<vector<double> > QRmat = AM;
+	cout << " A = [ " << endl; 
 	for (i = 0; i < QRmat.size(); ++i){
-		cout << "[ ";
 		for (j = 0; j < QRmat[i].size(); ++j){
 			cout << QRmat[i][j] << " ";
 		}
-		cout << "]" << endl;
+		cout << ";" << endl;
 	}
+	cout << "]" << endl;
 	QR.gramSchmidt(QRmat);
 	cout << endl;
 	for (i = 0; i < QRmat.size(); ++i){
@@ -308,7 +316,6 @@ void HighsAggregate::editRowWiseMatrix(int domLink, int slavLink, int idx){
 	vector<double> ARvalueTemp;
 	vector<bool> need(numRow_, false);
 	vector<double> sub;
-	vector<double> coeff(realNumCol_, 0);
 	ARstartTemp.push_back(0);
 	for (i = 0; i < numRow_; ++i){
 		isDom = false, isSlav = false;
@@ -348,13 +355,19 @@ void HighsAggregate::editRowWiseMatrix(int domLink, int slavLink, int idx){
 			}
 		}
 	}
-	for (i = 0; i < idx; ++i){
+	vector<vector<double> > temp;
+	for (i = 0; i < idx + 1; ++i){
+		vector<double> coeff(realNumCol_, 0);
 		coeff[linkingPairs[i].first] = 1;
 		coeff[linkingPairs[i].second] = -1;
+		temp.push_back(coeff);
 	}
-	coeff[domLink] = 1;
-	coeff[slavLink] = -1;
-	aggImpliedRows.push_back(coeff);
+	vector<double> sumVec = temp[temp.size() - 1];
+	for (i = 0; i < temp.size() - 1; ++i){
+		for (j = 0; j < temp[i].size(); ++j)
+			sumVec[j] += temp[i][j];
+	}
+	aggImpliedRows.push_back(sumVec);
 	ARstartSub_ = ARstartTemp;
 	ARvalueSub_ = ARvalueTemp;
 	ARindexSub_ = ARindexTemp;
@@ -610,12 +623,10 @@ vector<double> HighsAggregate::aggregateImpliedRow(int impliedRow){
 	for (i = impliedARstart[impliedRow]; i < impliedARstart[impliedRow + 1]; ++i){
 		for (j = 0; j < realNumCol_; ++j){
 			if (color[impliedARindex[i]] == j){
-				cout << "index: " << impliedARindex[i] << " color: " << color[impliedARindex[i]] << endl;
 				coeff[j] += impliedARvalue[i];
 			}
 		}
 	}
-	cout << "coeff" << endl;
 	return coeff;
 }
 
