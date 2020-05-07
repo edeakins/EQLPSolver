@@ -346,6 +346,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     HighsLp& alp = lpFolder.getAlp();
     HighsBasis& alpBasis = lpFolder.getAlpBasis();
     HighsStatus init_status = highs.passModel(alp);
+    HighsStatus write_status;
+    write_status = highs.writeModel("write.mps");
     HighsStatus basisStatus = highs.setBasis(alpBasis);
     if (init_status != HighsStatus::OK) {
       if (init_status == HighsStatus::Warning) {

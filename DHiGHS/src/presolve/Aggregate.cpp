@@ -129,7 +129,7 @@ void HighsAggregate::aggregateAMatrix(){
 		setAggregateRealRowsRhs();
 		setAggregateRealColsBounds();
 		eraseLinkersIfNotNeeded();
-		getAggImpliedRows();
+		//getAggImpliedRows();
 		findMissingBasicColumns();
 	}
 }
@@ -424,10 +424,8 @@ HighsBasis& HighsAggregate::getAlpBasis(){
 bool HighsAggregate::dependanceCheck(vector<double> &v){
 	bool cond = true;
 	for (int i = 0; i < v.size(); ++i){
-		if (fabs(v[i]) > 1e-6)
+		if (fabs(v[i]) > 1e-10)
 			cond = false;
-		else
-			v[i] = 0;
 	}
 	return cond;
 }
