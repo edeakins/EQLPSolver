@@ -203,6 +203,8 @@ void HighsAggregate::findMissingBasicColumns(){
 	currSize = linkingPairs.size();
 	prevSize = 0;
 	while (currSize != prevSize && linkingPairs.size()){
+		cout << "new start" << endl;
+		cin.get();
 		if (partsForGS.size() == 1){
 			for (i = 0; i < partsForGS.size(); ++i){
 				//if (numSplits[partsForGS[i] - numCol] <= 1) continue;
@@ -298,6 +300,8 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 		if (!linkIsNeeded[i]){
 			domLink = linkingPairs[i].first;
 			slavLink = linkingPairs[i].second;
+			cout << "link is not needed: " << domLink << ", " << slavLink << endl;
+			cin.get();
 			editRowWiseMatrix(domLink, slavLink, i);
 			equalColors.push_back(pair<int, int>(domLink, slavLink));
 			linkingPairs.erase(linkingPairs.begin() + i);
