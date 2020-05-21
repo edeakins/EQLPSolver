@@ -345,6 +345,13 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     }
     HighsLp& alp = lpFolder.getAlp();
     HighsBasis& alpBasis = lpFolder.getAlpBasis();
+    for (int j = 0; j < alpBasis.col_status.size(); ++j){
+      cout << "col: " << j << " basis is " << (int)alpBasis.col_status[j] << endl;
+    }
+    for (int j = 0; j < alpBasis.row_status.size(); ++j){
+      cout << "row: " << j << " basis is " << (int)alpBasis.row_status[j] << endl;
+    }
+    cin.get();
     HighsStatus init_status = highs.passModel(alp);
     // HighsStatus write_status;
     // // write_status = highs.writeModel("write.mps");

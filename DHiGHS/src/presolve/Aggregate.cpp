@@ -454,6 +454,14 @@ void HighsAggregate::setAggregateRealRowsRhs(){
 			potentialBasicRows_.push_back(i);
 			numActiveRows_++;
 		}
+		else if (previousRowInfo[previousRowColor] == HighsBasisStatus::BASIC &&
+			     previousRowValue[previousRowColor] == 0){
+			rowLower_.push_back(previousRowValue[previousRowColor]);
+			rowUpper_.push_back(previousRowValue[previousRowColor]);
+			activeConstraints_[i] = true;
+			potentialBasicRows_.push_back(i);
+			numActiveRows_++;
+		}
 		else{
 			rowLower_.push_back(rowLower[rep]);
 			rowUpper_.push_back(rowUpper[rep]);
