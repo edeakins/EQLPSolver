@@ -1,2 +1,0 @@
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles/CheckFortran/CMakeFiles/rebuild_cache.dir
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/DevBuild/CMakeFiles/CheckFortran/CMakeFiles/edit_cache.dir

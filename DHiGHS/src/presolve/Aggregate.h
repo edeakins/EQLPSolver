@@ -96,6 +96,7 @@ public:
 	int numActiveRows_ = 0;
 	int numActiveBounds_ = 0;
 	int numLinkers_ = 0;
+	int originalNumLinkers;
 	vector<int> startingBasicRows_;
 	vector<int> startingBasicColumns_;
 	vector<int> potentialBasicRows_;

@@ -25,7 +25,8 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	color.assign(ep.color.begin(), ep.color.end());
 	adjListLab.assign(ep.adjListLab.begin(), ep.adjListLab.end());
 	adjListWeight.assign(ep.adjListWeight.begin(), ep.adjListWeight.end());
-	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());
+	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());\
+	originalNumLinkers = linkingPairs.size();
 	// Used for setting active set
 	activeBounds_.assign(numCol, false);
 	activeConstraints_.assign(numRow, false);
@@ -241,13 +242,13 @@ void HighsAggregate::findMissingBasicColumns(){
 void HighsAggregate::doGramSchmidt(int oldPart){
 	int i, j, rep, prevColor; // k, x, rep, prevColor, domLink, slavLink;
 	int rowIdx = 0;
-	int linkColIdx = numCol_;
-	int numNonLinkRows = numSplits[oldPart - numCol];
+	int linkColIdx = numCol_;\
 	int numLinkers = linkingPairs.size();
+	int numNonLinkRows = numSplits[oldPart - numCol];
 	int impliedRowsIdx = aggImpliedRows.size() + numNonLinkRows;
 	int numRowsToTest = numLinkers + impliedRowsIdx;
 	vector<int> currentRows;
-	vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_ + numLinkers, 0.0));
+	vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_ + originalNumLinkers, 0.0));
 	for (i = 0; i < numRow_; ++i){
 		rep = C[i + numCol].front();
 		prevColor = previousRowColoring[rep - numCol];
