@@ -37,6 +37,7 @@ public:
 	void createImpliedRows(HighsLp& lp);
 	vector<double> aggregateImpliedRow(int impliedRow);
 	void getAggImpliedRows();
+	void createImpliedLinkRows(vector<double> &linkRow, int linkIdx);
 
 	// Lp to store the aggregate LP into
 	HighsLp alp;
@@ -106,12 +107,15 @@ public:
     vector<int> ARindex_;
     vector<int> ARindexSub_;
     vector<int> AR_Nend_;
+    vector<int> GSRstart_;
+    vector<int> GSRindex_;
     vector<int> linkers;
     vector<bool> activeConstraints_;
     vector<bool> activeBounds_;
     vector<double> Avalue_;
     vector<double> ARvalue_;
     vector<double> ARvalueSub_;
+    vector<double> GSRvalue_;
     vector<double> colCost_;
     vector<double> colLower_;
     vector<double> colUpper_;
