@@ -8,9 +8,9 @@
 
 ../src/interfaces/highs_c_api.h
 
-/home/edeak/EQLPSolver/DHiGHS/check/TestCAPI.c
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/check/TestCAPI.c
 interfaces/highs_c_api.h
-/home/edeak/EQLPSolver/DHiGHS/check/interfaces/highs_c_api.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/check/interfaces/highs_c_api.h
 stdio.h
 -
 stdlib.h

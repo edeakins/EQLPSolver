@@ -33,7 +33,7 @@ public:
 	vector<double> rowCoeff(int column);
 	void eraseLinkersIfNotNeeded();
 	bool varIsBounded(pair<int, int> link);
-	void editRowWiseMatrix(int domLink, int slavLink, int idx);
+	void editRowWiseMatrix(int domLink, int slavLink);
 	void createImpliedRows(HighsLp& lp);
 	vector<double> aggregateImpliedRow(int impliedRow);
 	void getAggImpliedRows();
