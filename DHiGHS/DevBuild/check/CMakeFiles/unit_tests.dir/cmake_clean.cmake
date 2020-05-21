@@ -11,7 +11,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o"
   "CMakeFiles/unit_tests.dir/TestLpModification.cpp.o"
   "CMakeFiles/unit_tests.dir/Avgas.cpp.o"
-  "CMakeFiles/unit_tests.dir/TestIpx.cpp.o"
   "../bin/unit_tests.pdb"
   "../bin/unit_tests"
 )

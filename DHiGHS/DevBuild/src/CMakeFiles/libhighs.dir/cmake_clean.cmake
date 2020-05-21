@@ -46,9 +46,9 @@ file(REMOVE_RECURSE
   "CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o"
   "CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o"
   "../lib/libhighs.pdb"
-  "../lib/libhighs.so.1.0.0"
-  "../lib/libhighs.so"
-  "../lib/libhighs.so.1.0"
+  "../lib/libhighs.1.0.0.dylib"
+  "../lib/libhighs.dylib"
+  "../lib/libhighs.1.0.dylib"
 )
 
 # Per-language clean rules from dependency scanning.

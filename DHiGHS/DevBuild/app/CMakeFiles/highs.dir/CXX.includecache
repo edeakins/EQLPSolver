@@ -370,23 +370,23 @@ cstring
 string
 -
 
-/home/edeak/EQLPSolver/DHiGHS/app/RunHighs.cpp
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/RunHighs.cpp
 Highs.h
-/home/edeak/EQLPSolver/DHiGHS/app/Highs.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/Highs.h
 HighsIO.h
-/home/edeak/EQLPSolver/DHiGHS/app/HighsIO.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsIO.h
 HighsMipSolver.h
-/home/edeak/EQLPSolver/DHiGHS/app/HighsMipSolver.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsMipSolver.h
 HighsOptions.h
-/home/edeak/EQLPSolver/DHiGHS/app/HighsOptions.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsOptions.h
 HighsRuntimeOptions.h
-/home/edeak/EQLPSolver/DHiGHS/app/HighsRuntimeOptions.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsRuntimeOptions.h
 HighsTimer.h
-/home/edeak/EQLPSolver/DHiGHS/app/HighsTimer.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/HighsTimer.h
 LoadProblem.h
-/home/edeak/EQLPSolver/DHiGHS/app/LoadProblem.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/LoadProblem.h
 Aggregate.h
-/home/edeak/EQLPSolver/DHiGHS/app/Aggregate.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app/Aggregate.h
 
 HConfig.h
 
