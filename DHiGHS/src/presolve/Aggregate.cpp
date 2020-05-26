@@ -138,8 +138,8 @@ void HighsAggregate::aggregateAMatrix(){
 void HighsAggregate::aggregateCVector(){
 	colCost_.assign(numCol_, 0);
 	for (int i = 0; i < numCol_; ++i){
-		int rep = C[i].front();
-		colCost_[i] = colCost[rep];
+		for (int j = 0; j < C[i].size(); ++j)
+			colCost_[i] += colCost[C[i][j]];
 	}
 }
 
@@ -203,7 +203,13 @@ void HighsAggregate::findMissingBasicColumns(){
 	int i, j, parent, child, currSize, prevSize;
 	currSize = linkingPairs.size();
 	prevSize = 0;
+	for (int i = 0; i  < linkingPairs.size(); ++i){
+		cout << linkingPairs[i].first << "," << linkingPairs[i].second << endl;
+	}
+	cin.get();
 	while (currSize != prevSize && linkingPairs.size()){
+		cout << "repeat" << endl;
+		cin.get();
 		if (partsForGS.size() == 1){
 			for (i = 0; i < partsForGS.size(); ++i){
 				//if (numSplits[partsForGS[i] - numCol] <= 1) continue;
@@ -245,8 +251,6 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 	int linkColIdx = numCol_;\
 	int numLinkers = linkingPairs.size();
 	int numNonLinkRows = numSplits[oldPart - numCol];
-	cout << "aggImplied row size: " << aggImpliedRows.size() << endl;
-	cin.get();
 	int impliedRowsIdx = aggImpliedRows.size() + numNonLinkRows;
 	int numRowsToTest = numLinkers + impliedRowsIdx;
 	vector<int> currentRows;
@@ -276,7 +280,6 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 			rowIdx++;
 		}
 	}
-	cout << "num Linkers left: " << linkingPairs.size() << endl;
 	vector<vector<double> > QRmat = AM;
 	cout << " A = [ " << endl; 
 	for (i = 0; i < QRmat.size(); ++i){
@@ -297,11 +300,13 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 	}
 	//cin.get();
 	for (i = 0; i < numNonLinkRows; ++i)
-		if (dependanceCheck(QRmat[i]))
+		if (dependanceCheck(QRmat[i])){
+			cout << "currentRow is dep: " << currentRows[i] << endl;
+			cin.get();
 			startingBasicRows_.push_back(currentRows[i]);
+		}
 	for (i = impliedRowsIdx; i < numRowsToTest; ++i){
 		if (dependanceCheck(QRmat[i])){
-			cout << "link row: " << i << " is dep" << endl;
 			linkIsNeeded[i - impliedRowsIdx] = false;
 			createImpliedLinkRows(QRmat[i], i);
 		}
@@ -380,14 +385,14 @@ void HighsAggregate::createImpliedLinkRows(vector<double>& linkRow, int linkIdx)
 		if (i == linkIdx){
 			v1 = linkingPairs[i - realNumCol_].first;
 			v2 = linkingPairs[i - realNumCol_].second;
-			temp[v1] = linkRow[i] * 1;
-			temp[v2] = linkRow[i] * -1;
+			temp[v1] += linkRow[i] * 1;
+			temp[v2] += linkRow[i] * -1;
 		}
 		else if (linkRow[i]){
 			v1 = linkingPairs[i - realNumCol_].first;
 			v2 = linkingPairs[i - realNumCol_].second;
-			temp[v1] = linkRow[i] * 1;
-			temp[v2] = linkRow[i] * -1;
+			temp[v1] += linkRow[i] * 1;
+			temp[v2] += linkRow[i] * -1;
 		}
 	}
 	aggImpliedRows.push_back(temp);

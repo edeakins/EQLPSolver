@@ -276,6 +276,8 @@ void HighsEquitable::findTarget(){
 	for (int i = 0; i < numCol; ++i){
 		if (!isolates[i]){
 			isolated = i;
+			cout << "isolate: " << isolated << " has color: " << color[isolated] << endl;
+			cin.get();
 			targets[i] = true;
 			isolate(i);
 			return;
@@ -289,19 +291,26 @@ void HighsEquitable::isolate(int i){
 	for (int j = numCol; j < numTot; ++j)
 		previousRowColoring[j - numCol] = color[j];
 	prevC = C;
-	C[color[i]].erase(remove(C[color[i]].begin(), C[color[i]].end(), i), C[color[i]].end());
+	// C[color[i]].erase(remove(C[color[i]].begin(), C[color[i]].end(), i), C[color[i]].end());
 	int newCol = vCol;
-	vCol++;
-	C[newCol].push_back(i);
-	color[i] = newCol;
-	for (int i = 0; i < C.size(); ++i){
-		if (C[i].size() != 0){
-			if (C[i].size() == 1)
-				isolates[C[i].front()] = true;
+	int oldCol = color[i];
+	for (int j = 0; j < C[oldCol].size();){
+		int var = C[oldCol][j];
+		if (var != i){
+			C[oldCol].erase(C[oldCol].begin() + j);
+			C[newCol].push_back(var);
+			color[var] = newCol;
 		}
+		else
+			++j;
 	}
-	SCheck[newCol] = true;
-	S.push(newCol);
+	vCol++;
+	for (int i = 0; i < C.size(); ++i){
+		if (C[i].size() == 1)
+			isolates[C[i].front()] = true;
+	}
+	SCheck[oldCol] = true;
+	S.push(oldCol);
 }
 
 void HighsEquitable::collectLinkingPairs(){
@@ -321,15 +330,20 @@ void HighsEquitable::collectLinkingPairs(){
 			notLinkedToIsolated.push_back(rep);
 		}
 	}
+	reverse(notLinkedToIsolated.begin(), notLinkedToIsolated.end());
 	while (!notLinkedToIsolated.empty()){
 		targ = notLinkedToIsolated.back();
 		notLinkedToIsolated.pop_back();
 		previousColorTarg = previousColumnColoring[targ];
-		for (i = 0; i < notLinkedToIsolated.size(); ++i){
+		for (i = 0; i < notLinkedToIsolated.size();){
 			rep = notLinkedToIsolated[i];
 			previousColorRep = previousColumnColoring[rep];
-			if (previousColorRep == previousColorTarg)
+			if (previousColorRep == previousColorTarg){
 				linkingPairs.push_back(pair<int, int>(color[targ], color[rep]));
+				notLinkedToIsolated.erase(notLinkedToIsolated.begin() + i);
+			}
+			else
+				++i;
 		}
 	}
 } 
