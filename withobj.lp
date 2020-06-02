@@ -1,9 +1,9 @@
 \ LP format - for model browsing. Use MPS format to capture full model detail.
-Minimize
-  20 C0 + C1 + C2 + 15 C3 + 6 C4 + 40 C5 + 20 C6 + 15 C7 + 30 C8 + 6 C9
-   + 2 C10 + 6 C11 + C12 + 15 C13 + 15 C14 + 6 C15 + C16 + 2 C17 + 6 C18
-   + 15 C19 + 20 C20 + 12 C21 + C22 + C23 + C24 + 15 C25 + 6 C26 + 15 C27
-   + 6 C28 + 12 C29 + 30 C30 + 20 C31 + 15 C32 + 6 C33 + C34
+Maximize
+  0 C0 + 0 C1 + 0 C2 + 0 C3 + 0 C4 + 0 C5 + 0 C6 + 0 C7 + 0 C8 + 0 C9
+   + 0 C10 + 0 C11 + 0 C12 + 0 C13 + 0 C14 + 0 C15 + 0 C16 + 0 C17 + 0 C18
+   + 0 C19 + 0 C20 + 0 C21 + 0 C22 + 0 C23 + 0 C24 + 0 C25 + 0 C26 + 0 C27
+   + 0 C28 + 0 C29 + 0 C30 + 0 C31 + 0 C32 + 0 C33 + 0 C34 + C35
 Subject To
  R0: 4 C0 + 2 C8 + 2 C11 + C25 + C32 = 1
  R1: C1 + 5 C3 + C4 + C26 + 2 C29 = 1
@@ -16,7 +16,7 @@ Subject To
  R8: 4 C6 + 2 C8 + 2 C9 + C27 + C32 = 1
  R9: 5 C8 + C9 + C10 + C11 + C15 + C21 = 1
  R10: 6 C9 + 2 C10 + C23 + C34 = 1
- R11: 2 C10 + 6 C11 + C24 + C34 >= 1
+ R11: 2 C10 + 6 C11 + C24 + C34 = 1
  R12: C4 + C12 + 5 C13 + C18 + 2 C29 = 1
  R13: 2 C5 + 3 C13 + 3 C14 + C20 + C31 = 1
  R14: 2 C8 + C14 + 2 C15 + 4 C20 + C32 = 1
@@ -40,7 +40,7 @@ Subject To
  R32: C9 + C11 + C15 + 5 C32 + C33 + C34 = 1
  R33: C14 + C25 + C27 + 4 C31 + C32 + 2 C33 = 1
  R34: C22 + C23 + C24 + 6 C33 + C34 = 1
- R35: - C4 + C16 - C35 = 0
+ R35: C4 - C16 - C35 = 0
 Bounds
  C0 <= 1
  C1 <= 1

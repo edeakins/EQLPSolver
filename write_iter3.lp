@@ -1,5 +1,5 @@
 \ LP format - for model browsing. Use MPS format to capture full model detail.
-Minimize
+Maximize
  
 Subject To
  R0: 4 C1 + 2 C8 + 2 C11 + C30 + C32 = 1
