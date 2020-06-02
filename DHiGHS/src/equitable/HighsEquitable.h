@@ -80,7 +80,7 @@ public:
 
 	// Contains linked variables from the splitting up of the partitions
 	vector<pair<int, int> > linkingPairs;
-
+	map<int, vector<int> > commonLinkers;
 	// Contains previous partitions coloring so we know how to link variables
 	vector<int> previousColumnColoring;
 	vector<int> previousRowColoring;

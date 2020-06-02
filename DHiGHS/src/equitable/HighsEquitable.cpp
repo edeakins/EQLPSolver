@@ -315,21 +315,28 @@ void HighsEquitable::isolate(int i){
 
 void HighsEquitable::collectLinkingPairs(){
 	if (isolated == -1) return;
-	int i;
+	int i, linkCnt = 0;
 	int rep;
 	int previousColorRep;
 	int targ = isolated;
 	int previousColorTarg = previousColumnColoring[targ];
 	vector<int> notLinkedToIsolated;
+	vector<int> temp;
+	commonLinkers.clear();
 	for (i = 0; i < columnColorReps.size(); ++i){
 		rep = columnColorReps[i];
 		previousColorRep = previousColumnColoring[rep];
-		if (previousColorRep == previousColorTarg)
+		if (previousColorRep == previousColorTarg){
 			linkingPairs.push_back(pair<int, int>(color[targ], color[rep]));
+			temp.push_back(linkCnt);
+			linkCnt++;
+		}
 		else{
 			notLinkedToIsolated.push_back(rep);
 		}
 	}
+	commonLinkers.insert(pair<int, vector<int> >(color[targ], temp));
+	temp.clear();
 	reverse(notLinkedToIsolated.begin(), notLinkedToIsolated.end());
 	while (!notLinkedToIsolated.empty()){
 		targ = notLinkedToIsolated.back();
@@ -340,10 +347,16 @@ void HighsEquitable::collectLinkingPairs(){
 			previousColorRep = previousColumnColoring[rep];
 			if (previousColorRep == previousColorTarg){
 				linkingPairs.push_back(pair<int, int>(color[targ], color[rep]));
+				temp.push_back(linkCnt);
+				linkCnt++;
 				notLinkedToIsolated.erase(notLinkedToIsolated.begin() + i);
 			}
 			else
 				++i;
+		}
+		if (temp.size()){
+			commonLinkers.insert(pair<int, vector<int> >(color[targ], temp));
+			temp.clear();
 		}
 	}
 } 

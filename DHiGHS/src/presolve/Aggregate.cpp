@@ -25,8 +25,8 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	color.assign(ep.color.begin(), ep.color.end());
 	adjListLab.assign(ep.adjListLab.begin(), ep.adjListLab.end());
 	adjListWeight.assign(ep.adjListWeight.begin(), ep.adjListWeight.end());
-	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());\
-	originalNumLinkers = linkingPairs.size();
+	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());
+	commonLinkers = ep.commonLinkers;
 	// Used for setting active set
 	activeBounds_.assign(numCol, false);
 	activeConstraints_.assign(numRow, false);
@@ -131,6 +131,7 @@ void HighsAggregate::aggregateAMatrix(){
 		setAggregateRealColsBounds();
 		eraseLinkersIfNotNeeded();
 		//getAggImpliedRows();
+		aggregateCVector();
 		findMissingBasicColumns();
 	}
 }
@@ -200,47 +201,37 @@ void HighsAggregate::createRowWiseAMatrix(){
 
 void HighsAggregate::findMissingBasicColumns(){
 	createRowWiseAMatrix();
-	int i, j, parent, child, currSize, prevSize;
-	currSize = linkingPairs.size();
-	prevSize = 0;
-	for (int i = 0; i  < linkingPairs.size(); ++i){
-		cout << linkingPairs[i].first << "," << linkingPairs[i].second << endl;
-	}
-	cin.get();
-	while (currSize != prevSize && linkingPairs.size()){
+	int i, j, parent, child, previous = 0, current = numLinkers;
+	while (current != previous && numLinkers){
 		cout << "repeat" << endl;
 		cin.get();
+		previous = current;
 		if (partsForGS.size() == 1){
 			for (i = 0; i < partsForGS.size(); ++i){
-				//if (numSplits[partsForGS[i] - numCol] <= 1) continue;
 				doGramSchmidt(partsForGS[i]);
 			}
 			break;
 		}
-		prevSize = currSize;
 		for (i = 0; i < partsForGS.size(); ++i){
-			//if (numSplits[partsForGS[i] - numCol] <= 1) continue;
 			doGramSchmidt(partsForGS[i]);
 			if (!linkingPairs.size())
 				break;
 		}
-		currSize = linkingPairs.size();
+		current = numLinkers;
 	}
 	for (i = 0; i < linkingPairs.size(); ++i){
-		parent = linkingPairs[i].first;
-		child = linkingPairs[i].second;
-		vector<double> linkRow(realNumCol_,  0);
-		linkRow[parent] = 1;
-		linkRow[child] = -1;
-		numLinkers_++;
-		appendLinkersToAMatrix(linkRow);
-		appendLinkersToColBounds();
-		appendLinkersToRowRhs();
+		if (linkIsNeeded[i]){
+			parent = linkingPairs[i].first;
+			child = linkingPairs[i].second;
+			vector<double> linkRow(realNumCol_,  0);
+			linkRow[parent] = 1;
+			linkRow[child] = -1;
+			numLinkers_++;
+			appendLinkersToAMatrix(linkRow);
+			appendLinkersToColBounds();
+			appendLinkersToRowRhs();
+		}
 	}
-	// for (i = numActiveRows_; i < numActiveRows_ + numActiveBounds_; ++i){
-	// 	if (dependanceCheck(QRmat[i]))
-	// 		startingBasicColumns_.push_back(potentialBasicColumns_[i - numActiveRows_]);
-	// }
 	numTot_ = numRow_ + numCol_;
 	colCost_.assign(numCol_, 0);
 }
@@ -248,12 +239,12 @@ void HighsAggregate::findMissingBasicColumns(){
 void HighsAggregate::doGramSchmidt(int oldPart){
 	int i, j, rep, prevColor; // k, x, rep, prevColor, domLink, slavLink;
 	int rowIdx = 0;
-	int linkColIdx = numCol_;\
-	int numLinkers = linkingPairs.size();
+	int linkColIdx = numCol_;
 	int numNonLinkRows = numSplits[oldPart - numCol];
 	int impliedRowsIdx = aggImpliedRows.size() + numNonLinkRows;
 	int numRowsToTest = numLinkers + impliedRowsIdx;
 	vector<int> currentRows;
+	vector<int> remainingLinks;
 	vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_ + originalNumLinkers, 0.0));
 	for (i = 0; i < numRow_; ++i){
 		rep = C[i + numCol].front();
@@ -274,16 +265,21 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 	}
 	for (i = 0; i < linkingPairs.size(); ++i){
 		if (linkIsNeeded[i]){
+			remainingLinks.push_back(i);
 			AM[rowIdx][linkingPairs[i].first] = 1;
 			AM[rowIdx][linkingPairs[i].second] = -1;
 			AM[rowIdx][numCol_ + i] = -1;
 			rowIdx++;
 		}
 	}
+	cout << "Rows" << endl;
+	for (i = 0; i < currentRows.size(); ++i)
+		cout << "R" << currentRows[i] << endl;
 	vector<vector<double> > QRmat = AM;
+	cout << "Before GS" << endl;
 	cout << " A = [ " << endl; 
 	for (i = 0; i < QRmat.size(); ++i){
-		for (j = 0; j < QRmat[i].size(); ++j){
+		for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
 			cout << QRmat[i][j] << " ";
 		}
 		cout << ";" << endl;
@@ -291,38 +287,45 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 	cout << "]" << endl;
 	QR.gramSchmidt(QRmat, linkColIdx);
 	cout << endl;
+	cout << "After GS" << endl;
+	cout << " A = [ " << endl; 
 	for (i = 0; i < QRmat.size(); ++i){
-		cout << "[ ";
-		for (j = 0; j < QRmat[i].size(); ++j){
+		for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
 			cout << QRmat[i][j] << " ";
 		}
-		cout << "]" << endl;
+		cout << ";" << endl;
 	}
-	//cin.get();
-	for (i = 0; i < numNonLinkRows; ++i)
-		if (dependanceCheck(QRmat[i])){
-			cout << "currentRow is dep: " << currentRows[i] << endl;
-			cin.get();
+	cout << "]" << endl;
+	cin.get();
+	for (i = 0; i < numNonLinkRows; ++i){
+		if (dependanceCheck(QRmat[i], impliedRowsIdx)){
 			startingBasicRows_.push_back(currentRows[i]);
 		}
+	}
 	for (i = impliedRowsIdx; i < numRowsToTest; ++i){
-		if (dependanceCheck(QRmat[i])){
-			linkIsNeeded[i - impliedRowsIdx] = false;
-			createImpliedLinkRows(QRmat[i], i);
+		int linkIdx = remainingLinks[i - impliedRowsIdx] + realNumCol_;
+		if (dependanceCheck(QRmat[i], impliedRowsIdx, linkIdx)){
+			numLinkers--;
+			linkIsNeeded[linkIdx - realNumCol_] = false;
+			createImpliedLinkRows(QRmat[i], linkIdx);
 		}
 	}
-	i = 0;
-	while (i < linkingPairs.size()){
-		if (!linkIsNeeded[i]){
+	for (i = 0; i < currentRows.size(); ++i){
+		if (i == currentRows.size() - 1){
+			cout << "R" << currentRows[i] << " zero out " << endl;
+			break;
+		}
+		cout << "R" << currentRows[i] << ", ";
+	}
+	for (i = 0; i < linkingPairs.size(); ++i){
+		if (!linkIsNeeded[i] and !linkIsErased[i]){
 			int dom = linkingPairs[i].first;
 			int slav = linkingPairs[i].second;
-			cout << "dom " << dom << " slav " << slav << endl;
+			cout << "C" << dom << ", C" << slav << endl;
+			cin.get();
 			editRowWiseMatrix(dom, slav);
-			linkingPairs.erase(linkingPairs.begin() + i);
-			linkIsNeeded.erase(linkIsNeeded.begin() + i);
+			linkIsErased[i] = true;
 		}
-		else
-			++i;
 	}
 }
 
@@ -387,6 +390,7 @@ void HighsAggregate::createImpliedLinkRows(vector<double>& linkRow, int linkIdx)
 			v2 = linkingPairs[i - realNumCol_].second;
 			temp[v1] += linkRow[i] * 1;
 			temp[v2] += linkRow[i] * -1;
+			//temp[linkIdx] += -1;
 		}
 		else if (linkRow[i]){
 			v1 = linkingPairs[i - realNumCol_].first;
@@ -395,6 +399,7 @@ void HighsAggregate::createImpliedLinkRows(vector<double>& linkRow, int linkIdx)
 			temp[v2] += linkRow[i] * -1;
 		}
 	}
+	// temp[linkIdx] = -1;
 	aggImpliedRows.push_back(temp);
 }
 
@@ -446,12 +451,46 @@ HighsBasis& HighsAggregate::getAlpBasis(){
 	return alpBasis;
 }
 
-bool HighsAggregate::dependanceCheck(vector<double> &v){
+bool HighsAggregate::dependanceCheck(vector<double> &v, int impliedRowsIdx, int linkIdx){
+	// cout << "linkIdx: " << linkIdx - realNumCol_ << endl;
 	bool cond = true;
 	for (int i = 0; i < realNumCol_; ++i){
 		if (fabs(v[i]) > 1e-6)
 			cond = false;
+		else
+			v[i] = 0;
 	}
+	if (!cond || linkIdx == -1){
+		// cout << "dependent check: " << cond << endl;
+		// cin.get();
+		return cond;
+	}
+	else{
+		int domLink = linkingPairs[linkIdx - realNumCol_].first;
+		vector<int> commonLinks = commonLinkers[domLink];
+		for (int i = 0; i < commonLinks.size(); ++i){
+			// cout << "commonLinks: " << commonLinks[i] << endl;
+			// cin.get();
+			if (commonLinks[i] == linkIdx - realNumCol_)
+				continue;
+			else if (fabs(v[commonLinks[i] + realNumCol_]) > 1e-6 && linkIsErased[commonLinks[i]]){
+					cond = false;
+					// cout << "dependent check: " << cond << endl;
+					// cin.get();
+					return cond;
+			}
+			// else if (linkIsErased[commonLinks[i]]){
+			// 	for (int j = realNumCol_; j < v.size(); ++j){
+			// 		if (v[j] != commonLinks[i] + realNumCol_ && fabs(v[j]) > 1e-6){
+			// 			cond = false;
+			// 			return cond;
+			// 		}
+			// 	}
+			// }	
+		}
+	}
+	// cout << "dependent check: " << cond << endl;
+	// cin.get();
 	return cond;
 }
 
@@ -554,6 +593,9 @@ void HighsAggregate::eraseLinkersIfNotNeeded(){
 			++i;
 	}
 	linkIsNeeded.assign(linkingPairs.size(), true);
+	linkIsErased.assign(linkingPairs.size(), false);
+	originalNumLinkers = linkingPairs.size();
+	numLinkers = linkingPairs.size();
 }
 
 void HighsAggregate::findPreviousBasisForRows(){

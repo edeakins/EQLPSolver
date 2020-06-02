@@ -27,7 +27,7 @@ public:
 	void setAlpBasis();
 	HighsLp& getAlp();
 	HighsBasis& getAlpBasis();
-	bool dependanceCheck(vector<double> &v);
+	bool dependanceCheck(vector<double> &v, int impliedRowsIdx, int linkIdx = -1);
 	void findPreviousBasisForRows();
 	void findPreviousBasisForColumns();
 	vector<double> rowCoeff(int column);
@@ -96,6 +96,7 @@ public:
 	int numActiveRows_ = 0;
 	int numActiveBounds_ = 0;
 	int numLinkers_ = 0;
+	int numLinkers;
 	int originalNumLinkers;
 	vector<int> startingBasicRows_;
 	vector<int> startingBasicColumns_;
@@ -144,6 +145,8 @@ public:
 
 	// Tells whether GS ruled out a linker or not
 	vector<bool> linkIsNeeded;
+	vector<bool> linkIsErased;
+	map<int, vector<int> > commonLinkers;
 
 	// Collect implied linkers for constraint manipulation
 	vector<pair<int, int> > equalColors;
