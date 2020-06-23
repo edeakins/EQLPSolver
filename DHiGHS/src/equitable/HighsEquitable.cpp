@@ -45,6 +45,8 @@ void HighsEquitable::setup(const HighsLp& lp){
 	targets.assign(numTot, false);
 	previousColumnColoring.assign(numCol, -1);
 	previousRowColoring.assign(numRow, -1);
+	partSize.assign(numCol, 0);
+	previousPartSize.assign(numCol, 0);
 	adjListLab.assign(numTot, vector<int>(0));
 	adjListWeight.assign(numTot, vector<double>(0));
 	C.assign(numTot, vector<int>(0));
@@ -213,6 +215,7 @@ void HighsEquitable::refine(){
 	//cout << "\n\n Partition \n\n" << endl;
 	for (i = 0; i < C.size(); ++i){
 		if (C[i].size()){
+			if (i < numCol) partSize[i] = C[i].size();
 			//cout << "color: " << i << endl;
 			rep = C[i].front();
 			if (i < numCol && !targets[rep])
@@ -290,6 +293,7 @@ void HighsEquitable::isolate(int i){
 		previousColumnColoring[j] = color[j];
 	for (int j = numCol; j < numTot; ++j)
 		previousRowColoring[j - numCol] = color[j];
+	previousPartSize = partSize;
 	prevC = C;
 	// C[color[i]].erase(remove(C[color[i]].begin(), C[color[i]].end(), i), C[color[i]].end());
 	int newCol = vCol;

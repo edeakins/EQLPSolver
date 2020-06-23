@@ -38,6 +38,7 @@ class HighsModelObject {
   HighsSolutionParams scaled_solution_params_;
   HighsBasis basis_;
   HighsSolution solution_;
+  HighsTableau tableau_;
 
   HighsLp simplex_lp_;
   SimplexBasis simplex_basis_;

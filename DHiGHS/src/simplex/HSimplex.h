@@ -36,6 +36,8 @@ bool dual_infeasible(const double value, const double lower, const double upper,
 
 // Methods not requiring HighsModelObject
 
+void computeTableauRowFull(HighsModelObject& highs_model_object, const HVector& row_ep, HVector& row_ap);
+
 void append_nonbasic_cols_to_basis(HighsLp& lp, HighsBasis& basis, int XnumNewCol);
 void append_nonbasic_cols_to_basis(HighsLp& lp, SimplexBasis& basis, int XnumNewCol);
 

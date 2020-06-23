@@ -2870,6 +2870,42 @@ void choosePriceTechnique(const int price_strategy, const double row_ep_density,
     price_strategy == SIMPLEX_PRICE_STRATEGY_ROW_SWITCH_COL_SWITCH;
 }
 
+void computeTableauRowFull(HighsModelObject& highs_model_object, const HVector& row_ep, HVector& row_ap) {
+  HighsTimer& timer = highs_model_object.timer_;
+  HighsSimplexInfo& simplex_info = highs_model_object.simplex_info_;
+  const HMatrix* matrix = &highs_model_object.matrix_;
+  HighsSimplexAnalysis* analysis = &highs_model_object.simplex_analysis_;
+
+  const int solver_num_row = highs_model_object.simplex_lp_.numRow_;
+  const double local_density = 1.0 * row_ep.count / solver_num_row;
+
+#ifdef HiGHSDEV
+  if (simplex_info.analyse_iterations) {
+    analysis->operationRecordBefore(ANALYSIS_OPERATION_TYPE_PRICE_AP, row_ep, 0.0);
+    analysis->num_col_price++;
+  }
+#endif
+  timer.start(simplex_info.clock_[PriceClock]);
+  row_ap.clear();
+    // Perform column-wise PRICE
+  matrix->priceByColumn(row_ap, row_ep);
+  const int solver_num_col = highs_model_object.simplex_lp_.numCol_;
+#ifdef HiGHSDEV
+  // Possibly analyse the error in the result of PRICE
+  const bool analyse_price_error = false;
+  if (analyse_price_error) matrix->price_er_ck(row_ap, row_ep);
+#endif
+  // Update the record of average row_ap density
+  const double local_row_ap_density = (double)row_ap.count / solver_num_col;
+  analysis->updateOperationResultDensity(local_row_ap_density, analysis->row_ap_density);
+#ifdef HiGHSDEV
+  if (simplex_info.analyse_iterations)
+    analysis->operationRecordAfter(ANALYSIS_OPERATION_TYPE_PRICE_AP, row_ap);
+#endif
+  timer.stop(simplex_info.clock_[PriceClock]);
+}
+
+
 void computeTableauRowFromPiP(HighsModelObject& highs_model_object, const HVector& row_ep, HVector& row_ap) {
   HighsTimer& timer = highs_model_object.timer_;
   HighsSimplexInfo& simplex_info = highs_model_object.simplex_info_;

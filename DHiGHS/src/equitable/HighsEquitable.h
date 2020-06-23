@@ -87,6 +87,10 @@ public:
 
 	// Contains the representatives of each color class within a partition at each major refinement
 	vector<int> columnColorReps;
+
+	// Contains partition size information for tableau scaling
+	vector<int> partSize;
+	vector<int> previousPartSize;
 };
 
 #endif

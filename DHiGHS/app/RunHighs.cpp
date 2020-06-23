@@ -238,8 +238,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Basis and solution to store from unfold interations
   HighsBasis basis;
   HighsSolution solution;
+  HighsTableau tableau;
   // Use aggregator to obtain an aggreated lp and return it
-  HighsAggregate lpFolder(lp, ep, solution, basis, false);
+  HighsAggregate lpFolder(lp, ep, solution, basis, tableau, false);
   HighsLp& alp = lpFolder.getAlp();
   // Solve LP case.
   Highs highs;
@@ -308,6 +309,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsStatus run_status = highs.run();
   basis = highs.getBasis();
   solution = highs.getSolution();
+  tableau = highs.getTableau();
 
   if (run_quiet)
     HighsPrintMessage(output, message_level, ML_ALWAYS,
@@ -318,7 +320,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     //highs = Highs();
     ep.refine();
     try{
-      lpFolder = HighsAggregate(lp, ep, solution, basis, true);
+      lpFolder = HighsAggregate(lp, ep, solution, basis, tableau, true);
     }
     catch(exception& e){
       cout << e.what() << endl;
@@ -370,6 +372,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     run_status = highs.run();
     basis = highs.getBasis();
     solution = highs.getSolution();
+    tableau = highs.getTableau();
     cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
     for (int i = 0; i < solution.col_value.size(); ++i){
       cout << "var_" << i << " = " << solution.col_value[i] << endl;

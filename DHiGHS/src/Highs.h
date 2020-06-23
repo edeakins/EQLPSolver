@@ -197,6 +197,9 @@ class Highs {
   const HighsBasis& getBasis() const;
   HighsBasis& getBasisForOrbitalCrossover();
 
+   // Returns tableau for orbital crossover purposes
+  const HighsTableau& getTableau() const;
+
   /**
    * @brief Returns the current model status
    */
@@ -711,6 +714,7 @@ class Highs {
   HighsBasis basis_;
   HighsLp lp_;
   ICrashInfo icrash_info_;
+  HighsTableau tableau_;
 
   HighsTimer timer_;
 

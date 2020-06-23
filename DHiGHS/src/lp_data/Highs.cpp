@@ -553,6 +553,8 @@ const ICrashInfo& Highs::getICrashInfo() const { return icrash_info_; }
 
 const HighsBasis& Highs::getBasis() const { return basis_; }
 
+const HighsTableau& Highs::getTableau() const { return tableau_; }
+
 const HighsModelStatus& Highs::getModelStatus(const bool scaled_model) const {
   if (scaled_model) {
     return scaled_model_status_;

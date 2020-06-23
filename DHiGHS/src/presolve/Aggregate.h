@@ -8,7 +8,7 @@
 
 class HighsAggregate{
 public:
-	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, bool flag);
+	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau tableau, bool flag);
 	//virtual ~HighsAggregate(){};
 	void clear();
 	void aggregateAMatrix();
@@ -38,6 +38,9 @@ public:
 	vector<double> aggregateImpliedRow(int impliedRow);
 	void getAggImpliedRows();
 	void createImpliedLinkRows(vector<double> &linkRow, int linkIdx);
+	void liftTableau();
+	void liftTableauColumnWise();
+	void initialAggregateAMatrix();
 
 	// Lp to store the aggregate LP into
 	HighsLp alp;
@@ -105,10 +108,13 @@ public:
 	vector<int> Astart_;
 	vector<int> ARstart_;
 	vector<int> ARstartSub_;
+	vector<int> ARtableauStart;
     vector<int> Aindex_;
     vector<int> ARindex_;
     vector<int> ARindexSub_;
+    vector<int> ARtableauIndex;
     vector<int> AR_Nend_;
+    vector<int> A_Nend_;
     vector<int> GSRstart_;
     vector<int> GSRindex_;
     vector<int> linkers;
@@ -117,6 +123,7 @@ public:
     vector<double> Avalue_;
     vector<double> ARvalue_;
     vector<double> ARvalueSub_;
+    vector<double> ARtableauValue;
     vector<double> GSRvalue_;
     vector<double> colCost_;
     vector<double> colLower_;
@@ -153,6 +160,10 @@ public:
 
 	// Holds all aggregated implied rows
 	vector<vector<double> > aggImpliedRows;
+
+	// Contains partition size information for tableau scaling
+	vector<int> partSize;
+	vector<int> previousPartSize;
 };
 
 #endif

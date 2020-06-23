@@ -133,6 +133,9 @@ class HighsLp {
 
     return true;
   }
+
+  int numRealRows;
+  int numRealCols;
 };
 
 // Cost, column and row scaling factors
@@ -371,6 +374,15 @@ struct HighsSolution {
   std::vector<double> col_dual;
   std::vector<double> row_value;
   std::vector<double> row_dual;
+};
+
+// This is a csc collection of the previous iterations reduced A matrix
+// that we use with the EP to construct the current LP
+// Struct to contain tableau info
+struct HighsTableau{
+  std::vector<int> ARtableauIndex;
+  std::vector<int> ARtableauStart;
+  std::vector<double> ARtableauValue;
 };
 
 // To be the basis representation given back to the user. Values of
