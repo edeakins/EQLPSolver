@@ -76,6 +76,7 @@ class HDual {
   HighsStatus solve();
 
  public:
+  void buildTableau();
   /**
    * @brief Set solver options from simplex options
    */

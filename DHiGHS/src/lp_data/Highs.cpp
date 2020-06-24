@@ -518,6 +518,7 @@ HighsStatus Highs::run() {
   // for them to have the right dimension.
   solution_ = hmos_[original_hmo].solution_;
   basis_ = hmos_[original_hmo].basis_;
+  tableau_ = hmos_[original_hmo].tableau_;
   // Report times
   if (hmos_[original_hmo].report_model_operations_clock) {
     std::vector<int> clockList{timer_.presolve_clock, timer_.solve_clock,

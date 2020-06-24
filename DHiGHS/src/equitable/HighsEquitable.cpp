@@ -279,8 +279,6 @@ void HighsEquitable::findTarget(){
 	for (int i = 0; i < numCol; ++i){
 		if (!isolates[i]){
 			isolated = i;
-			cout << "isolate: " << isolated << " has color: " << color[isolated] << endl;
-			cin.get();
 			targets[i] = true;
 			isolate(i);
 			return;

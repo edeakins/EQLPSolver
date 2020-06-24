@@ -1,7 +1,7 @@
 #include "Aggregate.h"
 using namespace std;
 
-HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau tableau, bool flag){
+HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau& tableau, bool flag){
 	// From the original lp
 	numRow = lp.numRow_;
 	numCol = lp.numCol_;
@@ -29,6 +29,8 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	adjListLab.assign(ep.adjListLab.begin(), ep.adjListLab.end());
 	adjListWeight.assign(ep.adjListWeight.begin(), ep.adjListWeight.end());
 	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());
+	partSize.assign(ep.partSize.begin(), ep.partSize.end());
+	previousPartSize.assign(ep.previousPartSize.begin(), ep.previousPartSize.end());
 	commonLinkers = ep.commonLinkers;
 	// Used for setting active set
 	activeBounds_.assign(numCol, false);
@@ -90,80 +92,49 @@ HighsLp& HighsAggregate::getAlp(){
 	return alp;
 }
 
-void HighsAggregate::liftTableau(){
-	int i, j, k, rep, previousColor, oldColor;
-	vector<double> scale;
-	int start = 0;
-	numCol_ = 0;
-	numRow_ = 0;
-	int numLiftedRows = 0;
-	for (i = 0; i < prevC.size(); ++i)
-		if (prevC[i].size() && i < numCol)
-			start++;
-	for (i = 0; i < C.size(); ++i){
-		if (C[i].size() && i < numCol){
-			rep = C[i].front();
-			oldColor = previousColumnColoring[rep];
-			scale.push_back((double)partSize[i]/previousPartSize[oldColor]);
-			numCol_++;
-		}
-		else if (C[i].size())
-			numRow_++;
-	}
-	ARstart_.push_back(0);
-	for (i = 0; i < ARtableauStart.size() - 1; ++i){
-		numLiftedRows++;
-		for (j = ARtableauStart[i]; j < ARtableauStart[i + 1]; ++j){
-			ARvalue_.push_back(ARtableauValue[j] * scale[ARtableauIndex[j]]);
-			ARindex_.push_back(ARtableauIndex[j]);
-			for (k = start; k < numCol_; ++k){
-				if (previousColumnColoring[k] == ARtableauIndex[j]){
-					ARvalue_.push_back(ARtableauValue[j] * scale[k]);
-					ARindex_.push_back(k);
-				}
-			}
-		}
-		ARstart_.push_back(ARvalue_.size());
-	}
-}
-
-void HighsAggregate::liftTableauColumnWise(){
-	int _numRow_ = numRow_ + linkingPairs.size();
-	int _numCol_ = numCol_ + linkingPairs.size();
-    int AcountX = ARstart_[_numRow_];
-    Aindex_.resize(AcountX);
-    Avalue_.resize(AcountX);
-    // Build row copy - pointers
-    Astart_.assign(_numCol_ + 1, 0);
-    A_Nend_.assign(_numCol_, 0);
-    for (int k = 0; k < AcountX; ++k)
-        A_Nend_[ARindex_[k]]++;
-    for (int i = 1; i <= _numCol_; ++i)
-        Astart_[i] = Astart_[i - 1] + A_Nend_[i - 1];
-    for (int i = 0; i < _numCol_; ++i)
-        A_Nend_[i] = Astart_[i];
-    // Build row copy - elements
-    for (int iRow = 0; iRow < _numRow_; ++iRow) {
-        for (int k = ARstart_[iRow]; k < ARstart_[iRow + 1]; ++k) {
-            int iCol = ARindex_[k];
-            int iPut = A_Nend_[iCol]++;
-            Aindex_[iPut] = iRow;
-            Avalue_[iPut] = ARvalue_[k];
-		}
-	}
-}
-
 void HighsAggregate::aggregateAMatrix(){
-	int i, j, rep, idx;
-	numCol_ = 0;
-	numRow_ = 0;
+	if (!flag_){
+		initialAggregateAMatrix();
+		setAggregateRealRowsRhs();
+		setAggregateRealColsBounds();
+		aggregateCVector();
+		return;
+	}
+	else{
+		examinePartition();
+		collectRowsForGS();
+		liftTableau();
+		findPreviousBasisForRows();
+		cout << "done" << endl;
+		findPreviousBasisForColumns();
+		cout << "done" << endl;
+		setAggregateRealRowsRhs();
+		cout << "done" << endl;
+		setAggregateRealColsBounds();
+		cout << "done" << endl;
+		eraseLinkersIfNotNeeded();
+		cout << "done" << endl;
+		findMissingBasicColumns();
+		cout << "done" << endl;
+		transposeMatrix();
+		cout << "done" << endl;
+		aggregateCVector();
+		cout << "done" << endl;
+	}
+}
+
+void HighsAggregate::examinePartition(){
+	int i, j, k, idx, rep, previousColor, oldColor;
 	for (i = 0; i < C.size(); ++i){
 		if (C[i].size() && i < numCol){
 			numCol_++;
 			realNumCol_++;
+			rep = C[i].front();
+			oldColor = previousColumnColoring[rep];
+			scale.push_back((double)partSize[i]/previousPartSize[oldColor]);
 		}
 		else if (C[i].size()){
-			numRow_++;
+			numRowGS_++;
 			realNumRow_++;
 			rep = C[i].front();
 			idx = previousRowColoring[rep - numCol] - numCol;
@@ -171,36 +142,44 @@ void HighsAggregate::aggregateAMatrix(){
 			numSplits[previousRowColoring[rep - numCol] - numCol]++;
 		}
 	}
-	numTot_ = numCol_ + numRow_;
-	realNumTot_ = numTot_;
-	Astart_.push_back(0);
-	for (i = 0; i < numCol_; ++i){
+}
+
+void HighsAggregate::collectRowsForGS(){
+	int i, j;
+	AstartGS_.push_back(0);
+	for (i = 0; i < realNumCol_; ++i){
 		vector<double> coeff = rowCoeff(i);
 		for (j = 0; j < coeff.size(); ++j){
 			if (coeff[j]){
-				Avalue_.push_back(coeff[j]);
-				Aindex_.push_back(j);
+				AvalueGS_.push_back(coeff[j]);
+				AindexGS_.push_back(j);
 			}
 		}
-		Astart_.push_back(Avalue_.size());
+		AstartGS_.push_back(AvalueGS_.size());
 	}
-	if (!flag_){
-		findPreviousBasisForRows();
-		findPreviousBasisForColumns();
-		setAggregateRealRowsRhs();
-		setAggregateRealColsBounds();
-		aggregateCVector();
-		return;
-	}
-	else{
-		findPreviousBasisForRows();
-		findPreviousBasisForColumns();
-		setAggregateRealRowsRhs();
-		setAggregateRealColsBounds();
-		eraseLinkersIfNotNeeded();
-		//getAggImpliedRows();
-		aggregateCVector();
-		findMissingBasicColumns();
+}
+
+void HighsAggregate::createRowWiseAMatrix(){
+    int AcountXSub = AstartGS_[numCol_];
+    ARindexGS_.resize(AcountXSub);
+    ARvalueGS_.resize(AcountXSub);
+    // Build row copy - pointers
+    ARstartGS_.assign(numRow_ + 1, 0);
+    AR_NendGS_.assign(numRow_, 0);
+    for (int k = 0; k < AcountXSub; ++k)
+        AR_NendGS_[AindexGS_[k]]++;
+    for (int i = 1; i <= numRow_; ++i)
+        ARstartGS_[i] = ARstartGS_[i - 1] + AR_NendGS_[i - 1];
+    for (int i = 0; i < numRow_; ++i)
+        AR_NendGS_[i] = ARstartGS_[i];
+    // Build row copy - elements
+    for (int iCol = 0; iCol < numCol_; ++iCol) {
+        for (int k = AstartGS_[iCol]; k < AstartGS_[iCol + 1]; ++k) {
+            int iRow = AindexGS_[k];
+            int iPut = AR_NendGS_[iRow]++;
+            ARindexGS_[iPut] = iCol;
+            ARvalueGS_[iPut] = Avalue_[k];
+		}
 	}
 }
 
@@ -228,6 +207,68 @@ void HighsAggregate::initialAggregateAMatrix(){
 	}
 }
 
+void HighsAggregate::liftTableau(){
+	int i, j, k, start = 0;
+	for (i = 0; i < prevC.size(); ++i)
+		if (prevC[i].size() && i < numCol)
+			start++;
+	for (i = 0; i < ARtableauStart.size() - 1; ++i){
+		numRow_++;
+		for (j = ARtableauStart[i]; j < ARtableauStart[i + 1]; ++j){
+			ARvalue_.push_back(ARtableauValue[j] * scale[ARtableauIndex[j]]);
+			ARindex_.push_back(ARtableauIndex[j]);
+			for (k = start; k < realNumCol_; ++k){
+				if (previousColumnColoring[k] == ARtableauIndex[j]){
+					ARvalue_.push_back(ARtableauValue[j] * scale[k]);
+					ARindex_.push_back(k);
+				}
+			}
+		}
+		ARstart_.push_back(ARvalue_.size());
+	}
+}
+
+void HighsAggregate::transposeMatrix(){
+	int i, j, parent, child;
+	int _numRow_ = numRow_;
+	int _numCol_ = numCol_;
+    int AcountX = ARstart_[_numRow_];
+    Aindex_.resize(AcountX);
+    Avalue_.resize(AcountX);
+    // Build row copy - pointers
+    Astart_.assign(_numCol_ + 1, 0);
+    A_Nend_.assign(_numCol_, 0);
+    for (int k = 0; k < AcountX; ++k)
+        A_Nend_[ARindex_[k]]++;
+    for (int i = 1; i <= _numCol_; ++i)
+        Astart_[i] = Astart_[i - 1] + A_Nend_[i - 1];
+    for (int i = 0; i < _numCol_; ++i)
+        A_Nend_[i] = Astart_[i];
+    // Build row copy - elements
+    for (int iRow = 0; iRow < _numRow_; ++iRow) {
+        for (int k = ARstart_[iRow]; k < ARstart_[iRow + 1]; ++k) {
+            int iCol = ARindex_[k];
+            int iPut = A_Nend_[iCol]++;
+            Aindex_[iPut] = iRow;
+            Avalue_[iPut] = ARvalue_[k];
+		}
+	}
+	for (i = 0; i < linkingPairs.size(); ++i){
+		if (linkIsNeeded[i]){
+			parent = linkingPairs[i].first;
+			child = linkingPairs[i].second;
+			vector<double> linkRow(realNumCol_,  0);
+			linkRow[parent] = 1;
+			linkRow[child] = -1;
+			numLinkers_++;
+			appendLinkersToAMatrix(linkRow);
+			appendLinkersToColBounds();
+			appendLinkersToRowRhs();
+		}
+	}
+	numTot_ = numRow_ + numCol_;
+	colCost_.assign(numCol_, 0);
+}
 
 void HighsAggregate::aggregateCVector(){
 	colCost_.assign(numCol_, 0);
@@ -265,39 +306,10 @@ void HighsAggregate::appendLinkersToColBounds(){
 	colUpper_.push_back(0);
 }
 
-void HighsAggregate::createRowWiseAMatrix(){
-    int AcountX = Astart_[numCol_];
-    ARindex_.resize(AcountX);
-    ARvalue_.resize(AcountX);
-    // Build row copy - pointers
-    ARstart_.assign(numRow_ + 1, 0);
-    AR_Nend_.assign(numRow_, 0);
-    for (int k = 0; k < AcountX; ++k)
-        AR_Nend_[Aindex_[k]]++;
-    for (int i = 1; i <= numRow_; ++i)
-        ARstart_[i] = ARstart_[i - 1] + AR_Nend_[i - 1];
-    for (int i = 0; i < numRow_; ++i)
-        AR_Nend_[i] = ARstart_[i];
-    // Build row copy - elements
-    for (int iCol = 0; iCol < numCol_; ++iCol) {
-        for (int k = Astart_[iCol]; k < Astart_[iCol + 1]; ++k) {
-            int iRow = Aindex_[k];
-            int iPut = AR_Nend_[iRow]++;
-            ARindex_[iPut] = iCol;
-            ARvalue_[iPut] = Avalue_[k];
-		}
-	}
-	ARstartSub_ = ARstart_;
-	ARindexSub_ = ARindex_;
-	ARvalueSub_ = ARvalue_;
-}
-
 void HighsAggregate::findMissingBasicColumns(){
 	createRowWiseAMatrix();
 	int i, j, parent, child, previous = 0, current = numLinkers;
 	while (current != previous && numLinkers){
-		cout << "repeat" << endl;
-		cin.get();
 		previous = current;
 		if (partsForGS.size() == 1){
 			for (i = 0; i < partsForGS.size(); ++i){
@@ -312,22 +324,6 @@ void HighsAggregate::findMissingBasicColumns(){
 		}
 		current = numLinkers;
 	}
-	for (i = 0; i < linkingPairs.size(); ++i){
-		if (linkIsNeeded[i]){
-			cout << "linkers after GS: " << linkingPairs[i].first << ", " << linkingPairs[i].second << endl;
-			parent = linkingPairs[i].first;
-			child = linkingPairs[i].second;
-			vector<double> linkRow(realNumCol_,  0);
-			linkRow[parent] = 1;
-			linkRow[child] = -1;
-			numLinkers_++;
-			appendLinkersToAMatrix(linkRow);
-			appendLinkersToColBounds();
-			appendLinkersToRowRhs();
-		}
-	}
-	numTot_ = numRow_ + numCol_;
-	colCost_.assign(numCol_, 0);
 }
 
 void HighsAggregate::doGramSchmidt(int oldPart){
@@ -340,13 +336,13 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 	vector<int> currentRows;
 	vector<int> remainingLinks;
 	vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_ + originalNumLinkers, 0.0));
-	for (i = 0; i < numRow_; ++i){
+	for (i = 0; i < numRowGS_; ++i){
 		rep = C[i + numCol].front();
 		prevColor = previousRowColoring[rep - numCol];
 		if ((activeConstraints_[i] && prevColor == oldPart)){
 			currentRows.push_back(i);
-			for (j = ARstartSub_[i]; j < ARstartSub_[i + 1]; ++j){
-				AM[rowIdx][ARindexSub_[j]] = activeBounds_[ARindexSub_[j]] ? 0 : ARvalueSub_[j];
+			for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
+				AM[rowIdx][ARindexGS_[j]] = activeBounds_[ARindexGS_[j]] ? 0 : ARvalueGS_[j];
 			}
 			rowIdx++;
 		}
@@ -366,9 +362,6 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 			rowIdx++;
 		}
 	}
-	cout << "Rows" << endl;
-	for (i = 0; i < currentRows.size(); ++i)
-		cout << "R" << currentRows[i] << endl;
 	vector<vector<double> > QRmat = AM;
 	cout << "Before GS" << endl;
 	cout << " A = [ " << endl; 
@@ -415,8 +408,6 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 		if (!linkIsNeeded[i] and !linkIsErased[i]){
 			int dom = linkingPairs[i].first;
 			int slav = linkingPairs[i].second;
-			cout << "C" << dom << ", C" << slav << endl;
-			cin.get();
 			editRowWiseMatrix(dom, slav);
 			linkIsErased[i] = true;
 		}
@@ -434,25 +425,25 @@ void HighsAggregate::editRowWiseMatrix(int domLink, int slavLink){
 	// ARstartTemp.push_back(0);
 	// for (i = 0; i < numRow_; ++i){
 	// 	isDom = false, isSlav = false;
-	// 	for (j = ARstartSub_[i]; j < ARstartSub_[i + 1]; ++j){
-	// 		if (ARindexSub_[j] == domLink) isDom = true;
-	// 		if (ARindexSub_[j] == slavLink) isSlav = true;
+	// 	for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
+	// 		if (ARindexGS_[j] == domLink) isDom = true;
+	// 		if (ARindexGS_[j] == slavLink) isSlav = true;
 	// 	}
 	// 	if (isDom && isSlav)
 	// 		need[i] = true;
 	// }
 	// for (i = 0; i < numRow_; ++i){
-	// 	for (j = ARstartSub_[i]; j < ARstartSub_[i + 1]; ++j){
-	// 		if (ARindexSub_[j] != slavLink){
-	// 			ARindexTemp.push_back(ARindexSub_[j]);
-	// 			ARvalueTemp.push_back(ARvalueSub_[j]);
+	// 	for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
+	// 		if (ARindexGS_[j] != slavLink){
+	// 			ARindexTemp.push_back(ARindexGS_[j]);
+	// 			ARvalueTemp.push_back(ARvalueGS_[j]);
 	// 		}
 	// 		else{
 	// 			if (need[i])
-	// 				sub.push_back(ARvalueSub_[j]);
+	// 				sub.push_back(ARvalueGS_[j]);
 	// 			else{
-	// 				ARindexTemp.push_back(ARindexSub_[j]);
-	// 				ARvalueTemp.push_back(ARvalueSub_[j]);
+	// 				ARindexTemp.push_back(ARindexGS_[j]);
+	// 				ARvalueTemp.push_back(ARvalueGS_[j]);
 	// 			}
 	// 		}
 	// 	}
@@ -470,9 +461,9 @@ void HighsAggregate::editRowWiseMatrix(int domLink, int slavLink){
 	// 		}
 	// 	}
 	// }	
-	// ARstartSub_ = ARstartTemp;
-	// ARindexSub_ = ARindexTemp;
-	// ARvalueSub_ = ARvalueTemp;
+	// ARstartGS_ = ARstartTemp;
+	// ARindexGS_ = ARindexTemp;
+	// ARvalueGS_ = ARvalueTemp;
 }
 
 void HighsAggregate::createImpliedLinkRows(vector<double>& linkRow, int linkIdx){
@@ -484,7 +475,6 @@ void HighsAggregate::createImpliedLinkRows(vector<double>& linkRow, int linkIdx)
 			v2 = linkingPairs[i - realNumCol_].second;
 			temp[v1] += linkRow[i] * 1;
 			temp[v2] += linkRow[i] * -1;
-			//temp[linkIdx] += -1;
 		}
 		else if (linkRow[i]){
 			v1 = linkingPairs[i - realNumCol_].first;
@@ -493,7 +483,14 @@ void HighsAggregate::createImpliedLinkRows(vector<double>& linkRow, int linkIdx)
 			temp[v2] += linkRow[i] * -1;
 		}
 	}
-	// temp[linkIdx] = -1;
+	for (i = 0; i < temp.size(); ++i){
+		if (temp[i]){
+			ARvalue_.push_back(temp[i]);
+			ARindex_.push_back(i);
+		}
+	}
+	ARstart_.push_back(ARvalue_.size());
+	numRow_++;
 	aggImpliedRows.push_back(temp);
 }
 

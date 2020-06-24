@@ -269,8 +269,36 @@ HighsStatus HDual::solve() {
   }
   assert(ok);
   computePrimalObjectiveValue(workHMO);
+  buildTableau();
   return HighsStatus::OK;
 }
+
+void HDual::buildTableau(){
+  int _numRow_ = workHMO.lp_.numRealRows;
+  HighsTableau& tableau = workHMO.tableau_;
+  HVector rowAp;
+  int nnz = 0;
+  rowAp.setup(row_ap.array.size());
+  tableau.ARtableauStart.push_back(0);
+  for (int i = 0; i < _numRow_; ++i){
+    row_ep.clear();
+    row_ep.count = 1;
+    row_ep.index[0] = i;
+    row_ep.array[i] = 1;
+    row_ep.packFlag = true;
+    workHMO.factor_.btran(row_ep, analysis->row_ep_density);
+    computeTableauRowFull(workHMO, row_ep, rowAp);
+    for (int j = 0; j < rowAp.array.size(); ++j){
+      if (fabs(rowAp.array[j]) > 1e-10){
+        nnz++;
+        tableau.ARtableauIndex.push_back(j);
+        tableau.ARtableauValue.push_back(rowAp.array[j]);
+      }
+    }
+    tableau.ARtableauStart.push_back(nnz);
+  }
+}
+
 
 void HDual::options() {
   // Set solver options from simplex options

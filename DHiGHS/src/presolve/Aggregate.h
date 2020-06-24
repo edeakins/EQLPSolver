@@ -8,7 +8,7 @@
 
 class HighsAggregate{
 public:
-	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau tableau, bool flag);
+	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau& tableau, bool flag);
 	//virtual ~HighsAggregate(){};
 	void clear();
 	void aggregateAMatrix();
@@ -39,7 +39,9 @@ public:
 	void getAggImpliedRows();
 	void createImpliedLinkRows(vector<double> &linkRow, int linkIdx);
 	void liftTableau();
-	void liftTableauColumnWise();
+	void transposeMatrix();
+	void collectRowsForGS();
+	void examinePartition();
 	void initialAggregateAMatrix();
 
 	// Lp to store the aggregate LP into
@@ -90,6 +92,8 @@ public:
 	vector<vector<double> > adjListWeight;
 
 	// For the new "smaller" lp
+	int numLiftedRow = 0;
+	int numRowGS_ = 0;
 	int numRow_ = 0;
 	int numCol_ = 0;
 	int numTot_ = 0;
@@ -106,14 +110,16 @@ public:
 	vector<int> potentialBasicRows_;
 	vector<int> potentialBasicColumns_;
 	vector<int> Astart_;
+	vector<int> AstartGS_;
 	vector<int> ARstart_;
-	vector<int> ARstartSub_;
+	vector<int> ARstartGS_;
 	vector<int> ARtableauStart;
     vector<int> Aindex_;
+    vector<int> AindexGS_;
     vector<int> ARindex_;
-    vector<int> ARindexSub_;
+    vector<int> ARindexGS_;
     vector<int> ARtableauIndex;
-    vector<int> AR_Nend_;
+    vector<int> AR_NendGS_;
     vector<int> A_Nend_;
     vector<int> GSRstart_;
     vector<int> GSRindex_;
@@ -121,8 +127,9 @@ public:
     vector<bool> activeConstraints_;
     vector<bool> activeBounds_;
     vector<double> Avalue_;
+    vector<double> AvalueGS_;
     vector<double> ARvalue_;
-    vector<double> ARvalueSub_;
+    vector<double> ARvalueGS_;
     vector<double> ARtableauValue;
     vector<double> GSRvalue_;
     vector<double> colCost_;
@@ -130,6 +137,7 @@ public:
     vector<double> colUpper_;
     vector<double> rowLower_;
     vector<double> rowUpper_;
+    vector<double> scale;
 
     // Basis for warm starting the lp
     // HighsBasis warmStart_;
