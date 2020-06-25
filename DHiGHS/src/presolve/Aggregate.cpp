@@ -103,23 +103,16 @@ void HighsAggregate::aggregateAMatrix(){
 	else{
 		examinePartition();
 		collectRowsForGS();
-		liftTableau();
+		createRowWiseAMatrix();
 		findPreviousBasisForRows();
-		cout << "done" << endl;
 		findPreviousBasisForColumns();
-		cout << "done" << endl;
 		setAggregateRealRowsRhs();
-		cout << "done" << endl;
 		setAggregateRealColsBounds();
-		cout << "done" << endl;
+		liftTableau();
 		eraseLinkersIfNotNeeded();
-		cout << "done" << endl;
 		findMissingBasicColumns();
-		cout << "done" << endl;
 		transposeMatrix();
-		cout << "done" << endl;
 		aggregateCVector();
-		cout << "done" << endl;
 	}
 }
 
@@ -190,8 +183,10 @@ void HighsAggregate::initialAggregateAMatrix(){
 	for (i = 0; i < C.size(); ++i){
 		if (C[i].size() && i < numCol)
 			numCol_++;
-		else if(C[i].size())
+		else if(C[i].size()){
+			realNumRow_++;
 			numRow_++;
+		}
 	}
 	numTot_ = numCol_ + numRow_;
 	Astart_.push_back(0);
@@ -208,11 +203,14 @@ void HighsAggregate::initialAggregateAMatrix(){
 }
 
 void HighsAggregate::liftTableau(){
-	int i, j, k, start = 0;
+	int i, j, k, previousRowColor, rep, start = 0;
 	for (i = 0; i < prevC.size(); ++i)
 		if (prevC[i].size() && i < numCol)
 			start++;
+	ARstart_.push_back(0);
 	for (i = 0; i < ARtableauStart.size() - 1; ++i){
+		if (row_status[i] == HighsBasisStatus::BASIC)
+			continue;
 		numRow_++;
 		for (j = ARtableauStart[i]; j < ARtableauStart[i + 1]; ++j){
 			ARvalue_.push_back(ARtableauValue[j] * scale[ARtableauIndex[j]]);
@@ -221,6 +219,20 @@ void HighsAggregate::liftTableau(){
 				if (previousColumnColoring[k] == ARtableauIndex[j]){
 					ARvalue_.push_back(ARtableauValue[j] * scale[k]);
 					ARindex_.push_back(k);
+				}
+			}
+		}
+		ARstart_.push_back(ARvalue_.size());
+	}
+	for (; i < realNumRow_; ++i){
+		rep = C[i + numCol].front() - numCol;
+		previousRowColor = previousRowColoring[rep];
+		if (previousRowInfo[previousRowColor] == HighsBasisStatus::LOWER || 
+			previousRowInfo[previousRowColor] == HighsBasisStatus::UPPER){
+			for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
+				if (previousColumnColoring[j] == ARtableauIndex[j]){
+					ARvalue_.push_back(ARvalueGS_[j] * scale[j]);
+					ARindex_.push_back(j);
 				}
 			}
 		}
@@ -307,7 +319,6 @@ void HighsAggregate::appendLinkersToColBounds(){
 }
 
 void HighsAggregate::findMissingBasicColumns(){
-	createRowWiseAMatrix();
 	int i, j, parent, child, previous = 0, current = numLinkers;
 	while (current != previous && numLinkers){
 		previous = current;
@@ -512,13 +523,13 @@ HighsBasis& HighsAggregate::getAlpBasis(){
 		else
 			alpBasis.col_status[i] = HighsBasisStatus::LOWER;
 	}
-	for (int i = 0; i < numRow_; ++i){
+	for (int i = 0; i < realNumRow_; ++i){
 		if (i < numRow_ - numLinkers_){
 			rep = C[i + numCol].front() - numCol;
 			previousRowColor = previousRowColoring[rep];
-			alpBasis.row_status[i] = previousRowInfo[previousRowColor];
-			if (previousRowInfo[previousRowColor] == HighsBasisStatus::BASIC)
-				numBasicVars++;
+			if (previousRowInfo[previousRowColor] == HighsBasisStatus::LOWER ||
+				previousRowInfo[previousRowColor] == HighsBasisStatus::UPPER)
+				alpBasis.row_status[i] = previousRowInfo[previousRowColor];
 		}
 		else
 			alpBasis.row_status[i] = HighsBasisStatus::LOWER;
@@ -589,32 +600,33 @@ void HighsAggregate::setAggregateRealRowsRhs(){
 	int previousRowColor;
 	int rep;
 	int i, j;
-	for (i = 0; i < numRow_; ++i){
+	for (i = 0; i < realNumRow_; ++i){
 		rep = C[i + numCol].front() - numCol;
 		previousRowColor = previousRowColoring[rep];
 		if (previousRowColor == -1){
 			rowLower_.push_back(rowLower[rep]);
 			rowUpper_.push_back(rowUpper[rep]);
 		}
-		else if (previousRowInfo[previousRowColor] == HighsBasisStatus::LOWER){
+		else if (previousRowInfo[previousRowColor] == HighsBasisStatus::LOWER
+			|| previousRowInfo[previousRowColor] == HighsBasisStatus::UPPER){
 			rowLower_.push_back(previousRowValue[previousRowColor]);
 			rowUpper_.push_back(previousRowValue[previousRowColor]);
 			activeConstraints_[i] = true;
 			potentialBasicRows_.push_back(i);
 			numActiveRows_++;
 		}
-		else if (previousRowInfo[previousRowColor] == HighsBasisStatus::BASIC &&
-			     previousRowValue[previousRowColor] == 0){
-			rowLower_.push_back(previousRowValue[previousRowColor]);
-			rowUpper_.push_back(previousRowValue[previousRowColor]);
-			activeConstraints_[i] = true;
-			potentialBasicRows_.push_back(i);
-			numActiveRows_++;
-		}
-		else{
-			rowLower_.push_back(rowLower[rep]);
-			rowUpper_.push_back(rowUpper[rep]);
-		}
+		// else if (previousRowInfo[previousRowColor] == HighsBasisStatus::BASIC &&
+		// 	     previousRowValue[previousRowColor] == 0){
+		// 	rowLower_.push_back(previousRowValue[previousRowColor]);
+		// 	rowUpper_.push_back(previousRowValue[previousRowColor]);
+		// 	activeConstraints_[i] = true;
+		// 	potentialBasicRows_.push_back(i);
+		// 	numActiveRows_++;
+		// }
+		// else{
+		// 	rowLower_.push_back(rowLower[rep]);
+		// 	rowUpper_.push_back(rowUpper[rep]);
+		// }
 	}
 }
 

@@ -229,6 +229,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // New options for aggregate models (work around for const input)
   HighsOptions alpOpt;
   alpOpt.presolve = string("off");
+  alpOpt.simplex_scale_strategy = 0;
   alpOpt.model_file = string("No File, Reduced Model");
   alpOpt.solver = string("simplex");
   alpOpt.parallel = string("off");
@@ -329,6 +330,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     solution = HighsSolution();
     alpOpt = HighsOptions();
     alpOpt.presolve = string("off");
+    alpOpt.simplex_scale_strategy = 0;
     alpOpt.model_file = string("No File, Reduced Model");
     alpOpt.solver = string("simplex");
     alpOpt.parallel = string("off");

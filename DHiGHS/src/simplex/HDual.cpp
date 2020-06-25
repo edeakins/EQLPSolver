@@ -281,6 +281,7 @@ void HDual::buildTableau(){
   rowAp.setup(row_ap.array.size());
   tableau.ARtableauStart.push_back(0);
   for (int i = 0; i < _numRow_; ++i){
+    tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
     row_ep.clear();
     row_ep.count = 1;
     row_ep.index[0] = i;

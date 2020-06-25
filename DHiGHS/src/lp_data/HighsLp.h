@@ -383,6 +383,7 @@ struct HighsTableau{
   std::vector<int> ARtableauIndex;
   std::vector<int> ARtableauStart;
   std::vector<double> ARtableauValue;
+  std::vector<double> ARreducedRHS;
 };
 
 // To be the basis representation given back to the user. Values of
