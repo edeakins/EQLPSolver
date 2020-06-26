@@ -138,6 +138,7 @@ public:
     vector<double> rowLower_;
     vector<double> rowUpper_;
     vector<double> scale;
+    vector<double> ARreducedRHS;
 
     // Basis for warm starting the lp
     // HighsBasis warmStart_;

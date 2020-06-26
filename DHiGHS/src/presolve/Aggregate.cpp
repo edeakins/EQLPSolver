@@ -20,6 +20,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	ARtableauValue.assign(tableau.ARtableauValue.begin(), tableau.ARtableauValue.end());
 	ARtableauIndex.assign(tableau.ARtableauIndex.begin(), tableau.ARtableauIndex.end());
 	ARtableauStart.assign(tableau.ARtableauStart.begin(), tableau.ARtableauStart.end());
+	ARreducedRHS.assign(tableau.ARreducedRHS.begin(), tableau.ARreducedRHS.end());
 	//Equitable partition info
 	previousRowColoring.assign(ep.previousRowColoring.begin(), ep.previousRowColoring.end());
 	previousColumnColoring.assign(ep.previousColumnColoring.begin(), ep.previousColumnColoring.end());
@@ -609,8 +610,11 @@ void HighsAggregate::setAggregateRealRowsRhs(){
 		}
 		else if (previousRowInfo[previousRowColor] == HighsBasisStatus::LOWER
 			|| previousRowInfo[previousRowColor] == HighsBasisStatus::UPPER){
-			rowLower_.push_back(previousRowValue[previousRowColor]);
-			rowUpper_.push_back(previousRowValue[previousRowColor]);
+			cout << "row: " << i << endl;
+			cout << "previousRowColor: " << previousRowColor << endl;
+			cout << "lifted RHS: " << ARreducedRHS[previousRowColor - numCol] << endl;
+			rowLower_.push_back(ARreducedRHS[previousRowColor - numCol]);
+			rowUpper_.push_back(ARreducedRHS[previousRowColor - numCol]);
 			activeConstraints_[i] = true;
 			potentialBasicRows_.push_back(i);
 			numActiveRows_++;
