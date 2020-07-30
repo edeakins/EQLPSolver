@@ -349,12 +349,14 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     }
     HighsLp& alp = lpFolder.getAlp();
     HighsBasis& alpBasis = lpFolder.getAlpBasis();
+    cout << "Start Basis" << endl;
     for (int j = 0; j < alpBasis.col_status.size(); ++j){
       cout << "col: " << j << " basis is " << (int)alpBasis.col_status[j] << endl;
     }
     for (int j = 0; j < alpBasis.row_status.size(); ++j){
       cout << "row: " << j << " basis is " << (int)alpBasis.row_status[j] << endl;
     }
+    cout << "\n" << endl;
     cin.get();
     HighsStatus init_status = highs.passModel(alp);
     HighsStatus write_status;
@@ -373,6 +375,14 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     }
     run_status = highs.run();
     basis = highs.getBasis();
+      // cout << "Finish Basis \n" << endl;
+      // for (int j = 0; j < basis.col_status.size(); ++j){
+      //   cout << "col: " << j << " basis is " << (int)basis.col_status[j] << endl;
+      // }
+      // for (int j = 0; j < basis.row_status.size(); ++j){
+      //   cout << "row: " << j << " basis is " << (int)basis.row_status[j] << endl;
+      // }
+      // cin.get();
     solution = highs.getSolution();
     tableau = highs.getTableau();
     cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;

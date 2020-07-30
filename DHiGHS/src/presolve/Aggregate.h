@@ -41,8 +41,10 @@ public:
 	void liftTableau();
 	void transposeMatrix();
 	void collectRowsForGS();
+	void collectPartsForGS();
 	void examinePartition();
 	void initialAggregateAMatrix();
+	void trackRowColors(HighsLp& ep);
 
 	// Lp to store the aggregate LP into
 	HighsLp alp;
@@ -50,6 +52,8 @@ public:
 	bool flag_;
 	int iterations = 0;
 	int pivots = 0;
+	int masterIter = 0;
+	int masterIter_ = 0;
 
 	// Copy original lp data from equitable partition
 	// scalars
@@ -57,6 +61,8 @@ public:
 	int impliedNumRow;
 	int numCol;
 	int numTot;
+	int realNumCol;
+	int realNumRow;
 	string model_name_;
 	string lp_name_;
 
@@ -92,7 +98,8 @@ public:
 	vector<vector<double> > adjListWeight;
 
 	// For the new "smaller" lp
-	int numLiftedRow = 0;
+	int numRowAfterImp_ = 0;
+	int numLiftedRow_ = 0;
 	int numRowGS_ = 0;
 	int numRow_ = 0;
 	int numCol_ = 0;
@@ -173,6 +180,15 @@ public:
 	// Contains partition size information for tableau scaling
 	vector<int> partSize;
 	vector<int> previousPartSize;
+
+	// Stores the actual color of rows
+	vector<int> rowColor;
+	vector<int> rowColor_;
+
+	// Keeps track of the history of constraints and their colors so we know when 
+	// a constraint become active (constraint became active while in this color class)
+	vector<bool> activeColorHistory;
+	vector<bool> activeColorHistory_;
 };
 
 #endif

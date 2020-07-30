@@ -1,0 +1,15 @@
+\ Model _copy
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Minimize
+ 
+Subject To
+ RO: 2 C2 + C3 + C4 + C5 = 0.25
+ R2: 2 C3 + C4 + C0 + C1 = 0.125
+ R4: 2 C2 + C4 + C0 + C1 >= 1
+ R5: C4 + 2 C5 + C0 + C1 >= 1
+Bounds
+ C2 free
+ C5 free
+ C0 free
+ C1 free
+End

@@ -91,6 +91,8 @@ public:
 	// Contains partition size information for tableau scaling
 	vector<int> partSize;
 	vector<int> previousPartSize;
+
+	// Stores rows and their colors since we lose rows in this procedure
 };
 
 #endif

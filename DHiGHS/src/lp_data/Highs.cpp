@@ -1246,8 +1246,6 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
     return HighsStatus::Error;
 #endif
   } else {
-    cout << "scale status: " << (int)model.scaled_model_status_ << endl;
-    cin.get();
     // Use Simplex
     call_status = solveLpSimplex(model);
     return_status = interpretCallStatus(call_status, return_status, "solveLpSimplex");

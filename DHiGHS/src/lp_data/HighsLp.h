@@ -80,6 +80,8 @@ class HighsLp {
     col_names_.resize(0);
     integrality_.resize(0);
   }
+  // Iteration Data
+  int masterIter = 0;
   // Model data
   int numCol_ = 0;
   int addNumCol_ = 0;
@@ -87,6 +89,8 @@ class HighsLp {
   int addNumRow_ = 0;
   int numInt_ = 0;
   int nnz_ = 0;
+  int realNumCol_ = 0;
+  int realNumRow_ = 0;
 
   std::vector<int> Astart_;
   std::vector<int> addARstart_;
@@ -100,6 +104,8 @@ class HighsLp {
   std::vector<double> rowLower_;
   std::vector<double> rowUpper_;
   std::vector<int> linkers;
+  std::vector<bool> activeColorHistory;
+
 
   // sense 1 = minimize, -1 = maximize
   int sense_ = 1;
@@ -112,6 +118,7 @@ class HighsLp {
   std::vector<std::string> col_names_;
 
   std::vector<int> integrality_;
+  std::vector<int> rowColor;
 
   bool operator==(const HighsLp& lp) {
     if (numCol_ != lp.numCol_ || numRow_ != lp.numRow_ || nnz_ != lp.nnz_ ||

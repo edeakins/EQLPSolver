@@ -291,9 +291,6 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
   // is not already scaled
   bool scale_lp = options.simplex_scale_strategy != SIMPLEX_SCALE_STRATEGY_OFF &&
                   !simplex_lp_status.scaling_tried;
-  
-  std::cout << "scale: " << scale_lp << std::endl;
-  std::cin.get();
   if (scale_lp) {
     timer.start(simplex_info.clock_[ScaleClock]);
     scaleSimplexLp(highs_model_object);
@@ -924,8 +921,8 @@ void computePrimalObjectiveValue(HighsModelObject& highs_model_object) {
     if (var < simplex_lp.numCol_){
       simplex_info.primal_objective_value +=
           simplex_info.baseValue_[row] * simplex_lp.colCost_[var];
-          std::cout << "row values: " << simplex_info.baseValue_[row] << std::endl;
-          std::cin.get();
+          // std::cout << "row values: " << simplex_info.baseValue_[row] << std::endl;
+          // std::cin.get();
     }
   }
   for (int col = 0; col < simplex_lp.numCol_; col++) {

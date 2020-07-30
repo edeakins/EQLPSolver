@@ -195,6 +195,7 @@ HighsStatus HQPrimal::solve() {
 // the unfolding procedured
 void HQPrimal::buildTableau(){
   int _numRow_ = workHMO.lp_.numRealRows;
+  int _numCol_ = workHMO.lp_.numRealCols;
   HighsTableau& tableau = workHMO.tableau_;
   HVector rowAp;
   int nnz = 0;
@@ -209,7 +210,7 @@ void HQPrimal::buildTableau(){
     row_ep.packFlag = true;
     workHMO.factor_.btran(row_ep, analysis->row_ep_density);
     computeTableauRowFull(workHMO, row_ep, rowAp);
-    for (int j = 0; j < rowAp.array.size(); ++j){
+    for (int j = 0; j < _numCol_; ++j){
       if (fabs(rowAp.array[j]) > 1e-10){
         nnz++;
         tableau.ARtableauIndex.push_back(j);
