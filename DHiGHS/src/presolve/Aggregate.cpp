@@ -415,6 +415,7 @@ void HighsAggregate::findMissingBasicColumns(){
 	while (current != previous && numLinkers){
 		previous = current;
 		if (partsForGS.size() == 1){
+			cout << "only one part" << endl;
 			for (i = 0; i < partsForGS.size(); ++i){
 				doGramSchmidt(partsForGS[i]);
 			}
@@ -430,6 +431,8 @@ void HighsAggregate::findMissingBasicColumns(){
 }
 
 void HighsAggregate::doGramSchmidt(int oldPart){
+	cout << "oldPart: " << oldPart << endl;
+	cin.get();
 	int i, j, rep, prevColor; // k, x, rep, prevColor, domLink, slavLink;
 	int rowIdx = 0;
 	int linkColIdx = numCol_;
@@ -444,6 +447,7 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 		prevColor = previousRowColoring[rep - numCol];
 		if ((activeConstraints_[i] && prevColor == oldPart)){
 			currentRows.push_back(i);
+			cout << "row: " << i << " has old color: " << oldPart << endl;
 			for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
 				AM[rowIdx][ARindexGS_[j]] = activeBounds_[ARindexGS_[j]] ? 0 : ARvalueGS_[j];
 			}
@@ -732,18 +736,18 @@ void HighsAggregate::setAggregateRealRowsRhs(){
 			rowLower_.push_back(rhs);
 			rowUpper_.push_back(rhs);
 			potentialBasicRows_.push_back(i);
-			activeConstraints_[i] = true;
+			//activeConstraints_[i] = true;
 			numActiveRows_++;
 			liftedColors[previousRowColor] = true;
 		}
 		else if (liftedColors[previousRowColor]){
-			activeConstraints_[i] = true;
+			//activeConstraints_[i] = true;
 			continue;
 		}
 		else{
 			rowLower_.push_back(ARreducedRHS[previousRowColor - numCol]);
 			rowUpper_.push_back(ARreducedRHS[previousRowColor - numCol]);
-			activeConstraints_[i] = true;
+			//activeConstraints_[i] = true;
 			potentialBasicRows_.push_back(i);
 			numActiveRows_++;
 			liftedColors[previousRowColor] = true;
@@ -856,8 +860,8 @@ void HighsAggregate::findPreviousBasisForRows(){
 			if (row_status[i] == HighsBasisStatus::LOWER){
 				previousRowInfo.insert(pair<int, HighsBasisStatus>(previousRowColor, HighsBasisStatus::LOWER));
 				previousRowValue.insert(pair<int, double>(previousRowColor, row_value[i]));
-				if (!(prevC[i + numCol].size() == 1))
-					partsForGS.push_back(previousRowColor);
+				// if (!(prevC[i + numCol].size() == 1))
+				// 	partsForGS.push_back(previousRowColor);
 			}
 			else if (rhs == row_value[i]){
 				previousRowInfo.insert(pair<int, HighsBasisStatus>(previousRowColor, row_status[i]));
@@ -889,31 +893,56 @@ void HighsAggregate::findPreviousBasisForRows(){
 
 void HighsAggregate::collectPartsForGS(){
 	activeColorHistory_.assign(numRow, false);
-	int i, j, rep, rhs, previousColor;
-	if (masterIter > 1){
+	vector<bool> colorAdded(numRow, false);
+	int i, j, rep, rhs, rCol, prevColor;
+	if (masterIter < 2){
+		for (i = 0; i < realNumRow; ++i){
+			if (row_status[i] != HighsBasisStatus::BASIC){
+				if (prevC[i].size() > 1)
+					partsForGS.push_back(i + numCol);
+				activeColorHistory_[i] = true;
+				activeConstraints_[i] = true;
+			}
+		}
 		for (i = 0; i < realNumRow_; ++i){
 			rep = C[i + numCol].front();
-			previousColor = previousRowColoring[rep - numCol];
-			if (activeColorHistory[previousColor - numCol] &&
-				prevC[previousColor].size() > 1){
-				partsForGS.push_back(i + numCol);
+			prevColor = previousRowColoring[rep - numCol];
+			if (activeColorHistory_[prevColor - numCol]){
 				activeColorHistory_[i] = true;
+				activeConstraints_[i] = true;
 			}
 		}
 	}
 	else{
-		for (i = 0; i < row_status.size(); ++i){
-			if (prevC[i + numCol].size() == 1)
-				continue;
-			rep = prevC[i + numCol].front();
-			rhs = min(fabs(rowUpper[rep - numCol]), fabs(rowLower[rep - numCol]));
+		for (i = 0; i < realNumRow; ++i){
+			rCol = rowColor[i];
 			if (row_status[i] != HighsBasisStatus::BASIC){
-				activeColorHistory_[i] = true;
-				partsForGS.push_back(i + numCol);
+				if (prevC[rCol].size() > 1){
+					partsForGS.push_back(rCol);
+					colorAdded[rCol - numCol] = true;
+				}
+				activeColorHistory_[rCol - numCol] = true;
+				activeConstraints_[rCol - numCol] = true;
+			} 
+		}
+		for (i = 0; i < activeColorHistory.size(); ++i){
+			if (!activeColorHistory[i])
+				continue;
+			else{
+				if (!colorAdded[i]){
+					if (prevC[i + numCol].size() > 1)
+						partsForGS.push_back(i + numCol);
+					activeColorHistory_[i] = true;
+					activeConstraints_[i] = true;
+				}
 			}
-			else if (row_value[i] == rhs){
+		}
+		for (i = 0; i < realNumRow_; ++i){
+			rep = C[i + numCol].front();
+			prevColor = previousRowColoring[rep - numCol];
+			if (activeColorHistory[prevColor - numCol]){
 				activeColorHistory_[i] = true;
-				partsForGS.push_back(i + numCol);
+				activeConstraints_[i] = true;
 			}
 		}
 	}
