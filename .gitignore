@@ -228,3 +228,6 @@ SolveMl
 hsol.ou
 libhsol.a
 lpi_h2gmp.cpp
+
+##Build Directory for DHiGHS"
+DevBuild

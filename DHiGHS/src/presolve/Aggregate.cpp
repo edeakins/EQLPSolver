@@ -852,7 +852,22 @@ void HighsAggregate::eraseLinkersIfNotNeeded(){
 	originalNumLinkers = linkingPairs.size();
 	numLinkers = linkingPairs.size();
 }
-// Fix indexing broken working here
+
+
+void HighsAggregate::createLinkerGraph(){
+	int i, j;
+	adjListLinker_.resize(originalNumLinkers);
+	for (i = 0; i < linkingPairs.size(); ++i){
+		for (j = 0; j < linkingPairs.size(); ++j){
+			if (i == j)
+				continue;
+			else if (linkingPairs[i].first == linkingPairs[j].first){
+				adjListLinker_[i].push_back(j);
+				adjListLinker_[j].push_back(i);
+			}
+		}
+	}
+}
 
 void HighsAggregate::findPreviousBasisForRows(){
 	int i, rep, previousRowColor, realRowColor;

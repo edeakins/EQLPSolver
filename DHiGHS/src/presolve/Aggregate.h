@@ -46,6 +46,7 @@ public:
 	void examinePartition();
 	void initialAggregateAMatrix();
 	void trackRowColors(HighsLp& ep);
+	void createLinkerGraph();
 
 	// Lp to store the aggregate LP into
 	HighsLp alp;
@@ -115,6 +116,7 @@ public:
 	int numLinkers_ = 0;
 	int numLinkers;
 	int originalNumLinkers;
+	vector<vector<int> > adjListLinkers_;
 	vector<int> startingBasicRows_;
 	vector<int> startingBasicColumns_;
 	vector<int> potentialBasicRows_;
