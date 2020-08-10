@@ -196,14 +196,14 @@ void HighsAggregate::createRowWiseAMatrix(){
             ARvalueGS_[iPut] = AvalueGS_[k];
 		}
 	}
-	for (int i = 0; i < realNumRow_; ++i){
-		cout << "R" << i << ": ";
-		for (int j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
-			cout << ARvalueGS_[j] << "x_" << ARindexGS_[j] << " ";
-		}
-		cout << endl;
-	}
-	cin.get();
+	// for (int i = 0; i < realNumRow_; ++i){
+	// 	cout << "R" << i << ": ";
+	// 	for (int j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
+	// 		cout << ARvalueGS_[j] << "x_" << ARindexGS_[j] << " ";
+	// 	}
+	// 	cout << endl;
+	// }
+	// cin.get();
 }
 
 void HighsAggregate::initialAggregateAMatrix(){
@@ -244,17 +244,21 @@ void HighsAggregate::liftTableau(){
 			start++;
 	ARstart_.push_back(0);
 	for (i = 0; i < realNumRow_; ++i){
-		cout << "row: " << i << endl;
+		// cout << "row: " << i << endl;
 		// cout << "ARstartGS i: " << ARstartGS_[i] << " ARstartGS_ i + 1: " << ARstartGS_[i + 1] << endl;
 		// cin.get();
 
 		rep = C[i + numCol].front() - numCol;
 		previousRowColor = previousRowColoring[rep];
-		rowCol = rowColor[i];
+		// cout << "i: " << i << endl;
+		// cout << "rep: " << rep << endl;
+		// cout << "prevColor: " << previousRowColor << endl;
+		// cout << "rowColor: " << rowCol << endl;
+		// cin.get();
 		if (!previousRowInfo.count(previousRowColor))
 			continue;
 		if (previousRowInfo[previousRowColor] == HighsBasisStatus::BASIC){
-			cout << "previous Row Color: " << previousRowColor << endl;
+			// cout << "previous Row Color: " << previousRowColor << endl;
 			for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
 				ARvalue_.push_back(ARvalueGS_[j]);
 				ARindex_.push_back(ARindexGS_[j]);
@@ -265,14 +269,13 @@ void HighsAggregate::liftTableau(){
 			rowColor_.push_back(color[rep + numCol]);
 		}
 		else if (liftedColors[previousRowColor]){ 
-			cout << "previousRowColor: " << previousRowColor << " skipped" << endl;
+			// cout << "previousRowColor: " << previousRowColor << " skipped" << endl;
 			continue;
 		}
 		else if (previousRowInfo[previousRowColor] != HighsBasisStatus::BASIC
-			&& (ARtableauStart[i] == ARtableauStart[i + 1]) &&
-			i < ARtableauStart.size() - 2){
-			cout << "previous Row Color: " << previousRowColor << endl;
-			cout << "next time this color comes it should be skipped" << endl;
+			&& (ARtableauStart[i] == ARtableauStart[i + 1])){
+			// cout << "previous Row Color: " << previousRowColor << endl;
+			// cout << "next time this color comes it should be skipped" << endl;
 			for (j = ARstartGS_[i]; j < ARstartGS_[i +1]; ++j){
 				ARvalue_.push_back(ARvalueGS_[j]);
 				ARindex_.push_back(ARindexGS_[j]);
@@ -317,22 +320,22 @@ void HighsAggregate::liftTableau(){
 			rowUpper_.push_back(0);
 		}
 	}	
-	cout << "numRow_: " << numRow_ << endl;
-	cin.get();
+	// cout << "numRow_: " << numRow_ << endl;
+	// cin.get();
 }
 
 void HighsAggregate::transposeMatrix(){
-	cout << "numRow_: " << numRow_ << endl;
-	cout << "final row wise matrix" << endl;
-	for (int i = 0; i < numRow_; ++i){
-		cout << "row: " << i << endl;
-		cout << rowLower_[i] << " <= ";
-		for (int j = ARstart_[i]; j < ARstart_[i + 1]; ++j){
-			cout << ARvalue_[j] << "x_" << ARindex_[j] << " ";
-		}
-		cout << " <= " << rowUpper_[i];
-		cout << "\n" << endl;
-	}
+	// cout << "numRow_: " << numRow_ << endl;
+	// cout << "final row wise matrix" << endl;
+	// for (int i = 0; i < numRow_; ++i){
+	// 	cout << "row: " << i << endl;
+	// 	cout << rowLower_[i] << " <= ";
+	// 	for (int j = ARstart_[i]; j < ARstart_[i + 1]; ++j){
+	// 		cout << ARvalue_[j] << "x_" << ARindex_[j] << " ";
+	// 	}
+	// 	cout << " <= " << rowUpper_[i];
+	// 	cout << "\n" << endl;
+	// }
 	int i, j, parent, child;
 	int _numRow_ = numRow_;
 	int _numCol_ = numCol_;
@@ -412,17 +415,19 @@ void HighsAggregate::appendLinkersToColBounds(){
 
 void HighsAggregate::findMissingBasicColumns(){
 	int i, j, parent, child, previous = 0, current = numLinkers;
+	QRStorage.resize(partsForGS.size());
+	QRIndexUpdate.assign(partsForGS.size(), 0);
 	while (current != previous && numLinkers){
 		previous = current;
 		if (partsForGS.size() == 1){
 			cout << "only one part" << endl;
 			for (i = 0; i < partsForGS.size(); ++i){
-				doGramSchmidt(partsForGS[i]);
+				doGramSchmidt(partsForGS[i], i);
 			}
 			break;
 		}
 		for (i = 0; i < partsForGS.size(); ++i){
-			doGramSchmidt(partsForGS[i]);
+			doGramSchmidt(partsForGS[i], i);
 			if (!linkingPairs.size())
 				break;
 		}
@@ -430,7 +435,7 @@ void HighsAggregate::findMissingBasicColumns(){
 	}
 }
 
-void HighsAggregate::doGramSchmidt(int oldPart){
+void HighsAggregate::doGramSchmidt(int oldPart, int idx){
 	cout << "oldPart: " << oldPart << endl;
 	cin.get();
 	int i, j, rep, prevColor; // k, x, rep, prevColor, domLink, slavLink;
@@ -439,84 +444,112 @@ void HighsAggregate::doGramSchmidt(int oldPart){
 	int numNonLinkRows = numSplits[oldPart - numCol];
 	int impliedRowsIdx = aggImpliedRows.size() + numNonLinkRows;
 	int numRowsToTest = numLinkers + impliedRowsIdx;
-	vector<int> currentRows;
-	vector<int> remainingLinks;
-	vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_ + originalNumLinkers, 0.0));
-	for (i = 0; i < numRowGS_; ++i){
-		rep = C[i + numCol].front();
-		prevColor = previousRowColoring[rep - numCol];
-		if ((activeConstraints_[i] && prevColor == oldPart)){
-			currentRows.push_back(i);
-			cout << "row: " << i << " has old color: " << oldPart << endl;
-			for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
-				AM[rowIdx][ARindexGS_[j]] = activeBounds_[ARindexGS_[j]] ? 0 : ARvalueGS_[j];
+	if (QRStorage[idx].empty()){
+		vector<int> currentRows;
+		vector<int> remainingLinks;
+		vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_ + originalNumLinkers, 0.0));
+		for (i = 0; i < numRowGS_; ++i){
+			rep = C[i + numCol].front();
+			prevColor = previousRowColoring[rep - numCol];
+			if ((activeConstraints_[i] && prevColor == oldPart)){
+				currentRows.push_back(i);
+				// cout << "row: " << i << " has old color: " << oldPart << endl;
+				for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
+					AM[rowIdx][ARindexGS_[j]] = activeBounds_[ARindexGS_[j]] ? 0 : ARvalueGS_[j];
+				}
+				rowIdx++;
+			}
+		}
+		for (i = 0; i < aggImpliedRows.size(); ++i){
+			for (j = 0; j < aggImpliedRows[i].size(); ++j){
+				AM[rowIdx][j] = aggImpliedRows[i][j];
 			}
 			rowIdx++;
 		}
-	}
-	cout << endl;
-	for (i = 0; i < aggImpliedRows.size(); ++i){
-		for (j = 0; j < aggImpliedRows[i].size(); ++j){
-			AM[rowIdx][j] = aggImpliedRows[i][j];
+		for (i = 0; i < linkingPairs.size(); ++i){
+			if (linkIsNeeded[i]){
+				remainingLinks.push_back(i);
+				AM[rowIdx][linkingPairs[i].first] = 1;
+				AM[rowIdx][linkingPairs[i].second] = -1;
+				AM[rowIdx][numCol_ + i] = -1;
+				rowIdx++;
+			}
 		}
-		rowIdx++;
+		QRStorage[idx] = AM;
 	}
-	for (i = 0; i < linkingPairs.size(); ++i){
-		if (linkIsNeeded[i]){
-			remainingLinks.push_back(i);
-			AM[rowIdx][linkingPairs[i].first] = 1;
-			AM[rowIdx][linkingPairs[i].second] = -1;
-			AM[rowIdx][numCol_ + i] = -1;
-			rowIdx++;
-		}
-	}
-	vector<vector<double> > QRmat = AM;
 	cout << "Before GS" << endl;
 	cout << " A = [ " << endl; 
-	for (i = 0; i < QRmat.size(); ++i){
+	for (i = 0; i < QRStorage[idx].size(); ++i){
 		for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
-			cout << QRmat[i][j] << " ";
+			cout << QRStorage[idx][i][j] << " ";
 		}
 		cout << ";" << endl;
 	}
 	cout << "]" << endl;
-	QR.gramSchmidt(QRmat, linkColIdx);
+	QR.gramSchmidt(QRStorage[idx], linkColIdx, QRIndexUpdate[idx]);
 	cout << endl;
 	cout << "After GS" << endl;
 	cout << " A = [ " << endl; 
-	for (i = 0; i < QRmat.size(); ++i){
+	for (i = 0; i < QRStorage[idx].size(); ++i){
 		for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
-			cout << QRmat[i][j] << " ";
+			cout << QRStorage[idx][i][j] << " ";
 		}
 		cout << ";" << endl;
 	}
 	cout << "]" << endl;
 	cin.get();
-	for (i = 0; i < numNonLinkRows; ++i){
-		if (dependanceCheck(QRmat[i], impliedRowsIdx)){
-			startingBasicRows_.push_back(currentRows[i]);
-		}
-	}
-	for (i = impliedRowsIdx; i < numRowsToTest; ++i){
-		int linkIdx = remainingLinks[i - impliedRowsIdx] + realNumCol_;
-		if (dependanceCheck(QRmat[i], impliedRowsIdx, linkIdx)){
+	// for (i = 0; i < numNonLinkRows; ++i){
+	// 	if (dependanceCheck(QRStorage[idx][i], impliedRowsIdx)){
+	// 		startingBasicRows_.push_back(currentRows[i]);
+	// 	}
+	// }
+	rowIdx = impliedRowsIdx;
+	for (i = 0; i < linkingPairs.size(); ++i){
+		if (!linkIsNeeded[i])
+			continue;
+		int linkIdx = i + realNumCol_;
+		if (dependanceCheck(QRStorage[idx][rowIdx])){
+
 			numLinkers--;
 			linkIsNeeded[linkIdx - realNumCol_] = false;
-			createImpliedLinkRows(QRmat[i], linkIdx);
+			createImpliedLinkRows(QRStorage[idx][rowIdx], linkIdx);
+			//swap(QRStorage[idx][impliedRowsIdx], QRStorage[idx][rowIdx]);
+			impliedRowsIdx++;
 		}
+		rowIdx++;
 	}
-	for (i = 0; i < currentRows.size(); ++i){
-		if (i == currentRows.size() - 1){
-			cout << "R" << currentRows[i] << " zero out " << endl;
-			break;
+	cout << endl;
+	cout << "After swap" << endl;
+	cout << " A = [ " << endl; 
+	for (i = 0; i < QRStorage[idx].size(); ++i){
+		for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
+			cout << QRStorage[idx][i][j] << " ";
 		}
-		cout << "R" << currentRows[i] << ", ";
+		cout << ";" << endl;
 	}
+	cout << "]" << endl;
+	cin.get();
+	// for (i = impliedRowsIdx; i < numRowsToTest; ++i){
+	// 	// int linkIdx = remainingLinks[i - impliedRowsIdx] + realNumCol_;
+	// 	if (dependanceCheck(QRStorage[idx][i], impliedRowsIdx)){ // linkIdx)){
+	// 		numLinkers--;
+	// 		linkIsNeeded[linkIdx - realNumCol_] = false;
+	// 		createImpliedLinkRows(QRStorage[idx][i], linkIdx);
+	// 	}
+	// }
+	//QRIndexUpdate[idx] = aggImpliedRows.size() + numNonLinkRows;
+	// for (i = 0; i < currentRows.size(); ++i){
+	// 	if (i == currentRows.size() - 1){
+	// 		cout << "R" << currentRows[i] << " zero out " << endl;
+	// 		break;
+	// 	}
+	// 	cout << "R" << currentRows[i] << ", ";
+	// }
 	for (i = 0; i < linkingPairs.size(); ++i){
 		if (!linkIsNeeded[i] and !linkIsErased[i]){
-			int dom = linkingPairs[i].first;
-			int slav = linkingPairs[i].second;
-			editRowWiseMatrix(dom, slav);
+			// int dom = linkingPairs[i].first;
+			// int slav = linkingPairs[i].second;
+			// editRowWiseMatrix(dom, slav);
 			linkIsErased[i] = true;
 		}
 	}
@@ -665,7 +698,7 @@ HighsBasis& HighsAggregate::getAlpBasis(){
 	return alpBasis;
 }
 
-bool HighsAggregate::dependanceCheck(vector<double> &v, int impliedRowsIdx, int linkIdx){
+bool HighsAggregate::dependanceCheck(vector<double> &v){ // int impliedRowsIdx){ //int linkIdx){
 	// cout << "linkIdx: " << linkIdx - realNumCol_ << endl;
 	bool cond = true;
 	for (int i = 0; i < realNumCol_; ++i){
@@ -674,37 +707,6 @@ bool HighsAggregate::dependanceCheck(vector<double> &v, int impliedRowsIdx, int 
 		else
 			v[i] = 0;
 	}
-	if (!cond || linkIdx == -1){
-		// cout << "dependent check: " << cond << endl;
-		// cin.get();
-		return cond;
-	}
-	else{
-		int domLink = linkingPairs[linkIdx - realNumCol_].first;
-		vector<int> commonLinks = commonLinkers[domLink];
-		for (int i = 0; i < commonLinks.size(); ++i){
-			// cout << "commonLinks: " << commonLinks[i] << endl;
-			// cin.get();
-			if (commonLinks[i] == linkIdx - realNumCol_)
-				continue;
-			else if (fabs(v[commonLinks[i] + realNumCol_]) > 1e-6 && linkIsErased[commonLinks[i]]){
-					cond = false;
-					// cout << "dependent check: " << cond << endl;
-					// cin.get();
-					return cond;
-			}
-			// else if (linkIsErased[commonLinks[i]]){
-			// 	for (int j = realNumCol_; j < v.size(); ++j){
-			// 		if (v[j] != commonLinks[i] + realNumCol_ && fabs(v[j]) > 1e-6){
-			// 			cond = false;
-			// 			return cond;
-			// 		}
-			// 	}
-			// }	
-		}
-	}
-	// cout << "dependent check: " << cond << endl;
-	// cin.get();
 	return cond;
 }
 
@@ -716,13 +718,13 @@ void HighsAggregate::setAggregateRealRowsRhs(){
 	for (i = 0; i < realNumRow_; ++i){
 		rep = C[i + numCol].front() - numCol;
 		previousRowColor = previousRowColoring[rep];
-		cout << "previousRowColor: " << previousRowColor << endl;
+		// cout << "previousRowColor: " << previousRowColor << endl;
 		if (previousRowColor == -1){
 			rowLower_.push_back(rowLower[rep]);
 			rowUpper_.push_back(rowUpper[rep]);
 		}
 		else if (!previousRowInfo.count(previousRowColor)){
-			cout << "previous Row Color not there: " << previousRowColor << endl;
+			// cout << "previous Row Color not there: " << previousRowColor << endl;
 			continue;
 		}
 		else if (previousRowInfo[previousRowColor] == HighsBasisStatus::BASIC){
@@ -753,11 +755,11 @@ void HighsAggregate::setAggregateRealRowsRhs(){
 			liftedColors[previousRowColor] = true;
 		}
 	}
-	for (int i = 0; i < rowUpper_.size(); ++i){
-		cout << "row: " << i << " upper: " << rowUpper_[i] << endl;
-		cout << "row: " << i << " lower: " << rowLower_[i] << endl;
-	}
-	cin.get();
+	// for (int i = 0; i < rowUpper_.size(); ++i){
+	// 	cout << "row: " << i << " upper: " << rowUpper_[i] << endl;
+	// 	cout << "row: " << i << " lower: " << rowLower_[i] << endl;
+	// }
+	// cin.get();
 }
 
 void HighsAggregate::setAggregateRealColsBounds(){
@@ -822,17 +824,24 @@ bool HighsAggregate::varIsBounded(pair<int, int> link){
 }
 
 void HighsAggregate::eraseLinkersIfNotNeeded(){
-	int i = 0;
+	int i = 0, rep, prevColor;
 	while (i < linkingPairs.size()){
 		if (varIsBounded(linkingPairs[i])){
-			ARvalue_.push_back(1);
-			ARindex_.push_back(linkingPairs[i].first);
-			ARvalue_.push_back(-1);
-			ARindex_.push_back(linkingPairs[i].second);
-			ARstart_.push_back(ARvalue_.size());
-			rowLower_.push_back(0);
-			rowUpper_.push_back(0);
-			numRow_++;
+			rep = C[linkingPairs[i].first].front();
+			prevColor = previousColumnColoring[rep];
+				if (previousColumnInfo[prevColor] == HighsBasisStatus::BASIC){
+				ARvalue_.push_back(1);
+				ARindex_.push_back(linkingPairs[i].first);
+				ARvalue_.push_back(-1);
+				ARindex_.push_back(linkingPairs[i].second);
+				ARstart_.push_back(ARvalue_.size());
+				rowLower_.push_back(0);
+				rowUpper_.push_back(0);
+				numRow_++;
+				vector<double> temp(realNumCol_, 0);
+				temp[linkingPairs[i].first] = 1; temp[linkingPairs[i].second] = -1;
+				aggImpliedRows.push_back(temp);
+			}
 			linkingPairs.erase(linkingPairs.begin() + i);
 		}
 		else
@@ -898,7 +907,7 @@ void HighsAggregate::collectPartsForGS(){
 	if (masterIter < 2){
 		for (i = 0; i < realNumRow; ++i){
 			if (row_status[i] != HighsBasisStatus::BASIC){
-				if (prevC[i].size() > 1)
+				if (prevC[i].size() > 1 && (prevC[i].size() != C[i].size()))
 					partsForGS.push_back(i + numCol);
 				activeColorHistory_[i] = true;
 				activeConstraints_[i] = true;
@@ -906,7 +915,9 @@ void HighsAggregate::collectPartsForGS(){
 		}
 		for (i = 0; i < realNumRow_; ++i){
 			rep = C[i + numCol].front();
+			//cout << "rep: " << rep << endl;
 			prevColor = previousRowColoring[rep - numCol];
+			//cout << "prevColor: " << prevColor << endl;
 			if (activeColorHistory_[prevColor - numCol]){
 				activeColorHistory_[i] = true;
 				activeConstraints_[i] = true;
@@ -916,6 +927,7 @@ void HighsAggregate::collectPartsForGS(){
 	else{
 		for (i = 0; i < realNumRow; ++i){
 			rCol = rowColor[i];
+			//cout << "rCol: " << rCol << endl;
 			if (row_status[i] != HighsBasisStatus::BASIC){
 				if (prevC[rCol].size() > 1){
 					partsForGS.push_back(rCol);
@@ -930,7 +942,7 @@ void HighsAggregate::collectPartsForGS(){
 				continue;
 			else{
 				if (!colorAdded[i]){
-					if (prevC[i + numCol].size() > 1)
+					if (prevC[i + numCol].size() > 1 && (prevC[i].size() != C[i].size()))
 						partsForGS.push_back(i + numCol);
 					activeColorHistory_[i] = true;
 					activeConstraints_[i] = true;
@@ -939,8 +951,11 @@ void HighsAggregate::collectPartsForGS(){
 		}
 		for (i = 0; i < realNumRow_; ++i){
 			rep = C[i + numCol].front();
+			//cout << "rep: " << rep << endl;
 			prevColor = previousRowColoring[rep - numCol];
-			if (activeColorHistory[prevColor - numCol]){
+			//cout << "prevColor: " << prevColor << endl;
+			if (activeColorHistory_[prevColor - numCol]){
+				//cout << "i: " << i << endl;
 				activeColorHistory_[i] = true;
 				activeConstraints_[i] = true;
 			}

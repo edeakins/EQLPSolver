@@ -56,6 +56,7 @@ class HighsTimer {
     presolve_clock = clock_def("Presolve", "Pre");
     solve_clock = clock_def("Solve", "Slv");
     postsolve_clock = clock_def("Postsolve", "Pst");
+    gram_schmidt_clock = clock_def("Gram Schmidt Reduction", "Gsr");
   }
 
   /**
@@ -123,6 +124,7 @@ class HighsTimer {
     this->presolve_clock = clock_def("Presolve", "Pre");
     this->solve_clock = clock_def("Solve", "Slv");
     this->postsolve_clock = clock_def("Postsolve", "Pst");
+    this->gram_schmidt_clock = clock_def("Gram Schmidt Reduction", "Gsr");
 
     this->run_highs_clock_time = 0;
     this->run_highs_clock_start_time = initial_clock_start;
@@ -147,6 +149,7 @@ class HighsTimer {
    */
   void start(int i_clock  //!< Index of the clock to be started
   ) {
+    // cout << "timer start called" << endl;
     assert(i_clock >= 0);
     assert(i_clock < num_clock);
     // Check that the clock's been stopped. It should be set to
@@ -489,6 +492,7 @@ class HighsTimer {
   int presolve_clock;
   int solve_clock;
   int postsolve_clock;
+  int gram_schmidt_clock;
   // HiGHS run time - used to scale ticks to time
   double run_highs_clock_time = 0;
   // HiGHS run start time - used to compute HiGHS run time

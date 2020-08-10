@@ -441,6 +441,7 @@ src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o
  ../src/lp_data/HighsQRmodule.h
  ../src/simplex/SimplexConst.h
  ../src/util/HighsSimpleDec.h
+ ../src/util/HighsTimer.h
  /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.cpp
  /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.h
  HConfig.h

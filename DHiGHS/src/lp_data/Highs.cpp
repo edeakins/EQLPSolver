@@ -543,9 +543,6 @@ HighsStatus Highs::run() {
   return return_status;
 }
 
-HighsSolution& Highs::getSolutionForOrbitalCrossover() { return solution_; }
-HighsBasis& Highs::getBasisForOrbitalCrossover() { return basis_; }
-
 const HighsLp& Highs::getLp() const { return lp_; }
 
 const HighsSolution& Highs::getSolution() const { return solution_; }

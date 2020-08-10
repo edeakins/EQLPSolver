@@ -49,15 +49,15 @@ void HighsQR::project(vector<double>& u, vector<double>& v, vector<double>& temp
 	scalarMultiply(u, scale, temp);
 }
 
-void HighsQR::gramSchmidt(vector<vector<double> >& Amatrix, int idx){
+void HighsQR::gramSchmidt(vector<vector<double> >& Amatrix, int colIdx, int rowIdx){
 	int i, j; 
 	double scale = 0;
 	int n = Amatrix.size();
 	int m = Amatrix[0].size();
-	linkStartIdx = idx;
+	linkStartIdx = colIdx;
 	vector<double> temp_i(m, 0);
 	vector<double> temp_j(m, 0);
-	for (i = 0; i < n; ++i){
+	for (i = rowIdx; i < n; ++i){
 		normalize(Amatrix[i], temp_i);
 		for (j = i + 1; j < n; ++j){
 			double scale = dotProduct(temp_i, Amatrix[j]);

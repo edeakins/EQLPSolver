@@ -207,6 +207,8 @@ HighsEquitable.h
 ../src/presolve/HighsEquitable.h
 HighsQRmodule.h
 ../src/presolve/HighsQRmodule.h
+HighsTimer.h
+../src/presolve/HighsTimer.h
 
 ../src/presolve/HPreData.h
 cstring

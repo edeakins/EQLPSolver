@@ -440,6 +440,7 @@ src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/lp_data/HighsLp.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/lp_data/HighsQRmodule.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/util/HighsSimpleDec.h
+src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/presolve/Aggregate.cpp
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: HConfig.h

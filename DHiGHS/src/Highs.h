@@ -708,6 +708,8 @@ class Highs {
 #ifdef OSI_FOUND
   friend class OsiHiGHSSolverInterface;
 #endif
+  HighsTimer timer_;
+
 
  private:
   HighsSolution solution_;
@@ -716,8 +718,7 @@ class Highs {
   ICrashInfo icrash_info_;
   HighsTableau tableau_;
 
-  HighsTimer timer_;
-
+  
   HighsOptions options_;
   HighsInfo info_;
   // Have copies in the HiGHS class so that const references to them

@@ -1141,6 +1141,8 @@ HighsEquitable.h
 /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HighsEquitable.h
 HighsQRmodule.h
 /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HighsQRmodule.h
+HighsTimer.h
+/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HighsTimer.h
 
 /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HPreData.cpp
 presolve/HPreData.h

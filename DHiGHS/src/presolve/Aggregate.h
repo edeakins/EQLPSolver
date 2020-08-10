@@ -4,6 +4,7 @@
 #include "HighsLp.h"
 #include "HighsEquitable.h"
 #include "HighsQRmodule.h"
+#include "HighsTimer.h"
 //#include "Highs.h"
 
 class HighsAggregate{
@@ -23,11 +24,11 @@ public:
 	void setAggregateLinkerRowsRhs();
 	void findLinks();
 	void findMissingBasicColumns();
-	void doGramSchmidt(int oldPart);
+	void doGramSchmidt(int oldPart, int idx);
 	void setAlpBasis();
 	HighsLp& getAlp();
 	HighsBasis& getAlpBasis();
-	bool dependanceCheck(vector<double> &v, int impliedRowsIdx, int linkIdx = -1);
+	bool dependanceCheck(vector<double> &v); // int impliedRowsIdx); // int linkIdx = -1);
 	void findPreviousBasisForRows();
 	void findPreviousBasisForColumns();
 	vector<double> rowCoeff(int column);
@@ -90,6 +91,8 @@ public:
     vector<HighsBasisStatus> col_status;
     vector<HighsBasisStatus> row_status;
     HighsQR QR;
+    vector<vector<vector<double> > > QRStorage;
+    vector<int> QRIndexUpdate;
 
     // (dense storage)
 	vector<vector<int> > C;
