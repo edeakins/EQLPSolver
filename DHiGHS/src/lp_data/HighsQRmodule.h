@@ -18,7 +18,7 @@ public:
 	void vectorSub(vector<double>& Aj, vector<double>& projection);
 	double dotProduct(vector<double>& Aj, vector<double>& Ak);
 	void project(vector<double>& u, vector<double>& v, vector<double>& temp);
-	void gramSchmidt(vector<vector<double> >& Amatrix, int colIdx, int rowIdx);
+	void gramSchmidt(vector<vector<double> >& Amatrix, int colIdx);
 	int linkStartIdx;
 };
 

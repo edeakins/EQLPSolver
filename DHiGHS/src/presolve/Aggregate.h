@@ -7,6 +7,64 @@
 #include "HighsTimer.h"
 //#include "Highs.h"
 
+class node{
+public:
+	node(int lab, int idx){
+		label = lab;
+		index = idx;
+	}
+	int label;
+	int index;
+};
+
+// graph class to be used to determine connected components for GS
+class linkGraph{
+public:
+	void initializeMat(int numNodes){
+		adjMat.assign(numNodes, vector<int>(numNodes));
+	}
+	void addLinkNode(int label, int index){
+		linkNodes.push_back(node(label, index));
+		nodes.push_back(node(label, index));
+	}
+	void addRowNode(int label, int index){
+		oldRowNodes.push_back(node(label, index));
+		nodes.push_back(node(label, index));
+	}
+	void addEdge(int u, int v){
+		adjMat[u][v] = 1;
+		adjMat[v][u] = 1;
+	}
+	void connectedComponents(){
+		vector<bool> visited(nodes.size());
+		for (int i = 0; i < nodes.size(); ++i)
+			if (!visited[i])
+				components.push_back(DFS(i, visited));
+	}
+	vector<int> DFS(int i, vector<bool>& visited){
+		vector<int> comp;
+		stack<int> nodeStack;
+		nodeStack.push(i);
+		while (!nodeStack.empty()){
+			i = nodeStack.top();
+			nodeStack.pop();
+			if (!visited[i]){
+				comp.push_back(nodes[i].label);
+				visited[i] = true;
+			}
+			for (int j = 0; j < adjMat[i].size(); ++j)
+				if (adjMat[i][j] && !visited[j])
+					nodeStack.push(j);
+		}
+		return comp;
+	}
+	vector<vector<int> > adjMat;
+	vector<vector<int> > components;
+	vector<node> linkNodes;
+	vector<node> oldRowNodes;
+	vector<node> nodes;
+};
+
 class HighsAggregate{
 public:
 	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau& tableau, bool flag);
@@ -46,7 +104,7 @@ public:
 	void examinePartition();
 	void initialAggregateAMatrix();
 	void trackRowColors(HighsLp& ep);
-	void createLinkerGraph();
+	void findLinkerComponents();
 
 	// Lp to store the aggregate LP into
 	HighsLp alp;
@@ -116,7 +174,7 @@ public:
 	int numLinkers_ = 0;
 	int numLinkers;
 	int originalNumLinkers;
-	vector<vector<int> > adjListLinkers_;
+	vector<vector<int> > adjMatLinks_;
 	vector<int> startingBasicRows_;
 	vector<int> startingBasicColumns_;
 	vector<int> potentialBasicRows_;
@@ -181,6 +239,7 @@ public:
 
 	// Holds all aggregated implied rows
 	vector<vector<double> > aggImpliedRows;
+	map<int, vector<vector<double> > > impliedRowsByColor;
 
 	// Contains partition size information for tableau scaling
 	vector<int> partSize;
@@ -194,6 +253,10 @@ public:
 	// a constraint become active (constraint became active while in this color class)
 	vector<bool> activeColorHistory;
 	vector<bool> activeColorHistory_;
+
+	// Graph class to contain linker and constraint row connections for GS
+	linkGraph linkerGraph;
+	map<int, vector<int> > connectedColorsAndLinks;
 };
 
 #endif

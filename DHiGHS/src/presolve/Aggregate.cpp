@@ -5,6 +5,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	// From the original lp
 	numRow = lp.numRow_;
 	numCol = lp.numCol_;
+	numTot = numRow + numCol;
 	impliedNumRow = lp.addNumRow_;
 	masterIter = lp.masterIter;
 	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
@@ -132,6 +133,7 @@ void HighsAggregate::aggregateAMatrix(){
 		setAggregateRealColsBounds();
 		liftTableau();
 		eraseLinkersIfNotNeeded();
+		findLinkerComponents();
 		findMissingBasicColumns();
 		transposeMatrix();
 		// aggregateCVector();
@@ -440,95 +442,72 @@ void HighsAggregate::doGramSchmidt(int oldPart, int idx){
 	cin.get();
 	int i, j, rep, prevColor; // k, x, rep, prevColor, domLink, slavLink;
 	int rowIdx = 0;
+	int link = 0;
 	int linkColIdx = numCol_;
 	int numNonLinkRows = numSplits[oldPart - numCol];
-	int impliedRowsIdx = aggImpliedRows.size() + numNonLinkRows;
-	int numRowsToTest = numLinkers + impliedRowsIdx;
-	if (QRStorage[idx].empty()){
-		vector<int> currentRows;
-		vector<int> remainingLinks;
-		vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_ + originalNumLinkers, 0.0));
-		for (i = 0; i < numRowGS_; ++i){
-			rep = C[i + numCol].front();
-			prevColor = previousRowColoring[rep - numCol];
-			if ((activeConstraints_[i] && prevColor == oldPart)){
-				currentRows.push_back(i);
-				// cout << "row: " << i << " has old color: " << oldPart << endl;
-				for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
-					AM[rowIdx][ARindexGS_[j]] = activeBounds_[ARindexGS_[j]] ? 0 : ARvalueGS_[j];
-				}
-				rowIdx++;
-			}
-		}
-		for (i = 0; i < aggImpliedRows.size(); ++i){
-			for (j = 0; j < aggImpliedRows[i].size(); ++j){
-				AM[rowIdx][j] = aggImpliedRows[i][j];
+	int impliedRowsIdx = impliedRowsByColor[oldPart].size() + numNonLinkRows;
+	int numRowsToTest = connectedColorsAndLinks[oldPart].size() + impliedRowsIdx;
+	vector<int> currentRows;
+	vector<int> remainingLinks;
+	vector<vector<double> > AM(numRowsToTest, vector<double>(numCol_ + originalNumLinkers, 0.0));
+	for (i = 0; i < numRowGS_; ++i){
+		rep = C[i + numCol].front();
+		prevColor = previousRowColoring[rep - numCol];
+		if ((activeConstraints_[i] && prevColor == oldPart)){
+			currentRows.push_back(i);
+			// cout << "row: " << i << " has old color: " << oldPart << endl;
+			for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
+				AM[rowIdx][ARindexGS_[j]] = activeBounds_[ARindexGS_[j]] ? 0 : ARvalueGS_[j];
 			}
 			rowIdx++;
 		}
-		for (i = 0; i < linkingPairs.size(); ++i){
-			if (linkIsNeeded[i]){
-				remainingLinks.push_back(i);
-				AM[rowIdx][linkingPairs[i].first] = 1;
-				AM[rowIdx][linkingPairs[i].second] = -1;
-				AM[rowIdx][numCol_ + i] = -1;
-				rowIdx++;
-			}
-		}
-		QRStorage[idx] = AM;
 	}
-	cout << "Before GS" << endl;
-	cout << " A = [ " << endl; 
-	for (i = 0; i < QRStorage[idx].size(); ++i){
-		for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
-			cout << QRStorage[idx][i][j] << " ";
-		}
-		cout << ";" << endl;
-	}
-	cout << "]" << endl;
-	QR.gramSchmidt(QRStorage[idx], linkColIdx, QRIndexUpdate[idx]);
-	cout << endl;
-	cout << "After GS" << endl;
-	cout << " A = [ " << endl; 
-	for (i = 0; i < QRStorage[idx].size(); ++i){
-		for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
-			cout << QRStorage[idx][i][j] << " ";
-		}
-		cout << ";" << endl;
-	}
-	cout << "]" << endl;
-	cin.get();
-	// for (i = 0; i < numNonLinkRows; ++i){
-	// 	if (dependanceCheck(QRStorage[idx][i], impliedRowsIdx)){
-	// 		startingBasicRows_.push_back(currentRows[i]);
-	// 	}
-	// }
-	rowIdx = impliedRowsIdx;
-	for (i = 0; i < linkingPairs.size(); ++i){
-		if (!linkIsNeeded[i])
-			continue;
-		int linkIdx = i + realNumCol_;
-		if (dependanceCheck(QRStorage[idx][rowIdx])){
-
-			numLinkers--;
-			linkIsNeeded[linkIdx - realNumCol_] = false;
-			createImpliedLinkRows(QRStorage[idx][rowIdx], linkIdx);
-			//swap(QRStorage[idx][impliedRowsIdx], QRStorage[idx][rowIdx]);
-			impliedRowsIdx++;
+	for (i = 0; i < impliedRowsByColor[oldPart].size(); ++i){
+		for (j = 0; j < impliedRowsByColor[oldPart][i].size(); ++j){
+			AM[rowIdx][j] = impliedRowsByColor[oldPart][i][j];
 		}
 		rowIdx++;
 	}
-	cout << endl;
-	cout << "After swap" << endl;
-	cout << " A = [ " << endl; 
-	for (i = 0; i < QRStorage[idx].size(); ++i){
-		for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
-			cout << QRStorage[idx][i][j] << " ";
+	for (i = 0; i < connectedColorsAndLinks[oldPart].size(); ++i){
+		link = connectedColorsAndLinks[oldPart][i];
+		if (linkIsNeeded[link - numTot]){
+			remainingLinks.push_back(i);
+			AM[rowIdx][linkingPairs[i].first] = 1;
+			AM[rowIdx][linkingPairs[i].second] = -1;
+			AM[rowIdx][numCol_ + i] = -1;
+			rowIdx++;
 		}
-		cout << ";" << endl;
 	}
-	cout << "]" << endl;
+	// cout << "Before GS" << endl;
+	// cout << " A = [ " << endl; 
+	// for (i = 0; i < AM.size(); ++i){
+	// 	for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
+	// 		cout << AM[i][j] << " ";
+	// 	}
+	// 	cout << ";" << endl;
+	// }
+	// cout << "]" << endl;
+	QR.gramSchmidt(AM, linkColIdx);
+	// cout << endl;
+	// cout << "After GS" << endl;
+	// cout << " A = [ " << endl; 
+	// for (i = 0; i < QRStorage[idx].size(); ++i){
+	// 	for (j = 0; j < realNumCol_ + originalNumLinkers; ++j){
+	// 		cout << QRStorage[idx][i][j] << " ";
+	// 	}
+	// 	cout << ";" << endl;
+	// }
+	// cout << "]" << endl;
 	cin.get();
+	for (i = impliedRowsIdx; i < AM.size(); ++i){
+		if (dependanceCheck(AM[i])){
+			link = connectedColorsAndLinks[oldPart][i - impliedRowsIdx];
+			numLinkers--;
+			linkIsNeeded[link - numTot] = false;
+			int linkIdx = link - numTot;
+			createImpliedLinkRows(AM[i], linkIdx);
+		}
+	}
 	// for (i = impliedRowsIdx; i < numRowsToTest; ++i){
 	// 	// int linkIdx = remainingLinks[i - impliedRowsIdx] + realNumCol_;
 	// 	if (dependanceCheck(QRStorage[idx][i], impliedRowsIdx)){ // linkIdx)){
@@ -854,20 +833,71 @@ void HighsAggregate::eraseLinkersIfNotNeeded(){
 }
 
 
-void HighsAggregate::createLinkerGraph(){
-	int i, j;
-	adjListLinker_.resize(originalNumLinkers);
+void HighsAggregate::findLinkerComponents(){
+	int i, j, key, numOldRowNodes = 0, numNodes = 0, rowIdx = 0, linkIdx = 0, rep, prevColor;
+	vector<int> linkToCon(numCol_, -1);
+	map<int, int> indexOfColor;
 	for (i = 0; i < linkingPairs.size(); ++i){
-		for (j = 0; j < linkingPairs.size(); ++j){
-			if (i == j)
-				continue;
-			else if (linkingPairs[i].first == linkingPairs[j].first){
-				adjListLinker_[i].push_back(j);
-				adjListLinker_[j].push_back(i);
-			}
+		linkerGraph.addLinkNode(i + numTot, i);
+		//indexOfColor[i + numTot] = i
+		linkToCon[linkingPairs[i].first] = i;
+		linkToCon[linkingPairs[i].second] = i;
+	}
+	for (i = numCol; i < numTot; ++i){
+		if (prevC[i].size() > 1 && prevC[i].size() != C[i].size()){
+			linkerGraph.addRowNode(i, rowIdx + originalNumLinkers);
+			indexOfColor[i] = rowIdx + originalNumLinkers;
+			rowIdx++;
 		}
 	}
+	numNodes = rowIdx + originalNumLinkers;
+	linkerGraph.initializeMat(numNodes);
+	for (i = 0; i < realNumRow_; ++ i){
+		rep = C[i + numCol].front();
+		prevColor = previousRowColoring[rep - numCol];
+		if (!indexOfColor.count(prevColor))
+			continue;
+		for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
+			if (linkToCon[ARindexGS_[j]] > -1 
+				&& !linkerGraph.adjMat[indexOfColor[prevColor]][linkToCon[ARindexGS_[j]]])
+				linkerGraph.addEdge(indexOfColor[prevColor], linkToCon[ARindexGS_[j]]);
+		}
+	}
+	linkerGraph.connectedComponents();
+	vector<int> keys;
+	vector<int> links;
+	for (i = 0; i < linkerGraph.components.size(); ++i){
+		for (j = 0; j < linkerGraph.components[i].size(); ++j){
+			if (linkerGraph.components[i][j] < numTot)
+				keys.push_back(linkerGraph.components[i][j]);
+			else 
+				links.push_back(linkerGraph.components[i][j]);
+		}
+		for(j = 0; j < keys.size(); ++j)
+			connectedColorsAndLinks[keys[j]] = links;
+	}
 }
+
+// vector<int> HighsAggregate::DFS(int i){
+// 	int node;
+// 	vector<bool> visited.assign(originalNumLinkers);
+// 	stack<int> linkStack;
+// 	vector<int> components;
+// 	linkStack.push_back(i);
+// 	while (!stack.empty()){
+// 		node = stack.top();
+// 		stack.pop();
+// 		components.push_back(start);
+// 		if (!visited[node])
+// 			visited[node] = true;
+// 		for (int j = originalNumLinkers - 1; j > -1; --j){
+// 			if (!visited[j] && adjMatLinks_[node][j]){
+// 				linkStack.push_back(j);
+// 			}
+// 		}
+// 	}
+// 	return components;
+// }
 
 void HighsAggregate::findPreviousBasisForRows(){
 	int i, rep, previousRowColor, realRowColor;
