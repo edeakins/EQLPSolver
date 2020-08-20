@@ -31,6 +31,10 @@ public:
 		oldRowNodes.push_back(node(label, index));
 		nodes.push_back(node(label, index));
 	}
+	void addNode(int label){
+		nodes.push_back(node(label, numNodes));
+		numNodes++;
+	}
 	void addEdge(int u, int v){
 		adjMat[u][v] = 1;
 		adjMat[v][u] = 1;
@@ -63,6 +67,7 @@ public:
 	vector<node> linkNodes;
 	vector<node> oldRowNodes;
 	vector<node> nodes;
+	int numNodes = 0;
 };
 
 class HighsAggregate{
@@ -180,16 +185,11 @@ public:
 	vector<int> potentialBasicRows_;
 	vector<int> potentialBasicColumns_;
 	vector<int> Astart_;
-	vector<int> AstartGS_;
 	vector<int> ARstart_;
-	vector<int> ARstartGS_;
 	vector<int> ARtableauStart;
     vector<int> Aindex_;
-    vector<int> AindexGS_;
     vector<int> ARindex_;
-    vector<int> ARindexGS_;
     vector<int> ARtableauIndex;
-    vector<int> AR_NendGS_;
     vector<int> A_Nend_;
     vector<int> GSRstart_;
     vector<int> GSRindex_;
@@ -197,9 +197,7 @@ public:
     vector<bool> activeConstraints_;
     vector<bool> activeBounds_;
     vector<double> Avalue_;
-    vector<double> AvalueGS_;
     vector<double> ARvalue_;
-    vector<double> ARvalueGS_;
     vector<double> ARtableauValue;
     vector<double> GSRvalue_;
     vector<double> colCost_;
@@ -209,9 +207,6 @@ public:
     vector<double> rowUpper_;
     vector<double> scale;
     vector<double> ARreducedRHS;
-
-    // Basis for warm starting the lp
-    // HighsBasis warmStart_;
 
     // Previous row coloring
     map<int, HighsBasisStatus> previousRowInfo;
@@ -223,15 +218,6 @@ public:
 	map<int, double> previousColumnValue;
 	vector<int> previousColumnColoring;
 
-	// Counts how many times a color was split for constraints
-	vector<int> numSplits;
-
-	// Contains previous parts of constraints that we need to do GS for
-	vector<int> partsForGS;
-
-	// Tells whether GS ruled out a linker or not
-	vector<bool> linkIsNeeded;
-	vector<bool> linkIsErased;
 	map<int, vector<int> > commonLinkers;
 
 	// Collect implied linkers for constraint manipulation
@@ -254,10 +240,26 @@ public:
 	vector<bool> activeColorHistory;
 	vector<bool> activeColorHistory_;
 
-	// Graph class to contain linker and constraint row connections for GS
-	linkGraph linkerGraph;
+	/* Gram schmidt storage and indices.  Mostly storage for Gram schmidt matrices
+	and their index information which we use to determine whether a "linker" variable 
+	requires pivoting or not. */
+	int numRowGS_ = 0;
+	vector<int> AstartGS_;
+	vector<int> ARstartGS_;
+	vector<int> AindexGS_;
+	vector<int> ARindexGS_;
+	vector<int> AR_NendGS_;
+	vector<double> AvalueGS_;
+	vector<double> ARvalueGS_;
+	vector<int> partsForGS;
+	vector<bool> colorsForGS;
+	vector<int> numSplits;
+	vector<bool> linkIsNeeded;
+	vector<bool> linkIsErased;
 	map<int, vector<int> > connectedColorsAndLinks;
-};
+	map<int, linkGraph> cLGraphs;
+	map<int, vector<vector<double> > > QRMatrices;
+	};
 
 #endif
 
