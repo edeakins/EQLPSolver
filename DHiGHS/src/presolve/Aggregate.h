@@ -33,11 +33,15 @@ public:
 	}
 	void addNode(int label){
 		nodes.push_back(node(label, numNodes));
+		labelIndex[label] = numNodes;
+		indexLabel[numNodes] = label;
 		numNodes++;
 	}
 	void addEdge(int u, int v){
-		adjMat[u][v] = 1;
-		adjMat[v][u] = 1;
+		int uIdx = labelIndex[u];
+		int vIdx = labelIndex[v];
+		adjMat[uIdx][vIdx] = 1;
+		adjMat[vIdx][uIdx] = 1;
 	}
 	void connectedComponents(){
 		vector<bool> visited(nodes.size());
@@ -62,6 +66,8 @@ public:
 		}
 		return comp;
 	}
+	map<int, int> labelIndex;
+	map<int, int> indexLabel;
 	vector<vector<int> > adjMat;
 	vector<vector<int> > components;
 	vector<node> linkNodes;
@@ -86,6 +92,7 @@ public:
 	void setAggregateLinkerColsBounds();
 	void setAggregateLinkerRowsRhs();
 	void findLinks();
+	void initGSMatricesAndGraphs();
 	void findMissingBasicColumns();
 	void doGramSchmidt(int oldPart, int idx);
 	void setAlpBasis();
@@ -101,7 +108,7 @@ public:
 	void createImpliedRows(HighsLp& lp);
 	vector<double> aggregateImpliedRow(int impliedRow);
 	void getAggImpliedRows();
-	void createImpliedLinkRows(vector<double> &linkRow, int linkIdx);
+	vector<double> createImpliedLinkRows(vector<double> &linkRow, int linkIdx);
 	void liftTableau();
 	void transposeMatrix();
 	void collectRowsForGS();
@@ -167,7 +174,6 @@ public:
 	// For the new "smaller" lp
 	int numRowAfterImp_ = 0;
 	int numLiftedRow_ = 0;
-	int numRowGS_ = 0;
 	int numRow_ = 0;
 	int numCol_ = 0;
 	int numTot_ = 0;
@@ -256,6 +262,9 @@ public:
 	vector<int> numSplits;
 	vector<bool> linkIsNeeded;
 	vector<bool> linkIsErased;
+	map<int, int> impliedIdx;
+	map<int, vector<int> > linksInMatrix;
+	map<int, vector<int> > varToLink;
 	map<int, vector<int> > connectedColorsAndLinks;
 	map<int, linkGraph> cLGraphs;
 	map<int, vector<vector<double> > > QRMatrices;
