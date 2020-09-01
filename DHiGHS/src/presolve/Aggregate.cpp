@@ -66,31 +66,6 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	createImpliedRows(lp);
 }
 
-void HighsAggregate::createImpliedRows(HighsLp& lp){
-	int i,j;
-	if (!aggImpliedRows.size())
-		return;
-	if (aggImpliedRows.size() && !lp.addARstart_.size())
-		lp.addARstart_.push_back(0);
-	for (i = 0; i < aggImpliedRows.size(); ++i){
-		for (j = 0; j < aggImpliedRows[i].size(); ++j){
-			if (aggImpliedRows[i][j]){
-				lp.addARindex_.push_back(j);
-				lp.addARvalue_.push_back(aggImpliedRows[i][j]);
-			}
-		}
-		lp.addARstart_.push_back(lp.addARvalue_.size());
-	}
-}
-
-void HighsAggregate::trackRowColors(HighsLp& lp){
-	lp.rowColor = rowColor_;
-	lp.realNumRow_ = numLiftedRow_;
-	lp.realNumCol_ = realNumCol_;
-	lp.masterIter++;
-	lp.activeColorHistory = activeColorHistory_;
-}
-
 HighsLp& HighsAggregate::getAlp(){
 	alp.numRow_ = (numRow_);
 	alp.numCol_ = (numCol_);
@@ -124,11 +99,8 @@ void HighsAggregate::aggregateAMatrix(){
 	}
 	else{
 		examinePartition();
-		collectRowsForGS();
-		collectPartsForGS();
-		createRowWiseAMatrix();
-		findPreviousBasisForRows();
-		findPreviousBasisForColumns();
+		collectRows();
+		findLpBasis();
 		setAggregateRealRowsRhs();
 		setAggregateRealColsBounds();
 		liftTableau();
@@ -140,88 +112,16 @@ void HighsAggregate::aggregateAMatrix(){
 	}
 }
 
-void HighsAggregate::examinePartition(){
-	int i, j, k, idx, rep, previousColor, oldColor;
-	for (i = 0; i < C.size(); ++i){
-		if (C[i].size() && i < numCol){
-			numCol_++;
-			realNumCol_++;
-			rep = C[i].front();
-			oldColor = previousColumnColoring[rep];
-			scale.push_back((double)partSize[i]/previousPartSize[oldColor]);
-		}
-		else if (C[i].size()){
-			numRowGS_++;
-			realNumRow_++;
-			rep = C[i].front();
-			idx = previousRowColoring[rep - numCol] - numCol;
-			if (idx < 0) continue;
-			numSplits[previousRowColoring[rep - numCol] - numCol]++;
-		}
-	}
-}
-
-void HighsAggregate::collectRowsForGS(){
-	int i, j;
-	AstartGS_.push_back(0);
-	for (i = 0; i < realNumCol_; ++i){
-		vector<double> coeff = rowCoeff(i);
-		for (j = 0; j < coeff.size(); ++j){
-			if (coeff[j]){
-				AvalueGS_.push_back(coeff[j]);
-				AindexGS_.push_back(j);
-			}
-		}
-		AstartGS_.push_back(AvalueGS_.size());
-	}
-}
-
-void HighsAggregate::createRowWiseAMatrix(){
-    int AcountXSub = AstartGS_[numCol_];
-    ARindexGS_.resize(AcountXSub);
-    ARvalueGS_.resize(AcountXSub);
-    // Build row copy - pointers
-    ARstartGS_.assign(realNumRow_ + 1, 0);
-    AR_NendGS_.assign(realNumRow_, 0);
-    for (int k = 0; k < AcountXSub; ++k)
-        AR_NendGS_[AindexGS_[k]]++;
-    for (int i = 1; i <= realNumRow_; ++i)
-        ARstartGS_[i] = ARstartGS_[i - 1] + AR_NendGS_[i - 1];
-    for (int i = 0; i < realNumRow_; ++i)
-        AR_NendGS_[i] = ARstartGS_[i];
-    // Build row copy - elements
-    for (int iCol = 0; iCol < realNumCol_; ++iCol) {
-        for (int k = AstartGS_[iCol]; k < AstartGS_[iCol + 1]; ++k) {
-            int iRow = AindexGS_[k];
-            int iPut = AR_NendGS_[iRow]++;
-            ARindexGS_[iPut] = iCol;
-            ARvalueGS_[iPut] = AvalueGS_[k];
-		}
-	}
-	for (int i = 0; i < realNumRow_; ++i){
-		cout << "R" << i << ": ";
-		for (int j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
-			cout << ARvalueGS_[j] << "x_" << ARindexGS_[j] << " ";
-		}
-		cout << endl;
-	}
-	cin.get();
-}
-
 void HighsAggregate::initialAggregateAMatrix(){
 	int i, j;
 	numCol_ = 0;
 	numRow_ = 0;
 	for (i = 0; i < C.size(); ++i){
 		if (C[i].size() && i < numCol){
-			realNumCol_++;
 			numCol_++;
 		}
 		else if(C[i].size()){
-			numLiftedRow_++;
-			realNumRow_++;
 			numRow_++;
-			rowColor_.push_back(i);
 		}
 	}
 	numTot_ = numCol_ + numRow_;
@@ -238,145 +138,55 @@ void HighsAggregate::initialAggregateAMatrix(){
 	}
 }
 
-void HighsAggregate::liftTableau(){
-	int i, j, k, previousRowColor, previousColColor, rep, varRep, rowCol, start = 0;
-	vector<bool> liftedColors(prevC.size(), false);
-	for (i = 0; i < prevC.size(); ++i)
-		if (prevC[i].size() && i < numCol)
-			start++;
-	ARstart_.push_back(0);
-	for (i = 0; i < realNumRow_; ++i){
-		// cout << "row: " << i << endl;
-		// cout << "ARstartGS i: " << ARstartGS_[i] << " ARstartGS_ i + 1: " << ARstartGS_[i + 1] << endl;
-		// cin.get();
-
-		rep = C[i + numCol].front() - numCol;
-		previousRowColor = previousRowColoring[rep];
-		// cout << "i: " << i << endl;
-		// cout << "rep: " << rep << endl;
-		// cout << "prevColor: " << previousRowColor << endl;
-		// cout << "rowColor: " << rowCol << endl;
-		// cin.get();
-		if (!previousRowInfo.count(previousRowColor))
-			continue;
-		if (previousRowInfo[previousRowColor] == HighsBasisStatus::BASIC){
-			// cout << "previous Row Color: " << previousRowColor << endl;
-			for (j = ARstartGS_[i]; j < ARstartGS_[i + 1]; ++j){
-				ARvalue_.push_back(ARvalueGS_[j]);
-				ARindex_.push_back(ARindexGS_[j]);
-			}
-			ARstart_.push_back(ARvalue_.size());
-			numLiftedRow_++;
-			numRow_++;
-			rowColor_.push_back(color[rep + numCol]);
+void HighsAggregate::examinePartition(){
+	int i, j;
+	for (i = 0; i < C.size(); ++i){
+		if (C[i].size() && i < numCol){
+			numCol_++;
 		}
-		else if (liftedColors[previousRowColor]){ 
-			// cout << "previousRowColor: " << previousRowColor << " skipped" << endl;
-			continue;
-		}
-		else if (previousRowInfo[previousRowColor] != HighsBasisStatus::BASIC
-			&& (ARtableauStart[i] == ARtableauStart[i + 1])){
-			// cout << "previous Row Color: " << previousRowColor << endl;
-			// cout << "next time this color comes it should be skipped" << endl;
-			for (j = ARstartGS_[i]; j < ARstartGS_[i +1]; ++j){
-				ARvalue_.push_back(ARvalueGS_[j]);
-				ARindex_.push_back(ARindexGS_[j]);
-			}
-			ARstart_.push_back(ARvalue_.size());
-			liftedColors[previousRowColor] = true;
-			numLiftedRow_++;
+		else if (C[i].size()){
 			numRow_++;
-			rowColor_.push_back(color[rep + numCol]);
-		}
-		else{
-			for (j = ARtableauStart[i]; j < ARtableauStart[i + 1]; ++j){
-				ARvalue_.push_back(ARtableauValue[j] * scale[ARtableauIndex[j]]);
-				ARindex_.push_back(ARtableauIndex[j]);
-				for (k = start; k < realNumCol_; ++k){
-					varRep = C[k].front();
-					previousColColor = previousColumnColoring[varRep];
-					if (previousColColor == ARtableauIndex[j]){
-						ARvalue_.push_back(ARtableauValue[j] * scale[k]);
-						ARindex_.push_back(k);
-					}
-				}
-			}
-			ARstart_.push_back(ARvalue_.size());
-			liftedColors[previousRowColor] = true;
-			numLiftedRow_++;
-			numRow_++;
-			rowColor_.push_back(color[rep + numCol]);
 		}
 	}
-	numRowAfterImp_ = numLiftedRow_;
-	if (impliedARstart.size()){
-		for (i = 0; i < impliedARstart.size() - 1; ++i){
-			for (j = impliedARstart[i]; j < impliedARstart[i + 1]; ++j){
-				ARvalue_.push_back(impliedARvalue[j]);
-				ARindex_.push_back(impliedARindex[j]);
-			}
-			ARstart_.push_back(ARvalue_.size());
-			numRow_++;
-			numRowAfterImp_++;
-			rowLower_.push_back(0);
-			rowUpper_.push_back(0);
-		}
-	}	
-	// cout << "numRow_: " << numRow_ << endl;
-	// cin.get();
+	numCol_ += 2 * linkingPairs.size();
+	numRow_ += linkingPairs.size();
+	Astart_.assign(numCol_, 0);
+	colUpper_.assign(numCol_, HIGHS_CONST_INF); 
+	colLower_.assign(numCol_, -HIGHS_CONST_INF);
+	rowUpper_.assign(numRow_, HIGHS_CONST_INF); 
+	rowLower_.assign(numRow_, -HIGHS_CONST_INF);
+	colCost_.assign(numCol_, 0);
 }
 
-void HighsAggregate::transposeMatrix(){
-	cout << "numRow_: " << numRow_ << endl;
-	cout << "final row wise matrix" << endl;
-	for (int i = 0; i < numRow_; ++i){
-		cout << "row: " << i << endl;
-		cout << rowLower_[i] << " <= ";
-		for (int j = ARstart_[i]; j < ARstart_[i + 1]; ++j){
-			cout << ARvalue_[j] << "x_" << ARindex_[j] << " ";
+void HighsAggregate::collectColumns(){
+	int i, j, x1, x2, rIdx, aIdx;
+	for (i = 0; i < numCol_; ++i){
+		vector<double> coeff = rowCoeff(i);
+		for (j = 0; j < coeff.size(); ++j){
+			if (coeff[j]){
+				Avalue_.push_back(coeff[j]);
+				Aindex_.push_back(j);
+			}
 		}
-		cout << " <= " << rowUpper_[i];
-		cout << "\n" << endl;
+		Astart_[i + 1] = Avalue_.size();
 	}
-	int i, j, parent, child;
-	int _numRow_ = numRow_;
-	int _numCol_ = numCol_;
-    int AcountX = ARstart_[_numRow_];
-    Aindex_.resize(AcountX);
-    Avalue_.resize(AcountX);
-    // Build row copy - pointers
-    Astart_.assign(_numCol_ + 1, 0);
-    A_Nend_.assign(_numCol_, 0);
-    for (int k = 0; k < AcountX; ++k)
-        A_Nend_[ARindex_[k]]++;
-    for (int i = 1; i <= _numCol_; ++i)
-        Astart_[i] = Astart_[i - 1] + A_Nend_[i - 1];
-    for (int i = 0; i < _numCol_; ++i)
-        A_Nend_[i] = Astart_[i];
-    // Build row copy - elements
-    for (int iRow = 0; iRow < _numRow_; ++iRow) {
-        for (int k = ARstart_[iRow]; k < ARstart_[iRow + 1]; ++k) {
-            int iCol = ARindex_[k];
-            int iPut = A_Nend_[iCol]++;
-            Aindex_[iPut] = iRow;
-            Avalue_[iPut] = ARvalue_[k];
-		}
-	}
+	rIdx = numCol_ - 2 * linkingPairs.size();
+	aIdx = numCol_ - linkingPairs.size();
 	for (i = 0; i < linkingPairs.size(); ++i){
-		if (linkIsNeeded[i]){
-			parent = linkingPairs[i].first;
-			child = linkingPairs[i].second;
-			vector<double> linkRow(realNumCol_,  0);
-			linkRow[parent] = 1;
-			linkRow[child] = -1;
-			numLinkers_++;
-			appendLinkersToAMatrix(linkRow);
-			appendLinkersToColBounds();
-			appendLinkersToRowRhs();
-		}
+		vector<double> coeff(numCol_ + 2 * linkingPairs.size());
+		x1 = linkingPairs[i].first;
+		x2 = linkingPairs[i].second;
+		coeff[x1] = 1, coeff[x2] = -1, coeff[rIdx] = -1, coeff[aIdx] = 1;
+		appendLinkersToAMatrix(coeff);
+		appendLinkersToColBounds();
+		appendLinkersToRowRhs();
+		rIdx++;
+		aIdx++;
 	}
-	numTot_ = numRow_ + numCol_;
-	colCost_.assign(numCol_, 0);
+}
+
+void HighsAggregate::findLpBasis(){
+
 }
 
 void HighsAggregate::aggregateCVector(){
@@ -392,7 +202,7 @@ void HighsAggregate::appendLinkersToAMatrix(vector<double>& row){
 	for (int i = 0; i < row.size(); ++i){
 		if (row[i]){
 			int colStartIdx = Astart_[i + 1];
-			for (int j = i + 1; j <= numCol_; j++)
+			for (int j = i + 1; j < Astart_.size(); ++j)
 				Astart_[j]++;
 			Aindex_.insert(Aindex_.begin() + colStartIdx, numRow_);
 			Avalue_.insert(Avalue_.begin() + colStartIdx, row[i]);
@@ -401,8 +211,6 @@ void HighsAggregate::appendLinkersToAMatrix(vector<double>& row){
 	Astart_.push_back(Astart_[numCol_] + 1);
 	Avalue_.push_back(-1);
 	Aindex_.push_back(numRow_);
-	numCol_++;
-	numRow_++;
 }
 
 void HighsAggregate::appendLinkersToRowRhs(){

@@ -83,6 +83,8 @@ public:
 	void clear();
 	void aggregateAMatrix();
 	void aggregateCVector();
+	void collectColumns();
+	void findLpBasis();
 	void appendLinkersToAMatrix(vector<double>& row);
 	void appendLinkersToRowRhs();
 	void appendLinkersToColBounds();
