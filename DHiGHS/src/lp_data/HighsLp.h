@@ -104,6 +104,7 @@ class HighsLp {
   std::vector<double> rowLower_;
   std::vector<double> rowUpper_;
   std::vector<int> linkers;
+  std::vector<int> artificialVariables;
   std::vector<bool> activeColorHistory;
 
 

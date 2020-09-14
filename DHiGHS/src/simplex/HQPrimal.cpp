@@ -283,11 +283,52 @@ void HQPrimal::solvePhase3() {
   }
 #endif
 
-  // Setup other buffers
+  // // Setup other buffers
 
-  HighsPrintMessage(workHMO.options_.output, workHMO.options_.message_level, ML_DETAILED,
-        "primal-phase3-start\n");
-  // Main solving structure
+  // HighsPrintMessage(workHMO.options_.output, workHMO.options_.message_level, ML_DETAILED,
+  //       "primal-phase3-start\n");
+  // // Main solving structure
+  // pivotArtificial.assign(workHMO.lp_.artificialVariables.size(), false);
+  // for (;;) {
+  //   timer.start(simplex_info.clock_[IteratePrimalRebuildClock]);
+  //   primalRebuild();
+  //   timer.stop(simplex_info.clock_[IteratePrimalRebuildClock]);
+
+  //   if (isPrimalPhase1) {
+  //     for (;;) {
+  //       /* Primal phase 1 choose column */
+  //       phase1ChooseColumnArtificial();
+  //       std::cout << "columnIn: " << columnIn << std::endl;
+  //       if (columnIn == -1) {
+  //         printf("==> Primal phase 1 choose column failed.\n");
+  //         invertHint = INVERT_HINT_CHOOSE_COLUMN_FAIL;
+  //         break;
+  //       }
+
+  //       /* Primal phsae 1 choose row */
+  //       phase1ChooseRow();
+  //       std::cout << "rowOut: " << rowOut << std::endl;
+  //       if (rowOut == -1) {
+  //         printf("Primal phase 1 choose row failed.\n");
+  //         exit(0);
+  //       }
+  //       std::cin.get();
+  //       /* Primal phase 1 update */
+  //       phase1Update();
+  //       if (invertHint) {
+  //         break;
+  //       }
+  //     }
+  //     /* Go to the next rebuild */
+  //     if (invertHint) {
+  //       /* Stop when the invert is new */
+  //       if (simplex_lp_status.has_fresh_rebuild) {
+  //         break;
+  //       }
+  //       continue;
+  //     }
+  //   }
+  // }
   unfold();
 
   if (workHMO.scaled_model_status_ == HighsModelStatus::REACHED_TIME_LIMIT) {
@@ -1037,6 +1078,20 @@ void HQPrimal::phase1ComputeDual() {
   computeDualInfeasible(workHMO);
 }
 
+/* Special phase 1 artificial variable pivoting function.  We know which
+variables we need to pivot on so there is no need to determine them, we just 
+need to do the pivots to push towards a valid basis in the current LP space */
+void HQPrimal::phase1ChooseColumnArtificial(){
+  columnIn = -1;
+  for (int i = 0; i < workHMO.lp_.artificialVariables.size(); ++i){
+    if (!pivotArtificial[i]){
+      columnIn = workHMO.lp_.artificialVariables[i];
+      pivotArtificial[i] = true;
+      return;
+    }
+  }
+}
+
 /* Choose a pivot column for the phase 1 primal simplex method */
 void HQPrimal::phase1ChooseColumn() {
   const int nSeq = workHMO.lp_.numCol_ + workHMO.lp_.numRow_;
@@ -1050,7 +1105,10 @@ void HQPrimal::phase1ChooseColumn() {
   columnIn = -1;
   for (int iSeq = 0; iSeq < nSeq; iSeq++) {
     double dMyDual = nbMove[iSeq] * workDual[iSeq];
+    std::cout << "dMyDual: " << dMyDual << std::endl;
     double dMyScore = dMyDual / devex_weight[iSeq];
+    std::cout << "dMyScore: " << dMyScore << std::endl;
+    std::cin.get();
     if (dMyDual < -dDualTol && dMyScore < dBestScore) {
       dBestScore = dMyScore;
       columnIn = iSeq;

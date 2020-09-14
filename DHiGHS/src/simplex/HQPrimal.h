@@ -53,6 +53,7 @@ class HQPrimal {
 
   void phase1ComputeDual();
   void phase1ChooseColumn();
+  void phase1ChooseColumnArtificial();
   void phase1ChooseRow();
   void phase1Update();
 
@@ -116,6 +117,9 @@ class HQPrimal {
   HVector row_ep;
   HVector row_ap;
   HVector col_aq;
+
+  // Artificial variable tracker
+  vector<bool> pivotArtificial;
 
   double row_epDensity;
   double columnDensity;

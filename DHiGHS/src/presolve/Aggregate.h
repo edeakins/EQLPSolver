@@ -85,9 +85,11 @@ public:
 	void aggregateCVector();
 	void collectColumns();
 	void findLpBasis();
-	void appendLinkersToAMatrix(vector<double>& row);
-	void appendLinkersToRowRhs();
-	void appendLinkersToColBounds();
+	void setInitialRhsAndBounds();
+	void setRhsAndBounds();
+	void appendLinkersToAMatrix(vector<double>& row, int rowIdx, int rIdx);
+	void appendLinkersToRowRhs(int rowIdx);
+	void appendLinkersToColBounds(int rIdx);
 	void createRowWiseAMatrix();
 	void setAggregateRealRowsRhs();
 	void setAggregateRealColsBounds();
@@ -202,6 +204,7 @@ public:
     vector<int> GSRstart_;
     vector<int> GSRindex_;
     vector<int> linkers;
+	vector<int> artificialVariables;
     vector<bool> activeConstraints_;
     vector<bool> activeBounds_;
     vector<double> Avalue_;

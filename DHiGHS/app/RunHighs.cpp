@@ -406,10 +406,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
       // cin.get();
     solution = highs.getSolution();
     tableau = highs.getTableau();
-    cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-    for (int i = 0; i < solution.col_value.size(); ++i){
-      cout << "var_" << i << " = " << solution.col_value[i] << endl;
-    }
+    // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+    // for (int i = 0; i < solution.col_value.size(); ++i){
+    //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
+    // }
   }
   cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
   for (int i = 0; i < solution.col_value.size(); ++i){
