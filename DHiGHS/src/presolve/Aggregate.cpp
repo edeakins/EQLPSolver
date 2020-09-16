@@ -6,7 +6,6 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	numRow = lp.numRow_;
 	numCol = lp.numCol_;
 	numTot = numRow + numCol;
-	impliedNumRow = lp.addNumRow_;
 	masterIter = lp.masterIter;
 	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
 	rowUpper.assign(lp.rowUpper_.begin(), lp.rowUpper_.end());
@@ -16,15 +15,6 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	Avalue.assign(lp.Avalue_.begin(), lp.Avalue_.end());
 	Aindex.assign(lp.Aindex_.begin(), lp.Aindex_.end());
 	Astart.assign(lp.Astart_.begin(), lp.Astart_.end());
-	impliedARstart.assign(lp.addARstart_.begin(), lp.addARstart_.end());
-	impliedARvalue.assign(lp.addARvalue_.begin(), lp.addARvalue_.end());
-	impliedARindex.assign(lp.addARindex_.begin(), lp.addARindex_.end());
-	ARtableauValue.assign(tableau.ARtableauValue.begin(), tableau.ARtableauValue.end());
-	ARtableauIndex.assign(tableau.ARtableauIndex.begin(), tableau.ARtableauIndex.end());
-	ARtableauStart.assign(tableau.ARtableauStart.begin(), tableau.ARtableauStart.end());
-	ARreducedRHS.assign(tableau.ARreducedRHS.begin(), tableau.ARreducedRHS.end());
-	rowColor.assign(lp.rowColor.begin(), lp.rowColor.end());
-	activeColorHistory.assign(lp.activeColorHistory.begin(), lp.activeColorHistory.end());
 	realNumRow = lp.realNumRow_;
 	realNumCol = lp.realNumCol_;
 	//Equitable partition info
@@ -36,13 +26,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	adjListLab.assign(ep.adjListLab.begin(), ep.adjListLab.end());
 	adjListWeight.assign(ep.adjListWeight.begin(), ep.adjListWeight.end());
 	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());
-	partSize.assign(ep.partSize.begin(), ep.partSize.end());
-	previousPartSize.assign(ep.previousPartSize.begin(), ep.previousPartSize.end());
-	commonLinkers = ep.commonLinkers;
-	// Used for setting active set
-	activeBounds_.assign(numCol, false);
-	activeConstraints_.assign(numRow, false);
-	// Preivous solution
+	// Previous solution
 	col_value = (solution.col_value);
 	row_value = (solution.row_value);
 	// Previous basis
@@ -50,7 +34,6 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	row_status = (basis.row_status);
 	// flag status to find linkers or not
 	flag_ = flag;
-	numSplits.assign(numRow, 0);
 	// if (ARtableauStart.size()){
 	// 	for (int i = 0; i < ARtableauStart.size() - 1; ++i){
 	// 		cout << "prev row: " << i << endl;
@@ -100,10 +83,25 @@ void HighsAggregate::aggregateAMatrix(){
 		return;
 	}
 	else{
+		// std::clock_t start;
+  		// start = std::clock();
+  		// double duration;
 		examinePartition();
+		// duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+  		// std::cout << "examine time: " << duration << std::endl;
+		// start = std::clock();
 		collectColumns();
+		// duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+		// std::cout << "collect cols time: " << duration << std::endl;
+		// start = std::clock();
 		findLpBasis();
-		// aggregateCVector();
+		// duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+		// std::cout << " find basis time: " << duration << std::endl;
+		// start = std::clock();
+		aggregateCVector();
+		// duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+		// std::cout << "aggregate cost time: " << duration << std::endl;
+		//std::cin.get();
 	}
 }
 
@@ -124,12 +122,10 @@ void HighsAggregate::initialAggregateAMatrix(){
 	numTot_ = numCol_ + numRow_;
 	Astart_.push_back(0);
 	for (i = 0; i < numCol_; ++i){
-		vector<double> coeff = rowCoeff(i);
+		rowCoeff(i);
 		for (j = 0; j < coeff.size(); ++j){
-			if (coeff[j]){
-				Avalue_.push_back(coeff[j]);
-				Aindex_.push_back(j);
-			}
+			Avalue_.push_back(coeff[j]);
+			Aindex_.push_back(coeffIdx[j]);
 		}
 		Astart_.push_back(Avalue_.size());
 	}
@@ -163,19 +159,22 @@ void HighsAggregate::examinePartition(){
 }
 
 void HighsAggregate::collectColumns(){
+	std::clock_t start;
+  	start = std::clock();
+  	double duration;
 	int i, j, x1, x2, rIdx, aIdx, rowIdx;
 	for (i = 0; i < numCol_; ++i){
 		if (i < realNumCol_){
-			vector<double> coeff = rowCoeff(i);
+			rowCoeff(i);
 			for (j = 0; j < coeff.size(); ++j){
-				if (coeff[j]){
-					Avalue_.push_back(coeff[j]);
-					Aindex_.push_back(j);
-				}
+				Avalue_.push_back(coeff[j]);
+				Aindex_.push_back(coeffIdx[j]);
 			}
 		}
 		Astart_[i + 1] = Avalue_.size();
 	}
+	duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+	//std::cout << "set regular column time: " << duration << std::endl;
 	setRhsAndBounds();
 	rIdx = realNumCol_;
 	rowIdx = realNumRow_;
@@ -243,8 +242,10 @@ void HighsAggregate::findLpBasis(){
 void HighsAggregate::aggregateCVector(){
 	colCost_.assign(numCol_, 0);
 	for (int i = 0; i < numCol_; ++i){
-		for (int j = 0; j < C[i].size(); ++j)
-			colCost_[i] += colCost[C[i][j]];
+		if (i < numCol_ - linkingPairs.size()){
+			for (int j = 0; j < C[i].size(); ++j)
+				colCost_[i] += colCost[C[i][j]];
+		}
 	}
 }
 
@@ -318,8 +319,9 @@ void HighsAggregate::setRhsAndBounds(){
 	}
 }
 
-vector<double> HighsAggregate::rowCoeff(int column){
-	vector<double> coeffs(realNumRow_, 0);
+void HighsAggregate::rowCoeff(int column){
+	coeff.clear();
+	coeffIdx.clear();
 	int i, j, var, rep, vWeight = 0, colWeight = 0;
 	for (i = 0; i < realNumRow_; ++i){
 		rep = C[i + numCol].front();
@@ -329,9 +331,9 @@ vector<double> HighsAggregate::rowCoeff(int column){
 				colWeight += adjListWeight[rep][j]; 
 			}
 		}
-		coeffs[i] = colWeight;
+		coeff.push_back(colWeight);
+		coeffIdx.push_back(i);
 		colWeight = 0;
 	}
-	return coeffs;
 }
 

@@ -269,7 +269,7 @@ HighsStatus HDual::solve() {
   }
   assert(ok);
   computePrimalObjectiveValue(workHMO);
-  buildTableau();
+  // buildTableau();
   return HighsStatus::OK;
 }
 

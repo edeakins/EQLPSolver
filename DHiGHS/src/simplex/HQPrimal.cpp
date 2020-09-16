@@ -187,7 +187,7 @@ HighsStatus HQPrimal::solve() {
   solvePhase); if (!ok) {printf("NOT OK After Solve???\n"); cout << flush;}
   assert(ok);
   */
-  buildTableau();
+  // buildTableau();
   return HighsStatus::OK;
 }
 
@@ -624,6 +624,7 @@ void HQPrimal::unfold() {
     //primalRebuild();
     workHMO.simplex_info_.workCost_[columnIn] = 0;
   }
+  // columnIn = -1;
 }
 
 void HQPrimal::primalChooseColumn() {
@@ -1105,10 +1106,7 @@ void HQPrimal::phase1ChooseColumn() {
   columnIn = -1;
   for (int iSeq = 0; iSeq < nSeq; iSeq++) {
     double dMyDual = nbMove[iSeq] * workDual[iSeq];
-    std::cout << "dMyDual: " << dMyDual << std::endl;
     double dMyScore = dMyDual / devex_weight[iSeq];
-    std::cout << "dMyScore: " << dMyScore << std::endl;
-    std::cin.get();
     if (dMyDual < -dDualTol && dMyScore < dBestScore) {
       dBestScore = dMyScore;
       columnIn = iSeq;

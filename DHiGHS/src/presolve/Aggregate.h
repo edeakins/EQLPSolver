@@ -7,75 +7,6 @@
 #include "HighsTimer.h"
 //#include "Highs.h"
 
-class node{
-public:
-	node(int lab, int idx){
-		label = lab;
-		index = idx;
-	}
-	int label;
-	int index;
-};
-
-// graph class to be used to determine connected components for GS
-class linkGraph{
-public:
-	void initializeMat(int numNodes){
-		adjMat.assign(numNodes, vector<int>(numNodes));
-	}
-	void addLinkNode(int label, int index){
-		linkNodes.push_back(node(label, index));
-		nodes.push_back(node(label, index));
-	}
-	void addRowNode(int label, int index){
-		oldRowNodes.push_back(node(label, index));
-		nodes.push_back(node(label, index));
-	}
-	void addNode(int label){
-		nodes.push_back(node(label, numNodes));
-		labelIndex[label] = numNodes;
-		indexLabel[numNodes] = label;
-		numNodes++;
-	}
-	void addEdge(int u, int v){
-		int uIdx = labelIndex[u];
-		int vIdx = labelIndex[v];
-		adjMat[uIdx][vIdx] = 1;
-		adjMat[vIdx][uIdx] = 1;
-	}
-	void connectedComponents(){
-		vector<bool> visited(nodes.size());
-		for (int i = 0; i < nodes.size(); ++i)
-			if (!visited[i])
-				components.push_back(DFS(i, visited));
-	}
-	vector<int> DFS(int i, vector<bool>& visited){
-		vector<int> comp;
-		stack<int> nodeStack;
-		nodeStack.push(i);
-		while (!nodeStack.empty()){
-			i = nodeStack.top();
-			nodeStack.pop();
-			if (!visited[i]){
-				comp.push_back(nodes[i].label);
-				visited[i] = true;
-			}
-			for (int j = 0; j < adjMat[i].size(); ++j)
-				if (adjMat[i][j] && !visited[j])
-					nodeStack.push(j);
-		}
-		return comp;
-	}
-	map<int, int> labelIndex;
-	map<int, int> indexLabel;
-	vector<vector<int> > adjMat;
-	vector<vector<int> > components;
-	vector<node> linkNodes;
-	vector<node> oldRowNodes;
-	vector<node> nodes;
-	int numNodes = 0;
-};
-
 class HighsAggregate{
 public:
 	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau& tableau, bool flag);
@@ -105,7 +36,7 @@ public:
 	bool dependanceCheck(vector<double> &v); // int impliedRowsIdx); // int linkIdx = -1);
 	void findPreviousBasisForRows();
 	void findPreviousBasisForColumns();
-	vector<double> rowCoeff(int column);
+	void rowCoeff(int column);
 	void eraseLinkersIfNotNeeded();
 	bool varIsBounded(pair<int, int> link);
 	void editRowWiseMatrix(int domLink, int slavLink);
@@ -165,9 +96,6 @@ public:
     vector<double> row_value;
     vector<HighsBasisStatus> col_status;
     vector<HighsBasisStatus> row_status;
-    HighsQR QR;
-    vector<vector<vector<double> > > QRStorage;
-    vector<int> QRIndexUpdate;
 
     // (dense storage)
 	vector<vector<int> > C;
@@ -218,61 +146,14 @@ public:
     vector<double> rowUpper_;
     vector<double> scale;
     vector<double> ARreducedRHS;
+	vector<double> coeff;
+	vector<int> coeffIdx;
 
     // Previous row coloring
-    map<int, HighsBasisStatus> previousRowInfo;
-	map<int, double> previousRowValue;
 	vector<int> previousRowColoring;
 
     // Previous column coloring
-    map<int, HighsBasisStatus> previousColumnInfo;
-	map<int, double> previousColumnValue;
 	vector<int> previousColumnColoring;
-
-	map<int, vector<int> > commonLinkers;
-
-	// Collect implied linkers for constraint manipulation
-	vector<pair<int, int> > equalColors;
-
-	// Holds all aggregated implied rows
-	vector<vector<double> > aggImpliedRows;
-	map<int, vector<vector<double> > > impliedRowsByColor;
-
-	// Contains partition size information for tableau scaling
-	vector<int> partSize;
-	vector<int> previousPartSize;
-
-	// Stores the actual color of rows
-	vector<int> rowColor;
-	vector<int> rowColor_;
-
-	// Keeps track of the history of constraints and their colors so we know when 
-	// a constraint become active (constraint became active while in this color class)
-	vector<bool> activeColorHistory;
-	vector<bool> activeColorHistory_;
-
-	/* Gram schmidt storage and indices.  Mostly storage for Gram schmidt matrices
-	and their index information which we use to determine whether a "linker" variable 
-	requires pivoting or not. */
-	int numRowGS_ = 0;
-	vector<int> AstartGS_;
-	vector<int> ARstartGS_;
-	vector<int> AindexGS_;
-	vector<int> ARindexGS_;
-	vector<int> AR_NendGS_;
-	vector<double> AvalueGS_;
-	vector<double> ARvalueGS_;
-	vector<int> partsForGS;
-	vector<bool> colorsForGS;
-	vector<int> numSplits;
-	vector<bool> linkIsNeeded;
-	vector<bool> linkIsErased;
-	map<int, int> impliedIdx;
-	map<int, vector<int> > linksInMatrix;
-	map<int, vector<int> > varToLink;
-	map<int, vector<int> > connectedColorsAndLinks;
-	map<int, linkGraph> cLGraphs;
-	map<int, vector<vector<double> > > QRMatrices;
 	};
 
 #endif

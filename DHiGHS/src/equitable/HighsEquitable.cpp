@@ -209,11 +209,11 @@ void HighsEquitable::refine(){
 			A[u].clear();
 		}
 		colorsAdj.clear();
-		for (i = 0; i < C.size(); ++i)
-			if (C[i].size() == 1) isolates[C[i].front()] = true;
-	}
+	}			
 	//cout << "\n\n Partition \n\n" << endl;
 	for (i = 0; i < C.size(); ++i){
+		if (C[i].size() == 1) 
+			isolates[C[i].front()] = true;
 		if (C[i].size()){
 			if (i < numCol) partSize[i] = C[i].size();
 			//cout << "color: " << i << endl;
@@ -296,16 +296,9 @@ void HighsEquitable::isolate(int i){
 	// C[color[i]].erase(remove(C[color[i]].begin(), C[color[i]].end(), i), C[color[i]].end());
 	int newCol = vCol;
 	int oldCol = color[i];
-	for (int j = 0; j < C[oldCol].size();){
-		int var = C[oldCol][j];
-		if (var != i){
-			C[oldCol].erase(C[oldCol].begin() + j);
-			C[newCol].push_back(var);
-			color[var] = newCol;
-		}
-		else
-			++j;
-	}
+	C[color[i]].erase(remove(C[oldCol].begin(), C[oldCol].end(), i), C[oldCol].end());
+	C[newCol].push_back(i);
+	color[i] = newCol;
 	vCol++;
 	for (int i = 0; i < C.size(); ++i){
 		if (C[i].size() == 1)

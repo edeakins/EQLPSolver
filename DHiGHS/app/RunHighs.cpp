@@ -33,9 +33,10 @@ HighsStatus callMipSolver(const HighsOptions& options, const HighsLp& lp,
                           FILE* output, int message_level, bool run_quiet);
 
 int main(int argc, char** argv) {
-  // std::clock_t start;
-  // start = std::clock();
-  // double duration;
+  std::ofstream resultsFile("results.txt", std::ios_base::app);
+  std::clock_t start;
+  start = std::clock();
+  double duration;
   printHighsVersionCopyright(stdout, ML_ALWAYS);
 
   // Load user options.
@@ -79,8 +80,10 @@ int main(int argc, char** argv) {
   } else {
     run_status = callMipSolver(options, lp, output, message_level, run_quiet);
   }
-  // duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-  // cout << "total time: " << duration << endl;
+  duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+  // std::cout << "time: " << duration << std::endl;
+  resultsFile << options.model_file + " | " + std::to_string(duration) << + "\n";
+  resultsFile.close();
   return (int)run_status;
 }
 
@@ -242,17 +245,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsBasis basis;
   HighsSolution solution;
   HighsTableau tableau;
-  HighsTimer& timer = highs.timer_;
   // Use aggregator to obtain an aggreated lp and return it
-  bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  if (!run_highs_clock_already_running) timer.startRunHighsClock();
-  double initial_time = timer.readRunHighsClock();
-  timer.start(timer.gram_schmidt_clock);
   HighsAggregate lpFolder(lp, ep, solution, basis, tableau, false);
   HighsLp& alp = lpFolder.getAlp();
-  timer.stop(timer.gram_schmidt_clock);
-  double lp_folder_time = timer.readRunHighsClock();
-  time = lp_folder_time - initial_time;
   // cout << "fold time: " << lp_folder_time - initial_time << endl;
   // cin.get();
   // Solve LP case.
@@ -322,7 +317,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsStatus run_status = highs.run();
   basis = highs.getBasis();
   solution = highs.getSolution();
-  tableau = highs.getTableau();
+  // tableau = highs.getTableau();
 
   if (run_quiet)
     HighsPrintMessage(output, message_level, ML_ALWAYS,
@@ -331,23 +326,27 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   reportSolvedLpStats(output, message_level, run_status, highs);
   while(!ep.isPartitionDiscrete()){
     //highs = Highs();
+    // std::cout << "refine" << std::endl;
     ep.refine();
-    try{
-      run_highs_clock_already_running = timer.runningRunHighsClock();
-      if (!run_highs_clock_already_running) timer.startRunHighsClock();
-      double initial_time = timer.readRunHighsClock();
-      timer.start(timer.gram_schmidt_clock);
-      lpFolder = HighsAggregate(lp, ep, solution, basis, tableau, true);
-      timer.stop(timer.gram_schmidt_clock);
-      double lp_folder_time = timer.readRunHighsClock();
-      time += lp_folder_time - initial_time;
-      // cout << "fold time: " << lp_folder_time - initial_time << endl;
-      // cin.get();
+    // std::cout << "refine done" << std::endl;
+    // std::cin.get();
+    // try{
+    //   // run_highs_clock_already_running = timer.runningRunHighsClock();
+    //   // if (!run_highs_clock_already_running) timer.startRunHighsClock();
+    //   // double initial_time = timer.readRunHighsClock();
+    // std::cout << "fold" << std::endl;
+    lpFolder = HighsAggregate(lp, ep, solution, basis, tableau, true);
+    // std::cout << "fold done"  << std::endl;
+    // std::cin.get();
+    //   // double lp_folder_time = timer.readRunHighsClock();
+    //   // time += lp_folder_time - initial_time;
+    //   // cout << "fold time: " << lp_folder_time - initial_time << endl;
+    //   // cin.get();
       
-    }
-    catch(exception& e){
-      cout << e.what() << endl;
-    }
+    // }
+    // catch(exception& e){
+    //   cout << e.what() << endl;
+    // }
     basis = HighsBasis();
     solution = HighsSolution();
     alpOpt = HighsOptions();
@@ -371,17 +370,17 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     }
     HighsLp& alp = lpFolder.getAlp();
     HighsBasis& alpBasis = lpFolder.getAlpBasis();
-    // cout << "Start Basis" << endl;
-    // for (int j = 0; j < alpBasis.col_status.size(); ++j){
-    //   cout << "col: " << j << " basis is " << (int)alpBasis.col_status[j] << endl;
-    // }
-    // for (int j = 0; j < alpBasis.row_status.size(); ++j){
-    //   cout << "row: " << j << " basis is " << (int)alpBasis.row_status[j] << endl;
-    // }
-    // cout << "\n" << endl;
+  //   // cout << "Start Basis" << endl;
+  //   // for (int j = 0; j < alpBasis.col_status.size(); ++j){
+  //   //   cout << "col: " << j << " basis is " << (int)alpBasis.col_status[j] << endl;
+  //   // }
+  //   // for (int j = 0; j < alpBasis.row_status.size(); ++j){
+  //   //   cout << "row: " << j << " basis is " << (int)alpBasis.row_status[j] << endl;
+  //   // }
+  //   // cout << "\n" << endl;
     HighsStatus init_status = highs.passModel(alp);
     HighsStatus write_status;
-    write_status = highs.writeModel("write.mps");
+    // write_status = highs.writeModel("write.mps");
     HighsStatus basisStatus = highs.setBasis(alpBasis);
     if (init_status != HighsStatus::OK) {
       if (init_status == HighsStatus::Warning) {
@@ -396,27 +395,27 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     }
     run_status = highs.run();
     basis = highs.getBasis();
-      // cout << "Finish Basis \n" << endl;
-      // for (int j = 0; j < basis.col_status.size(); ++j){
-      //   cout << "col: " << j << " basis is " << (int)basis.col_status[j] << endl;
-      // }
-      // for (int j = 0; j < basis.row_status.size(); ++j){
-      //   cout << "row: " << j << " basis is " << (int)basis.row_status[j] << endl;
-      // }
-      // cin.get();
+  //     // cout << "Finish Basis \n" << endl;
+  //     // for (int j = 0; j < basis.col_status.size(); ++j){
+  //     //   cout << "col: " << j << " basis is " << (int)basis.col_status[j] << endl;
+  //     // }
+  //     // for (int j = 0; j < basis.row_status.size(); ++j){
+  //     //   cout << "row: " << j << " basis is " << (int)basis.row_status[j] << endl;
+  //     // }
+  //     // cin.get();
     solution = highs.getSolution();
-    tableau = highs.getTableau();
-    // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-    // for (int i = 0; i < solution.col_value.size(); ++i){
-    //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
-    // }
+    // tableau = highs.getTableau();
+  //   // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+  //   // for (int i = 0; i < solution.col_value.size(); ++i){
+  //   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  //   // }
   }
-  cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-  for (int i = 0; i < solution.col_value.size(); ++i){
-    cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  }
-  cout << "\nUnfold iterations: " << highs.totIter_ << endl;
-  cout << "\nFold time total: " << time << endl;
+  // // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+  // // for (int i = 0; i < solution.col_value.size(); ++i){
+  // //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  // // }
+  // // cout << "\nUnfold iterations: " << highs.totIter_ << endl;
+  // cout << "\nFold time total: " << time << endl;
   return run_status;
 }
 
