@@ -56,7 +56,9 @@ class HighsTimer {
     presolve_clock = clock_def("Presolve", "Pre");
     solve_clock = clock_def("Solve", "Slv");
     postsolve_clock = clock_def("Postsolve", "Pst");
-    gram_schmidt_clock = clock_def("Gram Schmidt Reduction", "Gsr");
+    // partition_clock = clock_def("Refinement", "Ref");
+    // lp_fold_clock = clock_def("Aggregate", "Agg");
+    // lp_unfold_clock = clock_def("Unfold", "Ufd");
   }
 
   /**

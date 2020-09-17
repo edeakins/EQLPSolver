@@ -533,7 +533,7 @@ HighsStatus Highs::run() {
 		    "Postsolve  : %d\n", postsolve_iteration_count);
   HighsPrintMessage(options_.output, options_.message_level, ML_MINIMAL,
 		    "Time       : %0.3g\n", lp_solve_final_time - initial_time);
-  totUnfoldTime_ += (lp_solve_final_time - initial_time);
+  // totUnfoldTime_ += (lp_solve_final_time - initial_time);
   totIter_ += hmos_[solved_hmo].unscaled_solution_params_.simplex_iteration_count;
 
   // Assess success according to the scaled model status, unless

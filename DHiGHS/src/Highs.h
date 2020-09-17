@@ -53,6 +53,8 @@ class Highs {
   );
 
   double totUnfoldTime_ = 0;
+  double totFoldTime_ = 0;
+  double totPartTime_ = 0;
   int totIter_ = 0;
 
   /**
