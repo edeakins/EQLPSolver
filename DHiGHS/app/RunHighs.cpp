@@ -438,7 +438,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::cout << "Unfolding time: " << highs.totUnfoldTime_ << std::endl;
   double totTime = highs.totUnfoldTime_ + highs.totFoldTime_ + highs.totPartTime_;
   std::cout << "Total OC time: " << totTime << std::endl;
-  resultsFile << std::to_string(totTime) << + "\n";
+  resultsFile << lp.model_name_ + ".mps " << std::to_string(highs.totPartTime_) + " " << std::to_string(highs.totFoldTime_) + " " << std::to_string(highs.totUnfoldTime_) + " " << std::to_string(totTime) << + "\n";
   // // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
   // // for (int i = 0; i < solution.col_value.size(); ++i){
   // //   cout << "var_" << i << " = " << solution.col_value[i] << endl;

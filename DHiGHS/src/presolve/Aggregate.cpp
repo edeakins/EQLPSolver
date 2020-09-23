@@ -124,7 +124,7 @@ void HighsAggregate::initialAggregateAMatrix(){
 		}
 		Astart_.push_back(Avalue_.size());
 	}
-	std::cout << "built Amatrix only time: " << timer.readRunHighsClock() - initial_time << std::endl;
+	//std::cout << "built Amatrix only time: " << timer.readRunHighsClock() - initial_time << std::endl;
 	initial_time = timer.readRunHighsClock();
 	colUpper_.assign(numCol_, HIGHS_CONST_INF); 
 	colLower_.assign(numCol_, -HIGHS_CONST_INF);
