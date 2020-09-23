@@ -18,7 +18,7 @@ public:
 	void findLpBasis();
 	void setInitialRhsAndBounds();
 	void setRhsAndBounds();
-	void appendLinkersToAMatrix(vector<double>& row, int rowIdx, int rIdx);
+	void appendLinkersToAMatrix(vector<double>& row, vector<int> idx, int rowIdx, int rIdx);
 	void appendLinkersToRowRhs(int rowIdx);
 	void appendLinkersToColBounds(int rIdx);
 	void createRowWiseAMatrix();
@@ -154,6 +154,9 @@ public:
 
     // Previous column coloring
 	vector<int> previousColumnColoring;
+
+	// Timer
+	
 	};
 
 #endif

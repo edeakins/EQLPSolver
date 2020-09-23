@@ -1,13 +1,12 @@
 {
     "files.associations": {
-        "iostream": "cpp",
-        "chrono": "cpp",
+        "*.tcc": "cpp",
         "array": "cpp",
         "atomic": "cpp",
         "bit": "cpp",
-        "*.tcc": "cpp",
         "bitset": "cpp",
         "cctype": "cpp",
+        "chrono": "cpp",
         "clocale": "cpp",
         "cmath": "cpp",
         "condition_variable": "cpp",
@@ -48,6 +47,7 @@
         "initializer_list": "cpp",
         "iomanip": "cpp",
         "iosfwd": "cpp",
+        "iostream": "cpp",
         "istream": "cpp",
         "limits": "cpp",
         "new": "cpp",

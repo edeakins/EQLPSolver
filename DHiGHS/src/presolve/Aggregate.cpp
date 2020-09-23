@@ -24,7 +24,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	prevC.assign(ep.prevC.begin(), ep.prevC.end());
 	color.assign(ep.color.begin(), ep.color.end());
 	adjListLab.assign(ep.adjListLab.begin(), ep.adjListLab.end());
-	adjListWeight.assign(ep.adjListWeight.begin(), ep.adjListWeight.end());
+	adjListWeight.assign(ep.adjListWeightReal.begin(), ep.adjListWeightReal.end());
 	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());
 	// Previous solution
 	col_value = (solution.col_value);
@@ -83,29 +83,18 @@ void HighsAggregate::aggregateAMatrix(){
 		return;
 	}
 	else{
-		// std::clock_t start;
-  		// start = std::clock();
-  		// double duration;
 		examinePartition();
-		// duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-  		// std::cout << "examine time: " << duration << std::endl;
-		// start = std::clock();
 		collectColumns();
-		// duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-		// std::cout << "collect cols time: " << duration << std::endl;
-		// start = std::clock();
 		findLpBasis();
-		// duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-		// std::cout << " find basis time: " << duration << std::endl;
-		// start = std::clock();
 		aggregateCVector();
-		// duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-		// std::cout << "aggregate cost time: " << duration << std::endl;
-		//std::cin.get();
 	}
 }
 
 void HighsAggregate::initialAggregateAMatrix(){
+	HighsTimer timer;
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+  	double initial_time = timer.readRunHighsClock();
 	int i, j;
 	numCol_ = 0;
 	numRow_ = 0;
@@ -120,32 +109,46 @@ void HighsAggregate::initialAggregateAMatrix(){
 		}
 	}
 	numTot_ = numCol_ + numRow_;
+	//std::cout << "counter numRow and numCol time: " <<  timer.readRunHighsClock() - initial_time << std::endl;
+	//std::cin.get();
+	initial_time = timer.readRunHighsClock();
 	Astart_.push_back(0);
+	coeff.clear();
+	coeffIdx.clear();
 	for (i = 0; i < numCol_; ++i){
 		rowCoeff(i);
+		//std::cout << i << std::endl;
 		for (j = 0; j < coeff.size(); ++j){
 			Avalue_.push_back(coeff[j]);
 			Aindex_.push_back(coeffIdx[j]);
 		}
 		Astart_.push_back(Avalue_.size());
 	}
+	std::cout << "built Amatrix only time: " << timer.readRunHighsClock() - initial_time << std::endl;
+	initial_time = timer.readRunHighsClock();
 	colUpper_.assign(numCol_, HIGHS_CONST_INF); 
 	colLower_.assign(numCol_, -HIGHS_CONST_INF);
 	rowUpper_.assign(numRow_, HIGHS_CONST_INF); 
 	rowLower_.assign(numRow_, -HIGHS_CONST_INF);
 	colCost_.assign(numCol_, 0);
+	//std::cout << "built A matrix and all row/column vectors time: " << timer.readRunHighsClock() - initial_time << std::endl;
+	//std::cin.get();
 }
 
 void HighsAggregate::examinePartition(){
+	HighsTimer timer;
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+  	double initial_time = timer.readRunHighsClock();
 	int i, j;
 	for (i = 0; i < C.size(); ++i){
 		if (C[i].size() && i < numCol){
-			realNumCol_++;
 			numCol_++;
+			realNumCol_++;
 		}
-		else if (C[i].size()){
-			realNumRow_++;
+		else if(C[i].size()){
 			numRow_++;
+			realNumRow_++;
 		}
 	}
 	numCol_ += linkingPairs.size();
@@ -156,12 +159,15 @@ void HighsAggregate::examinePartition(){
 	rowUpper_.assign(numRow_, HIGHS_CONST_INF); 
 	rowLower_.assign(numRow_, -HIGHS_CONST_INF);
 	colCost_.assign(numCol_, 0);
+	//std::cout << "examine part and row/col vectors set up time: " << timer.readRunHighsClock() - initial_time << std::endl;
+	//std::cin.get();
 }
 
 void HighsAggregate::collectColumns(){
-	std::clock_t start;
-  	start = std::clock();
-  	double duration;
+	HighsTimer timer;
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+  	double initial_time = timer.readRunHighsClock();
 	int i, j, x1, x2, rIdx, aIdx, rowIdx;
 	for (i = 0; i < numCol_; ++i){
 		if (i < realNumCol_){
@@ -173,23 +179,30 @@ void HighsAggregate::collectColumns(){
 		}
 		Astart_[i + 1] = Avalue_.size();
 	}
-	duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-	//std::cout << "set regular column time: " << duration << std::endl;
 	setRhsAndBounds();
+	//std::cout << "built Amatrix and set bounds times: " << timer.readRunHighsClock() - initial_time << std::endl;
+	//std::cin.get();
+	initial_time = timer.readRunHighsClock();
 	rIdx = realNumCol_;
 	rowIdx = realNumRow_;
+	coeff.clear();
+	coeffIdx.clear();
 	for (i = 0; i < linkingPairs.size(); ++i){
-		vector<double> coeff(numCol_);
 		x1 = linkingPairs[i].first;
 		x2 = linkingPairs[i].second;
-		coeff[x1] = 1, coeff[x2] = -1, coeff[rIdx] = -1;
+		coeff.push_back(1), coeff.push_back(-1), coeff.push_back(-1);
+		coeffIdx.push_back(x1), coeffIdx.push_back(x2); coeffIdx.push_back(rIdx);
 		linkers.push_back(rIdx);
-		appendLinkersToAMatrix(coeff, rowIdx, rIdx);
+		appendLinkersToAMatrix(coeff, coeffIdx, rowIdx, rIdx);
 		appendLinkersToColBounds(rIdx);
 		appendLinkersToRowRhs(rowIdx);
 		rIdx++;
 		rowIdx++;
+		coeff.clear();
+		coeffIdx.clear();
 	}
+	//std::cout << "linkers added time: " << timer.readRunHighsClock() - initial_time << std::endl;
+	//std::cin.get();
 }
 
 void HighsAggregate::findLpBasis(){
@@ -249,15 +262,13 @@ void HighsAggregate::aggregateCVector(){
 	}
 }
 
-void HighsAggregate::appendLinkersToAMatrix(vector<double>& row, int rowIdx, int rIdx){
+void HighsAggregate::appendLinkersToAMatrix(vector<double>& row, vector<int> idx, int rowIdx, int rIdx){
 	for (int i = 0; i < row.size(); ++i){
-		if (row[i]){
-			int colStartIdx = Astart_[i + 1];
-			for (int j = i + 1; j < Astart_.size(); ++j)
-				Astart_[j]++;
-			Aindex_.insert(Aindex_.begin() + colStartIdx, rowIdx);
-			Avalue_.insert(Avalue_.begin() + colStartIdx, row[i]);
-		}
+		int colStartIdx = Astart_[idx[i] + 1];
+		for (int j = idx[i] + 1; j < Astart_.size(); ++j)
+			Astart_[j]++;
+		Aindex_.insert(Aindex_.begin() + colStartIdx, rowIdx);
+		Avalue_.insert(Avalue_.begin() + colStartIdx, row[i]);
 	}
 }
 
@@ -322,7 +333,7 @@ void HighsAggregate::setRhsAndBounds(){
 void HighsAggregate::rowCoeff(int column){
 	coeff.clear();
 	coeffIdx.clear();
-	int i, j, var, rep, vWeight = 0, colWeight = 0;
+	int i, j, var, rep, colWeight = 0;
 	for (i = 0; i < realNumRow_; ++i){
 		rep = C[i + numCol].front();
 		for (j = 0; j < adjListLab[rep].size(); ++j){
@@ -331,8 +342,10 @@ void HighsAggregate::rowCoeff(int column){
 				colWeight += adjListWeight[rep][j]; 
 			}
 		}
-		coeff.push_back(colWeight);
-		coeffIdx.push_back(i);
+		if (colWeight){
+			coeff.push_back(colWeight);
+			coeffIdx.push_back(i);
+		}
 		colWeight = 0;
 	}
 }

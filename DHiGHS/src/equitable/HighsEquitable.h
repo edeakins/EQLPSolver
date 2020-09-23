@@ -64,6 +64,9 @@ public:
 	vector<int> Astart;
     vector<int> Aindex;
     vector<double> Avalue;
+	vector<int> Xstart_;
+	vector<int> Xindex_;
+	vector<double> Xvalue_;
     vector<double> colCost;
     vector<double> colLower;
     vector<double> colUpper;
@@ -74,6 +77,7 @@ public:
 	// (Dense vectors)
 	vector<vector<int>> adjListLab;
 	vector<vector<double>> adjListWeight;
+	vector<vector<double>> adjListWeightReal;
 	vector<vector<int>> C;
 	vector<vector<int>> prevC;
 	vector<vector<int>> A;

@@ -243,8 +243,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
   double initial_time = timer.readRunHighsClock();
+  std::cout << "refine" << std::endl;
   HighsEquitable ep;
   ep.setup(lp);
+  std::cout << "refine done" << std::endl;
   highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
   // Basis and solution to store from unfold interations
   HighsBasis basis;
@@ -252,9 +254,11 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsTableau tableau;
   // Use aggregator to obtain an aggreated lp and return it
   initial_time = timer.readRunHighsClock();
+  std::cout << "fold start" << std::endl;
   HighsAggregate lpFolder(lp, ep, solution, basis, tableau, false);
+  std::cout << "fold done" << std::endl;
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
-  initial_time = timer.readRunHighsClock();
+  // initial_time = timer.readRunHighsClock();
   HighsLp& alp = lpFolder.getAlp();
   // cout << "fold time: " << lp_folder_time - initial_time << endl;
   // cin.get();
@@ -292,6 +296,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     }
   }
 
+  HighsStatus write_status;
+  //write_status = highs.writeModel("initial.mps");
   /*
   HighsStatus write_status;
   write_status = highs.writeModel("write.mps");
@@ -331,7 +337,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
                       "After calling highs.run()\n");
 
   reportSolvedLpStats(output, message_level, run_status, highs);
-  highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
+  //highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
   while(!ep.isPartitionDiscrete()){
     //highs = Highs();
     // std::cout << "refine" << std::endl;
@@ -395,7 +401,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   //   // cout << "\n" << endl;
     HighsStatus init_status = highs.passModel(alp);
     HighsStatus write_status;
-    // write_status = highs.writeModel("write.mps");
+    //write_status = highs.writeModel("write.mps");
     HighsStatus basisStatus = highs.setBasis(alpBasis);
     if (init_status != HighsStatus::OK) {
       if (init_status == HighsStatus::Warning) {

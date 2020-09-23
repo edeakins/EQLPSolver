@@ -36,6 +36,7 @@ void HighsEquitable::setup(const HighsLp& lp){
 
 	// Associated with equitable partition
 	numTot = numCol + numRow;
+	Xstart_.assign(numTot, 0);
 	SCheck.assign(numTot, false);
 	mincdeg.assign(numTot, 0);
 	maxcdeg.assign(numTot, 0);
@@ -49,6 +50,7 @@ void HighsEquitable::setup(const HighsLp& lp){
 	previousPartSize.assign(numCol, 0);
 	adjListLab.assign(numTot, vector<int>(0));
 	adjListWeight.assign(numTot, vector<double>(0));
+	adjListWeightReal.assign(numTot, vector<double>(0));
 	C.assign(numTot, vector<int>(0));
 	A.assign(numTot, vector<int>(0));
 
@@ -63,8 +65,9 @@ void HighsEquitable::lp2Graph(){
 	vector<double>::iterator min = min_element(Avalue.begin(), Avalue.end());
 	int i, j, k;
 	if (*min < 0){
-		for (i = 0; i < Avalue.size(); ++i)
-			AvalueCopy[i] = Avalue[i] + -2*(*min);
+		for (i = 0; i < Avalue.size(); ++i){
+			AvalueCopy[i] = Avalue[i] + (-*min) + 1;
+		}
 	}
 	else{
 		for (i = 0; i < Avalue.size(); ++i)
@@ -74,8 +77,10 @@ void HighsEquitable::lp2Graph(){
 		for (j = Astart[i]; j < Astart[i + 1]; ++j){
 			adjListLab[i].push_back(Aindex[j] + numCol);
 			adjListWeight[i].push_back(AvalueCopy[j]);
+			adjListWeightReal[i].push_back(Avalue[j]);
 			adjListLab[Aindex[j] + numCol].push_back(i);
 			adjListWeight[Aindex[j] + numCol].push_back(AvalueCopy[j]);
+			adjListWeightReal[Aindex[j] + numCol].push_back(Avalue[j]);
 		}
 	}
 }
@@ -276,7 +281,7 @@ void HighsEquitable::splitColor(int s){
 }
 
 void HighsEquitable::findTarget(){
-	for (int i = 0; i < numCol; ++i){
+	for (int i = 0; i < numTot; ++i){
 		if (!isolates[i]){
 			isolated = i;
 			targets[i] = true;
@@ -357,7 +362,7 @@ void HighsEquitable::collectLinkingPairs(){
 } 
 
 bool HighsEquitable::isPartitionDiscrete(){
-	for (int i = 0; i < numTot; ++i){
+	for (int i = 0; i < numCol; ++i){
 		if (!isolates[i]) return false;
 	}
 	return true;

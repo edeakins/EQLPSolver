@@ -33,11 +33,16 @@ HighsStatus assessLp(HighsLp& lp, const HighsOptions& options,
   // Assess the LP dimensions and vector sizes, returning on error
   call_status = assessLpDimensions(options, lp);
   return_status = interpretCallStatus(call_status, return_status, "assessLpDimensions");
-  if (return_status == HighsStatus::Error) return return_status;
-
+  if (return_status == HighsStatus::Error){ 
+    std::cout << "Lp has wrong dimensions" << std::endl;
+    return return_status;
+  }
   // If the LP has no columns there is nothing left to test
   // NB assessLpDimensions returns HighsStatus::Error if lp.numCol_ < 0
-  if (lp.numCol_ == 0) return HighsStatus::OK;
+  if (lp.numCol_ == 0){
+    std::cout << "Lp has zero columns" << std::endl;
+    return HighsStatus::OK;
+  }
 
   // From here, any LP has lp.numCol_ > 0 and lp.Astart_[lp.numCol_] exists (as
   // the number of nonzeros)
@@ -47,18 +52,27 @@ HighsStatus assessLp(HighsLp& lp, const HighsOptions& options,
   call_status = assessCosts(options, 0, lp.numCol_, true, 0, lp.numCol_-1, false, 0, NULL, false,
 			    NULL, &lp.colCost_[0], options.infinite_cost);
   return_status = interpretCallStatus(call_status, return_status, "assessCosts");
-  if (return_status == HighsStatus::Error) return return_status;
+  if (return_status == HighsStatus::Error) {
+    std::cout << "Lp costs have a problem" << std::endl;
+    return return_status;
+  }
   // Assess the LP column bounds
   call_status = assessBounds(options, "Col", 0, lp.numCol_, true, 0, lp.numCol_-1, false, 0, NULL, false, NULL,
 			     &lp.colLower_[0], &lp.colUpper_[0], options.infinite_bound, normalise);
   return_status = interpretCallStatus(call_status, return_status, "assessBounds");
-  if (return_status == HighsStatus::Error) return return_status;
+  if (return_status == HighsStatus::Error) {
+    std::cout << "Lp bounds have a problem" << std::endl;
+    return return_status;
+  }
   if (lp.numRow_) {
     // Assess the LP row bounds
     call_status = assessBounds(options, "Row", 0, lp.numRow_, true, 0, lp.numRow_-1, false, 0, NULL, false, NULL,
 			       &lp.rowLower_[0], &lp.rowUpper_[0], options.infinite_bound, normalise);
     return_status = interpretCallStatus(call_status, return_status, "assessBounds");
-    if (return_status == HighsStatus::Error) return return_status;
+    if (return_status == HighsStatus::Error) {
+      std::cout << "Lp row bounds have a problem" << std::endl;
+      return return_status;
+    }
     // Assess the LP matrix
     int lp_num_nz = lp.Astart_[lp.numCol_];
     call_status = assessMatrix(options, lp.numRow_, 0, lp.numCol_-1, lp.numCol_, lp_num_nz,
@@ -66,7 +80,10 @@ HighsStatus assessLp(HighsLp& lp, const HighsOptions& options,
 			       options.small_matrix_value,
 			       options.large_matrix_value, normalise);
     return_status = interpretCallStatus(call_status, return_status, "assessMatrix");
-    if (return_status == HighsStatus::Error) return return_status;
+    if (return_status == HighsStatus::Error) {
+      std::cout << "Lp matrix has a problem" << std::endl;
+      return return_status;
+    }
     lp.Astart_[lp.numCol_] = lp_num_nz;
   }
   if (return_status == HighsStatus::Error)
