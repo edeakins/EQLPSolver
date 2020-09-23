@@ -243,10 +243,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
   double initial_time = timer.readRunHighsClock();
-  std::cout << "refine" << std::endl;
+  //std::cout << "refine" << std::endl;
   HighsEquitable ep;
   ep.setup(lp);
-  std::cout << "refine done" << std::endl;
+  //std::cout << "refine done" << std::endl;
   highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
   // Basis and solution to store from unfold interations
   HighsBasis basis;
@@ -254,9 +254,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsTableau tableau;
   // Use aggregator to obtain an aggreated lp and return it
   initial_time = timer.readRunHighsClock();
-  std::cout << "fold start" << std::endl;
+  //std::cout << "fold start" << std::endl;
   HighsAggregate lpFolder(lp, ep, solution, basis, tableau, false);
-  std::cout << "fold done" << std::endl;
+  //std::cout << "fold done" << std::endl;
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
   // initial_time = timer.readRunHighsClock();
   HighsLp& alp = lpFolder.getAlp();
