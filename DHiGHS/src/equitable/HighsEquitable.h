@@ -13,6 +13,7 @@
 #include <tuple>
 #include <numeric>
 #include <functional>
+#include <forward_list>
 using namespace std;
 
 class HighsEquitable {
@@ -43,12 +44,11 @@ public:
 	int cCol;
 	int numParts;
 	int r;
-	int s;
 	int isolated = -1;
 	int refinements = 0;
 
 	// (Sparse vectors)
-	vector<int> colorsToSplit;
+	forward_list<int> colorsToSplit;
 	vector<int> initialParts;
 	vector<int> color;
 	vector<int> colReps;
@@ -57,8 +57,9 @@ public:
 	vector<double> cdeg;
 	vector<double> mincdeg;
 	vector<double> maxcdeg;
-	vector<int> isAdj;
-	vector<int> colorsAdj;
+	vector<int> numEdges;
+	vector<bool> isAdj;
+	list<int> colorsAdj;
 	vector<bool> isolates;
 	vector<bool> targets;
 	vector<int> Astart;
@@ -78,9 +79,9 @@ public:
 	vector<vector<int>> adjListLab;
 	vector<vector<double>> adjListWeight;
 	vector<vector<double>> adjListWeightReal;
-	vector<vector<int>> C;
+	vector<list<int>* > C;
 	vector<vector<int>> prevC;
-	vector<vector<int>> A;
+	vector<forward_list<int>* > A;
 
 	// Contains linked variables from the splitting up of the partitions
 	vector<pair<int, int> > linkingPairs;
@@ -96,7 +97,18 @@ public:
 	vector<int> partSize;
 	vector<int> previousPartSize;
 
-	// Stores rows and their colors since we lose rows in this procedure
+	// List iterator pointers
+	list<int>::iterator vPointer;
+	forward_list<int>::iterator wPointer;
+	forward_list<int>::iterator sPointer;
+	list<int>::iterator cPointer;
+
+	// List iterator 
+	int v;
+	int w;
+	int c;
+	int s;
+
 };
 
 #endif
