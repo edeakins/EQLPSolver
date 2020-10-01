@@ -21,7 +21,8 @@ public:
 	// Setup for equitable partition
 	void clear();
 	void setup(const HighsLp& lp);
-	void lp2Graph();
+	void handleNegatives();
+	void createRowCopy();
 	void initialRefinement();
 	void splitColor(int color);
 	void refine();
@@ -44,6 +45,7 @@ public:
 	int cCol;
 	int numParts;
 	int r;
+	int rep;
 	int isolated = -1;
 	int refinements = 0;
 
@@ -65,6 +67,11 @@ public:
 	vector<int> Astart;
     vector<int> Aindex;
     vector<double> Avalue;
+	vector<double> AvalueCopy;
+	vector<double> ARvalueCopy;
+	vector<int> ARindex;
+	vector<int> ARstart;
+	vector<int> AR_Nend;
 	vector<int> Xstart_;
 	vector<int> Xindex_;
 	vector<double> Xvalue_;
@@ -74,14 +81,17 @@ public:
     vector<double> rowLower;
     vector<double> rowUpper;
     stack<int> S;
+	vector<vector<double> > coeff;
 
 	// (Dense vectors)
 	vector<vector<int>> adjListLab;
 	vector<vector<double>> adjListWeight;
 	vector<vector<double>> adjListWeightReal;
 	vector<list<int>* > C;
-	vector<vector<int>> prevC;
+	vector<int> Csize;
+	vector<list<int>* > prevC;
 	vector<forward_list<int>* > A;
+	vector<int> Asize;
 
 	// Contains linked variables from the splitting up of the partitions
 	vector<pair<int, int> > linkingPairs;

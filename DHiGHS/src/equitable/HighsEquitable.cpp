@@ -36,7 +36,12 @@ void HighsEquitable::setup(const HighsLp& lp){
 
 	// Associated with equitable partition
 	numTot = numCol + numRow;
-	Xstart_.assign(numTot, 0);
+	coeff.resize(numTot);
+	Xstart_.assign(numCol + 1, 0);
+	Xvalue_.assign(Avalue.size(), 0);
+	Xindex_.assign(Aindex.size(), 0);
+	AvalueCopy.assign(Avalue.size(), 0);
+	ARvalueCopy.assign(Avalue.size(), 0);
 	SCheck.assign(numTot, false);
 	mincdeg.assign(numTot, 0);
 	maxcdeg.assign(numTot, 0);
@@ -50,19 +55,21 @@ void HighsEquitable::setup(const HighsLp& lp){
 	partSize.assign(numCol, 0);
 	previousPartSize.assign(numCol, 0);
 	color.assign(numTot, 0);
+	Csize.assign(numTot, 0);
+	Asize.assign(numTot, 0);
 	for (int i = 0; i < numTot; ++i){
-		C.push_back(new list<int>);
-		A.push_back(new forward_list<int>);
+		C.push_back(new list<int>());
+		A.push_back(new forward_list<int>());
 	}
 
 	// Initial refinement
-	lp2Graph();
+	handleNegatives();
+	createRowCopy();
 	initialRefinement();
 	refine();
 }
 
-void HighsEquitable::lp2Graph(){
-	vector<double> AvalueCopy(Avalue.size(), 0);
+void HighsEquitable::handleNegatives(){
 	vector<double>::iterator min = min_element(Avalue.begin(), Avalue.end());
 	int i, j, k;
 	if (*min < 0){
@@ -74,16 +81,30 @@ void HighsEquitable::lp2Graph(){
 		for (i = 0; i < Avalue.size(); ++i)
 			AvalueCopy[i] = Avalue[i];
 	}
-	// for (i = 0; i < numCol; ++i){
-	// 	for (j = Astart[i]; j < Astart[i + 1]; ++j){
-	// 		adjListLab[i].push_back(Aindex[j] + numCol);
-	// 		adjListWeight[i].push_back(AvalueCopy[j]);
-	// 		adjListWeightReal[i].push_back(Avalue[j]);
-	// 		adjListLab[Aindex[j] + numCol].push_back(i);
-	// 		adjListWeight[Aindex[j] + numCol].push_back(AvalueCopy[j]);
-	// 		adjListWeightReal[Aindex[j] + numCol].push_back(Avalue[j]);
-	// 	}
-	// }
+}
+
+void HighsEquitable::createRowCopy(){
+    int AcountXSub = Astart[numCol];
+    ARindex.resize(AcountXSub);
+    ARvalueCopy.resize(AcountXSub);
+    // Build row copy - pointers
+    ARstart.assign(numRow + 1, 0);
+    AR_Nend.assign(numRow, 0);
+    for (int k = 0; k < AcountXSub; ++k)
+        AR_Nend[Aindex[k]]++;
+    for (int i = 1; i <= numRow; ++i)
+        ARstart[i] = ARstart[i - 1] + AR_Nend[i - 1];
+    for (int i = 0; i < numRow; ++i)
+        AR_Nend[i] = ARstart[i];
+    // Build row copy - elements
+    for (int iCol = 0; iCol < numCol; ++iCol) {
+        for (int k = Astart[iCol]; k < Astart[iCol + 1]; ++k) {
+            int iRow = Aindex[k];
+            int iPut = AR_Nend[iRow]++;
+            ARindex[iPut] = iCol;
+            ARvalueCopy[iPut] = AvalueCopy[k];
+		}
+	}
 }
 
 void HighsEquitable::initialRefinement(){
@@ -100,25 +121,39 @@ void HighsEquitable::initialRefinement(){
 
 	// Prefill right hand side sets
 	pair<set<pair<double, double> >::iterator, bool> retRow;
-	for (i = 0; i < numRow; ++i){
-		retRow = rhs.inset(pair<double, double>(rowLower[i], rowUpper[i]));
+	rhs.insert(pair<double, double>(rowLower[0], rowUpper[0]));
+	initialParts[numCol] = conColor;
+	S.push(conColor);
+	SCheck[conColor] = true;
+	for (i = 1; i < numRow; ++i){
+		retRow = rhs.insert(pair<double, double>(rowLower[i], rowUpper[i]));
 		if (retRow.second){
-			initialParts[i + numCol] = conColor;
-			conColor++;
+			initialParts[i + numCol] = ++conColor;
+			S.push(conColor);
+			SCheck[conColor] = true;
 		}
+		else
+			initialParts[i + numCol] = conColor;
 	}
+	conColor++;
 
 	// Peace together var bounds and obj coefficients
 	pair<set<tuple<double, double, double> >::iterator, bool> retCol;
-	for (i = 0; i < numCol; ++i){
+	objBounds.insert(make_tuple(colCost[0], colLower[0], colUpper[0]));
+	initialParts[0] = varColor;
+	S.push(varColor);
+	SCheck[varColor] = true;
+	for (i = 1; i < numCol; ++i){
 		retCol = objBounds.insert(make_tuple(colCost[i], colLower[i], colUpper[i]));
 		if (retCol.second){
-			initialParts[i] = varColor;
+			initialParts[i] = ++varColor;
 			S.push(varColor);
 			SCheck[varColor] = true;
-			varColor++;
 		}
+		else
+			initialParts[i] = varColor;
 	}
+	varColor++;
 
 	// Define number of colors that have been used so far
 	vCol = varColor;
@@ -126,7 +161,8 @@ void HighsEquitable::initialRefinement(){
 
 	// Store initial refinement
 	for (i = 0; i < numTot; ++i){
-		C[initialParts[i]].push_back(i);
+		C[initialParts[i]]->push_back(i);
+		Csize[initialParts[i]]++;
 		color[i] = initialParts[i];
 	}
 }
@@ -144,40 +180,64 @@ void HighsEquitable::refine(){
 		r = S.top();
 		S.pop();
 		SCheck[r] = false;
-		for (vPointer = C[r].begin(); vPointer != C[r].end(); ++vPointer){
+		bool varOrCon = r < numCol ? 1 : 0;
+		for (vPointer = C[r]->begin(); vPointer != C[r]->end(); ++vPointer){
 			v = *vPointer;
-			for (j = Astart[v]; j < Astart[v + 1]; ++j){
-				w = Aindex[j];
-				weight = Avalue[j];
-				cdeg[w] += weight;
-				numEdges[w]++;
-				if (numEdges[w] == 1)
-					A[color[w]].push_back(w);
-				if (!isAdj[colow[w]]){
-					isAdj[color[w]] = true;
-					colorsAdj.push_back(color[w]);
+			if (varOrCon){
+				for (int j = Astart[v]; j < Astart[v + 1]; ++j){
+					w = Aindex[j] + numCol;
+					weight = AvalueCopy[j];
+					cdeg[w] += weight;
+					numEdges[w]++;
+					if (numEdges[w] == 1){
+						A[color[w]]->push_front(w);
+						Asize[color[w]]++;
+					}
+					if (!isAdj[color[w]]){
+						isAdj[color[w]] = true;
+						colorsAdj.push_back(color[w]);
+					}
+					if (cdeg[w] > maxcdeg[color[w]])
+						maxcdeg[color[w]] = cdeg[w];			
 				}
-				if (cdeg[w] > maxcdeg[color[w]])
-					maxcdeg[color[w]] = cdeg[w];			
+			}
+			else{
+				v -= numCol;
+				for (int j = ARstart[v]; j < ARstart[v + 1]; ++j){
+					w = ARindex[j];
+					weight = ARvalueCopy[j];
+					cdeg[w] += weight;
+					numEdges[w]++;
+					if (numEdges[w] == 1){
+						A[color[w]]->push_front(w);
+						Asize[color[w]]++;
+					} 
+					if (!isAdj[color[w]]){
+						isAdj[color[w]] = true;
+						colorsAdj.push_back(color[w]);
+					}
+					if (cdeg[w] > maxcdeg[color[w]])
+						maxcdeg[color[w]] = cdeg[w];			
+				}
 			}
 		}
 		for (cPointer = colorsAdj.begin(); cPointer!= colorsAdj.end(); ++cPointer){
 			c = *cPointer;
-			if (C[c].size() != A[c].size())
+			if (Csize[c] != Asize[c])
 				mincdeg[c] = 0;
 			else{
 				mincdeg[c] = maxcdeg[c];
-				for (wPointer = A[c].begin(); wPointer != A[c].end(); ++wPoiner){
+				for (wPointer = A[c]->begin(); wPointer != A[c]->end(); ++wPointer){
 					w = *wPointer;
 					if (cdeg[w] < mincdeg[c]) mincdeg[c] = cdeg[w];
 				}
 			}
 		}
 		colorsToSplit.clear();
-		for (cPointer = colorsAdj.begin(); cPointer != colorsAdj.end; ++cPointer){
+		for (cPointer = colorsAdj.begin(); cPointer != colorsAdj.end(); ++cPointer){
 			c = *cPointer;
 			if (mincdeg[c] < maxcdeg[c])
-				colorsToSplit.push_back(c);
+				colorsToSplit.push_front(c);
 		}
 		colorsToSplit.sort();
 		for (sPointer = colorsToSplit.begin(); sPointer != colorsToSplit.end(); ++sPointer){
@@ -186,28 +246,37 @@ void HighsEquitable::refine(){
 		}
 		for (cPointer = colorsAdj.begin(); cPointer != colorsAdj.end(); ++cPointer){
 			c = *cPointer;
-			for (wPointer = A[c].begin(); wPointer != A[c].end(); ++wPointer){
+			for (wPointer = A[c]->begin(); wPointer != A[c]->end(); ++wPointer){
 				w = *wPointer;
 				cdeg[w] = 0;
 				numEdges[w] = 0;
 			}
 			maxcdeg[c] = 0;
-			A[c].clear();
+			isAdj[c] = false;
+			A[c]->clear();
+			Asize[c] = 0;
 		}
 		colorsAdj.clear();
 	}			
-	//cout << "\n\n Partition \n\n" << endl;
+	// cout << "\n\n Partition \n\n" << endl;
 	for (int i = 0; i < C.size(); ++i){
-		if (C[i].size() == 1) 
-			isolates[C[i].front()] = true;
-		if (C[i].size()){
-			if (i < numCol) partSize[i] = C[i].size();
-			//cout << "color: " << i << endl;
-			rep = C[i].front();
+		if (Csize[i] == 1) 
+			isolates[C[i]->front()] = true;
+		if (Csize[i]){
+			// if (i < numCol) partSize[i] = C[i].size();
+			// //cout << "color: " << i << endl;
+			rep = C[i]->front();
 			if (i < numCol && !targets[rep])
 				columnColorReps.push_back(rep);
 		}
 	}
+	// for (int i = 0; i < coeff.size(); ++i){
+	// 	cout << "node: " << i << ": ";
+	// 	for (int j = 0; j < coeff[i].size(); ++j){
+	// 		cout << coeff[i][j] << " ";
+	// 	}
+	// 	cout << endl;
+	// }
 	collectLinkingPairs();
 }
 
@@ -218,8 +287,8 @@ void HighsEquitable::splitColor(int s){
 	map<double, int> degSumColor;
 	pair<map<double, int>::iterator, bool> ret;
 	degSumColor.insert(pair<double, int>(mincdeg[s], s));
-	colorFreq[0] = C[s].size() - A[s].size();
-	for (wPointer = A[s].begin(); wPointer != A[s].end(); ++wPointer){
+	colorFreq[0] = Csize[s] - Asize[s];
+	for (wPointer = A[s]->begin(); wPointer != A[s]->end(); ++wPointer){
 		w = *wPointer;
 		if (varOrCon){
 			ret = degSumColor.insert(pair<double, int>(cdeg[w], vCol));
@@ -231,29 +300,30 @@ void HighsEquitable::splitColor(int s){
 		}
 		colorFreq[degSumColor[cdeg[w]]]++;
 	}
-	if (varOrCon){
-		int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
-		int instack = (SCheck[s]) ? 1 : 0;
-		for(map<double, int>::iterator it = degSumColor.begin(); it != degSumColor.end(); ++it){
-			if (it->first == mincdeg[s]){
-				if (!instack && it->second != b){
-					S.push(it->second);
-					SCheck[s] = true;
-				}
+	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
+	int instack = (SCheck[s]) ? 1 : 0;
+	for(map<double, int>::iterator it = degSumColor.begin(); it != degSumColor.end(); ++it){
+		coeff[r].push_back(it->second);
+		if (it->first == mincdeg[s]){
+			if (!instack && it->second != b){
+				S.push(it->second);
+				SCheck[s] = true;
 			}
-			else{
-				if (instack || it->second != b){
-					S.push(it->second);
-					SCheck[s] = true;
-				}
+		}
+		else{
+			if (instack || it->second != b){
+				S.push(it->second);
+				SCheck[s] = true;
 			}
 		}
 	}
-	for (wPointer = A[s].begin(); wPointer != A[s].end(); ++wPointer){
+	for (wPointer = A[s]->begin(); wPointer != A[s]->end(); ++wPointer){
 		w = *wPointer;
 		if (degSumColor[cdeg[w]] != s){
-			C[s].remove(w);
-			C[degSumColor[cdeg[w]]].push_back(w);
+			C[s]->remove(w);
+			Csize[s]--;
+			C[degSumColor[cdeg[w]]]->push_back(w);
+			Csize[degSumColor[cdeg[w]]]++;
 			color[w] = degSumColor[cdeg[w]];
 		}
 	}
@@ -280,13 +350,15 @@ void HighsEquitable::isolate(int i){
 	// C[color[i]].erase(remove(C[color[i]].begin(), C[color[i]].end(), i), C[color[i]].end());
 	int newCol = vCol;
 	int oldCol = color[i];
-	C[color[i]].erase(remove(C[oldCol].begin(), C[oldCol].end(), i), C[oldCol].end());
-	C[newCol].push_back(i);
+	C[oldCol]->remove(i);
+	Csize[oldCol]--;
+	C[newCol]->push_back(i);
+	Csize[newCol]++;
 	color[i] = newCol;
 	vCol++;
 	for (int i = 0; i < C.size(); ++i){
-		if (C[i].size() == 1)
-			isolates[C[i].front()] = true;
+		if (Csize[i] == 1)
+			isolates[C[i]->front()] = true;
 	}
 	SCheck[oldCol] = true;
 	S.push(oldCol);
