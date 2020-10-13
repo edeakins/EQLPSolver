@@ -12,10 +12,27 @@ public:
 	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau& tableau, bool flag);
 	//virtual ~HighsAggregate(){};
 	void clear();
+	void aggregate();
 	void aggregateAMatrix();
-	void aggregateA();
-	void addLinkingRows();
+	void aggregateColBounds();
+	void aggregateRowBounds();
 	void aggregateCVector();
+	void appendColsToLpVectors(const int num_new_col,
+                                  const double* XcolCost,
+                                  const double* XcolLower,
+                                  const double* XcolUpper);
+	void appendColsToLpMatrix(const int num_new_col,
+                                 const int num_new_nz, const int* XAstart,
+                                 const int* XAindex, const double* XAvalue);
+	void appendRowsToLpMatrix(const int num_new_row,
+                                 const int num_new_nz, const int* XARstart,
+                                 const int* XARindex, const double* XARvalue);
+	void appendRowsToLpVectors(const int num_new_row,
+                                  const double* XrowLower,
+                                  const double* XrowUpper);							   
+	void transpose(vector<int>& xAstart, vector<int>& xAindex, vector<double>& xAvalue,
+					vector<int>& xARstart, vector<int>& xARindex, vector<double> &xARvalue);
+	void addLinkingRows();
 	void collectColumns();
 	void findLpBasis();
 	void setInitialRhsAndBounds();

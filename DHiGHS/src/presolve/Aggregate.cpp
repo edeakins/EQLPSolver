@@ -67,9 +67,9 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 // 	return alp;
 // }
 
-void HighsAggregate::aggregateAMatrix(){
+void HighsAggregate::aggregate(){
 	if (!flag_){
-		aggregateA();
+		aggregateAMatrix();
 		// initialAggregateAMatrix();
 		// setInitialRhsAndBounds();
 		// aggregateCVector();
@@ -83,13 +83,24 @@ void HighsAggregate::aggregateAMatrix(){
 	}
 }
 
-void HighsAggregate::AggregateA(){
-	int idx, rep, weight;
+void HighsAggregate::aggregateColBounds(){
+
+}
+
+void HighsAggregate::aggregateRowBounds(){
+
+}
+
+void HighsAggregate::aggregateCVector(){
+	
+}
+
+void HighsAggregate::aggregateAMatrix(){
 	Astart_.push_back(0);
 	for (int i = 0; i < numCol_; ++i){
-		rep = C[i]->front();
-		idx = Xindex[Astart[rep]]; 
-		weight = Avalue[Astart[rep]];
+		int rep = C[i]->front();
+		int idx = Xindex[Astart[rep]]; 
+		double weight = Avalue[Astart[rep]];
 		for (int j = Astart[rep] + 1; j < Astart[rep + 1]; ++j){
 			if (idx = Xindex[j])
 				weight += Avalue[j];
@@ -102,9 +113,170 @@ void HighsAggregate::AggregateA(){
 		}
 		Aindex_.push_back(Avalue_.size());
 	}
+	int num_new_col = linkingPairs.size();
+	int num_new_row = linkingPairs.size();
+	int num_new_nz = linkingPairs.size() * 3;  
+	vector<double> linkColCost, linkColBounds, linkRowBounds, linkAvalue, linkARvalue;
+	vector<int> linkAstart, linkAindex, linkARstart, linkARindex;
+	linkARstart.push_back(0);
+	for (int i = 0; i < linkingPairs.size(); ++i){
+		int x0 = linkingPairs[i].first, x1 = linkingPairs[i].second, r = numCol_ + i;
+		linkARvalue.push_back(1); linkARvalue.push_back(-1); linkARvalue.push_back(-1);
+		linkARindex.push_back(x0); linkARindex.push_back(x1); linkARindex.push_back(r);
+		linkARstart.push_back(linkARvalue.size());
+		linkRowBounds.push_back(0);
+		linkColBounds.push_back(0);
+		linkColCost.push_back(0);
+	}
+	transpose(linkAstart, linkAindex, linkAvalue, linkARstart, linkARindex, linkARvalue);
+	appendColsToLpVectors(num_new_col, linkColCost, linkColBounds, linkColBounds);
+	appendColsToLpMatrix(num_new_col, num_new_nz, linkAstart, linkAindex, linkAvalue);
+	appendRowsToLpVectors(num_new_row, linkRowBounds, linkRowBounds);
 }
 
-void HighsAggregate::addLinkingRows(){
+void HighsAggregate::appendColsToLpVectors(const int num_new_col,
+                                  const double* XcolCost,
+                                  const double* XcolLower,
+                                  const double* XcolUpper) {
+  int new_num_col = numCol_ + num_new_col;
+  colCost_.resize(new_num_col);
+  colLower_.resize(new_num_col);
+  colUpper_.resize(new_num_col);
+  bool have_names = col_names_.size();
+  for (int new_col = 0; new_col < num_new_col; new_col++) {
+    int iCol = numCol_ + new_col;
+    colCost_[iCol] = XcolCost[new_col];
+    colLower_[iCol] = XcolLower[new_col];
+    colUpper_[iCol] = XcolUpper[new_col];
+    // Cannot guarantee to create unique names, so name is blank
+  }
+}
+
+void HighsAggregate::appendColsToLpMatrix(const int num_new_col,
+                                 const int num_new_nz, const int* XAstart,
+                                 const int* XAindex, const double* XAvalue) {
+  if (num_new_col < 0) return HighsStatus::Error;
+  if (num_new_col == 0) return HighsStatus::OK;
+  // Check that nonzeros aren't being appended to a matrix with no rows
+  if (num_new_nz > 0 && numRow_ <= 0) return HighsStatus::Error;
+  // Determine the new number of columns in the matrix and resize the
+  // starts accordingly. 
+  int new_num_col = numCol_ + num_new_col;
+  Astart_.resize(new_num_col + 1);
+  // If adding columns to an empty LP then introduce the start for the
+  // fictitious column 0
+  if (numCol_ == 0) Astart_[0] = 0;
+
+  // Determine the current number of nonzeros and the new number of nonzeros
+  int current_num_nz = Astart_[numCol_];
+  int new_num_nz = current_num_nz + num_new_nz;
+
+  // Append the starts of the new columns
+  if (num_new_nz) {
+  // Nontrivial number of nonzeros being added, so use XAstart
+    assert(XAstart != NULL);
+    for (int col = 0; col < num_new_col; col++)
+      Astart_[numCol_ + col] = current_num_nz + XAstart[col];
+  } else {
+    // No nonzeros being added, so XAstart may be null, but entries of
+    // zero are implied.
+    for (int col = 0; col < num_new_col; col++)
+      Astart_[numCol_ + col] = current_num_nz;    
+  }
+  Astart_[numCol_ + num_new_col] = new_num_nz;
+
+  // If no nonzeros are being added then there's nothing else to do
+  if (num_new_nz <= 0) return HighsStatus::OK;
+
+  // Adding a non-trivial matrix: resize the column-wise matrix arrays
+  // accordingly
+  Aindex_.resize(new_num_nz);
+  Avalue_.resize(new_num_nz);
+  // Copy in the new indices and values
+  for (int el = 0; el < num_new_nz; el++) {
+    Aindex_[current_num_nz + el] = XAindex[el];
+    Avalue_[current_num_nz + el] = XAvalue[el];
+  }
+}
+
+void HighsAggregate::appendRowsToLpMatrix(const int num_new_row,
+                                 const int num_new_nz, const int* XARstart,
+                                 const int* XARindex, const double* XARvalue) {
+ 
+  int current_num_nz = Astart_[numCol_];
+  vector<int> Alength;
+  Alength.assign(numCol_, 0);
+  for (int el = 0; el < num_new_nz; el++) Alength[XARindex[el]]++;
+  // Determine the new number of nonzeros and resize the column-wise matrix
+  // arrays
+  int new_num_nz = current_num_nz + num_new_nz;
+  Aindex_.resize(new_num_nz);
+  Avalue_.resize(new_num_nz);
+
+  // Append the new rows
+  // Shift the existing columns to make space for the new entries
+  int new_el = new_num_nz;
+  for (int col = numCol_ - 1; col >= 0; col--) {
+    int start_col_plus_1 = new_el;
+    new_el -= Alength[col];
+    for (int el = Astart_[col + 1] - 1; el >= Astart_[col]; el--) {
+      new_el--;
+      Aindex_[new_el] = Aindex_[el];
+      Avalue_[new_el] = Avalue_[el];
+    }
+    Astart_[col + 1] = start_col_plus_1;
+  }
+  assert(new_el == 0);
+
+  // Insert the new entries
+  for (int row = 0; row < num_new_row; row++) {
+    int first_el = XARstart[row];
+    int last_el = (row < num_new_row - 1 ? XARstart[row + 1] : num_new_nz);
+    for (int el = first_el; el < last_el; el++) {
+      int col = XARindex[el];
+      new_el = Astart_[col + 1] - Alength[col];
+      Alength[col]--;
+      Aindex_[new_el] = numRow_ + row;
+      Avalue_[new_el] = XARvalue[el];
+    }
+  }
+}
+
+void HighsAggregate::appendRowsToLpVectors(const int num_new_row,
+                                  const double* XrowLower,
+                                  const double* XrowUpper) {
+  int new_num_row = numRow_ + num_new_row;
+  rowLower_.resize(new_num_row);
+  rowUpper_.resize(new_num_row);
+  bool have_names = row_names_.size();
+
+  for (int new_row = 0; new_row < num_new_row; new_row++) {
+    int iRow = numRow_ + new_row;
+    rowLower_[iRow] = XrowLower[new_row];
+    rowUpper_[iRow] = XrowUpper[new_row];
+    // Cannot guarantee to create unique names, so name is blank
+  }
+}
+
+void HighsAggregate::transpose(vector<int>& xAstart, vector<int>& xAindex, vector<double>& xAvalue,
+					vector<int>& xARstart, vector<int>& xARindex, vector<double> &xARvalue){
+	vector<int> iwork(numCol_, 0);
+	xAstart.resize(linkingPairs.size() + 1, 0);
+	int AcountX = linkingPairs.size() * 3;
+	xAindex.resize(AcountX);
+	xAvalue.resize(AcountX);
+	for (int k = 0; k < AcountX; k++) iwork.at(xARindex_.at(k))++;
+	for (int i = 1; i <= linkingPairs.size(); i++)
+		xAstart.at(i) = xAstart.at(i - 1) + iwork.at(i - 1);
+	for (int i = 0; i < linkingPairs.size(); i++) iwork.at(i) = xAstart.at(i);
+	for (int iRow = 0; iRow < linkingPairs.size(); iRow++) {
+		for (int k = xARstart.at(iRow); k < xARstart.at(iRow + 1); k++) {
+		int iCol = xARindex.at(k);
+		int iPut = iwork.at(iCol)++;
+		xAindex.at(iPut) = iRow;
+		xAvalue.at(iPut) = xARvalue[k];
+		}
+	}					
 }
 
 // void HighsAggregate::initialAggregateAMatrix(){
