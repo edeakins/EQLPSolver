@@ -37,7 +37,7 @@ void HighsEquitable::setup(const HighsLp& lp){
 	// Associated with equitable partition
 	numTot = numCol + numRow;
 	coeff.resize(numTot);
-	Xstart_.assign(numCol + 1, 0);
+	Xstart_.assign(Astart.begin(), Astart.end());
 	Xvalue_.assign(Avalue.size(), 0);
 	Xindex_.assign(Aindex.size(), 0);
 	AvalueCopy.assign(Avalue.size(), 0);
@@ -277,6 +277,7 @@ void HighsEquitable::refine(){
 	// 	}
 	// 	cout << endl;
 	// }
+	packVectors();
 	collectLinkingPairs();
 }
 
@@ -362,6 +363,12 @@ void HighsEquitable::isolate(int i){
 	}
 	SCheck[oldCol] = true;
 	S.push(oldCol);
+}
+
+void HighsEquitable::packVectors(){
+	for (int i = 0; i < Aindex.size(); ++i){
+		Xindex_[i] = color[Aindex[i] + numCol];
+	}
 }
 
 void HighsEquitable::collectLinkingPairs(){

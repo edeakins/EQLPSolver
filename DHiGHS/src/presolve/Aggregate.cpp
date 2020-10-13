@@ -1,51 +1,43 @@
-// #include "Aggregate.h"
-// using namespace std;
+#include "Aggregate.h"
+using namespace std;
 
-// HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau& tableau, bool flag){
-// 	// From the original lp
-// 	numRow = lp.numRow_;
-// 	numCol = lp.numCol_;
-// 	numTot = numRow + numCol;
-// 	masterIter = lp.masterIter;
-// 	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
-// 	rowUpper.assign(lp.rowUpper_.begin(), lp.rowUpper_.end());
-// 	colUpper.assign(lp.colUpper_.begin(), lp.colUpper_.end());
-// 	colLower.assign(lp.colLower_.begin(), lp.colLower_.end());
-// 	colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
-// 	Avalue.assign(lp.Avalue_.begin(), lp.Avalue_.end());
-// 	Aindex.assign(lp.Aindex_.begin(), lp.Aindex_.end());
-// 	Astart.assign(lp.Astart_.begin(), lp.Astart_.end());
-// 	realNumRow = lp.realNumRow_;
-// 	realNumCol = lp.realNumCol_;
-// 	//Equitable partition info
-// 	previousRowColoring.assign(ep.previousRowColoring.begin(), ep.previousRowColoring.end());
-// 	previousColumnColoring.assign(ep.previousColumnColoring.begin(), ep.previousColumnColoring.end());
-// 	C.assign(ep.C.begin(), ep.C.end());
-// 	prevC.assign(ep.prevC.begin(), ep.prevC.end());
-// 	color.assign(ep.color.begin(), ep.color.end());
-// 	adjListLab.assign(ep.adjListLab.begin(), ep.adjListLab.end());
-// 	adjListWeight.assign(ep.adjListWeightReal.begin(), ep.adjListWeightReal.end());
-// 	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());
-// 	// Previous solution
-// 	col_value = (solution.col_value);
-// 	row_value = (solution.row_value);
-// 	// Previous basis
-// 	col_status = (basis.col_status);
-// 	row_status = (basis.row_status);
-// 	// flag status to find linkers or not
-// 	flag_ = flag;
-// 	// if (ARtableauStart.size()){
-// 	// 	for (int i = 0; i < ARtableauStart.size() - 1; ++i){
-// 	// 		cout << "prev row: " << i << endl;
-// 	// 		for (int j = ARtableauStart[i]; j < ARtableauStart[i + 1]; ++j){
-// 	// 			cout << ARtableauValue[j] << "x_" << ARtableauIndex[j] << " ";
-// 	// 		}
-// 	// 		cout << endl;
-// 	// 	}
-// 	// 	cin.get();
-// 	// }
-// 	aggregateAMatrix();
-// }
+HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau& tableau, bool flag){
+	// From the original lp
+	numRow = lp.numRow_;
+	numCol = lp.numCol_;
+	numTot = numRow + numCol;
+	masterIter = lp.masterIter;
+	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
+	rowUpper.assign(lp.rowUpper_.begin(), lp.rowUpper_.end());
+	colUpper.assign(lp.colUpper_.begin(), lp.colUpper_.end());
+	colLower.assign(lp.colLower_.begin(), lp.colLower_.end());
+	colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
+	Avalue.assign(lp.Avalue_.begin(), lp.Avalue_.end());
+	Aindex.assign(lp.Aindex_.begin(), lp.Aindex_.end());
+	Astart.assign(lp.Astart_.begin(), lp.Astart_.end());
+	realNumRow = lp.realNumRow_;
+	realNumCol = lp.realNumCol_;
+	//Equitable partition info
+	previousRowColoring.assign(ep.previousRowColoring.begin(), ep.previousRowColoring.end());
+	previousColumnColoring.assign(ep.previousColumnColoring.begin(), ep.previousColumnColoring.end());
+	numRow_ = ep.cCol - numCol;
+	numCol_ = ep.vCol
+	numTot_ = numRow_ + numCol_;
+	C.assign(ep.C.begin(), ep.C.end());
+	prevC.assign(ep.prevC.begin(), ep.prevC.end());
+	color.assign(ep.color.begin(), ep.color.end());
+	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());
+	Xindex.assign(ep.Xindex_.begin(), ep.Xindex_.end());
+	// Previous solution
+	col_value = (solution.col_value);
+	row_value = (solution.row_value);
+	// Previous basis
+	col_status = (basis.col_status);
+	row_status = (basis.row_status);
+	// flag status to find linkers or not
+	flag_ = flag;
+	aggregateAMatrix();
+}
 
 // HighsBasis& HighsAggregate::getAlpBasis(){
 // 	return alpBasis;
@@ -75,20 +67,45 @@
 // 	return alp;
 // }
 
-// void HighsAggregate::aggregateAMatrix(){
-// 	if (!flag_){
-// 		initialAggregateAMatrix();
-// 		setInitialRhsAndBounds();
-// 		aggregateCVector();
-// 		return;
-// 	}
-// 	else{
-// 		examinePartition();
-// 		collectColumns();
-// 		findLpBasis();
-// 		aggregateCVector();
-// 	}
-// }
+void HighsAggregate::aggregateAMatrix(){
+	if (!flag_){
+		aggregateA();
+		// initialAggregateAMatrix();
+		// setInitialRhsAndBounds();
+		// aggregateCVector();
+		return;
+	}
+	else{
+		examinePartition();
+		collectColumns();
+		findLpBasis();
+		aggregateCVector();
+	}
+}
+
+void HighsAggregate::AggregateA(){
+	int idx, rep, weight;
+	Astart_.push_back(0);
+	for (int i = 0; i < numCol_; ++i){
+		rep = C[i]->front();
+		idx = Xindex[Astart[rep]]; 
+		weight = Avalue[Astart[rep]];
+		for (int j = Astart[rep] + 1; j < Astart[rep + 1]; ++j){
+			if (idx = Xindex[j])
+				weight += Avalue[j];
+			else{
+				Avalue_.push_back(weight);
+				Aindex_.push_back(idx - numCol);
+				idx = Xindex[j];
+				weight = Avalue[j];
+			}
+		}
+		Aindex_.push_back(Avalue_.size());
+	}
+}
+
+void HighsAggregate::addLinkingRows(){
+}
 
 // void HighsAggregate::initialAggregateAMatrix(){
 // 	HighsTimer timer;

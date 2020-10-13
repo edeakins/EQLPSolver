@@ -13,6 +13,8 @@ public:
 	//virtual ~HighsAggregate(){};
 	void clear();
 	void aggregateAMatrix();
+	void aggregateA();
+	void addLinkingRows();
 	void aggregateCVector();
 	void collectColumns();
 	void findLpBasis();
@@ -77,6 +79,7 @@ public:
 	vector<int> Astart;
 	vector<int> impliedARstart;
     vector<int> Aindex;
+    vector<int> Xindex;
     vector<int> impliedARindex;
     vector<double> Avalue;
     vector<double> impliedARvalue;
@@ -98,8 +101,8 @@ public:
     vector<HighsBasisStatus> row_status;
 
     // (dense storage)
-	vector<vector<int> > C;
-	vector<vector<int> > prevC;
+	vector<list<int>* > C;
+	vector<list<int>* > prevC;
 	vector<vector<int> > adjListLab;
 	vector<vector<double> > adjListWeight;
 

@@ -30,6 +30,7 @@ public:
 	void isolate(int i);
 	void collectLinkingPairs();
 	bool isPartitionDiscrete();
+	void packVectors();
 
 	// Some storage for info about lp and partition
 	string model_name = "";
