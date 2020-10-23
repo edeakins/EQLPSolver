@@ -57,6 +57,7 @@ void HighsEquitable::setup(const HighsLp& lp){
 	color.assign(numTot, 0);
 	Csize.assign(numTot, 0);
 	Asize.assign(numTot, 0);
+	prevC.resize(numTot);
 	for (int i = 0; i < numTot; ++i){
 		C.push_back(new list<int>());
 		A.push_back(new forward_list<int>());
@@ -347,7 +348,8 @@ void HighsEquitable::isolate(int i){
 	for (int j = numCol; j < numTot; ++j)
 		previousRowColoring[j - numCol] = color[j];
 	previousPartSize = partSize;
-	prevC = C;
+	for (int i = 0; i < C.size(); ++i)
+		prevC[i] = *C[i];
 	// C[color[i]].erase(remove(C[color[i]].begin(), C[color[i]].end(), i), C[color[i]].end());
 	int newCol = vCol;
 	int oldCol = color[i];

@@ -243,10 +243,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
   double initial_time = timer.readRunHighsClock();
-  //std::cout << "refine" << std::endl;
   HighsEquitable ep;
   ep.setup(lp);
-  //std::cout << "refine done" << std::endl;
   highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
   // Basis and solution to store from unfold interations
   HighsBasis basis;
@@ -254,12 +252,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsTableau tableau;
   // Use aggregator to obtain an aggreated lp and return it
   initial_time = timer.readRunHighsClock();
-  //std::cout << "fold start" << std::endl;
-  // HighsAggregate lpFolder(lp, ep, solution, basis, tableau, false);
-  //std::cout << "fold done" << std::endl;
+  HighsAggregate lpFolder(lp, ep, solution, basis);
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
   // initial_time = timer.readRunHighsClock();
-  // HighsLp& alp = lpFolder.getAlp();
+  HighsLp& alp = lpFolder.getAlp();
   // cout << "fold time: " << lp_folder_time - initial_time << endl;
   // cin.get();
   // Solve LP case.
@@ -282,7 +278,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     highs.setHighsOutput(NULL);
   }
 
-  //HighsStatus init_status = highs.passModel(alp);
+  HighsStatus init_status = highs.passModel(alp);
 //   if (init_status != HighsStatus::OK) {
 //     if (init_status == HighsStatus::Warning) {
 // #ifdef HiGHSDEV
@@ -354,7 +350,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     //   // double initial_time = timer.readRunHighsClock();
     // std::cout << "fold" << std::endl;
     initial_time = timer.readRunHighsClock();
-    // lpFolder = HighsAggregate(lp, ep, solution, basis, tableau, true);
+    lpFolder = HighsAggregate(lp, ep, solution, basis);
     highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
     // std::cout << "fold done"  << std::endl;
     // std::cin.get();
@@ -389,8 +385,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     //     return return_status;
     //   }
     // }
-    // HighsLp& alp = lpFolder.getAlp();
-    // HighsBasis& alpBasis = lpFolder.getAlpBasis();
+    HighsLp& alp = lpFolder.getAlp();
+    HighsBasis& alpBasis = lpFolder.getAlpBasis();
   //   // cout << "Start Basis" << endl;
   //   // for (int j = 0; j < alpBasis.col_status.size(); ++j){
   //   //   cout << "col: " << j << " basis is " << (int)alpBasis.col_status[j] << endl;
@@ -399,10 +395,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   //   //   cout << "row: " << j << " basis is " << (int)alpBasis.row_status[j] << endl;
   //   // }
   //   // cout << "\n" << endl;
-    //HighsStatus init_status = highs.passModel(alp);
+    HighsStatus init_status = highs.passModel(alp);
     HighsStatus write_status;
     // write_status = highs.writeModel("write.mps");
-    // HighsStatus basisStatus = highs.setBasis(alpBasis);
+    HighsStatus basisStatus = highs.setBasis(alpBasis);
     // if (init_status != HighsStatus::OK) {
     //   if (init_status == HighsStatus::Warning) {
     //     HighsPrintMessage(output, message_level, ML_ALWAYS,
@@ -439,12 +435,11 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   double totTime = highs.totUnfoldTime_ + highs.totFoldTime_ + highs.totPartTime_;
   std::cout << "Total OC time: " << totTime << std::endl;
   resultsFile << lp.model_name_ + ".mps " << std::to_string(highs.totPartTime_) + " " << std::to_string(highs.totFoldTime_) + " " << std::to_string(highs.totUnfoldTime_) + " " << std::to_string(totTime) << + "\n";
-  // // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-  // // for (int i = 0; i < solution.col_value.size(); ++i){
-  // //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  // // }
-  // // cout << "\nUnfold iterations: " << highs.totIter_ << endl;
-  // cout << "\nFold time total: " << time << endl;
+  // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+  // for (int i = 0; i < solution.col_value.size(); ++i){
+  //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  // }
+  // cout << "\nUnfold iterations: " << highs.totIter_ << endl;
   return run_status;
 }
 

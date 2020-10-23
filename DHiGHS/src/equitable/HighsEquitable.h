@@ -90,7 +90,7 @@ public:
 	vector<vector<double>> adjListWeightReal;
 	vector<list<int>* > C;
 	vector<int> Csize;
-	vector<list<int>* > prevC;
+	vector<list<int> > prevC;
 	vector<forward_list<int>* > A;
 	vector<int> Asize;
 

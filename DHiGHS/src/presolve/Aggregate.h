@@ -9,7 +9,7 @@
 
 class HighsAggregate{
 public:
-	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis, HighsTableau& tableau, bool flag);
+	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis);
 	//virtual ~HighsAggregate(){};
 	void clear();
 	void aggregate();
@@ -17,91 +17,46 @@ public:
 	void aggregateColBounds();
 	void aggregateRowBounds();
 	void aggregateCVector();
+	void setColBasis();
+	void setRowBasis();
+	void appendLinkersToLp();
 	void appendColsToLpVectors(const int num_new_col,
-                                  const double* XcolCost,
-                                  const double* XcolLower,
-                                  const double* XcolUpper);
+                                  vector<double>& XcolCost,
+                                  vector<double>& XcolLower,
+                                  vector<double>& XcolUpper);
 	void appendColsToLpMatrix(const int num_new_col,
-                                 const int num_new_nz, const int* XAstart,
-                                 const int* XAindex, const double* XAvalue);
+                                 const int num_new_nz, vector<int>& XAstart,
+                                 vector<int>& XAindex, vector<double>& XAvalue);
 	void appendRowsToLpMatrix(const int num_new_row,
-                                 const int num_new_nz, const int* XARstart,
-                                 const int* XARindex, const double* XARvalue);
+                                 const int num_new_nz, vector<int>& XAstart,
+                                 vector<int>& XAindex, vector<double>& XAvalue);
 	void appendRowsToLpVectors(const int num_new_row,
-                                  const double* XrowLower,
-                                  const double* XrowUpper);							   
+                                  vector<double>& XrowLower,
+                                  vector<double>& XrowUpper);							   
 	void transpose(vector<int>& xAstart, vector<int>& xAindex, vector<double>& xAvalue,
 					vector<int>& xARstart, vector<int>& xARindex, vector<double> &xARvalue);
-	void addLinkingRows();
-	void collectColumns();
-	void findLpBasis();
-	void setInitialRhsAndBounds();
-	void setRhsAndBounds();
-	void appendLinkersToAMatrix(vector<double>& row, vector<int> idx, int rowIdx, int rIdx);
-	void appendLinkersToRowRhs(int rowIdx);
-	void appendLinkersToColBounds(int rIdx);
-	void createRowWiseAMatrix();
-	void setAggregateRealRowsRhs();
-	void setAggregateRealColsBounds();
-	void setAggregateLinkerColsBounds();
-	void setAggregateLinkerRowsRhs();
-	void findLinks();
-	void initGSMatricesAndGraphs();
-	void findMissingBasicColumns();
-	void doGramSchmidt(int oldPart, int idx);
-	void setAlpBasis();
 	HighsLp& getAlp();
 	HighsBasis& getAlpBasis();
-	bool dependanceCheck(vector<double> &v); // int impliedRowsIdx); // int linkIdx = -1);
-	void findPreviousBasisForRows();
-	void findPreviousBasisForColumns();
-	void rowCoeff(int column);
-	void eraseLinkersIfNotNeeded();
-	bool varIsBounded(pair<int, int> link);
-	void editRowWiseMatrix(int domLink, int slavLink);
-	void createImpliedRows(HighsLp& lp);
-	vector<double> aggregateImpliedRow(int impliedRow);
-	void getAggImpliedRows();
-	vector<double> createImpliedLinkRows(vector<double> &linkRow, int linkIdx);
-	void liftTableau();
-	void transposeMatrix();
-	void collectRowsForGS();
-	void collectPartsForGS();
-	void examinePartition();
-	void initialAggregateAMatrix();
-	void trackRowColors(HighsLp& ep);
-	void findLinkerComponents();
 
-	// Lp to store the aggregate LP into
+	/* Data structs to house the aggregated lp 
+	and the aggregated lp basis information */
 	HighsLp alp;
 	HighsBasis alpBasis;
-	bool flag_;
-	int iterations = 0;
-	int pivots = 0;
-	int masterIter = 0;
-	int masterIter_ = 0;
 
-	// Copy original lp data from equitable partition
-	// scalars
+	/* Scalar values that contain dimensional and
+	name data about the original lp */
 	int numRow;
-	int impliedNumRow;
 	int numCol;
 	int numTot;
-	int realNumCol;
-	int realNumRow;
 	string model_name_;
 	string lp_name_;
 
-	// (sparse storage) Original lp
+	/* Sparse vectors that store information about the original lp
+	such as the A matrix, cost vector, and right hand sides.  Data is 
+	stored in csc data format */
 	vector<int> Astart;
-	vector<int> impliedARstart;
     vector<int> Aindex;
-    vector<int> Xindex;
-    vector<int> impliedARindex;
     vector<double> Avalue;
-    vector<double> impliedARvalue;
-    vector<int> color;
-    vector<int> linkerColor;
     vector<double> colCost;
     vector<double> colLower;
     vector<double> colUpper;
@@ -111,73 +66,52 @@ public:
     // Linking pairs for new aggregate lp
     vector<pair<int, int> > linkingPairs;
 
-   	// Storage to obtain "warm start" for new small lp
-    vector<double> col_value;
+	/* Sparse storage for the previous iterations basis
+	information.  We use this to set the basis of upcoming 
+	aggregated lp so that no phase 1 simplex is needed. */
+	vector<double> col_value;
     vector<double> row_value;
     vector<HighsBasisStatus> col_status;
-    vector<HighsBasisStatus> row_status;
+	vector<HighsBasisStatus> row_status;
 
-    // (dense storage)
+   	/* Sparse storage for the new aggregate lp's "warm start" 
+	basis.  Note that we do not pre load the solutions to this
+	lp as they are clear from the pre loaded basis. */
+	vector<HighsBasisStatus> col_status_;
+	vector<HighsBasisStatus> row_status_;
+
+    /* Dense storage for equitable partition information.
+	 These are doubly linked lists of elements by their color class.
+	 We have the previous color class information and current color class
+	 information. */
 	vector<list<int>* > C;
-	vector<list<int>* > prevC;
-	vector<vector<int> > adjListLab;
-	vector<vector<double> > adjListWeight;
+	vector<list<int> > prevC;
+	vector<int> previousRowColoring;
+	vector<int> previousColumnColoring;
+	vector<int> AindexSub;
+	vector<int> color;
 
-	// For the new "smaller" lp
-	int numRowAfterImp_ = 0;
-	int numLiftedRow_ = 0;
+	/* New scalars for the current aggregated lp */
 	int numRow_ = 0;
 	int numCol_ = 0;
 	int numTot_ = 0;
-	int realNumRow_ = 0;
-	int realNumCol_ = 0;
-	int realNumTot_ = 0;
-	int numActiveRows_ = 0;
-	int numActiveBounds_ = 0;
 	int numLinkers_ = 0;
-	int numLinkers;
-	int originalNumLinkers;
-	vector<vector<int> > adjMatLinks_;
-	vector<int> startingBasicRows_;
-	vector<int> startingBasicColumns_;
-	vector<int> potentialBasicRows_;
-	vector<int> potentialBasicColumns_;
+
+	/* This is the sparse storage for the current 
+	 aggregate lp.  This data will be uploaded to highs
+	 with the current basis to obtain the lifted solution
+	 and then used to pivot on linkers to a solution only in the 
+	 lifted space. */
 	vector<int> Astart_;
-	vector<int> ARstart_;
-	vector<int> ARtableauStart;
     vector<int> Aindex_;
-    vector<int> ARindex_;
-    vector<int> ARtableauIndex;
-    vector<int> A_Nend_;
-    vector<int> GSRstart_;
-    vector<int> GSRindex_;
     vector<int> linkers;
-	vector<int> artificialVariables;
-    vector<bool> activeConstraints_;
-    vector<bool> activeBounds_;
-    vector<double> Avalue_;
-    vector<double> ARvalue_;
-    vector<double> ARtableauValue;
-    vector<double> GSRvalue_;
+	vector<double> Avalue_;
     vector<double> colCost_;
     vector<double> colLower_;
     vector<double> colUpper_;
     vector<double> rowLower_;
     vector<double> rowUpper_;
-    vector<double> scale;
-    vector<double> ARreducedRHS;
-	vector<double> coeff;
-	vector<int> coeffIdx;
-
-    // Previous row coloring
-	vector<int> previousRowColoring;
-
-    // Previous column coloring
-	vector<int> previousColumnColoring;
-
-	// Timer
-	
-	};
+};
 
 #endif
 
