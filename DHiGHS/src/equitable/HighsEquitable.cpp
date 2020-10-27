@@ -37,8 +37,8 @@ void HighsEquitable::setup(const HighsLp& lp){
 	// Associated with equitable partition
 	numTot = numCol + numRow;
 	coeff.resize(numTot);
-	Xstart_.assign(Astart.begin(), Astart.end());
-	Xvalue_.assign(Avalue.size(), 0);
+	// Xstart_.assign(Astart.begin(), Astart.end());
+	// Xvalue_.assign(Avalue.size(), 0);
 	Xindex_.assign(Aindex.size(), 0);
 	AvalueCopy.assign(Avalue.size(), 0);
 	ARvalueCopy.assign(Avalue.size(), 0);
@@ -109,25 +109,30 @@ void HighsEquitable::createRowCopy(){
 }
 
 void HighsEquitable::initialRefinement(){
-	int i;
+	int i,j;
 	int numParts = 0;
 	int varColor = 0;
 	int conColor = numCol;
 	set<double> Rhs;
 	vector<double> Rhs_;
-	set<pair<double, double> > rhs;
-	set<tuple<double, double, double > > objBounds;
+	set<tuple<double, double, double> > rhs;
+	set<tuple<double, double, double, double> > objBounds;
 	// Prefill initial parts vector
 	initialParts.assign(numTot, 0);
 
 	// Prefill right hand side sets
-	pair<set<pair<double, double> >::iterator, bool> retRow;
-	rhs.insert(pair<double, double>(rowLower[0], rowUpper[0]));
+	pair<set<tuple<double, double, double> >::iterator, bool> retRow;
+	int rowSum = 0;
+	for (i = ARstart[0]; i < ARstart[1]; ++i)
+		rowSum += ARvalueCopy[i];
+	rhs.insert(make_tuple(rowLower[0], rowUpper[0], rowSum));
 	initialParts[numCol] = conColor;
 	S.push(conColor);
 	SCheck[conColor] = true;
 	for (i = 1; i < numRow; ++i){
-		retRow = rhs.insert(pair<double, double>(rowLower[i], rowUpper[i]));
+		for (j = ARstart[i]; j < ARstart[i + 1]; ++j)
+			rowSum += ARvalueCopy[j];
+		retRow = rhs.insert(make_tuple(rowLower[i], rowUpper[i], rowSum));
 		if (retRow.second){
 			initialParts[i + numCol] = ++conColor;
 			S.push(conColor);
@@ -135,17 +140,24 @@ void HighsEquitable::initialRefinement(){
 		}
 		else
 			initialParts[i + numCol] = conColor;
+		rowSum = 0;
 	}
 	conColor++;
 
 	// Peace together var bounds and obj coefficients
-	pair<set<tuple<double, double, double> >::iterator, bool> retCol;
-	objBounds.insert(make_tuple(colCost[0], colLower[0], colUpper[0]));
+	pair<set<tuple<double, double, double, double> >::iterator, bool> retCol;
+	int colSum = 0;
+	for (i = Astart[0]; i < Astart[1]; ++i){
+		colSum += AvalueCopy[i];
+	}
+	objBounds.insert(make_tuple(colCost[0], colLower[0], colUpper[0], colSum));
 	initialParts[0] = varColor;
 	S.push(varColor);
 	SCheck[varColor] = true;
 	for (i = 1; i < numCol; ++i){
-		retCol = objBounds.insert(make_tuple(colCost[i], colLower[i], colUpper[i]));
+		for (j = Astart[i]; j < Astart[i + 1]; ++j)
+			colSum += AvalueCopy[j];
+		retCol = objBounds.insert(make_tuple(colCost[i], colLower[i], colUpper[i], colSum));
 		if (retCol.second){
 			initialParts[i] = ++varColor;
 			S.push(varColor);
@@ -153,6 +165,7 @@ void HighsEquitable::initialRefinement(){
 		}
 		else
 			initialParts[i] = varColor;
+		colSum = 0;
 	}
 	varColor++;
 
@@ -305,7 +318,7 @@ void HighsEquitable::splitColor(int s){
 	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
 	int instack = (SCheck[s]) ? 1 : 0;
 	for(map<double, int>::iterator it = degSumColor.begin(); it != degSumColor.end(); ++it){
-		coeff[r].push_back(it->second);
+		//coeff[r].push_back(it->second);
 		if (it->first == mincdeg[s]){
 			if (!instack && it->second != b){
 				S.push(it->second);
@@ -313,7 +326,7 @@ void HighsEquitable::splitColor(int s){
 			}
 		}
 		else{
-			if (instack || it->second != b){
+			if (it->second != b){
 				S.push(it->second);
 				SCheck[s] = true;
 			}
