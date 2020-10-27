@@ -129,6 +129,7 @@ void HighsEquitable::initialRefinement(){
 	initialParts[numCol] = conColor;
 	S.push(conColor);
 	SCheck[conColor] = true;
+	rowSum = 0;
 	for (i = 1; i < numRow; ++i){
 		for (j = ARstart[i]; j < ARstart[i + 1]; ++j)
 			rowSum += ARvalueCopy[j];
@@ -154,6 +155,7 @@ void HighsEquitable::initialRefinement(){
 	initialParts[0] = varColor;
 	S.push(varColor);
 	SCheck[varColor] = true;
+	colSum = 0;
 	for (i = 1; i < numCol; ++i){
 		for (j = Astart[i]; j < Astart[i + 1]; ++j)
 			colSum += AvalueCopy[j];
