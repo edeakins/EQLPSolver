@@ -447,6 +447,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   cout << "\ninitial refinement took: " << ep.initialRefinementTime << endl;
   cout << "\ntotal refinements took: " << ep.refineTime << endl;
   cout << "\ntotal split color took: " << ep.splitColorTime << endl;
+  cout << "\ntotal split allocate storage time: " << ep.allocateStorageTime << endl;
+  cout << "\ntotal find new colors time: " << ep.loopForNewColorsTime << endl;
+  cout << "\ntotal set new stack colors time: " << ep.setNewStackTime << endl;
+  cout << "\ntotal remove and add vars/cons to colors time: " << ep.removeAndAddColorsTime << endl;
   cout << "\ntotal find targets took: " << ep.findTargetTime << endl;
   cout << "\ntotal isolation took: " << ep.isolateTime << endl;
   cout << "\ntotal collect linking pairs took: " << ep.collectLinkingPairsTime << endl;

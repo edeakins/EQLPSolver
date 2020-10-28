@@ -85,7 +85,7 @@ void HighsEquitable::handleNegatives(){
 		for (i = 0; i < Avalue.size(); ++i)
 			AvalueCopy[i] = Avalue[i];
 	}
-	handleNegativesTime = timer.readRunHighsClock() - init_time;
+	handleNegativesTime += timer.readRunHighsClock() - init_time;
 	//cout << "\nhandle negatives took: " << handleNegativesTime << endl;
 }
 
@@ -114,7 +114,7 @@ void HighsEquitable::createRowCopy(){
             ARvalueCopy[iPut] = AvalueCopy[k];
 		}
 	}
-	transposeTime = timer.readRunHighsClock() - init_time;
+	transposeTime += timer.readRunHighsClock() - init_time;
 	//cout << "\ntranspose took: " << transposeTime << endl;
 }
 
@@ -194,7 +194,7 @@ void HighsEquitable::initialRefinement(){
 		Csize[initialParts[i]]++;
 		color[i] = initialParts[i];
 	}
-	initialRefinementTime = timer.readRunHighsClock() - init_time;
+	initialRefinementTime += timer.readRunHighsClock() - init_time;
 	//cout << "\ninitial refinement took: " << initialRefinementTime << endl;
 }
 
@@ -320,11 +320,14 @@ void HighsEquitable::splitColor(int s){
 	bool run_highs_clock_already_running = timer.runningRunHighsClock();
   	if (!run_highs_clock_already_running) timer.startRunHighsClock();
 	init_time2 = timer.readRunHighsClock();
+	init_time3 = timer.readRunHighsClock();
 	bool varOrCon = (s < numCol) ? true : false;
 	set<double> cdegCopy;
 	vector<int> colorFreq(numTot, 0);
 	map<double, int> degSumColor;
 	pair<map<double, int>::iterator, bool> ret;
+	allocateStorageTime += timer.readRunHighsClock() - init_time3;
+	init_time3 = timer.readRunHighsClock();
 	degSumColor.insert(pair<double, int>(mincdeg[s], s));
 	colorFreq[0] = Csize[s] - Asize[s];
 	for (wPointer = A[s]->begin(); wPointer != A[s]->end(); ++wPointer){
@@ -339,6 +342,8 @@ void HighsEquitable::splitColor(int s){
 		}
 		colorFreq[degSumColor[cdeg[w]]]++;
 	}
+	loopForNewColorsTime = timer.readRunHighsClock() - init_time3;
+	init_time3 = timer.readRunHighsClock();
 	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
 	int instack = (SCheck[s]) ? 1 : 0;
 	for(map<double, int>::iterator it = degSumColor.begin(); it != degSumColor.end(); ++it){
@@ -356,6 +361,8 @@ void HighsEquitable::splitColor(int s){
 			}
 		}
 	}
+	setNewStackTime = timer.readRunHighsClock() - init_time3;
+	init_time3 = timer.readRunHighsClock();
 	for (wPointer = A[s]->begin(); wPointer != A[s]->end(); ++wPointer){
 		w = *wPointer;
 		if (degSumColor[cdeg[w]] != s){
@@ -366,6 +373,7 @@ void HighsEquitable::splitColor(int s){
 			color[w] = degSumColor[cdeg[w]];
 		}
 	}
+	removeAndAddColorsTime += timer.readRunHighsClock() - init_time3;
 	splitColorTime += timer.readRunHighsClock() - init_time2;
 }
 

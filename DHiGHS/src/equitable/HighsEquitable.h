@@ -52,9 +52,9 @@ public:
 	int refinements = 0;
 	
 	// timers
-	double handleNegativesTime;
-	double transposeTime;
-	double initialRefinementTime;
+	double handleNegativesTime = 0;
+	double transposeTime = 0;
+	double initialRefinementTime = 0;
 	double refineTime = 0;
 	double splitColorTime = 0;
 	double findTargetTime = 0;
@@ -62,8 +62,13 @@ public:
 	double collectLinkingPairsTime = 0;
 	double isPartitionDiscreteTime = 0;
 	double packVectorsTime = 0;
+	double allocateStorageTime = 0;
+	double loopForNewColorsTime = 0;
+	double setNewStackTime = 0;
+	double removeAndAddColorsTime = 0;
 	double init_time;
 	double init_time2;
+	double init_time3;
 
 	// (Sparse vectors)
 	forward_list<int> colorsToSplit;
