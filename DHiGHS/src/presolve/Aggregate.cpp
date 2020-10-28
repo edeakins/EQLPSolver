@@ -66,13 +66,13 @@ HighsLp& HighsAggregate::getAlp(){
 }
 
 void HighsAggregate::aggregate(){
-    aggregateColBounds();
-    aggregateRowBounds();
-    aggregateCVector();
-		aggregateAMatrix();
-    setColBasis();
-    setRowBasis();
-    appendLinkersToLp();
+  aggregateColBounds();
+  aggregateRowBounds();
+  aggregateCVector();
+  aggregateAMatrix();
+  setColBasis();
+  setRowBasis();
+  appendLinkersToLp();
 }
 
 void HighsAggregate::aggregateColBounds(){

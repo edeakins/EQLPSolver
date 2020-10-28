@@ -430,18 +430,29 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   //   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
   //   // }
   }
-  std::ofstream resultsFile("results.txt", std::ios_base::app);
-  std::cout << "Partition time: " << highs.totPartTime_ << std::endl;
-  std::cout << "Folding time: " << highs.totFoldTime_ << std::endl;
-  std::cout << "Unfolding time: " << highs.totUnfoldTime_ << std::endl;
-  double totTime = highs.totUnfoldTime_ + highs.totFoldTime_ + highs.totPartTime_;
-  std::cout << "Total OC time: " << totTime << std::endl;
-  resultsFile << lp.model_name_ + ".mps " << std::to_string(highs.totPartTime_) + " " << std::to_string(highs.totFoldTime_) + " " << std::to_string(highs.totUnfoldTime_) + " " << std::to_string(totTime) << + "\n";
+  // std::ofstream resultsFile("results.txt", std::ios_base::app);
+  // std::cout << "Partition time: " << highs.totPartTime_ << std::endl;
+  // std::cout << "Folding time: " << highs.totFoldTime_ << std::endl;
+  // std::cout << "Unfolding time: " << highs.totUnfoldTime_ << std::endl;
+  // double totTime = highs.totUnfoldTime_ + highs.totFoldTime_ + highs.totPartTime_;
+  // std::cout << "Total OC time: " << totTime << std::endl;
+  // resultsFile << lp.model_name_ + ".mps " << std::to_string(highs.totPartTime_) + " " << std::to_string(highs.totFoldTime_) + " " << std::to_string(highs.totUnfoldTime_) + " " << std::to_string(totTime) << + "\n";
   // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
   // for (int i = 0; i < solution.col_value.size(); ++i){
   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
   // }
   // cout << "\nUnfold iterations: " << highs.totIter_ << endl;
+  cout << "\nhandle negatives took: " << ep.handleNegativesTime << endl;
+  cout << "\ntranspose took: " << ep.transposeTime << endl;
+  cout << "\ninitial refinement took: " << ep.initialRefinementTime << endl;
+  cout << "\ntotal refinements took: " << ep.refineTime << endl;
+  cout << "\ntotal split color took: " << ep.splitColorTime << endl;
+  cout << "\ntotal find targets took: " << ep.findTargetTime << endl;
+  cout << "\ntotal isolation took: " << ep.isolateTime << endl;
+  cout << "\ntotal collect linking pairs took: " << ep.collectLinkingPairsTime << endl;
+  cout << "\ntotal is partition discrete check took: " << ep.isPartitionDiscreteTime << endl;
+  cout << "\ntotal pack vector took: " << ep.packVectorsTime << endl;
+  
   return run_status;
 }
 

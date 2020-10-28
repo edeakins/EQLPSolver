@@ -1,5 +1,4 @@
 #include "equitable/HighsEquitable.h"
-
 #include <cctype>
 #include <cmath>
 #include <cassert>
@@ -64,6 +63,7 @@ void HighsEquitable::setup(const HighsLp& lp){
 	}
 
 	// Initial refinement
+	// HighsTimer timer;
 	handleNegatives();
 	createRowCopy();
 	initialRefinement();
@@ -71,6 +71,9 @@ void HighsEquitable::setup(const HighsLp& lp){
 }
 
 void HighsEquitable::handleNegatives(){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time = timer.readRunHighsClock();
 	vector<double>::iterator min = min_element(Avalue.begin(), Avalue.end());
 	int i, j, k;
 	if (*min < 0){
@@ -82,9 +85,14 @@ void HighsEquitable::handleNegatives(){
 		for (i = 0; i < Avalue.size(); ++i)
 			AvalueCopy[i] = Avalue[i];
 	}
+	handleNegativesTime = timer.readRunHighsClock() - init_time;
+	//cout << "\nhandle negatives took: " << handleNegativesTime << endl;
 }
 
 void HighsEquitable::createRowCopy(){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time = timer.readRunHighsClock();
     int AcountXSub = Astart[numCol];
     ARindex.resize(AcountXSub);
     ARvalueCopy.resize(AcountXSub);
@@ -106,9 +114,14 @@ void HighsEquitable::createRowCopy(){
             ARvalueCopy[iPut] = AvalueCopy[k];
 		}
 	}
+	transposeTime = timer.readRunHighsClock() - init_time;
+	//cout << "\ntranspose took: " << transposeTime << endl;
 }
 
 void HighsEquitable::initialRefinement(){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time = timer.readRunHighsClock();
 	int i,j;
 	int numParts = 0;
 	int varColor = 0;
@@ -181,9 +194,14 @@ void HighsEquitable::initialRefinement(){
 		Csize[initialParts[i]]++;
 		color[i] = initialParts[i];
 	}
+	initialRefinementTime = timer.readRunHighsClock() - init_time;
+	//cout << "\ninitial refinement took: " << initialRefinementTime << endl;
 }
 
 void HighsEquitable::refine(){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time = timer.readRunHighsClock();
 	if (refinements) findTarget();
 	refinements++;
 	linkingPairs.clear();
@@ -293,11 +311,15 @@ void HighsEquitable::refine(){
 	// 	}
 	// 	cout << endl;
 	// }
+	refineTime += (timer.readRunHighsClock() - init_time);
 	packVectors();
 	collectLinkingPairs();
 }
 
 void HighsEquitable::splitColor(int s){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time2 = timer.readRunHighsClock();
 	bool varOrCon = (s < numCol) ? true : false;
 	set<double> cdegCopy;
 	vector<int> colorFreq(numTot, 0);
@@ -344,9 +366,13 @@ void HighsEquitable::splitColor(int s){
 			color[w] = degSumColor[cdeg[w]];
 		}
 	}
+	splitColorTime += timer.readRunHighsClock() - init_time2;
 }
 
 void HighsEquitable::findTarget(){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time = timer.readRunHighsClock();
 	for (int i = 0; i < numTot; ++i){
 		if (!isolates[i]){
 			isolated = i;
@@ -355,9 +381,13 @@ void HighsEquitable::findTarget(){
 			return;
 		}
 	}
+	findTargetTime += timer.readRunHighsClock() - init_time;
 }
 
 void HighsEquitable::isolate(int i){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time = timer.readRunHighsClock();
 	for (int j = 0; j < numCol; ++j)
 		previousColumnColoring[j] = color[j];
 	for (int j = numCol; j < numTot; ++j)
@@ -378,17 +408,25 @@ void HighsEquitable::isolate(int i){
 		if (Csize[i] == 1)
 			isolates[C[i]->front()] = true;
 	}
-	SCheck[oldCol] = true;
-	S.push(oldCol);
+	SCheck[newCol] = true;
+	S.push(newCol);
+	isolateTime += timer.readRunHighsClock() - init_time;
 }
 
 void HighsEquitable::packVectors(){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time = timer.readRunHighsClock();
 	for (int i = 0; i < Aindex.size(); ++i){
 		Xindex_[i] = color[Aindex[i] + numCol];
 	}
+	packVectorsTime += timer.readRunHighsClock() - init_time;
 }
 
 void HighsEquitable::collectLinkingPairs(){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time = timer.readRunHighsClock();
 	if (isolated == -1) return;
 	int i, linkCnt = 0;
 	int rep;
@@ -434,11 +472,16 @@ void HighsEquitable::collectLinkingPairs(){
 			temp.clear();
 		}
 	}
+	collectLinkingPairsTime += timer.readRunHighsClock() - init_time;
 } 
 
 bool HighsEquitable::isPartitionDiscrete(){
+	bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
+	init_time = timer.readRunHighsClock();
 	for (int i = 0; i < numCol; ++i){
 		if (!isolates[i]) return false;
 	}
 	return true;
+	isPartitionDiscreteTime += timer.readRunHighsClock() - init_time;
 }

@@ -3,6 +3,7 @@
 
 #include "HighsLp.h"
 #include "HighsSimpleDec.h"
+#include "HighsTimer.h"
 
 #include <string>
 #include <vector>
@@ -49,6 +50,20 @@ public:
 	int rep;
 	int isolated = -1;
 	int refinements = 0;
+	
+	// timers
+	double handleNegativesTime;
+	double transposeTime;
+	double initialRefinementTime;
+	double refineTime = 0;
+	double splitColorTime = 0;
+	double findTargetTime = 0;
+	double isolateTime = 0;
+	double collectLinkingPairsTime = 0;
+	double isPartitionDiscreteTime = 0;
+	double packVectorsTime = 0;
+	double init_time;
+	double init_time2;
 
 	// (Sparse vectors)
 	forward_list<int> colorsToSplit;
@@ -119,6 +134,9 @@ public:
 	int w;
 	int c;
 	int s;
+
+	// Timer
+	HighsTimer timer;
 
 };
 
