@@ -342,7 +342,7 @@ void HighsEquitable::splitColor(int s){
 		}
 		colorFreq[degSumColor[cdeg[w]]]++;
 	}
-	loopForNewColorsTime = timer.readRunHighsClock() - init_time3;
+	loopForNewColorsTime += timer.readRunHighsClock() - init_time3;
 	init_time3 = timer.readRunHighsClock();
 	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
 	int instack = (SCheck[s]) ? 1 : 0;
@@ -361,7 +361,7 @@ void HighsEquitable::splitColor(int s){
 			}
 		}
 	}
-	setNewStackTime = timer.readRunHighsClock() - init_time3;
+	setNewStackTime += timer.readRunHighsClock() - init_time3;
 	init_time3 = timer.readRunHighsClock();
 	for (wPointer = A[s]->begin(); wPointer != A[s]->end(); ++wPointer){
 		w = *wPointer;
