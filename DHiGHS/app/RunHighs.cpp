@@ -252,10 +252,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsTableau tableau;
   // Use aggregator to obtain an aggreated lp and return it
   // initial_time = timer.readRunHighsClock();
-  // HighsAggregate lpFolder(lp, ep, solution, basis);
+  HighsAggregate lpFolder(lp, ep, solution, basis);
   // highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
   // initial_time = timer.readRunHighsClock();
-  // HighsLp& alp = lpFolder.getAlp();
+  HighsLp& alp = lpFolder.getAlp();
   // cout << "fold time: " << lp_folder_time - initial_time << endl;
   // cin.get();
   // Solve LP case.
@@ -278,25 +278,27 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     highs.setHighsOutput(NULL);
   }
 
-  // HighsStatus init_status = highs.passModel(alp);
-//   if (init_status != HighsStatus::OK) {
-//     if (init_status == HighsStatus::Warning) {
-// #ifdef HiGHSDEV
-//       HighsPrintMessage(output, message_level, ML_ALWAYS,
-//                         "HighsStatus::Warning return setting HighsLp\n");
-// #endif
-//     } else {
-//       HighsPrintMessage(output, message_level, ML_ALWAYS,
-//                         "Error setting HighsLp\n");
-//       return HighsStatus::Error;
-//     }
-//   }
+  HighsStatus init_status = highs.passModel(alp);
+  if (init_status != HighsStatus::OK) {
+    if (init_status == HighsStatus::Warning) {
+#ifdef HiGHSDEV
+      HighsPrintMessage(output, message_level, ML_ALWAYS,
+                        "HighsStatus::Warning return setting HighsLp\n");
+#endif
+    } else {
+      HighsPrintMessage(output, message_level, ML_ALWAYS,
+                        "Error setting HighsLp\n");
+      return HighsStatus::Error;
+    }
+  }
 
   HighsStatus write_status;
   //write_status = highs.writeModel("initial.mps");
-  /*
-  HighsStatus write_status;
-  write_status = highs.writeModel("write.mps");
+  std::string fileName = options.model_file.c_str();
+  fileName = fileName.substr(35);
+  std::string pathWay = "../../aggregateSymModel/";
+  std::string fileType = ".mps";
+  write_status = highs.writeModel(pathWay + fileName);
   if (write_status != HighsStatus::OK) {
     if (write_status == HighsStatus::Warning) {
 #ifdef HiGHSDEV
@@ -308,7 +310,6 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
                         "Error return from highs.writeModel\n");
     }
   }
-  */
 
   // Write all the options to an options file
   // highs.writeHighsOptions("Highs.set", false);
@@ -442,20 +443,20 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
   // }
   // cout << "\nUnfold iterations: " << highs.totIter_ << endl;
-  cout << "\nhandle negatives took: " << ep.handleNegativesTime << endl;
-  cout << "\ntranspose took: " << ep.transposeTime << endl;
-  cout << "\ninitial refinement took: " << ep.initialRefinementTime << endl;
-  cout << "\ntotal refinements took: " << ep.refineTime << endl;
-  cout << "\ntotal split color took: " << ep.splitColorTime << endl;
-  cout << "\ntotal split allocate storage time: " << ep.allocateStorageTime << endl;
-  cout << "\ntotal find new colors time: " << ep.loopForNewColorsTime << endl;
-  cout << "\ntotal set new stack colors time: " << ep.setNewStackTime << endl;
-  cout << "\ntotal remove and add vars/cons to colors time: " << ep.removeAndAddColorsTime << endl;
-  cout << "\ntotal find targets took: " << ep.findTargetTime << endl;
-  cout << "\ntotal isolation took: " << ep.isolateTime << endl;
-  cout << "\ntotal collect linking pairs took: " << ep.collectLinkingPairsTime << endl;
-  cout << "\ntotal is partition discrete check took: " << ep.isPartitionDiscreteTime << endl;
-  cout << "\ntotal pack vector took: " << ep.packVectorsTime << endl;
+  // cout << "\nhandle negatives took: " << ep.handleNegativesTime << endl;
+  // cout << "\ntranspose took: " << ep.transposeTime << endl;
+  // cout << "\ninitial refinement took: " << ep.initialRefinementTime << endl;
+  // cout << "\ntotal refinements took: " << ep.refineTime << endl;
+  // cout << "\ntotal split color took: " << ep.splitColorTime << endl;
+  // cout << "\ntotal split allocate storage time: " << ep.allocateStorageTime << endl;
+  // cout << "\ntotal find new colors time: " << ep.loopForNewColorsTime << endl;
+  // cout << "\ntotal set new stack colors time: " << ep.setNewStackTime << endl;
+  // cout << "\ntotal remove and add vars/cons to colors time: " << ep.removeAndAddColorsTime << endl;
+  // cout << "\ntotal find targets took: " << ep.findTargetTime << endl;
+  // cout << "\ntotal isolation took: " << ep.isolateTime << endl;
+  // cout << "\ntotal collect linking pairs took: " << ep.collectLinkingPairsTime << endl;
+  // cout << "\ntotal is partition discrete check took: " << ep.isPartitionDiscreteTime << endl;
+  // cout << "\ntotal pack vector took: " << ep.packVectorsTime << endl;
   
   return run_status;
 }

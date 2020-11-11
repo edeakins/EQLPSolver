@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <stack>
 #include <set>
 #include <list>
@@ -19,21 +20,23 @@ using namespace std;
 
 class HighsEquitable {
 public:
-	// Setup for equitable partition
+	// Setup for equitable ptn
 	void clear();
 	void setup(const HighsLp& lp);
 	void handleNegatives();
 	void createRowCopy();
 	void initialRefinement();
 	void splitColor(int color);
+	void split(int s);
 	void refine();
 	void findTarget();
 	void isolate(int i);
 	void collectLinkingPairs();
 	bool isPartitionDiscrete();
 	void packVectors();
+	void shiftVectors(int& start, int& finish, int& shift);
 
-	// Some storage for info about lp and partition
+	// Some storage for info about lp and ptn
 	string model_name = "";
 	string lp_name = "";
 	// (Scalars)
@@ -114,17 +117,26 @@ public:
 	vector<forward_list<int>* > A;
 	vector<int> Asize;
 
-	// Contains linked variables from the splitting up of the partitions
+	// Partition storage
+	vector<int> label;
+	vector<int> labelTemp;
+	vector<int> ptn;
+	vector<int> ptnTemp;
+	vector<int> colorStart;
+	vector<int> colorStartTemp;
+
+	// Contains linked variables from the splitting up of the ptns
 	vector<pair<int, int> > linkingPairs;
 	map<int, vector<int> > commonLinkers;
-	// Contains previous partitions coloring so we know how to link variables
+
+	// Contains previous ptns coloring so we know how to link variables
 	vector<int> previousColumnColoring;
 	vector<int> previousRowColoring;
 
-	// Contains the representatives of each color class within a partition at each major refinement
+	// Contains the representatives of each color class within a ptn at each major refinement
 	vector<int> columnColorReps;
 
-	// Contains partition size information for tableau scaling
+	// Contains ptn size information for tableau scaling
 	vector<int> partSize;
 	vector<int> previousPartSize;
 
@@ -133,6 +145,9 @@ public:
 	forward_list<int>::iterator wPointer;
 	forward_list<int>::iterator sPointer;
 	list<int>::iterator cPointer;
+
+	// Map to store the nodes with the same degree sum
+	map<double, vector<int> > degSumNode;
 
 	// List iterator 
 	int v;
