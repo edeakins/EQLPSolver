@@ -1,4 +1,4 @@
-#include "EqutiablePartition.hpp"
+#include "EquitablePartition.hpp"
 
 using namespace std;
 
@@ -23,6 +23,7 @@ EquitablePartition::EquitablePartition(const int nR, const int nC, const vector<
     ARstart = ARs;
 
     // Pre allocate arrays for EP algorithm
+	AindexP.resize(Aindex.size());
     AvaluePos.resize(Avalue.size());
     ARvaluePos.resize(ARvalue.size());
     SCheck.assign(numTot, false);
@@ -311,4 +312,9 @@ void EquitablePartition::isolate(int col){
 	}
 	SCheck[newCol] = true;
 	S.push(newCol);
+}
+
+void EquitablePartition::packVectors(){
+	for (int i = 0; i < Aindex.size(); ++i)
+		AindexP[i] = color[Aindex[i] + nCols];
 }

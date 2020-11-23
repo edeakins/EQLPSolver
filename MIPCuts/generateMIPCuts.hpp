@@ -11,7 +11,8 @@
 #include "OsiSolverInterface.hpp"
 #include "CoinWarmStartBasis.hpp"
 #include "CglLiftAndProject.hpp"
-#include "EqutiablePartition.hpp"
+#include "EquitablePartition.hpp"
+#include "Aggregate.hpp"
 
 #include <iomanip>
 #include <cassert>

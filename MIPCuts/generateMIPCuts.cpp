@@ -36,6 +36,8 @@ int main(int argc, const char *argv[]){
                             colUpper, rowLower, rowUpper,
                             Avalue, Aindex, Astart,
                             ARvalue, ARindex, ARstart);
+    // Pass EP to aggregator
+    AggregateLp aLp(ep);
     
     si.initialSolve();
     CglLiftAndProject cg1;
