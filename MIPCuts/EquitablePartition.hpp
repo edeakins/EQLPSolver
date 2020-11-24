@@ -25,7 +25,7 @@ public:
     void splitColor(int s);
     void isolate(int i);
     void findTarget();
-    void isDiscrete();
+    bool isDiscrete();
     void packVectors();
 
     // Original LP info

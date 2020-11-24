@@ -6,13 +6,14 @@
 class AggregateLp{
 public:
     AggregateLp(EquitablePartition& ep);
-    void updatePacking(vector<int>& packed);
+    void updateEP(EquitablePartition& ep);
     void clear();
     void findDimensions();
     void aggregateColBounds();
     void aggregateRowBounds();
     void aggregateAMatrix();
     void aggregateCostVector();
+    void aggregate();
     vector<double>& getColUpper();
     vector<double>& getColLower();
     vector<double>& getColCost();

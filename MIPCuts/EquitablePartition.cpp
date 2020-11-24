@@ -38,6 +38,7 @@ EquitablePartition::EquitablePartition(const int nR, const int nC, const vector<
 	Asize.assign(numTot, 0);
     C.resize(numTot);
     A.resize(numTot);
+	handleNegatives();
     initRefinement();
 }
 
@@ -115,6 +116,8 @@ void EquitablePartition::initRefinement(){
 		Csize[initialParts[i]]++;
 		color[i] = initialParts[i];
 	}
+	refine();
+	packVectors();
 }
 
 void EquitablePartition::refine(){
@@ -123,7 +126,6 @@ void EquitablePartition::refine(){
 	double weight;
 	colorsAdj.clear();
 	colorsToSplit.clear();
-	// numParts = 0;
 	while (!S.empty()){
 		int r = S.top();
 		S.pop();
@@ -176,7 +178,7 @@ void EquitablePartition::refine(){
 			else{
 				mincdeg[c] = maxcdeg[c];
 				for (int j = 0; j < Asize[c]; ++j){
-					int w = A[c][i];
+					int w = A[c][j];
 					if (cdeg[w] < mincdeg[c]) mincdeg[c] = cdeg[w];
 				}
 			}
@@ -218,6 +220,7 @@ void EquitablePartition::refine(){
 	// 	}
 	// 	cout << endl;
 	// }
+	packVectors();
 }
 
 void EquitablePartition::splitColor(int s){
@@ -312,6 +315,14 @@ void EquitablePartition::isolate(int col){
 	}
 	SCheck[newCol] = true;
 	S.push(newCol);
+}
+
+bool EquitablePartition::isDiscrete(){
+	for (int i = 0; i < numTot; ++i){
+		if (Csize[i] > 1)
+			return false;
+	}
+	return true;
 }
 
 void EquitablePartition::packVectors(){

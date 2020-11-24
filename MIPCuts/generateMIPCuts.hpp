@@ -11,6 +11,9 @@
 #include "OsiSolverInterface.hpp"
 #include "CoinWarmStartBasis.hpp"
 #include "CglLiftAndProject.hpp"
+#include "CglKnapsackCover.hpp"
+#include "CglLandP.hpp"
+#include "CglSimpleRounding.hpp" 
 #include "EquitablePartition.hpp"
 #include "Aggregate.hpp"
 

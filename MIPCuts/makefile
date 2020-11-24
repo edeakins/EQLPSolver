@@ -1,6 +1,7 @@
 # Driver code
 DRIVER = generateMIPCuts
 EPENG = EquitablePartition
+AGGENG = Aggregate
 
 EXE = $(DRIVER)
 
@@ -22,7 +23,7 @@ LIB = -L/home/edeakins/Cbc-2.9.8/lib -lClpSolver -lClp  -L/home/edeakins/Cbc-2.9
 all: $(EXE)
 
 $(EXE): $(DRIVER).cpp
-	$(CXX) $(CXXFLAGS) $(CXXLINKFLAGS) $(INC) -o $(EXE) $(DRIVER).cpp $(EPENG).cpp $(LIB) $(ADDLIBS)
+	$(CXX) $(CXXFLAGS) $(CXXLINKFLAGS) $(INC) -o $(EXE) $(DRIVER).cpp $(EPENG).cpp $(AGGENG).cpp $(LIB) $(ADDLIBS)
 
 clean:
 	rm -rf generateMIPCuts

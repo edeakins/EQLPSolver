@@ -21,8 +21,11 @@ AggregateLp::AggregateLp(EquitablePartition& ep){
     color = ep.color;
 }
 
-void AggregateLp::updatePacking(vector<int>& packed){
-    AindexP = packed;
+void AggregateLp::updateEP(EquitablePartition& ep){
+    AindexP = ep.AindexP;
+    C = ep.C;
+    Csize = ep.Csize;
+    color = ep.color;
 }
 
 void AggregateLp::clear(){
@@ -55,7 +58,7 @@ void AggregateLp::aggregateColBounds(){
 
 void AggregateLp::aggregateRowBounds(){
      for (int i = tempNRows_; i < nRows_; ++i){
-        int rep = C[i].front() - nCols;
+        int rep = C[i + nCols].front() - nCols;
         rowLower_[i] = rowLower[rep];
         rowUpper_[i] = rowUpper[rep];
     }
@@ -78,6 +81,17 @@ void AggregateLp::aggregateAMatrix(){
         }
     Astart_.push_back(Avalue_.size());
 	}
+}
+
+void AggregateLp::aggregate(){
+    clear();
+    findDimensions();
+    aggregateColBounds();
+    aggregateRowBounds();
+    aggregateAMatrix();
+    aggregateCostVector();
+    tempNCols_ = nCols_;
+    tempNRows_ = nRows_;
 }
 
 void AggregateLp::aggregateCostVector(){
