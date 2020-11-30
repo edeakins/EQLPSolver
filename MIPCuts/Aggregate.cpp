@@ -5,27 +5,39 @@ AggregateLp::AggregateLp(EquitablePartition& ep){
     nRows = ep.nRows;
 	nCols = ep.nCols;
 	numTot = nRows + nCols;
-	rowLower = ep.rowLower;
-	rowUpper = ep.rowUpper;
-	colUpper = ep.colUpper;
-	colLower = ep.colLower;
-	colCost = ep.colCost;
-	Avalue = ep.Avalue;
-	Aindex = ep.Aindex;
-    AindexP = ep.AindexP;
-	Astart = ep.Astart;
+	colCost.assign(ep.colCost.begin(), ep.colCost.end());
+    colLower.assign(ep.colLower.begin(), ep.colLower.end());
+    colUpper.assign(ep.colUpper.begin(), ep.colUpper.end());
+    rowLower.assign(ep.rowLower.begin(), ep.rowLower.end());
+    rowUpper.assign(ep.rowUpper.begin(), ep.rowUpper.end());
+    Avalue.assign(ep.Avalue.begin(), ep.Avalue.end());
+    Aindex.assign(ep.Aindex.begin(), ep.Aindex.end());
+    AindexP.assign(ep.AindexP.begin(), ep.AindexP.end());
+    Astart.assign(ep.Astart.begin(), ep.Astart.end());
 
     // EP info
-    C = ep.C;
-    Csize = ep.Csize;
-    color = ep.color;
+    C.assign(ep.C.begin(), ep.C.end());
+    Csize.assign(ep.Csize.begin(), ep.Csize.end());
+    color.assign(ep.color.begin(), ep.color.end());
 }
 
-void AggregateLp::updateEP(EquitablePartition& ep){
-    AindexP = ep.AindexP;
-    C = ep.C;
-    Csize = ep.Csize;
-    color = ep.color;
+void AggregateLp::updateMasterLpAndEp(EquitablePartition& ep, int _nC, int _nR,
+                            int _nnz, vector<int>& As, vector<int>& Ai,
+                            vector<double>& Av, vector<double>& rL, vector<double>& rU){
+   // update original Lp info
+    _nRows = _nR;
+    _nCols = _nC;
+	_numTot = _nRows + _nCols;
+    rowLower.assign(rL.begin(), rL.end());
+    rowUpper.assign(rU.begin(), rU.end());
+    Avalue.assign(Av.begin(), Av.end());
+    Aindex.assign(Ai.begin(), Ai.end());
+    Astart.assign(As.begin(), As.end());
+
+    // update EP info
+    C.assign(ep.C.begin(), ep.C.end());
+    Csize.assign(ep.Csize.begin(), ep.Csize.end());
+    color.assign(ep.color.begin(), ep.color.end());
 }
 
 void AggregateLp::clear(){
@@ -48,6 +60,16 @@ void AggregateLp::findDimensions(){
     rowUpper_.resize(nRows_); 
 }
 
+void AggregateLp::scanForCuts(){
+    cut.clear();
+    cutIdx.clear();
+    for (int i = 0; i < AindexP.size(); ++i){
+        if (AindexP[i] - nCols < nRows_)
+            continue;
+        // Working here for cuts need to do set insert and make mapping of cut to its aggregated index
+    }
+}
+
 void AggregateLp::aggregateColBounds(){
     for (int i = tempNCols_; i < nCols_; ++i){
         int rep = C[i].front();
@@ -67,11 +89,15 @@ void AggregateLp::aggregateRowBounds(){
 void AggregateLp::aggregateAMatrix(){
 	Astart_.push_back(0);
 	for (int i = 0; i < nCols_; ++i){
-        vector<double> coeff(nRows_, 0);
+        vector<double> coeff(nRows_ + _nRows - nRows, 0);
 		int rep = C[i].front();
 		for (int j = Astart[rep]; j < Astart[rep + 1]; ++j){
             int rowIdx = AindexP[j] - nCols;
-            coeff[rowIdx] += Avalue[j];
+            if (rowIdx < nRows_)
+                coeff[rowIdx] += Avalue[j];
+            else{
+                coeff[cutIdx[AindexP[j]]] += Avalue[j];
+            }
         }
         for (int j = 0; j < coeff.size(); ++j){
             if (coeff[j]){

@@ -1,6 +1,71 @@
 #include "generateMIPCuts.hpp"
 using namespace std;
 
+void update(int& nCols, int& nRows, int nnz, vector<int>& Astart,
+            vector<int>& Aindex, vector<double>& Avalue, vector<int>& ARstart,
+            vector<int>& ARindex, vector<double>& ARvalue, vector<double>& colLower,
+            vector<double>& colUpper, vector<double>& rowLower, vector<double>& rowUpper,
+            EquitablePartition& ep, AggregateLp& aLp, OsiClpSolverInterface& aggSi, OsiClpSolverInterface& si){
+  // Grab info we will need for update
+  int nAggRowsWCuts = aggSi.getNumRows();
+  int nAggColsWCuts = aggSi.getNumCols();
+  int nnzAggWCuts = aggSi.getMatrixByCol()->getVectorStarts()[nAggColsWCuts];
+  int nAggRows = aLp.nRows_;
+  int nAggCols = aLp.nCols_;
+  vector<double> rowLowerAgg(aggSi.getRowLower(), aggSi.getRowLower() + nAggRowsWCuts);
+  vector<double> rowUpperAgg(aggSi.getRowUpper(), aggSi.getRowUpper() + nAggRowsWCuts);
+  vector<double> ARvalueAgg(aggSi.getMatrixByRow()->getElements(), 
+                                aggSi.getMatrixByRow()->getElements() + nnzAggWCuts);
+  vector<int> ARindexAgg(aggSi.getMatrixByRow()->getIndices(), 
+                                aggSi.getMatrixByRow()->getIndices() + nnzAggWCuts);
+  vector<int> ARstartAgg(aggSi.getMatrixByRow()->getVectorStarts(), 
+                                aggSi.getMatrixByRow()->getVectorStarts() + nAggRowsWCuts + 1);
+  vector<vector<int> > C = ep.C; 
+  // Update info for original LP
+  int nRowsAdded = 0;
+  for (int i = nAggRows; i < nAggRowsWCuts; ++i){
+    double lb = rowLowerAgg[i];
+    double ub = rowUpperAgg[i];
+    vector<int> indices;
+    vector<double> values;
+    // Do row wise update (This is easy because cuts are in row format)
+    for (int j = ARstartAgg[i]; j < ARstartAgg[i + 1]; ++j){
+      int color = ARindexAgg[j];
+      double alpha = ARvalueAgg[j];
+      indices.insert(indices.end(), C[color].begin(), C[color].end());
+      vector<double> temp(indices.size(), alpha);
+      values.insert(values.end(), temp.begin(), temp.end());
+    }
+    int numEl = indices.size();
+    si.addRow(numEl, &indices[0], &values[0], lb, ub);
+  } 
+  // Columns will be automagically updated using clp model class in background
+  // Pull new LP info with added cuts in the highest space
+  int nRowsWCuts = si.getNumRows();
+  int nColsWCuts = si.getNumCols();
+  int nnzWCuts = si.getMatrixByCol()->getVectorStarts()[nColsWCuts];
+  rowLower.insert(rowLower.end(), si.getRowLower() + nRows, si.getRowLower() + nRowsWCuts);
+  rowUpper.insert(rowUpper.end(), si.getRowUpper() + nRows, si.getRowUpper() + nRowsWCuts);
+  //Avalue.clear();
+  Avalue.assign(si.getMatrixByCol()->getElements(), 
+                si.getMatrixByCol()->getElements() + nnzWCuts);
+  //Aindex.clear();
+  Aindex.assign(si.getMatrixByCol()->getIndices(), 
+                si.getMatrixByCol()->getIndices() + nnzWCuts);
+  //Astart.clear();
+  Astart.assign(si.getMatrixByCol()->getVectorStarts(),
+                si.getMatrixByCol()->getVectorStarts() + nColsWCuts + 1);
+  ARvalue.insert(ARvalue.end(), si.getMatrixByRow()->getElements() + nnz, 
+                 si.getMatrixByRow()->getElements() + nnzWCuts);
+  ARindex.insert(ARindex.end(), si.getMatrixByRow()->getIndices() + nnz, 
+                 si.getMatrixByRow()->getIndices() + nnzWCuts);
+  ARstart.insert(ARstart.end(), si.getMatrixByRow()->getVectorStarts() + nRows + 1, 
+                 si.getMatrixByRow()->getVectorStarts() + nRowsWCuts + 1);
+  nRows = nRowsWCuts;
+  nCols = nColsWCuts;  
+  nnz = nnzWCuts;   
+}
+
 int main(int argc, const char *argv[]){
     // File name for problem being read in 
     string mpsFileName = argv[1];
@@ -13,28 +78,30 @@ int main(int argc, const char *argv[]){
 
     // Grab info for equitable partition scheme;
     si.readMps(mpsFileName.c_str(), "mps");
-    si.initialSolve();
-    const int nRows = si.getNumRows();
-    const int nCols = si.getNumCols();
-    const int nnz = si.getMatrixByCol()->getVectorStarts()[nCols];
-    const vector<double> colCost(si.getObjCoefficients(), 
-                                    si.getObjCoefficients() + nCols);
-    const vector<double> colLower(si.getColLower(), si.getColLower() + nCols);
-    const vector<double> colUpper(si.getColUpper(), si.getColUpper() + nCols);
-    const vector<double> rowLower(si.getRowLower(), si.getRowLower() + nRows);
-    const vector<double> rowUpper(si.getRowUpper(), si.getRowUpper() + nRows);
-    const vector<double> Avalue(si.getMatrixByCol()->getElements(), 
-                                    si.getMatrixByCol()->getElements() + nnz);
-    const vector<int> Aindex(si.getMatrixByCol()->getIndices(), 
-                                    si.getMatrixByCol()->getIndices() + nnz);
-    const vector<int> Astart(si.getMatrixByCol()->getVectorStarts(), 
-                                    si.getMatrixByCol()->getVectorStarts() + nCols + 1);
-    const vector<double> ARvalue(si.getMatrixByRow()->getElements(), 
-                                    si.getMatrixByRow()->getElements() + nnz);
-    const vector<int> ARindex(si.getMatrixByRow()->getIndices(), 
-                                    si.getMatrixByRow()->getIndices() + nnz);
-    const vector<int> ARstart(si.getMatrixByRow()->getVectorStarts(), 
-                                    si.getMatrixByRow()->getVectorStarts() + nRows + 1);
+    int nRows = si.getNumRows();
+    int _nRows = si.getNumRows();
+    int nCols = si.getNumCols();
+    int _nCols = si.getNumCols();
+    int nnz = si.getMatrixByCol()->getVectorStarts()[nCols];
+    int _nnz = si.getMatrixByCol()->getVectorStarts()[nCols];
+    vector<double> colCost(si.getObjCoefficients(), 
+                                  si.getObjCoefficients() + nCols);
+    vector<double> colLower(si.getColLower(), si.getColLower() + nCols);
+    vector<double> colUpper(si.getColUpper(), si.getColUpper() + nCols);
+    vector<double> rowLower(si.getRowLower(), si.getRowLower() + nRows);
+    vector<double> rowUpper(si.getRowUpper(), si.getRowUpper() + nRows);
+    vector<double> Avalue(si.getMatrixByCol()->getElements(), 
+                                  si.getMatrixByCol()->getElements() + nnz);
+    vector<int> Aindex(si.getMatrixByCol()->getIndices(), 
+                                  si.getMatrixByCol()->getIndices() + nnz);
+    vector<int> Astart(si.getMatrixByCol()->getVectorStarts(), 
+                                  si.getMatrixByCol()->getVectorStarts() + nCols + 1);
+    vector<double> ARvalue(si.getMatrixByRow()->getElements(), 
+                                  si.getMatrixByRow()->getElements() + nnz);
+    vector<int> ARindex(si.getMatrixByRow()->getIndices(), 
+                                  si.getMatrixByRow()->getIndices() + nnz);
+    vector<int> ARstart(si.getMatrixByRow()->getVectorStarts(), 
+                                  si.getMatrixByRow()->getVectorStarts() + nRows + 1);
 
     // Pass LP info off to EP algorithm to compute an
     // EP of the LP
@@ -60,21 +127,34 @@ int main(int argc, const char *argv[]){
     aggSi.loadProblem(nCols_, nRows_, Astart_, Aindex_,
                         Avalue_, colLower_, colUpper_,
                         colCost_, rowLower_, rowUpper_);
+    for (int i = 0; i < nCols; ++i){
+      aggSi.setInteger(i);
+    }
     // Solve initial aggregate
     aggSi.initialSolve();
     // Generate l & p cuts for this model
-    liftProjectCuts.generateCuts(si, cuts);
-    acRc = si.applyCuts(cuts,0.0);
-    cout <<endl <<endl;
-      cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
-      cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
-      cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
-           <<" were inconsistent for this problem" <<endl;
-      cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
-      cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
-      cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
-      cout <<endl <<endl;
-    aggSi.resolve();
+    liftProjectCuts.generateCuts(aggSi, cuts);
+    acRc = aggSi.applyCuts(cuts,0.0);
+    update(nCols, nRows, nnz, Astart, Aindex,
+            Avalue, ARstart, ARindex, ARvalue,
+            colLower, colUpper, rowLower, rowUpper,
+            ep, aLp, aggSi, si);
+    ep.refine();
+    aLp.updateMasterLpAndEp(ep, _nCols, _nRows, 
+                        _nnz, Astart, Aindex,
+                        Avalue, rowLower, rowUpper);
+    aLp.aggregate();
+    cout << "finish" << endl;
+    // Establish number of cuts added and new matrix data
+    // cout <<endl <<endl;
+    //   cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
+    //   cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
+    //   cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
+    //        <<" were inconsistent for this problem" <<endl;
+    //   cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
+    //   cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
+    //   cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
+    // cout <<endl <<endl;
     // Load problem into a native Coin clpmodel type
     /* Build first Coin aggregate model and pass off to another 
     solver interface (may not need to solver interfaces, but for

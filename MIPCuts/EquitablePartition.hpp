@@ -15,12 +15,16 @@ using namespace std;
 
 class EquitablePartition{
 public:
-    EquitablePartition(const int nR, const int nC, const vector<double>& cC, const vector<double>& cL,
-                            const vector<double>& cU, const vector<double>& rL, const vector<double>& rU,
-                            const vector<double>& Av, const vector<int>& Ai, const vector<int>& As,
-                            const vector<double>& ARv, const vector<int>& ARi, const vector<int>& ARs);
+    EquitablePartition( int nR,  int nC,  vector<double>& cC,  vector<double>& cL,
+                            vector<double>& cU,  vector<double>& rL,  vector<double>& rU,
+                            vector<double>& Av,  vector<int>& Ai,  vector<int>& As,
+                            vector<double>& ARv,  vector<int>& ARi,  vector<int>& ARs);
     void initRefinement();
     void handleNegatives();
+    void updateForCuts(int nR,  int nC,  vector<double>& cC,  vector<double>& cL,
+                            vector<double>& cU,  vector<double>& rL,  vector<double>& rU,
+                            vector<double>& Av,  vector<int>& Ai,  vector<int>& As,
+                            vector<double>& ARv,  vector<int>& ARi,  vector<int>& ARs);
     void refine();
     void splitColor(int s);
     void isolate(int i);

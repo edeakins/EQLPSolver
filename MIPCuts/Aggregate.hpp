@@ -6,9 +6,12 @@
 class AggregateLp{
 public:
     AggregateLp(EquitablePartition& ep);
-    void updateEP(EquitablePartition& ep);
+    void updateMasterLpAndEp(EquitablePartition& ep, int _nC, int _nR,
+                            int _nnz, vector<int>& As, vector<int>& Ai,
+                            vector<double>& Av, vector<double>& rL, vector<double>& rU);
     void clear();
     void findDimensions();
+    void scanForCuts();
     void aggregateColBounds();
     void aggregateRowBounds();
     void aggregateAMatrix();
@@ -25,8 +28,11 @@ public:
 
     // Original LP info
     int nRows;
+    int _nRows;
     int nCols; 
+    int _nCols;
     int numTot;
+    int _numTot;
     vector<double> colCost;
     vector<double> colLower;
     vector<double> colUpper; 
@@ -36,6 +42,7 @@ public:
     vector<int> Aindex; 
     vector<int> Astart;
     vector<int> AindexP;
+    set<int, int>
 
     // Reduced LP 
     int nRows_ = 0;
@@ -51,6 +58,8 @@ public:
     vector<double> Avalue_; 
     vector<int> Aindex_; 
     vector<int> Astart_;
+    set<int> cut;
+    map<int, int> cutIdx;
 
     // EP info
     vector<vector<int> > C;

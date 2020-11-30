@@ -2,25 +2,25 @@
 
 using namespace std;
 
-EquitablePartition::EquitablePartition(const int nR, const int nC, const vector<double>& cC, const vector<double>& cL,
-                                            const vector<double>& cU, const vector<double>& rL, const vector<double>& rU,
-                                            const vector<double>& Av, const vector<int>& Ai, const vector<int>& As,
-                                            const vector<double>& ARv, const vector<int>& ARi, const vector<int>& ARs){
+EquitablePartition::EquitablePartition( int nR,  int nC,  vector<double>& cC,  vector<double>& cL,
+                                             vector<double>& cU,  vector<double>& rL,  vector<double>& rU,
+                                             vector<double>& Av,  vector<int>& Ai,  vector<int>& As,
+                                             vector<double>& ARv,  vector<int>& ARi,  vector<int>& ARs){
     // Grab LP data
     nRows = nR;
     nCols = nC;
     numTot = nR + nC;
-    colCost = cC;
-    colLower = cL;
-    colUpper = cU;
-    rowLower = rL;
-    rowUpper = rU;
-    Avalue = Av;
-    Aindex = Ai;
-    Astart = As;
-    ARvalue = ARv;
-    ARindex = ARi;
-    ARstart = ARs;
+    colCost.assign(cC.begin(), cC.end());
+    colLower.assign(cL.begin(), cL.end());
+    colUpper.assign(cU.begin(), cU.end());
+    rowLower.assign(rL.begin(), rL.end());
+    rowUpper.assign(rU.begin(), rU.end());
+    Avalue.assign(Av.begin(), Av.end());
+    Aindex.assign(Ai.begin(), Ai.end());
+    Astart.assign(As.begin(), As.end());
+    ARvalue.assign(ARv.begin(), ARv.end());
+    ARindex.assign(ARi.begin(), ARi.end());
+    ARstart.assign(ARs.begin(), ARs.end());
 
     // Pre allocate arrays for EP algorithm
 	AindexP.resize(Aindex.size());
@@ -40,6 +40,42 @@ EquitablePartition::EquitablePartition(const int nR, const int nC, const vector<
     A.resize(numTot);
 	handleNegatives();
     initRefinement();
+}
+
+void EquitablePartition::updateForCuts(int nR,  int nC,  vector<double>& cC,  vector<double>& cL,
+                                    	vector<double>& cU,  vector<double>& rL,  vector<double>& rU,
+                                        vector<double>& Av,  vector<int>& Ai,  vector<int>& As,
+                                        vector<double>& ARv,  vector<int>& ARi,  vector<int>& ARs){
+	// Original Lp info but edited for cuts
+    nCols = nC;
+    numTot = nR + nC;
+    colCost.assign(cC.begin(), cC.end());
+    colLower.assign(cL.begin(), cL.end());
+    colUpper.assign(cU.begin(), cU.end());
+    rowLower.assign(rL.begin(), rL.end());
+    rowUpper.assign(rU.begin(), rU.end());
+    Avalue.assign(Av.begin(), Av.end());
+    Aindex.assign(Ai.begin(), Ai.end());
+    Astart.assign(As.begin(), As.end());
+    ARvalue.assign(ARv.begin(), ARv.end());
+    ARindex.assign(ARi.begin(), ARi.end());
+    ARstart.assign(ARs.begin(), ARs.end());
+	// Make color scheme edits for new cut rows
+	// These rows are singletons and therefore do not effect anything 
+	// other than that theyu exist.
+	C.resize(numTot);
+	Csize.resize(numTot);
+	A.resize(numTot);
+	Asize.resize(numTot);
+	color.resize(numTot);
+	AindexP.resize(Avalue.size());
+	for (int i = nRows; i < nR; ++i){
+		C[cCol].push_back(nRows + nCols);
+		Csize[cCol]++;
+		color[nRows + nCols] = cCol;
+		cCol++;
+		nRows++;
+	}
 }
 
 void EquitablePartition::initRefinement(){
@@ -117,7 +153,6 @@ void EquitablePartition::initRefinement(){
 		color[i] = initialParts[i];
 	}
 	refine();
-	packVectors();
 }
 
 void EquitablePartition::refine(){
