@@ -13,7 +13,10 @@
 #include "CglLiftAndProject.hpp"
 #include "CglKnapsackCover.hpp"
 #include "CglLandP.hpp"
-#include "CglSimpleRounding.hpp" 
+#include "CglZeroHalf.hpp"
+#include "CglSimpleRounding.hpp"
+#include "CglMixedIntegerRounding.hpp"
+#include "CglMixedIntegerRounding2.hpp" 
 #include "EquitablePartition.hpp"
 #include "Aggregate.hpp"
 

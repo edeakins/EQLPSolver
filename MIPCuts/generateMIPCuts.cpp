@@ -1,6 +1,9 @@
 #include "generateMIPCuts.hpp"
 using namespace std;
 
+int numRowUpdateStart = 0;
+int nCuts = 0;
+
 void update(int& nCols, int& nRows, int nnz, vector<int>& Astart,
             vector<int>& Aindex, vector<double>& Avalue, vector<int>& ARstart,
             vector<int>& ARindex, vector<double>& ARvalue, vector<double>& colLower,
@@ -10,7 +13,7 @@ void update(int& nCols, int& nRows, int nnz, vector<int>& Astart,
   int nAggRowsWCuts = aggSi.getNumRows();
   int nAggColsWCuts = aggSi.getNumCols();
   int nnzAggWCuts = aggSi.getMatrixByCol()->getVectorStarts()[nAggColsWCuts];
-  int nAggRows = aLp.nRows_;
+  int nAggRows = aLp.nRows_ + nCuts;
   int nAggCols = aLp.nCols_;
   vector<double> rowLowerAgg(aggSi.getRowLower(), aggSi.getRowLower() + nAggRowsWCuts);
   vector<double> rowUpperAgg(aggSi.getRowUpper(), aggSi.getRowUpper() + nAggRowsWCuts);
@@ -32,13 +35,18 @@ void update(int& nCols, int& nRows, int nnz, vector<int>& Astart,
     for (int j = ARstartAgg[i]; j < ARstartAgg[i + 1]; ++j){
       int color = ARindexAgg[j];
       double alpha = ARvalueAgg[j];
-      indices.insert(indices.end(), C[color].begin(), C[color].end());
-      vector<double> temp(indices.size(), alpha);
-      values.insert(values.end(), temp.begin(), temp.end());
+      vector<int> tempIndices(C[color].begin(), C[color].end());
+      indices.insert(indices.end(), tempIndices.begin(), tempIndices.end());
+      vector<double> tempValues(tempIndices.size(), alpha);
+      values.insert(values.begin(), tempValues.begin(), tempValues.end());
     }
     int numEl = indices.size();
     si.addRow(numEl, &indices[0], &values[0], lb, ub);
   } 
+  for (int i = 0; i < si.getNumCols(); ++i){
+    si.setInteger(i);
+  }
+  si.writeLp("testSi");
   // Columns will be automagically updated using clp model class in background
   // Pull new LP info with added cuts in the highest space
   int nRowsWCuts = si.getNumRows();
@@ -72,7 +80,7 @@ int main(int argc, const char *argv[]){
     // Intialize solvers and cut generators
     OsiClpSolverInterface si;
     OsiClpSolverInterface aggSi;
-    CglSimpleRounding liftProjectCuts;
+    CglLiftAndProject liftProjectCuts;
     OsiCuts cuts;
     OsiSolverInterface::ApplyCutsReturnCode acRc;
 
@@ -110,61 +118,80 @@ int main(int argc, const char *argv[]){
                             Avalue, Aindex, Astart,
                             ARvalue, ARindex, ARstart);
     // Pass EP to aggregator for first aggregation
-    AggregateLp aLp(ep);
-    aLp.aggregate();
-    // Grab aggregate Lp info
-    int nCols_ = aLp.nCols_;
-    int nRows_ = aLp.nRows_;
-    double* colCost_ = &aLp.colCost_[0];
-    double* colUpper_ = &aLp.colUpper_[0];
-    double* colLower_ = &aLp.colLower_[0];
-    double* rowUpper_ = &aLp.rowUpper_[0];
-    double* rowLower_ = &aLp.rowLower_[0];
-    double* Avalue_ = &aLp.Avalue_[0];
-    int* Aindex_ = &aLp.Aindex_[0];
-    int* Astart_ = &aLp.Astart_[0];
+    AggregateLp alp(ep);
+    alp.aggregate();
+    // Grab aggregate Lp dimensions
+    int nCols_ = alp.getNumCol();
+    int nRows_ = alp.getNumRow();
     // Load problem into a native Coin clpmodel type
-    aggSi.loadProblem(nCols_, nRows_, Astart_, Aindex_,
-                        Avalue_, colLower_, colUpper_,
-                        colCost_, rowLower_, rowUpper_);
-    for (int i = 0; i < nCols; ++i){
+    aggSi.loadProblem(nCols_, nRows_, &alp.getAstart()[0], &alp.getAindex()[0],
+                        &alp.getAvalue()[0], &alp.getColLower()[0], &alp.getColUpper()[0],
+                        &alp.getColCost()[0], &alp.getRowLower()[0], &alp.getRowUpper()[0]);
+    for (int i = 0; i < nCols_; ++i){
       aggSi.setInteger(i);
     }
-    // Solve initial aggregate
+    // // Solve initial aggregate
     aggSi.initialSolve();
     // Generate l & p cuts for this model
     liftProjectCuts.generateCuts(aggSi, cuts);
     acRc = aggSi.applyCuts(cuts,0.0);
-    update(nCols, nRows, nnz, Astart, Aindex,
+    // Print applyCuts return code
+    cout <<endl <<endl;
+    cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
+    cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
+    cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
+          <<" were inconsistent for this problem" <<endl;
+    cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
+    cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
+    cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
+    cout <<endl <<endl;
+    update(_nCols, _nRows, _nnz, Astart, Aindex,
             Avalue, ARstart, ARindex, ARvalue,
             colLower, colUpper, rowLower, rowUpper,
-            ep, aLp, aggSi, si);
-    ep.refine();
-    aLp.updateMasterLpAndEp(ep, _nCols, _nRows, 
+            ep, alp, aggSi, si);
+    nCuts += acRc.getNumApplied();
+    // aggSi.writeLp("test");
+    // Loop until EP is discrete
+    // This will give us an Lp in the original (full) dimension
+    // This Lp however will have the added symmetry cuts from each lift
+    while(!ep.isDiscrete()){
+      ep.refine();
+      alp.updateMasterLpAndEp(ep, _nCols, _nRows, 
                         _nnz, Astart, Aindex,
                         Avalue, rowLower, rowUpper);
-    aLp.aggregate();
-    cout << "finish" << endl;
-    // Establish number of cuts added and new matrix data
-    // cout <<endl <<endl;
-    //   cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
-    //   cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
-    //   cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
-    //        <<" were inconsistent for this problem" <<endl;
-    //   cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
-    //   cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
-    //   cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
-    // cout <<endl <<endl;
-    // Load problem into a native Coin clpmodel type
-    /* Build first Coin aggregate model and pass off to another 
-    solver interface (may not need to solver interfaces, but for
-    safe keeping early on shall have two) */
-    // while (!ep.isDiscrete()){
-    //     ep.refine();
-    //     aLp.updateEP(ep);
-    //     aLp.aggregate();
-    // }
-    
-    // si.initialSolve();
-    // CglLiftAndProject cg1;
+      alp.aggregate();
+      // Grab aggregate Lp dimensions
+      nCols_ = alp.getNumCol();
+      nRows_ = alp.getNumRow();
+      // Load problem into a native Coin clpmodel type
+      aggSi.loadProblem(nCols_, nRows_, &alp.getAstart()[0], &alp.getAindex()[0],
+                          &alp.getAvalue()[0], &alp.getColLower()[0], &alp.getColUpper()[0],
+                          &alp.getColCost()[0], &alp.getRowLower()[0], &alp.getRowUpper()[0]);
+      for (int i = 0; i < nCols_; ++i){
+        aggSi.setInteger(i);
+      }
+      aggSi.writeLp("testAggSi");
+      // Solve 
+      aggSi.initialSolve();
+      // Generate L&P cuts
+      liftProjectCuts.generateCuts(aggSi, cuts);
+      acRc = aggSi.applyCuts(cuts,0.0);
+      // Print applyCuts return code
+      cout <<endl <<endl;
+      cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
+      cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
+      cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
+           <<" were inconsistent for this problem" <<endl;
+      cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
+      cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
+      cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
+      cout <<endl <<endl;
+      // Update full model
+      update(_nCols, _nRows, _nnz, Astart, Aindex,
+              Avalue, ARstart, ARindex, ARvalue,
+              colLower, colUpper, rowLower, rowUpper,
+              ep, alp, aggSi, si);
+      nCuts += acRc.getNumApplied();
+    }
+    cout << "Symmetry Cuts Generated: " << nCuts << endl;
 }

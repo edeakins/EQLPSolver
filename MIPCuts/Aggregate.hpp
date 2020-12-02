@@ -15,8 +15,11 @@ public:
     void aggregateColBounds();
     void aggregateRowBounds();
     void aggregateAMatrix();
+    void addCutsToAggregate();
     void aggregateCostVector();
     void aggregate();
+    int getNumCol();
+    int getNumRow();
     vector<double>& getColUpper();
     vector<double>& getColLower();
     vector<double>& getColCost();
@@ -37,12 +40,16 @@ public:
     vector<double> colLower;
     vector<double> colUpper; 
     vector<double> rowLower;
+    vector<double> _rowLower;
     vector<double> rowUpper;
-    vector<double> Avalue; 
+    vector<double> _rowUpper;
+    vector<double> Avalue;
+    vector<double> _Avalue; 
     vector<int> Aindex; 
+    vector<int> _Aindex;
     vector<int> Astart;
+    vector<int> _Astart;
     vector<int> AindexP;
-    set<int, int>
 
     // Reduced LP 
     int nRows_ = 0;
@@ -50,6 +57,7 @@ public:
     int nCols_ = 0; 
     int tempNCols_ = 0;
     int numTot_ = 0;
+    int nCuts = 0;
     vector<double> colCost_;
     vector<double> colLower_;
     vector<double> colUpper_; 
