@@ -80,7 +80,7 @@ int main(int argc, const char *argv[]){
     // Intialize solvers and cut generators
     OsiClpSolverInterface si;
     OsiClpSolverInterface aggSi;
-    CglLiftAndProject liftProjectCuts;
+    CglSimpleRounding liftProjectCuts;
     OsiCuts cuts;
     OsiSolverInterface::ApplyCutsReturnCode acRc;
 
@@ -193,5 +193,6 @@ int main(int argc, const char *argv[]){
               ep, alp, aggSi, si);
       nCuts += acRc.getNumApplied();
     }
+    aggSi.initialSolve();
     cout << "Symmetry Cuts Generated: " << nCuts << endl;
 }
