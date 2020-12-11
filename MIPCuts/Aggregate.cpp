@@ -3,8 +3,11 @@
 AggregateLp::AggregateLp(EquitablePartition& ep){
     // Original Lp info
     nRows = ep.nRows;
+    _nRows = nRows;
 	nCols = ep.nCols;
+    _nCols = nCols;
 	numTot = nRows + nCols;
+    _numTot = numTot;
 	colCost.assign(ep.colCost.begin(), ep.colCost.end());
     colLower.assign(ep.colLower.begin(), ep.colLower.end());
     colUpper.assign(ep.colUpper.begin(), ep.colUpper.end());
@@ -39,6 +42,7 @@ void AggregateLp::updateMasterLpAndEp(EquitablePartition& ep, int _nC, int _nR,
     Csize.assign(ep.Csize.begin(), ep.Csize.end());
     color.assign(ep.color.begin(), ep.color.end());
     AindexP.assign(ep.AindexP.begin(), ep.AindexP.end());
+    parentPartition.assign(ep.parentPartition.begin(), ep.parentPartition.end());
 }
 
 void AggregateLp::clear(){
@@ -52,35 +56,41 @@ void AggregateLp::findDimensions(){
         if (Csize[i])
             nCols_++;
     for (int i = tempNRows_; i < nRows; ++i)
-        if (Csize[i])
+        if (Csize[i + nCols])
             nRows_++;
     colLower_.resize(nCols_);
     colUpper_.resize(nCols_);
     colCost_.resize(nCols_); 
 }
 
-void AggregateLp::scanForCuts(){
+void AggregateLp::pairCutWithIndex(){
     cut.clear();
     cutIdx.clear();
     nCuts = nRows_;
-    for (int i = 0; i < _Aindex.size(); ++i){
-        if (_Aindex[i] >= nRows){
-            pair<set<int>::iterator, bool> ret = cut.insert(_Aindex[i]);
-            if (ret.second){
-                cutIdx[_Aindex[i]] = nCuts;
-                nCuts++;
-            }
-        }
-    }
-    rowLower_.resize(nCuts);
-    rowUpper_.resize(nCuts);
+    int start = nRows;
+    int finish = _nRows;
+    for (int i = start; i < finish; ++i){
+        cutIdx[i] = nCuts++;
+    } 
+}
+
+void AggregateLp::pairOrderConstraintWithIndex(){
+    orderConstraintIdx.clear();
+    nOrdConstraints = nCuts;
+    int orderIdx = 0;
+    for (int i = 0; i < parentPartition.size(); ++i)
+        if (parentPartition[i] != -1)
+            orderConstraintIdx[orderIdx++] = nOrdConstraints++;
+    rowLower_.resize(nOrdConstraints);
+    rowUpper_.resize(nOrdConstraints);
 }
 
 void AggregateLp::aggregateColBounds(){
-    for (int i = tempNCols_; i < nCols_; ++i){
+    for (int i = 0; i < nCols_; ++i){
         int rep = C[i].front();
-        colLower_[i] = colLower[rep];
-        colUpper_[i] = colUpper[rep];
+        int orbitSize = Csize[color[rep]];
+        colLower_[i] = colLower[rep] * orbitSize;
+        colUpper_[i] = colUpper[rep] * orbitSize;
     }
 }
 
@@ -88,27 +98,51 @@ void AggregateLp::aggregateRowBounds(){
     for (int i = 0; i < nRows_; ++i){
         int rep = C[i + nCols].front() - nCols;
         int orbitSize = Csize[color[rep + nCols]];
-        rowLower_[i] = rowLower[rep] * orbitSize;
-        rowUpper_[i] = rowUpper[rep] * orbitSize;
+        if (rowLower[rep] == inf)
+            rowLower_[i] = inf;
+        else
+            rowLower_[i] = rowLower[rep] * orbitSize;
+        if (rowUpper[rep] == inf)
+            rowUpper_[i] = inf;
+        else
+            rowUpper_[i] = rowUpper[rep] * orbitSize;
     }
     for (int i = nRows_; i < nCuts; ++i){
-        rowLower_[i] = _rowLower[i - nRows_ + nRows];
-        rowUpper_[i] = _rowUpper[i - nRows_ + nRows];
+        if (_rowLower[i - nRows_ + nRows] == inf)
+            rowLower_[i] = inf;
+        else{
+            if (_rowLower[i - nRows_ + nRows] < 0)
+                rowLower_[i] = _rowLower[i - nRows_ + nRows];
+            else
+                rowLower_[i] = _rowLower[i - nRows_ + nRows];  
+        }
+        if (_rowUpper[i - nRows_ + nRows] == inf)
+            rowUpper_[i] = inf;
+        else{
+            if (_rowUpper[i - nRows_ + nRows] < 0)
+                rowUpper_[i] = _rowUpper[i - nRows_ + nRows];
+            else
+                rowUpper_[i] = _rowUpper[i - nRows_ + nRows];  
+        }
+    }
+    for (int i = nCuts; i < nOrdConstraints; ++i){
+        rowLower_[i] = 0;
+        rowUpper_[i] = inf;
     }
 }
 
 void AggregateLp::aggregateAMatrix(){
 	Astart_.push_back(0);
 	for (int i = 0; i < nCols_; ++i){
-        vector<double> coeff(nRows_);
-		int rep = C[i].front();
-		for (int j = Astart[rep]; j < Astart[rep + 1]; ++j){
+        int rep = C[i].front();
+        vector<double> coeff(nRows_, 0);
+        for (int j = Astart[rep]; j < Astart[rep + 1]; ++j){
             int rowIdx = AindexP[j] - nCols;
             coeff[rowIdx] += Avalue[j];
         }
         for (int j = 0; j < coeff.size(); ++j){
             if (coeff[j]){
-                Avalue_.push_back(coeff[j] * C[i].size());
+                Avalue_.push_back(coeff[j]);
                 Aindex_.push_back(j);
             }
         }
@@ -134,38 +168,76 @@ void AggregateLp::addCutsToAggregate(){
                 }
             }
         }
+        //std::cout << "column finished for generated cuts" << std::endl;
     }
 }
 
-void AggregateLp::aggregate(){
-    clear();
-    findDimensions();
-    scanForCuts();
-    aggregateColBounds();
-    aggregateRowBounds();
-    aggregateAMatrix();
-    addCutsToAggregate();
-    aggregateCostVector();
-    tempNCols_ = nCols_;
-    tempNRows_ = nRows_;
+void AggregateLp::addOrderConstraints(){
+    if (!_Astart.size()) return;
+    int orderIdx = 0;
+    for (int i  = 0; i < parentPartition.size(); ++i){
+        if (parentPartition[i] != -1){
+            int parent = parentPartition[i];
+            int child = i;
+            // add row to parent node
+            int aggColEnd = Astart_[parent + 1];
+            int rowIdx = orderConstraintIdx[orderIdx++];
+            double value = Csize[child];
+            Aindex_.insert(Aindex_.begin() + aggColEnd, rowIdx);
+            Avalue_.insert(Avalue_.begin() + aggColEnd, value);
+            for (int k = parent + 1; k <= nCols_; ++k){
+                Astart_[k]++;
+            }
+            // add row to childe node
+            aggColEnd = Astart_[child + 1];
+            value = -1;
+            Aindex_.insert(Aindex_.begin() + aggColEnd, rowIdx);
+            Avalue_.insert(Avalue_.begin() + aggColEnd, value);
+            for (int k = child + 1; k <= nCols_; ++k){
+                Astart_[k]++;
+            }
+        }
+    }
 }
 
 void AggregateLp::aggregateCostVector(){
     colCost_.assign(nCols_, 0);
 	for (int i = 0; i < nCols_; ++i){
         int rep = C[i].front();
-        colCost_[i] = C[i].size() * colCost[rep];
+        colCost_[i] = colCost[rep];
     }
+}
+
+void AggregateLp::aggregate(){
+    clear();
+    findDimensions();
+    pairCutWithIndex();
+    pairOrderConstraintWithIndex();
+    aggregateColBounds();
+    aggregateRowBounds();
+    aggregateAMatrix();
+    addCutsToAggregate();
+    addOrderConstraints();
+    aggregateCostVector();
+    tempNCols_ = nCols_;
+    tempNRows_ = nRows_;
 }
 
 int AggregateLp::getNumCol(){
     return nCols_;
 }
 
+int AggregateLp::getNumRowAfterCuts(){
+    if (!_Astart.size()) return nRows_;
+    return nCuts;
+}
+int AggregateLp::getNumRowAfterOrderConstraints(){
+    if (!_Astart.size()) return nRows_;
+    return nOrdConstraints;
+}
+
 int AggregateLp::getNumRow(){
-    if (!_Astart.size())
-        return nRows_;
-    return nRows_ + _nRows - nRows;
+    return nRows_;
 }
 
 vector<double>& AggregateLp::getColUpper(){

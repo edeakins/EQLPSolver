@@ -1,20 +1,22 @@
 #include "generateMIPCuts.hpp"
 using namespace std;
 
-int numRowUpdateStart = 0;
+int iter = 0;
 int nCuts = 0;
+int nCutsAdded = 0;
 
 void update(int& nCols, int& nRows, int nnz, vector<int>& Astart,
             vector<int>& Aindex, vector<double>& Avalue, vector<int>& ARstart,
             vector<int>& ARindex, vector<double>& ARvalue, vector<double>& colLower,
             vector<double>& colUpper, vector<double>& rowLower, vector<double>& rowUpper,
-            EquitablePartition& ep, AggregateLp& aLp, OsiClpSolverInterface& aggSi, OsiClpSolverInterface& si){
+            EquitablePartition& ep, AggregateLp& alp, OsiClpSolverInterface& aggSi, OsiClpSolverInterface& si){
   // Grab info we will need for update
-  int nAggRowsWCuts = aggSi.getNumRows();
+  int nAggRowsWCuts = alp.getNumRowAfterOrderConstraints() + nCutsAdded;
+  nCutsAdded = 0;
   int nAggColsWCuts = aggSi.getNumCols();
-  int nnzAggWCuts = aggSi.getMatrixByCol()->getVectorStarts()[nAggColsWCuts];
-  int nAggRows = aLp.nRows_ + nCuts;
-  int nAggCols = aLp.nCols_;
+  int nnzAggWCuts = aggSi.getMatrixByRow()->getVectorStarts()[nAggRowsWCuts];
+  int nAggRows = alp.getNumRowAfterOrderConstraints();
+  int nAggCols = alp.nCols_;
   vector<double> rowLowerAgg(aggSi.getRowLower(), aggSi.getRowLower() + nAggRowsWCuts);
   vector<double> rowUpperAgg(aggSi.getRowUpper(), aggSi.getRowUpper() + nAggRowsWCuts);
   vector<double> ARvalueAgg(aggSi.getMatrixByRow()->getElements(), 
@@ -38,7 +40,8 @@ void update(int& nCols, int& nRows, int nnz, vector<int>& Astart,
       vector<int> tempIndices(C[color].begin(), C[color].end());
       indices.insert(indices.end(), tempIndices.begin(), tempIndices.end());
       vector<double> tempValues(tempIndices.size(), alpha);
-      values.insert(values.begin(), tempValues.begin(), tempValues.end());
+      values.insert(values.end(), tempValues.begin(), tempValues.end());
+      // cout << "one col finished in this row" << endl;
     }
     int numEl = indices.size();
     si.addRow(numEl, &indices[0], &values[0], lb, ub);
@@ -80,12 +83,15 @@ int main(int argc, const char *argv[]){
     // Intialize solvers and cut generators
     OsiClpSolverInterface si;
     OsiClpSolverInterface aggSi;
-    CglSimpleRounding liftProjectCuts;
+    CglGomory gomoryCuts;
+    CglGMI gmiCuts;
+    CglTwomir twomirCuts;
+    CglMixedIntegerRounding mIRoundingCuts;
     OsiCuts cuts;
     OsiSolverInterface::ApplyCutsReturnCode acRc;
 
     // Grab info for equitable partition scheme;
-    si.readMps(mpsFileName.c_str(), "mps");
+    si.readMps(mpsFileName.c_str());
     int nRows = si.getNumRows();
     int _nRows = si.getNumRows();
     int nCols = si.getNumCols();
@@ -122,7 +128,7 @@ int main(int argc, const char *argv[]){
     alp.aggregate();
     // Grab aggregate Lp dimensions
     int nCols_ = alp.getNumCol();
-    int nRows_ = alp.getNumRow();
+    int nRows_ = alp.getNumRowAfterOrderConstraints();
     // Load problem into a native Coin clpmodel type
     aggSi.loadProblem(nCols_, nRows_, &alp.getAstart()[0], &alp.getAindex()[0],
                         &alp.getAvalue()[0], &alp.getColLower()[0], &alp.getColUpper()[0],
@@ -130,10 +136,36 @@ int main(int argc, const char *argv[]){
     for (int i = 0; i < nCols_; ++i){
       aggSi.setInteger(i);
     }
+    aggSi.writeMps("AggBeforeCutsAddedFromCbc");
     // // Solve initial aggregate
     aggSi.initialSolve();
+    vector<double> solution(aggSi.getColSolution(), aggSi.getColSolution() + aggSi.getNumCols());
+    cout << "\nsolution before\n" << endl;
+    for (int i = 0; i < aggSi.getNumCols(); ++i){
+      cout << "x_" << i << " = " << solution[i] << endl;
+    }
+    // CoinWarmStart* warmStart = aggSi.getWarmStart();
+    // int numDeleteRows = 0;
+    // int start = alp.getNumRowAfterCuts();
+    // int finish = alp.getNumRowAfterOrderConstraints();
+    // vector<int> deleteRows;
+    // for (int i = start; i < finish; ++i){
+    //   numDeleteRows++;
+    //   deleteRows.push_back(i);
+    // }
+    // aggSi.deleteRows(numDeleteRows, &deleteRows[0]);
+    // aggSi.writeLp("AggAfterDelete");
+    // aggSi.setWarmStart(warmStart);
+    // aggSi.resolve();
+    // cout << "\nsolution after\n" << endl;
+    // for (int i = 0; i < aggSi.getNumCols(); ++i){
+    //   cout << "x_" << i << " = " << solution[i] << endl;
+    // }
     // Generate l & p cuts for this model
-    liftProjectCuts.generateCuts(aggSi, cuts);
+    gomoryCuts.generateCuts(aggSi, cuts);
+    // gmiCuts.generateCuts(aggSi, cuts);
+    // twomirCuts.generateCuts(aggSi, cuts);
+    // mIRoundingCuts.generateCuts(aggSi, cuts);
     acRc = aggSi.applyCuts(cuts,0.0);
     // Print applyCuts return code
     cout <<endl <<endl;
@@ -145,11 +177,18 @@ int main(int argc, const char *argv[]){
     cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
     cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
     cout <<endl <<endl;
+    aggSi.writeMps("AggAfterCuts");
+    iter++;
+    const char* fName = argv[1];
+    char iteration[] = "_iter_";
+    char outPut[100];
+    sprintf(outPut, "%s%s%d", fName, iteration, iter);
+    nCuts += acRc.getNumApplied();
+    nCutsAdded += acRc.getNumApplied();
     update(_nCols, _nRows, _nnz, Astart, Aindex,
             Avalue, ARstart, ARindex, ARvalue,
             colLower, colUpper, rowLower, rowUpper,
             ep, alp, aggSi, si);
-    nCuts += acRc.getNumApplied();
     // aggSi.writeLp("test");
     // Loop until EP is discrete
     // This will give us an Lp in the original (full) dimension
@@ -162,19 +201,51 @@ int main(int argc, const char *argv[]){
       alp.aggregate();
       // Grab aggregate Lp dimensions
       nCols_ = alp.getNumCol();
-      nRows_ = alp.getNumRow();
+      nRows_ = alp.getNumRowAfterOrderConstraints();
       // Load problem into a native Coin clpmodel type
+      aggSi = OsiClpSolverInterface();
       aggSi.loadProblem(nCols_, nRows_, &alp.getAstart()[0], &alp.getAindex()[0],
                           &alp.getAvalue()[0], &alp.getColLower()[0], &alp.getColUpper()[0],
                           &alp.getColCost()[0], &alp.getRowLower()[0], &alp.getRowUpper()[0]);
       for (int i = 0; i < nCols_; ++i){
         aggSi.setInteger(i);
       }
-      aggSi.writeLp("testAggSi");
+      aggSi.writeMps("AggBeforeCutsAddedFromCbc");
       // Solve 
       aggSi.initialSolve();
+      solution.assign(aggSi.getColSolution(), aggSi.getColSolution() + aggSi.getNumCols());
+      cout << "\nsolution before\n" << endl;
+      for (int i = 0; i < aggSi.getNumCols(); ++i){
+        cout << "x_" << i << " = " << solution[i] << endl;
+      }
+      // warmStart = aggSi.getWarmStart();
+      // numDeleteRows = 0;
+      // start = alp.getNumRowAfterCuts();
+      // finish = alp.getNumRowAfterOrderConstraints();
+      // deleteRows.clear();
+      // for (int i = start; i < finish; ++i){
+      //   numDeleteRows++;
+      //   deleteRows.push_back(i);
+      // }
+      // aggSi.deleteRows(numDeleteRows, &deleteRows[0]);
+      // aggSi.writeLp("AggAfterDelete");
+      // aggSi.setWarmStart(warmStart);
+      // aggSi.initialSolve();
+      // solution.assign(aggSi.getColSolution(), aggSi.getColSolution() + aggSi.getNumCols());
+      // cout << "\nsolution after\n" << endl;
+      // for (int i = 0; i < aggSi.getNumCols(); ++i){
+      //   cout << "x_" << i << " = " << solution[i] << endl;
+      // }
       // Generate L&P cuts
-      liftProjectCuts.generateCuts(aggSi, cuts);
+      cuts = OsiCuts();
+      gomoryCuts = CglGomory();
+      // gmiCuts = CglGMI();
+      // twomirCuts = CglTwomir();
+      // mIRoundingCuts = CglMixedIntegerRounding();
+      gomoryCuts.generateCuts(aggSi, cuts);
+      // gmiCuts.generateCuts(aggSi, cuts);
+      // twomirCuts.generateCuts(aggSi, cuts);
+      // mIRoundingCuts.generateCuts(aggSi, cuts);
       acRc = aggSi.applyCuts(cuts,0.0);
       // Print applyCuts return code
       cout <<endl <<endl;
@@ -186,12 +257,16 @@ int main(int argc, const char *argv[]){
       cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
       cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
       cout <<endl <<endl;
+      aggSi.writeMps("AggAfterCuts");
+      iter++;
+      sprintf(outPut, "%s%s%d", fName, iteration, iter);
       // Update full model
+      nCuts += acRc.getNumApplied();
+      nCutsAdded += acRc.getNumApplied();
       update(_nCols, _nRows, _nnz, Astart, Aindex,
               Avalue, ARstart, ARindex, ARvalue,
               colLower, colUpper, rowLower, rowUpper,
               ep, alp, aggSi, si);
-      nCuts += acRc.getNumApplied();
     }
     aggSi.initialSolve();
     cout << "Symmetry Cuts Generated: " << nCuts << endl;

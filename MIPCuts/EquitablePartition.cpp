@@ -270,11 +270,15 @@ void EquitablePartition::splitColor(int s){
 		int w = A[s][i];
 		if (var){
 			ret = degSumColor.insert(pair<double, int>(cdeg[w], vCol));
-			vCol += (ret.second == 1);
+			if (ret.second){
+				if (parentPartition[s] != -1)
+					parentPartition[vCol] = parentPartition[s];
+				vCol++;
+			}
 		}
 		else{
 			ret = degSumColor.insert(pair<double, int>(cdeg[w], cCol));
-			cCol += (ret.second == 1);
+			cCol += ret.second == 1;
 		}
 		colorFreq[degSumColor[cdeg[w]]]++;
 	}
@@ -333,23 +337,24 @@ void EquitablePartition::findTarget(){
 	}
 }
 
-void EquitablePartition::isolate(int col){
-	// C[color[i]].erase(remove(C[color[i]].begin(), C[color[i]].end(), i), C[color[i]].end());
-	int newCol = vCol;
-	int oldCol = col;
-    int node = C[oldCol].back();
-	C[oldCol].pop_back();
-	Csize[oldCol]--;
-	C[newCol].push_back(node);
-	Csize[newCol]++;
-	color[node] = newCol;
-	vCol++;
+void EquitablePartition::isolate(int s){
+	parentPartition.assign(nCols, -1);
+	vector<int> temp1;
+	vector<int> temp2;
+	for (int i = 0; i < C[s].size(); ++i)
+		if (!i) {temp1.push_back(C[s][i]); color[C[s][i]] = s;}
+		else {temp2.push_back(C[s][i]); color[temp2[i - 1]] = vCol; Csize[vCol]++;}
+	C[s] = temp1;
+	C[vCol] = temp2;
+	Csize[s] = 1;
 	for (int i = 0; i < C.size(); ++i){
 		if (Csize[i] == 1)
-			isolates[C[i].front()] = true;
+			isolates[C[i][0]] = true;
 	}
-	SCheck[newCol] = true;
-	S.push(newCol);
+	parentPartition[vCol] = s;
+	SCheck[vCol] = true;
+	S.push(vCol);
+	vCol++;
 }
 
 bool EquitablePartition::isDiscrete(){

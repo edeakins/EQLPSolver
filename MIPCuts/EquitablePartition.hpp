@@ -11,6 +11,7 @@
 #include <tuple>
 #include <numeric>
 #include <functional>
+#include <iostream>
 using namespace std;
 
 class EquitablePartition{
@@ -69,6 +70,7 @@ public:
     vector<int> Asize;
     vector<int> initialParts;
     vector<int> numEdges;
+    vector<int> parentPartition;
 };
 
 #endif
