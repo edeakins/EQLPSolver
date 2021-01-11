@@ -17,242 +17,140 @@
 #include <numeric>
 using namespace std;
 
-void HighsEquitable::setup(const HighsLp& lp){
-	// From the lp 
-	numRow = (lp.numRow_);
-	numCol = (lp.numCol_);
-	nnz = (lp.nnz_);
-	rowLower = (lp.rowLower_);
-	rowUpper = (lp.rowUpper_);
-	colUpper = (lp.colUpper_);
-	colLower = (lp.colLower_);
-	colCost = (lp.colCost_);
-	Avalue = (lp.Avalue_);
-	Aindex = (lp.Aindex_);
-	Astart = (lp.Astart_);
-	model_name = lp.model_name_;
-	lp_name = lp.lp_name_;
-
-	// Associated with equitable ptn
-	numTot = numCol + numRow;
-	coeff.resize(numTot);
-	// Xstart_.assign(Astart.begin(), Astart.end());
-	// Xvalue_.assign(Avalue.size(), 0);
-	Xindex_.assign(Aindex.size(), 0);
-	AvalueCopy.assign(Avalue.size(), 0);
-	ARvalueCopy.assign(Avalue.size(), 0);
-	SCheck.assign(numTot, false);
-	mincdeg.assign(numTot, 0);
-	maxcdeg.assign(numTot, 0);
-	cdeg.assign(numTot, 0);
-	numEdges.assign(numTot, 0);
-	isAdj.assign(numTot, false);
-	isolates.assign(numTot, false);
-	targets.assign(numTot, false);
-	previousColumnColoring.assign(numCol, -1);
-	previousRowColoring.assign(numRow, -1);
-	partSize.assign(numCol, 0);
-	previousPartSize.assign(numCol, 0);
-	color.assign(numTot, 0);
-	Csize.assign(numTot, 0);
-	Asize.assign(numTot, 0);
-	prevC.resize(numTot);
-	for (int i = 0; i < numTot; ++i){
-		C.push_back(new list<int>());
-		A.push_back(new forward_list<int>());
-	}
-	colorStart.assign(numTot, 0);
-	colorStartTemp.assign(numTot, 0);
-	label.assign(numTot, 0);
-	labelTemp.assign(numTot, 0);
-	ptn.assign(numTot, 1);
-	ptnTemp.assign(numTot, 0);
-
-	// Initial refinement
-	// HighsTimer timer;
+HighsEquitable::HighsEquitable(const HighsLp& lp){
+	// Original Lp info but edited for cuts
+    nCols = lp.numCol_;
+	nRows = lp.numRow_;
+    nTot = lp.numCol_ + lp.numRow_;
+    colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
+    colLower.assign(lp.colLower_.begin(), lp.colLower_.end());
+    colUpper.assign(lp.colUpper_.begin(), lp.colUpper_.end());
+    rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
+    rowUpper.assign(lp.rowUpper_.begin(), lp.rowUpper_.end());
+    Avalue.assign(lp.Avalue_.begin(), lp.Avalue_.end());
+    Aindex.assign(lp.Aindex_.begin(), lp.Aindex_.end());
+    Astart.assign(lp.Astart_.begin(), lp.Astart_.end());
+	// Make color scheme edits for new cut rows
+	// These rows are singletons and therefore do not effect anything 
+	// other than that theyu exist.
+	AindexP.resize(Aindex.size());
+    AvaluePos.resize(Avalue.size());
+    ARvaluePos.resize(Avalue.size());
+    SCheck.assign(nTot, false);
+	mincdeg.assign(nTot, 0);
+	maxcdeg.assign(nTot, 0);
+	cdeg.assign(nTot, 0);
+    isAdj.assign(nTot, false);
+    numEdges.assign(nTot, 0);
+	isolates.assign(nTot, false);
+    color.assign(nTot, 0);
+	Csize.assign(nTot, 0);
+	Asize.assign(nTot, 0);
+    C.resize(nTot);
+    A.resize(nTot);
+	transpose();
 	handleNegatives();
-	createRowCopy();
-	initialRefinement();
-	refine();
+    initRefinement();
 }
 
-void HighsEquitable::handleNegatives(){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time = timer.readRunHighsClock();
-	vector<double>::iterator min = min_element(Avalue.begin(), Avalue.end());
-	int i, j, k;
-	if (*min < 0){
-		for (i = 0; i < Avalue.size(); ++i){
-			AvalueCopy[i] = Avalue[i] + (-*min) + 1;
-		}
-	}
-	else{
-		for (i = 0; i < Avalue.size(); ++i)
-			AvalueCopy[i] = Avalue[i];
-	}
-	handleNegativesTime += timer.readRunHighsClock() - init_time;
-	//cout << "\nhandle negatives took: " << handleNegativesTime << endl;
-}
-
-void HighsEquitable::createRowCopy(){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time = timer.readRunHighsClock();
-    int AcountXSub = Astart[numCol];
-    ARindex.resize(AcountXSub);
-    ARvalueCopy.resize(AcountXSub);
-    // Build row copy - pointers
-    ARstart.assign(numRow + 1, 0);
-    AR_Nend.assign(numRow, 0);
-    for (int k = 0; k < AcountXSub; ++k)
-        AR_Nend[Aindex[k]]++;
-    for (int i = 1; i <= numRow; ++i)
-        ARstart[i] = ARstart[i - 1] + AR_Nend[i - 1];
-    for (int i = 0; i < numRow; ++i)
-        AR_Nend[i] = ARstart[i];
-    // Build row copy - elements
-    for (int iCol = 0; iCol < numCol; ++iCol) {
-        for (int k = Astart[iCol]; k < Astart[iCol + 1]; ++k) {
-            int iRow = Aindex[k];
-            int iPut = AR_Nend[iRow]++;
-            ARindex[iPut] = iCol;
-            ARvalueCopy[iPut] = AvalueCopy[k];
-		}
-	}
-	transposeTime += timer.readRunHighsClock() - init_time;
-	//cout << "\ntranspose took: " << transposeTime << endl;
-}
-
-void HighsEquitable::initialRefinement(){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time = timer.readRunHighsClock();
-	int i,j;
+void HighsEquitable::initRefinement(){
+    int i,j;
 	int numParts = 0;
 	int varColor = 0;
-	int conColor = numCol;
+	int conColor = nCols;
 	set<double> Rhs;
 	vector<double> Rhs_;
 	set<tuple<double, double, double> > rhs;
 	set<tuple<double, double, double, double> > objBounds;
-	// Prefill initial parts vector
-	initialParts.assign(numTot, 0);
+    initialParts.resize(nTot);
 
-	// Prefill right hand side sets
+    // Partition the rows
 	pair<set<tuple<double, double, double> >::iterator, bool> retRow;
 	int rowSum = 0;
-	label[numCol] = numCol;
-	ptn[numCol] = 1;
 	for (i = ARstart[0]; i < ARstart[1]; ++i)
-		rowSum += ARvalueCopy[i];
+		rowSum += ARvaluePos[i];
 	rhs.insert(make_tuple(rowLower[0], rowUpper[0], rowSum));
-	initialParts[numCol] = conColor;
-	colorStart[conColor] = numCol;
-	colorStart[conColor + 1] = colorStart[conColor] + 1; 
+	initialParts[nCols] = conColor;
 	S.push(conColor);
 	SCheck[conColor] = true;
 	rowSum = 0;
-	for (i = 1; i < numRow; ++i){
-		label[i + numCol] = i + numCol;
+    for (i = 1; i < nRows; ++i){
 		for (j = ARstart[i]; j < ARstart[i + 1]; ++j)
-			rowSum += ARvalueCopy[j];
+			rowSum += ARvaluePos[j];
 		retRow = rhs.insert(make_tuple(rowLower[i], rowUpper[i], rowSum));
 		if (retRow.second){
-			initialParts[i + numCol] = ++conColor;
+			initialParts[i + nCols] = ++conColor;
 			S.push(conColor);
 			SCheck[conColor] = true;
-			colorStart[conColor + 1] = colorStart[conColor] + 1;
 		}
 		else{
-			initialParts[i + numCol] = conColor;
-			colorStart[conColor + 1]++;
+			initialParts[i + nCols] = conColor;
 		}
 		rowSum = 0;
 	}
 	conColor++;
-	for (i = conColor; i < numTot; ++i)
-		colorStart[i] = colorStart[conColor]; 
-	for (i = numCol; i < conColor + 1; ++i)
-		ptn[colorStart[i] - 1] = 0;
 
-
-	// Peace together var bounds and obj coefficients
+    // Partition the columns
 	pair<set<tuple<double, double, double, double> >::iterator, bool> retCol;
 	int colSum = 0;
 	for (i = Astart[0]; i < Astart[1]; ++i){
-		colSum += AvalueCopy[i];
+		colSum += AvaluePos[i];
 	}
 	objBounds.insert(make_tuple(colCost[0], colLower[0], colUpper[0], colSum));
 	initialParts[0] = varColor;
-	colorStart[varColor + 1]++;
 	S.push(varColor);
 	SCheck[varColor] = true;
 	colSum = 0;
-	for (i = 1; i < numCol; ++i){
-		label[i] = i;
+    for (i = 1; i < nCols; ++i){
 		for (j = Astart[i]; j < Astart[i + 1]; ++j)
-			colSum += AvalueCopy[j];
+			colSum += AvaluePos[j];
 		retCol = objBounds.insert(make_tuple(colCost[i], colLower[i], colUpper[i], colSum));
 		if (retCol.second){
 			initialParts[i] = ++varColor;
 			S.push(varColor);
-			SCheck[varColor] = true;
-			colorStart[varColor + 1] = colorStart[varColor] + 1;
+			SCheck[varColor] = true;;
 		}
 		else{
 			initialParts[i] = varColor;
-			colorStart[varColor + 1]++;
 		}
 		colSum = 0;
 	}
 	varColor++;
-	for (i = varColor; i < numCol; ++i)
-		colorStart[i] = colorStart[varColor];
-	for (i = 1; i < varColor; ++i)
-		ptn[colorStart[i] - 1] = 0;
 
-	// Define number of colors that have been used so far
+    // Define number of colors that have been used so far
 	vCol = varColor;
 	cCol = conColor;
 
 	// Store initial refinement
-	for (i = 0; i < numTot; ++i){
-		C[initialParts[i]]->push_back(i);
+	for (i = 0; i < nTot; ++i){
+		C[initialParts[i]].push_back(i);
 		Csize[initialParts[i]]++;
 		color[i] = initialParts[i];
 	}
-	initialRefinementTime += timer.readRunHighsClock() - init_time;
-	cout << "\ninitial refinement took: " << initialRefinementTime << endl;
+	refine();
 }
 
 void HighsEquitable::refine(){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time = timer.readRunHighsClock();
 	if (refinements) findTarget();
 	refinements++;
-	linkingPairs.clear();
-	columnColorReps.clear();
 	double weight;
 	colorsAdj.clear();
 	colorsToSplit.clear();
-	numParts = 0;
 	while (!S.empty()){
-		r = S.top();
+		int r = S.top();
 		S.pop();
 		SCheck[r] = false;
-		bool var = r < numCol ? 1 : 0;
-		for (vPointer = C[r]->begin(); vPointer != C[r]->end(); ++vPointer){
-			v = *vPointer;
+		bool var = r < nCols ? 1 : 0;
+		for (int i = 0; i < Csize[r]; ++i){
+			int v = C[r][i];
 			if (var){
 				for (int j = Astart[v]; j < Astart[v + 1]; ++j){
-					w = Aindex[j] + numCol;
-					weight = AvalueCopy[j];
+					int w = Aindex[j] + nCols;
+					weight = AvaluePos[j];
 					cdeg[w] += weight;
 					numEdges[w]++;
 					if (numEdges[w] == 1){
-						A[color[w]]->push_front(w);
+						A[color[w]].push_back(w);
 						Asize[color[w]]++;
 					}
 					if (!isAdj[color[w]]){
@@ -264,14 +162,14 @@ void HighsEquitable::refine(){
 				}
 			}
 			else{
-				v -= numCol;
+				v -= nCols;
 				for (int j = ARstart[v]; j < ARstart[v + 1]; ++j){
-					w = ARindex[j];
-					weight = ARvalueCopy[j];
+					int w = ARindex[j];
+					weight = ARvaluePos[j];
 					cdeg[w] += weight;
 					numEdges[w]++;
 					if (numEdges[w] == 1){
-						A[color[w]]->push_front(w);
+						A[color[w]].push_back(w);
 						Asize[color[w]]++;
 					} 
 					if (!isAdj[color[w]]){
@@ -283,39 +181,39 @@ void HighsEquitable::refine(){
 				}
 			}
 		}
-		for (cPointer = colorsAdj.begin(); cPointer!= colorsAdj.end(); ++cPointer){
-			c = *cPointer;
+		for (int i = 0; i < colorsAdj.size(); ++i){
+			int c = colorsAdj[i];
 			if (Csize[c] != Asize[c])
 				mincdeg[c] = 0;
 			else{
 				mincdeg[c] = maxcdeg[c];
-				for (wPointer = A[c]->begin(); wPointer != A[c]->end(); ++wPointer){
-					w = *wPointer;
+				for (int j = 0; j < Asize[c]; ++j){
+					int w = A[c][j];
 					if (cdeg[w] < mincdeg[c]) mincdeg[c] = cdeg[w];
 				}
 			}
 		}
 		colorsToSplit.clear();
-		for (cPointer = colorsAdj.begin(); cPointer != colorsAdj.end(); ++cPointer){
-			c = *cPointer;
+		for (int i = 0; i < colorsAdj.size(); ++i){
+			int c = colorsAdj[i];
 			if (mincdeg[c] < maxcdeg[c])
-				colorsToSplit.push_front(c);
+				colorsToSplit.push_back(c);
 		}
-		colorsToSplit.sort();
-		for (sPointer = colorsToSplit.begin(); sPointer != colorsToSplit.end(); ++sPointer){
-			s = *sPointer;
+		sort(colorsToSplit.begin(), colorsToSplit.end());
+		for (int i = 0; i < colorsToSplit.size(); ++i){
+			int s = colorsToSplit[i];
 			splitColor(s);
 		}
-		for (cPointer = colorsAdj.begin(); cPointer != colorsAdj.end(); ++cPointer){
-			c = *cPointer;
-			for (wPointer = A[c]->begin(); wPointer != A[c]->end(); ++wPointer){
-				w = *wPointer;
+		for (int i = 0; i < colorsAdj.size(); ++i){
+			int c = colorsAdj[i];
+			for (int j = 0; j < Asize[c]; ++j){
+				int w = A[c][j];
 				cdeg[w] = 0;
 				numEdges[w] = 0;
 			}
 			maxcdeg[c] = 0;
 			isAdj[c] = false;
-			A[c]->clear();
+			A[c].clear();
 			Asize[c] = 0;
 		}
 		colorsAdj.clear();
@@ -323,14 +221,7 @@ void HighsEquitable::refine(){
 	// cout << "\n\n Partition \n\n" << endl;
 	for (int i = 0; i < C.size(); ++i){
 		if (Csize[i] == 1) 
-			isolates[C[i]->front()] = true;
-		if (Csize[i]){
-			// if (i < numCol) partSize[i] = C[i].size();
-			// //cout << "color: " << i << endl;
-			rep = C[i]->front();
-			if (i < numCol && !targets[rep])
-				columnColorReps.push_back(rep);
-		}
+			isolates[C[i].front()] = true;
 	}
 	// for (int i = 0; i < coeff.size(); ++i){
 	// 	cout << "node: " << i << ": ";
@@ -339,239 +230,136 @@ void HighsEquitable::refine(){
 	// 	}
 	// 	cout << endl;
 	// }
-	refineTime += (timer.readRunHighsClock() - init_time);
 	packVectors();
-	collectLinkingPairs();
 }
 
-// void HighsEquitable::split(int s){
-// 	int lab = 0, deg = 0, shift = 0; 
-// 	bool var = (s < numCol) ? true : false;
-// 	degSumNode.clear();
-// 	for (int i = colorStart[s]; i < colorStart[s + 1]; ++i){
-// 		lab = label[i];
-// 		deg = cdeg[lab];
-// 		degSumNode[deg].push_back(lab);
-// 	}
-// 	int idx = s;
-// 	int start = colorStart[idx];
-// 	map<double, vector<int> >::iterator el = degSumNode.begin();
-// 	move(el->second.begin(), el->second.end(), label.begin() + start);
-// 	start = colorStart[idx] + el->second.size();
-// 	shift = Csize[s] - el->second.size();
-// 	int finish = start + shift;
-// 	shiftVectors(start, finish, shift);
-// 	degSumNode.erase(degSumNode.begin());
-// 	if (var){
-// 		for (el = degSumNode.begin(); el != degSumNode.end(); ++el){
-// 			start = colorStart[vCol];
-// 			move(el->second.begin(), el->second.end(), label.begin() + start);
-// 			colorStart[vCol + 1] = colorStart[vCol] + el->second.size();
-// 			vCol++;
-// 		}
-// 		for (int i = vCol; i < numCol; ++i)
-// 			colorStart[i] = colorStart[vCol];
-// 	}
-// 	else{
-// 		for (el = degSumNode.begin(); el != degSumNode.end(); ++el){
-// 			start = colorStart[cCol];
-// 			move(el->second.begin(), el->second.end(), label.begin() + start);
-// 			colorStart[cCol + 1] = colorStart[cCol] + el->second.size();
-// 			cCol++;
-// 		}
-// 		for (int i = cCol; i < numTot; ++i)
-// 			colorStart[i] = colorStart[cCol];
-// 	}
-// }
-
 void HighsEquitable::splitColor(int s){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time2 = timer.readRunHighsClock();
-	init_time3 = timer.readRunHighsClock();
-	bool varOrCon = (s < numCol) ? true : false;
+	bool var = (s < nCols) ? true : false;
 	set<double> cdegCopy;
-	vector<int> colorFreq(numTot, 0);
+	vector<int> colorFreq(nTot, 0);
 	map<double, int> degSumColor;
 	pair<map<double, int>::iterator, bool> ret;
-	allocateStorageTime += timer.readRunHighsClock() - init_time3;
-	init_time3 = timer.readRunHighsClock();
 	degSumColor.insert(pair<double, int>(mincdeg[s], s));
 	colorFreq[0] = Csize[s] - Asize[s];
-	for (wPointer = A[s]->begin(); wPointer != A[s]->end(); ++wPointer){
-		w = *wPointer;
-		if (varOrCon){
+	for (int i = 0; i < Asize[s]; ++i){
+		int w = A[s][i];
+		if (var){
 			ret = degSumColor.insert(pair<double, int>(cdeg[w], vCol));
-			vCol += (ret.second == 1);
+			if (ret.second){
+				if (parentPartition[s] != -1)
+					parentPartition[vCol] = parentPartition[s];
+				vCol++;
+			}
 		}
 		else{
 			ret = degSumColor.insert(pair<double, int>(cdeg[w], cCol));
-			cCol += (ret.second == 1);
+			cCol += ret.second == 1;
 		}
-		colorFreq[degSumColor[cdeg[w]]]++;
+		colorFreq[cdeg[w]]++;
 	}
-	loopForNewColorsTime += timer.readRunHighsClock() - init_time3;
-	init_time3 = timer.readRunHighsClock();
 	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
 	int instack = (SCheck[s]) ? 1 : 0;
 	for(map<double, int>::iterator it = degSumColor.begin(); it != degSumColor.end(); ++it){
 		//coeff[r].push_back(it->second);
 		if (it->first == mincdeg[s]){
-			if (!instack && it->second != b){
+			if (!instack && it->first != b){
 				S.push(it->second);
 				SCheck[s] = true;
 			}
 		}
 		else{
-			if (it->second != b){
+			if (it->first != b){
 				S.push(it->second);
 				SCheck[s] = true;
 			}
 		}
 	}
-	setNewStackTime += timer.readRunHighsClock() - init_time3;
-	init_time3 = timer.readRunHighsClock();
-	for (wPointer = A[s]->begin(); wPointer != A[s]->end(); ++wPointer){
-		w = *wPointer;
+	for (int i = 0; i < Asize[s]; ++i){
+		int w = A[s][i];
 		if (degSumColor[cdeg[w]] != s){
-			C[s]->remove(w);
+			C[s].erase(remove(C[s].begin(), C[s].end(), w), C[s].end());
 			Csize[s]--;
-			C[degSumColor[cdeg[w]]]->push_back(w);
+			C[degSumColor[cdeg[w]]].push_back(w);
 			Csize[degSumColor[cdeg[w]]]++;
 			color[w] = degSumColor[cdeg[w]];
 		}
 	}
-	removeAndAddColorsTime += timer.readRunHighsClock() - init_time3;
-	splitColorTime += timer.readRunHighsClock() - init_time2;
+}
+
+void HighsEquitable::handleNegatives(){
+    vector<double>::iterator min = min_element(Avalue.begin(), Avalue.end());
+    if (*min < 0){
+        for (int i = 0; i < Avalue.size(); ++i){
+            AvaluePos[i] = Avalue[i] + (-*min) + 1;
+            ARvaluePos[i] = ARvalue[i] + (-*min) + 1;
+        }
+    }
+    else{
+        for (int i = 0; i < Avalue.size(); ++i){
+            AvaluePos[i] = Avalue[i];
+            ARvaluePos[i] = ARvalue[i];
+        }
+    }
+}
+
+void HighsEquitable::transpose(){
+	int AcountX = Astart[nCols];
+	ARindex.resize(AcountX);
+	ARvalue.resize(AcountX);
+	ARstart.resize(nRows + 1);
+	vector<int> AR_Nend(nRows);
+	for (int k = 0; k < AcountX; ++k) AR_Nend[Aindex[k]]++;
+	for (int i = 1; i < nRows; ++i) ARstart[i] = ARstart[i - 1] = AR_Nend[i - 1];
+	for (int i = 0; i < nRows; ++i) AR_Nend[i] = ARstart[i];
+	for (int col = 0; col < nCols; ++col){
+		for (int k = Astart[col]; k < Astart[col + 1]; ++k){
+			int row = Aindex[k];
+			int put = AR_Nend[row]++;
+			ARindex[put] = col;
+			ARvalue[put] = Avalue[k];
+		}
+	}
 }
 
 void HighsEquitable::findTarget(){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time = timer.readRunHighsClock();
-	for (int i = 0; i < numTot; ++i){
-		if (!isolates[i]){
-			isolated = i;
-			targets[i] = true;
-			isolate(i);
+    for (int col = 0; col < nTot; ++col){
+		if (Csize[col] > 1){
+			// int isolated = i;
+			isolate(col);
 			return;
 		}
 	}
-	findTargetTime += timer.readRunHighsClock() - init_time;
 }
 
-void HighsEquitable::isolate(int i){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time = timer.readRunHighsClock();
-	for (int j = 0; j < numCol; ++j)
-		previousColumnColoring[j] = color[j];
-	for (int j = numCol; j < numTot; ++j)
-		previousRowColoring[j - numCol] = color[j];
-	previousPartSize = partSize;
-	for (int i = 0; i < C.size(); ++i)
-		prevC[i] = *C[i];
-	// C[color[i]].erase(remove(C[color[i]].begin(), C[color[i]].end(), i), C[color[i]].end());
-	int newCol = vCol;
-	int oldCol = color[i];
-	C[oldCol]->remove(i);
-	Csize[oldCol]--;
-	C[newCol]->push_back(i);
-	Csize[newCol]++;
-	color[i] = newCol;
-	vCol++;
+void HighsEquitable::isolate(int s){
+	parentPartition.assign(nCols, -1);
+	vector<int> temp1;
+	vector<int> temp2;
+	for (int i = 0; i < C[s].size(); ++i)
+		if (!i) {temp1.push_back(C[s][i]); color[C[s][i]] = s;}
+		else {temp2.push_back(C[s][i]); color[temp2[i - 1]] = vCol; Csize[vCol]++;}
+	C[s] = temp1;
+	C[vCol] = temp2;
+	Csize[s] = 1;
 	for (int i = 0; i < C.size(); ++i){
 		if (Csize[i] == 1)
-			isolates[C[i]->front()] = true;
+			isolates[C[i][0]] = true;
 	}
-	SCheck[newCol] = true;
-	S.push(newCol);
-	isolateTime += timer.readRunHighsClock() - init_time;
+	parentPartition[vCol] = s;
+	SCheck[vCol] = true;
+	S.push(vCol);
+	vCol++;
+}
+
+bool HighsEquitable::isDiscrete(){
+	for (int i = 0; i < nTot; ++i){
+		if (Csize[i] > 1)
+			return false;
+	}
+	return true;
 }
 
 void HighsEquitable::packVectors(){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time = timer.readRunHighsClock();
-	for (int i = 0; i < Aindex.size(); ++i){
-		Xindex_[i] = color[Aindex[i] + numCol];
-	}
-	packVectorsTime += timer.readRunHighsClock() - init_time;
-}
-
-void HighsEquitable::collectLinkingPairs(){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time = timer.readRunHighsClock();
-	if (isolated == -1) return;
-	int i, linkCnt = 0;
-	int rep;
-	int previousColorRep;
-	int targ = isolated;
-	int previousColorTarg = previousColumnColoring[targ];
-	vector<int> notLinkedToIsolated;
-	vector<int> temp;
-	commonLinkers.clear();
-	for (i = 0; i < columnColorReps.size(); ++i){
-		rep = columnColorReps[i];
-		previousColorRep = previousColumnColoring[rep];
-		if (previousColorRep == previousColorTarg){
-			linkingPairs.push_back(pair<int, int>(color[targ], color[rep]));
-			temp.push_back(linkCnt);
-			linkCnt++;
-		}
-		else{
-			notLinkedToIsolated.push_back(rep);
-		}
-	}
-	commonLinkers.insert(pair<int, vector<int> >(color[targ], temp));
-	temp.clear();
-	reverse(notLinkedToIsolated.begin(), notLinkedToIsolated.end());
-	while (!notLinkedToIsolated.empty()){
-		targ = notLinkedToIsolated.back();
-		notLinkedToIsolated.pop_back();
-		previousColorTarg = previousColumnColoring[targ];
-		for (i = 0; i < notLinkedToIsolated.size();){
-			rep = notLinkedToIsolated[i];
-			previousColorRep = previousColumnColoring[rep];
-			if (previousColorRep == previousColorTarg){
-				linkingPairs.push_back(pair<int, int>(color[targ], color[rep]));
-				temp.push_back(linkCnt);
-				linkCnt++;
-				notLinkedToIsolated.erase(notLinkedToIsolated.begin() + i);
-			}
-			else
-				++i;
-		}
-		if (temp.size()){
-			commonLinkers.insert(pair<int, vector<int> >(color[targ], temp));
-			temp.clear();
-		}
-	}
-	collectLinkingPairsTime += timer.readRunHighsClock() - init_time;
-} 
-
-bool HighsEquitable::isPartitionDiscrete(){
-	bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  	if (!run_highs_clock_already_running) timer.startRunHighsClock();
-	init_time = timer.readRunHighsClock();
-	for (int i = 0; i < numCol; ++i){
-		if (!isolates[i]) return false;
-	}
-	return true;
-	isPartitionDiscreteTime += timer.readRunHighsClock() - init_time;
-}
-
-void HighsEquitable::shiftVectors(int& start, int& finish, int& shift){
-	for (int i = start; i < finish; ++i)
-		label[i] = label[i + shift];
-	bool var = (start < numCol) ? true : false;
-	if (var){
-		for (int i = finish; i < numCol; ++i)
-			colorStart[i] -= shift;
-	}
-	else{
-		for (int i = finish; i < numTot; ++i)
-			colorStart[i] -= shift;
-	}
+	for (int i = 0; i < Aindex.size(); ++i)
+		AindexP[i] = color[Aindex[i] + nCols];
 }

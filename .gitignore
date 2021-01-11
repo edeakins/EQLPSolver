@@ -231,3 +231,6 @@ lpi_h2gmp.cpp
 
 ##Build Directory for DHiGHS"
 DevBuild
+
+##Lp files with cbc cuts
+CutGenerationLpFiles
