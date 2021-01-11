@@ -246,8 +246,8 @@ void HighsEquitable::splitColor(int s){
 		if (var){
 			ret = degSumColor.insert(pair<double, int>(cdeg[w], vCol));
 			if (ret.second){
-				if (parentPartition[s] != -1)
-					parentPartition[vCol] = parentPartition[s];
+				if (parentPartition[s] != -1) parentPartition[vCol] = parentPartition[s];
+				else parentPartition[vCol] = s;
 				vCol++;
 			}
 		}
@@ -333,6 +333,11 @@ void HighsEquitable::findTarget(){
 
 void HighsEquitable::isolate(int s){
 	parentPartition.assign(nCols, -1);
+	prevC = C;
+	for (int i = 0; i < nCols; ++i)
+		previousColumnColoring.push_back(color[i]);
+	for (int i = 0; i < nRows; ++i)
+		previousRowColoring.push_back(color[i + nCols]);
 	vector<int> temp1;
 	vector<int> temp2;
 	for (int i = 0; i < C[s].size(); ++i)

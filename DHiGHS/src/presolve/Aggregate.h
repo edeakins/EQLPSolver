@@ -64,7 +64,7 @@ public:
     vector<double> rowUpper;
 
     // Linking pairs for new aggregate lp
-    vector<pair<int, int> > linkingPairs;
+	vector<int> parentPartition;
 
 	/* Sparse storage for the previous iterations basis
 	information.  We use this to set the basis of upcoming 

@@ -25,7 +25,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	C.assign(ep.C.begin(), ep.C.end());
 	prevC.assign(ep.prevC.begin(), ep.prevC.end());
 	color.assign(ep.color.begin(), ep.color.end());
-	linkingPairs.assign(ep.linkingPairs.begin(), ep.linkingPairs.end());
+	parentPartition.assign(ep.parentPartition.begin(), ep.parentPartition.end());
 
 	// Previous solution
 	col_value = (solution.col_value);

@@ -54,8 +54,11 @@ public:
     // EP info
     int vCol, cCol, refinements = 0;
     vector<vector<int> > C;
+    vector<vector<int> > prevC;
     vector<vector<int> > A;
     vector<int> color;
+    vector<int> previousRowColoring;
+    vector<int> previousColumnColoring;
     vector<bool> SCheck;
     vector<double> cdeg;
 	vector<double> mincdeg;
