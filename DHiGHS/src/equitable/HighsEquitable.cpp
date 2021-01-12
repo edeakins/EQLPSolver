@@ -309,7 +309,7 @@ void HighsEquitable::transpose(){
 	ARstart.resize(nRows + 1);
 	vector<int> AR_Nend(nRows);
 	for (int k = 0; k < AcountX; ++k) AR_Nend[Aindex[k]]++;
-	for (int i = 1; i < nRows; ++i) ARstart[i] = ARstart[i - 1] = AR_Nend[i - 1];
+	for (int i = 1; i <= nRows; ++i) ARstart[i] = ARstart[i - 1] + AR_Nend[i - 1];
 	for (int i = 0; i < nRows; ++i) AR_Nend[i] = ARstart[i];
 	for (int col = 0; col < nCols; ++col){
 		for (int k = Astart[col]; k < Astart[col + 1]; ++k){
@@ -333,6 +333,8 @@ void HighsEquitable::findTarget(){
 
 void HighsEquitable::isolate(int s){
 	parentPartition.assign(nCols, -1);
+	previousRowColoring.clear();
+	previousColumnColoring.clear();
 	prevC = C;
 	for (int i = 0; i < nCols; ++i)
 		previousColumnColoring.push_back(color[i]);

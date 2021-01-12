@@ -48,6 +48,7 @@ public:
 	int numRow;
 	int numCol;
 	int numTot;
+	int numPairs;
 	string model_name_;
 	string lp_name_;
 
@@ -84,8 +85,8 @@ public:
 	 These are doubly linked lists of elements by their color class.
 	 We have the previous color class information and current color class
 	 information. */
-	vector<list<int>* > C;
-	vector<list<int> > prevC;
+	vector<vector<int> > C;
+	vector<vector<int> > prevC;
 	vector<int> previousRowColoring;
 	vector<int> previousColumnColoring;
 	vector<int> AindexSub;

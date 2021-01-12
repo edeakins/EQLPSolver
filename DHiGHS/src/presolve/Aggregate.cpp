@@ -18,7 +18,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolut
 	//Equitable partition info
 	previousRowColoring.assign(ep.previousRowColoring.begin(), ep.previousRowColoring.end());
 	previousColumnColoring.assign(ep.previousColumnColoring.begin(), ep.previousColumnColoring.end());
-  AindexSub.assign(ep.Xindex_.begin(), ep.Xindex_.end());
+  AindexSub.assign(ep.AindexP.begin(), ep.AindexP.end());
 	numRow_ = ep.cCol - numCol;
 	numCol_ = ep.vCol;
 	numTot_ = numRow_ + numCol_;
@@ -80,7 +80,7 @@ void HighsAggregate::aggregateColBounds(){
   colLower_.assign(numCol_, 0);
   if (col_value.size()){
     for (int i = 0; i < numCol_; ++i){
-      int rep = C[i]->front();
+      int rep = C[i].front();
       int pCol = previousColumnColoring[rep];
       if (col_value[pCol] == colUpper[rep]){
         colUpper_[i] = colUpper[rep];
@@ -98,7 +98,7 @@ void HighsAggregate::aggregateColBounds(){
   }
   else{
     for (int i = 0; i < numCol_; ++i){
-      int rep = C[i]->front();
+      int rep = C[i].front();
       colLower_[i] = colLower[rep];
       colUpper_[i] = colUpper[rep];
     }
@@ -110,27 +110,27 @@ void HighsAggregate::aggregateRowBounds(){
   rowLower_.assign(numRow_, 0);
   if (row_value.size()){
     for (int i = 0; i < numRow_; ++i){
-      int rep = C[i + numCol]->front() - numCol;
+      int rep = C[i + numCol].front() - numCol;
       int pCol = previousRowColoring[rep] - numCol;
-      if (row_value[pCol] == rowLower[rep] * prevC[pCol + numCol].size()){
-        rowLower_[i] = rowLower[rep] * C[i + numCol]->size();
-        rowUpper_[i] = rowLower[rep] * C[i + numCol]->size();
+      if (row_value[pCol] == rowLower[rep]){// * prevC[pCol + numCol].size()){
+        rowLower_[i] = rowLower[rep];// * C[i + numCol].size();
+        rowUpper_[i] = rowLower[rep];// * C[i + numCol].size();
       }
-      else if (row_value[pCol] == rowUpper[rep] * prevC[pCol + numCol].size()){
-        rowLower_[i] = rowUpper[rep] * C[i + numCol]->size();
-        rowUpper_[i] = rowUpper[rep] * C[i + numCol]->size();
+      else if (row_value[pCol] == rowUpper[rep]){// * prevC[pCol + numCol].size()){
+        rowLower_[i] = rowUpper[rep];// * C[i + numCol].size();
+        rowUpper_[i] = rowUpper[rep];// * C[i + numCol].size();
       }
       else{
-        rowLower_[i] = rowLower[rep] * C[i + numCol]->size();
-        rowUpper_[i] = rowUpper[rep] * C[i + numCol]->size();
+        rowLower_[i] = rowLower[rep];// * C[i + numCol].size();
+        rowUpper_[i] = rowUpper[rep];//* C[i + numCol].size();
       }
     }
   }
   else{
     for (int i = 0; i < numRow_; ++i){
-      int rep = C[i + numCol]->front() - numCol;
-      rowLower_[i] = rowLower[rep] * C[i + numCol]->size();
-      rowUpper_[i] = rowUpper[rep] * C[i + numCol]->size();
+      int rep = C[i + numCol].front() - numCol;
+      rowLower_[i] = rowLower[rep];// * C[i + numCol].size();
+      rowUpper_[i] = rowUpper[rep];// * C[i + numCol].size();
     }
   }
 }
@@ -138,8 +138,8 @@ void HighsAggregate::aggregateRowBounds(){
 void HighsAggregate::aggregateCVector(){
   colCost_.assign(numCol_, 0);
 	for (int i = 0; i < numCol_; ++i){
-    int rep = C[i]->front();
-    colCost_[i] = C[i]->size() * colCost[rep];
+    int rep = C[i].front();
+    colCost_[i] = C[i].size() * colCost[rep];
   }
 }
 
@@ -147,14 +147,14 @@ void HighsAggregate::aggregateAMatrix(){
 	Astart_.push_back(0);
 	for (int i = 0; i < numCol_; ++i){
     vector<double> coeff(numRow_, 0);
-		int rep = C[i]->front();
+		int rep = C[i].front();
 		for (int j = Astart[rep]; j < Astart[rep + 1]; ++j){
       int rowIdx = AindexSub[j] - numCol;
       coeff[rowIdx] += Avalue[j];
-    };
+    }
     for (int j = 0; j < coeff.size(); ++j){
       if (coeff[j]){
-        Avalue_.push_back(coeff[j] * C[i]->size());
+        C[j + numCol].size() > 1 ? Avalue_.push_back(coeff[j]) : Avalue_.push_back(coeff[j] * C[i].size());
         Aindex_.push_back(j);
       }
     }
@@ -167,7 +167,7 @@ void HighsAggregate::setColBasis(){
     col_status_.assign(numCol_, HighsBasisStatus::LOWER);
     vector<bool> nonBasics(numCol, false);
     for (int i = 0; i < numCol_; ++i){
-      int rep = C[i]->front();
+      int rep = C[i].front();
       int pCol = previousColumnColoring[rep];
       if ((col_status[pCol] == HighsBasisStatus::LOWER
       || col_status[pCol] == HighsBasisStatus::UPPER
@@ -193,7 +193,7 @@ void HighsAggregate::setRowBasis(){
     row_status_.assign(numRow_, HighsBasisStatus::BASIC);
     vector<bool> nonBasics(numRow, false);
     for (int i = 0; i < numRow_; ++i){
-      int rep = C[i + numCol]->front() - numCol;
+      int rep = C[i + numCol].front() - numCol;
 			int pCol = previousRowColoring[rep] - numCol;
 			if ((row_status[pCol] == HighsBasisStatus::LOWER
 			|| row_status[pCol] == HighsBasisStatus::UPPER
@@ -215,16 +215,21 @@ void HighsAggregate::setRowBasis(){
 }
 
 void HighsAggregate::appendLinkersToLp(){
-  if (!linkingPairs.size()) return;
-  int num_new_col = linkingPairs.size();
-	int num_new_row = linkingPairs.size();
-	int num_new_nz = linkingPairs.size() * 3;  
+  numPairs = 0;
+  for (int i = 0; i < parentPartition.size(); ++i)
+    if (parentPartition[i] > -1) numPairs++;
+  if (!numPairs) return;
+  int num_new_col = numPairs;
+	int num_new_row = numPairs;
+	int num_new_nz = numPairs * 3;  
 	vector<double> linkColCost, linkColBounds, linkRowBounds, linkAvalue, linkARvalue;
 	vector<int> linkAstart, linkAindex, linkARstart, linkARindex;
 	linkARstart.push_back(0);
   int nnz = Astart_[numCol_];
-	for (int i = 0; i < linkingPairs.size(); ++i){
-		int x0 = linkingPairs[i].first, x1 = linkingPairs[i].second, r = numCol_ + i;
+  numPairs = 0;
+	for (int i = 0; i < parentPartition.size(); ++i){
+    if (parentPartition[i] < 0) continue;
+		int x0 = parentPartition[i], x1 = i, r = numCol_ + numPairs;
     linkers.push_back(r);
 		linkARvalue.push_back(1); linkARvalue.push_back(-1); linkARvalue.push_back(-1);
 		linkARindex.push_back(x0); linkARindex.push_back(x1); linkARindex.push_back(r);
@@ -233,14 +238,15 @@ void HighsAggregate::appendLinkersToLp(){
 		linkColBounds.push_back(0);
 		linkColCost.push_back(0);
     Astart_.push_back(nnz);
+    numPairs++;
 	}
 	// transpose(linkAstart, linkAindex, linkAvalue, linkARstart, linkARindex, linkARvalue);
 	appendColsToLpVectors(num_new_col, linkColCost, linkColBounds, linkColBounds);
-  numCol_ += linkingPairs.size();
+  numCol_ += numPairs;
 	// appendColsToLpMatrix(num_new_col, num_new_nz, linkAstart, linkAindex, linkAvalue);
 	appendRowsToLpVectors(num_new_row, linkRowBounds, linkRowBounds);
   appendRowsToLpMatrix(num_new_row, num_new_nz, linkARstart, linkARindex, linkARvalue);
-  numRow_ += linkingPairs.size();
+  numRow_ += numPairs;
   numTot_ = numRow_ + numCol_;
 }
 
@@ -308,7 +314,7 @@ void HighsAggregate::appendRowsToLpMatrix(const int num_new_row,
  
   int current_num_nz = Astart_[numCol_];
   vector<int> Alength;
-  Alength.assign(numCol_ + linkingPairs.size(), 0);
+  Alength.assign(numCol_ + numPairs, 0);
   for (int el = 0; el < num_new_nz; el++) Alength[XARindex[el]]++;
   // Determine the new number of nonzeros and resize the column-wise matrix
   // arrays
@@ -363,16 +369,16 @@ void HighsAggregate::appendRowsToLpVectors(const int num_new_row,
 
 void HighsAggregate::transpose(vector<int>& xAstart, vector<int>& xAindex, vector<double>& xAvalue,
 					vector<int>& xARstart, vector<int>& xARindex, vector<double> &xARvalue){
-	vector<int> iwork(numCol_ + linkingPairs.size(), 0);
-	xAstart.resize(linkingPairs.size() + 1, 0);
-	int AcountX = linkingPairs.size() * 3;
+	vector<int> iwork(numCol_ + numPairs, 0);
+	xAstart.resize(numPairs + 1, 0);
+	int AcountX = numPairs * 3;
 	xAindex.resize(AcountX);
 	xAvalue.resize(AcountX);
 	for (int k = 0; k < AcountX; k++) iwork.at(xARindex.at(k))++;
-	for (int i = 1; i <= linkingPairs.size(); i++)
+	for (int i = 1; i <= numPairs; i++)
 		xAstart.at(i) = xAstart.at(i - 1) + iwork.at(i - 1);
-	for (int i = 0; i < linkingPairs.size(); i++) iwork.at(i) = xAstart.at(i);
-	for (int iRow = 0; iRow < linkingPairs.size(); iRow++) {
+	for (int i = 0; i < numPairs; i++) iwork.at(i) = xAstart.at(i);
+	for (int iRow = 0; iRow < numPairs; iRow++) {
 		for (int k = xARstart.at(iRow); k < xARstart.at(iRow + 1); k++) {
 		int iCol = xARindex.at(k);
 		int iPut = iwork.at(iCol)++;

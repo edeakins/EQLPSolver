@@ -243,8 +243,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
   double initial_time = timer.readRunHighsClock();
-  HighsEquitable ep;
-  ep.setup(lp);
+  HighsEquitable ep(lp);
   highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
   // Basis and solution to store from unfold interations
   HighsBasis basis;
@@ -337,7 +336,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
 
   //reportSolvedLpStats(output, message_level, run_status, highs);
   //highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
-  while(!ep.isPartitionDiscrete()){
+  while(!ep.isDiscrete()){
     //highs = Highs();
     // std::cout << "refine" << std::endl;
     run_highs_clock_already_running = timer.runningRunHighsClock();
@@ -390,18 +389,18 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     }
     HighsLp& alp = lpFolder.getAlp();
     HighsBasis& alpBasis = lpFolder.getAlpBasis();
-    cout << "Start Basis" << endl;
-    for (int j = 0; j < alpBasis.col_status.size(); ++j){
-      cout << "col: " << j << " basis is " << (int)alpBasis.col_status[j] << endl;
-    }
-    for (int j = 0; j < alpBasis.row_status.size(); ++j){
-      cout << "row: " << j << " basis is " << (int)alpBasis.row_status[j] << endl;
-    }
-    cout << "\n" << endl;
-    cin.get();
+    // cout << "Start Basis" << endl;
+    // for (int j = 0; j < alpBasis.col_status.size(); ++j){
+    //   cout << "col: " << j << " basis is " << (int)alpBasis.col_status[j] << endl;
+    // }
+    // for (int j = 0; j < alpBasis.row_status.size(); ++j){
+    //   cout << "row: " << j << " basis is " << (int)alpBasis.row_status[j] << endl;
+    // }
+    // cout << "\n" << endl;
+    // cin.get();
     HighsStatus init_status = highs.passModel(alp);
     HighsStatus write_status;
-    // write_status = highs.writeModel("write.mps");
+    write_status = highs.writeModel("highs_lp.lp");
     HighsStatus basisStatus = highs.setBasis(alpBasis);
     if (init_status != HighsStatus::OK) {
       if (init_status == HighsStatus::Warning) {
@@ -427,10 +426,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     solution = highs.getSolution();
     highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
     // tableau = highs.getTableau();
-  //   // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-  //   // for (int i = 0; i < solution.col_value.size(); ++i){
-  //   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  //   // }
+    cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+    for (int i = 0; i < solution.col_value.size(); ++i){
+      cout << "var_" << i << " = " << solution.col_value[i] << endl;
+    }
   }
   // std::ofstream resultsFile("results.txt", std::ios_base::app);
   // std::cout << "Partition time: " << highs.totPartTime_ << std::endl;
@@ -439,10 +438,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // double totTime = highs.totUnfoldTime_ + highs.totFoldTime_ + highs.totPartTime_;
   // std::cout << "Total OC time: " << totTime << std::endl;
   // resultsFile << lp.model_name_ + ".mps " << std::to_string(highs.totPartTime_) + " " << std::to_string(highs.totFoldTime_) + " " << std::to_string(highs.totUnfoldTime_) + " " << std::to_string(totTime) << + "\n";
-  cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-  for (int i = 0; i < solution.col_value.size(); ++i){
-    cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  }
+  // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+  // for (int i = 0; i < solution.col_value.size(); ++i){
+  //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  // }
   // cout << "\nUnfold iterations: " << highs.totIter_ << endl;
   // cout << "\nhandle negatives took: " << ep.handleNegativesTime << endl;
   // cout << "\ntranspose took: " << ep.transposeTime << endl;
