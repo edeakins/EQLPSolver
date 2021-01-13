@@ -70,30 +70,30 @@ int main (int argc, const char *argv[])
     OSIUNITTEST_CATCH_ERROR(OsiRowCutDebuggerUnitTest(&highsSi,mpsDir), {}, highsSi, "rowcut debugger unittest");
   }
 
-#if COINNETLIBFOUND
-  //  We have run the fast unit tests.
-  //  If there were no errors, then also run the Netlib problems.
-  outcomes.getCountBySeverity(TestOutcome::ERROR, nerrors, nerrors_expected);
-  if( nerrors <= nerrors_expected)
-  {
-	std::string netlibDir = COINNETLIBDIR;
-	netlibDir.push_back(CoinFindDirSeparator());
+// #if COINNETLIBFOUND
+//   //  We have run the fast unit tests.
+//   //  If there were no errors, then also run the Netlib problems.
+//   outcomes.getCountBySeverity(TestOutcome::ERROR, nerrors, nerrors_expected);
+//   if( nerrors <= nerrors_expected)
+//   {
+// 	std::string netlibDir = COINNETLIBDIR;
+// 	netlibDir.push_back(CoinFindDirSeparator());
 
-    // Create vector of solver interfaces
-    std::vector<OsiSolverInterface*> vecSi(1, new OsiHiGHSSolverInterface);
+//     // Create vector of solver interfaces
+//     std::vector<OsiSolverInterface*> vecSi(1, new OsiHiGHSSolverInterface);
 
-    testingMessage( "Testing OsiSolverInterface on Netlib problems.\n" );
-    OSIUNITTEST_CATCH_ERROR(OsiSolverInterfaceMpsUnitTest(vecSi,netlibDir), {}, "highs", "netlib unittest");
+//     testingMessage( "Testing OsiSolverInterface on Netlib problems.\n" );
+//     OSIUNITTEST_CATCH_ERROR(OsiSolverInterfaceMpsUnitTest(vecSi,netlibDir), {}, "highs", "netlib unittest");
 
-    delete vecSi[0];
-  }
-  else
-  {
-	testingMessage( "Skip testing OsiSolverInterface on Netlib problems as there were unexpected errors in previous runs.\n" );
-  }
-#else
-  testingMessage( "Skip testing OsiSolverInterface on Netlib problems as path to Data/Netlib not known.\n" );
-#endif
+//     delete vecSi[0];
+//   }
+//   else
+//   {
+// 	testingMessage( "Skip testing OsiSolverInterface on Netlib problems as there were unexpected errors in previous runs.\n" );
+//   }
+// #else
+//   testingMessage( "Skip testing OsiSolverInterface on Netlib problems as path to Data/Netlib not known.\n" );
+// #endif
 
   // We're done. Report on the results.
   std::cout.flush();

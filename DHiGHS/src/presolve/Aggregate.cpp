@@ -112,25 +112,25 @@ void HighsAggregate::aggregateRowBounds(){
     for (int i = 0; i < numRow_; ++i){
       int rep = C[i + numCol].front() - numCol;
       int pCol = previousRowColoring[rep] - numCol;
-      if (row_value[pCol] == rowLower[rep]){// * prevC[pCol + numCol].size()){
-        rowLower_[i] = rowLower[rep];// * C[i + numCol].size();
-        rowUpper_[i] = rowLower[rep];// * C[i + numCol].size();
+      if (row_value[pCol] == rowLower[rep] * prevC[pCol + numCol].size()){
+        rowLower_[i] = rowLower[rep] * C[i + numCol].size();
+        rowUpper_[i] = rowLower[rep] * C[i + numCol].size();
       }
-      else if (row_value[pCol] == rowUpper[rep]){// * prevC[pCol + numCol].size()){
-        rowLower_[i] = rowUpper[rep];// * C[i + numCol].size();
-        rowUpper_[i] = rowUpper[rep];// * C[i + numCol].size();
+      else if (row_value[pCol] == rowUpper[rep] * prevC[pCol + numCol].size()){
+        rowLower_[i] = rowUpper[rep] * C[i + numCol].size();
+        rowUpper_[i] = rowUpper[rep] * C[i + numCol].size();
       }
       else{
-        rowLower_[i] = rowLower[rep];// * C[i + numCol].size();
-        rowUpper_[i] = rowUpper[rep];//* C[i + numCol].size();
+        rowLower_[i] = rowLower[rep] * C[i + numCol].size();
+        rowUpper_[i] = rowUpper[rep] * C[i + numCol].size();
       }
     }
   }
   else{
     for (int i = 0; i < numRow_; ++i){
       int rep = C[i + numCol].front() - numCol;
-      rowLower_[i] = rowLower[rep];// * C[i + numCol].size();
-      rowUpper_[i] = rowUpper[rep];// * C[i + numCol].size();
+      rowLower_[i] = rowLower[rep] * C[i + numCol].size();
+      rowUpper_[i] = rowUpper[rep] * C[i + numCol].size();
     }
   }
 }
@@ -154,7 +154,7 @@ void HighsAggregate::aggregateAMatrix(){
     }
     for (int j = 0; j < coeff.size(); ++j){
       if (coeff[j]){
-        C[j + numCol].size() > 1 ? Avalue_.push_back(coeff[j]) : Avalue_.push_back(coeff[j] * C[i].size());
+        Avalue_.push_back(coeff[j] * C[i].size());
         Aindex_.push_back(j);
       }
     }
