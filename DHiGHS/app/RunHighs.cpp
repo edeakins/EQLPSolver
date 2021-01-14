@@ -324,15 +324,15 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Run HiGHS.
   // double initial_time = timer.readRunHighsClock();
   // HighsStatus run_status;
-  write_status = highs.writeModel("highs_lp.lp");
+  // write_status = highs.writeModel("highs_lp.lp");
   HighsStatus run_status = highs.run(); 
   // highs.totPartTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
   basis = highs.getBasis();
   solution = highs.getSolution();
-  cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-    for (int i = 0; i < solution.col_value.size(); ++i){
-      cout << "var_" << i << " = " << solution.col_value[i] << endl;
-    }
+  // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+  //   for (int i = 0; i < solution.col_value.size(); ++i){
+  //     cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  //   }
   // tableau = highs.getTableau();
 
   if (run_quiet)
@@ -404,7 +404,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     // cout << "\n" << endl;
     // cin.get();
     HighsStatus init_status = highs.passModel(alp);
-    write_status = highs.writeModel("highs_lp.lp");
+    // write_status = highs.writeModel("highs_lp.lp");
     HighsStatus basisStatus = highs.setBasis(alpBasis);
     if (init_status != HighsStatus::OK) {
       if (init_status == HighsStatus::Warning) {
@@ -430,10 +430,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     solution = highs.getSolution();
     highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
     // tableau = highs.getTableau();
-    cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-    for (int i = 0; i < solution.col_value.size(); ++i){
-      cout << "var_" << i << " = " << solution.col_value[i] << endl;
-    }
+    // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+    // for (int i = 0; i < solution.col_value.size(); ++i){
+    //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
+    // }
   }
   // std::ofstream resultsFile("results.txt", std::ios_base::app);
   // std::cout << "Partition time: " << highs.totPartTime_ << std::endl;
