@@ -280,7 +280,7 @@ void EquitablePartition::splitColor(int s){
 			ret = degSumColor.insert(pair<double, int>(cdeg[w], cCol));
 			cCol += ret.second == 1;
 		}
-		colorFreq[degSumColor[cdeg[w]]]++;
+		colorFreq[cdeg[w]]++;
 	}
 	int b = distance(colorFreq.begin(), max_element(colorFreq.begin(), colorFreq.end()));
 	int instack = (SCheck[s]) ? 1 : 0;
@@ -288,14 +288,14 @@ void EquitablePartition::splitColor(int s){
 		//coeff[r].push_back(it->second);
 		if (it->first == mincdeg[s]){
 			if (!instack && it->second != b){
-				S.push(it->second);
+				S.push(it->first);
 				SCheck[s] = true;
 			}
 		}
 		else{
-			if (it->second != b){
+			if (it->first != b){
 				S.push(it->second);
-				SCheck[s] = true;
+				SCheck[it->second] = true;
 			}
 		}
 	}

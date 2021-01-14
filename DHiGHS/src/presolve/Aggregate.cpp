@@ -82,11 +82,11 @@ void HighsAggregate::aggregateColBounds(){
     for (int i = 0; i < numCol_; ++i){
       int rep = C[i].front();
       int pCol = previousColumnColoring[rep];
-      if (col_value[pCol] == colUpper[rep]){
+      if (fabs(col_value[pCol] - colUpper[rep]) < 1e-6){
         colUpper_[i] = colUpper[rep];
         colLower_[i] = colUpper[rep];
       }
-      else if (col_value[pCol] == colLower[rep]){
+      else if (fabs(col_value[pCol] - colLower[rep]) < 1e-6){
         colUpper_[i] = colLower[rep];
         colLower_[i] = colLower[rep];
       }
@@ -112,11 +112,11 @@ void HighsAggregate::aggregateRowBounds(){
     for (int i = 0; i < numRow_; ++i){
       int rep = C[i + numCol].front() - numCol;
       int pCol = previousRowColoring[rep] - numCol;
-      if (row_value[pCol] == rowLower[rep] * prevC[pCol + numCol].size()){
+      if (fabs(row_value[pCol] - (rowLower[rep] * prevC[pCol + numCol].size())) < 1e-6){
         rowLower_[i] = rowLower[rep] * C[i + numCol].size();
         rowUpper_[i] = rowLower[rep] * C[i + numCol].size();
       }
-      else if (row_value[pCol] == rowUpper[rep] * prevC[pCol + numCol].size()){
+      else if (fabs(row_value[pCol] - (rowUpper[rep] * prevC[pCol + numCol].size())) < 1e-6){
         rowLower_[i] = rowUpper[rep] * C[i + numCol].size();
         rowUpper_[i] = rowUpper[rep] * C[i + numCol].size();
       }

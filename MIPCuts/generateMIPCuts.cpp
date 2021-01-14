@@ -136,7 +136,7 @@ int main(int argc, const char *argv[]){
     for (int i = 0; i < nCols_; ++i){
       aggSi.setInteger(i);
     }
-    aggSi.writeMps("AggBeforeCutsAddedFromCbc");
+    aggSi.writeLp("AggBeforeCutsAddedFromCbc");
     // // Solve initial aggregate
     aggSi.initialSolve();
     vector<double> solution(aggSi.getColSolution(), aggSi.getColSolution() + aggSi.getNumCols());
@@ -210,7 +210,7 @@ int main(int argc, const char *argv[]){
       for (int i = 0; i < nCols_; ++i){
         aggSi.setInteger(i);
       }
-      aggSi.writeMps("AggBeforeCutsAddedFromCbc");
+      aggSi.writeLp("AggBeforeCutsAddedFromCbc");
       // Solve 
       aggSi.initialSolve();
       solution.assign(aggSi.getColSolution(), aggSi.getColSolution() + aggSi.getNumCols());

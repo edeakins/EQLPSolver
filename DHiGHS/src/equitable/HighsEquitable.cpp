@@ -270,7 +270,7 @@ void HighsEquitable::splitColor(int s){
 		else{
 			if (it->first != b){
 				S.push(it->second);
-				SCheck[s] = true;
+				SCheck[it->second] = true;
 			}
 		}
 	}
