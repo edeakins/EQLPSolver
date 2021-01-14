@@ -287,8 +287,8 @@ void EquitablePartition::splitColor(int s){
 	for(map<double, int>::iterator it = degSumColor.begin(); it != degSumColor.end(); ++it){
 		//coeff[r].push_back(it->second);
 		if (it->first == mincdeg[s]){
-			if (!instack && it->second != b){
-				S.push(it->first);
+			if (!instack && it->first != b){
+				S.push(it->second);
 				SCheck[s] = true;
 			}
 		}

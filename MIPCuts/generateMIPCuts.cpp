@@ -138,61 +138,43 @@ int main(int argc, const char *argv[]){
     }
     aggSi.writeLp("AggBeforeCutsAddedFromCbc");
     // // Solve initial aggregate
+    double prevObj = numeric_limits<double>::infinity();
     aggSi.initialSolve();
-    vector<double> solution(aggSi.getColSolution(), aggSi.getColSolution() + aggSi.getNumCols());
-    cout << "\nsolution before\n" << endl;
-    for (int i = 0; i < aggSi.getNumCols(); ++i){
-      cout << "x_" << i << " = " << solution[i] << endl;
+    double obj = aggSi.getObjValue();
+    while (fabs(obj - prevObj) > 1e-4){
+      prevObj = obj;
+      cuts = OsiCuts();
+      // Generate l & p cuts for this model
+      gomoryCuts.generateCuts(aggSi, cuts);
+      // gmiCuts.generateCuts(aggSi, cuts);
+      // twomirCuts.generateCuts(aggSi, cuts);
+      // mIRoundingCuts.generateCuts(aggSi, cuts);
+      acRc = aggSi.applyCuts(cuts,0.0);
+      // Print applyCuts return code
+      cout <<endl <<endl;
+      cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
+      cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
+      cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
+            <<" were inconsistent for this problem" <<endl;
+      cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
+      cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
+      cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
+      cout <<endl <<endl;
+      aggSi.writeLp("AggAfterCuts");
+      aggSi.resolve();
+      obj = aggSi.getObjValue();
+      iter++;
+      const char* fName = argv[1];
+      char iteration[] = "_iter_";
+      char outPut[100];
+      // sprintf(outPut, "%s%s%d", fName, iteration, iter);
+      nCuts += acRc.getNumApplied();
+      nCutsAdded += acRc.getNumApplied();
     }
-    // CoinWarmStart* warmStart = aggSi.getWarmStart();
-    // int numDeleteRows = 0;
-    // int start = alp.getNumRowAfterCuts();
-    // int finish = alp.getNumRowAfterOrderConstraints();
-    // vector<int> deleteRows;
-    // for (int i = start; i < finish; ++i){
-    //   numDeleteRows++;
-    //   deleteRows.push_back(i);
-    // }
-    // aggSi.deleteRows(numDeleteRows, &deleteRows[0]);
-    // aggSi.writeLp("AggAfterDelete");
-    // aggSi.setWarmStart(warmStart);
-    // aggSi.resolve();
-    // cout << "\nsolution after\n" << endl;
-    // for (int i = 0; i < aggSi.getNumCols(); ++i){
-    //   cout << "x_" << i << " = " << solution[i] << endl;
-    // }
-    // Generate l & p cuts for this model
-    gomoryCuts.generateCuts(aggSi, cuts);
-    // gmiCuts.generateCuts(aggSi, cuts);
-    // twomirCuts.generateCuts(aggSi, cuts);
-    // mIRoundingCuts.generateCuts(aggSi, cuts);
-    acRc = aggSi.applyCuts(cuts,0.0);
-    // Print applyCuts return code
-    cout <<endl <<endl;
-    cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
-    cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
-    cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
-          <<" were inconsistent for this problem" <<endl;
-    cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
-    cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
-    cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
-    cout <<endl <<endl;
-    aggSi.writeMps("AggAfterCuts");
-    iter++;
-    const char* fName = argv[1];
-    char iteration[] = "_iter_";
-    char outPut[100];
-    sprintf(outPut, "%s%s%d", fName, iteration, iter);
-    nCuts += acRc.getNumApplied();
-    nCutsAdded += acRc.getNumApplied();
     update(_nCols, _nRows, _nnz, Astart, Aindex,
             Avalue, ARstart, ARindex, ARvalue,
             colLower, colUpper, rowLower, rowUpper,
             ep, alp, aggSi, si);
-    // aggSi.writeLp("test");
-    // Loop until EP is discrete
-    // This will give us an Lp in the original (full) dimension
-    // This Lp however will have the added symmetry cuts from each lift
     while(!ep.isDiscrete()){
       ep.refine();
       alp.updateMasterLpAndEp(ep, _nCols, _nRows, 
@@ -212,57 +194,39 @@ int main(int argc, const char *argv[]){
       }
       aggSi.writeLp("AggBeforeCutsAddedFromCbc");
       // Solve 
+
       aggSi.initialSolve();
-      solution.assign(aggSi.getColSolution(), aggSi.getColSolution() + aggSi.getNumCols());
-      cout << "\nsolution before\n" << endl;
-      for (int i = 0; i < aggSi.getNumCols(); ++i){
-        cout << "x_" << i << " = " << solution[i] << endl;
+      double obj = aggSi.getObjValue();
+      while (fabs(obj - prevObj) > 1e-4){
+        prevObj = obj;
+        // Generate l & p cuts for this model
+        cuts = OsiCuts();
+        gomoryCuts.generateCuts(aggSi, cuts);
+        // gmiCuts.generateCuts(aggSi, cuts);
+        // twomirCuts.generateCuts(aggSi, cuts);
+        // mIRoundingCuts.generateCuts(aggSi, cuts);
+        acRc = aggSi.applyCuts(cuts,0.0);
+        // Print applyCuts return code
+        cout <<endl <<endl;
+        cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
+        cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
+        cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
+              <<" were inconsistent for this problem" <<endl;
+        cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
+        cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
+        cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
+        cout <<endl <<endl;
+        aggSi.writeLp("AggAfterCuts");
+        aggSi.resolve();
+        obj = aggSi.getObjValue();
+        iter++;
+        const char* fName = argv[1];
+        char iteration[] = "_iter_";
+        char outPut[100];
+        // sprintf(outPut, "%s%s%d", fName, iteration, iter);
+        nCuts += acRc.getNumApplied();
+        nCutsAdded += acRc.getNumApplied();
       }
-      // warmStart = aggSi.getWarmStart();
-      // numDeleteRows = 0;
-      // start = alp.getNumRowAfterCuts();
-      // finish = alp.getNumRowAfterOrderConstraints();
-      // deleteRows.clear();
-      // for (int i = start; i < finish; ++i){
-      //   numDeleteRows++;
-      //   deleteRows.push_back(i);
-      // }
-      // aggSi.deleteRows(numDeleteRows, &deleteRows[0]);
-      // aggSi.writeLp("AggAfterDelete");
-      // aggSi.setWarmStart(warmStart);
-      // aggSi.initialSolve();
-      // solution.assign(aggSi.getColSolution(), aggSi.getColSolution() + aggSi.getNumCols());
-      // cout << "\nsolution after\n" << endl;
-      // for (int i = 0; i < aggSi.getNumCols(); ++i){
-      //   cout << "x_" << i << " = " << solution[i] << endl;
-      // }
-      // Generate L&P cuts
-      cuts = OsiCuts();
-      gomoryCuts = CglGomory();
-      // gmiCuts = CglGMI();
-      // twomirCuts = CglTwomir();
-      // mIRoundingCuts = CglMixedIntegerRounding();
-      gomoryCuts.generateCuts(aggSi, cuts);
-      // gmiCuts.generateCuts(aggSi, cuts);
-      // twomirCuts.generateCuts(aggSi, cuts);
-      // mIRoundingCuts.generateCuts(aggSi, cuts);
-      acRc = aggSi.applyCuts(cuts,0.0);
-      // Print applyCuts return code
-      cout <<endl <<endl;
-      cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
-      cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
-      cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
-           <<" were inconsistent for this problem" <<endl;
-      cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
-      cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
-      cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
-      cout <<endl <<endl;
-      aggSi.writeMps("AggAfterCuts");
-      iter++;
-      sprintf(outPut, "%s%s%d", fName, iteration, iter);
-      // Update full model
-      nCuts += acRc.getNumApplied();
-      nCutsAdded += acRc.getNumApplied();
       update(_nCols, _nRows, _nnz, Astart, Aindex,
               Avalue, ARstart, ARindex, ARvalue,
               colLower, colUpper, rowLower, rowUpper,
