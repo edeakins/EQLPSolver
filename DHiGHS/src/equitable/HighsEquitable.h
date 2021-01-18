@@ -18,6 +18,13 @@
 #include <forward_list>
 using namespace std;
 
+struct HighsColoring{
+    std::vector<int> lab;
+    std::vector<int> unlab;
+    std::vector<int> clen;
+    std::vector<int> cfront;
+};
+
 class HighsEquitable {
 public:
 	// Setup for equitable ptn
@@ -31,6 +38,8 @@ public:
     void findTarget();
     bool isDiscrete();
     void packVectors();
+    void setLabel(int index, int value);
+    void colorAlloc();
 
 	/// Original LP info
     int nRows;
@@ -73,6 +82,35 @@ public:
     vector<int> initialParts;
     vector<int> numEdges;
     vector<int> parentPartition;
+
+    // Saucy like storage (trying to optimize ep algorithm)
+    struct HighsColoring coloring;
+
+    /* Refinement: inducers */
+	vector<char> indmark;   /* Induce marks */
+	vector<int> ninduce;    /* Nonsingletons that might induce refinement */
+	vector<int> sinduce;    /* Singletons that might induce refinement */
+	int nninduce;    /* Size of ninduce stack */
+	int nsinduce;    /* Size of sinduce stack */
+
+	/* Refinement: marked cells */
+	vector<int> clist;      /* List of cells marked for refining */
+	int csize;       /* Number of cells in clist */
+
+	/* Refinement: workspace */
+	vector<char> stuff;     /* Bit vector, but one char per bit */
+	vector<int> ccount;     /* Number of connections to refining cell */
+	vector<int> bucket;     /* Workspace */
+	vector<int> count;      /* Num vertices with same adj count to ref cell */
+	vector<int> junk;       /* More workspace */
+	vector<int> gamma;      /* Working permutation */
+	vector<int> conncnts;   /* Connection counts for cell fronts */
+
+    /* Search: split record */
+	vector<int> splitwho;   /* List of where splits occurred */
+	vector<int> splitfrom;  /* List of cells which were split */
+	vector<int> splitlev;   /* Where splitwho/from begins for each level */
+	int nsplits;     /* Number of splits at this point */
 
 };
 

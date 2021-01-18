@@ -17,6 +17,7 @@
 #include <numeric>
 using namespace std;
 
+
 HighsEquitable::HighsEquitable(const HighsLp& lp){
 	// Original Lp info but edited for cuts
     nCols = lp.numCol_;
@@ -48,6 +49,7 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
 	Asize.assign(nTot, 0);
     C.resize(nTot);
     A.resize(nTot);
+	colorAlloc();
 	transpose();
 	handleNegatives();
     initRefinement();
@@ -55,6 +57,7 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
 
 void HighsEquitable::initRefinement(){
     int i,j;
+	int max = 0;
 	int numParts = 0;
 	int varColor = 0;
 	int conColor = nCols;
@@ -126,6 +129,10 @@ void HighsEquitable::initRefinement(){
 		C[initialParts[i]].push_back(i);
 		Csize[initialParts[i]]++;
 		color[i] = initialParts[i];
+	}
+	for (i = 0; i < nTot; ++i){
+		ccount[color[i]]++;
+		if (max < color[i]) max = color[i];
 	}
 	refine();
 }
@@ -369,4 +376,19 @@ bool HighsEquitable::isDiscrete(){
 void HighsEquitable::packVectors(){
 	for (int i = 0; i < Aindex.size(); ++i)
 		AindexP[i] = color[Aindex[i] + nCols];
+}
+
+/* Sets labels for partition information (saucy style) */
+void HighsEquitable::setLabel(int index, int value){
+	coloring.lab[index] = value;
+	coloring.unlab[value] = index;
+}
+
+/* Allocate color storage */
+void HighsEquitable::colorAlloc(){
+	coloring.lab.resize(nTot);
+	coloring.unlab.resize(nTot);
+	coloring.clen.resize(nTot);
+	coloring.cfront.resize(nTot);
+	ccount.resize(nTot);
 }
