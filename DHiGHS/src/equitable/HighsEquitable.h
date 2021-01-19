@@ -39,7 +39,10 @@ public:
     bool isDiscrete();
     void packVectors();
     void setLabel(int index, int value);
+    void addInduce(int who);
+    void fixFronts(int cf, int ff);
     void colorAlloc();
+    int *ints(int n) { return (int*)malloc(n * sizeof(int)); }
 
 	/// Original LP info
     int nRows;
@@ -90,8 +93,8 @@ public:
 	vector<char> indmark;   /* Induce marks */
 	vector<int> ninduce;    /* Nonsingletons that might induce refinement */
 	vector<int> sinduce;    /* Singletons that might induce refinement */
-	int nninduce;    /* Size of ninduce stack */
-	int nsinduce;    /* Size of sinduce stack */
+	int nninduce = 0;    /* Size of ninduce stack */
+	int nsinduce = 0;    /* Size of sinduce stack */
 
 	/* Refinement: marked cells */
 	vector<int> clist;      /* List of cells marked for refining */
@@ -105,6 +108,8 @@ public:
 	vector<int> junk;       /* More workspace */
 	vector<int> gamma;      /* Working permutation */
 	vector<int> conncnts;   /* Connection counts for cell fronts */
+    int *nextnon;    /* Forward next-nonsingleton pointers */
+	int *prevnon;    /* Backward next-nonsingleton pointers */
 
     /* Search: split record */
 	vector<int> splitwho;   /* List of where splits occurred */

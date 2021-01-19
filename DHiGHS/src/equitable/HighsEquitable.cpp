@@ -130,9 +130,47 @@ void HighsEquitable::initRefinement(){
 		Csize[initialParts[i]]++;
 		color[i] = initialParts[i];
 	}
+	/*  Count the initial frequency of each color class */	
 	for (i = 0; i < nTot; ++i){
 		ccount[color[i]]++;
 		if (max < color[i]) max = color[i];
+	}
+	/* Build cell lengths */
+	coloring.clen[0] = ccount[0] - 1;
+	for (i = 0; i < max; ++i) {
+		coloring.clen[ccount[i]] = ccount[i+1] - 1;
+		ccount[i+1] += ccount[i];
+	}
+	/* Build the label array */
+	for (i = 0; i < nTot; ++i) {
+		setLabel(--ccount[color[i]], i);
+	}
+	/* Clear out ccount */
+	for (i = 0; i <= max; ++i) {
+		ccount[i] = 0;
+	}
+	/* Update refinement stuff based on initial partition */
+	for (i = 0; i < nTot; i += coloring.clen[i]+1) {
+		addInduce(i);
+		fixFronts(i, i);
+	}
+	/* Prepare lists based on cell lengths */
+	for (i = 0, j = -1; i < nTot; i += coloring.clen[i] + 1) {
+		if (!coloring.clen[i]) continue;
+		prevnon[i] = j;
+		nextnon[j] = i;
+		j = i;
+	}
+	/* Fix the end */
+	prevnon[nTot] = j;
+	nextnon[j] = nTot;
+	cout << "nextnon" << endl;
+	for(i = -1; i < nTot; ++i){
+		cout << nextnon[i] << endl;
+	}
+	cout << "prevnon" << endl;
+	for(i = 0; i < nTot + 1; ++i){
+		cout << prevnon[i] << endl;
 	}
 	refine();
 }
@@ -384,6 +422,25 @@ void HighsEquitable::setLabel(int index, int value){
 	coloring.unlab[value] = index;
 }
 
+/* Add singletons and nonsingletons to induction list
+for refinement induction */
+void HighsEquitable::addInduce(int who){
+	if (!coloring.clen[who]) {
+		sinduce[nsinduce++] = who;
+	}
+	else {
+		ninduce[nninduce++] = who;
+	}
+	indmark[who] = 1;
+}
+
+void HighsEquitable::fixFronts(int cf, int ff){
+	int i, end = cf + coloring.clen[cf];
+	for (i = ff; i <= end; ++i) {
+		coloring.cfront[coloring.lab[i]] = cf;
+	}
+}
+
 /* Allocate color storage */
 void HighsEquitable::colorAlloc(){
 	coloring.lab.resize(nTot);
@@ -391,4 +448,10 @@ void HighsEquitable::colorAlloc(){
 	coloring.clen.resize(nTot);
 	coloring.cfront.resize(nTot);
 	ccount.resize(nTot);
+	sinduce.resize(nTot);
+	ninduce.resize(nTot);
+	indmark.resize(nTot);
+	count.resize(nTot);
+	prevnon = ints(nTot + 1);
+	nextnon = ints(nTot + 1) + 1;
 }
