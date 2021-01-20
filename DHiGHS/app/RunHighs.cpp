@@ -234,6 +234,18 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsTimer timer;
   HighsOptions alpOpt;
   Highs highs;
+  // Highs highsOrg;
+  // highsOrg.passModel(lp);
+  // vector<double> lowerBound;
+  // vector<double> upperBound;
+  // vector<int> ARstart;
+  // vector<int> ARindex;
+  // vector<double> ARvalue;
+  // int nnzRow = 0;
+  // int numRow = lp.numRow_;
+  // int from = 0;
+  // int to = lp.numRow_;
+  // highsOrg.getRows(from, to, numRow, &lowerBound, &upperBound, nnzRow, &ARstart, &ARindex, &ARvalue);
   alpOpt.presolve = string("off");
   alpOpt.simplex_scale_strategy = 0;
   alpOpt.model_file = string("No File, Reduced Model");

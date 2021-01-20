@@ -18,12 +18,12 @@
 #include <forward_list>
 using namespace std;
 
-struct HighsColoring{
-    std::vector<int> lab;
-    std::vector<int> unlab;
-    std::vector<int> clen;
-    std::vector<int> cfront;
-};
+// struct HighsColoring{
+//     int *lab;
+//     int *unlab;
+//     int *clen;
+//     int *cfront;
+// };
 
 class HighsEquitable {
 public:
@@ -38,16 +38,53 @@ public:
     void findTarget();
     bool isDiscrete();
     void packVectors();
-    void setLabel(int index, int value);
-    void addInduce(int who);
-    void fixFronts(int cf, int ff);
-    void colorAlloc();
-    int *ints(int n) { return (int*)malloc(n * sizeof(int)); }
+    /* mimicing saucy */
+    // void setLabel(int index, int value);
+    // void addInduce(int who);
+    // void fixFronts(int cf, int ff);
+    // void colorAlloc();
+   
+    // int refineSaucy();
+    // bool atTerminal();
+    // void clearRefine();
+    // void swapLabels(int a, int b);
+    // void moveToBack(int k);
+    // void dataMark(int k);
+    // void lp2Graph();
+    // void fixAdj();
+    // int refineCell();
+    // int refineCells();
+    // int refSingleton(int* adj, int* edg, int cf);
+    // int refNonsingle(int* adj, int* edg, int cf);
+    // int refSingletonUndirected(int cf);
+    // int refNonsingleUndirected(int cf);
+    // int refSingleCell(int cf);
+    // int refNonsingleCell(int cf);
+    // // int refNonsingle();
+    // // int refine2(int cf);
+    // void introsort(int* a, int n);
+    // void introsortLoop(int* a, int n, int lim);
+    // void insertionSort(int* a, int n);
+    // int logBase2(int n);
+    // int median(int a, int b, int c);
+    // void heapSort(int* a, int n);
+    // int maybeSplit(int cf, int ff);
+    // int partition(int* a, int n, int m);
+    // void swap(int* a, int x, int y);
+    // void siftUp(int* a, int k);
+    // void siftDown(int* a, int n);
+
+    // // Saucy allocation functions
+    // int* ints(int n) {return (int*)malloc(n * sizeof(int));}
+    // double* doubles(int n) {return (double*)malloc(n * sizeof(double));}
+    // int* zeros(int n) {return(int*)malloc(n * sizeof(int));}
+    // char* bits(int n) {return(char*)malloc(n * sizeof(char));}
 
 	/// Original LP info
     int nRows;
     int nCols; 
     int nTot;
+    int nnz;
     vector<double> colCost;
     vector<double> colLower;
     vector<double> colUpper; 
@@ -86,36 +123,45 @@ public:
     vector<int> numEdges;
     vector<int> parentPartition;
 
-    // Saucy like storage (trying to optimize ep algorithm)
-    struct HighsColoring coloring;
+    // // Saucy like storage (trying to optimize ep algorithm)
+    // struct HighsColoring coloring;
 
-    /* Refinement: inducers */
-	vector<char> indmark;   /* Induce marks */
-	vector<int> ninduce;    /* Nonsingletons that might induce refinement */
-	vector<int> sinduce;    /* Singletons that might induce refinement */
-	int nninduce = 0;    /* Size of ninduce stack */
-	int nsinduce = 0;    /* Size of sinduce stack */
+    // // Saucy miscelaneous used in their code
+    // int* junk;
 
-	/* Refinement: marked cells */
-	vector<int> clist;      /* List of cells marked for refining */
-	int csize;       /* Number of cells in clist */
+    // /* graph storage */
+    // int* adj;
+    // int* edg;
+    // double* wt;
 
-	/* Refinement: workspace */
-	vector<char> stuff;     /* Bit vector, but one char per bit */
-	vector<int> ccount;     /* Number of connections to refining cell */
-	vector<int> bucket;     /* Workspace */
-	vector<int> count;      /* Num vertices with same adj count to ref cell */
-	vector<int> junk;       /* More workspace */
-	vector<int> gamma;      /* Working permutation */
-	vector<int> conncnts;   /* Connection counts for cell fronts */
-    int *nextnon;    /* Forward next-nonsingleton pointers */
-	int *prevnon;    /* Backward next-nonsingleton pointers */
+    // /* Refinement: inducers */
+	// char* indmark;   /* Induce marks */
+	// int* ninduce;    /* Nonsingletons that might induce refinement */
+	// int* sinduce;    /* Singletons that might induce refinement */
+	// int nninduce = 0;    /* Size of ninduce stack */
+	// int nsinduce = 0;    /* Size of sinduce stack */
 
-    /* Search: split record */
-	vector<int> splitwho;   /* List of where splits occurred */
-	vector<int> splitfrom;  /* List of cells which were split */
-	vector<int> splitlev;   /* Where splitwho/from begins for each level */
-	int nsplits;     /* Number of splits at this point */
+	// /* Refinement: marked cells */
+	// int* clist;      /* List of cells marked for refining */
+	// int csize = 0;  
+    // int lev = 0;     /* Number of cells in clist */
+
+	// /* Refinement: workspace */
+	// char* stuff;     /* Bit vector, but one char per bit */
+	// int* ccount;     /* Number of connections to refining cell */
+	// int* bucket;     /* Workspace */
+	// int* count;      /* Num vertices with same adj count to ref cell */
+	// int* junk;       /* More workspace */
+	// int* gamma;      /* Working permutation */
+	// int* conncnts;   /* Connection counts for cell fronts */    /* Backward next-nonsingleton pointers */
+    // int* nextnon;
+    // int* prevnon;
+
+    // /* Search: split record */
+	// int* splitwho;   /* List of where splits occurred */
+	// int* splitfrom;  /* List of cells which were split */
+	// int* splitlev;   /* Where splitwho/from begins for each level */
+	// int nsplits = 0;     /* Number of splits at this point */
 
 };
 

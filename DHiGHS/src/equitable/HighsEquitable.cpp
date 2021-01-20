@@ -1,4 +1,5 @@
 #include "equitable/HighsEquitable.h"
+#include "saucy.h"
 #include <cctype>
 #include <cmath>
 #include <cassert>
@@ -20,9 +21,11 @@ using namespace std;
 
 HighsEquitable::HighsEquitable(const HighsLp& lp){
 	// Original Lp info but edited for cuts
+	struct saucy *s;
     nCols = lp.numCol_;
 	nRows = lp.numRow_;
     nTot = lp.numCol_ + lp.numRow_;
+	nnz = lp.nnz_;
     colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
     colLower.assign(lp.colLower_.begin(), lp.colLower_.end());
     colUpper.assign(lp.colUpper_.begin(), lp.colUpper_.end());
@@ -49,8 +52,9 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
 	Asize.assign(nTot, 0);
     C.resize(nTot);
     A.resize(nTot);
-	colorAlloc();
 	transpose();
+	// lp2Graph();
+	// colorAlloc();
 	handleNegatives();
     initRefinement();
 }
@@ -130,48 +134,40 @@ void HighsEquitable::initRefinement(){
 		Csize[initialParts[i]]++;
 		color[i] = initialParts[i];
 	}
-	/*  Count the initial frequency of each color class */	
-	for (i = 0; i < nTot; ++i){
-		ccount[color[i]]++;
-		if (max < color[i]) max = color[i];
-	}
-	/* Build cell lengths */
-	coloring.clen[0] = ccount[0] - 1;
-	for (i = 0; i < max; ++i) {
-		coloring.clen[ccount[i]] = ccount[i+1] - 1;
-		ccount[i+1] += ccount[i];
-	}
-	/* Build the label array */
-	for (i = 0; i < nTot; ++i) {
-		setLabel(--ccount[color[i]], i);
-	}
-	/* Clear out ccount */
-	for (i = 0; i <= max; ++i) {
-		ccount[i] = 0;
-	}
-	/* Update refinement stuff based on initial partition */
-	for (i = 0; i < nTot; i += coloring.clen[i]+1) {
-		addInduce(i);
-		fixFronts(i, i);
-	}
-	/* Prepare lists based on cell lengths */
-	for (i = 0, j = -1; i < nTot; i += coloring.clen[i] + 1) {
-		if (!coloring.clen[i]) continue;
-		prevnon[i] = j;
-		nextnon[j] = i;
-		j = i;
-	}
-	/* Fix the end */
-	prevnon[nTot] = j;
-	nextnon[j] = nTot;
-	cout << "nextnon" << endl;
-	for(i = -1; i < nTot; ++i){
-		cout << nextnon[i] << endl;
-	}
-	cout << "prevnon" << endl;
-	for(i = 0; i < nTot + 1; ++i){
-		cout << prevnon[i] << endl;
-	}
+	// /*  Count the initial frequency of each color class */	
+	// for (i = 0; i < nTot; ++i){
+	// 	ccount[color[i]]++;
+	// 	if (max < color[i]) max = color[i];
+	// }
+	// /* Build cell lengths */
+	// coloring.clen[0] = ccount[0] - 1;
+	// for (i = 0; i < max; ++i) {
+	// 	coloring.clen[ccount[i]] = ccount[i+1] - 1;
+	// 	ccount[i+1] += ccount[i];
+	// }
+	// /* Build the label array */
+	// for (i = 0; i < nTot; ++i) {
+	// 	setLabel(--ccount[color[i]], i);
+	// }
+	// /* Clear out ccount */
+	// for (i = 0; i <= max; ++i) {
+	// 	ccount[i] = 0;
+	// }
+	// /* Update refinement stuff based on initial partition */
+	// for (i = 0; i < nTot; i += coloring.clen[i]+1) {
+	// 	addInduce(i);
+	// 	fixFronts(i, i);
+	// }
+	// /* Prepare lists based on cell lengths */
+	// for (i = 0, j = -1; i < nTot; i += coloring.clen[i] + 1) {
+	// 	if (!coloring.clen[i]) continue;
+	// 	prevnon[i] = j;
+	// 	nextnon[j] = i;
+	// 	j = i;
+	// }
+	// /* Fix the end */
+	// prevnon[nTot] = j;
+	// nextnon[j] = nTot;
 	refine();
 }
 
@@ -416,42 +412,359 @@ void HighsEquitable::packVectors(){
 		AindexP[i] = color[Aindex[i] + nCols];
 }
 
-/* Sets labels for partition information (saucy style) */
-void HighsEquitable::setLabel(int index, int value){
-	coloring.lab[index] = value;
-	coloring.unlab[value] = index;
-}
+// /* Sets labels for partition information (saucy style) */
+// void HighsEquitable::setLabel(int index, int value){
+// 	coloring.lab[index] = value;
+// 	coloring.unlab[value] = index;
+// }
 
-/* Add singletons and nonsingletons to induction list
-for refinement induction */
-void HighsEquitable::addInduce(int who){
-	if (!coloring.clen[who]) {
-		sinduce[nsinduce++] = who;
-	}
-	else {
-		ninduce[nninduce++] = who;
-	}
-	indmark[who] = 1;
-}
+// /* Add singletons and nonsingletons to induction list
+// for refinement induction */
+// void HighsEquitable::addInduce(int who){
+// 	if (!coloring.clen[who]) {
+// 		sinduce[nsinduce++] = who;
+// 	}
+// 	else {
+// 		ninduce[nninduce++] = who;
+// 	}
+// 	indmark[who] = 1;
+// }
 
-void HighsEquitable::fixFronts(int cf, int ff){
-	int i, end = cf + coloring.clen[cf];
-	for (i = ff; i <= end; ++i) {
-		coloring.cfront[coloring.lab[i]] = cf;
-	}
-}
+// void HighsEquitable::fixFronts(int cf, int ff){
+// 	int i, end = cf + coloring.clen[cf];
+// 	for (i = ff; i <= end; ++i) {
+// 		coloring.cfront[coloring.lab[i]] = cf;
+// 	}
+// }
 
-/* Allocate color storage */
-void HighsEquitable::colorAlloc(){
-	coloring.lab.resize(nTot);
-	coloring.unlab.resize(nTot);
-	coloring.clen.resize(nTot);
-	coloring.cfront.resize(nTot);
-	ccount.resize(nTot);
-	sinduce.resize(nTot);
-	ninduce.resize(nTot);
-	indmark.resize(nTot);
-	count.resize(nTot);
-	prevnon = ints(nTot + 1);
-	nextnon = ints(nTot + 1) + 1;
-}
+// /* Allocate color storage */
+// void HighsEquitable::colorAlloc(){
+// 	coloring.lab = ints(nTot);
+// 	coloring.unlab = ints(nTot);
+// 	coloring.clen = ints(nTot);
+// 	coloring.cfront = zeros(nTot);
+// 	ccount = zeros(nTot);
+// 	sinduce = ints(nTot);
+// 	ninduce = ints(nTot);
+// 	indmark = bits(nTot);
+// 	count = ints(nTot);
+// 	conncnts = ints(nTot);
+// 	clist = ints(nTot);
+// 	prevnon = ints(nTot + 1);
+// 	nextnon = ints(nTot + 1) + 1;
+// 	stuff = bits(nTot + 1);
+// 	junk = ints(nTot);\
+// 	bucket = ints(nTot + 2);
+// }
+
+// /* Going to try saucy refinement style */
+// int HighsEquitable::refineSaucy(){
+// 	int front;
+// 	while(true){
+// 		if (atTerminal()){
+// 			clearRefine();
+// 			return 1;
+// 		}
+// 		if (nsinduce){
+// 			front = sinduce[--nsinduce];
+// 			indmark[front] = 0;
+// 			if (!refSingletonUndirected(front)) break;
+// 		}
+// 		else if (nninduce){
+// 			front = ninduce[--nninduce];
+// 			indmark[front] = 0;
+// 			// if (!refNonsingleUndirected(front)) break;
+// 		}
+// 		else{
+// 			return 1;
+// 		}
+
+// 	}
+// }
+
+// bool HighsEquitable::atTerminal(){
+// 	return nsplits == nTot;
+// }
+
+// void HighsEquitable::clearRefine(){
+// 	int i;
+// 	for (i = 0; i < nninduce; ++i)
+// 		indmark[ninduce[i]] = 0;
+// 	for (i = 0; i < nsinduce; ++i)
+// 		indmark[sinduce[i]] = 0;
+// 	nninduce = nsinduce = 0;
+// }
+
+// void HighsEquitable::swapLabels(int a, int b){
+// 	int tmp = coloring.lab[a];
+// 	setLabel(a, coloring.lab[b]);
+// 	setLabel(b, tmp);
+// }
+
+// void HighsEquitable::moveToBack(int k){
+// 	int cf = coloring.cfront[k];
+// 	int cb = cf + coloring.clen[cf];
+// 	int offset = conncnts[cf]++;
+// 	swapLabels(cb - offset, coloring.unlab[k]);
+// 	if (!offset) clist[csize++] = cf;
+// }
+
+// void HighsEquitable::dataMark(int k){
+// 	int cf = coloring.cfront[k];
+// 	if (coloring.clen[cf]) moveToBack(k);
+// }
+
+// int HighsEquitable::refSingleton(int* adj, int* edg, int cf){
+// 	int i, k = coloring.lab[cf];
+// 	for (i = adj[k]; i < adj[k + 1]; ++i)
+// 		dataMark(edg[i]);
+// 		return refineCell();
+// }
+
+// int HighsEquitable::refNonsingle(int* adj, int*edg, int cf){
+// 	int i, j, k, ret;
+// 	int cb = cf + coloring.clen[cf];
+// 	int size = cb - cf + 1;
+// 	if (cf == cb)
+// 		return refSingleton(adj, edg, cf);
+// 	memcpy(junk, coloring.lab + cf, size * sizeof(int));
+// 	for (i = 0; i < size; ++i){
+// 		k = junk[i];
+// 		for (j = adj[k]; j != adj[k + 1]; ++j)
+// 			// dataCount(edg[j]); // TO DO: define dataCount function and edit it for lps
+// 	}
+// 	ret = refineCells();
+// 	for (i = cf; i <= cb; ++i){
+// 		k = coloring.lab[i];
+// 		for (j = adj[k]; j != adj[k + 1]; ++j)
+// 			ccount[edg[j]] = 0;
+// 	}
+// 	return ret;
+// }
+
+// void HighsEquitable::lp2Graph(){
+// 	adj = ints(nTot + 1);
+// 	edg = ints(2 * nnz);
+// 	wt = doubles(2 * nnz);
+// 	// Count adjacencies
+// 	for (int i = 0; i < nCols; ++i){
+// 		for (int j = Astart[i]; j < Astart[i + 1]; ++j){
+// 			adj[i]++; adj[Aindex[j] + nCols]++; 
+// 		}
+// 	}
+// 	// Insert adjacencies (sparse storage)
+// 	int idx = 0;
+// 	for (int i = 0; i < nCols; ++i){
+// 		for (int j = Astart[i]; j < Astart[i + 1]; ++j){
+// 			edg[j] = Aindex[j] + nCols;
+// 			wt[j] = Avalue[j];
+// 		}
+// 	}
+// 	for (int i = 0; i < nRows; ++i){
+// 		for (int j = ARstart[i]; j < ARstart[i + 1]; ++j){
+// 			edg[j + nnz] = ARindex[j];
+// 			wt[j + nnz] = Avalue[j];
+// 		}
+// 	}
+// 	fixAdj();
+// }
+
+// void HighsEquitable::fixAdj(){
+// 	int i, val, sum;
+// 	val = adj[0]; sum = 0; adj[0] = 0;
+// 	for (i = 1; i <= nTot; ++i){
+// 		sum += val;
+// 		val = adj[i];
+// 		adj[i] = sum;
+// 	} 
+// }
+
+// int HighsEquitable::refineCell(){
+// 	int i, cf, ret = 1;
+// 	if (lev > 1) introsort(clist, csize); // need to define lev and introsort
+// 	for (i = 0; ret && i < csize; ++i){
+// 		cf = clist[i];
+// 		ret = refSingleCell(cf);
+// 	}
+// 	for (i = 0; i < csize; ++i){
+// 		cf = clist[i];
+// 		conncnts[cf] = 0;
+// 	}
+// 	csize = 0;
+// 	return ret;
+// }
+
+// int HighsEquitable::refineCells(){
+// 	int i, cf, ret = 1;
+// 	if (lev > 1) introsort(clist, csize); // need to define lev and introsort
+// 	for (i = 0; ret && i < csize; ++i){
+// 		cf = clist[i];
+// 		ret = refNonsingleCell(cf);
+// 	}
+// 	for (i = 0; i < csize; ++i){
+// 		cf = clist[i];
+// 		conncnts[cf] = 0;
+// 	}
+// 	csize = 0;
+// 	return ret;
+// }
+
+// int HighsEquitable::refSingleCell(int cf){
+// 	int zcnt = coloring.clen[cf] + 1 - conncnts[cf];
+// 	// return maybeSplit(cf, cf + zcnt); // TO DO define maybe split
+// 	return 1;
+// }
+
+// int HighsEquitable::refNonsingleCell(int cf){
+// 	int cnt, i, cb, nzf, ff, fb, bmin, bmax;
+// 	cb = cf + coloring.clen[cf];
+// 	nzf = cb - conncnts[cf] + 1;
+// 	ff = nzf;
+// 	cnt = ccount[coloring.lab[ff]];
+// 	count[ff] = bmin = bmax = cnt;
+// 	bucket[cnt] = 1;
+// 	while (++ff <= cb){
+// 		cnt = ccount[coloring.lab[ff]];
+// 		while (bmin > cnt) bucket[--bmin] = 0;
+// 		while (bmax < cnt) bucket[++bmax] = 0;
+// 		++bucket[cnt];
+// 		count[ff] = cnt;
+// 	}
+// 	if (bmin == bmax) return 1;
+// 	ff = fb = nzf;
+// 	for (i = bmin; i <= bmax; ++i, ff = fb){
+// 		if (!bucket[i]) continue;
+// 		fb = ff + bucket[i];
+// 		bucket[i] = fb;
+// 	}
+// 	for (i = nzf; i <= cb; ++i)
+// 		junk[--bucket[count[i]]] = coloring.lab[i];
+// 	for (i = nzf; i <= cb; ++i)
+// 		setLabel(i, junk[i]);
+// 	for (i = bmax; i > bmin; --i){
+// 		ff = bucket[i];
+// 		if (ff && !split(cf, ff)) return 0; // TO DO: define split
+// 	}
+// 	return maybeSplit(cf, bucket[bmin]);
+// }
+
+// void HighsEquitable::introsort(int* a, int n){
+// 	introsortLoop(a, n, 2 * logBase2(n));
+// 	insertionSort(a, n);
+// }
+
+// void HighsEquitable::introsortLoop(int* a, int n, int lim){
+// 	int p;
+// 	while (n > 16){
+// 		if (lim == 0){
+// 			heapSort(a, n);
+// 			return;
+// 		}
+// 		--lim;
+// 		p = partition(a, n, median(a[0], a[n/2], a[n - 1]));
+// 		introsortLoop(a + p, n - p, lim);
+// 		n = p;
+// 	}
+// }
+
+// int HighsEquitable::median(int a, int b, int c){
+// 	if (a <= b) {
+// 		if (b <= c) return b;
+// 		if (a <= c) return c;
+// 		return a;
+// 	}
+// 	else {
+// 		if (a <= c) return a;
+// 		if (b <= c) return c;
+// 		return b;
+// 	}
+// }
+
+// int HighsEquitable::partition(int* a, int n, int m){
+// 	int f = 0, b = n;
+// 	for (;;){
+// 		while (a[f]) ++f;
+// 		do --b; while (m <= a[b]);
+// 		if (f < b){
+// 			swap(a, f, b);
+// 			++f;
+// 		}
+// 		else break;
+// 	}
+// 	return f;
+// }
+
+// int HighsEquitable::logBase2(int n){
+// 	int k = 0;
+// 	while (n > 1){
+// 		++k;
+// 		n >>= 1;
+// 	}
+// 	return k;
+// }
+
+// void HighsEquitable::swap(int* a, int x, int y){
+// 	int tmp = a[x];
+// 	a[x] = a[y];
+// 	a[y] = tmp;
+// }
+
+// void HighsEquitable::heapSort(int* a, int n){
+// 	int i;
+// 	for (i = 1; i < n; ++i){
+// 		siftUp(a - 1, i + 1);
+// 	}
+// 	--i;
+// 	while(i > 0){
+// 		swap(a, 0, i);
+// 		siftDown(a - 1, i--);
+// 	}
+// }
+
+// void HighsEquitable::siftUp(int* a, int k){
+// 	int p;
+// 	do{
+// 		p = k/2;
+// 		if(a[k] <= a[p]){
+// 			return;
+// 		}
+// 		else{
+// 			swap(a, k, p);
+// 			k = p;
+// 		}
+// 	} while (k > 1);
+// }
+
+// void HighsEquitable::siftDown(int* a, int n){
+// 	int p = 1, k = 2;
+// 	while (k <= n){
+// 		if (k < n && a[k] < a[k + 1]) ++k;
+// 		if (a[p] < a[k]){
+// 			swap(a, p, k);
+// 			p = k;
+// 			k = 2 * p;
+// 		}
+// 		else{
+// 			return;
+// 		}
+// 	}
+// }
+
+// void HighsEquitable::insertionSort(int* a, int n){
+// 	int i, j, k;
+// 	for (i = 1; i < n; ++i){
+// 		k = a[i];
+// 		for (j = i; j > 0 && a[j - 1] > k; --j){
+// 			a[j] = a[j - 1];
+// 		}
+// 		a[j] = k;
+// 	}
+// }
+
+// int HighsEquitable::refSingletonUndirected(int cf){
+// 	return refSingleton(adj, edg, cf);
+// }
+
+// int HighsEquitable::refNonsingleUndirected(int cf){
+// 	return refNonsingle(adj, edg, cf);
+// }
