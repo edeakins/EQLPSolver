@@ -1,5 +1,4 @@
 #include "equitable/HighsEquitable.h"
-#include "saucy.h"
 #include <cctype>
 #include <cmath>
 #include <cassert>
@@ -19,12 +18,14 @@
 using namespace std;
 
 
+
+
 HighsEquitable::HighsEquitable(const HighsLp& lp){
 	// Original Lp info but edited for cuts
-	struct saucy *s;
     nCols = lp.numCol_;
 	nRows = lp.numRow_;
     nTot = lp.numCol_ + lp.numRow_;
+	//nTotal = nTot;
 	nnz = lp.nnz_;
     colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
     colLower.assign(lp.colLower_.begin(), lp.colLower_.end());
@@ -34,6 +35,8 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
     Avalue.assign(lp.Avalue_.begin(), lp.Avalue_.end());
     Aindex.assign(lp.Aindex_.begin(), lp.Aindex_.end());
     Astart.assign(lp.Astart_.begin(), lp.Astart_.end());
+	colNames.assign(lp.col_names_.begin(), lp.col_names_.end());
+	rowNames.assign(lp.row_names_.begin(), lp.row_names_.end());
 	// Make color scheme edits for new cut rows
 	// These rows are singletons and therefore do not effect anything 
 	// other than that theyu exist.
@@ -53,10 +56,86 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
     C.resize(nTot);
     A.resize(nTot);
 	transpose();
-	// lp2Graph();
+	lp2Graph();
+	doSaucyEquitable();
 	// colorAlloc();
 	handleNegatives();
     initRefinement();
+}
+
+void HighsEquitable::lp2Graph(){
+	int i, j, nColor = 0;
+	double sum;
+	// Use to color vertices by rhs, bounds, and obj coeff
+	set<tuple<double, double> > rhs;
+	set<tuple<double, double, double> > objBounds;
+	g = (struct amorph_graph *)malloc(sizeof(struct amorph_graph));
+	g->sg.n = nTot;
+	g->sg.e = nnz;
+	int* adj = (int *)calloc(nTot + 1, sizeof(int));
+	int* edg = (int *)calloc(2 * nnz, sizeof(int));
+	double* w8t = (double *)calloc(2 * nnz, sizeof(double));
+	int* colors = (int *)calloc(nTot, sizeof(int));
+	char** var_names = (char** )malloc(nTot*sizeof(char*));
+	//marks = (char*)calloc(nTot, sizeof(char));
+	g->sg.adj = adj;
+	g->sg.edg = edg;
+	g->sg.w8t = w8t;
+	g->colors = colors;
+	g->var_names = var_names;
+	g->consumer = amorph_print_automorphism;
+	// Fill adj, should be the same as Astart and ARstart + nnz
+	for (i = 0; i < nCols; ++i)
+		adj[i + 1] = Astart[i + 1];
+	for (i = 0; i < nRows; ++i)
+		adj[i + nCols + 1] = ARstart[i + 1] + nnz;
+	// Fill edg and w8t
+	for (i = 0; i < nCols; ++i){
+		for (j = Astart[i]; j < Astart[i + 1]; ++j){
+			edg[j] = Aindex[j] + nCols;
+			w8t[j] = Avalue[j];
+		}
+	}
+	for (i = 0; i < nRows; ++i){
+		for (j = ARstart[i]; j < ARstart[i + 1]; ++j){
+			edg[j + nnz] = ARindex[j];
+			w8t[j + nnz] = ARvalue[j];
+		}
+	}
+	// Fill initial colors
+	objBounds.insert(make_tuple(colLower[0], colUpper[0], colCost[0]));
+	colors[0] = nColor;
+	for (i = 1; i < nCols; ++i){
+		if (objBounds.insert(make_tuple(colLower[i], colUpper[i], colCost[i])).second)
+			colors[i] = ++nColor;
+		else
+			colors[i] = nColor;
+	}
+	rhs.insert(make_tuple(rowLower[0], rowUpper[0]));
+	colors[nCols] = ++nColor;
+	for (i = 1; i < nRows; ++i){
+		if (rhs.insert(make_tuple(rowLower[i], rowUpper[i])).second)
+			colors[i + nCols] = ++nColor;
+		else
+			colors[i + nCols] = nColor;
+	}	
+	// Fill in var_names
+	for (i = 0; i < nCols; ++i){
+		int tempk = colNames[i].length();
+		var_names[i] = (char*)malloc(tempk*sizeof(char));
+		strcpy(var_names[i], colNames[i].c_str());
+	}
+	for(i = 0; i < nRows; ++i)
+    {
+        int tempk = rowNames[i].length();
+        var_names[i + nCols] = (char *)malloc( tempk*sizeof(char) );
+        strcpy(var_names[i + nCols], rowNames[i].c_str());
+    }
+}
+
+void HighsEquitable::doSaucyEquitable(){
+	s = saucy_alloc(nTot);
+	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &sstats);
 }
 
 void HighsEquitable::initRefinement(){
@@ -768,3 +847,57 @@ void HighsEquitable::packVectors(){
 // int HighsEquitable::refNonsingleUndirected(int cf){
 // 	return refNonsingle(adj, edg, cf);
 // }
+
+void HighsEquitable::amorph_print_automorphism(
+    int n, const int *gamma, int nsupp, const int *support,
+    struct amorph_graph *g, char *marks )
+{
+    int i, j, k;
+
+    // We presume support is already sorted
+    for (i = 0; i < nsupp; ++i) {
+        k = support[i];
+
+        // Skip elements already seen
+        if (marks[k]) continue;
+
+        // Start an orbit
+        marks[k] = 1;
+        printf( "(%s", g->var_names[k] );
+        //printf("(%d", k);
+
+        // Mark and notify elements in this orbit
+        for (j = gamma[k]; j != k; j = gamma[j]) {
+            marks[j] = 1;
+            printf( " %s", g->var_names[j] );
+            //printf(" %d", j);
+        }
+
+        // Finish off the orbit
+        putchar(')');
+    }
+    putchar('\n');
+
+    // Clean up after ourselves
+    for (i = 0; i < nsupp; ++i) {
+        marks[support[i]] = 0;
+    }
+}
+
+int HighsEquitable::on_automorphism( int n, const int *gamma, int k, int *support, void *arg )
+{
+	// marks = (char*)calloc(nTotal, sizeof(char));
+    // struct amorph_graph *g = (struct amorph_graph *)arg;
+    // if( !quiet_mode )
+    // {
+    //     qsort_integers( support, k );
+    //     //if( gap_mode )
+    //     //{
+    //     //    putchar( !first ? '[' : ',' );
+    //     //    putchar( '\n' );
+    //     //    first = 1;
+    //     //}
+    //     g->consumer( n, gamma, k, support, g, marks );
+    // }
+    return !timeout_flag;
+}

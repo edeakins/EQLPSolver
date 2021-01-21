@@ -12,6 +12,7 @@ struct amorph_graph {
 	struct saucy_graph sg;
 	int *colors;
 	void *data;
+        char **var_names;
 	void (*consumer)(int, const int *, int, const int *,
 		struct amorph_graph *g, char *);
 	void (*free)(struct amorph_graph *);

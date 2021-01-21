@@ -4,6 +4,9 @@
 #include "HighsLp.h"
 #include "HighsSimpleDec.h"
 #include "HighsTimer.h"
+#include "saucy.h"
+#include "amorph.h"
+#include "util.h"
 
 #include <string>
 #include <vector>
@@ -16,6 +19,7 @@
 #include <numeric>
 #include <functional>
 #include <forward_list>
+#include <signal.h>
 using namespace std;
 
 // struct HighsColoring{
@@ -30,6 +34,8 @@ public:
 	// Setup for equitable ptn
 	HighsEquitable(const HighsLp& lp);
 	void transpose();
+    void lp2Graph();
+    void doSaucyEquitable();
     void initRefinement();
     void handleNegatives();
 	void refine();
@@ -38,6 +44,10 @@ public:
     void findTarget();
     bool isDiscrete();
     void packVectors();
+    static int on_automorphism( int n, const int *gamma, int k, int *support, void *arg );
+    static void amorph_print_automorphism(
+    int n, const int *gamma, int nsupp, const int *support,
+    struct amorph_graph *g, char *marks );
     /* mimicing saucy */
     // void setLabel(int index, int value);
     // void addInduce(int who);
@@ -80,10 +90,20 @@ public:
     // int* zeros(int n) {return(int*)malloc(n * sizeof(int));}
     // char* bits(int n) {return(char*)malloc(n * sizeof(char));}
 
+    // Saucy
+    struct saucy *s;
+    struct saucy_stats sstats;
+	amorph_graph *g;
+    const static int quiet_mode = 0;
+    const static sig_atomic_t timeout_flag = 0;
+    int timeout = 0;
+    static char *marks;
+    
 	/// Original LP info
     int nRows;
     int nCols; 
     int nTot;
+    static int nTotal;
     int nnz;
     vector<double> colCost;
     vector<double> colLower;
@@ -99,6 +119,8 @@ public:
     vector<int> ARstart;
     vector<double> ARvaluePos;
     vector<int> AindexP;
+    vector<string> rowNames;
+    vector<string> colNames;
 
     // EP info
     int vCol, cCol, refinements = 0;

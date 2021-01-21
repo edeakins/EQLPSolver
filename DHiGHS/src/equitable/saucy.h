@@ -26,6 +26,7 @@ struct saucy_graph {
 	int e;
 	int *adj;
 	int *edg;
+	double *w8t;
 };
 
 struct saucy *saucy_alloc(int n);

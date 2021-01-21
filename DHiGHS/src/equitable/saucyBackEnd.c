@@ -1533,6 +1533,7 @@ void saucy_search(struct saucy *s, const struct saucy_graph *g, int directed,
 static int *ints(int n) { return malloc(n * sizeof(int)); }
 static int *zeros(int n) { return calloc(n, sizeof(int)); }
 static char *bits(int n) { return calloc(n, sizeof(char)); }
+static double *doubles(int n) { return calloc(n, sizeof(double)); }
 
 struct saucy *
 saucy_alloc(int n)
