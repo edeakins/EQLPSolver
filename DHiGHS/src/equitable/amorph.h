@@ -1,12 +1,7 @@
-  
 #ifndef SAUCY_AMORPH_H
 #define SAUCY_AMORPH_H
 
-#include "saucy.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "saucy-equitable.h"
 
 struct amorph_graph {
 	struct saucy_graph sg;
@@ -29,9 +24,5 @@ struct dimacs_info {
 struct amorph_graph *amorph_read(const char *filename, int digraph);
 struct amorph_graph *amorph_read_gap(const char *filename);
 struct amorph_graph *amorph_read_dimacs(const char *filename);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

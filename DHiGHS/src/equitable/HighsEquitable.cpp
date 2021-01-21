@@ -56,8 +56,8 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
     C.resize(nTot);
     A.resize(nTot);
 	transpose();
-	lp2Graph();
-	doSaucyEquitable();
+	// lp2Graph();
+	// doSaucyEquitable();
 	// colorAlloc();
 	handleNegatives();
     initRefinement();
@@ -74,13 +74,13 @@ void HighsEquitable::lp2Graph(){
 	g->sg.e = nnz;
 	int* adj = (int *)calloc(nTot + 1, sizeof(int));
 	int* edg = (int *)calloc(2 * nnz, sizeof(int));
-	double* w8t = (double *)calloc(2 * nnz, sizeof(double));
+	double* wght = (double *)calloc(2 * nnz, sizeof(double));
 	int* colors = (int *)calloc(nTot, sizeof(int));
 	char** var_names = (char** )malloc(nTot*sizeof(char*));
 	//marks = (char*)calloc(nTot, sizeof(char));
 	g->sg.adj = adj;
 	g->sg.edg = edg;
-	g->sg.w8t = w8t;
+	g->sg.wght = wght;
 	g->colors = colors;
 	g->var_names = var_names;
 	g->consumer = amorph_print_automorphism;
@@ -134,8 +134,8 @@ void HighsEquitable::lp2Graph(){
 }
 
 void HighsEquitable::doSaucyEquitable(){
-	s = saucy_alloc(nTot);
-	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &sstats);
+	s = saucy_alloc(nTot); // TO DO: add second argument to this function
+	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &sstats); // TO DO: add seventh argument to this function
 }
 
 void HighsEquitable::initRefinement(){

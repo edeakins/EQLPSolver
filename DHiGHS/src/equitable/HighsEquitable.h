@@ -4,9 +4,10 @@
 #include "HighsLp.h"
 #include "HighsSimpleDec.h"
 #include "HighsTimer.h"
-#include "saucy.h"
-#include "amorph.h"
+#include "saucy-equitable.h"
 #include "util.h"
+#include "amorph.h"
+#include "platform.h"
 
 #include <string>
 #include <vector>

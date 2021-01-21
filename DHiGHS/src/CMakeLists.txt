@@ -116,8 +116,8 @@ set(sources
     util/HighsSort.cpp
     util/HighsUtils.cpp
     util/stringutil.cpp
+    equitable/saucy-equitable.cpp
     equitable/HighsEquitable.cpp
-    equitable/saucyBackEnd.c
     interfaces/highs_c_api.cpp)
 
 set(headers
@@ -177,10 +177,12 @@ set(headers
     util/HighsSort.h
     util/HighsTimer.h
     util/HighsUtils.h
-    equitable/HighsEqutiable.h
-    equitable/saucy.h
+    equitable/saucy-equitable.h
     equitable/amorph.h
     equitable/util.h
+    equitable/platform.h
+    # equitable/saucy.h
+    equitable/HighsEqutiable.h
     Highs.h
     interfaces/highs_c_api.h
 )
