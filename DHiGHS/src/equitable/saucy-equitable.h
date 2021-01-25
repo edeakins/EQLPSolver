@@ -30,6 +30,7 @@ struct eq_part {
     int target;
     int *labels;
     int *fronts;
+    int *parents;
 };
 
 struct saucy *saucy_alloc(int n, int w);

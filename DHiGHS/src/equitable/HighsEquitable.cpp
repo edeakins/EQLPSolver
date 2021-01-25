@@ -17,9 +17,6 @@
 #include <numeric>
 using namespace std;
 
-
-
-
 HighsEquitable::HighsEquitable(const HighsLp& lp){
 	// Original Lp info but edited for cuts
     nCols = lp.numCol_;
@@ -56,86 +53,193 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
     C.resize(nTot);
     A.resize(nTot);
 	transpose();
-	// lp2Graph();
-	// doSaucyEquitable();
+	lp2Graph();
+	doSaucyEquitable();
 	// colorAlloc();
 	handleNegatives();
     initRefinement();
 }
 
 void HighsEquitable::lp2Graph(){
-	int i, j, nColor = 0;
+	int i, j, tempk, tempj, nColor = 0;
+	int *aout, *ain, *eout, *ein, *colors;
+	int w, *wout, *win; /* weight data */
 	double sum;
 	// Use to color vertices by rhs, bounds, and obj coeff
-	set<tuple<double, double> > rhs;
-	set<tuple<double, double, double> > objBounds;
+	map<double, int> edgeColors;
+	map<tuple<double, double>, int> rowColors;
+	map<tuple<double, double, double>, int > colColors;
+	aout = (int *)calloc( (nTot+1), sizeof(int) );
+    eout = (int *)malloc( 2 * nnz * sizeof(int) );
+    wout = (int *)malloc( 2 * nnz * sizeof(int) ); /* weight data */
+    colors = (int *)malloc( nTot * sizeof(int) );
+	char** var_names = (char**)malloc(nTot * sizeof(char*));
+	//marks = (char*)calloc(nTot, sizeof(char));
+	// Assign graph to temp pointers so it gets filled in
 	g = (struct amorph_graph *)malloc(sizeof(struct amorph_graph));
 	g->sg.n = nTot;
 	g->sg.e = nnz;
-	int* adj = (int *)calloc(nTot + 1, sizeof(int));
-	int* edg = (int *)calloc(2 * nnz, sizeof(int));
-	double* wght = (double *)calloc(2 * nnz, sizeof(double));
-	int* colors = (int *)calloc(nTot, sizeof(int));
-	char** var_names = (char** )malloc(nTot*sizeof(char*));
-	//marks = (char*)calloc(nTot, sizeof(char));
-	g->sg.adj = adj;
-	g->sg.edg = edg;
-	g->sg.wght = wght;
+	g->sg.adj = aout;
+	g->sg.edg = eout;
+	g->sg.wght = wout;
 	g->colors = colors;
 	g->var_names = var_names;
 	g->consumer = amorph_print_automorphism;
-	// Fill adj, should be the same as Astart and ARstart + nnz
-	for (i = 0; i < nCols; ++i)
-		adj[i + 1] = Astart[i + 1];
-	for (i = 0; i < nRows; ++i)
-		adj[i + nCols + 1] = ARstart[i + 1] + nnz;
-	// Fill edg and w8t
-	for (i = 0; i < nCols; ++i){
-		for (j = Astart[i]; j < Astart[i + 1]; ++j){
-			edg[j] = Aindex[j] + nCols;
-			w8t[j] = Avalue[j];
-		}
-	}
-	for (i = 0; i < nRows; ++i){
-		for (j = ARstart[i]; j < ARstart[i + 1]; ++j){
-			edg[j + nnz] = ARindex[j];
-			w8t[j + nnz] = ARvalue[j];
-		}
-	}
+	// Connect in to out
+	ain = aout;
+	ein = eout;
+	win = wout;
 	// Fill initial colors
-	objBounds.insert(make_tuple(colLower[0], colUpper[0], colCost[0]));
-	colors[0] = nColor;
-	for (i = 1; i < nCols; ++i){
-		if (objBounds.insert(make_tuple(colLower[i], colUpper[i], colCost[i])).second)
-			colors[i] = ++nColor;
-		else
-			colors[i] = nColor;
-	}
-	rhs.insert(make_tuple(rowLower[0], rowUpper[0]));
-	colors[nCols] = ++nColor;
-	for (i = 1; i < nRows; ++i){
-		if (rhs.insert(make_tuple(rowLower[i], rowUpper[i])).second)
-			colors[i + nCols] = ++nColor;
-		else
-			colors[i + nCols] = nColor;
-	}	
+	pair<map<tuple<double, double, double>, int>::iterator, bool> ret;
+	for (i = 0; i < nCols; ++i)
+		if (colColors.insert(pair<tuple<double, double, double>, int>(
+			make_tuple(colLower[i], colUpper[i], colCost[i]), nColor)).second)
+			++nColor;
+	for (i = 0; i < nRows; ++i)
+		if (rowColors.insert(pair<tuple<double, double>, int>(
+			make_tuple(rowLower[i], rowUpper[i]), nColor)).second)
+			++nColor;
+	nColor = 0;
+	for (i = 0; i < nnz; ++i)
+		if (edgeColors.insert(pair<double,int>(Avalue[i], nColor)).second)
+			++nColor;
+	g->sg.w = edgeColors.size();
+	// Fill in colors
+	for (i = 0; i < nCols; ++i)
+		colors[i] = colColors.find(make_tuple(colLower[i], colUpper[i], colCost[i]))->second;
+	for (i = 0; i < nRows; ++i)
+		colors[i + nCols] = rowColors.find(make_tuple(rowLower[i], rowUpper[i]))->second;
+	// Fill adj, should be the same as Astart and ARstart + nnz
+	for(j = 0; j < nCols; ++j){
+        for(i = Astart[j]; i < Astart[j+1]; ++i){
+            ++ain[Aindex[i] + nCols]; ++aout[j];
+        }
+    }
+    /* Fix that */
+    init_fixadj1( nTot, aout );
+	/* Insert adjacencies */
+    for(j = 0; j < nCols; ++j){
+        for(i = Astart[j]; i < Astart[j+1]; ++i){
+            tempk = ain[Aindex[i] + nCols]++; tempj = aout[j]++;
+            eout[tempj] = Aindex[i] + nCols; ein[tempk] = j;
+            w = edgeColors.find(Avalue[i])->second;
+            wout[tempj] = w; win[tempk] = w;
+        }
+    }
+	// Fix edges and weights
+	init_fixadj2(nTot, 2 * nnz, aout);	
 	// Fill in var_names
 	for (i = 0; i < nCols; ++i){
-		int tempk = colNames[i].length();
+		tempk = colNames[i].length() + 1;
 		var_names[i] = (char*)malloc(tempk*sizeof(char));
 		strcpy(var_names[i], colNames[i].c_str());
 	}
-	for(i = 0; i < nRows; ++i)
-    {
-        int tempk = rowNames[i].length();
-        var_names[i + nCols] = (char *)malloc( tempk*sizeof(char) );
+	for(i = 0; i < nRows; ++i){
+        tempk = rowNames[i].length() + 1;
+        var_names[i + nCols] = (char*)malloc(tempk * sizeof(char));
         strcpy(var_names[i + nCols], rowNames[i].c_str());
     }
 }
 
 void HighsEquitable::doSaucyEquitable(){
-	s = saucy_alloc(nTot); // TO DO: add second argument to this function
-	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &sstats); // TO DO: add seventh argument to this function
+	int i, j, k;
+	s = saucy_alloc(nTot, g->sg.w); // TO DO: add second argument to this function
+	partitions = (struct eq_part *)calloc( (nTot+1), sizeof(struct eq_part) );
+    for( i = 0; i < nTot+1; ++i)
+    {
+        partitions[i].target = -2;
+        partitions[i].labels = (int *)calloc(nTot, sizeof(int));
+        partitions[i].fronts = (int *)calloc(nTot, sizeof(int));
+		partitions[i].parents = (int *)calloc(nTot, sizeof(int));
+    }
+	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &stats, partitions); // TO DO: add seventh argument to this function
+	// Begin partition collecting scheme
+    // Loop through every collection of partitions
+	// Create temp vectors for partitions, fronts, and individualized members
+    set<int> front;
+    set<int>::iterator it;
+    vector<int> individuals;
+    vector<int> partition;
+
+    // Create temp matrix for partitions
+    vector<vector<int> > partition_matrix;
+
+    // Create 3D matrix to store all partitions
+    vector<vector<vector<int> > > all_partitions;
+    for( i = 0; i < nTot+1 && partitions[i].target != -2; i++ ){
+
+        // loop through individual partitions
+        //TODO: deal with -1 target
+        if( partitions[i].target != -1 )
+        {
+            individuals.push_back( partitions[i-1].labels[partitions[i].target] );
+            //for( j = 0; j < numVars; j++ ){
+            for( j = 0; j < nTot; j++ ){
+                if (find(individuals.begin(), individuals.end(), j) != individuals.end()){
+                    continue;
+                }
+                // if a front has already been added to fronts don't read it 
+                front.insert(partitions[i].fronts[j]);
+            }
+            for( j = 0; j < nTot; j++ ){
+                if (find(individuals.begin(), individuals.end(), j) != individuals.end()){
+                    continue;
+                }
+                // if a front has already been added to fronts don't read it 
+                front.insert(partitions[i].fronts[j]);
+            }
+            // Loop through list of fronts and collect partition elements with that front
+            for (k = 0; k < front.size(); k++){
+                it = front.begin();
+                advance(it, k);
+                for (j = 0; j < nTot; j++){
+                    if (partitions[i].fronts[j] == *it){
+                        partition.push_back(j);
+                    }
+                }
+                partition_matrix.push_back(partition);
+                partition.clear();
+            }
+            all_partitions.push_back(partition_matrix);
+            partition_matrix.clear();
+            front.clear();
+        }
+        else{
+            //for( j = 0; j < numVars; j++ ){
+            for( j = 0; j < nTot; j++ ){
+                // if a front has already been added to fronts don't read it 
+                front.insert(partitions[i].fronts[j]);
+            }
+            // Loop through list of fronts and collect partition elements with that front
+            for (k = 0; k < front.size(); k++){
+                it = front.begin();
+                advance(it, k);
+                for (j = 0; j < nTot; j++){
+                    if (partitions[i].fronts[j] == *it){
+                        partition.push_back(j);
+                    }
+                }
+                partition_matrix.push_back(partition);
+                partition.clear();
+            }
+            all_partitions.push_back(partition_matrix);
+            partition_matrix.clear();
+            front.clear();
+        }
+    }
+    int count = 0;
+    for (int i = 0; i < 4; ++i){
+        cout << "Coarsest Partitions #: " << i << endl;
+        for (int j = 0; j < all_partitions[i].size(); ++j){
+            count ++;
+            cout << "{ ";
+            for (int k = 0; k < all_partitions[i][j].size(); ++k){
+                cout << all_partitions[i][j][k] << " ";
+            }
+            cout << "}" << endl;
+        }
+    }
+    cout << "num parts: " << count << endl;
 }
 
 void HighsEquitable::initRefinement(){
@@ -847,6 +951,34 @@ void HighsEquitable::packVectors(){
 // int HighsEquitable::refNonsingleUndirected(int cf){
 // 	return refNonsingle(adj, edg, cf);
 // }
+
+int HighsEquitable::init_fixadj1( int n, int *adj ){
+
+int val, sum, i;
+
+    /* Translate adj values to real locations */
+    val = adj[0]; sum = 0; adj[0] = 0;
+    for (i = 1; i < n; ++i) {
+        sum += val;
+        val = adj[i];
+
+adj[i] = sum;
+    }
+    return sum + val;
+}
+
+void HighsEquitable::init_fixadj2( int n, int e, int *adj ){
+
+int i;
+
+
+/* Translate again-broken sizes to adj values */
+    for (i = n-1; i > 0; --i) {
+        adj[i] = adj[i-1];
+    }
+    adj[0] = 0;
+    adj[n] = e;
+}
 
 void HighsEquitable::amorph_print_automorphism(
     int n, const int *gamma, int nsupp, const int *support,

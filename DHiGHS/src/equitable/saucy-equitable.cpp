@@ -32,6 +32,7 @@ struct coloring {
     int *unlab;      /* Inverse of lab */
     int *cfront;     /* Pointer to front of cells */
     int *clen;       /* Length of cells (defined for cfront's) */
+    int *parent;     /* Contains parent cells from splitting */
 };
 
 struct saucy {
@@ -604,6 +605,14 @@ fix_diffs(struct saucy *s, int cf, int ff)
 }
 
 static void
+clear_parent(struct saucy *s, struct coloring *c)
+{   
+    int i;
+    for (int i = 0; i < s->n; ++i)
+        c->parent[i] = -1;
+}
+
+static void
 split_color(struct coloring *c, int cf, int ff)
 {
     int cb, fb;
@@ -613,6 +622,7 @@ split_color(struct coloring *c, int cf, int ff)
     cb = cf + c->clen[cf];
     c->clen[cf] = fb - cf;
     c->clen[ff] = cb - ff;
+    (c->parent[cf]) > -1 ? c->parent[ff] = c->parent[cf] : c->parent[ff] = cf; 
 
     /* Fix cell front pointers */
     fix_fronts(c, ff, ff);
@@ -1039,6 +1049,8 @@ descend(struct saucy *s, struct coloring *c, int target, int min, struct eq_part
     //eq_steps[idx].target = c->lab[min];
     memcpy( eq_steps[idx].labels, c->lab, s->n*sizeof(int) );
     memcpy( eq_steps[idx].fronts, c->cfront, s->n*sizeof(int) );
+    memcpy( eq_steps[idx].parents, c->parent, s->n*sizeof(int) );
+    clear_parent(s, c);
     //memcpy( eq_steps[idx].lens, c->clen, s->n*sizeof(int) );
 
     return ret;
@@ -1195,15 +1207,10 @@ saucy_search(
     /* Fix the end */
     s->prevnon[s->n] = j;
     s->nextnon[j] = s->n;
-    std::cout << "nextnon" << std::endl;
-    for (i = -1; i < s->n; ++i)
-    	std::cout << s->nextnon[i] << std::endl;
-    std::cout << "prevnon" << std::endl;
-    for (i = 0; i < s->n + 1; ++i)
-    	std::cout << s->prevnon[i] << std::endl;
-    std::cin.get();
     /* Preprocessing after initial coloring */
-    s->split = split_init;
+    
+    s->split = split_init; 
+    clear_parent(s, &s->left);
     refine(s, &s->left);
 
     /* Descend along the leftmost branch and compute zeta */
@@ -1254,6 +1261,7 @@ saucy_alloc(int n, int w)
     s->thsize = ints(n);
     s->left.lab = ints(n);
     s->left.unlab = ints(n);
+    s->left.parent = ints(n);
     s->right.lab = ints(n);
     s->right.unlab = ints(n);
     s->splitwho = ints(n);

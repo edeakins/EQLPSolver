@@ -45,6 +45,8 @@ public:
     void findTarget();
     bool isDiscrete();
     void packVectors();
+    int init_fixadj1(int n, int* adj);
+    void init_fixadj2(int n, int e, int* adj);
     static int on_automorphism( int n, const int *gamma, int k, int *support, void *arg );
     static void amorph_print_automorphism(
     int n, const int *gamma, int nsupp, const int *support,
@@ -93,8 +95,9 @@ public:
 
     // Saucy
     struct saucy *s;
-    struct saucy_stats sstats;
-	amorph_graph *g;
+    struct eq_part *partitions;
+    struct saucy_stats stats;
+	struct amorph_graph *g;
     const static int quiet_mode = 0;
     const static sig_atomic_t timeout_flag = 0;
     int timeout = 0;
