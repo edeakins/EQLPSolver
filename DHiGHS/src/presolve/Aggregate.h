@@ -9,8 +9,15 @@
 
 class HighsAggregate{
 public:
-	HighsAggregate(HighsLp& lp, const HighsEquitable& ep, HighsSolution& solution, HighsBasis& basis);
-	//virtual ~HighsAggregate(){};
+	HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
+	void update(const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
+	void translateFrontsToColors();
+	void packVectors();
+	void foldMatrix();
+	void foldRhsInit();
+	void foldRhs();
+	void foldBndsInit();
+	void foldBnds();
 	void clear();
 	void aggregate();
 	void aggregateAMatrix();
@@ -48,6 +55,7 @@ public:
 	int numRow;
 	int numCol;
 	int numTot;
+	int nnz;
 	int numPairs;
 	string model_name_;
 	string lp_name_;
@@ -112,6 +120,15 @@ public:
     vector<double> colUpper_;
     vector<double> rowLower_;
     vector<double> rowUpper_;
+	vector<double> AvaluePacked_;
+	vector<int> AindexPacked_;
+	vector<bool> inMat;
+
+	// For equitable partitions
+	struct eq_part partition;
+	vector<int> cell;
+	vector<int> cellFront;
+	vector<int> cellSize;
 };
 
 #endif

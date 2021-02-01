@@ -19,6 +19,7 @@ struct saucy_stats {
 
 struct saucy_graph {
     int n;
+    int nCols;
     int e;
     int w;
     int *adj;
@@ -27,6 +28,7 @@ struct saucy_graph {
 };
 
 struct eq_part {
+    int nsplits;
     int target;
     int *labels;
     int *fronts;

@@ -18,6 +18,7 @@
 #include <cstring> /* memcpy */
 #include <cstdint>
 #include <iostream>
+#include <stdint.h>
 
 #include "saucy-equitable.h"
 
@@ -28,6 +29,9 @@
 /* TODO: consider using unsigned ints/longs for everything */
 
 struct coloring {
+    bool ind;
+    int nCols;
+    int nsplits = 0;
     int *lab;        /* Labelling of objects */
     int *unlab;      /* Inverse of lab */
     int *cfront;     /* Pointer to front of cells */
@@ -50,7 +54,7 @@ struct saucy {
 
     /* Coloring data */
     struct coloring left, right;
-    int *nextnon;    /* Forward next-nonsingleton pointers */ 
+    int *nextnon;    /* Forward next-nonsingleton pointers */
     int *prevnon;    /* Backward next-nonsingleton pointers */
 
     /* Refinement: inducers */
@@ -622,8 +626,12 @@ split_color(struct coloring *c, int cf, int ff)
     cb = cf + c->clen[cf];
     c->clen[cf] = fb - cf;
     c->clen[ff] = cb - ff;
-    (c->parent[cf]) > -1 ? c->parent[ff] = c->parent[cf] : c->parent[ff] = cf; 
-
+    if (!c->ind)
+        c->parent[cf] > -1 ? c->parent[ff] = c->parent[cf] : c->parent[ff] = cf;
+    else
+        c->parent[cf] = ff; 
+    c->ind = false;
+    if (cf < c->nCols) ++c->nsplits;
     /* Fix cell front pointers */
     fix_fronts(c, ff, ff);
 }
@@ -1045,12 +1053,13 @@ descend(struct saucy *s, struct coloring *c, int target, int min, struct eq_part
             }
         }
     }
-
+    eq_steps[idx].nsplits = c->nsplits;
     //eq_steps[idx].target = c->lab[min];
     memcpy( eq_steps[idx].labels, c->lab, s->n*sizeof(int) );
     memcpy( eq_steps[idx].fronts, c->cfront, s->n*sizeof(int) );
     memcpy( eq_steps[idx].parents, c->parent, s->n*sizeof(int) );
     clear_parent(s, c);
+
     //memcpy( eq_steps[idx].lens, c->clen, s->n*sizeof(int) );
 
     return ret;
@@ -1070,6 +1079,7 @@ descend_leftmost( struct saucy *s, struct eq_part *eq_steps )
     while (!at_terminal(s)) {
         idx++;
         target = s->nextnon[-1];
+        s->left.ind = true;
         min = target;
         s->start[s->lev] = target;
         s->splitlev[s->lev] = s->nsplits;
@@ -1099,6 +1109,7 @@ saucy_search(
 
     /* Save graph information */
     s->n = g->n;
+    s->left.nCols = g->nCols;
     /*s->e = g->e;*/
     s->wcount = g->w;
     s->adj = g->adj;
@@ -1172,7 +1183,6 @@ saucy_search(
         if (max < colors[i]) max = colors[i];
     }
     s->nsplits = max + 1;
-
     /* Build cell lengths */
     s->left.clen[0] = s->ccount[0] - 1;
     for (i = 0; i < max; ++i) {
@@ -1218,14 +1228,14 @@ saucy_search(
 }
 
 static int *ints(int n) { return (int *)malloc(n * sizeof(int)); }
-static int *zeros(uint64_t n) { return (int *)calloc(n, sizeof(int)); }
+static int *zeros(int n) { return (int *)calloc(n, sizeof(uint64_t)); }
 static char *bits(int n) { return (char *)calloc(n, sizeof(char)); }
 
 struct saucy *
 saucy_alloc(int n, int w)
 {
     struct saucy *s = (struct saucy *)malloc(sizeof(struct saucy));
-    if (s == NULL) return NULL;
+    if (s == NULL){ return NULL; std::cout << "NULL" << std::endl; }
 
     s->ninduce = ints(n);
     s->sinduce = ints(n);
@@ -1301,6 +1311,7 @@ saucy_alloc(int n, int w)
         return s;
     }
     else {
+        std::cout << "saucy_free called" << std::endl;
         saucy_free(s);
         return NULL;
     }
