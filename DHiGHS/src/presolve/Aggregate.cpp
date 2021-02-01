@@ -27,15 +27,26 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
 	col_status = (basis.col_status);
 	row_status = (basis.row_status);
   // New Lp info
-  alp.Avalue_.resize(nnz);
-  alp.Aindex_.resize(nnz);
-  alp.Astart_.resize(numCol + 1);
-  alp.colUpper_.resize(numCol);
-  alp.colLower_.resize(numCol);
-  alp.rowLower_.resize(numRow);
-  alp.rowUpper_.resize(numRow);
-  alpBasis.col_status.resize(numCol);
-  alpBasis.row_status.resize(numRow);
+  maxLinkCols = ep.nsplits;
+  maxLinkSpace = 3 * maxLinkCols;
+  alp = (HighsLp *)calloc(1, sizeof(HighsLp));
+  alpBasis = (HighsBasis *)calloc(1, sizeof(HighsBasis));
+  alp->Avalue_.resize(nnz + maxLinkSpace);
+  alp->Aindex_.resize(nnz + maxLinkSpace);
+  alp->Astart_.resize(numCol + maxLinkCols + 1);
+  alp->colUpper_.resize(numCol + maxLinkCols);
+  alp->colLower_.resize(numCol + maxLinkCols);
+  alp->rowLower_.resize(numRow + maxLinkCols);
+  alp->rowUpper_.resize(numRow + maxLinkCols);
+  alp->linkers.resize(maxLinkCols);
+  alpBasis->col_status.resize(numCol + maxLinkCols);
+  alpBasis->row_status.resize(numRow + maxLinkCols);
+  parent.reserve(maxLinkCols);
+  child.reserve(maxLinkCols);
+  linkARstart.resize(maxLinkCols + 1);
+  linkARindex.resize(maxLinkSpace);
+  linkARvalue.resize(maxLinkSpace);
+  linkAlength.assign(numCol + maxLinkCols, 0);
   // coeff.assign(numTot);
   AindexPacked_.resize(nnz);
   inMat.assign(numTot, false);
@@ -49,19 +60,23 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
 
 void HighsAggregate::translateFrontsToColors(){
   int i = 0, c = 0;
-  map<int, int> frontCell;
+  map<int, int> fCell;
   // map fronts to colors and count numCol_ and numRow_
+  numCol_ = numRow_ = numTot_ = 0;
   for (i = 0; i < numTot; ++i){
-    if (frontCell.insert(pair<int, int>(partition.fronts[i], c)).second){
+    if (fCell.insert(pair<int, int>(partition.fronts[i], c)).second){
       ++c;
       partition.fronts[i] < numCol ? ++numCol_ : ++numRow_;
+      ++numTot_;
     }
   }
   for (i = 0; i < numTot; ++i){
-    cell[i] = frontCell.find(partition.fronts[i])->second;
-    cellFront[frontCell.find(partition.fronts[i])->second] = partition.fronts[i];
-    ++cellSize[frontCell.find(partition.fronts[i])->second];
+    cell[i] = fCell.find(partition.fronts[i])->second;
+    cellFront[fCell.find(partition.fronts[i])->second] = partition.fronts[i];
+    ++cellSize[fCell.find(partition.fronts[i])->second];
   }
+  alp->numCol_ = numCol_;
+  alp->numRow_ = numRow_;
 }
 
 void HighsAggregate::packVectors(){
@@ -73,22 +88,23 @@ void HighsAggregate::packVectors(){
 // Fold the matrix down based on current ep
 void HighsAggregate::foldMatrix(){
   int i, j, rep, idx = 0, offset = 0;
-  alp.Astart_[0] = 0;
+  alp->Astart_[0] = 0;
   for (i = 0; i < numCol_; ++i){
     rep = partition.labels[cellFront[i]];
     for (j = Astart[rep]; j < Astart[rep + 1]; ++j){
-      alp.Avalue_[AindexPacked_[j] + offset] += Avalue[j] * cellSize[i]; 
+      alp->Avalue_[AindexPacked_[j] + offset] += Avalue[j] * cellSize[i]; 
       if (!inMat[AindexPacked_[j]]){
-        alp.Aindex_[AindexPacked_[j] + offset] = AindexPacked_[j];
+        alp->Aindex_[AindexPacked_[j] + offset] = AindexPacked_[j];
         ++idx;
         inMat[AindexPacked_[j]] = true;
       }
     }
-    alp.Astart_[i + 1] = idx;
+    alp->Astart_[i + 1] = idx;
     offset = idx;
     for (j = 0; j < numTot; ++j)
       inMat[j] = false;
   }
+  alp->nnz_ = idx;
 }
 
 // Fold the row bounds based on current ep
@@ -96,26 +112,120 @@ void HighsAggregate::foldRhsInit(){
   int i, rep;
   for (i = 0; i < numRow_; ++i){
     rep = partition.labels[cellFront[i + numCol_]] - numCol;
-    alp.rowLower_[i] = rowLower[rep];
-    alp.rowUpper_[i] = rowUpper[rep];
+    alp->rowLower_[i] = rowLower[rep];
+    alp->rowUpper_[i] = rowUpper[rep];
   }
 }
 
-void HighsAggregate::foldRhs(){}
+void HighsAggregate::foldRhs(){
+
+}
 
 // Fold the row bounds based on current ep
 void HighsAggregate::foldBndsInit(){
   int i, rep;
   for (i = 0; i < numCol_; ++i){
     rep = partition.labels[cellFront[i]];
-    alp.colLower_[i] = colLower[rep];
-    alp.colUpper_[i] = colUpper[rep];
+    alp->colLower_[i] = colLower[rep];
+    alp->colUpper_[i] = colUpper[rep];
   }
 }
 
-void HighsAggregate::foldBnds(){}
+void HighsAggregate::foldBnds(){
+  
+}
 
+void HighsAggregate::addRows(){
+  int i, stop = parent.size();
+  for (i = 0; i < maxLinkCols; ++i){
+    if (i < stop){
+      alp->rowLower_[alp->numRow_] = 0;
+      alp->rowUpper_[alp->numRow_] = 0;
+      alpBasis->row_status[alp->numRow_++] = HighsBasisStatus::LOWER;
+    }
+  }
+  alp->numRow_ -= stop;
+  appendRowsToMatrix();
+}
 
+void HighsAggregate::appendRowsToMatrix(){
+  int num_new_row = parent.size();
+  int num_new_nz = parent.size() * 3;
+  for (int el = 0; el < num_new_nz; el++) linkAlength[linkARindex[el]]++;
+  // Append the new rows
+  // Shift the existing columns to make space for the new entries
+  int new_el = parent.size() * 3;
+  for (int col = alp->numCol_ - 1; col >= 0; col--) {
+    int start_col_plus_1 = new_el;
+    new_el -= linkAlength[col];
+    for (int el = alp->Astart_[col + 1] - 1; el >= alp->Astart_[col]; el--) {
+      new_el--;
+      alp->Aindex_[new_el] = alp->Aindex_[el];
+      alp->Avalue_[new_el] = alp->Avalue_[el];
+    }
+    alp->Astart_[col + 1] = start_col_plus_1;
+  }
+  assert(new_el == 0);
+  // Insert the new entries
+  for (int row = 0; row < num_new_row; row++) {
+    int first_el = linkARstart[row];
+    int last_el = (row < num_new_row - 1 ? linkARstart[row + 1] : num_new_nz);
+    for (int el = first_el; el < last_el; el++) {
+      int col = linkARindex[el];
+      new_el = alp->Astart_[col + 1] - linkAlength[col];
+      linkAlength[col]--;
+      alp->Aindex_[new_el] = alp->numRow_ + row;
+      alp->Avalue_[new_el] = linkARvalue[el];
+    }
+    alp->numRow_++;
+  }
+}
+
+void HighsAggregate::addCols(){
+  int i, stop = parent.size();
+  for (i = 0; i < maxLinkCols; ++i){
+    if (i < stop){
+      alpBasis->col_status[alp->numCol_] = HighsBasisStatus::LOWER;
+      alp->colLower_[alp->numCol_] = 0;
+      alp->colUpper_[alp->numCol_] = 0;
+      alp->linkers[i] = alp->numCol_;
+      alp->Astart_[alp->numCol_ + 1] = alp->Astart_[alp->numCol_++];
+    }
+  }
+}
+
+void HighsAggregate::identifyLinks(){
+  int i;
+  for (i = 0; i < numCol; ++i){
+    if (partition.parents[i] >= 0){
+      int x1 = cell[partition.labels[partition.parents[i]]];
+      int x2 = cell[partition.labels[i]];
+      parent.push_back(x1); child.push_back(x2);
+    }
+  }
+}
+
+void HighsAggregate::createLinkRows(){
+  int i, offset = 0, idx, stop = parent.size();
+  linkARstart[0] = 0;
+  for (i = 0; i < maxLinkCols; ++i){
+    if (i < stop){
+      linkARindex[offset] = parent[i]; linkARvalue[offset] = 1;
+      linkARindex[offset + 1] = child[i]; linkARvalue[offset + 1] = -1;
+      linkARindex[offset + 1] = alp->numCol_ + i; linkARvalue[offset + 2] = -1;
+      linkARstart[i + 1] = linkARstart[i] + 3;
+      offset += 3;
+    }
+  }
+}
+
+HighsLp* HighsAggregate::getAlp(){
+  return alp;
+}
+
+HighsBasis* HighsAggregate::getBasis(){
+  return alpBasis;
+}
 
 // HighsBasis& HighsAggregate::getAlpBasis(){
 //   alpBasis.col_status = col_status_;

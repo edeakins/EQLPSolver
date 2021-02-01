@@ -18,6 +18,14 @@ public:
 	void foldRhs();
 	void foldBndsInit();
 	void foldBnds();
+	void addRows();
+	void appendRowsToMatrix();
+	void addCols();
+	void identifyLinks();
+	void createLinkRows();
+	void update();
+	HighsLp* getAlp();
+	HighsBasis* getBasis();
 	void clear();
 	void aggregate();
 	void aggregateAMatrix();
@@ -42,13 +50,13 @@ public:
                                   vector<double>& XrowUpper);							   
 	void transpose(vector<int>& xAstart, vector<int>& xAindex, vector<double>& xAvalue,
 					vector<int>& xARstart, vector<int>& xARindex, vector<double> &xARvalue);
-	HighsLp& getAlp();
-	HighsBasis& getAlpBasis();
+	// HighsLp& getAlp();
+	// HighsBasis& getAlpBasis();
 
 	/* Data structs to house the aggregated lp 
 	and the aggregated lp basis information */
-	HighsLp alp;
-	HighsBasis alpBasis;
+	HighsLp* alp;
+	HighsBasis* alpBasis;
 
 	/* Scalar values that contain dimensional and
 	name data about the original lp */
@@ -101,10 +109,10 @@ public:
 	vector<int> color;
 
 	/* New scalars for the current aggregated lp */
-	int numRow_ = 0;
-	int numCol_ = 0;
-	int numTot_ = 0;
-	int numLinkers_ = 0;
+	int numRow_;
+	int numCol_;
+	int numTot_;
+	int numLinkers_;
 
 	/* This is the sparse storage for the current 
 	 aggregate lp.  This data will be uploaded to highs
@@ -123,6 +131,15 @@ public:
 	vector<double> AvaluePacked_;
 	vector<int> AindexPacked_;
 	vector<bool> inMat;
+	vector<int> parent;
+	vector<int> child;
+	// For linker additions
+	int maxLinkCols;
+	int maxLinkSpace;
+	vector<int> linkARstart;
+	vector<int> linkARindex;
+	vector<double> linkARvalue;
+	vector<int> linkAlength;
 
 	// For equitable partitions
 	struct eq_part partition;

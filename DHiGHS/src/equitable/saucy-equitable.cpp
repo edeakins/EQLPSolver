@@ -1001,6 +1001,7 @@ descend(struct saucy *s, struct coloring *c, int target, int min, struct eq_part
 
     /* Count this node */
     ++s->stats->nodes;
+    c->nsplits = 0;
 
     /* Move the minimum label to the back */
     eq_steps[idx].target = target;

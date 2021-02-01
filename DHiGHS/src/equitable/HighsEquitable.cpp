@@ -170,7 +170,7 @@ void HighsEquitable::lp2Graph(){
 }
 
 void HighsEquitable::doSaucyEquitable(){
-	int i, j, k;
+	int i, j, k = 0, maxSplit = 0;
 	s = saucy_alloc(nTot, g->sg.w); // TO DO: add second argument to this function
 	partitions = (struct eq_part *)calloc( (nTot+1), sizeof(struct eq_part) );
     for( i = 0; i < nTot+1; ++i)
@@ -180,7 +180,11 @@ void HighsEquitable::doSaucyEquitable(){
         partitions[i].fronts = (int *)calloc(nTot, sizeof(int));
 		partitions[i].parents = (int *)calloc(nTot, sizeof(int));
     }
-	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &stats, partitions);  
+	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &stats, partitions); 
+	for (i = 0; i < sizeof(*partitions)/sizeof(partitions); ++i)
+		if (partitions[i].nsplits > maxSplit) maxSplit = partitions[i].nsplits;
+	for (j = 0; j < i; ++j)
+		if (partitions[j].nsplits != maxSplit) partitions[j].nsplits = maxSplit;
 	saucy_free(s);
 }
 // Refine function to call everything thing else
