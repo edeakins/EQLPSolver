@@ -23,13 +23,6 @@
 #include <signal.h>
 using namespace std;
 
-// struct HighsColoring{
-//     int *lab;
-//     int *unlab;
-//     int *clen;
-//     int *cfront;
-// };
-
 class HighsEquitable {
 public:
 	// Setup for equitable ptn

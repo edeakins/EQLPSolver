@@ -231,26 +231,26 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   		         FILE* output, int message_level, bool run_quiet) {
   // New options for aggregate models (work around for const input)
   double time;
+  // Timer, options, highs solver, write_status, run_status
   HighsTimer timer;
   HighsOptions alpOpt;
   Highs highs;
-  // // Highs highsOrg;
-  // // highsOrg.passModel(lp);
-  // // vector<double> lowerBound;
-  // // vector<double> upperBound;
-  // // vector<int> ARstart;
-  // // vector<int> ARindex;
-  // // vector<double> ARvalue;
-  // // int nnzRow = 0;
-  // // int numRow = lp.numRow_;
-  // // int from = 0;
-  // // int to = lp.numRow_;
-  // // highsOrg.getRows(from, to, numRow, &lowerBound, &upperBound, nnzRow, &ARstart, &ARindex, &ARvalue);
-  // alpOpt.presolve = string("off");
-  // alpOpt.simplex_scale_strategy = 0;
-  // alpOpt.model_file = string("No File, Reduced Model");
-  // alpOpt.solver = string("simplex");
-  // alpOpt.parallel = string("off");
+  HighsStatus run_status;
+  HighsStatus write_status;
+  HighsStatus return_status;
+  HighsStatus init_status;
+  // HighsLp class to contain aggregates and HighsBasis class to contain bases
+  HighsLp* alp;
+  HighsBasis* alpBasis;
+  // Basis and solution to store from unfold interations
+  HighsBasis basis;
+  HighsSolution solution;
+  // Set options
+  alpOpt.presolve = string("off");
+  alpOpt.simplex_scale_strategy = 0;
+  alpOpt.model_file = string("No File, Reduced Model");
+  alpOpt.solver = string("simplex");
+  alpOpt.parallel = string("off");
   // initialize partitioning tool/class
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
@@ -259,15 +259,27 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsEquitable ep(lp);
   partitions = ep.refine();
   highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
-  std::cout << "total refinement time: " << highs.totPartTime_ << endl;
-  // Basis and solution to store from unfold interations
-  HighsBasis basis;
-  HighsSolution solution;
-  // Use aggregator to obtain an aggreated lp and return it
+  // Use aggregator to get first aggregate lp (level 0)
   initial_time = timer.readRunHighsClock();
   HighsAggregate lpFolder(lp, partitions[0], solution, basis);
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
-  std::cout << "total fold time: " << highs.totFoldTime_ << endl;
+  alp = lpFolder.getAlp();
+  alpBasis = lpFolder.getBasis();
+  // Intitial solve of level 0 aggregate
+  return_status = highs.passHighsOptions(alpOpt);
+  init_status = highs.passModel(*alp);
+  write_status = highs.writeModel("level_0.lp");
+  initial_time = timer.readRunHighsClock();
+  run_status = highs.run(); 
+  highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
+  basis = highs.getBasis();
+  solution = highs.getSolution();
+  cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+  for (int i = 0; i < solution.col_value.size(); ++i){
+    cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  }
+  // Start loop for level 1+ aggregates
+  lpFolder.update(partitions[1], solution, basis);
   // initial_time = timer.readRunHighsClock();
   // HighsLp& alp = lpFolder.getAlp();
   // // cout << "fold time: " << lp_folder_time - initial_time << endl;
@@ -336,14 +348,6 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   //   HighsPrintMessage(output, message_level, ML_ALWAYS,
   //                     "Before calling highs.run()\n");
 
-  // // Run HiGHS.
-  // // double initial_time = timer.readRunHighsClock();
-  HighsStatus run_status;
-  // // write_status = highs.writeModel("highs_lp.lp");
-  // HighsStatus run_status = highs.run(); 
-  // // highs.totPartTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
-  // basis = highs.getBasis();
-  // solution = highs.getSolution();
   // // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
   // //   for (int i = 0; i < solution.col_value.size(); ++i){
   // //     cout << "var_" << i << " = " << solution.col_value[i] << endl;

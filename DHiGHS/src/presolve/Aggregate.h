@@ -10,10 +10,12 @@
 class HighsAggregate{
 public:
 	HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
-	void update(const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
+	void update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis);
 	void translateFrontsToColors();
 	void packVectors();
+	void foldObj();
 	void foldMatrix();
+	void fixMatrix();
 	void foldRhsInit();
 	void foldRhs();
 	void foldBndsInit();
@@ -23,7 +25,7 @@ public:
 	void addCols();
 	void identifyLinks();
 	void createLinkRows();
-	void update();
+	void reset();
 	HighsLp* getAlp();
 	HighsBasis* getBasis();
 	void clear();
@@ -91,28 +93,12 @@ public:
     vector<HighsBasisStatus> col_status;
 	vector<HighsBasisStatus> row_status;
 
-   	/* Sparse storage for the new aggregate lp's "warm start" 
-	basis.  Note that we do not pre load the solutions to this
-	lp as they are clear from the pre loaded basis. */
-	vector<HighsBasisStatus> col_status_;
-	vector<HighsBasisStatus> row_status_;
-
-    /* Dense storage for equitable partition information.
-	 These are doubly linked lists of elements by their color class.
-	 We have the previous color class information and current color class
-	 information. */
-	vector<vector<int> > C;
-	vector<vector<int> > prevC;
-	vector<int> previousRowColoring;
-	vector<int> previousColumnColoring;
-	vector<int> AindexSub;
-	vector<int> color;
-
 	/* New scalars for the current aggregated lp */
 	int numRow_;
 	int numCol_;
 	int numTot_;
 	int numLinkers_;
+	int previousNumCol_;
 
 	/* This is the sparse storage for the current 
 	 aggregate lp.  This data will be uploaded to highs
@@ -133,6 +119,7 @@ public:
 	vector<bool> inMat;
 	vector<int> parent;
 	vector<int> child;
+	vector<double> coeff;
 	// For linker additions
 	int maxLinkCols;
 	int maxLinkSpace;
@@ -146,6 +133,8 @@ public:
 	vector<int> cell;
 	vector<int> cellFront;
 	vector<int> cellSize;
+	vector<int> previousCell;
+	vector<int> previousCellSize;
 };
 
 #endif
