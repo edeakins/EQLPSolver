@@ -397,21 +397,14 @@ struct HighsTableau{
 // To be the basis representation given back to the user. Values of
 // HighsBasisStatus are defined in HConst.h
 struct HighsBasis {
-  void clear(){
-    valid_ = false;
-    col_status.resize(0);
-    row_status.resize(0);
-  }
+  int numCol_;
+  int numRow_;
   bool valid_ = false;
   std::vector<HighsBasisStatus> col_status;
   std::vector<HighsBasisStatus> row_status;
 };
 
 struct HighsPreviousSolutionInfo{
-  void clear(){
-    basis.clear();
-    solution.clear();
-  }
   HighsBasis basis;
   HighsSolution solution;
 };

@@ -717,8 +717,8 @@ void append_basic_rows_to_basis(HighsLp& lp, SimplexBasis& basis, int XnumNewRow
 }
 
 bool basisOk(FILE* logfile, const HighsLp& lp, const HighsBasis& basis) {
-  int col_status_size = basis.col_status.size();
-  int row_status_size = basis.row_status.size();
+  int col_status_size = basis.numCol_;
+  int row_status_size = basis.numRow_;;
   assert(col_status_size == lp.numCol_);
   if (col_status_size != lp.numCol_) {
      HighsLogMessage(logfile, HighsMessageType::ERROR,

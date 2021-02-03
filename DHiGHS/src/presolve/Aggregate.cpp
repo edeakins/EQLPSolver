@@ -83,6 +83,10 @@ void HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solut
   foldBnds();
   setRowBasis();
   setColBasis();
+  identifyLinks();
+  createLinkRows();
+  addCols();
+  addRows();
 }
 
 void HighsAggregate::translateFrontsToColors(){
@@ -197,6 +201,7 @@ void HighsAggregate::foldRhs(){
 // Set row basis
 void HighsAggregate::setRowBasis(){
   int i, rep, rowIdx;
+  alpBasis->numRow_ = 0;
   for (i = 0; i < numRow_; ++i){
     rep = partition.labels[cellFront[i + numCol_]];
     rowIdx = previousCell[rep] - previousNumCol_;
@@ -206,15 +211,18 @@ void HighsAggregate::setRowBasis(){
         !nonBasic[rowIdx]){
       alpBasis->row_status[i] = row_status[rowIdx];
       nonBasic[rowIdx] = true;
+      ++alpBasis->numRow_;
     }
     else if ((row_status[rowIdx] == HighsBasisStatus::UPPER ||
             row_status[rowIdx] == HighsBasisStatus::LOWER ||
             row_status[rowIdx] == HighsBasisStatus::NONBASIC) &&
             !nonBasic[rowIdx]){
       alpBasis->row_status[i] = HighsBasisStatus::BASIC;
+      ++alpBasis->numRow_;
     }
     else{
       alpBasis->row_status[i] = row_status[rowIdx];
+      ++alpBasis->numRow_;
     }
   }
 }
@@ -252,6 +260,7 @@ void HighsAggregate::foldBnds(){
 // Set col basis
 void HighsAggregate::setColBasis(){
   int i, rep, colIdx;
+  alpBasis->numCol_ = 0;
   for (i = 0; i < numCol_; ++i){
     rep = partition.labels[cellFront[i]];
     colIdx = previousCell[rep];
@@ -261,15 +270,18 @@ void HighsAggregate::setColBasis(){
         !nonBasic[colIdx]){
       alpBasis->col_status[i] = row_status[colIdx];
       nonBasic[colIdx] = true;
+      ++alpBasis->numCol_;
     }
     else if ((row_status[colIdx] == HighsBasisStatus::UPPER ||
             row_status[colIdx] == HighsBasisStatus::LOWER ||
             row_status[colIdx] == HighsBasisStatus::NONBASIC) &&
             !nonBasic[colIdx]){
       alpBasis->col_status[i] = HighsBasisStatus::BASIC;
+      ++alpBasis->numCol_;
     }
     else{
       alpBasis->col_status[i] = row_status[colIdx];
+      ++alpBasis->numCol_;
     }
   }
 }
@@ -290,10 +302,11 @@ void HighsAggregate::addRows(){
 void HighsAggregate::appendRowsToMatrix(){
   int num_new_row = parent.size();
   int num_new_nz = parent.size() * 3;
+  int new_num_nz = alp->nnz_ + num_new_nz;
   for (int el = 0; el < num_new_nz; el++) linkAlength[linkARindex[el]]++;
   // Append the new rows
   // Shift the existing columns to make space for the new entries
-  int new_el = parent.size() * 3;
+  int new_el = new_num_nz;
   for (int col = alp->numCol_ - 1; col >= 0; col--) {
     int start_col_plus_1 = new_el;
     new_el -= linkAlength[col];
@@ -351,11 +364,13 @@ void HighsAggregate::createLinkRows(){
     if (i < stop){
       linkARindex[offset] = parent[i]; linkARvalue[offset] = 1;
       linkARindex[offset + 1] = child[i]; linkARvalue[offset + 1] = -1;
-      linkARindex[offset + 1] = alp->numCol_ + i; linkARvalue[offset + 2] = -1;
+      linkARindex[offset + 2] = alp->numCol_ + i; linkARvalue[offset + 2] = -1;
       linkARstart[i + 1] = linkARstart[i] + 3;
       offset += 3;
     }
   }
+  for (i = stop; i < maxLinkCols; ++i)
+    linkARstart[i + 1] = linkARstart[i];
 }
 
 HighsLp* HighsAggregate::getAlp(){

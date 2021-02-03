@@ -269,7 +269,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Intitial solve of level 0 aggregate
   return_status = highs.passHighsOptions(alpOpt);
   init_status = highs.passModel(*alp);
-  write_status = highs.writeModel("level_0.mps");
+  write_status = highs.writeModel("level_0.lp");
   initial_time = timer.readRunHighsClock();
   run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
@@ -286,17 +286,17 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   alp = lpFolder.getAlp();
   alpBasis = lpFolder.getBasis();
   init_status = highs.passModel(*alp);
-  write_status = highs.writeModel("level_1.mps");
-  basis_status = highs.setBasis(*alpBasis);
-  initial_time = timer.readRunHighsClock();
-  run_status = highs.run(); 
-  highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
-  basis = highs.getBasis();
-  solution = highs.getSolution();
-  cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-  for (int i = 0; i < solution.col_value.size(); ++i){
-    cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  }
+  write_status = highs.writeModel("level_1.lp");
+  // basis_status = highs.setBasis(*alpBasis);
+  // initial_time = timer.readRunHighsClock();
+  // run_status = highs.run(); 
+  // highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
+  // basis = highs.getBasis();
+  // solution = highs.getSolution();
+  // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+  // for (int i = 0; i < solution.col_value.size(); ++i){
+  //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  // }
   // initial_time = timer.readRunHighsClock();
   // HighsLp& alp = lpFolder.getAlp();
   // // cout << "fold time: " << lp_folder_time - initial_time << endl;

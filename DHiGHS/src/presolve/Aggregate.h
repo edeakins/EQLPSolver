@@ -95,11 +95,11 @@ public:
 	vector<bool> nonBasic;
 
 	/* New scalars for the current aggregated lp */
-	int numRow_;
-	int numCol_;
-	int numTot_;
-	int numLinkers_;
-	int previousNumCol_;
+	int numRow_ = 0;
+	int numCol_ = 0;
+	int numTot_ = 0;
+	int numLinkers_ = 0;
+	int previousNumCol_ = 0;
 
 	/* This is the sparse storage for the current 
 	 aggregate lp.  This data will be uploaded to highs
