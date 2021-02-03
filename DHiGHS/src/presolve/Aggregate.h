@@ -20,6 +20,8 @@ public:
 	void foldRhs();
 	void foldBndsInit();
 	void foldBnds();
+	void setRowBasis();
+	void setColBasis();
 	void addRows();
 	void appendRowsToMatrix();
 	void addCols();
@@ -34,8 +36,6 @@ public:
 	void aggregateColBounds();
 	void aggregateRowBounds();
 	void aggregateCVector();
-	void setColBasis();
-	void setRowBasis();
 	void appendLinkersToLp();
 	void appendColsToLpVectors(const int num_new_col,
                                   vector<double>& XcolCost,
@@ -92,6 +92,7 @@ public:
     vector<double> row_value;
     vector<HighsBasisStatus> col_status;
 	vector<HighsBasisStatus> row_status;
+	vector<bool> nonBasic;
 
 	/* New scalars for the current aggregated lp */
 	int numRow_;

@@ -28,6 +28,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
 	// Previous basis
 	col_status = (basis.col_status);
 	row_status = (basis.row_status);
+  nonBasic.resize(numRow);
   // New Lp info
   maxLinkCols = ep.nsplits;
   maxLinkSpace = 3 * maxLinkCols;
@@ -53,7 +54,6 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   linkAlength.assign(numCol + maxLinkCols, 0);
   // coeff.assign(numTot);
   AindexPacked_.resize(nnz);
-  inMat.assign(numTot, false);
   // Translate fronts array to colors for vertices
   translateFrontsToColors();
   packVectors();
@@ -81,6 +81,8 @@ void HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solut
   fixMatrix();
   foldRhs();
   foldBnds();
+  setRowBasis();
+  setColBasis();
 }
 
 void HighsAggregate::translateFrontsToColors(){
@@ -157,6 +159,8 @@ void HighsAggregate::reset(){
     cellSize[i] = 0;
   for (i = 0; i < alp->nnz_; ++i)
     alp->Avalue_[i] = 0;
+  for (i = 0; i < numRow; ++i)  
+    nonBasic[i] = false;
 }
 
 // Fold the row bounds based on current ep
@@ -190,6 +194,31 @@ void HighsAggregate::foldRhs(){
   }
 }
 
+// Set row basis
+void HighsAggregate::setRowBasis(){
+  int i, rep, rowIdx;
+  for (i = 0; i < numRow_; ++i){
+    rep = partition.labels[cellFront[i + numCol_]];
+    rowIdx = previousCell[rep] - previousNumCol_;
+    if ((row_status[rowIdx] == HighsBasisStatus::UPPER ||
+        row_status[rowIdx] == HighsBasisStatus::LOWER ||
+        row_status[rowIdx] == HighsBasisStatus::NONBASIC) &&
+        !nonBasic[rowIdx]){
+      alpBasis->row_status[i] = row_status[rowIdx];
+      nonBasic[rowIdx] = true;
+    }
+    else if ((row_status[rowIdx] == HighsBasisStatus::UPPER ||
+            row_status[rowIdx] == HighsBasisStatus::LOWER ||
+            row_status[rowIdx] == HighsBasisStatus::NONBASIC) &&
+            !nonBasic[rowIdx]){
+      alpBasis->row_status[i] = HighsBasisStatus::BASIC;
+    }
+    else{
+      alpBasis->row_status[i] = row_status[rowIdx];
+    }
+  }
+}
+
 // Fold the row bounds based on current ep
 void HighsAggregate::foldBndsInit(){
   int i, rep;
@@ -216,6 +245,31 @@ void HighsAggregate::foldBnds(){
     else{
       alp->colLower_[i] = colLower[rep];
       alp->colUpper_[i] = colUpper[rep];
+    }
+  }
+}
+
+// Set col basis
+void HighsAggregate::setColBasis(){
+  int i, rep, colIdx;
+  for (i = 0; i < numCol_; ++i){
+    rep = partition.labels[cellFront[i]];
+    colIdx = previousCell[rep];
+    if ((row_status[colIdx] == HighsBasisStatus::UPPER ||
+        row_status[colIdx] == HighsBasisStatus::LOWER ||
+        row_status[colIdx] == HighsBasisStatus::NONBASIC) &&
+        !nonBasic[colIdx]){
+      alpBasis->col_status[i] = row_status[colIdx];
+      nonBasic[colIdx] = true;
+    }
+    else if ((row_status[colIdx] == HighsBasisStatus::UPPER ||
+            row_status[colIdx] == HighsBasisStatus::LOWER ||
+            row_status[colIdx] == HighsBasisStatus::NONBASIC) &&
+            !nonBasic[colIdx]){
+      alpBasis->col_status[i] = HighsBasisStatus::BASIC;
+    }
+    else{
+      alpBasis->col_status[i] = row_status[colIdx];
     }
   }
 }
