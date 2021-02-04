@@ -608,7 +608,7 @@ void HQPrimal::unfold() {
   HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
   HighsTimer& timer = workHMO.timer_;
   primalRebuild();
-  for (int i = 0; i < workHMO.lp_.linkers.size(); ++i){
+  for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
     workHMO.unfoldCount_++;
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);
     columnIn = workHMO.lp_.linkers[i];

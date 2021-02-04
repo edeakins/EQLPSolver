@@ -181,7 +181,8 @@ void HighsEquitable::doSaucyEquitable(){
 		partitions[i].parents = (int *)calloc(nTot, sizeof(int));
     }
 	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &stats, partitions); 
-	for (i = 0; i < sizeof(*partitions)/sizeof(partitions); ++i)
+	int iter = stats.iter;
+	for (i = 0; i < iter; ++i)
 		if (partitions[i].nsplits > maxSplit) maxSplit = partitions[i].nsplits;
 	for (j = 0; j < i; ++j)
 		if (partitions[j].nsplits != maxSplit) partitions[j].nsplits = maxSplit;
@@ -193,3 +194,9 @@ eq_part* HighsEquitable::refine(){
 	doSaucyEquitable();
 	return partitions;
 } 
+
+// Return number of refinements
+int HighsEquitable::getNumRefinements(){
+	int iter = stats.iter;
+	return iter;
+}

@@ -1079,6 +1079,7 @@ descend_leftmost( struct saucy *s, struct eq_part *eq_steps )
     /* Keep going until we're discrete */
     while (!at_terminal(s)) {
         idx++;
+        ++s->stats->iter;
         target = s->nextnon[-1];
         s->left.ind = true;
         min = target;
@@ -1107,6 +1108,7 @@ saucy_search(
     s->stats = stats;
     s->arg = arg;
     s->consumer = consumer;
+    s->stats->iter = 0;
 
     /* Save graph information */
     s->n = g->n;
@@ -1223,6 +1225,7 @@ saucy_search(
     s->split = split_init; 
     clear_parent(s, &s->left);
     refine(s, &s->left);
+    ++s->stats->iter;
 
     /* Descend along the leftmost branch and compute zeta */
     descend_leftmost( s, eq_steps );

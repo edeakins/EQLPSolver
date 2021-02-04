@@ -15,6 +15,7 @@ struct saucy_stats {
     int bads;
     int gens;
     int support;
+    int iter;
 };
 
 struct saucy_graph {

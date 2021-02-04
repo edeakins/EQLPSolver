@@ -111,6 +111,7 @@ class HighsLp {
   // sense 1 = minimize, -1 = maximize
   int sense_ = 1;
   double offset_ = 0;
+  int numLinkers;
 
   std::string model_name_ = "";
   std::string lp_name_ = "";

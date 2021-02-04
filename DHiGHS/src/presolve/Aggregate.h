@@ -92,7 +92,8 @@ public:
     vector<double> row_value;
     vector<HighsBasisStatus> col_status;
 	vector<HighsBasisStatus> row_status;
-	vector<bool> nonBasic;
+	vector<bool> nonBasicCol;
+	vector<bool> nonBasicRow;
 
 	/* New scalars for the current aggregated lp */
 	int numRow_ = 0;
