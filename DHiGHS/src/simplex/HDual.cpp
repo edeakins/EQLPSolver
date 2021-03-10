@@ -1087,6 +1087,8 @@ void HDual::chooseRow() {
       invertHint = INVERT_HINT_POSSIBLY_OPTIMAL;
       return;
     }
+    // std::cout << "rowOut: " << rowOut << std::endl;
+    // std::cin.get(); 
     // Compute pi_p = B^{-T}e_p in row_ep
     timer.start(simplex_info.clock_[BtranClock]);
     // Set up RHS for BTRAN

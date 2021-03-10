@@ -278,6 +278,8 @@ void HFactor::change(int updateMethod_) { updateMethod = updateMethod_; }
 #endif
 
 int HFactor::build() {
+  // std::cout << "build called" << std::endl;
+  // std::cin.get();
 #ifdef HiGHSDEV
   if (omp_max_threads <= 1) timer_.start(clock_[FactorInvert]);
 #endif

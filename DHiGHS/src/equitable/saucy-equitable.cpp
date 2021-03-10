@@ -37,6 +37,8 @@ struct coloring {
     int *cfront;     /* Pointer to front of cells */
     int *clen;       /* Length of cells (defined for cfront's) */
     int *parent;     /* Contains parent cells from splitting */
+    int *isParent; 
+    int *isChild;
 };
 
 struct saucy {
@@ -612,8 +614,11 @@ static void
 clear_parent(struct saucy *s, struct coloring *c)
 {   
     int i;
-    for (int i = 0; i < s->n; ++i)
+    for (int i = 0; i < s->n; ++i){
         c->parent[i] = -1;
+        c->isParent[i] = 0;
+        c->isChild[i] = 0;
+    }
 }
 
 static void
@@ -626,11 +631,24 @@ split_color(struct coloring *c, int cf, int ff)
     cb = cf + c->clen[cf];
     c->clen[cf] = fb - cf;
     c->clen[ff] = cb - ff;
-    if (!c->ind)
-        c->parent[cf] > -1 ? c->parent[ff] = c->parent[cf] : c->parent[ff] = cf;
-    else
-        c->parent[cf] = ff; 
-    c->ind = false;
+    if (c->isParent[cf]){
+        c->parent[ff] = cf;
+        c->isChild[ff] = 1;
+    }
+    else if (c->isChild[cf]){
+        c->parent[ff] = c->parent[cf];
+        c->isChild[ff] = 1;
+    }
+    else{
+        c->parent[cf] = ff;
+        c->isParent[ff] = 1;
+        c->isChild[cf] = 1;
+    }
+    // if (!c->ind)
+    //     c->parent[cf] > -1 ? c->parent[ff] = c->parent[cf] : c->parent[ff] = cf;
+    // else
+    //     c->parent[cf] = ff; 
+    // c->ind = false;
     if (cf < c->nCols) ++c->nsplits;
     /* Fix cell front pointers */
     fix_fronts(c, ff, ff);
@@ -1075,6 +1093,7 @@ descend_leftmost( struct saucy *s, struct eq_part *eq_steps )
     memcpy( eq_steps[idx].labels, s->left.lab, s->n*sizeof(int) );
     memcpy( eq_steps[idx].fronts, s->left.cfront, s->n*sizeof(int) );
     //memcpy( eq_steps[idx].lens, s->left.clen, s->n*sizeof(int) );
+    clear_parent(s, &s->left);
     
     /* Keep going until we're discrete */
     while (!at_terminal(s)) {
@@ -1276,6 +1295,8 @@ saucy_alloc(int n, int w)
     s->left.lab = ints(n);
     s->left.unlab = ints(n);
     s->left.parent = ints(n);
+    s->left.isParent = ints(n);
+    s->left.isChild = ints(n);
     s->right.lab = ints(n);
     s->right.unlab = ints(n);
     s->splitwho = ints(n);

@@ -2529,6 +2529,8 @@ iRow<simplex_lp.numRow_; iRow++)
 }
 */
 int compute_factor(HighsModelObject& highs_model_object) {
+  // std::cout << "compute_factor func called" << std::endl;
+  // std::cin.get();
   HighsSimplexInfo& simplex_info = highs_model_object.simplex_info_;
   HighsSimplexLpStatus& simplex_lp_status =
       highs_model_object.simplex_lp_status_;

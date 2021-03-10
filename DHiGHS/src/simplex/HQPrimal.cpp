@@ -192,7 +192,7 @@ HighsStatus HQPrimal::solve() {
 }
 
 // This function collects the reduced Amatrix after a master iteration of 
-// the unfolding procedured
+// the unfolding procedure
 void HQPrimal::buildTableau(){
   int _numRow_ = workHMO.lp_.numRealRows;
   int _numCol_ = workHMO.lp_.numRealCols;
@@ -607,8 +607,18 @@ void HQPrimal::primalRebuild() {
 void HQPrimal::unfold() {
   HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
   HighsTimer& timer = workHMO.timer_;
+  bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  if (!run_highs_clock_already_running) timer.startRunHighsClock();
+  double init = timer.readRunHighsClock();
   primalRebuild();
+  // double rebTime = timer.readRunHighsClock() - initial_time;
+  // double cRowTime = 0;
+  // double uTime = 0;
+  // std::cout << "REBUILD TIME: " << rebTime << std::endl;
+  // std::cout << "START PIVOTS" << std::endl;
   for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
+    // std::cout << i << std::endl;
+    // simplex_info.update_count = 0;
     workHMO.unfoldCount_++;
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);
     columnIn = workHMO.lp_.linkers[i];
@@ -619,11 +629,25 @@ void HQPrimal::unfold() {
     workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
     workHMO.simplex_info_.workValue_[columnIn] = 0;
     workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
+    // initial_time = timer.readRunHighsClock();
     primalChooseRow();
+    // cRowTime += timer.readRunHighsClock() - initial_time;
+    // initial_time = timer.readRunHighsClock();
     primalUpdate();
-    //primalRebuild();
+    // uTime += timer.readRunHighsClock() - initial_time;
     workHMO.simplex_info_.workCost_[columnIn] = 0;
+    if (invertHint) primalRebuild();
   }
+  double time = timer.readRunHighsClock() - init;
+  std::cout << "inner loop time: " << time << std::endl;
+  std::cin.get();
+  // std::cout << "CHOOSE ROW TIME: " << cRowTime << std::endl;
+  // std::cout << "UPDATE TIME: " << uTime << std::endl;
+  // std::cin.get();
+  // std::cout << "NUM DUAL INFEAS: " << workHMO.scaled_solution_params_.num_dual_infeasibilities << std::endl;
+  // std::cout << "NUM PRIMAL INFEAS: " << workHMO.scaled_solution_params_.num_primal_infeasibilities << std::endl;
+  // // std::cout << "END PIVOTS" << std::endl;
+  // std::cin.get();
   // columnIn = -1;
 }
 
@@ -806,9 +830,11 @@ void HQPrimal::primalChooseRow() {
     }
   }
   timer.stop(simplex_info.clock_[Chuzr2Clock]);
+  // std::cout << "row out: " << rowOut << std::endl;
 }
 
 void HQPrimal::primalUpdate() {
+  
   HighsTimer& timer = workHMO.timer_;
   int* jMove = &workHMO.simplex_basis_.nonbasicMove_[0];
   double* workDual = &workHMO.simplex_info_.workDual_[0];
@@ -992,6 +1018,11 @@ void HQPrimal::primalUpdate() {
   if (simplex_info.update_count >= simplex_info.update_limit) {
     invertHint = INVERT_HINT_UPDATE_LIMIT_REACHED;
   }
+  // std::cout << "INVERT_HINT_UPDATE_LIMIT_REACHED: " << (int)INVERT_HINT_UPDATE_LIMIT_REACHED << std::endl;
+  // std::cout << "UPDATE LIMIT: " << (int)simplex_info.update_limit << std::endl;
+  // std::cout << "UPDATE COUNT: " << (int)simplex_info.update_count << std::endl;
+  // std::cout << "INVERT HINT: " << (int)invertHint << std::endl;
+  // std::cin.get();
   // Move this to Simplex class once it's created
   // simplex_method.record_pivots(columnIn, columnOut, alpha);
   workHMO.scaled_solution_params_.simplex_iteration_count++;

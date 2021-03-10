@@ -22,6 +22,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   cellSize.resize(numTot);
   previousCell.resize(numTot);
   previousCellSize.resize(numTot);
+  linked.resize(numCol);
 	// Previous solution
 	col_value = (solution.col_value);
 	row_value = (solution.row_value);
@@ -104,6 +105,8 @@ void HighsAggregate::translateFrontsToColors(){
   }
   for (i = 0; i < numTot; ++i){
     cell[i] = fCell.find(partition.fronts[i])->second;
+    // if (cell[i] == 0)
+    //   std::cout << "color of node i: " << i << " = " << cell[i] << std::endl; 
     cellFront[fCell.find(partition.fronts[i])->second] = partition.fronts[i];
     ++cellSize[fCell.find(partition.fronts[i])->second];
   }
@@ -160,9 +163,10 @@ void HighsAggregate::reset(){
   for (i = 0; i < numTot; ++i){
     previousCell[i] = cell[i];
     previousCellSize[i] = cellSize[i];
-  }
-  for (i = 0; i < alp->numCol_ + alp->numRow_; ++i)
     cellSize[i] = 0;
+  }
+  for (i = 0; i < numCol; ++i)
+    linked[i] = 0;
   for (i = 0; i < alp->nnz_; ++i)
     alp->Avalue_[i] = 0;
   for (i = 0; i < numRow; ++i)  
@@ -359,7 +363,7 @@ void HighsAggregate::addCols(){
       alp->colLower_[alp->numCol_] = 0;
       alp->colUpper_[alp->numCol_] = 0;
       alp->linkers[i] = alp->numCol_;
-      alp->Astart_[alp->numCol_ + 1] = alp->Astart_[alp->numCol_++];
+      ++alp->numCol_;
       ++alpBasis->numCol_;
     }
   }
@@ -375,6 +379,18 @@ void HighsAggregate::identifyLinks(){
       parent[numLinkers_] = x1; child[numLinkers_++] = x2; 
     }
   }
+  // int lCnt = 0;
+  // for (i = 0; i < numCol_; ++i){
+  //   if (previousCellSize[i] != cellSize[i] && !linked[cell[i]]
+  //       && cell[i] != previousCell[i]){
+  //     // parent[numLinkers_] = previousCell[i];
+  //     // child[numLinkers_++] = cell[i];
+  //     lCnt++;
+  //     linked[cell[i]] = true;
+  //   }
+  // }
+  // std::cout << "lCnt: " << lCnt << std::endl;
+  // std::cin.get();
 }
 
 void HighsAggregate::createLinkRows(){
