@@ -45,6 +45,8 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   alp->rowLower_.resize(numRow + maxLinkCols);
   alp->rowUpper_.resize(numRow + maxLinkCols);
   alp->linkers.resize(maxLinkCols);
+  alp->linkLower_.resize(maxLinkCols);
+  alp->linkUpper_.resize(maxLinkCols);
   alpBasis->col_status.resize(numCol + maxLinkCols);
   alpBasis->row_status.resize(numRow + maxLinkCols);
   parent.resize(maxLinkCols);
@@ -54,6 +56,8 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   linkARindex.resize(maxLinkSpace);
   linkARvalue.resize(maxLinkSpace);
   linkAlength.assign(numCol + maxLinkCols, 0);
+  // linkLB.assign(maxLinkCols, 0);
+  // linkUB.assign(maxLinkCols, 0);
   // coeff.assign(numTot);
   AindexPacked_.resize(nnz);
   // Translate fronts array to colors for vertices
@@ -376,7 +380,11 @@ void HighsAggregate::identifyLinks(){
     if (partition.parents[i] >= 0){
       int x1 = cell[partition.labels[partition.parents[i]]];
       int x2 = cell[partition.labels[i]];
-      parent[numLinkers_] = x1; child[numLinkers_++] = x2; 
+      parent[numLinkers_] = x1; child[numLinkers_] = x2;
+      int rep1 = partition.labels[cellFront[x1]];
+      int rep2 = partition.labels[cellFront[x2]];
+      alp->linkLower_[numLinkers_] = colLower[rep1] - colUpper[rep2];
+      alp->linkUpper_[numLinkers_++] = colUpper[rep1] - colLower[rep2]; 
     }
   }
   // int lCnt = 0;

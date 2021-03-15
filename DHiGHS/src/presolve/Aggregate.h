@@ -130,6 +130,8 @@ public:
 	vector<double> linkARvalue;
 	vector<int> linkAlength;
 	vector<bool> linked;
+	vector<double> linkLB;
+	vector<double> linkUB;
 
 	// For equitable partitions
 	struct eq_part partition;

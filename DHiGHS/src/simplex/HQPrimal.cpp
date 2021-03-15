@@ -25,6 +25,23 @@
 
 using std::runtime_error;
 
+double fTranTime = 0;
+double Chuzc1Time = 0;
+double Chuzc2Time = 0;
+double updatePrimalTime = 0;
+double collectPrimalInfsTime = 0;
+double bTranTime = 0;
+double updateDualTime = 0;
+double updateFactorTime = 0;
+double invertTime = 0;
+double computePrimalTime = 0;
+double computePrimalObjTime = 0;
+double computeDualTime = 0;
+double computePrimalInfsTime = 0;
+double computeDualInfsTime = 0;
+double reportRebTime = 0;
+bool liftStart = false;
+
 HighsStatus HQPrimal::solve() {
   HighsOptions& options = workHMO.options_;
   HighsSolutionParams& scaled_solution_params = workHMO.scaled_solution_params_;
@@ -194,15 +211,15 @@ HighsStatus HQPrimal::solve() {
 // This function collects the reduced Amatrix after a master iteration of 
 // the unfolding procedure
 void HQPrimal::buildTableau(){
-  int _numRow_ = workHMO.lp_.numRealRows;
-  int _numCol_ = workHMO.lp_.numRealCols;
+  int _numRow_ = workHMO.lp_.numRow_;
+  int _numCol_ = workHMO.lp_.numCol_;
   HighsTableau& tableau = workHMO.tableau_;
   HVector rowAp;
   int nnz = 0;
   rowAp.setup(row_ap.array.size());
-  tableau.ARtableauStart.push_back(0);
+  // tableau.ARtableauStart.push_back(0);
   for (int i = 0; i < _numRow_; ++i){
-    tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
+    // tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
     row_ep.clear();
     row_ep.count = 1;
     row_ep.index[0] = i;
@@ -211,14 +228,21 @@ void HQPrimal::buildTableau(){
     workHMO.factor_.btran(row_ep, analysis->row_ep_density);
     computeTableauRowFull(workHMO, row_ep, rowAp);
     for (int j = 0; j < _numCol_; ++j){
-      if (fabs(rowAp.array[j]) > 1e-10){
-        nnz++;
-        tableau.ARtableauIndex.push_back(j);
-        tableau.ARtableauValue.push_back(rowAp.array[j]);
+      if (j == _numCol_ - 1){
+        std::cout << rowAp.array[j] << "x_" << j << " ";
+        break;
       }
+      std::cout << rowAp.array[j] << "x_" << j << " + ";
+      // if (fabs(rowAp.array[j]) > 1e-10){
+      //   nnz++;
+      //   tableau.ARtableauIndex.push_back(j);
+      //   tableau.ARtableauValue.push_back(rowAp.array[j]);
+      // }
     }
-    tableau.ARtableauStart.push_back(nnz);
+    std::cout << std::endl;
+    // tableau.ARtableauStart.push_back(nnz);
   }
+  std::cin.get();
 }
 
 void HQPrimal::solvePhase3() {
@@ -244,7 +268,7 @@ void HQPrimal::solvePhase3() {
 
   // Setup update limits
   simplex_info.update_limit =
-      min(100 + solver_num_row / 100,
+      min(400 + solver_num_row / 100,
           1000);  // TODO: Consider allowing the dual limit to be used
   simplex_info.update_count = 0;
 
@@ -330,6 +354,7 @@ void HQPrimal::solvePhase3() {
   //   }
   // }
   unfold();
+  // buildTableau();
 
   if (workHMO.scaled_model_status_ == HighsModelStatus::REACHED_TIME_LIMIT) {
     return;
@@ -519,6 +544,7 @@ void HQPrimal::primalRebuild() {
   invertHint = INVERT_HINT_NO;
   // Possibly Rebuild workHMO.factor_
   bool reInvert = simplex_info.update_count > 0;
+  // if (liftStart) reInvert = true;
   if (!invert_if_row_out_negative) {
     // Don't reinvert if columnIn is negative [equivalently, if sv_invertHint ==
     // INVERT_HINT_POSSIBLY_OPTIMAL]
@@ -527,9 +553,14 @@ void HQPrimal::primalRebuild() {
       reInvert = false;
     }
   }
+  double init;
+  // std::cout << "reinvert: " << reInvert << std::endl;
+  // std::cin.get();
   if (reInvert) {
     timer.start(simplex_info.clock_[InvertClock]);
+    init = timer.readRunHighsClock();
     int rankDeficiency = compute_factor(workHMO);
+    invertTime += timer.readRunHighsClock() - init;
     timer.stop(simplex_info.clock_[InvertClock]);
     if (rankDeficiency) {
       throw runtime_error("Primal reInvert: singular-basis-matrix");
@@ -537,16 +568,22 @@ void HQPrimal::primalRebuild() {
     simplex_info.update_count = 0;
   }
   timer.start(simplex_info.clock_[ComputeDualClock]);
+  init = timer.readRunHighsClock();
   compute_dual(workHMO);
+  computeDualTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputeDualClock]);
 
   timer.start(simplex_info.clock_[ComputePrimalClock]);
+  init = timer.readRunHighsClock();
   compute_primal(workHMO);
+  computePrimalTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputePrimalClock]);
 
   // Primal objective section
   timer.start(simplex_info.clock_[ComputePrObjClock]);
+  init = timer.readRunHighsClock();
   computePrimalObjectiveValue(workHMO);
+  computePrimalObjTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputePrObjClock]);
 
   double primal_objective_value = simplex_info.primal_objective_value;
@@ -570,11 +607,15 @@ void HQPrimal::primalRebuild() {
   simplex_info.updated_primal_objective_value = primal_objective_value;
 
   timer.start(simplex_info.clock_[ComputePrIfsClock]);
+  init = timer.readRunHighsClock();
   computePrimalInfeasible(workHMO);
+  computePrimalInfsTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputePrIfsClock]);
 
   timer.start(simplex_info.clock_[ComputeDuIfsClock]);
+  init = timer.readRunHighsClock();
   computeDualInfeasible(workHMO);
+  computeDualInfsTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputeDuIfsClock]);
 
   /* Whether to switch to primal phase 1 */
@@ -586,7 +627,9 @@ void HQPrimal::primalRebuild() {
   }
 
   timer.start(simplex_info.clock_[ReportRebuildClock]);
+  init = timer.readRunHighsClock();
   reportRebuild(sv_invertHint);
+  reportRebTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ReportRebuildClock]);
 #ifdef HiGHSDEV
   if (simplex_info.analyse_rebuild_time) {
@@ -605,17 +648,36 @@ void HQPrimal::primalRebuild() {
 }
 
 void HQPrimal::unfold() {
+  fTranTime = 0;
+  Chuzc1Time = 0;
+  Chuzc2Time = 0;
+  bTranTime = 0;
+  updatePrimalTime = 0;
+  updateDualTime = 0;
+  collectPrimalInfsTime = 0;
+  updateFactorTime = 0;
+  invertTime = 0;
+  computePrimalTime = 0;
+  computePrimalObjTime = 0;
+  computeDualTime = 0;
+  computePrimalInfsTime = 0;
+  computeDualInfsTime = 0;
+  reportRebTime = 0;
   HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
   HighsTimer& timer = workHMO.timer_;
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
   double init = timer.readRunHighsClock();
+  liftStart = true;
   primalRebuild();
-  // double rebTime = timer.readRunHighsClock() - initial_time;
-  // double cRowTime = 0;
-  // double uTime = 0;
+  // buildTableau();
+  liftStart = false;
+  double rebTime = timer.readRunHighsClock() - init;
+  double cRowTime = 0;
+  double uTime = 0;
   // std::cout << "REBUILD TIME: " << rebTime << std::endl;
   // std::cout << "START PIVOTS" << std::endl;
+  int idx = workHMO.lp_.numCol_ - workHMO.lp_.numLinkers;
   for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
     // std::cout << i << std::endl;
     // simplex_info.update_count = 0;
@@ -629,20 +691,33 @@ void HQPrimal::unfold() {
     workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
     workHMO.simplex_info_.workValue_[columnIn] = 0;
     workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
-    // initial_time = timer.readRunHighsClock();
+    init = timer.readRunHighsClock();
     primalChooseRow();
-    // cRowTime += timer.readRunHighsClock() - initial_time;
+    cRowTime += timer.readRunHighsClock() - init;
     // initial_time = timer.readRunHighsClock();
     primalUpdate();
     // uTime += timer.readRunHighsClock() - initial_time;
     workHMO.simplex_info_.workCost_[columnIn] = 0;
-    if (invertHint) primalRebuild();
+    workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
+    workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF;
+    // if (invertHint) primalRebuild();
   }
   double time = timer.readRunHighsClock() - init;
-  std::cout << "inner loop time: " << time << std::endl;
-  std::cin.get();
-  // std::cout << "CHOOSE ROW TIME: " << cRowTime << std::endl;
-  // std::cout << "UPDATE TIME: " << uTime << std::endl;
+  // std::cout << "Ftran time: " << fTranTime << std::endl;
+  // std::cout << "Chuzc1 time: " << Chuzc1Time << std::endl;
+  // std::cout << "Chuzc2 time: " << Chuzc2Time << std::endl;
+  // std::cout << "Primal Update Time: " << updatePrimalTime << std::endl;
+  // std::cout << "Dual Update Time: " << updateDualTime << std::endl;
+  // std::cout << "Btran Update Time: " << bTranTime << std::endl;
+  // std::cout << "Collect Primal Infeasibilities Time: " << collectPrimalInfsTime << std::endl;
+  // std::cout << "Factor Update Time: " << updateFactorTime << std::endl;
+  // std::cout << "Invert Time: " << invertTime << std::endl;
+  // std::cout << "Compute Primal Time: " << computePrimalTime << std::endl;
+  // std::cout << "Compute Primal Objective Time: " << computePrimalObjTime << std::endl;
+  // std::cout << "Compute Dual Time: " << computeDualTime << std::endl;
+  // std::cout << "Compute Primal Infeasibilities Time: " << computePrimalInfsTime << std::endl;
+  // std::cout << "Compute Dual Infeasibilities Time: " << computeDualInfsTime << std::endl;
+  // std::cout << "Report Rebuild Time: " << reportRebTime << std::endl;
   // std::cin.get();
   // std::cout << "NUM DUAL INFEAS: " << workHMO.scaled_solution_params_.num_dual_infeasibilities << std::endl;
   // std::cout << "NUM PRIMAL INFEAS: " << workHMO.scaled_solution_params_.num_primal_infeasibilities << std::endl;
@@ -734,6 +809,7 @@ void HQPrimal::primalChooseRow() {
 
   // Compute pivot column
   timer.start(simplex_info.clock_[FtranClock]);
+  double init = timer.readRunHighsClock();
   col_aq.clear();
   col_aq.packFlag = true;
   workHMO.matrix_.collect_aj(col_aq, columnIn, 1);
@@ -742,6 +818,7 @@ void HQPrimal::primalChooseRow() {
     analysis->operationRecordBefore(ANALYSIS_OPERATION_TYPE_FTRAN, col_aq, analysis->col_aq_density);
 #endif
   workHMO.factor_.ftran(col_aq, analysis->col_aq_density);
+  fTranTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[FtranClock]);
 #ifdef HiGHSDEV
   if (simplex_info.analyse_iterations)
@@ -775,6 +852,7 @@ void HQPrimal::primalChooseRow() {
   }
 
   timer.start(simplex_info.clock_[Chuzr1Clock]);
+  init = timer.readRunHighsClock();
   // Initialize
   rowOut = -1;
 
@@ -802,9 +880,11 @@ void HQPrimal::primalChooseRow() {
       if (relaxSpace > relaxTheta * alpha) relaxTheta = relaxSpace / alpha;
     }
   }
+  Chuzc1Time += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[Chuzr1Clock]);
 
   timer.start(simplex_info.clock_[Chuzr2Clock]);
+  init = timer.readRunHighsClock();
   double bestAlpha = 0;
   for (int i = 0; i < col_aq.count; i++) {
     int index = col_aq.index[i];
@@ -829,6 +909,7 @@ void HQPrimal::primalChooseRow() {
       }
     }
   }
+  Chuzc2Time += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[Chuzr2Clock]);
   // std::cout << "row out: " << rowOut << std::endl;
 }
@@ -888,10 +969,12 @@ void HQPrimal::primalUpdate() {
   }
 
   timer.start(simplex_info.clock_[UpdatePrimalClock]);
+  double init = timer.readRunHighsClock();
   for (int i = 0; i < col_aq.count; i++) {
     int index = col_aq.index[i];
     baseValue[index] -= thetaPrimal * col_aq.array[index];
   }
+  updatePrimalTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[UpdatePrimalClock]);
 
   simplex_info.updated_primal_objective_value +=
@@ -916,6 +999,7 @@ void HQPrimal::primalUpdate() {
   baseValue[rowOut] = valueIn;
 
   timer.start(simplex_info.clock_[CollectPrIfsClock]);
+  init = timer.readRunHighsClock();
   // Check for any possible infeasible
   for (int iRow = 0; iRow < solver_num_row; iRow++) {
     if (baseValue[iRow] < baseLower[iRow] - primalTolerance) {
@@ -924,11 +1008,13 @@ void HQPrimal::primalUpdate() {
       invertHint = INVERT_HINT_PRIMAL_INFEASIBLE_IN_PRIMAL_SIMPLEX;
     }
   }
+  collectPrimalInfsTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[CollectPrIfsClock]);
 
   // 2. Now we can update the dual
 
   timer.start(simplex_info.clock_[BtranClock]);
+  init = timer.readRunHighsClock();
   row_ep.clear();
   row_ap.clear();
   row_ep.count = 1;
@@ -944,6 +1030,7 @@ void HQPrimal::primalUpdate() {
   if (simplex_info.analyse_iterations)
     analysis->operationRecordAfter(ANALYSIS_OPERATION_TYPE_BTRAN_EP, row_ep);
 #endif
+  bTranTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[BtranClock]);
   //
   // PRICE
@@ -968,6 +1055,7 @@ void HQPrimal::primalUpdate() {
   analysis->updateOperationResultDensity(local_row_ep_density, analysis->row_ep_density);
   */
   timer.start(simplex_info.clock_[UpdateDualClock]);
+  init = timer.readRunHighsClock();
   //  double
   thetaDual = workDual[columnIn] / alpha;
   for (int i = 0; i < row_ap.count; i++) {
@@ -979,6 +1067,7 @@ void HQPrimal::primalUpdate() {
     int iCol = iGet + solver_num_col;
     workDual[iCol] -= thetaDual * row_ep.array[iGet];
   }
+  updateDualTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[UpdateDualClock]);
 
   /* Update the devex weight */
@@ -1013,11 +1102,13 @@ void HQPrimal::primalUpdate() {
   workDual[columnOut] = -thetaDual;
 
   // Update workHMO.factor_ basis
+  init = timer.readRunHighsClock();
   update_factor(workHMO, &col_aq, &row_ep, &rowOut, &invertHint);
   update_matrix(workHMO, columnIn, columnOut);
   if (simplex_info.update_count >= simplex_info.update_limit) {
     invertHint = INVERT_HINT_UPDATE_LIMIT_REACHED;
   }
+  updateFactorTime += timer.readRunHighsClock() - init;
   // std::cout << "INVERT_HINT_UPDATE_LIMIT_REACHED: " << (int)INVERT_HINT_UPDATE_LIMIT_REACHED << std::endl;
   // std::cout << "UPDATE LIMIT: " << (int)simplex_info.update_limit << std::endl;
   // std::cout << "UPDATE COUNT: " << (int)simplex_info.update_count << std::endl;

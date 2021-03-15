@@ -375,6 +375,8 @@ void HFactor::update(HVector* aq, HVector* ep, int* iRow, int* hint) {
     updateCFT(aq, ep, iRow);//, hint);
     return;
   }
+  // std::cout << "Update Method: " << (int)updateMethod << std::endl;
+  // std::cin.get();
 
   if (updateMethod == UPDATE_METHOD_FT) updateFT(aq, ep, *iRow);//, hint);
   if (updateMethod == UPDATE_METHOD_PF) updatePF(aq, *iRow, hint);

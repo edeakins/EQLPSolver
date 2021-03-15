@@ -292,12 +292,18 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     alpBasis = lpFolder.getBasis();
     init_status = highs.passModel(*alp);
     basis_status = highs.setBasis(*alpBasis);
-    write_status = highs.writeModel("level_1.lp");
+    // if (i == 1 or i == 2)
+    //   write_status = highs.writeModel("level_1.lp");
     initial_time = timer.readRunHighsClock();
     run_status = highs.run(); 
     highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
     basis = highs.getBasis();
     solution = highs.getSolution();
+    // if (i == 1 || i == 2){
+    //   for (int i = 0; i < solution.col_value.size(); ++i)
+    //     std::cout << "x_" << i << " = " << solution.col_value[i] << std::endl;
+    //   std::cin.get();
+    // }
   }
   double obj = 0;
   for (int i = 0; i < solution.col_value.size(); ++i)
