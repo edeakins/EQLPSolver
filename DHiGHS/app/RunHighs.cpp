@@ -243,9 +243,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // HighsLp class to contain aggregates and HighsBasis class to contain bases
   HighsLp* alp;
   HighsBasis* alpBasis;
-  // Basis and solution to store from unfold interations
+  // Basis, tableau, and solution to store from unfold interations
   HighsBasis basis;
   HighsSolution solution;
+  HighsTableau tableau;
   // Set options
   alpOpt.presolve = string("off");
   alpOpt.simplex_scale_strategy = 0;
@@ -277,34 +278,36 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
   basis = highs.getBasis();
   solution = highs.getSolution();
+  tableau = highs.getTableau();
   // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
   // for (int i = 0; i < solution.col_value.size(); ++i){
   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
   // }
-  // Start loop for level 1+ aggregates
-  alpOpt.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
-  return_status = highs.passHighsOptions(alpOpt);
-  for (int i = 1; i < numRefinements; ++i){
-    initial_time = timer.readRunHighsClock();
-    lpFolder.update(partitions[i], solution, basis);
-    highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
-    alp = lpFolder.getAlp();
-    alpBasis = lpFolder.getBasis();
-    init_status = highs.passModel(*alp);
-    basis_status = highs.setBasis(*alpBasis);
-    // if (i == 1 or i == 2)
-    //   write_status = highs.writeModel("level_1.lp");
-    initial_time = timer.readRunHighsClock();
-    run_status = highs.run(); 
-    highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
-    basis = highs.getBasis();
-    solution = highs.getSolution();
-    // if (i == 1 || i == 2){
-    //   for (int i = 0; i < solution.col_value.size(); ++i)
-    //     std::cout << "x_" << i << " = " << solution.col_value[i] << std::endl;
-    //   std::cin.get();
-    // }
-  }
+  // // Start loop for level 1+ aggregates
+  // alpOpt.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
+  // return_status = highs.passHighsOptions(alpOpt);
+  // for (int i = 1; i < numRefinements; ++i){
+  //   initial_time = timer.readRunHighsClock();
+  //   lpFolder.update(partitions[i], solution, basis, tableau);
+  //   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
+  //   alp = lpFolder.getAlp();
+  //   alpBasis = lpFolder.getBasis();
+  //   init_status = highs.passModel(*alp);
+  //   basis_status = highs.setBasis(*alpBasis);
+  //   // if (i == 1 or i == 2)
+  //   //   write_status = highs.writeModel("level_1.lp");
+  //   initial_time = timer.readRunHighsClock();
+  //   run_status = highs.run(); 
+  //   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
+  //   basis = highs.getBasis();
+  //   solution = highs.getSolution();
+  //   tableau = highs.getTableau();
+  //   // if (i == 1 || i == 2){
+  //   //   for (int i = 0; i < solution.col_value.size(); ++i)
+  //   //     std::cout << "x_" << i << " = " << solution.col_value[i] << std::endl;
+  //   //   std::cin.get();
+  //   // }
+  // }
   double obj = 0;
   for (int i = 0; i < solution.col_value.size(); ++i)
     obj += solution.col_value[i] * alp->colCost_[i];

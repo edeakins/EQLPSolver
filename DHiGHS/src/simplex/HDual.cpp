@@ -269,47 +269,76 @@ HighsStatus HDual::solve() {
   }
   assert(ok);
   computePrimalObjectiveValue(workHMO);
-  // buildTableau();
+  buildTableau();
   return HighsStatus::OK;
 }
 
-// This function collects the reduced Amatrix after a master iteration of 
-// the unfolding procedure
 void HDual::buildTableau(){
   int _numRow_ = workHMO.lp_.numRow_;
   int _numCol_ = workHMO.lp_.numCol_;
+  int _numLinkers_ = workHMO.lp_.numLinkers;
+  int _numTrueRow_ = _numRow_ - _numLinkers_;
+  int _numTrueCol_ = _numCol_ - _numLinkers_;
+  // std::cout << workHMO.lp_.numLinkers << std::endl;
+  // std::cin.get();
   HighsTableau& tableau = workHMO.tableau_;
-  HVector rowAp;
-  int nnz = 0;
-  rowAp.setup(row_ap.array.size());
-  std::cout << rowAp.array.size() << std::endl;
-  // tableau.ARtableauStart.push_back(0);
-  for (int i = 0; i < _numRow_; ++i){
-    // tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
+  // HVector row_ap;
+  tableau.nnz = 0;
+  // row_ap.setup(row_ap.array.size());
+  tableau.ARtableauStart.push_back(0);
+  for (int i = 0; i < _numTrueRow_; ++i){
+    tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
     row_ep.clear();
     row_ep.count = 1;
     row_ep.index[0] = i;
     row_ep.array[i] = 1;
     row_ep.packFlag = true;
     workHMO.factor_.btran(row_ep, analysis->row_ep_density);
-    computeTableauRowFull(workHMO, row_ep, rowAp);
-    for (int j = 0; j < _numCol_; ++j){
-      if (j == _numCol_ - 1){
-        std::cout << rowAp.array[j] << "x_" << j << " ";
+    computeTableauRowFull(workHMO, row_ep, row_ap);
+    for (int j = 0; j < _numTrueCol_; ++j){
+      if (fabs(row_ap.array[j]) > 1e-10){
+        ++tableau.nnz;
+        tableau.ARtableauIndex.push_back(j);
+        tableau.ARtableauValue.push_back(row_ap.array[j]);
+      }
+      if (j == _numTrueCol_ - 1){
+        std::cout << row_ap.array[j] << "x_" << j << " ";
         break;
       }
-      std::cout << rowAp.array[j] << "x_" << j << " + ";
-      // if (fabs(rowAp.array[j]) > 1e-10){
-      //   nnz++;
-      //   tableau.ARtableauIndex.push_back(j);
-      //   tableau.ARtableauValue.push_back(rowAp.array[j]);
-      // }
+      std::cout << row_ap.array[j] << "x_" << j << " + ";
     }
     std::cout << std::endl;
-    // tableau.ARtableauStart.push_back(nnz);
+    tableau.ARtableauStart.push_back(tableau.nnz);
+    tableau.tableauRowIndex.push_back(i + _numTrueCol_);
   }
   std::cin.get();
 }
+
+// // This function collects the reduced Amatrix after a master iteration of 
+// // the unfolding procedure
+// void HDual::buildTableau(){
+//   int _numRow_ = workHMO.lp_.numRow_;
+//   int _numCol_ = workHMO.lp_.numCol_;
+//   HighsTableau& tableau = workHMO.tableau_;
+//   if (!tableau.nnz)
+//     tableau.ARtableauStart.push_back(0);
+//   computeTableauRowFull(workHMO, row_ep, row_ap);
+//   for (int j = 0; j < _numCol_; ++j){
+//     if (j == _numCol_ - 1){
+//       std::cout << row_ap.array[j] << "x_" << j << " ";
+//       break;
+//     }
+//     std::cout << row_ap.array[j] << "x_" << j << " + ";
+//     if (fabs(row_ap.array[j]) > 1e-10){
+//       ++tableau.nnz;
+//       tableau.ARtableauIndex.push_back(j);
+//       tableau.ARtableauValue.push_back(row_ap.array[j]);
+//     }
+//   }
+//   std::cout << std::endl;
+//   tableau.ARtableauStart.push_back(tableau.nnz);
+//   std::cin.get();
+// }
 
 
 void HDual::options() {
@@ -1114,6 +1143,7 @@ void HDual::chooseRow() {
 #endif
     // Perform BTRAN
     factor->btran(row_ep, analysis->row_ep_density);
+    // buildTableau();
 #ifdef HiGHSDEV
     if (simplex_info.analyse_iterations)
       analysis->operationRecordAfter(ANALYSIS_OPERATION_TYPE_BTRAN_EP, row_ep);

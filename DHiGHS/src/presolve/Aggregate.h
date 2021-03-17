@@ -1,6 +1,8 @@
 #ifndef AGGREGATE_H_
 #define AGGREGATE_H_
 
+#include <unordered_map>
+
 #include "HighsLp.h"
 #include "HighsEquitable.h"
 #include "HighsQRmodule.h"
@@ -9,12 +11,15 @@
 
 class HighsAggregate{
 public:
-	HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
-	void update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis);
+	HighsAggregate(HighsLp& lp, const struct eq_part& ep, 
+					HighsSolution& solution, HighsBasis& basis);
+	void update(const struct eq_part& ep, const HighsSolution& solution, 
+					const HighsBasis& basis, const HighsTableau& tableau);
 	void translateFrontsToColors();
 	void packVectors();
 	void foldObj();
 	void foldMatrix();
+	void liftTabRows();
 	void fixMatrix();
 	void foldRhsInit();
 	void foldRhs();
@@ -94,6 +99,12 @@ public:
 	vector<HighsBasisStatus> row_status;
 	vector<bool> nonBasicCol;
 	vector<bool> nonBasicRow;
+	vector<int>  tableauStart;
+  	vector<double> tableauValue;
+  	vector<int> tableauIndex;
+    vector<double> reducedRhs;
+  	vector<int> tableauRowIndex;
+  	int tableauNnz;
 
 	/* New scalars for the current aggregated lp */
 	int numRow_ = 0;
@@ -132,14 +143,18 @@ public:
 	vector<bool> linked;
 	vector<double> linkLB;
 	vector<double> linkUB;
+	map<pair<int, int>, double> tableauEntry;
+	map<pair<int, int>, double> tableauScale;
 
 	// For equitable partitions
 	struct eq_part partition;
+	struct eq_part previousPartition;
 	vector<int> cell;
 	vector<int> cellFront;
 	vector<int> cellSize;
 	vector<int> previousCell;
 	vector<int> previousCellSize;
+	vector<int> previousCellFront;
 };
 
 #endif

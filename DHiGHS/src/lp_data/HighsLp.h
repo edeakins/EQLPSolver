@@ -391,6 +391,8 @@ struct HighsSolution {
 // that we use with the EP to construct the current LP
 // Struct to contain tableau info
 struct HighsTableau{
+  int nnz;
+  std::vector<int> tableauRowIndex;
   std::vector<int> ARtableauIndex;
   std::vector<int> ARtableauStart;
   std::vector<double> ARtableauValue;

@@ -204,7 +204,7 @@ HighsStatus HQPrimal::solve() {
   solvePhase); if (!ok) {printf("NOT OK After Solve???\n"); cout << flush;}
   assert(ok);
   */
-  // buildTableau();
+  buildTableau();
   return HighsStatus::OK;
 }
 
@@ -213,36 +213,41 @@ HighsStatus HQPrimal::solve() {
 void HQPrimal::buildTableau(){
   int _numRow_ = workHMO.lp_.numRow_;
   int _numCol_ = workHMO.lp_.numCol_;
+  int _numLinkers_ = workHMO.lp_.numLinkers;
+  int _numTrueRow_ = _numRow_ - _numLinkers_;
+  int _numTrueCol_ = _numCol_ - _numLinkers_;
   HighsTableau& tableau = workHMO.tableau_;
-  HVector rowAp;
-  int nnz = 0;
-  rowAp.setup(row_ap.array.size());
-  // tableau.ARtableauStart.push_back(0);
-  for (int i = 0; i < _numRow_; ++i){
-    // tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
+  // HVector rowAp;
+  tableau.nnz = 0;
+  // rowAp.setup(row_ap.array.size());
+  tableau.ARtableauStart.push_back(0);
+  for (int i = 0; i < _numTrueRow_; ++i){
+    // std::cout << "row: " << i << std::endl;
+    tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
     row_ep.clear();
     row_ep.count = 1;
     row_ep.index[0] = i;
     row_ep.array[i] = 1;
     row_ep.packFlag = true;
     workHMO.factor_.btran(row_ep, analysis->row_ep_density);
-    computeTableauRowFull(workHMO, row_ep, rowAp);
-    for (int j = 0; j < _numCol_; ++j){
-      if (j == _numCol_ - 1){
-        std::cout << rowAp.array[j] << "x_" << j << " ";
-        break;
+    computeTableauRowFull(workHMO, row_ep, row_ap);
+    for (int j = 0; j < _numTrueCol_; ++j){
+      if (fabs(row_ap.array[j]) > 1e-10){
+        ++tableau.nnz;
+        tableau.ARtableauIndex.push_back(j);
+        tableau.ARtableauValue.push_back(row_ap.array[j]);
       }
-      std::cout << rowAp.array[j] << "x_" << j << " + ";
-      // if (fabs(rowAp.array[j]) > 1e-10){
-      //   nnz++;
-      //   tableau.ARtableauIndex.push_back(j);
-      //   tableau.ARtableauValue.push_back(rowAp.array[j]);
-      // }
+    //   if (j == _numTrueCol_ - 1){
+    //     std::cout << row_ap.array[j] << "x_" << j << " ";
+    //     break;
+    //   }
+    //   std::cout << row_ap.array[j] << "x_" << j << " + ";
     }
-    std::cout << std::endl;
-    // tableau.ARtableauStart.push_back(nnz);
+    // std::cout << std::endl;
+    tableau.ARtableauStart.push_back(tableau.nnz);
+    tableau.tableauRowIndex.push_back(i + _numTrueCol_);
   }
-  std::cin.get();
+  // std::cin.get();
 }
 
 void HQPrimal::solvePhase3() {

@@ -21,6 +21,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   cellFront.resize(numTot);
   cellSize.resize(numTot);
   previousCell.resize(numTot);
+  previousCellFront.resize(numTot);
   previousCellSize.resize(numTot);
   linked.resize(numCol);
 	// Previous solution
@@ -36,18 +37,18 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   maxLinkSpace = 3 * maxLinkCols;
   alp = (HighsLp *)calloc(1, sizeof(HighsLp));
   alpBasis = (HighsBasis *)calloc(1, sizeof(HighsBasis));
-  alp->colCost_.resize(numCol + maxLinkCols);
-  alp->Avalue_.resize(nnz + maxLinkSpace);
-  alp->Aindex_.resize(nnz + maxLinkSpace);
-  alp->Astart_.resize(numCol + maxLinkCols + 1);
-  alp->colUpper_.resize(numCol + maxLinkCols);
-  alp->colLower_.resize(numCol + maxLinkCols);
+  alp->colCost_.resize(numCol + maxLinkCols + numRow);
+  alp->Avalue_.resize(nnz + maxLinkSpace + numRow);
+  alp->Aindex_.resize(nnz + maxLinkSpace + numRow);
+  alp->Astart_.resize(numCol + maxLinkCols + numRow + 1);
+  alp->colUpper_.resize(numCol + maxLinkCols + numRow);
+  alp->colLower_.resize(numCol + maxLinkCols + numRow);
   alp->rowLower_.resize(numRow + maxLinkCols);
   alp->rowUpper_.resize(numRow + maxLinkCols);
   alp->linkers.resize(maxLinkCols);
   alp->linkLower_.resize(maxLinkCols);
   alp->linkUpper_.resize(maxLinkCols);
-  alpBasis->col_status.resize(numCol + maxLinkCols);
+  alpBasis->col_status.resize(numCol + maxLinkCols + numRow);
   alpBasis->row_status.resize(numRow + maxLinkCols);
   parent.resize(maxLinkCols);
   child.resize(maxLinkCols);
@@ -63,14 +64,15 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   // Translate fronts array to colors for vertices
   translateFrontsToColors();
   packVectors();
-  foldObj();
   foldMatrix();
   fixMatrix();
   foldRhsInit();
   foldBndsInit();
+  foldObj();
 }
 
-void HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis){
+void HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solution, 
+                            const HighsBasis& basis, const HighsTableau& tableau){
   // equtiable partition update
   partition = ep;
   // Previous solution
@@ -79,20 +81,28 @@ void HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solut
 	// Previous basis
 	col_status = (basis.col_status);
 	row_status = (basis.row_status);
+  // Previous tableau
+  tableauStart = tableau.ARtableauStart;
+  tableauValue = tableau.ARtableauValue;
+  tableauIndex = tableau.ARtableauIndex;
+  reducedRhs = tableau.ARreducedRHS;
+  tableauRowIndex = tableau.tableauRowIndex;
+  tableauNnz = tableau.nnz;
   reset();
   translateFrontsToColors();
   packVectors();
-  foldObj();
   foldMatrix();
+  liftTabRows();
   fixMatrix();
-  foldRhs();
-  foldBnds();
-  setRowBasis();
-  setColBasis();
   identifyLinks();
   createLinkRows();
   addCols();
   addRows();
+  foldRhs();
+  foldBnds();
+  setRowBasis();
+  setColBasis();
+  foldObj();
 }
 
 void HighsAggregate::translateFrontsToColors(){
@@ -114,7 +124,7 @@ void HighsAggregate::translateFrontsToColors(){
     cellFront[fCell.find(partition.fronts[i])->second] = partition.fronts[i];
     ++cellSize[fCell.find(partition.fronts[i])->second];
   }
-  alp->numCol_ = numCol_;
+  alp->numCol_ = numCol_ + numRow_;
   alp->numRow_ = numRow_;
 }
 
@@ -127,10 +137,14 @@ void HighsAggregate::packVectors(){
 // Fold the objective
 void HighsAggregate::foldObj(){
   int i, rep;
-  for (i = 0; i < numCol_; ++i){
+  int numXCol = alp->numCol_ - numLinkers_ - numRow_;
+  int numSRCol = alp->numCol_;
+  for (i = 0; i < numXCol; ++i){
     rep = partition.labels[cellFront[i]];
     alp->colCost_[i] = colCost[rep] * cellSize[i];
   }
+  for (i = numXCol; i < numSRCol; ++i)
+    alp->colCost_[i] = 0;
   alp->sense_ = 1;
 }
 
@@ -152,11 +166,39 @@ void HighsAggregate::foldMatrix(){
     }
     alp->Astart_[i + 1] = alp->nnz_;
   }
+  for (i = numCol_; i < numCol_ + numRow_; ++i){
+    alp->Avalue_[alp->nnz_] = 1;
+    alp->Aindex_[alp->nnz_++] = i - numCol_;
+    alp->Astart_[i + 1] = alp->nnz_;
+    // ++alp->numCol_;
+  }
+}
+
+// Lift the previous tableau and collect coefficients for this 
+// iteration
+void HighsAggregate::liftTabRows(){
+  int i, j, colRep, rowRep;
+  int rowCell, colCell, oldColCell;
+  double scale, pSize, cSize;
+  for (i = 0; i < tableauStart.size() - 1; ++i){
+    rowRep = previousPartition.labels[previousCellFront[tableauRowIndex[i]]];
+    rowCell = cell[rowRep];
+    for (j = tableauStart[i]; j < tableauStart[i + 1]; ++j){
+      colRep = previousPartition.labels[previousCellFront[tableauIndex[j]]];
+      colCell = cell[colRep];
+      oldColCell = previousCell[colRep];
+      pSize = previousCellSize[oldColCell];
+      cSize = cellSize[colCell];
+      scale = (double)cSize/pSize;
+      tableauEntry[std::pair<int, int>(oldColCell, rowCell - numCol_)] = tableauValue[j];
+      tableauScale[std::pair<int, int>(oldColCell, rowCell - numCol_)] = scale;
+    }
+  }
 }
 
 void HighsAggregate::fixMatrix(){
   int i;
-  for (i = alp->numCol_; i < numCol + maxLinkCols; ++i)
+  for (i = alp->numCol_; i < numCol + maxLinkCols + numRow; ++i)
     alp->Astart_[i + 1] = alp->Astart_[i];
 }
 
@@ -167,8 +209,10 @@ void HighsAggregate::reset(){
   for (i = 0; i < numTot; ++i){
     previousCell[i] = cell[i];
     previousCellSize[i] = cellSize[i];
+    previousCellFront[i] = cellFront[i];
     cellSize[i] = 0;
   }
+  previousPartition = partition;
   for (i = 0; i < numCol; ++i)
     linked[i] = 0;
   for (i = 0; i < alp->nnz_; ++i)
@@ -188,15 +232,16 @@ void HighsAggregate::reset(){
     child[i] = -1;
   }
   numLinkers_ = 0;
+  tableauEntry.clear();
 }
 
 // Fold the row bounds based on current ep
 void HighsAggregate::foldRhsInit(){
-  int i, rep;
+  int i, rep, rhs;
   for (i = 0; i < numRow_; ++i){
     rep = partition.labels[cellFront[i + numCol_]] - numCol;
-    alp->rowLower_[i] = rowLower[rep] * cellSize[i + numCol_];
-    alp->rowUpper_[i] = rowUpper[rep] * cellSize[i + numCol_];
+    rhs = std::min(std::fabs(rowLower[rep]), std::fabs(rowUpper[rep]));
+    alp->rowLower_[i] = alp->rowUpper_[i] = rhs;
   }
 }
 
@@ -257,6 +302,10 @@ void HighsAggregate::foldBndsInit(){
     rep = partition.labels[cellFront[i]];
     alp->colLower_[i] = colLower[rep];
     alp->colUpper_[i] = colUpper[rep];
+  }
+  for (; i < numCol_ + numRow_; ++i){
+    alp->colLower_[i] = -HIGHS_CONST_INF;
+    alp->colUpper_[i] = HIGHS_CONST_INF;
   }
 }
 
