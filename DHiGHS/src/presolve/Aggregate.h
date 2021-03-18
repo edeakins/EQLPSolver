@@ -105,6 +105,9 @@ public:
     vector<double> reducedRhs;
   	vector<int> tableauRowIndex;
   	int tableauNnz;
+	int tableauNumXCol;
+	int tableauNumSCol;
+	int tableauNumRCol;
 
 	/* New scalars for the current aggregated lp */
 	int numRow_ = 0;
@@ -127,6 +130,7 @@ public:
     vector<double> colUpper_;
     vector<double> rowLower_;
     vector<double> rowUpper_;
+	vector<std::string> rowSense_;
 	vector<double> AvaluePacked_;
 	vector<int> AindexPacked_;
 	vector<bool> inMat;

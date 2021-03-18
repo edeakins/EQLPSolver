@@ -188,6 +188,9 @@ HighsStatus HDual::solve() {
   }
   dualInfeasCount = scaled_solution_params.num_dual_infeasibilities;
   solvePhase = dualInfeasCount > 0 ? 1 : 2;
+  // std::cout << "solvePhase: " << solvePhase << std::endl;
+  // std::cout << "dualInfeasCount: " << dualInfeasCount << std::endl;
+  // std::cin.get(); 
   //
   // Check that the model is OK to solve:
   //
@@ -284,6 +287,9 @@ void HDual::buildTableau(){
   HighsTableau& tableau = workHMO.tableau_;
   // HVector row_ap;
   tableau.nnz = 0;
+  tableau.numXCol = workHMO.lp_.numXCol_;
+  tableau.numSCol = workHMO.lp_.numSCol_;
+  tableau.numRCol = workHMO.lp_.numRCol_;
   // row_ap.setup(row_ap.array.size());
   tableau.ARtableauStart.push_back(0);
   for (int i = 0; i < _numTrueRow_; ++i){
@@ -301,17 +307,17 @@ void HDual::buildTableau(){
         tableau.ARtableauIndex.push_back(j);
         tableau.ARtableauValue.push_back(row_ap.array[j]);
       }
-      if (j == _numTrueCol_ - 1){
-        std::cout << row_ap.array[j] << "x_" << j << " ";
-        break;
-      }
-      std::cout << row_ap.array[j] << "x_" << j << " + ";
+      // if (j == _numTrueCol_ - 1){
+      //   std::cout << row_ap.array[j] << "x_" << j << " ";
+      //   break;
+      // }
+      // std::cout << row_ap.array[j] << "x_" << j << " + ";
     }
-    std::cout << std::endl;
+    // std::cout << std::endl;
     tableau.ARtableauStart.push_back(tableau.nnz);
     tableau.tableauRowIndex.push_back(i + _numTrueCol_);
   }
-  std::cin.get();
+  // std::cin.get();
 }
 
 // // This function collects the reduced Amatrix after a master iteration of 

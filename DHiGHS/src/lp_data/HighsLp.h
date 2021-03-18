@@ -84,13 +84,16 @@ class HighsLp {
   int masterIter = 0;
   // Model data
   int numCol_ = 0;
-  int addNumCol_ = 0;
+  // int addNumCol_ = 0;
   int numRow_ = 0;
-  int addNumRow_ = 0;
+  // int addNumRow_ = 0;
   int numInt_ = 0;
   int nnz_ = 0;
-  int realNumCol_ = 0;
-  int realNumRow_ = 0;
+  // int realNumCol_ = 0;
+  // int realNumRow_ = 0;
+  int numXCol_;
+  int numSCol_;
+  int numRCol_;
 
   std::vector<int> Astart_;
   std::vector<int> addARstart_;
@@ -392,6 +395,9 @@ struct HighsSolution {
 // Struct to contain tableau info
 struct HighsTableau{
   int nnz;
+  int numXCol;
+  int numSCol;
+  int numRCol;
   std::vector<int> tableauRowIndex;
   std::vector<int> ARtableauIndex;
   std::vector<int> ARtableauStart;

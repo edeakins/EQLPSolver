@@ -219,6 +219,9 @@ void HQPrimal::buildTableau(){
   HighsTableau& tableau = workHMO.tableau_;
   // HVector rowAp;
   tableau.nnz = 0;
+  tableau.numXCol = workHMO.lp_.numXCol_;
+  tableau.numSCol = workHMO.lp_.numSCol_;
+  tableau.numRCol = workHMO.lp_.numRCol_;
   // rowAp.setup(row_ap.array.size());
   tableau.ARtableauStart.push_back(0);
   for (int i = 0; i < _numTrueRow_; ++i){
@@ -689,7 +692,7 @@ void HQPrimal::unfold() {
     workHMO.unfoldCount_++;
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);
     columnIn = workHMO.lp_.linkers[i];
-    // std::cout << "columnIn: " << columnIn << std::endl;
+    std::cout << "columnIn: " << columnIn << std::endl;
     timer.stop(simplex_info.clock_[ChuzcPrimalClock]);
     workHMO.simplex_info_.workCost_[columnIn] = 1;
     workHMO.simplex_info_.workUpper_[columnIn] = +HIGHS_CONST_INF;
