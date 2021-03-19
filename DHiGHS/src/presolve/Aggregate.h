@@ -17,8 +17,10 @@ public:
 					const HighsBasis& basis, const HighsTableau& tableau);
 	void translateFrontsToColors();
 	void packVectors();
+	void scanLiftRows();
 	void foldObj();
 	void foldMatrix();
+	void foldMatrixInit();
 	void liftTabRows();
 	void fixMatrix();
 	void foldRhsInit();
@@ -104,6 +106,7 @@ public:
   	vector<int> tableauIndex;
     vector<double> reducedRhs;
   	vector<int> tableauRowIndex;
+	vector<bool> isRowLifted;
   	int tableauNnz;
 	int tableauNumXCol;
 	int tableauNumSCol;

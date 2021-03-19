@@ -294,9 +294,11 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     alp = lpFolder.getAlp();
     alpBasis = lpFolder.getBasis();
     init_status = highs.passModel(*alp);
+    write_status = highs.writeModel("level_1.lp");
+    // std::cin.get();
     basis_status = highs.setBasis(*alpBasis);
     // if (i == 1 or i == 2)
-    write_status = highs.writeModel("level_1.lp");
+    
       // std::cin.get();
     initial_time = timer.readRunHighsClock();
     run_status = highs.run(); 
@@ -305,10 +307,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     solution = highs.getSolution();
     tableau = highs.getTableau();
     cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-  for (int i = 0; i < solution.col_value.size(); ++i){
-    cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  }
-  std::cin.get();
+    for (int i = 0; i < solution.col_value.size(); ++i){
+      cout << "var_" << i << " = " << solution.col_value[i] << endl;
+    }
+    std::cin.get();
   }
   double obj = 0;
   for (int i = 0; i < solution.col_value.size(); ++i)
