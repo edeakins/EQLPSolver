@@ -295,7 +295,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     alpBasis = lpFolder.getBasis();
     init_status = highs.passModel(*alp);
     write_status = highs.writeModel("level_1.lp");
-    // std::cin.get();
+    std::cout << "model written" << std::endl;
+    std::cin.get();
     basis_status = highs.setBasis(*alpBasis);
     // if (i == 1 or i == 2)
     
@@ -310,7 +311,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     for (int i = 0; i < solution.col_value.size(); ++i){
       cout << "var_" << i << " = " << solution.col_value[i] << endl;
     }
-    std::cin.get();
+    // std::cin.get();
   }
   double obj = 0;
   for (int i = 0; i < solution.col_value.size(); ++i)
