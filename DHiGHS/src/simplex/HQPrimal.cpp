@@ -223,7 +223,8 @@ void HQPrimal::buildTableauInit(){
   tableau.numSCol = workHMO.lp_.numSCol_;
   tableau.numRCol = workHMO.lp_.numRCol_;
   // rowAp.setup(row_ap.array.size());
-  tableau.ARtableauStart.push_back(0);
+  // tableau.ARtableauStart.push_back(0);
+  std::cout << " [ " << std::endl;
   for (int i = 0; i < _numRow_; ++i){
     // std::cout << "row: " << i << std::endl;
     // tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
@@ -234,6 +235,7 @@ void HQPrimal::buildTableauInit(){
     row_ep.packFlag = true;
     workHMO.factor_.btran(row_ep, analysis->row_ep_density);
     computeTableauRowFull(workHMO, row_ep, row_ap);
+    std::cout << " [ ";
     for (int j = 0; j < _numTrueCol_; ++j){
       // if (fabs(row_ap.array[j]) > 1e-10){
       //   ++tableau.nnz;
@@ -241,15 +243,16 @@ void HQPrimal::buildTableauInit(){
       //   tableau.ARtableauValue.push_back(row_ap.array[j]);
       // }
       if (j == _numTrueCol_ - 1){
-        std::cout << row_ap.array[j] << "x_" << j << " = " << workHMO.simplex_info_.baseValue_[i] << " ";
+        std::cout << row_ap.array[j] << " , " << workHMO.simplex_info_.baseValue_[i] << " ] ";
         break;
       }
-      std::cout << row_ap.array[j] << "x_" << j << " + ";
+      std::cout << row_ap.array[j] << " , ";
     }
     std::cout << std::endl;
     // tableau.ARtableauStart.push_back(tableau.nnz);
     // tableau.tableauRowIndex.push_back(i + _numTrueCol_);
   }
+  std::cout << " ] " << std::endl;
   std::cin.get();
 }
 
@@ -285,15 +288,42 @@ void HQPrimal::buildTableau(){
         tableau.ARtableauIndex.push_back(j);
         tableau.ARtableauValue.push_back(row_ap.array[j]);
       }
-      if (j == _numTrueCol_ - 1){
-        std::cout << row_ap.array[j] << "x_" << j << " ";
+      // if (j == _numTrueCol_ - 1){
+      //   std::cout << row_ap.array[j] << "x_" << j << " = " << workHMO.simplex_info_.baseValue_[i] << " ";
+      //   break;
+      // }
+      // std::cout << row_ap.array[j] << "x_" << j << " + ";
+    }
+    // std::cout << std::endl;
+    tableau.ARtableauStart.push_back(tableau.nnz);
+    tableau.tableauRowIndex.push_back(i + _numTrueCol_);
+  }
+  // std::cin.get();
+  for (int i = 0; i < _numRow_; ++i){
+    // std::cout << "row: " << i << std::endl;
+    // tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
+    row_ep.clear();
+    row_ep.count = 1;
+    row_ep.index[0] = i;
+    row_ep.array[i] = 1;
+    row_ep.packFlag = true;
+    workHMO.factor_.btran(row_ep, analysis->row_ep_density);
+    computeTableauRowFull(workHMO, row_ep, row_ap);
+    for (int j = 0; j < _numCol_; ++j){
+      // if (fabs(row_ap.array[j]) > 1e-10){
+      //   ++tableau.nnz;
+      //   tableau.ARtableauIndex.push_back(j);
+      //   tableau.ARtableauValue.push_back(row_ap.array[j]);
+      // }
+      if (j == _numCol_ - 1){
+        std::cout << row_ap.array[j] << "x_" << j << " = " << workHMO.simplex_info_.baseValue_[i] << " ";
         break;
       }
       std::cout << row_ap.array[j] << "x_" << j << " + ";
     }
     std::cout << std::endl;
-    tableau.ARtableauStart.push_back(tableau.nnz);
-    tableau.tableauRowIndex.push_back(i + _numTrueCol_);
+    // tableau.ARtableauStart.push_back(tableau.nnz);
+    // tableau.tableauRowIndex.push_back(i + _numTrueCol_);
   }
   std::cin.get();
 }
@@ -723,7 +753,7 @@ void HQPrimal::unfold() {
   double init = timer.readRunHighsClock();
   liftStart = true;
   primalRebuild();
-  buildTableauInit();
+  // buildTableauInit();
   liftStart = false;
   double rebTime = timer.readRunHighsClock() - init;
   double cRowTime = 0;
