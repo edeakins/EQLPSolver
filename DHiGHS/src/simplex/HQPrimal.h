@@ -61,6 +61,7 @@ class HQPrimal {
   void devexUpdate();
 
   void buildTableau();
+  void buildTableauInit();
 
   /**
    * @brief Pass the data for the iteration analysis, report and rebuild report

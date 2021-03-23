@@ -272,7 +272,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Intitial solve of level 0 aggregate
   return_status = highs.passHighsOptions(alpOpt);
   init_status = highs.passModel(*alp);
-  // write_status = highs.writeModel("level_0.lp");
+  write_status = highs.writeModel("level_0.lp");
+  std::cout << "Model Written" << std::endl;
+  std::cin.get();
   initial_time = timer.readRunHighsClock();
   run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
