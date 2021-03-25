@@ -55,6 +55,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   alpBasis->col_status.resize(numCol + maxLinkCols + numRow);
   alpBasis->row_status.resize(numRow + maxLinkCols);
   rowSense_.resize(numRow + maxLinkCols);
+  rowIdx_.resize(numRow);
   parent.resize(maxLinkCols);
   child.resize(maxLinkCols);
   coeff.assign(numRow, 0);
@@ -62,7 +63,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   linkARindex.resize(maxLinkSpace);
   linkARvalue.resize(maxLinkSpace);
   linkAlength.assign(numCol + maxLinkCols + numRow, 0);
-  isRowLifted.assign(numRow, false);
+  isLifted.assign(numTot, false);
   // linkLB.assign(maxLinkCols, 0);
   // linkUB.assign(maxLinkCols, 0);
   // coeff.assign(numTot);
@@ -73,45 +74,6 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   foldRhsInit();
   foldBndsInit();
   foldMatrixInit();
-  fixMatrix();
-  foldObj();
-}
-
-void HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solution, 
-                            const HighsBasis& basis, const HighsTableau& tableau){
-  // equtiable partition update
-  partition = ep;
-  // Previous solution
-	col_value = (solution.col_value);
-	row_value = (solution.row_value);
-	// Previous basis
-	col_status = (basis.col_status);
-	row_status = (basis.row_status);
-  // Previous tableau
-  tableauStart = tableau.ARtableauStart;
-  tableauValue = tableau.ARtableauValue;
-  tableauIndex = tableau.ARtableauIndex;
-  reducedRhs = tableau.ARreducedRHS;
-  tableauRowIndex = tableau.tableauRowIndex;
-  tableauNnz = tableau.nnz;
-  tableauNumXCol = tableau.numXCol;
-  tableauNumSCol = tableau.numSCol;
-  tableauNumRCol = tableau.numRCol;
-  reset();
-  translateFrontsToColors();
-  packVectors();
-  scanLiftRows();
-  foldRhs();
-  foldBnds();
-  setRowBasis();
-  setColBasis();
-  liftTabRows();
-  foldMatrix();
-  fixMatrix();
-  identifyLinks();
-  createLinkRows();
-  addCols();
-  addRows();
   fixMatrix();
   std::vector<std::vector<double> > matrix (alp->numRow_, std::vector<double> (alp->numCol_, 0));
   // std::cout << "[ " << std::endl;
@@ -135,6 +97,68 @@ void HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solut
   std::cout << " ]" << std::endl;
   std::cin.get();
   foldObj();
+}
+
+void HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solution, 
+                            const HighsBasis& basis, const HighsTableau& tableau){
+  // equtiable partition update
+  partition = ep;
+  // Previous solution
+	col_value = (solution.col_value);
+	row_value = (solution.row_value);
+	// Previous basis
+	col_status = (basis.col_status);
+	row_status = (basis.row_status);
+  // Previous tableau
+  tStart = tableau.Astart;
+  tIndex = tableau.Aindex;
+  tValue = tableau.Avalue;
+  tBasicIndex = tableau.basicIndex;
+  tBasicValue = tableau.basicValue;
+  tReps = tableau.reps;
+  tNumCol = tableau.numCol;
+  tNumRow = tableau.numRow;
+  tNumRCol = tableau.numRCol;
+  tNumSCol = tableau.numSCol;
+  tNumXCol = tableau.numXCol;
+  reset();
+  translateFrontsToColors();
+  packVectors();
+  scanLifts();
+  liftTableau();
+  foldRhs();
+  foldBnds();
+  setRowBasis();
+  setColBasis();
+  foldMatrix();
+  fixMatrix();
+  identifyLinks();
+  // createLinkRows();
+  // addCols();
+  // addRows();
+  // fixMatrix();
+  // std::vector<std::vector<double> > matrix (alp->numRow_, std::vector<double> (alp->numCol_, 0));
+  // // std::cout << "[ " << std::endl;
+  // for (int i = 0; i < alp->numCol_; ++i){
+  //   // std::cout << " [";
+  //   for (int j = alp->Astart_[i]; j < alp->Astart_[i + 1]; ++j){
+  //     matrix[alp->Aindex_[j]][i] = alp->Avalue_[j]; 
+  //   }
+  // }
+  // std::cout << "[ " << std::endl;
+  // for (int i = 0; i < alp->numRow_; ++i){
+  //   std::cout << " [ ";
+  //   for (int j = 0; j < alp->numCol_; ++j){
+  //     if (j == alp->numCol_ - 1){
+  //       std::cout << matrix[i][j] << ", " << alp->rowUpper_[i] << " ]," << std::endl;
+  //       break;
+  //     } 
+  //     std::cout << matrix[i][j] << ", ";
+  //   }
+  // }
+  // std::cout << " ]" << std::endl;
+  // std::cin.get();
+  // foldObj();
 }
 
 void HighsAggregate::translateFrontsToColors(){
@@ -161,6 +185,9 @@ void HighsAggregate::translateFrontsToColors(){
   alp->numSCol_ = numRow_;
   alp->numRCol_ = 0;
   alp->numRow_ = numRow_;
+  alp->cell = cell;
+  alp->labels.assign(partition.labels, partition.labels + numTot);
+  alp->fronts = cellFront;
 }
 
 void HighsAggregate::packVectors(){
@@ -169,20 +196,22 @@ void HighsAggregate::packVectors(){
     AindexPacked_[i] = cell[Aindex[i] + numCol] - numCol_;
 }
 
-void HighsAggregate::scanLiftRows(){
-  int i, j, currRow = -1;
-  int rep, oldCell, oldRep;
+void HighsAggregate::scanLifts(){
+  int i, rep, c, front, label, lRowCnt = 0, nRowCnt = 0;
   int offset;
-  for (i = 0; i < tableauRowIndex.size(); ++i){
-    offset = tableauRowIndex[i] - tableauNumSCol;
-    oldRep = previousPartition.labels[previousCellFront[offset]];
-    for (j = numCol_; j < numCol_ + numRow_; ++j){
-      rep = partition.labels[cellFront[j]];
-      if (rep == oldRep){
-        isRowLifted[j - numCol_] = true; 
-        break;
-      }  
-    }
+  for (i = 0; i < tReps.size(); ++i){
+    rep =  tReps[i];
+    c = cell[rep];
+    front = cellFront[c];
+    rep = partition.labels[front];
+    isLifted[rep] = true;
+    if (tReps[i] >= numCol) ++nRowCnt;
+  }
+  // std::cout << rowCnt << std::endl;
+  for (i = numCol_; i < numCol_ + numRow_; ++i){
+    rep = partition.labels[cellFront[i]];
+    if (isLifted[rep]) rowIdx_[rep - numCol] = lRowCnt++;
+    else if(!isLifted[rep]) rowIdx_[rep - numCol] = nRowCnt++;
   }
 }
 
@@ -233,35 +262,35 @@ void HighsAggregate::foldMatrixInit(){
 
 // Fold the matrix down based on current ep
 void HighsAggregate::foldMatrix(){
-  int i, j, rep, idx = 0;
-  int oldRowCell, rowCell, oldColCell, colCell;
-  int rowRep, sColRep, oldRep;
-  int sCol;
-  bool rowCol = false;
-  double entry, num, den, scale, size;
-  alp->Astart_[0] = 0;
+  int i, j, oldCol, colRep, rowRep, rowIdx;
+  int c;
+  double entry, scale, num, den;
+  bool rowCol = false, lifted = false;
+  std::pair<int, int> query;
   for (i = 0; i < numCol_; ++i){
-    rep = partition.labels[cellFront[i]];
-    oldColCell = previousCell[rep];
-    for (j = Astart[rep]; j < Astart[rep + 1]; ++j){
-      rowCol = tableauEntry.find(std::pair<int, int>(oldColCell, AindexPacked_[j] + numCol_)) != tableauEntry.end();
-      if ( rowCol){ 
-        size = cellSize[i];
-        scale = tableauEntry[std::pair<int, int>(oldColCell, AindexPacked_[j] + numCol_)];
-        den = previousCellSize[previousCell[rep]];
-        num = cellSize[cell[rep]];
-        entry = scale*(num/den);
-        // std::cout << "entry: " << entry << std::endl;
-        coeff[AindexPacked_[j]] = entry; 
+    colRep = partition.labels[cellFront[i]];
+    oldCol = previousCell[colRep];
+    for (j = Astart[colRep]; j < Astart[colRep + 1]; ++j){
+      c = AindexPacked_[j] + numCol_;
+      rowRep = partition.labels[cellFront[c]];
+      rowIdx = rowIdx_[rowRep - numCol];
+      query = std::pair<int, int>(oldCol, rowIdx);
+      rowCol = tEntry.find(query) != tEntry.end();
+      lifted = isLifted[rowRep];
+      if (lifted && rowCol){
+        num = cellSize[cell[colRep]];
+        den = previousCellSize[previousCell[colRep]];
+        scale = tEntry[query];
+        coeff[rowIdx] = scale*(num/den);
       }
-      else if (isRowLifted[AindexPacked_[j]])
-        coeff[AindexPacked_[j]] = 0;
-      else
-        coeff[AindexPacked_[j]] += Avalue[j];
+      else if (lifted) coeff[rowIdx] = 0;
+      else coeff[rowIdx] += Avalue[j];
     }
-    for (j = 0; j < numRow_; ++j){
+    for (j = 0; j < coeff.size(); ++j){
+      rowRep = partition.labels[cellFront[c]];
+      lifted = isLifted[rowRep];
       if (coeff[j]){
-        alp->Avalue_[alp->nnz_] = coeff[j] * (isRowLifted[j] ? 1 : cellSize[i]);
+        alp->Avalue_[alp->nnz_] = coeff[j] * (lifted ? 1 : cellSize[i]);
         alp->Aindex_[alp->nnz_++] = j;
         coeff[j] = 0;
       }
@@ -269,71 +298,31 @@ void HighsAggregate::foldMatrix(){
     alp->Astart_[i + 1] = alp->nnz_;
   }
   for (i = numCol_; i < numCol_ + numRow_; ++i){
-    // std::cout << "i: " << i << std::endl;
-    rep = partition.labels[cellFront[i]];
-    oldColCell = previousCell[rep];
-    oldRep = previousPartition.labels[previousCellFront[oldColCell]];
-    for (j = 0; j < numRow_; ++j){
-      std::pair<int, int> query = std::pair<int, int>(oldColCell, j + numCol_);
-      rowCol = tableauEntry.find(query) != tableauEntry.end();
-      if (rowCol){
-        oldRep = previousPartition.labels[previousCellFront[oldColCell]];
-        // rowCell = cell[oldRep];
-        size = cellSize[i];
-        scale = tableauEntry[std::pair<int, int>(oldColCell, j + numCol_)];
-        den = previousCellSize[previousCell[rep]];
-        num = cellSize[cell[rep]];
-        entry = scale*(num/den);
-        coeff[j] = entry;
-        alp->Avalue_[alp->nnz_] = entry;
-        alp->Aindex_[alp->nnz_++] = j;
-      }
-      else if (i == j + numCol_){
-        if (rowSense_[i - numCol_].compare("<=")){
-          alp->Avalue_[alp->nnz_] = cellSize[j + numCol_] * 1;
-          coeff[j] = cellSize[j + numCol_] * 1;
-          alp->Aindex_[alp->nnz_++] = j;
-        }
-        else if (rowSense_[i - numCol_].compare(">=")){
-          alp->Avalue_[alp->nnz_] = cellSize[j + numCol_] * -1;
-          coeff[j] = cellSize[j + numCol_] * -1;
-          alp->Aindex_[alp->nnz_++] = j;
-        } 
-      } 
+    colRep = partition.labels[cellFront[i]];
+    oldCol = previousCell[colRep];
+    rowRep = partition.labels[cellFront[i]];
+    rowIdx = rowIdx_[rowRep - numCol];
+    query = std::pair<int, int>(oldCol, rowIdx);
+    rowCol = tEntry.find(query) != tEntry.end();
+    lifted = isLifted[rowRep];
+    if (lifted && rowCol){
+      num = cellSize[cell[colRep]];
+      den = previousCellSize[previousCell[colRep]];
+      scale = tEntry[query];
+      coeff[rowIdx] = scale*(num/den);
     }
-    // std::cout << "j loop done" << std::endl;
-    for (int j = 0; j < coeff.size(); ++j){
-      coeff[j] = 0;
-    }
-    alp->Astart_[i + 1] = alp->nnz_;
-    // ++alp->numCol_;
   }
-  // std::cout << "foldMatrix done" << std::endl;
-  // std::cin.get();
 }
 
 // Lift the previous tableau and collect coefficients for this 
 // iteration
-void HighsAggregate::liftTabRows(){
-  int i, j, colRep, rowRep;
-  int rowCell, colCell, oldColCell, offset;
-  double scale, pSize, cSize;
-  for (i = 0; i < tableauStart.size() - 1; ++i){
-    offset = tableauRowIndex[i] - tableauNumSCol;
-    rowRep = previousPartition.labels[previousCellFront[offset]];
-    rowCell = cell[rowRep];
-    for (j = tableauStart[i]; j < tableauStart[i + 1]; ++j){
-      colRep = previousPartition.labels[previousCellFront[tableauIndex[j]]];
-      colCell = cell[colRep];
-      oldColCell = previousCell[colRep];
-      // std::cout << "oldColCell: " << oldColCell << std::endl;
-      // std::cout << "rowCell: " << rowCell << std::endl;
-      // std::cin.get();
-      pSize = previousCellSize[oldColCell];
-      // cSize = cellSize[colCell];
-      scale = (double)pSize;
-      tableauEntry[std::pair<int, int>(oldColCell, rowCell)] = tableauValue[j];
-      tableauScale[std::pair<int, int>(oldColCell, rowCell)] = scale;
+void HighsAggregate::liftTableau(){
+  int i, j, rep, front, offset, c;
+  std::pair<int, int> key;
+  for (i = 0; i < tNumCol; ++i){
+    for (j = tStart[i]; j < tStart[i + 1]; ++j){
+      key = std::pair<int, int>(i, tIndex[j]);
+      tEntry[key] = tValue[j];
     }
   }
 }
@@ -374,7 +363,7 @@ void HighsAggregate::reset(){
     child[i] = -1;
   }
   numLinkers_ = 0;
-  tableauEntry.clear();
+  tEntry.clear();
 }
 
 // Fold the row bounds based on current ep
@@ -404,16 +393,15 @@ void HighsAggregate::foldRhs(){
       rowSense_[i] = ">=";
     else
       rowSense_[i] = "=";
-    if (isRowLifted[i]){
-      rep = partition.labels[cellFront[i + numCol_]];
-      oldRowCell = previousCell[rep];
-      // std::cout << "oldRowCell: " << oldRowCell << std::endl;
-      // std::cin.get();
-      alp->rowLower_[i] = alp->rowUpper_[i] = reducedRhs[oldRowCell - tableauNumXCol];
-    }
-    else{
+    // if (isRowLifted[i]){
+    //   rep = partition.labels[cellFront[i + numCol_]];
+    //   oldRowCell = previousCell[rep];
+    //   // std::cout << "oldRowCell: " << oldRowCell << std::endl;
+    //   // std::cin.get();
+    //   alp->rowLower_[i] = alp->rowUpper_[i] = reducedRhs[oldRowCell - tableauNumXCol];
+    // }
+    // else{
       alp->rowLower_[i] = alp->rowUpper_[i] = rhs * cellSize[i + numCol_];
-    }
     // rep = partition.labels[cellFront[i + numCol_]];
     // rowIdx = previousCell[rep] - previousNumCol_;
     // cellIdx = previousCell[rep];

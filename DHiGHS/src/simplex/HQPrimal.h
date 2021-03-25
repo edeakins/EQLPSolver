@@ -43,6 +43,7 @@ class HQPrimal {
    */
   void solvePhase2();
   void solvePhase3();
+  bool scanForLink(HVector& row);
 
  private:
   void primalRebuild();

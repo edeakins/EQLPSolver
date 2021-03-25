@@ -17,11 +17,11 @@ public:
 					const HighsBasis& basis, const HighsTableau& tableau);
 	void translateFrontsToColors();
 	void packVectors();
-	void scanLiftRows();
+	void scanLifts();
 	void foldObj();
 	void foldMatrix();
 	void foldMatrixInit();
-	void liftTabRows();
+	void liftTableau();
 	void fixMatrix();
 	void foldRhsInit();
 	void foldRhs();
@@ -101,12 +101,19 @@ public:
 	vector<HighsBasisStatus> row_status;
 	vector<bool> nonBasicCol;
 	vector<bool> nonBasicRow;
-	vector<int>  tableauStart;
-  	vector<double> tableauValue;
-  	vector<int> tableauIndex;
-    vector<double> reducedRhs;
-  	vector<int> tableauRowIndex;
-	vector<bool> isRowLifted;
+	int tNumRow;
+	int tNumCol;
+	int tNumRCol;
+	int tNumSCol;
+	int tNumXCol;
+	vector<int>  tStart;
+  	vector<double> tValue;
+  	vector<int> tIndex;
+    // vector<double> tRhs;
+  	vector<double> tBasicValue;
+	vector<int> tBasicIndex;
+	vector<int> tReps;
+	vector<bool> isLifted;
   	int tableauNnz;
 	int tableauNumXCol;
 	int tableauNumSCol;
@@ -133,6 +140,7 @@ public:
     vector<double> colUpper_;
     vector<double> rowLower_;
     vector<double> rowUpper_;
+	vector<int> rowIdx_;
 	vector<std::string> rowSense_;
 	vector<double> AvaluePacked_;
 	vector<int> AindexPacked_;
@@ -150,8 +158,7 @@ public:
 	vector<bool> linked;
 	vector<double> linkLB;
 	vector<double> linkUB;
-	map<pair<int, int>, double> tableauEntry;
-	map<pair<int, int>, double> tableauScale;
+	map<std::pair<int, int>, double> tEntry;
 
 	// For equitable partitions
 	struct eq_part partition;

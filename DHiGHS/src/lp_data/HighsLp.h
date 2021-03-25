@@ -111,6 +111,9 @@ class HighsLp {
   std::vector<int> linkers;
   std::vector<int> artificialVariables;
   std::vector<bool> activeColorHistory;
+  std::vector<int> cell;
+  std::vector<int> labels;
+  std::vector<int> fronts;
 
 
   // sense 1 = minimize, -1 = maximize
@@ -395,14 +398,17 @@ struct HighsSolution {
 // Struct to contain tableau info
 struct HighsTableau{
   int nnz;
+  int numCol;
+  int numRow;
   int numXCol;
   int numSCol;
   int numRCol;
-  std::vector<int> tableauRowIndex;
-  std::vector<int> ARtableauIndex;
-  std::vector<int> ARtableauStart;
-  std::vector<double> ARtableauValue;
-  std::vector<double> ARreducedRHS;
+  std::vector<int> Aindex;
+  std::vector<int> Astart;
+  std::vector<double> Avalue;
+  std::vector<double> basicValue;
+  std::vector<int> basicIndex;
+  std::vector<int> reps;
 };
 
 // To be the basis representation given back to the user. Values of

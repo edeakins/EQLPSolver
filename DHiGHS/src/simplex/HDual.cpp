@@ -277,47 +277,68 @@ HighsStatus HDual::solve() {
 }
 
 void HDual::buildTableau(){
-  int _numRow_ = workHMO.lp_.numRow_;
-  int _numCol_ = workHMO.lp_.numCol_;
-  int _numLinkers_ = workHMO.lp_.numLinkers;
-  int _numTrueRow_ = _numRow_ - _numLinkers_;
-  int _numTrueCol_ = _numCol_ - _numLinkers_;
-  // std::cout << workHMO.lp_.numLinkers << std::endl;
-  // std::cin.get();
-  HighsTableau& tableau = workHMO.tableau_;
-  // HVector row_ap;
-  tableau.nnz = 0;
-  tableau.numXCol = workHMO.lp_.numXCol_;
-  tableau.numSCol = workHMO.lp_.numSCol_;
-  tableau.numRCol = workHMO.lp_.numRCol_;
-  // row_ap.setup(row_ap.array.size());
-  tableau.ARtableauStart.push_back(0);
-  for (int i = 0; i < _numTrueRow_; ++i){
-    tableau.ARreducedRHS.push_back(workHMO.simplex_info_.baseValue_[i]);
-    row_ep.clear();
-    row_ep.count = 1;
-    row_ep.index[0] = i;
-    row_ep.array[i] = 1;
-    row_ep.packFlag = true;
-    workHMO.factor_.btran(row_ep, analysis->row_ep_density);
-    computeTableauRowFull(workHMO, row_ep, row_ap);
-    for (int j = 0; j < _numTrueCol_; ++j){
-      if (fabs(row_ap.array[j]) > 1e-10){
-        ++tableau.nnz;
-        tableau.ARtableauIndex.push_back(j);
-        tableau.ARtableauValue.push_back(row_ap.array[j]);
-      }
-      // if (j == _numTrueCol_ - 1){
-      //   std::cout << row_ap.array[j] << "x_" << j << " ";
-      //   break;
-      // }
-      // std::cout << row_ap.array[j] << "x_" << j << " + ";
-    }
-    // std::cout << std::endl;
-    tableau.ARtableauStart.push_back(tableau.nnz);
-    tableau.tableauRowIndex.push_back(i + _numTrueCol_);
+  // Book keeping keep track of number of x, s, r
+  int* nnz = &workHMO.tableau_.nnz;
+  int* numXCol = &workHMO.tableau_.numXCol;
+  int* numSCol = &workHMO.tableau_.numSCol;
+  int* numRCol = &workHMO.tableau_.numRCol;
+  int* numCol = &workHMO.tableau_.numCol;
+  int* numRow = &workHMO.tableau_.numRow;
+  *numXCol = workHMO.lp_.numXCol_;
+  *numSCol = workHMO.lp_.numSCol_;
+  *numRCol = workHMO.lp_.numRCol_;
+  *numCol = workHMO.lp_.numCol_;
+  *numRow = workHMO.lp_.numRow_;
+  // Book keeping for tableau entries
+  std::vector<int>& Astart = workHMO.tableau_.Astart;
+  std::vector<int>& Aindex = workHMO.tableau_.Aindex;
+  std::vector<double>& Avalue = workHMO.tableau_.Avalue;
+  std::vector<double>& basicValue = workHMO.tableau_.basicValue;
+  std::vector<int>& basicIndex = workHMO.tableau_.basicIndex;
+  std::vector<int>& reps = workHMO.tableau_.reps;
+  std::vector<int>& cell = workHMO.lp_.cell;
+  std::vector<int>& labels = workHMO.lp_.labels;
+  std::vector<int>& fronts = workHMO.lp_.fronts;
+  for(int i = 0; i < *numCol - *numRCol; ++i){
+    int front = fronts[i];
+    int label = labels[front];
+    reps.push_back(label);
   }
-  // std::cin.get();
+  // Tease out rows for which r columns are basic
+  std::vector<bool> skipRows(*numRow, false);
+  int numLinkers = workHMO.lp_.numLinkers;
+  // int cnt = 0;
+  for (int i = *numXCol + *numSCol; i < *numXCol + *numSCol + *numRCol; ++i){
+    col_aq.clear();
+    col_aq.packFlag = true;
+    workHMO.matrix_.collect_aj(col_aq, i, 1);
+    workHMO.factor_.ftran(col_aq, analysis->col_aq_density);
+    for (int j = 0; j < *numRow; ++j){
+      if (col_aq.array[j] == 1){
+        skipRows[j] = true;
+        break;
+      }
+    }
+  }
+  // Compute column entries for tableau
+  Astart.push_back(0);
+  for (int i = 0; i < *numCol - numLinkers; ++i){
+    col_aq.clear();
+    col_aq.packFlag = true;
+    workHMO.matrix_.collect_aj(col_aq, i, 1);
+    workHMO.factor_.ftran(col_aq, analysis->col_aq_density);
+    for (int j = 0; j < *numRow; ++j){
+      if (skipRows[j]) continue;
+      if (col_aq.array[j]){
+        Avalue.push_back(col_aq.array[j]);
+        Aindex.push_back(j);
+      }
+    }
+    Astart.push_back(Avalue.size());
+  }
+  basicValue = workHMO.simplex_info_.baseValue_;
+  basicIndex = workHMO.simplex_basis_.basicIndex_;
+  std::cout << "tableau" << std::endl;
 }
 
 // // This function collects the reduced Amatrix after a master iteration of 
