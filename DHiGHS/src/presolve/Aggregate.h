@@ -114,6 +114,7 @@ public:
 	vector<int> tBasicIndex;
 	vector<int> tReps;
 	vector<bool> isLifted;
+	vector<bool> isBasic;
   	int tableauNnz;
 	int tableauNumXCol;
 	int tableauNumSCol;

@@ -64,6 +64,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   linkARvalue.resize(maxLinkSpace);
   linkAlength.assign(numCol + maxLinkCols + numRow, 0);
   isLifted.assign(numTot, false);
+  isBasic.assign(numTot, false);
   // linkLB.assign(maxLinkCols, 0);
   // linkUB.assign(maxLinkCols, 0);
   // coeff.assign(numTot);
@@ -133,32 +134,32 @@ void HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solut
   foldMatrix();
   fixMatrix();
   identifyLinks();
-  // createLinkRows();
-  // addCols();
-  // addRows();
-  // fixMatrix();
-  // std::vector<std::vector<double> > matrix (alp->numRow_, std::vector<double> (alp->numCol_, 0));
-  // // std::cout << "[ " << std::endl;
-  // for (int i = 0; i < alp->numCol_; ++i){
-  //   // std::cout << " [";
-  //   for (int j = alp->Astart_[i]; j < alp->Astart_[i + 1]; ++j){
-  //     matrix[alp->Aindex_[j]][i] = alp->Avalue_[j]; 
-  //   }
-  // }
+  createLinkRows();
+  addCols();
+  addRows();
+  fixMatrix();
+  std::vector<std::vector<double> > matrix (alp->numRow_, std::vector<double> (alp->numCol_, 0));
   // std::cout << "[ " << std::endl;
-  // for (int i = 0; i < alp->numRow_; ++i){
-  //   std::cout << " [ ";
-  //   for (int j = 0; j < alp->numCol_; ++j){
-  //     if (j == alp->numCol_ - 1){
-  //       std::cout << matrix[i][j] << ", " << alp->rowUpper_[i] << " ]," << std::endl;
-  //       break;
-  //     } 
-  //     std::cout << matrix[i][j] << ", ";
-  //   }
-  // }
-  // std::cout << " ]" << std::endl;
-  // std::cin.get();
-  // foldObj();
+  for (int i = 0; i < alp->numCol_; ++i){
+    // std::cout << " [";
+    for (int j = alp->Astart_[i]; j < alp->Astart_[i + 1]; ++j){
+      matrix[alp->Aindex_[j]][i] = alp->Avalue_[j]; 
+    }
+  }
+  std::cout << "[ " << std::endl;
+  for (int i = 0; i < alp->numRow_; ++i){
+    std::cout << " [ ";
+    for (int j = 0; j < alp->numCol_; ++j){
+      if (j == alp->numCol_ - 1){
+        std::cout << matrix[i][j] << ", " << alp->rowUpper_[i] << " ]," << std::endl;
+        break;
+      } 
+      std::cout << matrix[i][j] << ", ";
+    }
+  }
+  std::cout << " ]" << std::endl;
+  std::cin.get();
+  foldObj();
 }
 
 void HighsAggregate::translateFrontsToColors(){
@@ -213,6 +214,10 @@ void HighsAggregate::scanLifts(){
     if (isLifted[rep]) rowIdx_[rep - numCol] = lRowCnt++;
     else if(!isLifted[rep]) rowIdx_[rep - numCol] = nRowCnt++;
   }
+  for (i = 0; i < tBasicIndex.size(); ++i){
+    rep = previousPartition.labels[previousCellFront[tBasicIndex[i]]];
+    isBasic[rep] = true;
+  }
 }
 
 // Fold the objective
@@ -265,8 +270,9 @@ void HighsAggregate::foldMatrix(){
   int i, j, oldCol, colRep, rowRep, rowIdx;
   int c;
   double entry, scale, num, den;
-  bool rowCol = false, lifted = false;
-  std::pair<int, int> query;
+  bool rowCol = false, lifted = false, basic = false;
+  map<pair<int, int>, int>::iterator it;
+  pair<int, int> query;
   for (i = 0; i < numCol_; ++i){
     colRep = partition.labels[cellFront[i]];
     oldCol = previousCell[colRep];
@@ -286,6 +292,7 @@ void HighsAggregate::foldMatrix(){
       else if (lifted) coeff[rowIdx] = 0;
       else coeff[rowIdx] += Avalue[j];
     }
+    std::cout << "x loop" << std::endl;
     for (j = 0; j < coeff.size(); ++j){
       rowRep = partition.labels[cellFront[c]];
       lifted = isLifted[rowRep];
@@ -304,13 +311,46 @@ void HighsAggregate::foldMatrix(){
     rowIdx = rowIdx_[rowRep - numCol];
     query = std::pair<int, int>(oldCol, rowIdx);
     rowCol = tEntry.find(query) != tEntry.end();
-    lifted = isLifted[rowRep];
-    if (lifted && rowCol){
+    lifted = isBasic[rowRep];
+    basic = isLifted[colRep];
+    if (lifted && basic){
       num = cellSize[cell[colRep]];
       den = previousCellSize[previousCell[colRep]];
       scale = tEntry[query];
       coeff[rowIdx] = scale*(num/den);
     }
+    else{
+      for (j = numCol_; j < numCol_ + numRow_; ++j){
+        rowRep = partition.labels[cellFront[j]];
+        rowIdx = rowIdx_[rowRep - numCol];
+        query = std::pair<int, int>(oldCol, rowIdx);
+        rowCol = tEntry.find(query) != tEntry.end();
+        if (rowCol){
+          num = cellSize[cell[colRep]];
+          den = previousCellSize[previousCell[colRep]];
+          scale = tEntry[query];
+          coeff[rowIdx] = scale*(num/den);
+        }
+        else if(i == j){
+          if (rowSense_[i - numCol_].compare("<="))
+            coeff[rowIdx] = cellSize[i] * -1;
+          else if (rowSense_[i - numCol_].compare(">="))
+            coeff[rowIdx] = cellSize[i] * -1;
+        }
+      }
+    }
+    std::cout << "coeff built" << std::endl;
+    for (j = 0; j < coeff.size(); ++j){
+      rowRep = partition.labels[cellFront[c]];
+      lifted = isLifted[rowRep];
+      if (coeff[j]){
+        alp->Avalue_[alp->nnz_] = coeff[j];
+        alp->Aindex_[alp->nnz_++] = j;
+        coeff[j] = 0;
+      }
+    }
+    alp->Astart_[i + 1] = alp->nnz_;
+    // std::cout << "slack loop" << std::endl;
   }
 }
 
@@ -342,6 +382,8 @@ void HighsAggregate::reset(){
     previousCellSize[i] = cellSize[i];
     previousCellFront[i] = cellFront[i];
     cellSize[i] = 0;
+    isLifted[i] = false;
+    isBasic[i] = false;
   }
   previousPartition = partition;
   for (i = 0; i < numCol; ++i)
