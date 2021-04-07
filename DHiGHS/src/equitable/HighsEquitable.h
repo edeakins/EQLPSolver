@@ -29,6 +29,7 @@ public:
 	HighsEquitable(const HighsLp& lp);
     eq_part* refine();
     int getNumRefinements();
+    void removeDupRows();
     void lp2Graph();
     void doSaucyEquitable();
     int init_fixadj1(int n, int* adj);

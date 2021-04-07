@@ -35,6 +35,14 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
 	rowNames.assign(lp.row_names_.begin(), lp.row_names_.end());
 }
 
+// void HighsEquitable::removeDupRows(){
+// 	int i, j;
+// 	bool sameRow = true;
+// 	for (i = 0; i < nCols; ++i){
+// 		for (j = Astart[i]; j < Astart[i + 1]; ++j)
+// 	}
+// }
+
 int HighsEquitable::init_fixadj1( int n, int *adj ){
 	int val, sum, i;
     /* Translate adj values to real locations */

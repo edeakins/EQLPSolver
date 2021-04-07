@@ -277,6 +277,7 @@ HighsStatus HDual::solve() {
 }
 
 void HDual::buildTableau(){
+  // printTableau();
   // Book keeping keep track of number of x, s, r
   int* nnz = &workHMO.tableau_.nnz;
   int* numXCol = &workHMO.tableau_.numXCol;
@@ -314,7 +315,7 @@ void HDual::buildTableau(){
     workHMO.matrix_.collect_aj(col_aq, i, 1);
     workHMO.factor_.ftran(col_aq, analysis->col_aq_density);
     for (int j = 0; j < *numRow; ++j){
-      if (col_aq.array[j] == 1){
+      if (std::fabs(col_aq.array[j] - 1) <= 1e-6){
         skipRows[j] = true;
         break;
       }
@@ -338,7 +339,45 @@ void HDual::buildTableau(){
   }
   basicValue = workHMO.simplex_info_.baseValue_;
   basicIndex = workHMO.simplex_basis_.basicIndex_;
-  std::cout << "tableau" << std::endl;
+  for (int i = 0; i < basicValue.size(); ++i)
+    if (std::fabs(basicValue[i]) < 1e-6) basicValue[i] = 0;
+  // std::cout << "tableau" << std::endl;
+}
+
+// This function collects the reduced Amatrix after a master iteration of 
+// the unfolding procedure
+void HDual::printTableau(){
+  int _numRow_ = workHMO.lp_.numRow_;
+  int _numCol_ = workHMO.lp_.numCol_;
+  int _numLinkers_ = workHMO.lp_.numLinkers;
+  int _numTrueRow_ = _numRow_ - _numLinkers_;
+  int _numTrueCol_ = _numCol_ - _numLinkers_;
+  HighsTableau& tableau = workHMO.tableau_;
+  // HVector rowAp;
+  // tableau.nnz = 0;
+  tableau.numXCol = workHMO.lp_.numXCol_;
+  tableau.numSCol = workHMO.lp_.numSCol_;
+  tableau.numRCol = workHMO.lp_.numRCol_;
+  std::cout << "[";
+  for (int i = 0; i < _numRow_; ++i){
+    row_ep.clear();
+    row_ep.count = 1;
+    row_ep.index[0] = i;
+    row_ep.array[i] = 1;
+    row_ep.packFlag = true;
+    workHMO.factor_.btran(row_ep, analysis->row_ep_density);
+    computeTableauRowFull(workHMO, row_ep, row_ap);
+    std::cout << "[ ";
+    for (int j = 0; j < _numCol_; ++j){
+      if (j == _numCol_ - 1){
+        std::cout << row_ap.array[j] << ", " << workHMO.simplex_info_.baseValue_[i] << " ],";
+        break;
+      }
+      std::cout << row_ap.array[j] << ", ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << "]" << std::endl;
 }
 
 // // This function collects the reduced Amatrix after a master iteration of 

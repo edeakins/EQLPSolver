@@ -77,6 +77,7 @@ class HDual {
 
  public:
   void buildTableau();
+  void printTableau();
   /**
    * @brief Set solver options from simplex options
    */

@@ -272,7 +272,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Intitial solve of level 0 aggregate
   return_status = highs.passHighsOptions(alpOpt);
   init_status = highs.passModel(*alp);
-  write_status = highs.writeModel("level_0.lp");
+  // write_status = highs.writeModel("level_0.lp");
   // std::cout << "Model Written" << std::endl;
   // std::cin.get();
   initial_time = timer.readRunHighsClock();
@@ -296,9 +296,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     alp = lpFolder.getAlp();
     alpBasis = lpFolder.getBasis();
     init_status = highs.passModel(*alp);
-    write_status = highs.writeModel("level_1.lp");
-    std::cout << "model written" << std::endl;
-    std::cin.get();
+    // write_status = highs.writeModel("level_1.lp");
+    // std::cout << "model written" << std::endl;
+    // std::cin.get();
     basis_status = highs.setBasis(*alpBasis);
     // if (i == 1 or i == 2)
     
@@ -309,10 +309,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     basis = highs.getBasis();
     solution = highs.getSolution();
     tableau = highs.getTableau();
-    cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-    for (int i = 0; i < solution.col_value.size(); ++i){
-      cout << "var_" << i << " = " << solution.col_value[i] << endl;
-    }
+    // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+    // for (int i = 0; i < solution.col_value.size(); ++i){
+    //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
+    // }
     // std::cin.get();
   }
   double obj = 0;

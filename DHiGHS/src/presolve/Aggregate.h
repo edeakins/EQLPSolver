@@ -113,12 +113,16 @@ public:
   	vector<double> tBasicValue;
 	vector<int> tBasicIndex;
 	vector<int> tReps;
+	vector<double> tRhs;
+	vector<bool> newRowLifted;
 	vector<bool> isLifted;
 	vector<bool> isBasic;
   	int tableauNnz;
 	int tableauNumXCol;
 	int tableauNumSCol;
 	int tableauNumRCol;
+	int lRowCnt;
+	int nRowCnt;
 
 	/* New scalars for the current aggregated lp */
 	int numRow_ = 0;
