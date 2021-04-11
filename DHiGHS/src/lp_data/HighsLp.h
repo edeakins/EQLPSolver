@@ -82,6 +82,9 @@ class HighsLp {
   }
   // Iteration Data
   int masterIter = 0;
+  int unfoldIter = 0;
+  double invertTime = 0;
+  double pivotTime = 0;
   // Model data
   int numCol_ = 0;
   int addNumCol_ = 0;

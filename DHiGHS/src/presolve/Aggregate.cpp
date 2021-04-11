@@ -163,6 +163,9 @@ void HighsAggregate::fixMatrix(){
 void HighsAggregate::reset(){
   int i;
   alp->nnz_ = 0;
+  alp->pivotTime = 0;
+  alp->invertTime = 0;
+  alp->unfoldIter = 0;
   previousNumCol_ = alp->numCol_ - numLinkers_;
   for (i = 0; i < numTot; ++i){
     previousCell[i] = cell[i];
@@ -195,8 +198,8 @@ void HighsAggregate::foldRhsInit(){
   int i, rep;
   for (i = 0; i < numRow_; ++i){
     rep = partition.labels[cellFront[i + numCol_]] - numCol;
-    alp->rowLower_[i] = rowLower[rep] * cellSize[i + numCol_];
-    alp->rowUpper_[i] = rowUpper[rep] * cellSize[i + numCol_];
+    alp->rowLower_[i] = std::max(rowLower[rep] * cellSize[i + numCol_], -HIGHS_CONST_INF);
+    alp->rowUpper_[i] = std::min(rowUpper[rep] * cellSize[i + numCol_], HIGHS_CONST_INF);
   }
 }
 
@@ -215,8 +218,8 @@ void HighsAggregate::foldRhs(){
       alp->rowUpper_[i] = rowUpper[rep - numCol] * cellSize[i + numCol_];  
     }
     else{
-      alp->rowLower_[i] = rowLower[rep - numCol] * cellSize[i + numCol_];
-      alp->rowUpper_[i] = rowUpper[rep - numCol] * cellSize[i + numCol_];  
+      alp->rowLower_[i] = std::max(rowLower[rep] * cellSize[i + numCol_], -HIGHS_CONST_INF);
+    alp->rowUpper_[i] = std::min(rowUpper[rep] * cellSize[i + numCol_], HIGHS_CONST_INF);  
     }
   }
 }

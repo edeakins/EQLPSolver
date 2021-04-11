@@ -363,7 +363,7 @@ void HDualRow::createFreelist() {
   if (freeList.size() > 0) {
     //  int freeListSa = *freeList.begin();
     //  int freeListE = *freeList.end();
-    freeListSize = *freeList.end();
+    freeListSize = freeList.size();
     if (freeListSize != ckFreeListSize) {
       printf("!! STRANGE: freeListSize != ckFreeListSize\n");
     }
@@ -414,7 +414,7 @@ void HDualRow::deleteFreelist(int iColumn) {
     int ckFreeListSize = 0;
     set<int>::iterator sit;
     for (sit = freeList.begin(); sit != freeList.end(); sit++) ckFreeListSize++;
-    freeListSize = *freeList.end();
+    freeListSize = freeList.size();
     if (freeListSize != ckFreeListSize) {
       printf("!! STRANGE: freeListSize != ckFreeListSize\n");
     }

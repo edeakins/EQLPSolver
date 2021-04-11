@@ -648,6 +648,7 @@ void HQPrimal::primalRebuild() {
 }
 
 void HQPrimal::unfold() {
+  ++workHMO.lp_.masterIter;
   fTranTime = 0;
   Chuzc1Time = 0;
   Chuzc2Time = 0;
@@ -673,15 +674,17 @@ void HQPrimal::unfold() {
   // buildTableau();
   liftStart = false;
   double rebTime = timer.readRunHighsClock() - init;
+  workHMO.lp_.invertTime = rebTime;
   double cRowTime = 0;
-  double uTime = 0;
+  // double uTime = 0;
   // std::cout << "REBUILD TIME: " << rebTime << std::endl;
   // std::cout << "START PIVOTS" << std::endl;
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numLinkers;
+  init = timer.readRunHighsClock();
   for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
     // std::cout << i << std::endl;
     // simplex_info.update_count = 0;
-    workHMO.unfoldCount_++;
+    ++workHMO.lp_.unfoldIter;
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);
     columnIn = workHMO.lp_.linkers[i];
     // std::cout << "columnIn: " << columnIn << std::endl;
@@ -691,7 +694,7 @@ void HQPrimal::unfold() {
     workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
     workHMO.simplex_info_.workValue_[columnIn] = 0;
     workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
-    init = timer.readRunHighsClock();
+    
     primalChooseRow();
     cRowTime += timer.readRunHighsClock() - init;
     // initial_time = timer.readRunHighsClock();
@@ -702,7 +705,8 @@ void HQPrimal::unfold() {
     workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF;
     // if (invertHint) primalRebuild();
   }
-  double time = timer.readRunHighsClock() - init;
+  double uTime = timer.readRunHighsClock() - init;
+  workHMO.lp_.pivotTime = uTime;
   // std::cout << "Ftran time: " << fTranTime << std::endl;
   // std::cout << "Chuzc1 time: " << Chuzc1Time << std::endl;
   // std::cout << "Chuzc2 time: " << Chuzc2Time << std::endl;
