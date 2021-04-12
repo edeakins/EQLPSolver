@@ -9,6 +9,9 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   nnz = lp.nnz_;
 	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
 	rowUpper.assign(lp.rowUpper_.begin(), lp.rowUpper_.end());
+  // for (int i = 0; i < lp.colLower_.size(); ++i){
+  //   lp.colUpper_[i] = +HIGHS_CONST_INF;
+  // }
 	colUpper.assign(lp.colUpper_.begin(), lp.colUpper_.end());
 	colLower.assign(lp.colLower_.begin(), lp.colLower_.end());
 	colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
