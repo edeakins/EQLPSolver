@@ -10,12 +10,14 @@
 class HighsAggregate{
 public:
 	HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
-	void update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis);
+	bool update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis);
 	void translateFrontsToColors();
 	void packVectors();
 	void foldObj();
 	void foldMatrix();
 	void fixMatrix();
+	void findRowRepsToFix();
+	void findColRepsToFix();
 	void foldRhsInit();
 	void foldRhs();
 	void foldBndsInit();
@@ -28,6 +30,7 @@ public:
 	void identifyLinks();
 	void createLinkRows();
 	void reset();
+	void preprocess();
 	HighsLp* getAlp();
 	HighsBasis* getBasis();
 	void clear();
@@ -62,6 +65,7 @@ public:
 
 	/* Scalar values that contain dimensional and
 	name data about the original lp */
+	int iter;
 	int numRow;
 	int numCol;
 	int numTot;
@@ -118,6 +122,11 @@ public:
     vector<double> rowUpper_;
 	vector<double> AvaluePacked_;
 	vector<int> AindexPacked_;
+	vector<bool> rowRepsToFix;
+	vector<double> rowRepsValue;
+	vector<double> rowRepsScale;
+	vector<bool> colRepsToFix;
+	vector<double> colRepsValue;
 	vector<bool> inMat;
 	vector<int> parent;
 	vector<int> child;
@@ -132,14 +141,19 @@ public:
 	vector<bool> linked;
 	vector<double> linkLB;
 	vector<double> linkUB;
+	vector<bool> skipLink;
 
 	// For equitable partitions
 	struct eq_part partition;
+	struct eq_part previousPartition;
+	vector<int> labels;
 	vector<int> cell;
 	vector<int> cellFront;
 	vector<int> cellSize;
 	vector<int> previousCell;
 	vector<int> previousCellSize;
+	vector<int> previousCellFront;
+	vector<int> previousLabels;
 };
 
 #endif

@@ -268,7 +268,7 @@ void HQPrimal::solvePhase3() {
 
   // Setup update limits
   simplex_info.update_limit =
-      min(400 + solver_num_row / 100,
+      min(100 + solver_num_row / 100,
           1000);  // TODO: Consider allowing the dual limit to be used
   simplex_info.update_count = 0;
 
@@ -668,20 +668,22 @@ void HQPrimal::unfold() {
   HighsTimer& timer = workHMO.timer_;
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
-  double init = timer.readRunHighsClock();
+  // double init = timer.readRunHighsClock();
   liftStart = true;
   primalRebuild();
   // buildTableau();
   liftStart = false;
-  double rebTime = timer.readRunHighsClock() - init;
-  workHMO.lp_.invertTime = rebTime;
-  double cRowTime = 0;
+  // double rebTime = timer.readRunHighsClock() - init;
+  // workHMO.lp_.invertTime = rebTime;
+  // double cRowTime = 0;
   // double uTime = 0;
   // std::cout << "REBUILD TIME: " << rebTime << std::endl;
   // std::cout << "START PIVOTS" << std::endl;
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numLinkers;
-  init = timer.readRunHighsClock();
+  // init = timer.readRunHighsClock();
+  int cnt = 0;
   for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
+    cnt++;
     // std::cout << i << std::endl;
     // simplex_info.update_count = 0;
     ++workHMO.lp_.unfoldIter;
@@ -696,17 +698,18 @@ void HQPrimal::unfold() {
     workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
     
     primalChooseRow();
-    cRowTime += timer.readRunHighsClock() - init;
+    // cRowTime += timer.readRunHighsClock() - init;
     // initial_time = timer.readRunHighsClock();
     primalUpdate();
     // uTime += timer.readRunHighsClock() - initial_time;
     workHMO.simplex_info_.workCost_[columnIn] = 0;
     workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
     workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF;
-    // if (invertHint) primalRebuild();
+    
   }
-  double uTime = timer.readRunHighsClock() - init;
-  workHMO.lp_.pivotTime = uTime;
+  primalRebuild();
+  // double uTime = timer.readRunHighsClock() - init;
+  // workHMO.lp_.pivotTime = uTime;
   // std::cout << "Ftran time: " << fTranTime << std::endl;
   // std::cout << "Chuzc1 time: " << Chuzc1Time << std::endl;
   // std::cout << "Chuzc2 time: " << Chuzc2Time << std::endl;

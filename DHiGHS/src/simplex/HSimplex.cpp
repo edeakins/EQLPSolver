@@ -335,6 +335,7 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
   if (highs_model_object.options_.simplex_initial_condition_check) {
     basis_condition_ok = basisConditionOk(highs_model_object, "Initial");
   }
+  basis_condition_ok = true;
   // ToDo Handle ill-conditioned basis with basis crash, in which case
   // ensure that HiGHS and simplex basis are invalidated and simplex
   // work and base arrays are re-populated

@@ -1,0 +1,1 @@
+/usr/bin/c++   -fopenmp -Wall -Wextra -Wno-unused-parameter -pedantic -D_GLIBCXX_DEBUG -g -D_DEBUG -O0  -rdynamic CMakeFiles/highs.dir/RunHighs.cpp.o  -o ../bin/highs  -Wl,-rpath,/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/lib: ../lib/libhighs.so.1.0.0 ../lib/libipx.so ../lib/libbasiclu.so 
