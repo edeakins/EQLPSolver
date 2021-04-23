@@ -29,6 +29,20 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   previousCellSize.resize(numTot);
   previousCellFront.resize(numTot);
   previousLabels.resize(numTot);
+  colsToReps.assign(numCol, -1);
+  prevColsToReps.assign(numCol, -1);
+  repsToCols.assign(numCol, -1);
+  prevRepsToCols.assign(numCol, -1);
+  rowsToReps.assign(numRow, -1);
+  prevRowsToReps.assign(numRow, -1);
+  repsToRows.assign(numRow, -1);
+  prevRepsToRows.assign(numRow, -1);
+  lastSolveRow.resize(numRow);
+  lastSolveCol.resize(numCol);
+  row.resize(numRow);
+  prevCol.resize(numCol);
+  col.resize(numCol);
+  cellMarked.assign(numCol, false);
   linked.resize(numCol);
 	// Previous solution
 	col_value = (solution.col_value);
@@ -93,6 +107,7 @@ bool HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solut
 	col_status = (basis.col_status);
 	row_status = (basis.row_status);
   reset();
+  saveRowsAndColsFromLastSolve();
   translateFrontsToColors();
   identifyLinks();
   if (!numLinkers_) return false;
@@ -113,10 +128,13 @@ bool HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solut
 }
 
 void HighsAggregate::translateFrontsToColors(){
-  int i = 0, c = 0;
+  int i = 0, c = 0, r = 0, rep, cf, colCounter = 0, rowCounter = 0;
   map<int, int> fCell;
   // map fronts to colors and count numCol_ and numRow_
+  previousNumCol_ = numCol_;
   numCol_ = numRow_ = numTot_ = 0;
+  prevCol = col;
+  int numColCell = 0;
   for (i = 0; i < numTot; ++i){
     if (fCell.insert(pair<int, int>(partition.fronts[i], c)).second){
       ++c;
@@ -134,12 +152,38 @@ void HighsAggregate::translateFrontsToColors(){
   }
   alp->numCol_ = numCol_;
   alp->numRow_ = numRow_;
+  for (i = 0; i < numCol_; ++i){
+    cf = cellFront[i];
+    rep = labels[cf];
+    repsToCols[rep] = colCounter;
+    colsToReps[colCounter++] = rep;
+  }
+  for (i = 0; i < numRow_; ++i){
+    cf = cellFront[i + numCol_];
+    rep = labels[cf];
+    repsToRows[rep - numCol] = rowCounter;
+    rowsToReps[rowCounter++] = rep - numCol;
+  }
+  for (i = 0; i < numCol; ++i){
+    cf = cellFront[cell[i]];
+    rep = labels[cf];
+    c = repsToCols[rep];
+    col[i] = c;
+  }
+  for (i = numCol; i < numTot; ++i){
+    cf = cellFront[cell[i]];
+    rep = labels[cf];
+    r = repsToRows[rep - numCol];
+    row[i - numCol] = r;
+  }
 }
 
 void HighsAggregate::packVectors(){
-  int i;
-  for (i = 0; i < nnz; ++i)
-    AindexPacked_[i] = cell[Aindex[i] + numCol] - numCol_;
+  int i, r;
+  for (i = 0; i < nnz; ++i){
+    r = row[Aindex[i]];
+    AindexPacked_[i] = r;
+  }
 }
 
 // Find the rows to fix from the original aggregate
@@ -192,16 +236,18 @@ void HighsAggregate::foldObj(){
 
 // Fold the matrix down based on current ep
 void HighsAggregate::foldMatrix(){
-  int i, j, rep, idx = 0;
+  int i, j, r, c, rep, idx = 0;
   alp->Astart_[0] = 0;
   for (i = 0; i < numCol_; ++i){
-    rep = partition.labels[cellFront[i]];
+    rep = colsToReps[i];
     for (j = Astart[rep]; j < Astart[rep + 1]; ++j){
-      coeff[AindexPacked_[j]] += Avalue[j];
+      r = AindexPacked_[j];
+      coeff[r] += Avalue[j];
     }
-    for (j = 0; j < numRow; ++j){
+    for (j = 0; j < numRow_; ++j){
       if (coeff[j]){
-        alp->Avalue_[alp->nnz_] = coeff[j] * cellSize[i];
+        c = cell[rep];
+        alp->Avalue_[alp->nnz_] = coeff[j] * cellSize[c];
         alp->Aindex_[alp->nnz_++] = j;
         coeff[j] = 0;
       }
@@ -214,6 +260,15 @@ void HighsAggregate::fixMatrix(){
   int i;
   for (i = alp->numCol_; i < numCol + maxLinkCols; ++i)
     alp->Astart_[i + 1] = alp->Astart_[i];
+}
+
+void HighsAggregate::saveRowsAndColsFromLastSolve(){
+  lastSolveCol = col;
+  lastSolveRow = row;
+  prevRepsToCols = repsToCols;
+  prevColsToReps = colsToReps;
+  prevRepsToRows = repsToRows;
+  prevRowsToReps = rowsToReps;
 }
 
 void HighsAggregate::reset(){

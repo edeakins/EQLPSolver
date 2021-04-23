@@ -30,6 +30,11 @@ public:
 	void identifyLinks();
 	void createLinkRows();
 	void reset();
+	void savePartition();
+	void saveRowsAndColsFromLastSolve();
+	void clearLp();
+	void clearLinks();
+	void clearPartitionCellSize();
 	void preprocess();
 	HighsLp* getAlp();
 	HighsBasis* getBasis();
@@ -88,6 +93,7 @@ public:
 
     // Linking pairs for new aggregate lp
 	vector<int> parentPartition;
+	vector<pair<int, int> > linkingPairs;
 
 	/* Sparse storage for the previous iterations basis
 	information.  We use this to set the basis of upcoming 
@@ -103,6 +109,8 @@ public:
 	int numRow_ = 0;
 	int numCol_ = 0;
 	int numTot_ = 0;
+	int oldNumCol_ = 0;
+	int newNumCol_ = 0;
 	int numLinkers_ = 0;
 	int previousNumCol_ = 0;
 
@@ -154,6 +162,21 @@ public:
 	vector<int> previousCellSize;
 	vector<int> previousCellFront;
 	vector<int> previousLabels;
+	// Mapping for rows and cols from partition cells
+	vector<int> colsToReps;
+	vector<int> prevColsToReps;
+	vector<int> repsToCols;
+	vector<int> prevRepsToCols;
+	vector<int> repsToRows;
+	vector<int> prevRepsToRows;
+	vector<int> rowsToReps;
+	vector<int> prevRowsToReps;
+	vector<int> prevCol;
+	vector<int> col;
+	vector<int> row;
+	vector<int> lastSolveCol;
+	vector<int> lastSolveRow;
+	vector<bool> cellMarked;
 };
 
 #endif
