@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
-  "../lib/libhighs.1.0.0.dylib"
-  "../lib/libhighs.1.0.dylib"
-  "../lib/libhighs.dylib"
   "../lib/libhighs.pdb"
+  "../lib/libhighs.so"
+  "../lib/libhighs.so.1.0"
+  "../lib/libhighs.so.1.0.0"
   "CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o"
   "CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.o"
   "CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o"

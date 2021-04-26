@@ -39,6 +39,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   prevRepsToRows.assign(numRow, -1);
   lastSolveRow.resize(numRow);
   lastSolveCol.resize(numCol);
+  prevRow.resize(numRow);
   row.resize(numRow);
   prevCol.resize(numCol);
   col.resize(numCol);
@@ -132,8 +133,10 @@ void HighsAggregate::translateFrontsToColors(){
   map<int, int> fCell;
   // map fronts to colors and count numCol_ and numRow_
   previousNumCol_ = numCol_;
+  previousNumRow_ = numRow_;
   numCol_ = numRow_ = numTot_ = 0;
   prevCol = col;
+  prevRow = row;
   int numColCell = 0;
   for (i = 0; i < numTot; ++i){
     if (fCell.insert(pair<int, int>(partition.fronts[i], c)).second){
@@ -191,17 +194,20 @@ void HighsAggregate::findRowRepsToFix(){
   int oldNCol = col_value.size();
   vector<bool> fixRow(numRow, false);
   for (int i = 0; i < row_value.size(); ++i){
-    int rep = previousLabels[previousCellFront[i + oldNCol]];
-    if (std::fabs(row_value[i] - rowLower[rep - numCol] * previousCellSize[i + oldNCol]) < 1e-6 ||
-        std::fabs(row_value[i] - rowUpper[rep - numCol] * previousCellSize[i + oldNCol]) < 1e-6){
+    int rep = prevRowsToReps[i];
+    int pCell = previousCell[rep + numCol];
+    if (std::fabs(row_value[i] - rowLower[rep] * previousCellSize[pCell]) < 1e-6 ||
+        std::fabs(row_value[i] - rowUpper[rep] * previousCellSize[pCell]) < 1e-6){
           fixRow[i] = true;
     }
   }
   for (int i = numCol; i < numTot; ++i){
-    if (fixRow[previousCell[i] - oldNCol]){
+    int row = prevRow[i - numCol];
+    int pCell = previousCell[i];
+    if (fixRow[row]){
       rowRepsToFix[i - numCol] = true;
-      rowRepsValue[i - numCol] = row_value[previousCell[i] - oldNCol];
-      rowRepsScale[i - numCol] = previousCellSize[previousCell[i]];
+      rowRepsValue[i - numCol] = row_value[row];
+      rowRepsScale[i - numCol] = previousCellSize[pCell];
     }
   }
 }
@@ -210,14 +216,14 @@ void HighsAggregate::findRowRepsToFix(){
 void HighsAggregate::findColRepsToFix(){
   vector<bool> fixCol(numCol, false);
   for (int i = 0; i < col_value.size(); ++i){
-    int rep = previousLabels[previousCellFront[i]];
+    int rep = prevColsToReps[i];
     if (std::fabs(col_value[i] - colLower[rep]) < 1e-6 ||
         std::fabs(col_value[i] - colUpper[rep]) < 1e-6){
           fixCol[i] = true;
     }
   }
   for (int i = 0; i < numCol; ++i){
-    if (fixCol[previousCell[i]]){
+    if (fixCol[prevCol[i]]){
       colRepsToFix[i] = true;
       colRepsValue[i] = col_value[previousCell[i]];
     }
@@ -226,10 +232,11 @@ void HighsAggregate::findColRepsToFix(){
 
 // Fold the objective
 void HighsAggregate::foldObj(){
-  int i, rep;
+  int i, c, rep;
   for (i = 0; i < numCol_; ++i){
-    rep = partition.labels[cellFront[i]];
-    alp->colCost_[i] = colCost[rep] * cellSize[i];
+    rep = colsToReps[i];
+    c = cell[rep];
+    alp->colCost_[i] = colCost[rep] * cellSize[c];
   }
   alp->sense_ = 1;
 }
@@ -308,24 +315,25 @@ void HighsAggregate::reset(){
 
 // Fold the row bounds based on current ep
 void HighsAggregate::foldRhsInit(){
-  int i, rep;
+  int i, rep, cellIdx;
   for (i = 0; i < numRow_; ++i){
-    rep = partition.labels[cellFront[i + numCol_]] - numCol;
-    alp->rowLower_[i] = std::max(rowLower[rep] * cellSize[i + numCol_], -HIGHS_CONST_INF);
-    alp->rowUpper_[i] = std::min(rowUpper[rep] * cellSize[i + numCol_], HIGHS_CONST_INF);
+    rep = rowsToReps[i];
+    cellIdx = cell[rep + numCol];
+    alp->rowLower_[i] = std::max(rowLower[rep] * cellSize[cellIdx], -HIGHS_CONST_INF);
+    alp->rowUpper_[i] = std::min(rowUpper[rep] * cellSize[cellIdx], HIGHS_CONST_INF);
   }
 }
 
 void HighsAggregate::foldRhs(){
   int i, rep, rowIdx, cellIdx;
   for (i = 0; i < numRow_; ++i){
-    rep = partition.labels[cellFront[i + numCol_]];
-    rowIdx = previousCell[rep] - previousNumCol_;
-    bool fixed = rowRepsToFix[rep - numCol];
-    cellIdx = previousCell[rep];
-    if (rowRepsToFix[rep - numCol]){
-      double rhs = (double)rowRepsValue[rep - numCol]/rowRepsScale[rep - numCol];
-      alp->rowLower_[i] = alp->rowUpper_[i] = rhs * cellSize[i + numCol_];
+    rep = rowsToReps[i];
+    rowIdx = prevRow[rep];
+    bool fixed = rowRepsToFix[rep];
+    cellIdx = cell[rep + numCol];
+    if (rowRepsToFix[rep]){
+      double rhs = (double)rowRepsValue[rep]/rowRepsScale[rep];
+      alp->rowLower_[i] = alp->rowUpper_[i] = rhs * cellSize[cellIdx];
     }
     // if (fabs(row_value[rowIdx] - (rowLower[rep - numCol] * previousCellSize[cellIdx])) < 1e-6){
     //   alp->rowLower_[i] = rowLower[rep - numCol] * cellSize[i + numCol_];
@@ -336,8 +344,8 @@ void HighsAggregate::foldRhs(){
     //   alp->rowUpper_[i] = rowUpper[rep - numCol] * cellSize[i + numCol_];  
     // }
     else{
-      alp->rowLower_[i] = std::max(rowLower[rep - numCol] * cellSize[i + numCol_], -HIGHS_CONST_INF);
-      alp->rowUpper_[i] = std::min(rowUpper[rep - numCol] * cellSize[i + numCol_], HIGHS_CONST_INF);  
+      alp->rowLower_[i] = std::max(rowLower[rep] * cellSize[cellIdx], -HIGHS_CONST_INF);
+      alp->rowUpper_[i] = std::min(rowUpper[rep] * cellSize[cellIdx], HIGHS_CONST_INF);  
     }
   }
 }
@@ -347,8 +355,11 @@ void HighsAggregate::setRowBasis(){
   int i, rep, rowIdx;
   alpBasis->numRow_ = 0;
   for (i = 0; i < numRow_; ++i){
-    rep = partition.labels[cellFront[i + numCol_]];
-    rowIdx = previousCell[rep] - previousNumCol_;
+    if (i == 2619){
+      std::cout << "problem row: " << i << std::endl;
+    }
+    rep = rowsToReps[i];
+    rowIdx = prevRow[rep];
     if ((row_status[rowIdx] == HighsBasisStatus::UPPER ||
         row_status[rowIdx] == HighsBasisStatus::LOWER ||
         row_status[rowIdx] == HighsBasisStatus::NONBASIC) &&
@@ -375,7 +386,7 @@ void HighsAggregate::setRowBasis(){
 void HighsAggregate::foldBndsInit(){
   int i, rep;
   for (i = 0; i < numCol_; ++i){
-    rep = partition.labels[cellFront[i]];
+    rep = colsToReps[i];
     alp->colLower_[i] = colLower[rep];
     alp->colUpper_[i] = colUpper[rep];
   }
@@ -384,8 +395,8 @@ void HighsAggregate::foldBndsInit(){
 void HighsAggregate::foldBnds(){
   int i, rep, colIdx;
   for (i = 0; i < numCol_; ++i){
-    rep = partition.labels[cellFront[i]];
-    colIdx = previousCell[rep];
+    rep = colsToReps[i];
+    colIdx = prevCol[rep];
     bool fixed = colRepsToFix[rep];
     if (colRepsToFix[rep]){
       double bnd = (double)colRepsValue[rep];
@@ -411,8 +422,8 @@ void HighsAggregate::setColBasis(){
   int i, rep, colIdx;
   alpBasis->numCol_ = 0;
   for (i = 0; i < numCol_; ++i){
-    rep = partition.labels[cellFront[i]];
-    colIdx = previousCell[rep];
+    rep = colsToReps[i];
+    colIdx = prevCol[rep];
     if ((col_status[colIdx] == HighsBasisStatus::UPPER ||
         col_status[colIdx] == HighsBasisStatus::LOWER ||
         col_status[colIdx] == HighsBasisStatus::NONBASIC) &&
@@ -502,17 +513,17 @@ void HighsAggregate::addCols(){
 
 void HighsAggregate::identifyLinks(){
   int i, idx = 0;
-  for (i = 0; i < numCol; ++i){
-    if (partition.parents[i] >= 0){
-      int x1 = cell[partition.labels[partition.parents[i]]];
-      int x2 = cell[partition.labels[i]];
-      parent[numLinkers_] = x1; child[numLinkers_] = x2;
-      int rep1 = partition.labels[cellFront[x1]];
-      int rep2 = partition.labels[cellFront[x2]];
-      ++numLinkers_;
-      // alp->linkLower_[numLinkers_] = colLower[rep1] - colUpper[rep2];
-      // alp->linkUpper_[numLinkers_++] = colUpper[rep1] - colLower[rep2]; 
-    }
+  for (i = previousNumCol_; i < numCol_; ++i){
+    int rep = colsToReps[i];
+    int pCol = prevCol[rep];
+    parent[numLinkers_] = pCol;
+    child[numLinkers_++] = i;
+  }
+  linkingPairs.clear();
+  for (i = previousNumCol_; i < numCol_; ++i){
+    int rep = colsToReps[i];
+    int pCol = prevCol[rep];
+    linkingPairs.push_back(pair<int, int>(pCol, i));
   }
   // int lCnt = 0;
   // for (i = 0; i < numCol_; ++i){

@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/app
-# Build directory: /Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/devBuild/app
+# Source directory: /home/edeakins/LP/EQLPSolver/DHiGHS/app
+# Build directory: /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/app
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.

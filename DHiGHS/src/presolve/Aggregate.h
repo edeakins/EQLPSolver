@@ -113,6 +113,7 @@ public:
 	int newNumCol_ = 0;
 	int numLinkers_ = 0;
 	int previousNumCol_ = 0;
+	int previousNumRow_ = 0;
 
 	/* This is the sparse storage for the current 
 	 aggregate lp.  This data will be uploaded to highs
@@ -173,6 +174,7 @@ public:
 	vector<int> prevRowsToReps;
 	vector<int> prevCol;
 	vector<int> col;
+	vector<int> prevRow;
 	vector<int> row;
 	vector<int> lastSolveCol;
 	vector<int> lastSolveRow;

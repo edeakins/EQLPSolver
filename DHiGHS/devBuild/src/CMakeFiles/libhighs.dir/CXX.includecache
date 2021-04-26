@@ -124,19 +124,19 @@ intrin.h
 x86intrin.h
 -
 
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.cpp
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/Aggregate.cpp
 Aggregate.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/Aggregate.h
 
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/Aggregate.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/Aggregate.h
 HighsLp.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HighsLp.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/HighsLp.h
 HighsEquitable.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HighsEquitable.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/HighsEquitable.h
 HighsQRmodule.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HighsQRmodule.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/HighsQRmodule.h
 HighsTimer.h
-/Users/Chvatal/Documents/Thesis/EQLPSolver/DHiGHS/src/presolve/HighsTimer.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/HighsTimer.h
 
 HConfig.h
 
