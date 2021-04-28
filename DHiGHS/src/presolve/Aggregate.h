@@ -88,6 +88,7 @@ public:
 
     // Linking pairs for new aggregate lp
 	vector<int> parentPartition;
+	vector<pair<int, int> > linkingPairs;
 
 	/* Sparse storage for the previous iterations basis
 	information.  We use this to set the basis of upcoming 

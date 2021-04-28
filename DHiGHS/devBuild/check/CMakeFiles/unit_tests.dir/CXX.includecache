@@ -908,8 +908,6 @@ lp_data/HConst.h
 
 ../src/util/HighsRandom.h
 
-../src/util/HighsSort.h
-
 ../src/util/HighsTimer.h
 cassert
 -
@@ -940,14 +938,6 @@ ctype.h
 cstring
 -
 string
--
-
-/home/edeakins/LP/EQLPSolver/DHiGHS/check/Avgas.cpp
-Avgas.h
-/home/edeakins/LP/EQLPSolver/DHiGHS/check/Avgas.h
-cassert
--
-cstdio
 -
 
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/Avgas.h
@@ -1060,10 +1050,6 @@ HighsSimplexInterface.h
 Avgas.h
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/Avgas.h
 
-/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestMain.cpp
-catch.hpp
-/home/edeakins/LP/EQLPSolver/DHiGHS/check/catch.hpp
-
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/TestOptions.cpp
 cstdio
 -
@@ -1097,20 +1083,6 @@ HighsLp.h
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/HighsLp.h
 HighsStatus.h
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/HighsStatus.h
-
-/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestSort.cpp
-catch.hpp
-/home/edeakins/LP/EQLPSolver/DHiGHS/check/catch.hpp
-lp_data/HConst.h
-/home/edeakins/LP/EQLPSolver/DHiGHS/check/lp_data/HConst.h
-util/HighsSort.h
-/home/edeakins/LP/EQLPSolver/DHiGHS/check/util/HighsSort.h
-util/HighsRandom.h
-/home/edeakins/LP/EQLPSolver/DHiGHS/check/util/HighsRandom.h
-vector
--
-algorithm
--
 
 HConfig.h
 
