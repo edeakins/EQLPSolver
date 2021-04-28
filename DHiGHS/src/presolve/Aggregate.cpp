@@ -447,25 +447,17 @@ void HighsAggregate::addCols(){
 
 void HighsAggregate::identifyLinks(){
   int i, cf, rep, pc, xParent, xChild;
-  // for (i = 0; i < numCol; ++i){
-  //   if (partition.parents[i] >= 0){
-  //     int x1 = cell[partition.labels[partition.parents[i]]];
-  //     int x2 = cell[partition.labels[i]];
-  //     parent[numLinkers_] = x1; child[numLinkers_] = x2;
-  //     int rep1 = partition.labels[cellFront[x1]];
-  //     int rep2 = partition.labels[cellFront[x2]];
-  //     ++numLinkers_;
-  //     // alp->linkLower_[numLinkers_] = colLower[rep1] - colUpper[rep2];
-  //     // alp->linkUpper_[numLinkers_++] = colUpper[rep1] - colLower[rep2]; 
-  //   }
-  // }
-  for (i = previousNumCol_; i < numCol_; ++i){
-    cf = cellFront[i];
-    rep = labels[cf];
-    xParent = previousCell[rep];
-    xChild = i;
-    parent[numLinkers_] = xParent; child[numLinkers_++] = xChild;
-    linkingPairs.push_back(pair<int, int>(pc, i));
+  for (i = 0; i < numCol; ++i){
+    if (partition.parents[i] >= 0){
+      int x1 = cell[partition.labels[partition.parents[i]]];
+      int x2 = cell[partition.labels[i]];
+      parent[numLinkers_] = x1; child[numLinkers_] = x2;
+      int rep1 = partition.labels[cellFront[x1]];
+      int rep2 = partition.labels[cellFront[x2]];
+      ++numLinkers_;
+      // alp->linkLower_[numLinkers_] = colLower[rep1] - colUpper[rep2];
+      // alp->linkUpper_[numLinkers_++] = colUpper[rep1] - colLower[rep2]; 
+    }
   }
 }
 
