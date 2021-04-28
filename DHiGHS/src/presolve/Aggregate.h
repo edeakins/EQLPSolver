@@ -12,6 +12,8 @@ public:
 	HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
 	bool update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis);
 	void translateFrontsToColors();
+	void findNonbasicRows();
+	void findNonbasicCols();
 	void packVectors();
 	void foldObj();
 	void foldMatrix();
@@ -102,8 +104,11 @@ public:
     vector<double> row_value;
     vector<HighsBasisStatus> col_status;
 	vector<HighsBasisStatus> row_status;
+	vector<HighsBasisStatus> col_status_;
+	vector<HighsBasisStatus> row_status_;
 	vector<bool> nonBasicCol;
 	vector<bool> nonBasicRow;
+
 
 	/* New scalars for the current aggregated lp */
 	int numRow_ = 0;

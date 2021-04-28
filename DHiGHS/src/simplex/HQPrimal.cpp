@@ -229,7 +229,7 @@ void HQPrimal::buildTableau(){
     computeTableauRowFull(workHMO, row_ep, rowAp);
     for (int j = 0; j < _numCol_; ++j){
       if (j == _numCol_ - 1){
-        std::cout << rowAp.array[j] << "x_" << j << " ";
+        std::cout << rowAp.array[j] << "x_" << j << " = " << workHMO.simplex_info_.baseValue_[i]; 
         break;
       }
       std::cout << rowAp.array[j] << "x_" << j << " + ";
@@ -708,6 +708,7 @@ void HQPrimal::unfold() {
     
   }
   primalRebuild();
+  // buildTableau();
   // double uTime = timer.readRunHighsClock() - init;
   // workHMO.lp_.pivotTime = uTime;
   // std::cout << "Ftran time: " << fTranTime << std::endl;
