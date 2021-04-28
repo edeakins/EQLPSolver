@@ -184,6 +184,12 @@ public:
 	vector<int> lastSolveCol;
 	vector<int> lastSolveRow;
 	vector<bool> cellMarked;
+	vector<bool> isRep;
+	vector<int> cellToRow;
+	vector<int> cellToCol;
+	vector<int> newCellForRep;
+	vector<int> cellReps;
+	vector<bool> cellContainsOldRep;
 };
 
 #endif

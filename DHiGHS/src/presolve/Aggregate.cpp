@@ -1,6 +1,9 @@
 #include "Aggregate.h"
 using namespace std;
 
+int cCounter = 0;
+int rCounter = 0;
+
 HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis){
 	// From the original lp
   iter = 0;
@@ -39,11 +42,16 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   prevRepsToRows.assign(numRow, -1);
   lastSolveRow.resize(numRow);
   lastSolveCol.resize(numCol);
+  isRep.assign(numTot, false);
   prevRow.resize(numRow);
   row.resize(numRow);
   prevCol.resize(numCol);
   col.resize(numCol);
   cellMarked.assign(numCol, false);
+  newCellForRep.assign(numTot, -1);
+  cellContainsOldRep.assign(numTot, false);
+  cellToCol.assign(numCol, -1);
+  cellToRow.assign(numRow, -1);
   linked.resize(numCol);
 	// Previous solution
 	col_value = (solution.col_value);
@@ -138,14 +146,14 @@ void HighsAggregate::translateFrontsToColors(){
   // map fronts to colors and count numCol_ and numRow_
   previousNumCol_ = numCol_;
   previousNumRow_ = numRow_;
-  numCol_ = numRow_ = numTot_ = 0;
+  numTot_ = 0;
   prevCol = col;
   prevRow = row;
   int numColCell = 0;
   for (i = 0; i < numTot; ++i){
     if (fCell.insert(pair<int, int>(partition.fronts[i], c)).second){
       ++c;
-      partition.fronts[i] < numCol ? ++numCol_ : ++numRow_;
+      // partition.fronts[i] < numCol ? ++numCol_ : ++numRow_;
       ++numTot_;
     }
   }
@@ -157,20 +165,54 @@ void HighsAggregate::translateFrontsToColors(){
     cellFront[fCell.find(partition.fronts[i])->second] = partition.fronts[i];
     ++cellSize[fCell.find(partition.fronts[i])->second];
   }
-  alp->numCol_ = numCol_;
-  alp->numRow_ = numRow_;
-  for (i = 0; i < numCol_; ++i){
+  
+
+  // Check for cells that contained a previous rep
+  // The rep for a cell may change even if the cell 
+  // didn't lose the previous rep
+  for (i = 0; i < cellReps.size(); ++i){
+    rep = cellReps[i];
+    c = cell[rep];
+    cellContainsOldRep[c] = true;
+  }
+  // Scan all cells and assign a column and row index
+  // to newly created cells
+  for (i = 0; i < numTot_; ++i){
+    if (cellContainsOldRep[i]) continue;
     cf = cellFront[i];
     rep = labels[cf];
-    repsToCols[rep] = colCounter;
-    colsToReps[colCounter++] = rep;
+    cellReps.push_back(rep);
+    if (rep < numCol){
+      repsToCols[rep] = numCol_;
+      colsToReps[numCol_++] = rep;
+    }
+    else{
+      repsToRows[rep - numCol] = numRow_;
+      rowsToReps[numRow_++] = rep - numCol;
+    }
   }
   for (i = 0; i < numRow_; ++i){
-    cf = cellFront[i + numCol_];
-    rep = labels[cf];
-    repsToRows[rep - numCol] = rowCounter;
-    rowsToReps[rowCounter++] = rep - numCol;
+    rep = rowsToReps[i];
+    c = cell[rep + numCol] - numCol_;
+    cellToRow[c] = i;
   }
+  for (i = 0; i < numCol_; ++i){
+    rep = colsToReps[i];
+    c = cell[rep];
+    cellToCol[c] = i;
+  }
+  // for (i = 0; i < numCol_; ++i){
+  //   cf = cellFront[i];
+  //   rep = labels[cf];
+  //   repsToCols[rep] = colCounter;
+  //   colsToReps[colCounter++] = rep;
+  // }
+  // for (i = 0; i < numRow_; ++i){
+  //   cf = cellFront[i + numCol_];
+  //   rep = labels[cf];
+  //   repsToRows[rep - numCol] = rowCounter;
+  //   rowsToReps[rowCounter++] = rep - numCol;
+  // }
   for (i = 0; i < numCol; ++i){
     cf = cellFront[cell[i]];
     rep = labels[cf];
@@ -183,17 +225,27 @@ void HighsAggregate::translateFrontsToColors(){
     r = repsToRows[rep - numCol];
     row[i - numCol] = r;
   }
+  alp->numCol_ = numCol_;
+  alp->numRow_ = numRow_;
+  // vector<int> rtr (numRow, -1);
+  // vector<int> rtc (numCol, -1);
+  // for (i = 0; i < numCol_; ++i){
+  //   cf = cellFront[i];
+  //   rep = labels[cf];
+  //   if (isRep[rep]) continue;
+
+  // }
 }
 
 void HighsAggregate::packVectors(){
-  int i, r, c, offset, rIdx;
+  int i, r, rep, c, cf, offset;
   for (i = 0; i < nnz; ++i){
-    r = Aindex[i] + numCol;
-    c = cell[r];
-    rIdx = c - numCol_;
-    AindexPacked_[i] = rIdx;
-    // r = row[Aindex[i]];
-    // AindexPacked_[i] = r;
+    offset = Aindex[i] + numCol;
+    c = cell[offset];
+    r = cellToRow[c - numCol_];
+    if (r == -1) 
+      std::cin.get();
+    AindexPacked_[i] = r;
   }
 }
 
@@ -287,20 +339,20 @@ void HighsAggregate::foldObj(){
 
 // Fold the matrix down based on current ep
 void HighsAggregate::foldMatrix(){
-  int i, j, r, cf, l, rep;
+  int i, j, r, c, cf, l, rep;
   alp->Astart_[0] = 0;
   for (i = 0; i < numCol_; ++i){
-    // rep = colsToReps[i];
-    cf = cellFront[i];
-    rep = labels[cf];
+    rep = colsToReps[i];
+    // cf = cellFront[i];
+    // rep = labels[cf];
     for (j = Astart[rep]; j < Astart[rep + 1]; ++j){
       r = AindexPacked_[j];
       coeff[r] += Avalue[j];
     }
     for (j = 0; j < numRow_; ++j){
       if (coeff[j]){
-        // c = cell[rep];
-        alp->Avalue_[alp->nnz_] = coeff[j] * cellSize[i];
+        c = cell[rep];
+        alp->Avalue_[alp->nnz_] = coeff[j] * cellSize[c];
         alp->Aindex_[alp->nnz_++] = j;
         coeff[j] = 0;
       }
@@ -337,6 +389,7 @@ void HighsAggregate::reset(){
     previousCellFront[i] = cellFront[i];
     previousLabels[i] = labels[i];
     cellSize[i] = 0;
+    cellContainsOldRep[i] = false;
   }
   for (i = 0; i < numCol; ++i)
     linked[i] = 0;
@@ -345,10 +398,12 @@ void HighsAggregate::reset(){
   for (i = 0; i < numRow; ++i){  
     nonBasicRow[i] = false;
     row_status_[i] = HighsBasisStatus::BASIC;
+    cellToRow[i] = -1;
   }
   for (i = 0; i < numCol; ++i){
     nonBasicCol[i] = false;
     col_status_[i] = HighsBasisStatus::BASIC;
+    cellToCol[i] = -1;
   }
   for (i = 0; i < maxLinkSpace; ++i){
     linkARindex[i] = 0;
@@ -404,36 +459,36 @@ void HighsAggregate::foldRhs(){
 void HighsAggregate::setRowBasis(){
   int i, rep, rowIdx;
   alpBasis->numRow_ = 0;
-  for (i = 0; i < numRow_; ++i){
-    if (i == 2619){
-      std::cout << "problem row: " << i << std::endl;
-    }
-    rep = rowsToReps[i];
-    rowIdx = prevRow[rep];
-    if ((row_status[rowIdx] == HighsBasisStatus::UPPER ||
-        row_status[rowIdx] == HighsBasisStatus::LOWER ||
-        row_status[rowIdx] == HighsBasisStatus::NONBASIC) &&
-        !nonBasicRow[rowIdx]){
-      alpBasis->row_status[i] = row_status[rowIdx];
-      nonBasicRow[rowIdx] = true;
-      ++alpBasis->numRow_;
-    }
-    else if ((row_status[rowIdx] == HighsBasisStatus::UPPER ||
-            row_status[rowIdx] == HighsBasisStatus::LOWER ||
-            row_status[rowIdx] == HighsBasisStatus::NONBASIC) &&
-            nonBasicRow[rowIdx]){
-      alpBasis->row_status[i] = HighsBasisStatus::BASIC;
-      ++alpBasis->numRow_;
-    }
-    else{
-      alpBasis->row_status[i] = row_status[rowIdx];
-      ++alpBasis->numRow_;
-    }
-  }
   // for (i = 0; i < numRow_; ++i){
-  //   alpBasis->row_status[i] = row_status_[i];
-  //   ++alpBasis->numRow_;
+  //   if (i == 2619){
+  //     std::cout << "problem row: " << i << std::endl;
+  //   }
+  //   rep = rowsToReps[i];
+  //   rowIdx = prevRow[rep];
+  //   if ((row_status[rowIdx] == HighsBasisStatus::UPPER ||
+  //       row_status[rowIdx] == HighsBasisStatus::LOWER ||
+  //       row_status[rowIdx] == HighsBasisStatus::NONBASIC) &&
+  //       !nonBasicRow[rowIdx]){
+  //     alpBasis->row_status[i] = row_status[rowIdx];
+  //     nonBasicRow[rowIdx] = true;
+  //     ++alpBasis->numRow_;
+  //   }
+  //   else if ((row_status[rowIdx] == HighsBasisStatus::UPPER ||
+  //           row_status[rowIdx] == HighsBasisStatus::LOWER ||
+  //           row_status[rowIdx] == HighsBasisStatus::NONBASIC) &&
+  //           nonBasicRow[rowIdx]){
+  //     alpBasis->row_status[i] = HighsBasisStatus::BASIC;
+  //     ++alpBasis->numRow_;
+  //   }
+  //   else{
+  //     alpBasis->row_status[i] = row_status[rowIdx];
+  //     ++alpBasis->numRow_;
+  //   }
   // }
+  for (i = 0; i < numRow_; ++i){
+    alpBasis->row_status[i] = row_status_[i];
+    ++alpBasis->numRow_;
+  }
 }
 
 // Fold the row bounds based on current ep
@@ -474,34 +529,34 @@ void HighsAggregate::foldBnds(){
 // Set col basis
 void HighsAggregate::setColBasis(){
   int i, rep, colIdx;
-  alpBasis->numCol_ = 0;
-  for (i = 0; i < numCol_; ++i){
-    rep = colsToReps[i];
-    colIdx = prevCol[rep];
-    if ((col_status[colIdx] == HighsBasisStatus::UPPER ||
-        col_status[colIdx] == HighsBasisStatus::LOWER ||
-        col_status[colIdx] == HighsBasisStatus::NONBASIC) &&
-        !nonBasicCol[colIdx]){
-      alpBasis->col_status[i] = col_status[colIdx];
-      nonBasicCol[colIdx] = true;
-      ++alpBasis->numCol_;
-    }
-    else if ((col_status[colIdx] == HighsBasisStatus::UPPER ||
-            col_status[colIdx] == HighsBasisStatus::LOWER ||
-            col_status[colIdx] == HighsBasisStatus::NONBASIC) &&
-            nonBasicCol[colIdx]){
-      alpBasis->col_status[i] = HighsBasisStatus::BASIC;
-      ++alpBasis->numCol_;
-    }
-    else{
-      alpBasis->col_status[i] = col_status[colIdx];
-      ++alpBasis->numCol_;
-    }
-  }
+  // alpBasis->numCol_ = 0;
   // for (i = 0; i < numCol_; ++i){
-  //   alpBasis->col_status[i] = col_status_[i];
-  //   ++alpBasis->numCol_;
+  //   rep = colsToReps[i];
+  //   colIdx = prevCol[rep];
+  //   if ((col_status[colIdx] == HighsBasisStatus::UPPER ||
+  //       col_status[colIdx] == HighsBasisStatus::LOWER ||
+  //       col_status[colIdx] == HighsBasisStatus::NONBASIC) &&
+  //       !nonBasicCol[colIdx]){
+  //     alpBasis->col_status[i] = col_status[colIdx];
+  //     nonBasicCol[colIdx] = true;
+  //     ++alpBasis->numCol_;
+  //   }
+  //   else if ((col_status[colIdx] == HighsBasisStatus::UPPER ||
+  //           col_status[colIdx] == HighsBasisStatus::LOWER ||
+  //           col_status[colIdx] == HighsBasisStatus::NONBASIC) &&
+  //           nonBasicCol[colIdx]){
+  //     alpBasis->col_status[i] = HighsBasisStatus::BASIC;
+  //     ++alpBasis->numCol_;
+  //   }
+  //   else{
+  //     alpBasis->col_status[i] = col_status[colIdx];
+  //     ++alpBasis->numCol_;
+  //   }
   // }
+  for (i = 0; i < numCol_; ++i){
+    alpBasis->col_status[i] = col_status_[i];
+    ++alpBasis->numCol_;
+  }
 }
 
 void HighsAggregate::addRows(){
