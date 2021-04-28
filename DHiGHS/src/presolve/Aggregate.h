@@ -12,8 +12,6 @@ public:
 	HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
 	bool update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis);
 	void translateFrontsToColors();
-	void findNonbasicRows();
-	void findNonbasicCols();
 	void packVectors();
 	void foldObj();
 	void foldMatrix();
@@ -32,11 +30,6 @@ public:
 	void identifyLinks();
 	void createLinkRows();
 	void reset();
-	void savePartition();
-	void saveRowsAndColsFromLastSolve();
-	void clearLp();
-	void clearLinks();
-	void clearPartitionCellSize();
 	void preprocess();
 	HighsLp* getAlp();
 	HighsBasis* getBasis();
@@ -95,7 +88,6 @@ public:
 
     // Linking pairs for new aggregate lp
 	vector<int> parentPartition;
-	vector<pair<int, int> > linkingPairs;
 
 	/* Sparse storage for the previous iterations basis
 	information.  We use this to set the basis of upcoming 
@@ -104,21 +96,15 @@ public:
     vector<double> row_value;
     vector<HighsBasisStatus> col_status;
 	vector<HighsBasisStatus> row_status;
-	vector<HighsBasisStatus> col_status_;
-	vector<HighsBasisStatus> row_status_;
 	vector<bool> nonBasicCol;
 	vector<bool> nonBasicRow;
-
 
 	/* New scalars for the current aggregated lp */
 	int numRow_ = 0;
 	int numCol_ = 0;
 	int numTot_ = 0;
-	int oldNumCol_ = 0;
-	int newNumCol_ = 0;
 	int numLinkers_ = 0;
 	int previousNumCol_ = 0;
-	int previousNumRow_ = 0;
 
 	/* This is the sparse storage for the current 
 	 aggregate lp.  This data will be uploaded to highs
@@ -168,22 +154,6 @@ public:
 	vector<int> previousCellSize;
 	vector<int> previousCellFront;
 	vector<int> previousLabels;
-	// Mapping for rows and cols from partition cells
-	vector<int> colsToReps;
-	vector<int> prevColsToReps;
-	vector<int> repsToCols;
-	vector<int> prevRepsToCols;
-	vector<int> repsToRows;
-	vector<int> prevRepsToRows;
-	vector<int> rowsToReps;
-	vector<int> prevRowsToReps;
-	vector<int> prevCol;
-	vector<int> col;
-	vector<int> prevRow;
-	vector<int> row;
-	vector<int> lastSolveCol;
-	vector<int> lastSolveRow;
-	vector<bool> cellMarked;
 };
 
 #endif

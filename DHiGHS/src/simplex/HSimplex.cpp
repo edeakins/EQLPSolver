@@ -2691,7 +2691,6 @@ void computePrimalInfeasible(HighsModelObject& highs_model_object,
       //      primal_infeasibility = %12g\n", nonbasic_ix, i, lower, value,
       //      upper, primal_infeasibility); nonbasic_ix++;
       if (primal_infeasibility > 0) {
-        // std::cout << "row: " << i << std::endl;
 	if (primal_infeasibility > scaled_primal_feasibility_tolerance) num_nonbasic_primal_infeasibilities++;
 	max_nonbasic_primal_infeasibility =
 	  std::max(primal_infeasibility, max_nonbasic_primal_infeasibility);
@@ -2706,7 +2705,6 @@ void computePrimalInfeasible(HighsModelObject& highs_model_object,
     double upper = simplex_info.baseUpper_[i];
     double primal_infeasibility = max(lower - value, value - upper);
     if (primal_infeasibility > 0) {
-      // std::cout << "row: " << i << std::endl;
       if (primal_infeasibility > scaled_primal_feasibility_tolerance) num_basic_primal_infeasibilities++;
       max_basic_primal_infeasibility =
 	std::max(primal_infeasibility, max_basic_primal_infeasibility);

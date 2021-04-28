@@ -299,7 +299,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Intitial solve of level 0 aggregate
   return_status = highs.passHighsOptions(alpOpt);
   init_status = highs.passModel(*alp);
-  write_status = highs.writeModel("level_0.lp");
+  // write_status = highs.writeModel("level_0.lp");
   initial_time = timer.readRunHighsClock();
   run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
@@ -338,9 +338,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     alpBasis = lpFolder.getBasis();
     init_status = highs.passModel(*alp);
     basis_status = highs.setBasis(*alpBasis);
-    std::string name = "level_" + std::to_string(i) + ".lp";
+    // std::string name = "level_" + std::to_string(i) + ".lp";
     // if (i == 1 or i == 2)
-    write_status = highs.writeModel(name);
+    // write_status = highs.writeModel(name);
     initial_time = timer.readRunHighsClock();
     run_status = highs.run(); 
     highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
