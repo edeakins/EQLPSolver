@@ -383,6 +383,8 @@ void HighsAggregate::reset(){
   alp->invertTime = 0;
   alp->unfoldIter = 0;
   previousNumCol_ = alp->numCol_ - numLinkers_;
+  alpBasis->numCol_ = 0;
+  alpBasis->numRow_ = 0;
   for (i = 0; i < numTot; ++i){
     previousCell[i] = cell[i];
     previousCellSize[i] = cellSize[i];
@@ -458,7 +460,7 @@ void HighsAggregate::foldRhs(){
 // Set row basis
 void HighsAggregate::setRowBasis(){
   int i, rep, rowIdx;
-  alpBasis->numRow_ = 0;
+  // alpBasis->numRow_ = 0;
   // for (i = 0; i < numRow_; ++i){
   //   if (i == 2619){
   //     std::cout << "problem row: " << i << std::endl;

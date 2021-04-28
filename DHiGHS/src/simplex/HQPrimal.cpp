@@ -708,6 +708,8 @@ void HQPrimal::unfold() {
     
   }
   primalRebuild();
+  columnIn = -1;
+  // solvePhase2()
   // buildTableau();
   // double uTime = timer.readRunHighsClock() - init;
   // workHMO.lp_.pivotTime = uTime;
