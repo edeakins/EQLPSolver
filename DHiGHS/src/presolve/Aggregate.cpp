@@ -141,7 +141,7 @@ bool HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solut
 }
 
 void HighsAggregate::translateFrontsToColors(){
-  int i = 0, c = 0, r = 0, rep, cf, colCounter = 0, rowCounter = 0;
+  int i = 0, c = 0, r = 0, rep, v, cf, colCounter = 0, rowCounter = 0;
   map<int, int> fCell;
   // map fronts to colors and count numCol_ and numRow_
   previousNumCol_ = numCol_;
@@ -165,8 +165,6 @@ void HighsAggregate::translateFrontsToColors(){
     cellFront[fCell.find(partition.fronts[i])->second] = partition.fronts[i];
     ++cellSize[fCell.find(partition.fronts[i])->second];
   }
-  
-
   // Check for cells that contained a previous rep
   // The rep for a cell may change even if the cell 
   // didn't lose the previous rep
@@ -214,15 +212,13 @@ void HighsAggregate::translateFrontsToColors(){
   //   rowsToReps[rowCounter++] = rep - numCol;
   // }
   for (i = 0; i < numCol; ++i){
-    cf = cellFront[cell[i]];
-    rep = labels[cf];
-    c = repsToCols[rep];
-    col[i] = c;
+    c = cell[i];
+    v = cellToCol[c];
+    col[i] = v;
   }
   for (i = numCol; i < numTot; ++i){
-    cf = cellFront[cell[i]];
-    rep = labels[cf];
-    r = repsToRows[rep - numCol];
+    c = cell[i];
+    r = cellToRow[c - numCol_];
     row[i - numCol] = r;
   }
   alp->numCol_ = numCol_;
@@ -243,8 +239,8 @@ void HighsAggregate::packVectors(){
     offset = Aindex[i] + numCol;
     c = cell[offset];
     r = cellToRow[c - numCol_];
-    if (r == -1) 
-      std::cin.get();
+    // if (r == -1) 
+    //   std::cin.get();
     AindexPacked_[i] = r;
   }
 }
@@ -279,14 +275,12 @@ void HighsAggregate::findNonbasicRows(){
     if (row_status[i] == HighsBasisStatus::UPPER ||
         row_status[i] == HighsBasisStatus::LOWER ||
         row_status[i] == HighsBasisStatus::NONBASIC){
-      int con = i;
-      int pRep = prevRowsToReps[con];
-      int c = cell[pRep + numCol];
-      int cf = cellFront[c];
-      int cRep = partition.labels[cf] - numCol;
-      int cCon = repsToRows[cRep];
+      // int con = i;
+      // int pRep = prevRowsToReps[con];
+      // int c = cell[pRep + numCol];
+      // int cCon = cellToRow[c - numCol_];
       // nonBasicRow[cRow] = true;
-      row_status_[cCon] = row_status[i];
+      row_status_[i] = row_status[i];
     }
   }
 }
@@ -297,13 +291,11 @@ void HighsAggregate::findNonbasicCols(){
     if (col_status[i] == HighsBasisStatus::UPPER ||
         col_status[i] == HighsBasisStatus::LOWER ||
         col_status[i] == HighsBasisStatus::NONBASIC){
-      int var = i;
-      int pRep = prevColsToReps[var];
-      int c = cell[pRep];
-      int cf = cellFront[c];
-      int cRep = partition.labels[cf];
-      int cVar = repsToCols[cRep];
-      col_status_[cVar] = col_status[i];
+      // int var = i;
+      // int pRep = prevColsToReps[var];
+      // int c = cell[pRep];
+      // int cVar = cellToCol[c];
+      col_status_[i] = col_status[i];
     }
   }
 }
@@ -630,7 +622,7 @@ void HighsAggregate::identifyLinks(){
   int i, idx = 0;
   for (i = previousNumCol_; i < numCol_; ++i){
     int rep1 = colsToReps[i];
-    int rep2 = colsToReps[prevCol[rep1]];
+    // int rep2 = colsToReps[prevCol[rep1]];
     int pCol = prevCol[rep1];
     // if (rep1 < rep2){
     //   parent[numLinkers_] = pCol;

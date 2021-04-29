@@ -708,6 +708,7 @@ void HQPrimal::unfold() {
     
   }
   primalRebuild();
+  if (workHMO.scaled_solution_params_.num_dual_infeasibilities > 0) solvePhase2();
   columnIn = -1;
   // solvePhase2()
   // buildTableau();
