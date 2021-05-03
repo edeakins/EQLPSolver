@@ -9,8 +9,8 @@
 
 class HighsAggregate{
 public:
-	HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
-	bool update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis);
+	HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis);
+	bool update(const HighsSolution& solution, const HighsBasis& basis);
 	void translateFrontsToColors();
 	void findNonbasicRows();
 	void findNonbasicCols();
@@ -158,8 +158,8 @@ public:
 	vector<bool> skipLink;
 
 	// For equitable partitions
-	struct eq_part partition;
-	struct eq_part previousPartition;
+	struct eq_part* partition;
+	struct eq_part* previousPartition;
 	vector<int> labels;
 	vector<int> cell;
 	vector<int> cellFront;

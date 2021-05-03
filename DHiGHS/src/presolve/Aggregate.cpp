@@ -107,7 +107,7 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   foldBndsInit();
 }
 
-bool HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis){
+bool HighsAggregate::update(const HighsSolution& solution, const HighsBasis& basis){
   // equtiable partition update
   // previousPartition = partition;
   partition = ep;
@@ -368,7 +368,7 @@ void HighsAggregate::saveRowsAndColsFromLastSolve(){
   prevRowsToReps = rowsToReps;
 }
 
-void HighsAggregate::reset(){
+void HighsAggregate::clearLp(){
   int i;
   alp->nnz_ = 0;
   alp->pivotTime = 0;
@@ -377,16 +377,6 @@ void HighsAggregate::reset(){
   previousNumCol_ = alp->numCol_ - numLinkers_;
   alpBasis->numCol_ = 0;
   alpBasis->numRow_ = 0;
-  for (i = 0; i < numTot; ++i){
-    previousCell[i] = cell[i];
-    previousCellSize[i] = cellSize[i];
-    previousCellFront[i] = cellFront[i];
-    previousLabels[i] = labels[i];
-    cellSize[i] = 0;
-    cellContainsOldRep[i] = false;
-  }
-  for (i = 0; i < numCol; ++i)
-    linked[i] = 0;
   for (i = 0; i < alp->nnz_; ++i)
     alp->Avalue_[i] = 0;
   for (i = 0; i < numRow; ++i){  
@@ -399,6 +389,24 @@ void HighsAggregate::reset(){
     col_status_[i] = HighsBasisStatus::BASIC;
     cellToCol[i] = -1;
   }
+}
+
+void HighsAggregate::savePartition(){
+  int i;
+  for (i = 0; i < numTot; ++i){
+    previousCell[i] = cell[i];
+    previousCellSize[i] = cellSize[i];
+    previousCellFront[i] = cellFront[i];
+    previousLabels[i] = labels[i];
+    cellSize[i] = 0;
+    cellContainsOldRep[i] = false;
+  }
+}
+
+void HighsAggregate::clearLinks(){
+  int i;
+  for (i = 0; i < numCol; ++i)
+    linked[i] = 0;
   for (i = 0; i < maxLinkSpace; ++i){
     linkARindex[i] = 0;
     linkARvalue[i] = 0;
@@ -411,6 +419,8 @@ void HighsAggregate::reset(){
   }
   numLinkers_ = 0;
 }
+
+void HighsAggregate::reset(){}
 
 // Fold the row bounds based on current ep
 void HighsAggregate::foldRhsInit(){
