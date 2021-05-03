@@ -300,6 +300,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   return_status = highs.passHighsOptions(alpOpt);
   init_status = highs.passModel(*alp);
   write_status = highs.writeModel("stable_level_0.lp");
+  
   initial_time = timer.readRunHighsClock();
   run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
