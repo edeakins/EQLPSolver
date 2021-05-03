@@ -9,8 +9,9 @@
 
 class HighsAggregate{
 public:
-	HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis);
-	bool update(const HighsSolution& solution, const HighsBasis& basis);
+	HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis,
+	int numRefinements);
+	int update(const HighsSolution& solution, const HighsBasis& basis);
 	void translateFrontsToColors();
 	void findNonbasicRows();
 	void findNonbasicCols();
@@ -32,20 +33,13 @@ public:
 	void identifyLinks();
 	void createLinkRows();
 	void reset();
+	void countNumRefinements();
 	void savePartition();
 	void saveRowsAndColsFromLastSolve();
 	void clearLp();
 	void clearLinks();
-	void clearPartitionCellSize();
-	void preprocess();
 	HighsLp* getAlp();
 	HighsBasis* getBasis();
-	void clear();
-	void aggregate();
-	void aggregateAMatrix();
-	void aggregateColBounds();
-	void aggregateRowBounds();
-	void aggregateCVector();
 	void appendLinkersToLp();
 	void appendColsToLpVectors(const int num_new_col,
                                   vector<double>& XcolCost,
@@ -69,9 +63,14 @@ public:
 	and the aggregated lp basis information */
 	HighsLp* alp;
 	HighsBasis* alpBasis;
+	HighsBasis* prevBasis;
+	HighsSolution* prevSol;
+	bool solve;
+	bool solved;
 
 	/* Scalar values that contain dimensional and
 	name data about the original lp */
+	int numRef;
 	int iter;
 	int numRow;
 	int numCol;
@@ -119,6 +118,8 @@ public:
 	int numLinkers_ = 0;
 	int previousNumCol_ = 0;
 	int previousNumRow_ = 0;
+	int previousNumSolveCol_ = 0;
+	int previousNumSolveRow_ = 0;
 
 	/* This is the sparse storage for the current 
 	 aggregate lp.  This data will be uploaded to highs

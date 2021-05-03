@@ -292,7 +292,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
   // Use aggregator to get first aggregate lp (level 0)
   initial_time = timer.readRunHighsClock();
-  HighsAggregate lpFolder(lp, partitions, solution, basis);
+  HighsAggregate lpFolder(lp, partitions, solution, basis, numRefinements);
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
   alp = lpFolder.getAlp();
   alpBasis = lpFolder.getBasis();
@@ -330,8 +330,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   for (int i = 1; i < numRefinements; ++i){
     // double foldTime = timer.readRunHighsClock();
     initial_time = timer.readRunHighsClock();
-    bool links = lpFolder.update(solution, basis);
+    int links = lpFolder.update(solution, basis);
     if (!links) break;
+    if (links == 1) continue;
     // foldTime = timer.readRunHighsClock() - foldTime;
     highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
     alp = lpFolder.getAlp();

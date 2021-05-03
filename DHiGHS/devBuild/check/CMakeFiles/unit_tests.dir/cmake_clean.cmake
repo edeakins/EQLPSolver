@@ -6,7 +6,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/unit_tests.dir/TestFilereader.cpp.o"
   "CMakeFiles/unit_tests.dir/TestIO.cpp.o"
   "CMakeFiles/unit_tests.dir/TestInfo.cpp.o"
-  "CMakeFiles/unit_tests.dir/TestIpx.cpp.o"
   "CMakeFiles/unit_tests.dir/TestLpModification.cpp.o"
   "CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o"
   "CMakeFiles/unit_tests.dir/TestMain.cpp.o"
