@@ -23,6 +23,9 @@ int numRefinements){
   // for (int i = 0; i < lp.colLower_.size(); ++i){
   //   lp.colUpper_[i] = +HIGHS_CONST_INF;
   // }
+  // for (int i = 0; i < lp.colLower_.size(); ++i){
+  //   lp.colLower_[i] = -HIGHS_CONST_INF;
+  // }
 	colUpper.assign(lp.colUpper_.begin(), lp.colUpper_.end());
 	colLower.assign(lp.colLower_.begin(), lp.colLower_.end());
 	colCost.assign(lp.colCost_.begin(), lp.colCost_.end());
@@ -61,11 +64,11 @@ int numRefinements){
   cellToRow.assign(numRow, -1);
   linked.resize(numCol);
 	// Previous solution
-	col_value = (solution.col_value);
-	row_value = (solution.row_value);
+	col_value = prevSol.col_value;
+	row_value = prevSol.row_value;
 	// Previous basis
-	col_status = (basis.col_status);
-	row_status = (basis.row_status);
+	col_status = prevBasis.col_status;
+	row_status = prevBasis.row_status;
   col_status_.assign(numCol, HighsBasisStatus::BASIC);
   row_status_.assign(numRow, HighsBasisStatus::BASIC);
   nonBasicCol.resize(numCol);
@@ -73,6 +76,7 @@ int numRefinements){
   // New Lp info
   maxLinkCols = 0;
   maxLinkSpace = 0;
+  countNumRefinements();
   alp = (HighsLp *)calloc(1, sizeof(HighsLp));
   alpBasis = (HighsBasis *)calloc(1, sizeof(HighsBasis));
   alp->colCost_.resize(numCol + maxLinkCols);
@@ -88,8 +92,8 @@ int numRefinements){
   alp->linkUpper_.resize(maxLinkCols);
   rowRepsToFix.assign(numRow, false);
   rowRepsValue.resize(numRow);
-  colRepsToFix.assign(numRow, false);
-  colRepsValue.resize(numRow);
+  colRepsToFix.assign(numCol, false);
+  colRepsValue.resize(numCol);
   rowRepsScale.resize(numRow);
   alpBasis->col_status.resize(numCol + maxLinkCols);
   alpBasis->row_status.resize(numRow + maxLinkCols);
@@ -105,7 +109,7 @@ int numRefinements){
   // coeff.assign(numTot);
   AindexPacked_.resize(nnz);
   // Translate fronts array to colors for vertices
-  countNumRefinements();
+  
   translateFrontsToColors();
   packVectors();
   foldObj();
@@ -115,11 +119,11 @@ int numRefinements){
   foldBndsInit();
 }
 
-int HighsAggregate::update(const HighsSolution& solution, const HighsBasis& basis){
+int HighsAggregate::update(HighsSolution& solution, HighsBasis& basis){
+  savePartition();
   if (solved){
     prevBasis = basis;
     prevSol = solution;
-    savePartition();
     saveRowsAndColsFromLastSolve();
     clearLp();
     clearLinks();
@@ -127,6 +131,7 @@ int HighsAggregate::update(const HighsSolution& solution, const HighsBasis& basi
     findNonbasicRows();
     if (!iter) {findRowRepsToFix(); findColRepsToFix();}
   }
+  ++iter;
   translateFrontsToColors();
   identifyLinks();
   if (!numLinkers_) return 0;
@@ -139,14 +144,13 @@ int HighsAggregate::update(const HighsSolution& solution, const HighsBasis& basi
     fixMatrix();
     foldRhs();
     foldBnds();
-    findNonbasicRows();
-    findNonbasicCols();
+    // findNonbasicRows();
+    // findNonbasicCols();
     setRowBasis();
     setColBasis();
     createLinkRows();
     addCols();
     addRows();
-    ++iter;
     return 2;
   }
   else{
@@ -176,6 +180,7 @@ int HighsAggregate::update(const HighsSolution& solution, const HighsBasis& basi
 }
 
 void HighsAggregate::countNumRefinements(){
+  int i;
   for (i = 0; i < numRef; ++i){
     maxLinkCols += partition[i].nsplits;
   }
@@ -189,8 +194,7 @@ void HighsAggregate::translateFrontsToColors(){
   previousNumCol_ = numCol_;
   previousNumRow_ = numRow_;
   numTot_ = 0;
-  prevCol = col;
-  prevRow = row;
+  
   int numColCell = 0;
   for (i = 0; i < numTot; ++i){
     if (fCell.insert(pair<int, int>(partition[iter].fronts[i], c)).second){
@@ -277,11 +281,11 @@ void HighsAggregate::findRowRepsToFix(){
     }
   }
   for (int i = numCol; i < numTot; ++i){
-    int row = prevRow[i - numCol];
+    int pRow = prevRow[i - numCol];
     int pCell = previousCell[i];
-    if (fixRow[row]){
+    if (fixRow[pRow]){
       rowRepsToFix[i - numCol] = true;
-      rowRepsValue[i - numCol] = row_value[row];
+      rowRepsValue[i - numCol] = row_value[pRow];
       rowRepsScale[i - numCol] = previousCellSize[pCell];
     }
   }
@@ -291,9 +295,7 @@ void HighsAggregate::findRowRepsToFix(){
 void HighsAggregate::findNonbasicRows(){
   int i;
   for (i = 0; i < previousNumSolveRow_; ++i){
-    if (row_status[i] == HighsBasisStatus::UPPER ||
-        row_status[i] == HighsBasisStatus::LOWER ||
-        row_status[i] == HighsBasisStatus::NONBASIC){
+    if (row_status[i] != HighsBasisStatus::BASIC){
       // int con = i;
       // int pRep = prevRowsToReps[con];
       // int c = cell[pRep + numCol];
@@ -307,9 +309,7 @@ void HighsAggregate::findNonbasicRows(){
 void HighsAggregate::findNonbasicCols(){
   int i;
   for (i = 0; i < previousNumSolveCol_; ++i){
-    if (col_status[i] == HighsBasisStatus::UPPER ||
-        col_status[i] == HighsBasisStatus::LOWER ||
-        col_status[i] == HighsBasisStatus::NONBASIC){
+    if (col_status[i] != HighsBasisStatus::BASIC){
       // int var = i;
       // int pRep = prevColsToReps[var];
       // int c = cell[pRep];
@@ -330,9 +330,10 @@ void HighsAggregate::findColRepsToFix(){
     }
   }
   for (int i = 0; i < numCol; ++i){
-    if (fixCol[prevCol[i]]){
+    int pCol = prevCol[i];
+    if (fixCol[pCol]){
       colRepsToFix[i] = true;
-      colRepsValue[i] = col_value[previousCell[i]];
+      colRepsValue[i] = col_value[pCol];
     }
   }
 }
@@ -385,10 +386,10 @@ void HighsAggregate::saveRowsAndColsFromLastSolve(){
   prevColsToReps = colsToReps;
   prevRepsToRows = repsToRows;
   prevRowsToReps = rowsToReps;
-  col_status = (prevBasis.col_status);
-	row_status = (prevBasis.row_status);
-  col_value = (prevSol.col_value);
-	row_value = (prevSol.row_value);
+  col_status = prevBasis.col_status;
+	row_status = prevBasis.row_status;
+  col_value = prevSol.col_value;
+	row_value = prevSol.row_value;
   previousNumSolveCol_ = alp->numCol_ - numLinkers_;
   previousNumSolveRow_ = alp->numRow_ - numLinkers_;
 }
@@ -426,6 +427,8 @@ void HighsAggregate::savePartition(){
     cellSize[i] = 0;
     cellContainsOldRep[i] = false;
   }
+  prevCol = col;
+  prevRow = row;
 }
 
 void HighsAggregate::clearLinks(){
@@ -636,6 +639,7 @@ void HighsAggregate::appendRowsToMatrix(){
     }
   }
   alp->numRow_ += num_new_row;
+  alp->numLinkers_ = num_new_row;
 }
 
 void HighsAggregate::addCols(){
@@ -657,15 +661,15 @@ void HighsAggregate::identifyLinks(){
   int i, idx = 0;
   for (i = previousNumCol_; i < numCol_; ++i){
     int rep1 = colsToReps[i];
-    // int rep2 = colsToReps[prevCol[rep1]];
+    int rep2 = colsToReps[prevCol[rep1]];
     int pCol = prevCol[rep1];
     // if (rep1 < rep2){
-    //   parent[numLinkers_] = pCol;
-    //   child[numLinkers_++] = i;
-    // }
-    // else{
     //   parent[numLinkers_] = i;
     //   child[numLinkers_++] = pCol;
+    // }
+    // else{
+    //   parent[numLinkers_] = pCol;
+    //   child[numLinkers_++] = i;
     // }
     parent[numLinkers_] = pCol;
     child[numLinkers_++] = i;

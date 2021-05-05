@@ -274,6 +274,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Basis and solution to store from unfold interations
   HighsBasis basis;
   HighsSolution solution;
+  init_status = highs.passModel(lp);
+  write_status = highs.writeModel("Original.lp");
   // Set options
   alpOpt.presolve = string("off");
   alpOpt.simplex_scale_strategy = 0;
@@ -347,6 +349,11 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
     basis = highs.getBasis();
     solution = highs.getSolution();
+    std::cout << "Basis for Linkers" << std::endl;
+    for (int i = alp->numCol_ - alp->numLinkers_; i < alp->numCol_; ++i)
+      if ((int)basis.col_status[i] != 1)
+        std::cout << i << std::endl;
+  }
     
       // for (int i = 0; i < solution.col_value.size(); ++i)
       //   std::cout << "x_" << i << " = " << solution.col_value[i] << std::endl;
@@ -362,7 +369,6 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     // mName.erase(mName.length() - 4, mName.length());
     // std::string outN = mName + "," + mIter + "," + rIter + "," + uTime + "," + iTime + "," + pTime + "\n";
     // resultsFile << outN;
-  }
   // resultsFile.close();
   double obj = 0;
   for (int i = 0; i < solution.col_value.size(); ++i)

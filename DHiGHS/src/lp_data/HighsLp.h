@@ -93,6 +93,7 @@ class HighsLp {
   int numInt_ = 0;
   int nnz_ = 0;
   int realNumCol_ = 0;
+  int numLinkers_ = 0;
   int realNumRow_ = 0;
 
   std::vector<int> Astart_;

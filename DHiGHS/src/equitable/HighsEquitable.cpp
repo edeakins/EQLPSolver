@@ -133,9 +133,9 @@ void HighsEquitable::lp2Graph(){
 			++nColor;
 	g->sg.w = edgeColors.size();
 	// Fill in colors
-	for (i = 0; i < nCols; ++i)
+	for (i = nCols - 1; i >= 0; --i)
 		colors[i] = colColors.find(make_tuple(colLower[i], colUpper[i], colCost[i]))->second;
-	for (i = 0; i < nRows; ++i)
+	for (i = nRows - 1; i >= 0; --i)
 		colors[i + nCols] = rowColors.find(make_tuple(rowLower[i], rowUpper[i]))->second;
 	// Fill adj, should be the same as Astart and ARstart + nnz
 	for(j = 0; j < nCols; ++j){
@@ -182,10 +182,10 @@ void HighsEquitable::doSaucyEquitable(){
     }
 	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &stats, partitions); 
 	int iter = stats.iter;
-	for (i = 0; i < iter; ++i)
-		if (partitions[i].nsplits > maxSplit) maxSplit = partitions[i].nsplits;
-	for (j = 0; j < i; ++j)
-		if (partitions[j].nsplits != maxSplit) partitions[j].nsplits = maxSplit;
+	// for (i = 0; i < iter; ++i)
+	// 	if (partitions[i].nsplits > maxSplit) maxSplit = partitions[i].nsplits;
+	// for (j = 0; j < i; ++j)
+	// 	if (partitions[j].nsplits != maxSplit) partitions[j].nsplits = maxSplit;
 	saucy_free(s);
 }
 // Refine function to call everything thing else
