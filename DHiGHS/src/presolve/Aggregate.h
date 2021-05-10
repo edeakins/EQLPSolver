@@ -144,6 +144,7 @@ public:
 	vector<double> colRepsValue;
 	vector<bool> inMat;
 	vector<int> parent;
+	vector<int> parents;
 	vector<int> child;
 	vector<double> coeff;
 	// For linker additions

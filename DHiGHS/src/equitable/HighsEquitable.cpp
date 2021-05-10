@@ -172,7 +172,7 @@ void HighsEquitable::lp2Graph(){
 void HighsEquitable::doSaucyEquitable(){
 	int i, j, k = 0, maxSplit = 0;
 	s = saucy_alloc(nTot, g->sg.w); // TO DO: add second argument to this function
-	partitions = (struct eq_part *)calloc( (nTot+1), sizeof(struct eq_part) );
+	partitions = (struct eq_part *)calloc( (1), sizeof(struct eq_part) );
     for( i = 0; i < nTot+1; ++i)
     {
         partitions[i].target = -2;

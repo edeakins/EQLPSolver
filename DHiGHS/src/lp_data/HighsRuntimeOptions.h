@@ -61,8 +61,9 @@ bool loadOptions(int argc, char** argv, HighsOptions& options) {
           }
         }
         if (nonEmpty > 1) {
-          std::cout << "Multiple files not implemented.\n";
-          return false;
+          std::cout << "Will (not) aggregate based on last option";
+          options.model_file = v[0];
+          // return false;
         }
       } else {
         options.model_file = v[0];

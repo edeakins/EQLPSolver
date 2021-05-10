@@ -37,8 +37,8 @@ struct coloring {
     int *cfront;     /* Pointer to front of cells */
     int *clen;       /* Length of cells (defined for cfront's) */
     int *parent;     /* Contains parent cells from splitting */
-    int *isParent; 
-    int *isChild;
+    int *pfront;
+    int *frontFound;
 };
 
 struct saucy {
@@ -131,6 +131,10 @@ struct saucy {
      /* Statistics structure */
     struct saucy_stats *stats;
 };
+
+static int comp(const void* a, const void* b){
+    return (*(int*)a - *(int*)b);
+}
 
 static int
 array_find_min(const int *a, int n)
@@ -610,45 +614,34 @@ fix_diffs(struct saucy *s, int cf, int ff)
     }
 }
 
+// static void
+// clear_parent(struct saucy *s, struct coloring *c)
+// {   
+//     int i;
+//     for (int i = 0; i < s->n; ++i){
+//         // c->parent[i] = -1;
+//         c->isParent[i] = 0;
+//         c->isChild[i] = 0;
+//     }
+// }
+
 static void
-clear_parent(struct saucy *s, struct coloring *c)
-{   
+save_fronts(struct saucy* s, struct coloring* c){
     int i;
-    for (int i = 0; i < s->n; ++i){
-        c->parent[i] = -1;
-        c->isParent[i] = 0;
-        c->isChild[i] = 0;
-    }
+    for (i = 0; i < s->n; ++i)
+        c->pfront[i] = c->cfront[i];
 }
 
 static void
 split_color(struct coloring *c, int cf, int ff)
 {
-    int cb, fb;
+    int cb, fb, pRep, cRep;
 
     /* Fix lengths */
     fb = ff - 1;
     cb = cf + c->clen[cf];
     c->clen[cf] = fb - cf;
     c->clen[ff] = cb - ff;
-    if (c->isParent[cf]){
-        c->parent[ff] = cf;
-        c->isChild[ff] = 1;
-    }
-    else if (c->isChild[cf]){
-        c->parent[ff] = c->parent[cf];
-        c->isChild[ff] = 1;
-    }
-    else{
-        c->parent[cf] = ff;
-        c->isParent[ff] = 1;
-        c->isChild[cf] = 1;
-    }
-    // if (!c->ind)
-    //     c->parent[cf] > -1 ? c->parent[ff] = c->parent[cf] : c->parent[ff] = cf;
-    // else
-    //     c->parent[cf] = ff; 
-    // c->ind = false;
     if (cf < c->nCols) ++c->nsplits;
     /* Fix cell front pointers */
     fix_fronts(c, ff, ff);
@@ -1011,6 +1004,17 @@ refine(struct saucy *s, struct coloring *c)
     return 0;
 }
 
+static void 
+find_links(struct saucy* s, struct coloring* c, int idx){
+    int child;
+    for (int i = 0, j = i + 1, k = s->left.clen[i]+1; i < s->left.nCols; i += s->left.clen[i]+1){
+        for (; j < k; ++j){
+            child = s->left.lab[j];
+            s->left.parent[child] = s->left.lab[i];
+        }
+    }
+}
+
 static int
 descend(struct saucy *s, struct coloring *c, int target, int min, struct eq_part *eq_steps, int idx)
 {
@@ -1033,6 +1037,10 @@ descend(struct saucy *s, struct coloring *c, int target, int min, struct eq_part
 
     /* Now go and do some work */
     ret = refine(s, c);
+    // for (int i = 0; i < s->n; i += s->left.clen[i]+1) {
+    //     qsort(&s->left.lab[i], s->left.clen[i] + 1, sizeof(int), comp);
+    // }
+    // std::cout << "hopefully sorted" << std::endl;
 
     /* This is the new enhancement in saucy 3.0 */
     if (c == &s->right && ret) {
@@ -1074,10 +1082,12 @@ descend(struct saucy *s, struct coloring *c, int target, int min, struct eq_part
     }
     eq_steps[idx].nsplits = c->nsplits;
     //eq_steps[idx].target = c->lab[min];
-    memcpy( eq_steps[idx].labels, c->lab, s->n*sizeof(int) );
-    memcpy( eq_steps[idx].fronts, c->cfront, s->n*sizeof(int) );
-    memcpy( eq_steps[idx].parents, c->parent, s->n*sizeof(int) );
-    clear_parent(s, c);
+    // find_links(s, c, idx);
+    // save_fronts(s, c);
+    // memcpy( eq_steps[idx].labels, c->lab, s->n*sizeof(int) );
+    // memcpy( eq_steps[idx].fronts, c->cfront, s->n*sizeof(int) );
+    // memcpy( eq_steps[idx].parents, c->parent, s->n*sizeof(int) );
+    // clear_parent(s, c);
 
     //memcpy( eq_steps[idx].lens, c->clen, s->n*sizeof(int) );
 
@@ -1089,11 +1099,14 @@ descend_leftmost( struct saucy *s, struct eq_part *eq_steps )
 {
     int target, min, idx=0;
     
-    eq_steps[idx].target = -1;
-    memcpy( eq_steps[idx].labels, s->left.lab, s->n*sizeof(int) );
-    memcpy( eq_steps[idx].fronts, s->left.cfront, s->n*sizeof(int) );
+    // eq_steps[idx].target = -1;
+    // memcpy( eq_steps[idx].labels, s->left.lab, s->n*sizeof(int) );
+    // memcpy( eq_steps[idx].fronts, s->left.cfront, s->n*sizeof(int) );
+    // memcpy( eq_steps[idx].parents, s->left.parent, s->n*sizeof(int) );
+    // save_fronts(s, &s->left);
+    // find_links(s, &s->left, idx);
     //memcpy( eq_steps[idx].lens, s->left.clen, s->n*sizeof(int) );
-    clear_parent(s, &s->left);
+    // clear_parent(s, &s->left);
     
     /* Keep going until we're discrete */
     while (!at_terminal(s)) {
@@ -1105,6 +1118,7 @@ descend_leftmost( struct saucy *s, struct eq_part *eq_steps )
         s->start[s->lev] = target;
         s->splitlev[s->lev] = s->nsplits;
         if (!descend(s, &s->left, target, min, eq_steps, idx)) return 0;
+        /* Update refinement stuff based on initial partition */
     }
     s->splitlev[s->lev] = s->n;
     return 1;
@@ -1236,18 +1250,28 @@ saucy_search(
         j = i;
     }
 
+    for (i = 0; i < s->n; ++i)
+        s->left.parent[i] = -1;
+
     /* Fix the end */
     s->prevnon[s->n] = j;
     s->nextnon[j] = s->n;
     /* Preprocessing after initial coloring */
     
     s->split = split_init; 
-    clear_parent(s, &s->left);
+    // clear_parent(s, &s->left);
     refine(s, &s->left);
     ++s->stats->iter;
+    for (int i = 0; i < s->n; i += s->left.clen[i]+1)
+        qsort(&s->left.lab[i], s->left.clen[i] + 1, sizeof(int), comp);
+    find_links(s, &s->left, 0);
+    eq_steps[0].target = -1;
+    memcpy( eq_steps[0].labels, s->left.lab, s->n*sizeof(int) );
+    memcpy( eq_steps[0].fronts, s->left.cfront, s->n*sizeof(int) );
+    memcpy( eq_steps[0].parents, s->left.parent, s->n*sizeof(int) );
 
     /* Descend along the leftmost branch and compute zeta */
-    descend_leftmost( s, eq_steps );
+    // descend_leftmost( s, eq_steps );
 }
 
 static int *ints(int n) { return (int *)malloc(n * sizeof(int)); }
@@ -1295,8 +1319,8 @@ saucy_alloc(int n, int w)
     s->left.lab = ints(n);
     s->left.unlab = ints(n);
     s->left.parent = ints(n);
-    s->left.isParent = ints(n);
-    s->left.isChild = ints(n);
+    s->left.pfront = ints(n);
+    s->left.frontFound = zeros(n);
     s->right.lab = ints(n);
     s->right.unlab = ints(n);
     s->splitwho = ints(n);
