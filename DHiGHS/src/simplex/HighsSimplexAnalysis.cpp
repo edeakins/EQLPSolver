@@ -160,6 +160,7 @@ void HighsSimplexAnalysis::updateOperationResultDensity(const double local_densi
 }
 
 void HighsSimplexAnalysis::iterationReport() {
+  // std::cout << "here" << std::endl;
   if (!(iteration_report_message_level & message_level)) return;
   const bool header =
     (num_iteration_report_since_last_header < 0) ||
@@ -185,6 +186,7 @@ void HighsSimplexAnalysis::invertReport() {
 }
 
 void HighsSimplexAnalysis::invertReport(const bool header) {
+  // std::cout << "invertReport" << std::endl;
   if (!(invert_report_message_level & message_level)) return;
   reportAlgorithmPhaseIterationObjective(header, invert_report_message_level);
 #ifdef HiGHSDEV
@@ -712,6 +714,7 @@ void HighsSimplexAnalysis::summaryReport() {
 #endif
 
 void HighsSimplexAnalysis::iterationReport(const bool header) {
+  // std::cout << "here" << std::endl;
   if (!(iteration_report_message_level & message_level)) return;
   if (!header && (pivotal_row_index<0 || entering_variable<0)) return;
   reportAlgorithmPhaseIterationObjective(header, iteration_report_message_level);

@@ -173,13 +173,17 @@ void HighsEquitable::doSaucyEquitable(){
 	int i, j, k = 0, maxSplit = 0;
 	s = saucy_alloc(nTot, g->sg.w); // TO DO: add second argument to this function
 	partitions = (struct eq_part *)calloc( (1), sizeof(struct eq_part) );
-    for( i = 0; i < nTot+1; ++i)
-    {
-        partitions[i].target = -2;
-        partitions[i].labels = (int *)calloc(nTot, sizeof(int));
-        partitions[i].fronts = (int *)calloc(nTot, sizeof(int));
-		partitions[i].parents = (int *)calloc(nTot, sizeof(int));
-    }
+    // for( i = 0; i <+1; ++i)
+    // {
+    //     partitions[i].target = -2;
+    //     partitions[i].labels = (int *)calloc(nTot, sizeof(int));
+    //     partitions[i].fronts = (int *)calloc(nTot, sizeof(int));
+	// 	partitions[i].parents = (int *)calloc(nTot, sizeof(int));
+    // }
+	partitions[0].target = -2;
+	partitions[0].labels = (int *)calloc(nTot, sizeof(int));
+	partitions[0].fronts = (int *)calloc(nTot, sizeof(int));
+	partitions[0].parents = (int *)calloc(nTot, sizeof(int));
 	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &stats, partitions); 
 	int iter = stats.iter;
 	// for (i = 0; i < iter; ++i)

@@ -230,35 +230,35 @@ void reportSolvedLpStats(FILE* output, int message_level,
 
 HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   		         FILE* output, int message_level, bool run_quiet, int run_aggregate) {
-  // New options for aggregate models (work around for const input)
-  if (lp.numCol_ > 80000 || lp.numRow_ > 80000){
-    HighsStatus run_status;
-    const char *fileName = "DHiGHS_mittleman_timings.csv";
-    std::ofstream resultsFile(fileName, std::ios_base::app);
-    std::ifstream in(fileName);
-    std::string name = options.model_file.c_str();
-    std::string pTime = std::to_string(0);
-    std::string fTime = std::to_string(0);
-    std::string uTime = std::to_string(0);
-    std::string tTime = std::to_string(0);
-    std::string objval = std::to_string(0);
-    std::string big = "to big";
-    name.erase(0,33);
-    std::string outP = name + "," + pTime + "," + fTime + "," + uTime + "," + tTime + "," + objval + "," + big + "\n";
-    if (in.peek() == std::ifstream::traits_type::eof()){
-      std::string column0 = "Instance";
-      std::string column1 = "Partition Time";
-      std::string column2 = "Fold Time";
-      std::string column3 = "Unfold Time";
-      std::string column4 = "Total Time";
-      std::string column5 = "Objective";
-      std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + column4 + "," + column5 + "\n";
-      resultsFile << outCols;
-    }
-    resultsFile << outP;
-    resultsFile.close();
-    return run_status;
-  }
+  // // New options for aggregate models (work around for const input)
+  // if (lp.numCol_ > 80000 || lp.numRow_ > 80000){
+  //   HighsStatus run_status;
+  //   const char *fileName = "DHiGHS_mittleman_timings.csv";
+  //   std::ofstream resultsFile(fileName, std::ios_base::app);
+  //   std::ifstream in(fileName);
+  //   std::string name = options.model_file.c_str();
+  //   std::string pTime = std::to_string(0);
+  //   std::string fTime = std::to_string(0);
+  //   std::string uTime = std::to_string(0);
+  //   std::string tTime = std::to_string(0);
+  //   std::string objval = std::to_string(0);
+  //   std::string big = "to big";
+  //   name.erase(0,33);
+  //   std::string outP = name + "," + pTime + "," + fTime + "," + uTime + "," + tTime + "," + objval + "," + big + "\n";
+  //   if (in.peek() == std::ifstream::traits_type::eof()){
+  //     std::string column0 = "Instance";
+  //     std::string column1 = "Partition Time";
+  //     std::string column2 = "Fold Time";
+  //     std::string column3 = "Unfold Time";
+  //     std::string column4 = "Total Time";
+  //     std::string column5 = "Objective";
+  //     std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + column4 + "," + column5 + "\n";
+  //     resultsFile << outCols;
+  //   }
+  //   resultsFile << outP;
+  //   resultsFile.close();
+  //   return run_status;
+  // }
   if (!run_aggregate){
     HighsStatus run_status;
     HighsStatus init_status;
@@ -316,7 +316,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Basis and solution to store from unfold interations
   HighsBasis basis;
   HighsSolution solution;
-  init_status = highs.passModel(lp);
+  // init_status = highs.passModel(lp);
   // write_status = highs.writeModel("Original.mps");
   // Set options
   alpOpt.presolve = string("off");
@@ -325,6 +325,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // alpOpt.solver = string("simplex");
   alpOpt.parallel = string("off");
   alpOpt.time_limit = (double)3600;
+  std::string mitName = options.model_file.c_str();
   // initialize partitioning tool/class
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
@@ -356,94 +357,122 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Start loop for level 1+ aggregates
   alpOpt.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
   return_status = highs.passHighsOptions(alpOpt);
-  // std::string mitName = options.model_file.c_str();
-  // mitName.erase(0,24);
-  // mitName.erase(mitName.length()-4, mitName.length());
-  // std::string totName = "../../../mittleman_runs_for_jim/DHiGHS_" + mitName + ".csv";
-  // char fileName[totName.length() + 1];
-  // std::strcpy(fileName, totName.c_str()); 
-  // std::ofstream resultsFile(fileName, std::ios_base::app);
-  // std::string column0 = "Instance";
-  // std::string column1 = "Master Iteration";
-  // std::string column2 = "r Pivots";
-  // std::string column3 = "Fold Time";
-  // std::string column4 = "Initial Invert Time";
-  // std::string column5 = "Pivoting Time";
-  // std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + column4 + "," + column5 + "\n";
-  // resultsFile << outCols;
-  for (int i = 1; i < numRefinements; ++i){
-    // double foldTime = timer.readRunHighsClock();
-    initial_time = timer.readRunHighsClock();
-    int links = lpFolder.update(solution, basis);
-    if (!links) break;
-    if (links == 1) continue;
-    // foldTime = timer.readRunHighsClock() - foldTime;
-    highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
-    alp = lpFolder.getAlp();
-    alpBasis = lpFolder.getBasis();
-    init_status = highs.passModel(*alp);
-    basis_status = highs.setBasis(*alpBasis);
-    // std::string name = "level_" + std::to_string(i) + ".lp";
-    // if (i == 1 or i == 2)
-    // write_status = highs.writeModel(name);
-    initial_time = timer.readRunHighsClock();
-    run_status = highs.run(); 
-    highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
-    basis = highs.getBasis();
-    solution = highs.getSolution();
-    // std::cout << "Basis for Linkers" << std::endl;
-    // for (int i = alp->numCol_ - alp->numLinkers_; i < alp->numCol_; ++i)
-    //   if ((int)basis.col_status[i] != 1)
-    //     std::cout << i << std::endl;
-  }
-    
-      // for (int i = 0; i < solution.col_value.size(); ++i)
-      //   std::cout << "x_" << i << " = " << solution.col_value[i] << std::endl;
-      
-    
-    // std::string iTime = std::to_string(highs.getLp().invertTime);
-    // std::string pTime = std::to_string(highs.getLp().pivotTime);
-    // std::string uTime = std::to_string(foldTime);
-    // std::string mIter = std::to_string(i);
-    // std::string rIter = std::to_string(highs.getLp().unfoldIter);
-    // std::string mName = options.model_file.c_str(); 
-    // mName.erase(0,24);
-    // mName.erase(mName.length() - 4, mName.length());
-    // std::string outN = mName + "," + mIter + "," + rIter + "," + uTime + "," + iTime + "," + pTime + "\n";
-    // resultsFile << outN;
-  // resultsFile.close();
+  initial_time = timer.readRunHighsClock();
+  lpFolder.lift(solution, basis);
+  highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
+  alp = lpFolder.getAlp();
+  alpBasis = lpFolder.getBasis();
+  init_status = highs.passModel(*alp);
+  // write_status = highs.writeModel("level_n.lp");
+  basis_status = highs.setBasis(*alpBasis);
+  initial_time = timer.readRunHighsClock();
+  run_status = highs.run(); 
+  highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
+  basis = highs.getBasis();
+  for (int i = basis.col_status.size() - alp->numLinkers_; i < basis.col_status.size(); ++i)
+    if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
+  solution = highs.getSolution();
   double obj = 0;
   for (int i = 0; i < solution.col_value.size(); ++i)
     obj += solution.col_value[i] * alp->colCost_[i];
-  // cout << "Partition Time: " << highs.totPartTime_ << endl;
-  // cout << "Fold Time: " << highs.totFoldTime_ << endl;
-  // cout << "Unfold Time: " << highs.totUnfoldTime_ << endl;
-  // cout << "Total Time: " << highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_ << endl;
-  // Report timings
-  // const char *fileName = "DHiGHS_mittleman_timings.csv";
-  // std::ofstream resultsFile(fileName, std::ios_base::app);
-  // std::ifstream in(fileName);
-  // std::string name = options.model_file.c_str();
-  // std::string pTime = std::to_string(highs.totPartTime_);
-  // std::string fTime = std::to_string(highs.totFoldTime_);
-  // std::string uTime = std::to_string(highs.totUnfoldTime_);
-  // std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
-  // std::string objval = std::to_string(obj);
-  // name.erase(0,33);
-  // // name.erase(0,42);
-  // std::string outP = name + "," + pTime + "," + fTime + "," + uTime + "," + tTime + "," + objval + "\n";
-  // if (in.peek() == std::ifstream::traits_type::eof()){
-  //   std::string column0 = "Instance";
-  //   std::string column1 = "Partition Time";
-  //   std::string column2 = "Fold Time";
-  //   std::string column3 = "Unfold Time";
-  //   std::string column4 = "Total Time";
-  //   std::string column5 = "Objective";
-  //   std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + column4 + "," + column5 + "\n";
-  //   resultsFile << outCols;
+  const char *fileName = "DHiGHS_mittleman_timings.csv";
+  std::ofstream resultsFile(fileName, std::ios_base::app);
+  std::ifstream in(fileName);
+  std::string name = options.model_file.c_str();
+  std::string pTime = std::to_string(highs.totPartTime_);
+  std::string fTime = std::to_string(highs.totFoldTime_);
+  std::string uTime = std::to_string(highs.totUnfoldTime_);
+  std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
+  std::string objval = std::to_string(obj);
+  name.erase(0,33);
+  // name.erase(0,42);
+  std::string outP = name + "," + pTime + "," + fTime + "," + uTime + "," + tTime + "," + objval + "\n";
+  if (in.peek() == std::ifstream::traits_type::eof()){
+    std::string column0 = "Instance";
+    std::string column1 = "Partition Time";
+    std::string column2 = "Fold Time";
+    std::string column3 = "Unfold Time";
+    std::string column4 = "Total Time";
+    std::string column5 = "Objective";
+    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + column4 + "," + column5 + "\n";
+    resultsFile << outCols;
+  }
+  resultsFile << outP;
+  resultsFile.close(); 
+  
+  // for (int i = 1; i < numRefinements; ++i){
+  //   // double foldTime = timer.readRunHighsClock();
+  //   initial_time = timer.readRunHighsClock();
+  //   int links = lpFolder.update(solution, basis);
+  //   if (!links) break;
+  //   if (links == 1) continue;
+  //   // foldTime = timer.readRunHighsClock() - foldTime;
+  //   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
+  //   alp = lpFolder.getAlp();
+  //   alpBasis = lpFolder.getBasis();
+  //   init_status = highs.passModel(*alp);
+  //   basis_status = highs.setBasis(*alpBasis);
+  //   // std::string name = "level_" + std::to_string(i) + ".lp";
+  //   // if (i == 1 or i == 2)
+  //   // write_status = highs.writeModel(name);
+  //   initial_time = timer.readRunHighsClock();
+  //   run_status = highs.run(); 
+  //   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
+  //   basis = highs.getBasis();
+  //   solution = highs.getSolution();
+  //   // std::cout << "Basis for Linkers" << std::endl;
+  //   // for (int i = alp->numCol_ - alp->numLinkers_; i < alp->numCol_; ++i)
+  //   //   if ((int)basis.col_status[i] != 1)
+  //   //     std::cout << i << std::endl;
   // }
-  // resultsFile << outP;
-  // resultsFile.close(); 
+    
+  //     // for (int i = 0; i < solution.col_value.size(); ++i)
+  //     //   std::cout << "x_" << i << " = " << solution.col_value[i] << std::endl;
+      
+    
+  //   // std::string iTime = std::to_string(highs.getLp().invertTime);
+  //   // std::string pTime = std::to_string(highs.getLp().pivotTime);
+  //   // std::string uTime = std::to_string(foldTime);
+  //   // std::string mIter = std::to_string(i);
+  //   // std::string rIter = std::to_string(highs.getLp().unfoldIter);
+  //   // std::string mName = options.model_file.c_str(); 
+  //   // mName.erase(0,24);
+  //   // mName.erase(mName.length() - 4, mName.length());
+  //   // std::string outN = mName + "," + mIter + "," + rIter + "," + uTime + "," + iTime + "," + pTime + "\n";
+  //   // resultsFile << outN;
+  // // resultsFile.close();
+  // double obj = 0;
+  // for (int i = 0; i < solution.col_value.size(); ++i)
+  //   obj += solution.col_value[i] * alp->colCost_[i];
+  // // cout << "Partition Time: " << highs.totPartTime_ << endl;
+  // // cout << "Fold Time: " << highs.totFoldTime_ << endl;
+  // // cout << "Unfold Time: " << highs.totUnfoldTime_ << endl;
+  // // cout << "Total Time: " << highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_ << endl;
+  // // Report timings
+  // // const char *fileName = "DHiGHS_mittleman_timings.csv";
+  // // std::ofstream resultsFile(fileName, std::ios_base::app);
+  // // std::ifstream in(fileName);
+  // // std::string name = options.model_file.c_str();
+  // // std::string pTime = std::to_string(highs.totPartTime_);
+  // // std::string fTime = std::to_string(highs.totFoldTime_);
+  // // std::string uTime = std::to_string(highs.totUnfoldTime_);
+  // // std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
+  // // std::string objval = std::to_string(obj);
+  // // name.erase(0,33);
+  // // // name.erase(0,42);
+  // // std::string outP = name + "," + pTime + "," + fTime + "," + uTime + "," + tTime + "," + objval + "\n";
+  // // if (in.peek() == std::ifstream::traits_type::eof()){
+  // //   std::string column0 = "Instance";
+  // //   std::string column1 = "Partition Time";
+  // //   std::string column2 = "Fold Time";
+  // //   std::string column3 = "Unfold Time";
+  // //   std::string column4 = "Total Time";
+  // //   std::string column5 = "Objective";
+  // //   std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + column4 + "," + column5 + "\n";
+  // //   resultsFile << outCols;
+  // // }
+  // // resultsFile << outP;
+  // // resultsFile.close(); 
   
   return run_status;
 }

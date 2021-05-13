@@ -1006,8 +1006,9 @@ refine(struct saucy *s, struct coloring *c)
 
 static void 
 find_links(struct saucy* s, struct coloring* c, int idx){
-    int child;
-    for (int i = 0, j = i + 1, k = s->left.clen[i]+1; i < s->left.nCols; i += s->left.clen[i]+1){
+    int child, i, j, k;
+    for (i = 0; i < s->left.nCols; i += s->left.clen[i]+1){
+        j = i + 1; k = i + s->left.clen[i]+1;
         for (; j < k; ++j){
             child = s->left.lab[j];
             s->left.parent[child] = s->left.lab[i];

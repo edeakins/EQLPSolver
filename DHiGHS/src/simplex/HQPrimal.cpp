@@ -682,6 +682,9 @@ void HQPrimal::unfold() {
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numLinkers;
   // init = timer.readRunHighsClock();
   int cnt = 0;
+  int update_limit = min(100 + solver_num_row / 100,
+          1000);
+  // std::cout << "Num Pivots Required: " << workHMO.lp_.numLinkers_ << std::endl;
   for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
     cnt++;
     // std::cout << i << std::endl;
@@ -705,8 +708,10 @@ void HQPrimal::unfold() {
     workHMO.simplex_info_.workCost_[columnIn] = 0;
     workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
     workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF;
-    
+    if (cnt > update_limit){ primalRebuild(); cnt = 0;}
   }
+  // std::cout << "done pivoting" << std::endl;
+  // std::cin.get();
   primalRebuild();
   if (workHMO.scaled_solution_params_.num_dual_infeasibilities > 0) solvePhase2();
   columnIn = -1;

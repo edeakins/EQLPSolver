@@ -12,6 +12,7 @@ public:
 	HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis,
 	int numRefinements);
 	int update(HighsSolution& solution, HighsBasis& basis);
+	void lift(HighsSolution& solution, HighsBasis& basis);
 	void translateFrontsToColors();
 	void findNonbasicRows();
 	void findNonbasicCols();
@@ -38,6 +39,17 @@ public:
 	void saveRowsAndColsFromLastSolve();
 	void clearLp();
 	void clearLinks();
+	// New funcs for lifting
+	void countNumLinkers();
+	void liftAMatrix();
+	void fixAstart();
+	void liftObjective();
+	void liftBnd();
+	void liftRhs();
+	void liftColBasis();
+	void liftRowBasis();
+	void makeLinks();
+	// New functs for lifting
 	HighsLp* getAlp();
 	HighsBasis* getBasis();
 	void appendLinkersToLp();
