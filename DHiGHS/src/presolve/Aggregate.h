@@ -149,6 +149,8 @@ public:
     vector<double> rowUpper_;
 	vector<double> AvaluePacked_;
 	vector<int> AindexPacked_;
+	vector<bool> fixed;
+	vector<bool> skip;
 	vector<bool> rowRepsToFix;
 	vector<double> rowRepsValue;
 	vector<double> rowRepsScale;

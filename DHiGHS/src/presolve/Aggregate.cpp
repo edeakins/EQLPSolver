@@ -20,6 +20,7 @@ int numRefinements){
   prevSol = solution;
 	rowLower.assign(lp.rowLower_.begin(), lp.rowLower_.end());
 	rowUpper.assign(lp.rowUpper_.begin(), lp.rowUpper_.end());
+  fixed.assign(numCol, false);
   // for (int i = 0; i < lp.colLower_.size(); ++i){
   //   lp.colUpper_[i] = +HIGHS_CONST_INF;
   // }
@@ -77,6 +78,7 @@ int numRefinements){
   // numLinkers_ = 0;
   parents.resize(numCol);
   countNumLinkers();
+  skip.assign(numLinkers_, false);
   maxLinkSpace = numLinkers_ * 3;
   // countNumRefinements();
   alp = (HighsLp *)calloc(1, sizeof(HighsLp));
@@ -276,6 +278,7 @@ void HighsAggregate::liftBnd(){
     if (fabs(pVal - ub) < 1e-6 ||
         fabs(pVal - lb) < 1e-6){
       alp->colUpper_[i] = alp->colLower_[i] = pVal;
+      fixed[i] = true;
     }
     else{
       alp->colUpper_[i] = colUpper[i];
@@ -365,15 +368,25 @@ void HighsAggregate::countNumLinkers(){
 }
 
 void HighsAggregate::makeLinks(){
-  int i, p, c, n = 0;
+  int i, p, c, n = 0, cnt = 0;
   for (i = 0; i < numCol; ++i){
     if (parents[i] > -1){
       p = parents[i];
       c = i;
+      bool fixedP = fixed[p];
+      bool fixedC = fixed[c];
       parent[n] = p;
-      child[n++] = c;
+      child[n] = c;
+      if (fixedP && fixedC){
+        cnt++;
+        skip[n++] = true;
+      }
+      else{
+        skip[n++] = false;
+      }
     }
   }
+  alp->skip = skip;
 }
 
 // New Lifting funcs

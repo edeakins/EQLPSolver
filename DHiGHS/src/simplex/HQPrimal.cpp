@@ -682,10 +682,11 @@ void HQPrimal::unfold() {
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numLinkers;
   // init = timer.readRunHighsClock();
   int cnt = 0;
-  int update_limit = min(100 + solver_num_row / 100,
+  int update_limit = min(100 + workHMO.lp_.numLinkers_ / 100,
           1000);
   // std::cout << "Num Pivots Required: " << workHMO.lp_.numLinkers_ << std::endl;
   for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
+    if (workHMO.lp_.skip[i]) continue;
     cnt++;
     // std::cout << i << std::endl;
     // simplex_info.update_count = 0;

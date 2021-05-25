@@ -110,6 +110,7 @@ class HighsLp {
   std::vector<double> linkLower_;
   std::vector<double> linkUpper_;
   std::vector<int> linkers;
+  std::vector<bool> skip;
   std::vector<int> artificialVariables;
   std::vector<bool> activeColorHistory;
 
