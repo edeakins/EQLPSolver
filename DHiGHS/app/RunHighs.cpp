@@ -231,7 +231,7 @@ void reportSolvedLpStats(FILE* output, int message_level,
 HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   		         FILE* output, int message_level, bool run_quiet, int run_aggregate) {
   // // New options for aggregate models (work around for const input)
-  // if (lp.numCol_ > 80000 || lp.numRow_ > 80000){
+  // if (lp.numCol_ > 100000 || lp.numRow_ > 100000){
   //   HighsStatus run_status;
   //   const char *fileName = "DHiGHS_mittleman_timings.csv";
   //   std::ofstream resultsFile(fileName, std::ios_base::app);
@@ -267,7 +267,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     HighsTimer timer;
     Highs highs;
     sOptions.presolve = string("off");
+    sOptions.parallel = string("off");
     sOptions.simplex_scale_strategy = 0;
+    sOptions.time_limit = (double)1800;
     highs.passHighsOptions(sOptions);
     init_status = highs.passModel(lp);
     bool run_highs_clock_already_running = timer.runningRunHighsClock();
