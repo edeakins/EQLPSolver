@@ -3,6 +3,7 @@ using namespace std;
 
 int cCounter = 0;
 int rCounter = 0;
+int numBasic = 0;
 
 HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis, 
 int numRefinements){
@@ -188,10 +189,12 @@ void HighsAggregate::lift(HighsSolution &solution, HighsBasis& basis){
   row_value = solution.row_value;
   col_status = basis.col_status;
   row_status = basis.row_status;
+  numLinkers_ = 0; 
   liftColBasis();
   liftRowBasis();
   liftBnd();
   liftRhs();
+  countNumLinkers();
   liftObjective();
   liftAMatrix();
   fixAstart();
@@ -258,6 +261,8 @@ void HighsAggregate::translateFrontsToColors(){
   }
   alp->numCol_ = numCol_;
   alp->numRow_ = numRow_;
+  prevCol = col;
+  prevRow = row;
 }
 
 // New lifting funcs
@@ -269,16 +274,19 @@ void HighsAggregate::liftObjective(){
 
 void HighsAggregate::liftBnd(){
   int i;
+  HighsBasisStatus status, basic = HighsBasisStatus::BASIC;
   for (i = 0; i < numCol; ++i){
     int pCol = col[i];
     int pRep = colsToReps[pCol];
     double pVal = col_value[pCol];
+    status = col_status[pCol];
     double ub = colUpper[pRep];
     double lb = colLower[pRep];
     if (fabs(pVal - ub) < 1e-6 ||
         fabs(pVal - lb) < 1e-6){
       alp->colUpper_[i] = alp->colLower_[i] = pVal;
-      fixed[i] = true;
+      // fixed[i] = true;
+      if (status != basic) fixed[i] = true;
     }
     else{
       alp->colUpper_[i] = colUpper[i];
@@ -311,14 +319,23 @@ void HighsAggregate::liftColBasis(){
   int i; 
   HighsBasisStatus status, basic = HighsBasisStatus::BASIC;
   alpBasis->numCol_ = numCol;
-  for (i = 0; i < numCol; ++i)
-    alpBasis->col_status[i] = basic;
-  for (i = 0; i < numCol_; ++i){
-    status = col_status[i];
-    if (status != basic){
-      int pRep = colsToReps[i];
-      alpBasis->col_status[pRep] = status;
-    }
+  // for (i = 0; i < numCol; ++i)
+  //   alpBasis->col_status[i] = basic;
+  // numBasic = numCol;
+  // for (i = 0; i < numCol_; ++i){
+  //   status = col_status[i];
+  //   if (status != basic){
+  //     numBasic--;
+  //     int pRep = colsToReps[i];
+  //     alpBasis->col_status[pRep] = status;
+  //   }
+  // }
+  for (i = 0; i < numCol; ++i){
+    int rep = i;
+    int pCol = prevCol[i];
+    status = col_status[pCol];
+    if (status == basic) numBasic++;
+    alpBasis->col_status[i] = status;
   }
 }
 
@@ -328,9 +345,11 @@ void HighsAggregate::liftRowBasis(){
   alpBasis->numRow_ = numRow;
   for (i = 0; i < numRow; ++i)
     alpBasis->row_status[i] = basic;
+  numBasic += numRow;
   for (i = 0; i < numRow_; ++i){
     status = row_status[i];
     if (status != basic){
+      numBasic--;
       int pRep = rowsToReps[i];
       alpBasis->row_status[pRep] = status;
     }
@@ -362,7 +381,8 @@ void HighsAggregate::fixAstart(){
 void HighsAggregate::countNumLinkers(){
   int i;
   for (i = 0; i < numCol; ++i){
-    if (partition[0].parents[i] > -1) numLinkers_++;
+    int p = partition[0].parents[i];
+    if (p > -1 && !fixed[p]) numLinkers_++;
     parents[i] = partition[0].parents[i];
   }
 }
@@ -372,18 +392,22 @@ void HighsAggregate::makeLinks(){
   for (i = 0; i < numCol; ++i){
     if (parents[i] > -1){
       p = parents[i];
+      bool fix = fixed[p];
+      if (fix) continue;
       c = i;
-      bool fixedP = fixed[p];
-      bool fixedC = fixed[c];
       parent[n] = p;
-      child[n] = c;
-      if (fixedP && fixedC){
-        cnt++;
-        skip[n++] = true;
-      }
-      else{
-        skip[n++] = false;
-      }
+      child[n++] = i;
+      // bool fixedP = fixed[p];
+      // bool fixedC = fixed[c];
+      // parent[n] = p;
+      // child[n] = c;
+      // if (fixedP && fixedC){
+      //   cnt++;
+      //   skip[n++] = true;
+      // }
+      // else{
+      //   skip[n++] = false;
+      // }
     }
   }
   alp->skip = skip;

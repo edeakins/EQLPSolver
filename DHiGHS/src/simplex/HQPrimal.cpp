@@ -686,7 +686,17 @@ void HQPrimal::unfold() {
           1000);
   // std::cout << "Num Pivots Required: " << workHMO.lp_.numLinkers_ << std::endl;
   for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
-    if (workHMO.lp_.skip[i]) continue;
+  // if (workHMO.lp_.skip[i]){
+  //     // workHMO.simplex_info_.workCost_[columnIn] = 0;
+  //     // workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
+  //     // workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF; 
+  //     // workHMO.simplex_info_.workCost_[columnIn] = 1;
+  //   // workHMO.simplex_info_.workUpper_[columnIn] = +HIGHS_CONST_INF;
+  //   // workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
+  //   // workHMO.simplex_info_.workValue_[columnIn] = 0;
+  //   // workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
+  //     continue;
+  // }
     cnt++;
     // std::cout << i << std::endl;
     // simplex_info.update_count = 0;
@@ -715,7 +725,7 @@ void HQPrimal::unfold() {
   // std::cin.get();
   primalRebuild();
   if (workHMO.scaled_solution_params_.num_dual_infeasibilities > 0) solvePhase2();
-  solvePhase2();
+  // solvePhase2();
   columnIn = -1;
   
   // buildTableau();
