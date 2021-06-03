@@ -342,6 +342,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsAggregate lpFolder(lp, partitions, solution, basis, numRefinements);
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
   alp = lpFolder.getAlp();
+  // Record original and reduced data for reduction calculations
   int nRCol = alp->numCol_;
   int nRRow = alp->numRow_;
   int nnzR = alp->nnz_;
