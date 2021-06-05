@@ -365,7 +365,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Intitial solve of level 0 aggregate
   return_status = highs.passHighsOptions(alpOpt);
   init_status = highs.passModel(*alp);
-  // write_status = highs.writeModel("level_0.lp");
+  write_status = highs.writeModel("level_0.lp");
   initial_time = timer.readRunHighsClock();
   run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
@@ -426,7 +426,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     "," + column7 + "," + column8 + "," + column5 + "\n";
     resultsFile << outCols;
   }
-  resultsFile << outP;
+  // resultsFile << outP;
   resultsFile.close(); 
   
   // for (int i = 1; i < numRefinements; ++i){
