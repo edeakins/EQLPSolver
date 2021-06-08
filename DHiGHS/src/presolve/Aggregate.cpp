@@ -275,28 +275,28 @@ void HighsAggregate::liftObjective(){
 void HighsAggregate::liftBnd(){
   int i;
   HighsBasisStatus status, basic = HighsBasisStatus::BASIC;
-  // for (i = 0; i < numCol; ++i){
-  //   int pCol = col[i];
-  //   int pRep = colsToReps[pCol];
-  //   double pVal = col_value[pCol];
-  //   status = col_status[pCol];
-  //   double ub = colUpper[pRep];
-  //   double lb = colLower[pRep];
-  //   if (fabs(pVal - ub) < 1e-6 ||
-  //       fabs(pVal - lb) < 1e-6){
-  //     alp->colUpper_[i] = alp->colLower_[i] = pVal;
-  //     // fixed[i] = true;
-  //     if (status != basic) fixed[i] = true;
-  //   }
-  //   else{
-  //     alp->colUpper_[i] = colUpper[i];
-  //     alp->colLower_[i] = colLower[i];
-  //   }
-  // }
   for (i = 0; i < numCol; ++i){
-    alp->colLower_[i] = colLower[i];
-    alp->colUpper_[i] = colUpper[i];
+    int pCol = col[i];
+    int pRep = colsToReps[pCol];
+    double pVal = col_value[pCol];
+    status = col_status[pCol];
+    double ub = colUpper[pRep];
+    double lb = colLower[pRep];
+    if (fabs(pVal - ub) < 1e-6 ||
+        fabs(pVal - lb) < 1e-6){
+      alp->colUpper_[i] = alp->colLower_[i] = pVal;
+      // fixed[i] = true;
+      if (status != basic) fixed[i] = true;
+    }
+    else{
+      alp->colUpper_[i] = colUpper[i];
+      alp->colLower_[i] = colLower[i];
+    }
   }
+  // for (i = 0; i < numCol; ++i){
+  //   alp->colLower_[i] = colLower[i];
+  //   alp->colUpper_[i] = colUpper[i];
+  // }
   // for (i = 0; i < col_value.size(); ++i){
   //   int pCol = i;
   //   int pRep = colsToReps[pCol];
@@ -839,9 +839,9 @@ void HighsAggregate::addCols(){
   int i, stop = numLinkers_;
   for (i = 0; i < numLinkers_; ++i){
     if (i < stop){
-      alpBasis->col_status[alp->numCol_] = HighsBasisStatus::LOWER;
-      alp->colLower_[alp->numCol_] = 0;
-      alp->colUpper_[alp->numCol_] = 0;
+      alpBasis->col_status[alp->numCol_] = HighsBasisStatus::ZERO;
+      alp->colLower_[alp->numCol_] = -HIGHS_CONST_INF;
+      alp->colUpper_[alp->numCol_] = +HIGHS_CONST_INF;
       alp->linkers[i] = alp->numCol_;
       ++alp->numCol_;
       ++alpBasis->numCol_;

@@ -391,8 +391,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
   basis = highs.getBasis();
-  // for (int i = basis.col_status.size() - alp->numLinkers_; i < basis.col_status.size(); ++i)
-  //   if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
+  for (int i = basis.col_status.size() - alp->numLinkers_; i < basis.col_status.size(); ++i)
+    if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
   solution = highs.getSolution();
   double obj = 0;
   for (int i = 0; i < solution.col_value.size(); ++i)

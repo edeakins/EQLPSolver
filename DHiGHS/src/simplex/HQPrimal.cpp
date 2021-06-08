@@ -41,6 +41,8 @@ double computePrimalInfsTime = 0;
 double computeDualInfsTime = 0;
 double reportRebTime = 0;
 bool liftStart = false;
+bool infeas = true;
+int iter = 0;
 
 HighsStatus HQPrimal::solve() {
   HighsOptions& options = workHMO.options_;
@@ -698,27 +700,45 @@ void HQPrimal::unfold() {
   //     continue;
   // }
     cnt++;
+    iter++;
     // std::cout << i << std::endl;
     // simplex_info.update_count = 0;
-    ++workHMO.lp_.unfoldIter;
-    timer.start(simplex_info.clock_[ChuzcPrimalClock]);
+    // ++workHMO.lp_.unfoldIter;
+    // timer.start(simplex_info.clock_[ChuzcPrimalClock]);
+    // columnIn = workHMO.lp_.linkers[i];
+    // // std::cout << "columnIn: " << columnIn << std::endl;
+    // timer.stop(simplex_info.clock_[ChuzcPrimalClock]);
+    // workHMO.simplex_info_.workCost_[columnIn] = 1;
+    // workHMO.simplex_info_.workUpper_[columnIn] = +HIGHS_CONST_INF;
+    // workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
+    // workHMO.simplex_info_.workValue_[columnIn] = 0;
+    // workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
+    // primalChooseColumn();
     columnIn = workHMO.lp_.linkers[i];
     // std::cout << "columnIn: " << columnIn << std::endl;
-    timer.stop(simplex_info.clock_[ChuzcPrimalClock]);
-    workHMO.simplex_info_.workCost_[columnIn] = 1;
-    workHMO.simplex_info_.workUpper_[columnIn] = +HIGHS_CONST_INF;
-    workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
-    workHMO.simplex_info_.workValue_[columnIn] = 0;
-    workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
-    
+    if (columnOut >= workHMO.lp_.numCol_ - workHMO.lp_.numLinkers_ &&
+        columnOut < workHMO.lp_.numCol_){ std::cout << "columnOut: " << columnOut << std::endl;
+        std::cin.get();
+        }
+    if (columnIn == -1) break;
     primalChooseRow();
+    // std::cout << "columnOut: " << columnOut << std::endl;
+    // std::cin.get();
     // cRowTime += timer.readRunHighsClock() - init;
     // initial_time = timer.readRunHighsClock();
     primalUpdate();
+    if (invertHint == INVERT_HINT_POSSIBLY_SINGULAR_BASIS) {primalRebuild(); cnt = 0;}
+    bool pInfeas = workHMO.scaled_solution_params_.num_primal_infeasibilities > 0;
+    bool dInfeas = workHMO.scaled_solution_params_.num_dual_infeasibilities > 0;
+    // std::cout << "pInfeas: " << pInfeas << std::endl;
+    // std::cout << "dInfeas: " << dInfeas << std::endl;
+    // std::cin.get();
+    if (!pInfeas && !dInfeas) infeas = false;
     // uTime += timer.readRunHighsClock() - initial_time;
-    workHMO.simplex_info_.workCost_[columnIn] = 0;
-    workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
-    workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF;
+    // workHMO.simplex_info_.workCost_[columnIn] = 0;
+    // workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
+    // workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF;
+    // primalRebuild();
     if (cnt > update_limit){ primalRebuild(); cnt = 0;}
   }
   // std::cout << "done pivoting" << std::endl;
@@ -764,6 +784,8 @@ void HQPrimal::primalChooseColumn() {
   const double* workLower = &workHMO.simplex_info_.workLower_[0];
   const double* workUpper = &workHMO.simplex_info_.workUpper_[0];
   const double dualTolerance = workHMO.scaled_solution_params_.dual_feasibility_tolerance;
+  int rStart = columnIn;
+  int rEnd = workHMO.lp_.numCol_;
 
   timer.start(simplex_info.clock_[ChuzcPrimalClock]);
   columnIn = -1;
@@ -823,17 +845,33 @@ void HQPrimal::primalChooseColumn() {
       }
     }
   }
+  // if (columnIn == -1) infeas = false;
+  // if (!infeas){
+  //   // std::cout << "no more infeasibilities " << std::endl;
+  //   // std::cout << "rStart: " << rStart << std::endl;
+  //   // std::cin.get();
+  //   for (int iCol = rStart; iCol < rEnd; ++iCol){
+  //     if (jFlag[iCol]){
+  //       columnIn = iCol;
+  //       break;
+  //     }
+  //   }
+  // }
   timer.stop(simplex_info.clock_[ChuzcPrimalClock]);
 }
 
 void HQPrimal::primalChooseRow() {
   HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
   HighsTimer& timer = workHMO.timer_;
+  const int* baseIndex = &workHMO.simplex_basis_.basicIndex_[0];
   const double* baseLower = &workHMO.simplex_info_.baseLower_[0];
   const double* baseUpper = &workHMO.simplex_info_.baseUpper_[0];
   double* baseValue = &workHMO.simplex_info_.baseValue_[0];
   const double primalTolerance =
       workHMO.scaled_solution_params_.primal_feasibility_tolerance;
+    const double* workDual = &workHMO.simplex_info_.workDual_[0];
+  int rStart = workHMO.lp_.numCol_ - workHMO.lp_.numLinkers_;
+  int rEnd = workHMO.lp_.numCol_;
 
   // Compute pivot column
   timer.start(simplex_info.clock_[FtranClock]);
@@ -890,6 +928,8 @@ void HQPrimal::primalChooseRow() {
                         : workHMO.simplex_info_.update_count < 20 ? 1e-8 : 1e-7;
   const int* jMove = &workHMO.simplex_basis_.nonbasicMove_[0];
   int moveIn = jMove[columnIn];
+  thetaDual = workDual[columnIn];
+  moveIn = thetaDual > 0 ? -1 : 1;
   if (moveIn == 0) {
     // If there's still free in the N
     // We would report not-solved
@@ -897,25 +937,43 @@ void HQPrimal::primalChooseRow() {
   }
   double relaxTheta = 1e100;
   double relaxSpace;
+  int bIndexS;
   for (int i = 0; i < col_aq.count; i++) {
     int index = col_aq.index[i];
+    int bIndex = baseIndex[index];
+    if (bIndex >= rStart && bIndex < rEnd) continue;
     alpha = col_aq.array[index] * moveIn;
     if (alpha > alphaTol) {
       relaxSpace = baseValue[index] - baseLower[index] + primalTolerance;
-      if (relaxSpace < relaxTheta * alpha) relaxTheta = relaxSpace / alpha;
+      if (relaxSpace < relaxTheta * alpha){
+        relaxTheta = relaxSpace / alpha;
+        bIndexS = index;
+      } 
     } else if (alpha < -alphaTol) {
       relaxSpace = baseValue[index] - baseUpper[index] - primalTolerance;
-      if (relaxSpace > relaxTheta * alpha) relaxTheta = relaxSpace / alpha;
+      if (relaxSpace > relaxTheta * alpha){
+        relaxTheta = relaxSpace / alpha;
+        bIndexS = index;
+      }
     }
   }
   Chuzc1Time += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[Chuzr1Clock]);
-
+  // if (iter > 4032){
+  //   std::cout << "relaxSpace: " << relaxSpace << std::endl;
+  //   std::cout << "relaxTheta: " << relaxTheta << std::endl;
+  //   std::cout << "baseValue: " << baseValue[bIndexS] << std::endl;
+  //   std::cout << "baseLower: " << baseLower[bIndexS] << std::endl;
+  //   std::cout << "baseUpper: " << baseUpper[bIndexS] << std::endl;
+  //   std::cout << "baseIndex: " << baseIndex[bIndexS] << std::endl;
+  // }
   timer.start(simplex_info.clock_[Chuzr2Clock]);
   init = timer.readRunHighsClock();
   double bestAlpha = 0;
   for (int i = 0; i < col_aq.count; i++) {
     int index = col_aq.index[i];
+    int bIndex = baseIndex[index];
+    if (bIndex >= rStart && bIndex < rEnd) continue;
     alpha = col_aq.array[index] * moveIn;
     if (alpha > alphaTol) {
       // Positive pivotal column entry
@@ -939,6 +997,13 @@ void HQPrimal::primalChooseRow() {
   }
   Chuzc2Time += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[Chuzr2Clock]);
+  // if (iter > 4032){
+  //   std::cout << "baseValue: " << baseValue[rowOut] << std::endl;
+  //   std::cout << "baseLower: " << baseLower[rowOut] << std::endl;
+  //   std::cout << "baseUpper: " << baseUpper[rowOut] << std::endl;
+  //   std::cout << "baseIndex: " << baseIndex[rowOut] << std::endl;
+  //   std::cin.get();
+  // }
   // std::cout << "row out: " << rowOut << std::endl;
 }
 
@@ -953,25 +1018,84 @@ void HQPrimal::primalUpdate() {
   const double* baseUpper = &workHMO.simplex_info_.baseUpper_[0];
   double* workValue = &workHMO.simplex_info_.workValue_[0];
   double* baseValue = &workHMO.simplex_info_.baseValue_[0];
+  int* baseIndex = &workHMO.simplex_basis_.basicIndex_[0];
   const double primalTolerance =
       workHMO.scaled_solution_params_.primal_feasibility_tolerance;
   HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
 
   // Compute thetaPrimal
   int moveIn = jMove[columnIn];
+  std::string bnd;
   //  int
   columnOut = workHMO.simplex_basis_.basicIndex_[rowOut];
   //  double
   alpha = col_aq.array[rowOut];
   //  double
   thetaPrimal = 0;
-  if (alpha * moveIn > 0) {
-    // Lower bound
-    thetaPrimal = (baseValue[rowOut] - baseLower[rowOut]) / alpha;
-  } else {
-    // Upper bound
-    thetaPrimal = (baseValue[rowOut] - baseUpper[rowOut]) / alpha;
-  }
+  double tPrimalL = (baseValue[rowOut] - baseLower[rowOut]) / alpha;
+  double tPrimalU = (baseValue[rowOut] - baseUpper[rowOut]) / alpha;
+  // if (!infeas){
+    double cValL = baseValue[rowOut] - (tPrimalL * col_aq.array[rowOut]);
+    // double cValU = baseValue[rowOut] - (tPrimalU * col_aq.array[rowOut]);
+    bool compL = fabs(cValL - baseLower[rowOut]) < HIGHS_CONST_TINY ? false : true;
+    // bool compU = fabs(cValU - baseUpper[rowOut]) < HIGHS_CONST_TINY ? false : true;
+    // std::cout << "compU: " << cValU << std::endl;
+    // std::cout << "compL: " << cValL << std::endl;
+    // std::cin.get();
+    if (compL)
+        thetaPrimal = tPrimalU;
+    else
+        thetaPrimal = tPrimalL;
+    // std::cout << "tPrimalL: " << tPrimalL << std::endl;
+    // std::cout << "tPrimalU: " << tPrimalU << std::endl;
+    // std::cout << "new thetaPrimal: " << thetaPrimal << std::endl;
+    // std::cin.get();
+  // }
+  // else{
+  //   if (alpha * moveIn > 0) {
+  //     // Lower bound
+  //     bnd = "lower";
+  //     thetaPrimal = (baseValue[rowOut] - baseLower[rowOut]) / alpha;
+  //     // tPrimalL = thetaPrimal;
+  //   } else {
+  //     // Upper bound
+  //     bnd = "upper";
+  //     thetaPrimal = (baseValue[rowOut] - baseUpper[rowOut]) / alpha;
+  //     // tPrimalU = thetaPrimal;
+  //   }
+  // }
+  // std::cout << "infeas: " << infeas << std::endl;
+  // if (!infeas){
+  //   std::cout << "columnOut: " << baseIndex[rowOut] << std::endl;
+  //   std::cout << "alpha: " << alpha << std::endl;
+  //   std::cout << "moveIn: " << moveIn << std::endl;
+  //   std::cout << "bound: " << bnd << std::endl;
+  //   std::cout << "baseValue: " << baseValue[rowOut] << std::endl;
+  //   std::cout << "baseUpper: " << baseUpper[rowOut] << std::endl;
+  //   std::cout << "baseLower: " << baseLower[rowOut] << std::endl; 
+  //   std::cout << "thetaPrimal: " << thetaPrimal << std::endl;
+  //   std::cout << "\nLOWER\n" << std::endl;
+  //   for (int i = 0; i < col_aq.count; i++) {
+  //     int index = col_aq.index[i];
+  //     if (baseIndex[index] < workHMO.lp_.numCol_ - workHMO.lp_.numLinkers_){
+  //     std::cout << "x_" << baseIndex[index] << " = " << baseValue[index] << " before" << std::endl;
+  //     std::cout << "Change: " <<  (tPrimalL * col_aq.array[index]) << std::endl;
+  //     std::cout << "x_" << baseIndex[index] << " = " << baseValue[index] - (tPrimalL * col_aq.array[index]) << " after\n" << std::endl;
+  //     // baseValue[index] -= thetaPrimal * col_aq.array[index];
+  //     }
+  //   }
+  //   std::cout << "\nUPPER\n" << std::endl;
+  //   for (int i = 0; i < col_aq.count; i++) {
+  //     int index = col_aq.index[i];
+  //     if (baseIndex[index] < workHMO.lp_.numCol_ - workHMO.lp_.numLinkers_){
+  //     std::cout << "x_" << baseIndex[index] << " = " << baseValue[index] << " before" << std::endl;
+  //     std::cout << "Change: " <<  (tPrimalU * col_aq.array[index]) << std::endl;
+  //     std::cout << "x_" << baseIndex[index] << " = " << baseValue[index] - (tPrimalU * col_aq.array[index]) << " after\n" << std::endl;
+  //     // baseValue[index] -= thetaPrimal * col_aq.array[index];
+  //     }
+  //   }
+  //   std::cin.get();
+  // }
 
   // 1. Make sure it is inside bounds or just flip bound
   double lowerIn = workLower[columnIn];
@@ -1021,7 +1145,10 @@ void HQPrimal::primalUpdate() {
   }
 
   // Pivot in
-  int sourceOut = alpha * moveIn > 0 ? -1 : 1;
+  int sourceOut = 0;
+  sourceOut = thetaPrimal == tPrimalL ? -1 : 1;
+  // if (!infeas) sourceOut = thetaPrimal == tPrimalL ? -1 : 1;
+  // else sourceOut = alpha * moveIn > 0 ? -1 : 1;
   update_pivots(workHMO, columnIn, rowOut, sourceOut);
 
   baseValue[rowOut] = valueIn;
@@ -1106,7 +1233,6 @@ void HQPrimal::primalUpdate() {
 
   // updateVerify for primal
   numericalTrouble = 0;
-  /*
   double aCol = fabs(alpha);
   double alphaRow;
   if (columnIn < workHMO.simplex_lp_.numCol_) {
@@ -1118,13 +1244,14 @@ void HQPrimal::primalUpdate() {
   double aDiff = fabs(aCol - aRow);
   numericalTrouble = aDiff / min(aCol, aRow);
   if (numericalTrouble > 1e-7)
-    printf("Numerical check: alphaCol = %12g, alphaRow = a%12g, aDiff = a%12g:
-  measure = %12g\n", alpha, alphaRow, aDiff, numericalTrouble);
+    printf("\nNumerical Trouble: Re-Inverting Basis Matrix\n");
+  //   printf("Numerical check: alphaCol = %12g, alphaRow = a%12g, aDiff = a%12g:
+  // measure = %12g\n", alpha, alphaRow, aDiff, numericalTrouble);
   // Reinvert if the relative difference is large enough, and updates have been
-  performed
-  //  if (numericalTrouble > 1e-7 && workHMO.simplex_info_.update_count > 0)
-  invertHint = INVERT_HINT_POSSIBLY_SINGULAR_BASIS;
-  */
+  //performed
+  if (numericalTrouble > 1e-7 && workHMO.simplex_info_.update_count > 0)
+    invertHint = INVERT_HINT_POSSIBLY_SINGULAR_BASIS;
+
   // Dual for the pivot
   workDual[columnIn] = 0;
   workDual[columnOut] = -thetaDual;
@@ -1150,7 +1277,7 @@ void HQPrimal::primalUpdate() {
   if(num_bad_devex_weight > 3) {
     devexReset();
   }
-
+  computeDualInfeasible(workHMO);
   // Report on the iteration
   iterationAnalysis();
 }
