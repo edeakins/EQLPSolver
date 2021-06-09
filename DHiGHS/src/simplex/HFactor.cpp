@@ -1976,7 +1976,7 @@ void HFactor::updateCFT(HVector* aq, HVector* ep, int* iRow
     UtotalX += PFindex.size() - PFstart.back();
     PFstart.push_back(PFindex.size());
 
-    // 8. Update the sorted ep
+    // 8. (Update) the sorted ep
     sorted_pp.push_back(make_pair(pLogic[cp], cp));
     sort(sorted_pp.begin(), sorted_pp.end());
   }

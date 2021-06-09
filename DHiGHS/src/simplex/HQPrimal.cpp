@@ -41,6 +41,7 @@ double computePrimalInfsTime = 0;
 double computeDualInfsTime = 0;
 double reportRebTime = 0;
 bool liftStart = false;
+int ivHint = 0;
 
 HighsStatus HQPrimal::solve() {
   HighsOptions& options = workHMO.options_;
@@ -556,7 +557,11 @@ void HQPrimal::primalRebuild() {
   double init;
   // std::cout << "reinvert: " << reInvert << std::endl;
   // std::cin.get();
+  // std::cout << "reIvert variable: " << reInvert << std::endl;
+  // std::cin.get();
   if (reInvert) {
+    // std::cout << "reinvert called" << std::endl;
+    // std::cin.get();
     timer.start(simplex_info.clock_[InvertClock]);
     init = timer.readRunHighsClock();
     int rankDeficiency = compute_factor(workHMO);
@@ -686,20 +691,7 @@ void HQPrimal::unfold() {
           1000);
   // std::cout << "Num Pivots Required: " << workHMO.lp_.numLinkers_ << std::endl;
   for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
-  // if (workHMO.lp_.skip[i]){
-  //     // workHMO.simplex_info_.workCost_[columnIn] = 0;
-  //     // workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
-  //     // workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF; 
-  //     // workHMO.simplex_info_.workCost_[columnIn] = 1;
-  //   // workHMO.simplex_info_.workUpper_[columnIn] = +HIGHS_CONST_INF;
-  //   // workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
-  //   // workHMO.simplex_info_.workValue_[columnIn] = 0;
-  //   // workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
-  //     continue;
-  // }
     cnt++;
-    // std::cout << i << std::endl;
-    // simplex_info.update_count = 0;
     ++workHMO.lp_.unfoldIter;
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);
     columnIn = workHMO.lp_.linkers[i];
@@ -715,11 +707,22 @@ void HQPrimal::unfold() {
     // cRowTime += timer.readRunHighsClock() - init;
     // initial_time = timer.readRunHighsClock();
     primalUpdate();
+    // std::cout << "invertHint: " << invertHint << std::endl;
+    // std::cin.get();
+    if (ivHint == INVERT_HINT_POSSIBLY_SINGULAR_BASIS){
+      primalRebuild(); 
+      ivHint = 0;
+      // std::cout << "primalRebuild called" << std::endl;
+    }
+    if (cnt > update_limit){
+      printf("PrPh3 %10d %20.10e\n", workHMO.lp_.unfoldIter, workHMO.simplex_info_.primal_objective_value);
+      cnt = 0;
+    }
     // uTime += timer.readRunHighsClock() - initial_time;
     workHMO.simplex_info_.workCost_[columnIn] = 0;
     workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
     workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF;
-    if (cnt > update_limit){ primalRebuild(); cnt = 0;}
+    // if (cnt > update_limit){ primalRebuild(); cnt = 0;}
   }
   // std::cout << "done pivoting" << std::endl;
   // std::cin.get();
@@ -1106,7 +1109,6 @@ void HQPrimal::primalUpdate() {
 
   // updateVerify for primal
   numericalTrouble = 0;
-  /*
   double aCol = fabs(alpha);
   double alphaRow;
   if (columnIn < workHMO.simplex_lp_.numCol_) {
@@ -1118,13 +1120,16 @@ void HQPrimal::primalUpdate() {
   double aDiff = fabs(aCol - aRow);
   numericalTrouble = aDiff / min(aCol, aRow);
   if (numericalTrouble > 1e-7)
-    printf("Numerical check: alphaCol = %12g, alphaRow = a%12g, aDiff = a%12g:
-  measure = %12g\n", alpha, alphaRow, aDiff, numericalTrouble);
+    printf("NumericalTrouble - Reinverting\n");
   // Reinvert if the relative difference is large enough, and updates have been
-  performed
-  //  if (numericalTrouble > 1e-7 && workHMO.simplex_info_.update_count > 0)
-  invertHint = INVERT_HINT_POSSIBLY_SINGULAR_BASIS;
-  */
+  //performed
+  if (numericalTrouble > 1e-7 && workHMO.simplex_info_.update_count > 0){
+    invertHint = INVERT_HINT_POSSIBLY_SINGULAR_BASIS;
+    ivHint = INVERT_HINT_POSSIBLY_SINGULAR_BASIS;
+    // std::cout << "invertHint: " << (int)invertHint << std::endl;
+    // // std::cout << "update_count: " << workHMO.simplex_info_.update_count << std::endl;
+    // std::cin.get();
+  }
   // Dual for the pivot
   workDual[columnIn] = 0;
   workDual[columnOut] = -thetaDual;
@@ -1132,6 +1137,8 @@ void HQPrimal::primalUpdate() {
   // Update workHMO.factor_ basis
   init = timer.readRunHighsClock();
   update_factor(workHMO, &col_aq, &row_ep, &rowOut, &invertHint);
+  // std::cout << "invertHint: " << (int)invertHint << std::endl;
+  // std::cin.get();
   update_matrix(workHMO, columnIn, columnOut);
   if (simplex_info.update_count >= simplex_info.update_limit) {
     invertHint = INVERT_HINT_UPDATE_LIMIT_REACHED;
