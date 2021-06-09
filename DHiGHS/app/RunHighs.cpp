@@ -282,7 +282,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     for (int i = 0; i < solution.col_value.size(); ++i){
       obj += solution.col_value[i] * lp.colCost_[i];
     }
-    const char *fileName = "HiGHS_mittleman_timings.csv";
+    const char *fileName = "HiGHS_Symmetric_timings.csv";
     std::ofstream resultsFile(fileName, std::ios_base::app);
     std::ifstream in(fileName);
     std::string name = options.model_file.c_str();
@@ -319,7 +319,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsBasis basis;
   HighsSolution solution;
   init_status = highs.passModel(lp);
-  write_status = highs.writeModel("Original.lp");
+  // write_status = highs.writeModel("Original.lp");
   // Set options
   alpOpt.presolve = string("off");
   alpOpt.simplex_scale_strategy = 0;
@@ -365,7 +365,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Intitial solve of level 0 aggregate
   return_status = highs.passHighsOptions(alpOpt);
   init_status = highs.passModel(*alp);
-  write_status = highs.writeModel("level_0.lp");
+  // write_status = highs.writeModel("level_0.lp");
   initial_time = timer.readRunHighsClock();
   run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
@@ -385,7 +385,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   alp = lpFolder.getAlp();
   alpBasis = lpFolder.getBasis();
   init_status = highs.passModel(*alp);
-  write_status = highs.writeModel("level_n.lp");
+  // write_status = highs.writeModel("level_n.lp");
   basis_status = highs.setBasis(*alpBasis);
   initial_time = timer.readRunHighsClock();
   run_status = highs.run(); 
@@ -397,7 +397,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   double obj = 0;
   for (int i = 0; i < solution.col_value.size(); ++i)
     obj += solution.col_value[i] * alp->colCost_[i];
-  const char *fileName = "DHiGHS_mittleman_timings.csv";
+  const char *fileName = "OC_Symmetric_timings.csv";
   std::ofstream resultsFile(fileName, std::ios_base::app);
   std::ifstream in(fileName);
   std::string name = options.model_file.c_str();
@@ -407,8 +407,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::string uTime = std::to_string(highs.totUnfoldTime_ - foldSolveTime);
   std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
   std::string objval = std::to_string(obj);
-  name.erase(0,33);
-  // name.erase(0,42);
+  // name.erase(0,33);
+  name.erase(0,41);
   std::string outP = name + "," + pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + cRed +
   "," + rRed + "," + nRed + "," + objval + "\n";
   if (in.peek() == std::ifstream::traits_type::eof()){
@@ -426,7 +426,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     "," + column7 + "," + column8 + "," + column5 + "\n";
     resultsFile << outCols;
   }
-  // resultsFile << outP;
+  resultsFile << outP;
   resultsFile.close(); 
   
   // for (int i = 1; i < numRefinements; ++i){
