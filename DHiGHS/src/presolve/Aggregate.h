@@ -12,6 +12,7 @@ public:
 	HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
 	bool update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis);
 	void translateFrontsToColors();
+	void allocate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis);
 	void packVectors();
 	void foldObj();
 	void foldMatrix();
@@ -61,6 +62,7 @@ public:
 	/* Data structs to house the aggregated lp 
 	and the aggregated lp basis information */
 	HighsLp* alp;
+	HighsLp* elp;
 	HighsBasis* alpBasis;
 
 	/* Scalar values that contain dimensional and
@@ -155,6 +157,12 @@ public:
 	vector<int> previousCellSize;
 	vector<int> previousCellFront;
 	vector<int> previousLabels;
+
+	// Extended LP stuff	
+	int elpNumRow_;
+	int elpNumCol_;
+	int elpNumTot_;
+	int elpnnz_;
 };
 
 #endif

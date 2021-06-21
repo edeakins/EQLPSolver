@@ -31,6 +31,7 @@ public:
     int getNumRefinements();
     void lp2Graph();
     void doSaucyEquitable();
+    void convSaucyPartToLpPart();
     int init_fixadj1(int n, int* adj);
     void init_fixadj2(int n, int e, int* adj);
     static int on_automorphism( int n, const int *gamma, int k, int *support, void *arg );
@@ -43,6 +44,7 @@ public:
     struct eq_part *partitions;
     struct saucy_stats stats;
 	struct amorph_graph *g;
+    struct equitablePartition *ep;
     const static int quiet_mode = 0;
     const static sig_atomic_t timeout_flag = 0;
     int timeout = 0;
@@ -70,6 +72,15 @@ public:
     vector<int> AindexP;
     vector<string> rowNames;
     vector<string> colNames;
+};
+
+struct equitableParititon{
+    int* label;
+    int* cell;
+    int* cellSize;
+    int* cellFront;
+    int numColParts_;
+    int numRowParts_;
 };
 
 #endif

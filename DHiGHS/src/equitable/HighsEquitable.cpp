@@ -188,6 +188,11 @@ void HighsEquitable::doSaucyEquitable(){
 		if (partitions[j].nsplits != maxSplit) partitions[j].nsplits = maxSplit;
 	saucy_free(s);
 }
+
+// Convert saucy partition to a partition easier to parse for LP construction
+void HighsEquitable::convSaucyPartToLpPart(){
+	
+}
 // Refine function to call everything thing else
 eq_part* HighsEquitable::refine(){
 	lp2Graph();

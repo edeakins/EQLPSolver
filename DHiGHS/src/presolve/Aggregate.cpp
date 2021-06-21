@@ -82,6 +82,27 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part& ep, HighsSolut
   foldBndsInit();
 }
 
+void HighsAggregate::allocate(HighsLp& lp, const struct eq_part& ep, HighsSolution& solution, HighsBasis& basis){
+  // Allocate storage for link rows and columns in original LP
+  int numLinkCols_ = ep.nsplits, numLinkRows_ = ep.nsplits;
+  int nnzLink_ = ep.nsplits * 3;
+  elp = &lp;
+  elpNumRow_ = elp->numRow_;
+  elpNumCol_ = elp->numCol_;
+  elpNumTot_ = elpNumRow_ + elpNumCol_;
+  elpnnz_ = elp->nnz_;
+  elp->rowUpper_.resize(elpNumRow_ + numLinkRows_);
+  elp->rowLower_.resize(elpNumRow_ + numLinkRows_);
+  elp->colUpper_.resize(elpNumCol_ + numLinkCols_);
+  elp->colLower_.resize(elpNumCol_ + numLinkCols_);
+  elp->colCost_.resize(elpNumCol_ + numLinkCols_);
+  elp->Avalue_.resize(elpnnz_ + nnzLink_);
+  elp->Avalue_.resize(elpnnz_ + nnzLink_);
+  elp->Astart_.resize(elpNumCol_ + numLinkCols_ + 1);
+  // // Allocate storage for aggregate lp
+  // alp->
+}
+
 bool HighsAggregate::update(const struct eq_part& ep, const HighsSolution& solution, const HighsBasis& basis){
   // equtiable partition update
   // previousPartition = partition;

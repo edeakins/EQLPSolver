@@ -396,6 +396,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   }
   resultsFile << outP;
   resultsFile.close(); 
+  std::cout << "Fold Time: " << fTime << std::endl;
+  std::cout << "Total Time: " << tTime << std::endl;
   
   return run_status;
 }
