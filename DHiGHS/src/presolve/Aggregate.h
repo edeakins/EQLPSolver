@@ -11,6 +11,7 @@ class HighsAggregate{
 public:
 	HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis,
 	int numRefinements);
+	void allocate();
 	int update(HighsSolution& solution, HighsBasis& basis);
 	void lift(HighsSolution& solution, HighsBasis& basis);
 	void translateFrontsToColors();
@@ -28,9 +29,9 @@ public:
 	void foldBnds();
 	void setRowBasis();
 	void setColBasis();
-	void addRows();
-	void appendRowsToMatrix();
-	void addCols();
+	void addRows(HighsLp& lp);
+	void appendRowsToMatrix(HighsLP& lp);
+	void addCols(HighsLp& lp);
 	void identifyLinks();
 	void createLinkRows();
 	void reset();
@@ -74,6 +75,7 @@ public:
 	/* Data structs to house the aggregated lp 
 	and the aggregated lp basis information */
 	HighsLp* alp;
+	HighsLp* elp;
 	HighsBasis* alpBasis;
 	HighsBasis prevBasis;
 	HighsSolution prevSol;
@@ -85,10 +87,18 @@ public:
 	int numRef;
 	int iter;
 	int numRow;
+	
 	int numCol;
+	int eNumCol_;
 	int numTot;
+	int eNumTot_;
 	int nnz;
-	int numPairs;
+	int ennz_;
+	int eNumRow_;
+	int eNumCol_;
+	int eNumTot_;
+	int eNumLinkCols_;
+	int eNumLinkRows_;
 	string model_name_;
 	string lp_name_;
 

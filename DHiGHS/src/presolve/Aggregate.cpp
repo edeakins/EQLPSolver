@@ -8,6 +8,7 @@ int numBasic = 0;
 HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis, 
 int numRefinements){
 	// To solve and was the LP solved
+  elp = &lp;
   numRef = numRefinements;
   solve = true;
   solved = true;
@@ -182,6 +183,26 @@ int HighsAggregate::update(HighsSolution& solution, HighsBasis& basis){
   // addRows();
   // ++iter;
   // return true;
+}
+
+void HighsAggregate::allocate(){
+  /* Allocate new space in original lp and create space for alp */
+  ennz_ = elp->nnz_;
+  eNumCol_ = elp->numCol_;
+  eNumRow_ = elp->numRow_;
+  eNumTot_ = eNumCol_ + eNumRow_;
+  eNumLinkCols_ = 
+  elp->colCost_.resize(eNumCol_ + );
+  elp->Avalue_.resize(nnz + maxLinkSpace);
+  elp->Aindex_.resize(nnz + maxLinkSpace);
+  elp->Astart_.resize(numCol + numLinkers_ + 1);
+  elp->colUpper_.resize(numCol + numLinkers_);
+  elp->colLower_.resize(numCol + numLinkers_);
+  elp->rowLower_.resize(numRow + numLinkers_);
+  elp->rowUpper_.resize(numRow + numLinkers_);
+  elp->linkers.resize(numLinkers_);
+  elp->linkLower_.resize(numLinkers_);
+  elp->linkUpper_.resize(numLinkers_);
 }
 
 void HighsAggregate::lift(HighsSolution &solution, HighsBasis& basis){
@@ -784,7 +805,7 @@ void HighsAggregate::setColBasis(){
   }
 }
 
-void HighsAggregate::addRows(){
+void HighsAggregate::addRows(HighsLp& lp){
   int i, stop = numLinkers_;
   for (i = 0; i < numLinkers_; ++i){
     if (i < stop){
