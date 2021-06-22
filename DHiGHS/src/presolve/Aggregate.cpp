@@ -8,6 +8,7 @@ int numBasic = 0;
 HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis, 
 int numRefinements){
 	// To solve and was the LP solved
+  elp = &lp;
   numRef = numRefinements;
   solve = true;
   solved = true;
@@ -182,6 +183,34 @@ int HighsAggregate::update(HighsSolution& solution, HighsBasis& basis){
   // addRows();
   // ++iter;
   // return true;
+}
+
+void HighsAggregate::allocate(){
+  /* Allocate Space for alp and its data structs */
+  alp->colCost_.resize(alpNumCol_);
+  alp->colLower_.resize(alpNumCol_);
+  alp->colUpper_.resize(alpNumCol_);
+  alp->rowLower_.resize(alpNumRow_);
+  alp->rowUpper_.resize(alpNumRow_);
+  alp->Astart_.resize(alpNumCol_ + 1);
+  alp->Aindex_.resize(alpNnz_);
+  alp->Avalue_.resize(alpNnz_);
+  /* Resize original LP to contain full extended LP
+  info at level N partition */
+  elpNnz_ = elp->nnz_;
+  elpNumRow_ = elp->numRow_;
+  elpNumCol_ = elp->numCol_;
+  elpNumTot_ = elpNumRow_ + elpNumCol_;
+  elpNumResCols_ = elpNumResRows_ = numLinkers_;
+  elpNumResNnz_ = numLinkers_ * 3;
+  elp->colCost_.resize(elpNumCol_ + elpNumResCols_);
+  elp->colLower_.resize(elpNumCol_ + elpNumResCols_);
+  elp->colUpper_.resize(elpNumCol_ + elpNumResCols_);
+  elp->rowLower_.resize(elpNumRow_ + elpNumResRows_);
+  elp->rowUpper_.resize(elpNumRow_ + elpNumResRows_);
+  elp->Astart_.resize(elpNumCol_ + elpNumResCols_ + 1);
+  elp->Aindex_.resize(elpNnz_ + elpNumResNnz_);
+  elp->Avalue_.resize(elpNnz_ + elpNumResNnz_);
 }
 
 void HighsAggregate::lift(HighsSolution &solution, HighsBasis& basis){

@@ -712,10 +712,11 @@ void HQPrimal::unfold() {
     if (ivHint == INVERT_HINT_POSSIBLY_SINGULAR_BASIS){
       primalRebuild(); 
       ivHint = 0;
+      cnt = 0;
       // std::cout << "primalRebuild called" << std::endl;
     }
     if (cnt > update_limit){
-      printf("PrPh3 %10d %20.10e\n", workHMO.lp_.unfoldIter, workHMO.simplex_info_.primal_objective_value);
+      primalRebuild();
       cnt = 0;
     }
     // uTime += timer.readRunHighsClock() - initial_time;

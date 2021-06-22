@@ -11,6 +11,7 @@ class HighsAggregate{
 public:
 	HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis,
 	int numRefinements);
+	void allocate();
 	int update(HighsSolution& solution, HighsBasis& basis);
 	void lift(HighsSolution& solution, HighsBasis& basis);
 	void translateFrontsToColors();
@@ -74,6 +75,7 @@ public:
 	/* Data structs to house the aggregated lp 
 	and the aggregated lp basis information */
 	HighsLp* alp;
+	HighsLp* elp;
 	HighsBasis* alpBasis;
 	HighsBasis prevBasis;
 	HighsSolution prevSol;
@@ -89,6 +91,13 @@ public:
 	int numTot;
 	int nnz;
 	int numPairs;
+	int elpNumRow_;
+	int elpNumCol_;
+	int elpNumTot_;
+	int elpNnz_;
+	int elpNumResNnz_;
+	int elpNumResCols_;
+	int elpNumResRows_;
 	string model_name_;
 	string lp_name_;
 
@@ -132,6 +141,10 @@ public:
 	int previousNumRow_ = 0;
 	int previousNumSolveCol_ = 0;
 	int previousNumSolveRow_ = 0;
+	int alpNumCol_ = 0;
+	int alpNumRow_ = 0;
+	int alpNumTot_ = 0;
+	int alpNnz_ = 0;
 
 	/* This is the sparse storage for the current 
 	 aggregate lp.  This data will be uploaded to highs
