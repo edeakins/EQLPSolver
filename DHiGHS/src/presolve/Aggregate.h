@@ -9,79 +9,45 @@
 
 class HighsAggregate{
 public:
-	HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis,
-	int numRefinements);
-	void allocate();
-	int update(HighsSolution& solution, HighsBasis& basis);
-	void lift(HighsSolution& solution, HighsBasis& basis);
+	// Create and allocate
+	HighsAggregate(HighsLp& lp, const struct lpPartition* ep);
+	void allocateAlp();
+	void allocateElp();
+	// Fold to alp
+	void fold();
 	void translateFrontsToColors();
-	void findNonbasicRows();
-	void findNonbasicCols();
 	void packVectors();
 	void foldObj();
 	void foldMatrix();
-	void fixMatrix();
-	void findRowRepsToFix();
-	void findColRepsToFix();
-	void foldRhsInit();
 	void foldRhs();
-	void foldBndsInit();
-	void foldBnds();
-	void setRowBasis();
-	void setColBasis();
-	void addRows();
-	void appendRowsToMatrix();
-	void addCols();
-	void identifyLinks();
-	void createLinkRows();
-	void reset();
-	void countNumRefinements();
-	void savePartition();
-	void saveRowsAndColsFromLastSolve();
-	void clearLp();
-	void clearLinks();
-	// New funcs for lifting
-	void countNumLinkers();
+	void foldBnd();
+	// lift to elp
+	void lift(HighsSolution& solution, HighsBasis& basis);
 	void liftAMatrix();
-	void fixAstart();
 	void liftObjective();
 	void liftBnd();
 	void liftRhs();
 	void liftColBasis();
 	void liftRowBasis();
-	void makeLinks();
-	// New functs for lifting
+	// utility functions
 	HighsLp* getAlp();
 	HighsBasis* getBasis();
+	void countNumLinkers();
+	void makeLinks();
+	void createLinkRows();
+	void addRows();
+	void appendRowsToMatrix();
+	void addCols();
+	void fixAstart();
 	void appendLinkersToLp();
-	void appendColsToLpVectors(const int num_new_col,
-                                  vector<double>& XcolCost,
-                                  vector<double>& XcolLower,
-                                  vector<double>& XcolUpper);
-	void appendColsToLpMatrix(const int num_new_col,
-                                 const int num_new_nz, vector<int>& XAstart,
-                                 vector<int>& XAindex, vector<double>& XAvalue);
-	void appendRowsToLpMatrix(const int num_new_row,
-                                 const int num_new_nz, vector<int>& XAstart,
-                                 vector<int>& XAindex, vector<double>& XAvalue);
-	void appendRowsToLpVectors(const int num_new_row,
-                                  vector<double>& XrowLower,
-                                  vector<double>& XrowUpper);							   
-	void transpose(vector<int>& xAstart, vector<int>& xAindex, vector<double>& xAvalue,
-					vector<int>& xARstart, vector<int>& xARindex, vector<double> &xARvalue);
-	// HighsLp& getAlp();
-	// HighsBasis& getAlpBasis();
-
 	/* Data structs to house the aggregated lp 
 	and the aggregated lp basis information */
 	HighsLp* alp;
 	HighsLp* elp;
 	HighsBasis* alpBasis;
+	HighsBasis* elpBasis;
 	HighsBasis prevBasis;
 	HighsSolution prevSol;
-	bool solve;
-	bool solved;
-
 	/* Scalar values that contain dimensional and
 	name data about the original lp */
 	int numRef;
@@ -100,23 +66,9 @@ public:
 	int elpNumResRows_;
 	string model_name_;
 	string lp_name_;
-
-	/* Sparse vectors that store information about the original lp
-	such as the A matrix, cost vector, and right hand sides.  Data is 
-	stored in csc data format */
-	vector<int> Astart;
-    vector<int> Aindex;
-    vector<double> Avalue;
-    vector<double> colCost;
-    vector<double> colLower;
-    vector<double> colUpper;
-    vector<double> rowLower;
-    vector<double> rowUpper;
-
     // Linking pairs for new aggregate lp
 	vector<int> parentPartition;
 	vector<pair<int, int> > linkingPairs;
-
 	/* Sparse storage for the previous iterations basis
 	information.  We use this to set the basis of upcoming 
 	aggregated lp so that no phase 1 simplex is needed. */
@@ -128,8 +80,6 @@ public:
 	vector<HighsBasisStatus> row_status_;
 	vector<bool> nonBasicCol;
 	vector<bool> nonBasicRow;
-
-
 	/* New scalars for the current aggregated lp */
 	int numRow_ = 0;
 	int numCol_ = 0;
@@ -187,7 +137,7 @@ public:
 	vector<bool> skipLink;
 
 	// For equitable partitions
-	const struct eq_part* partition;
+	const struct lpPartition* partition;
 	const struct eq_part* previousPartition;
 	vector<int> labels;
 	vector<int> cell;

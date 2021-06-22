@@ -333,13 +333,13 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
   double initial_time = timer.readRunHighsClock();
   HighsEquitable ep(lp);
-  struct eq_part *partitions;
-  partitions = ep.refine();
+  struct lpPartition *partition;
+  partition = ep.convertToLpPartition();
   int numRefinements = ep.getNumRefinements();
   highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
   // Use aggregator to get first aggregate lp (level 0)
   initial_time = timer.readRunHighsClock();
-  HighsAggregate lpFolder(lp, partitions, solution, basis, numRefinements);
+  HighsAggregate lpFolder(lp, partition);
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
   alp = lpFolder.getAlp();
   int nRCol = alp->numCol_;

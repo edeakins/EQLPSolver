@@ -33,6 +33,20 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
     Astart.assign(lp.Astart_.begin(), lp.Astart_.end());
 	colNames.assign(lp.col_names_.begin(), lp.col_names_.end());
 	rowNames.assign(lp.row_names_.begin(), lp.row_names_.end());
+	// Allocation for lpPartition class
+	partition->cell.resize(nTot);
+  	partition->cellFront.resize(nTot);
+  	partition->cellSize.resize(nTot);
+  	partition->labels.resize(nTot);
+	partition->row.resize(nRows);
+	partition->col.resize(nCols);
+	partition->cellToCol.assign(nCols, -1);
+	partition->cellToRow.assign(nRows, -1);
+	partition->colsToReps.assign(nCols, -1);
+	partition->repsToCols.assign(nCols, -1);
+	partition->rowsToReps.assign(nRows, -1);
+	partition->repsToRows.assign(nRows, -1);
+	partition->parents.assign(nTot, -1);
 }
 
 int HighsEquitable::init_fixadj1( int n, int *adj ){
@@ -193,11 +207,60 @@ void HighsEquitable::doSaucyEquitable(){
 	saucy_free(s);
 }
 // Refine function to call everything thing else
-eq_part* HighsEquitable::refine(){
+void HighsEquitable::refine(){
 	lp2Graph();
 	doSaucyEquitable();
-	return partitions;
+	// return partitions;
 } 
+
+// Convert the saucy partition to lpPartition
+lpPartition* HighsEquitable::convertToLpPartition(){
+	int i = 0, c = 0, r = 0, rep, cRep, pRep, v, pf, cf, colCounter = 0, rowCounter = 0;
+	map<int, int> fCell;
+	vector<bool> cellMarked(nTot, false);
+	// map fronts to colors and count numCol_ and numRow_
+	int numColCell = 0;
+	for (i = 0; i < nTot; ++i){
+		if (fCell.insert(pair<int, int>(partitions[0].fronts[i], c)).second){
+		++c;
+		++partition->numTot_;
+		}
+	}
+	for (i = 0; i < nTot; ++i){
+		partition->labels[i] = partitions[0].labels[i];
+		if (i < nCols) partition->parents[i] = partitions[0].parents[i];
+		if (partition->parents[i] > -1) partition->numResCol_++;
+		partition->cell[i] = fCell.find(partitions[0].fronts[i])->second;
+		partition->cellFront[fCell.find(partitions[0].fronts[i])->second] = partitions[0].fronts[i];
+		++partition->cellSize[fCell.find(partitions[0].fronts[i])->second];
+	}
+	/* New mapping code: Go through col by col in ascending order,
+	when a cell is counted it is marked as true, go to next col that
+	that is in a new cell and mark that cell */
+	for (i = 0; i < nTot; ++i){
+		c = partition->cell[i];
+		if (cellMarked[c]){ 
+		i < nCols ? partition->col[i] = partition->cellToCol[c] : partition->row[i - nCols] = partition->cellToRow[c - partition->numCol_];
+		continue;
+		}
+		if (i < nCols){
+		partition->repsToCols[i] = partition->numCol_;
+		partition->colsToReps[partition->numCol_] = i;
+		partition->cellToCol[c] = partition->numCol_;
+		partition->col[i] = partition->numCol_++;
+		cellMarked[c] = true;
+		}
+		else{
+		partition->repsToRows[i - nCols] = partition->numRow_;
+		partition->rowsToReps[partition->numRow_] = i - nCols;
+		partition->cellToRow[c - partition->numCol_] = partition->numRow_;
+		partition->row[i - nCols] = partition->numRow_++;
+		cellMarked[c] = true;
+		}
+	}
+	partition->numTot_ = partition->numCol_ + partition->numRow_;
+	return partition;
+}
 
 // Return number of refinements
 int HighsEquitable::getNumRefinements(){
