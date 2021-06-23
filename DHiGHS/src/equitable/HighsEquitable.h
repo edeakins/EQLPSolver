@@ -27,8 +27,8 @@ class HighsEquitable {
 public:
 	// Setup for equitable ptn
 	HighsEquitable(const HighsLp& lp);
-    lpPartition* convertToLpPartition();
-    void refine();
+    void convertToLpPartition();
+    lpPartition* refine();
     int getNumRefinements();
     void lp2Graph();
     void doSaucyEquitable();
@@ -72,26 +72,6 @@ public:
     vector<int> AindexP;
     vector<string> rowNames;
     vector<string> colNames;
-};
-
-struct lpPartition{
-    int numCol_ = 0;
-    int numRow_ = 0;
-    int numTot_ = 0;
-    int numResCol_ = 0;
-    vector<int> cell;
-    vector<int> cellSize;
-    vector<int> cellFront;
-    vector<int> labels;
-    vector<int> col;
-    vector<int> row;
-    vector<int> colsToReps;
-    vector<int> cellToCol;
-    vector<int> repsToCols;
-    vector<int> rowsToReps;
-    vector<int> cellToRow;
-    vector<int> repsToRows;
-    vector<int> parents;
 };
 
 #endif

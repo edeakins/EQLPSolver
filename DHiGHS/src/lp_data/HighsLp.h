@@ -87,32 +87,20 @@ class HighsLp {
   double pivotTime = 0;
   // Model data
   int numCol_ = 0;
-  int addNumCol_ = 0;
   int numRow_ = 0;
-  int addNumRow_ = 0;
   int numInt_ = 0;
   int nnz_ = 0;
-  int realNumCol_ = 0;
   int numLinkers_ = 0;
-  int realNumRow_ = 0;
 
   std::vector<int> Astart_;
-  std::vector<int> addARstart_;
   std::vector<int> Aindex_;
-  std::vector<int> addARindex_;
   std::vector<double> Avalue_;
-  std::vector<double> addARvalue_;
   std::vector<double> colCost_;
   std::vector<double> colLower_;
   std::vector<double> colUpper_;
   std::vector<double> rowLower_;
   std::vector<double> rowUpper_;
-  std::vector<double> linkLower_;
-  std::vector<double> linkUpper_;
-  std::vector<int> linkers;
-  std::vector<bool> skip;
-  std::vector<int> artificialVariables;
-  std::vector<bool> activeColorHistory;
+  std::vector<int> residuals_;
 
 
   // sense 1 = minimize, -1 = maximize
@@ -152,6 +140,26 @@ class HighsLp {
 
   int numRealRows;
   int numRealCols;
+};
+
+struct lpPartition{
+  int numCol_ = 0;
+  int numRow_ = 0;
+  int numTot_ = 0;
+  int numResCol_ = 0;
+  std::vector<int> cell;
+  std::vector<int> cellSize;
+  std::vector<int> cellFront;
+  std::vector<int> labels;
+  std::vector<int> col;
+  std::vector<int> row;
+  std::vector<int> colsToReps;
+  std::vector<int> cellToCol;
+  std::vector<int> repsToCols;
+  std::vector<int> rowsToReps;
+  std::vector<int> cellToRow;
+  std::vector<int> repsToRows;
+  std::vector<int> parents;
 };
 
 // Cost, column and row scaling factors

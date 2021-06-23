@@ -9,6 +9,12 @@ HighsAggregate::HighsAggregate(HighsLp& lp, const struct lpPartition* ep){
 	/* Make elp and partition point to lp and ep */
   elp = &lp;
   partition = ep;
+  elpNnz_ = elp->nnz_;
+  elpNumRow_ = elp->numRow_;
+  elpNumCol_ = elp->numCol_;
+  elpNumTot_ = elpNumRow_ + elpNumCol_;
+  copyPartition();
+  allocateAlp();
 }
 
 void HighsAggregate::allocateAlp(){
@@ -25,44 +31,13 @@ void HighsAggregate::allocateAlp(){
   alp->Astart_.resize(alpNumCol_ + 1);
   alp->Aindex_.reserve(elpNnz_);
   alp->Avalue_.reserve(elpNnz_);
-  coeff.assign(numRow, 0);
-  /* Allocate space for partition info */
-  cell = partition->cell;
-  cellFront = partition->cellFront;
-  cellSize = partition->cellSize;
-  labels = partition->labels;
-  parents = partition->parents;
-  prevRow.resize(numRow);
-  row = partition->row;
-  prevCol.resize(numCol);
-  col = partition->col;
-  cellToCol = partition->cellToCol;
-  cellToRow = partition->cellToRow;
-  colsToReps = partition->colsToReps;
-  repsToCols = partition->repsToCols;
-  rowsToReps = partition->rowsToReps;
-  repsToRows = partition->repsToRows;
-  AindexPacked_.resize(elpNnz_);
-  /* Allocate space for linker storage info */
-  fixed.assign(numCol, false);
-  parents.resize(numCol);
-  parent.resize(numLinkers_);
-  child.resize(numLinkers_);
-  linkARstart.resize(numLinkers_ + 1);
-  linkARindex.resize(maxLinkSpace);
-  linkARvalue.resize(maxLinkSpace);
-  linkAlength.assign(numCol + numLinkers_, 0);
+  coeff.assign(alpNumRow_, 0);
+  fixed.assign(elpNumCol_, false);
 }
 
-void HighsAggregate::allocateElp(){
+void HighsAggregate::resizeElp(){
    /* Resize original LP to contain full extended LP
   info at level N partition */
-  elpNnz_ = elp->nnz_;
-  elpNumRow_ = elp->numRow_;
-  elpNumCol_ = elp->numCol_;
-  elpNumTot_ = elpNumRow_ + elpNumCol_;
-  elpNumResCols_ = elpNumResRows_ = partition->numResCol_;
-  elpNumResNnz_ = partition->numResCol_ * 3;
   elp->colCost_.resize(elpNumCol_ + elpNumResCols_);
   elp->colLower_.resize(elpNumCol_ + elpNumResCols_);
   elp->colUpper_.resize(elpNumCol_ + elpNumResCols_);
@@ -71,9 +46,35 @@ void HighsAggregate::allocateElp(){
   elp->Astart_.resize(elpNumCol_ + elpNumResCols_ + 1);
   elp->Aindex_.resize(elpNnz_ + elpNumResNnz_);
   elp->Avalue_.resize(elpNnz_ + elpNumResNnz_);
+  elp->residuals_.resize(elpNumResCols_);
   elpBasis = (HighsBasis *)calloc(1, sizeof(HighsBasis));
   elpBasis->col_status.resize(elpNumCol_ + elpNumResCols_);
   elpBasis->row_status.resize(elpNumRow_ + elpNumResCols_);
+  /* Allocate space for linker storage info */
+  parent.resize(elpNumResCols_);
+  child.resize(elpNumResCols_);
+  linkARstart.resize(elpNumResCols_ + 1);
+  linkARindex.resize(elpNumResNnz_);
+  linkARvalue.resize(elpNumResNnz_);
+  linkAlength.assign(elpNumCol_ + elpNumResCols_, 0);
+}
+
+void HighsAggregate::copyPartition(){
+  /* Allocate space for partition info */
+  cell = partition->cell;
+  cellFront = partition->cellFront;
+  cellSize = partition->cellSize;
+  labels = partition->labels;
+  parents = partition->parents;
+  row = partition->row;
+  col = partition->col;
+  cellToCol = partition->cellToCol;
+  cellToRow = partition->cellToRow;
+  colsToReps = partition->colsToReps;
+  repsToCols = partition->repsToCols;
+  rowsToReps = partition->rowsToReps;
+  repsToRows = partition->repsToRows;
+  AindexPacked_.resize(elpNnz_);
 }
 
 void HighsAggregate::fold(){
@@ -89,13 +90,12 @@ void HighsAggregate::lift(HighsSolution &solution, HighsBasis& basis){
   row_value = solution.row_value;
   col_status = basis.col_status;
   row_status = basis.row_status;
-  liftColBasis();
-  liftRowBasis();
   liftBnd();
   liftRhs();
-  countNumLinkers();
-  liftObjective();
-  // liftAMatrix();
+  countNonbasicSplits();
+  resizeElp();
+  liftColBasis();
+  liftRowBasis();
   fixAstart();
   makeLinks();
   createLinkRows();
@@ -151,7 +151,7 @@ void HighsAggregate::liftColBasis(){
   elpBasis->numCol_ = elpNumCol_;
   for (i = 0; i < elpNumCol_; ++i){
     int rep = i;
-    int pCol = prevCol[i];
+    int pCol = col[i];
     status = col_status[pCol];
     elpBasis->col_status[i] = status;
   }
@@ -180,7 +180,7 @@ void HighsAggregate::fixAstart(){
 
 void HighsAggregate::makeLinks(){
   int i, p, c, n = 0, cnt = 0;
-  for (i = 0; i < numCol; ++i){
+  for (i = 0; i < elpNumCol_; ++i){
     if (parents[i] > -1){
       p = parents[i];
       bool fix = fixed[p];
@@ -190,7 +190,6 @@ void HighsAggregate::makeLinks(){
       child[n++] = i;
     }
   }
-  alp->skip = skip;
 }
 
 void HighsAggregate::packVectors(){
@@ -218,7 +217,7 @@ void HighsAggregate::foldObj(){
 void HighsAggregate::foldMatrix(){
   int i, j, r, c, cf, l, rep;
   alp->Astart_[0] = 0;
-  for (i = 0; i < numCol_; ++i){
+  for (i = 0; i < alpNumCol_; ++i){
     rep = colsToReps[i];
     // cf = cellFront[i];
     // rep = labels[cf];
@@ -226,7 +225,7 @@ void HighsAggregate::foldMatrix(){
       r = AindexPacked_[j];
       coeff[r] += elp->Avalue_[j];
     }
-    for (j = 0; j < numRow_; ++j){
+    for (j = 0; j < alpNumRow_; ++j){
       if (coeff[j]){
         c = cell[rep];
         alp->Avalue_.push_back(coeff[j] * cellSize[c]);
@@ -261,39 +260,37 @@ void HighsAggregate::foldBnd(){
 }
 
 void HighsAggregate::addRows(){
-  int i, stop = numLinkers_;
+  int i;
   for (i = 0; i < elpNumResCols_; ++i){
-    if (i < stop){
-      elp->rowLower_[elp->numRow_] = 0;
-      elp->rowUpper_[elp->numRow_] = 0;
-      elpBasis->row_status[elp->numRow_++] = HighsBasisStatus::LOWER;
-      ++elpBasis->numRow_;
-    }
+    elp->rowLower_[elp->numRow_] = 0;
+    elp->rowUpper_[elp->numRow_] = 0;
+    elpBasis->row_status[elp->numRow_++] = HighsBasisStatus::LOWER;
+    ++elpBasis->numRow_;
   }
-  elp->numRow_ -= stop;
+  elp->numRow_ -= elpNumResCols_;
   appendRowsToMatrix();
 }
 
 void HighsAggregate::appendRowsToMatrix(){
-  int num_new_row = numLinkers_;
-  int num_new_nz = numLinkers_ * 3;
-  int new_num_nz = alp->nnz_ + num_new_nz;
+  int num_new_row = elpNumResCols_;
+  int num_new_nz = elpNumResNnz_;
+  int new_num_nz = elpNnz_ + num_new_nz;
   for (int el = 0; el < num_new_nz; el++) linkAlength[linkARindex[el]]++;
   // Append the new rows
   // Shift the existing columns to make space for the new entries
   int new_el = new_num_nz;
-  for (int col = alp->numCol_ - 1; col >= 0; col--) {
+  for (int col = elpNumCol_ - 1; col >= 0; col--) {
     int start_col_plus_1 = new_el;
     new_el -= linkAlength[col];
-    for (int el = alp->Astart_[col + 1] - 1; el >= alp->Astart_[col]; el--) {
+    for (int el = elp->Astart_[col + 1] - 1; el >= elp->Astart_[col]; el--) {
       new_el--;
-      alp->Aindex_[new_el] = alp->Aindex_[el];
-      alp->Avalue_[new_el] = alp->Avalue_[el];
+      elp->Aindex_[new_el] = elp->Aindex_[el];
+      elp->Avalue_[new_el] = elp->Avalue_[el];
     }
-    alp->Astart_[col + 1] = start_col_plus_1;
+    elp->Astart_[col + 1] = start_col_plus_1;
   }
-  for (int i = alp->numCol_; i < numCol + numLinkers_; ++i)
-    alp->Astart_[i + 1] = alp->Astart_[i];
+  for (int i = elpNumCol_; i < elpNumCol_ + elpNumResCols_; ++i)
+    elp->Astart_[i + 1] = elp->Astart_[i];
   assert(new_el == 0);
   // Insert the new entries
   for (int row = 0; row < num_new_row; row++) {
@@ -301,52 +298,67 @@ void HighsAggregate::appendRowsToMatrix(){
     int last_el = (row < num_new_row - 1 ? linkARstart[row + 1] : num_new_nz);
     for (int el = first_el; el < last_el; el++) {
       int col = linkARindex[el];
-      new_el = alp->Astart_[col + 1] - linkAlength[col];
+      new_el = elp->Astart_[col + 1] - linkAlength[col];
       linkAlength[col]--;
-      alp->Aindex_[new_el] = alp->numRow_ + row;
-      alp->Avalue_[new_el] = linkARvalue[el];
+      elp->Aindex_[new_el] = elp->numRow_ + row;
+      elp->Avalue_[new_el] = linkARvalue[el];
     }
   }
-  alp->numRow_ += num_new_row;
-  alp->numLinkers_ = num_new_row;
+  elp->numRow_ += num_new_row;
+  elp->numLinkers_ = num_new_row;
+  elp->nnz_ += num_new_nz;
 }
 
 void HighsAggregate::addCols(){
-  int i, stop = numLinkers_;
-  for (i = 0; i < numLinkers_; ++i){
-    if (i < stop){
-      alpBasis->col_status[alp->numCol_] = HighsBasisStatus::LOWER;
-      alp->colLower_[alp->numCol_] = 0;
-      alp->colUpper_[alp->numCol_] = 0;
-      alp->linkers[i] = alp->numCol_;
-      ++alp->numCol_;
-      ++alpBasis->numCol_;
+  int i;
+  for (i = 0; i < elpNumResCols_; ++i){
+    elpBasis->col_status[elp->numCol_] = HighsBasisStatus::LOWER;
+    elp->colLower_[elp->numCol_] = 0;
+    elp->colUpper_[elp->numCol_] = 0;
+    elp->residuals_[i] = elp->numCol_;
+    ++elp->numCol_; ++elpNumCol_;
+    ++elpBasis->numCol_;
+  }
+  elp->numLinkers = elpNumResCols_;
+}
+
+void HighsAggregate::countNonbasicSplits(){
+  int i, p, numSplits = 0;
+  for (i = 0; i < elpNumTot_; ++i){
+    p = parents[i];
+    if (parents[i] > -1 && !fixed[p]){
+      numSplits++;
     }
   }
-  alp->numLinkers = numLinkers_;
+  elpNumResCols_ = elpNumResRows_ = numSplits;
+  elpNumResNnz_ = elpNumResCols_ * 3;
 }
 
 void HighsAggregate::createLinkRows(){
-  int i, offset = 0, idx, stop = numLinkers_;
+  int i, offset = 0, idx;
   linkARstart[0] = 0;
-  for (i = 0; i < numLinkers_; ++i){
-    if (i < stop){
-      linkARindex[offset] = parent[i]; linkARvalue[offset] = 1;
-      linkARindex[offset + 1] = child[i]; linkARvalue[offset + 1] = -1;
-      linkARindex[offset + 2] = alp->numCol_ + i; linkARvalue[offset + 2] = -1;
-      linkARstart[i + 1] = linkARstart[i] + 3;
-      offset += 3;
-    }
+  for (i = 0; i < elpNumResCols_; ++i){
+    linkARindex[offset] = parent[i]; linkARvalue[offset] = 1;
+    linkARindex[offset + 1] = child[i]; linkARvalue[offset + 1] = -1;
+    linkARindex[offset + 2] = elp->numCol_ + i; linkARvalue[offset + 2] = -1;
+    linkARstart[i + 1] = linkARstart[i] + 3;
+    offset += 3;
   }
-  for (i = stop; i < numLinkers_; ++i)
-    linkARstart[i + 1] = linkARstart[i];
+}
+
+HighsLp* HighsAggregate::getElp(){
+  return elp;
+}
+
+HighsBasis* HighsAggregate::getElpBasis(){
+  return elpBasis;
 }
 
 HighsLp* HighsAggregate::getAlp(){
   return alp;
 }
 
-HighsBasis* HighsAggregate::getBasis(){
+HighsBasis* HighsAggregate::getAlpBasis(){
   return alpBasis;
 }
 

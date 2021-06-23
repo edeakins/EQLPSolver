@@ -314,7 +314,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsStatus basis_status;
   // HighsLp class to contain aggregates and HighsBasis class to contain bases
   HighsLp* alp;
-  HighsBasis* alpBasis;
+  // HighsLp* alpBasis;
+  HighsLp* elp;
+  HighsBasis* elpBasis;
   // Basis and solution to store from unfold interations
   HighsBasis basis;
   HighsSolution solution;
@@ -334,12 +336,13 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   double initial_time = timer.readRunHighsClock();
   HighsEquitable ep(lp);
   struct lpPartition *partition;
-  partition = ep.convertToLpPartition();
+  partition = ep.refine();
   int numRefinements = ep.getNumRefinements();
   highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
   // Use aggregator to get first aggregate lp (level 0)
   initial_time = timer.readRunHighsClock();
   HighsAggregate lpFolder(lp, partition);
+  lpFolder.fold();
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
   alp = lpFolder.getAlp();
   int nRCol = alp->numCol_;
@@ -361,7 +364,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::string rRed = rstream.str();
   nstream << std::fixed << std::setprecision(2) << nnzRed;
   std::string nRed = nstream.str();
-  alpBasis = lpFolder.getBasis();
+  // alpBasis = lpFolder.getBasis();
   // Intitial solve of level 0 aggregate
   return_status = highs.passHighsOptions(alpOpt);
   init_status = highs.passModel(*alp);
@@ -372,137 +375,62 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   double foldSolveTime = timer.readRunHighsClock() - initial_time;
   basis = highs.getBasis();
   solution = highs.getSolution();
-  // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-  // for (int i = 0; i < solution.col_value.size(); ++i){
-  //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  // }
+  cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
+  for (int i = 0; i < solution.col_value.size(); ++i){
+    cout << "var_" << i << " = " << solution.col_value[i] << endl;
+  }
   // Start loop for level 1+ aggregates
   alpOpt.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
   return_status = highs.passHighsOptions(alpOpt);
   initial_time = timer.readRunHighsClock();
   lpFolder.lift(solution, basis);
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
-  alp = lpFolder.getAlp();
-  alpBasis = lpFolder.getBasis();
-  init_status = highs.passModel(*alp);
-  // write_status = highs.writeModel("level_n.lp");
-  basis_status = highs.setBasis(*alpBasis);
-  initial_time = timer.readRunHighsClock();
-  run_status = highs.run(); 
-  highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
-  basis = highs.getBasis();
-  // for (int i = basis.col_status.size() - alp->numLinkers_; i < basis.col_status.size(); ++i)
-  //   if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
-  solution = highs.getSolution();
-  double obj = 0;
-  for (int i = 0; i < solution.col_value.size(); ++i)
-    obj += solution.col_value[i] * alp->colCost_[i];
-  const char *fileName = "OC_Symmetric_timings.csv";
-  std::ofstream resultsFile(fileName, std::ios_base::app);
-  std::ifstream in(fileName);
-  std::string name = options.model_file.c_str();
-  std::string pTime = std::to_string(highs.totPartTime_);
-  std::string fTime = std::to_string(highs.totFoldTime_);
-  std::string fSTime = std::to_string(foldSolveTime);
-  std::string uTime = std::to_string(highs.totUnfoldTime_ - foldSolveTime);
-  std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
-  std::string objval = std::to_string(obj);
-  // name.erase(0,33);
-  name.erase(0,41);
-  std::string outP = name + "," + pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + cRed +
-  "," + rRed + "," + nRed + "," + objval + "\n";
-  if (in.peek() == std::ifstream::traits_type::eof()){
-    std::string column0 = "Instance";
-    std::string column1 = "Partition Time";
-    std::string column2 = "Fold Time";
-    std::string column9 = "Folded Solve Time";
-    std::string column3 = "Unfold Time";
-    std::string column4 = "Total Time";
-    std::string column5 = "Objective";
-    std::string column6 = "Column Reduction (%)";
-    std::string column7 = "Row Reduction (%)";
-    std::string column8 = "Nonzero Reduction (%)";
-    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column9 + "," + column3 + "," + column4 + "," + column6 +
-    "," + column7 + "," + column8 + "," + column5 + "\n";
-    resultsFile << outCols;
-  }
-  resultsFile << outP;
-  resultsFile.close(); 
-  
-  // for (int i = 1; i < numRefinements; ++i){
-  //   // double foldTime = timer.readRunHighsClock();
-  //   initial_time = timer.readRunHighsClock();
-  //   int links = lpFolder.update(solution, basis);
-  //   if (!links) break;
-  //   if (links == 1) continue;
-  //   // foldTime = timer.readRunHighsClock() - foldTime;
-  //   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
-  //   alp = lpFolder.getAlp();
-  //   alpBasis = lpFolder.getBasis();
-  //   init_status = highs.passModel(*alp);
-  //   basis_status = highs.setBasis(*alpBasis);
-  //   // std::string name = "level_" + std::to_string(i) + ".lp";
-  //   // if (i == 1 or i == 2)
-  //   // write_status = highs.writeModel(name);
-  //   initial_time = timer.readRunHighsClock();
-  //   run_status = highs.run(); 
-  //   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
-  //   basis = highs.getBasis();
-  //   solution = highs.getSolution();
-  //   // std::cout << "Basis for Linkers" << std::endl;
-  //   // for (int i = alp->numCol_ - alp->numLinkers_; i < alp->numCol_; ++i)
-  //   //   if ((int)basis.col_status[i] != 1)
-  //   //     std::cout << i << std::endl;
-  // }
-    
-  //     // for (int i = 0; i < solution.col_value.size(); ++i)
-  //     //   std::cout << "x_" << i << " = " << solution.col_value[i] << std::endl;
-      
-    
-  //   // std::string iTime = std::to_string(highs.getLp().invertTime);
-  //   // std::string pTime = std::to_string(highs.getLp().pivotTime);
-  //   // std::string uTime = std::to_string(foldTime);
-  //   // std::string mIter = std::to_string(i);
-  //   // std::string rIter = std::to_string(highs.getLp().unfoldIter);
-  //   // std::string mName = options.model_file.c_str(); 
-  //   // mName.erase(0,24);
-  //   // mName.erase(mName.length() - 4, mName.length());
-  //   // std::string outN = mName + "," + mIter + "," + rIter + "," + uTime + "," + iTime + "," + pTime + "\n";
-  //   // resultsFile << outN;
-  // // resultsFile.close();
+  elp = lpFolder.getAlp();
+  elpBasis = lpFolder.getElpBasis();
+  // init_status = highs.passModel(*alp);
+  // // write_status = highs.writeModel("level_n.lp");
+  // basis_status = highs.setBasis(*alpBasis);
+  // initial_time = timer.readRunHighsClock();
+  // run_status = highs.run(); 
+  // highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
+  // basis = highs.getBasis();
+  // // for (int i = basis.col_status.size() - alp->numLinkers_; i < basis.col_status.size(); ++i)
+  // //   if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
+  // solution = highs.getSolution();
   // double obj = 0;
   // for (int i = 0; i < solution.col_value.size(); ++i)
   //   obj += solution.col_value[i] * alp->colCost_[i];
-  // // cout << "Partition Time: " << highs.totPartTime_ << endl;
-  // // cout << "Fold Time: " << highs.totFoldTime_ << endl;
-  // // cout << "Unfold Time: " << highs.totUnfoldTime_ << endl;
-  // // cout << "Total Time: " << highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_ << endl;
-  // // Report timings
-  // // const char *fileName = "DHiGHS_mittleman_timings.csv";
-  // // std::ofstream resultsFile(fileName, std::ios_base::app);
-  // // std::ifstream in(fileName);
-  // // std::string name = options.model_file.c_str();
-  // // std::string pTime = std::to_string(highs.totPartTime_);
-  // // std::string fTime = std::to_string(highs.totFoldTime_);
-  // // std::string uTime = std::to_string(highs.totUnfoldTime_);
-  // // std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
-  // // std::string objval = std::to_string(obj);
+  // const char *fileName = "OC_Symmetric_timings.csv";
+  // std::ofstream resultsFile(fileName, std::ios_base::app);
+  // std::ifstream in(fileName);
+  // std::string name = options.model_file.c_str();
+  // std::string pTime = std::to_string(highs.totPartTime_);
+  // std::string fTime = std::to_string(highs.totFoldTime_);
+  // std::string fSTime = std::to_string(foldSolveTime);
+  // std::string uTime = std::to_string(highs.totUnfoldTime_ - foldSolveTime);
+  // std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
+  // std::string objval = std::to_string(obj);
   // // name.erase(0,33);
-  // // // name.erase(0,42);
-  // // std::string outP = name + "," + pTime + "," + fTime + "," + uTime + "," + tTime + "," + objval + "\n";
-  // // if (in.peek() == std::ifstream::traits_type::eof()){
-  // //   std::string column0 = "Instance";
-  // //   std::string column1 = "Partition Time";
-  // //   std::string column2 = "Fold Time";
-  // //   std::string column3 = "Unfold Time";
-  // //   std::string column4 = "Total Time";
-  // //   std::string column5 = "Objective";
-  // //   std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + column4 + "," + column5 + "\n";
-  // //   resultsFile << outCols;
-  // // }
-  // // resultsFile << outP;
-  // // resultsFile.close(); 
-  
+  // name.erase(0,41);
+  // std::string outP = name + "," + pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + cRed +
+  // "," + rRed + "," + nRed + "," + objval + "\n";
+  // if (in.peek() == std::ifstream::traits_type::eof()){
+  //   std::string column0 = "Instance";
+  //   std::string column1 = "Partition Time";
+  //   std::string column2 = "Fold Time";
+  //   std::string column9 = "Folded Solve Time";
+  //   std::string column3 = "Unfold Time";
+  //   std::string column4 = "Total Time";
+  //   std::string column5 = "Objective";
+  //   std::string column6 = "Column Reduction (%)";
+  //   std::string column7 = "Row Reduction (%)";
+  //   std::string column8 = "Nonzero Reduction (%)";
+  //   std::string outCols = column0 + "," + column1 + "," + column2 + "," + column9 + "," + column3 + "," + column4 + "," + column6 +
+  //   "," + column7 + "," + column8 + "," + column5 + "\n";
+  //   resultsFile << outCols;
+  // }
+  // resultsFile << outP;
+  // resultsFile.close(); 
   return run_status;
 }
 

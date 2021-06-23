@@ -694,7 +694,7 @@ void HQPrimal::unfold() {
     cnt++;
     ++workHMO.lp_.unfoldIter;
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);
-    columnIn = workHMO.lp_.linkers[i];
+    columnIn = workHMO.lp_.residuals_[i];
     // std::cout << "columnIn: " << columnIn << std::endl;
     timer.stop(simplex_info.clock_[ChuzcPrimalClock]);
     workHMO.simplex_info_.workCost_[columnIn] = 1;
@@ -1235,20 +1235,6 @@ void HQPrimal::phase1ComputeDual() {
 
   /* Recompute number of dual infeasible variables with the phase 1 cost */
   computeDualInfeasible(workHMO);
-}
-
-/* Special phase 1 artificial variable pivoting function.  We know which
-variables we need to pivot on so there is no need to determine them, we just 
-need to do the pivots to push towards a valid basis in the current LP space */
-void HQPrimal::phase1ChooseColumnArtificial(){
-  columnIn = -1;
-  for (int i = 0; i < workHMO.lp_.artificialVariables.size(); ++i){
-    if (!pivotArtificial[i]){
-      columnIn = workHMO.lp_.artificialVariables[i];
-      pivotArtificial[i] = true;
-      return;
-    }
-  }
 }
 
 /* Choose a pivot column for the phase 1 primal simplex method */

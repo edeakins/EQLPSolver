@@ -12,7 +12,8 @@ public:
 	// Create and allocate
 	HighsAggregate(HighsLp& lp, const struct lpPartition* ep);
 	void allocateAlp();
-	void allocateElp();
+	void resizeElp();
+	void copyPartition();
 	// Fold to alp
 	void fold();
 	void translateFrontsToColors();
@@ -31,8 +32,10 @@ public:
 	void liftRowBasis();
 	// utility functions
 	HighsLp* getAlp();
-	HighsBasis* getBasis();
-	void countNumLinkers();
+	HighsBasis* getAlpBasis();
+	HighsLp* getElp();
+	HighsBasis* getElpBasis();
+	void countNonbasicSplits();
 	void makeLinks();
 	void createLinkRows();
 	void addRows();

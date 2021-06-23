@@ -34,6 +34,7 @@ HighsEquitable::HighsEquitable(const HighsLp& lp){
 	colNames.assign(lp.col_names_.begin(), lp.col_names_.end());
 	rowNames.assign(lp.row_names_.begin(), lp.row_names_.end());
 	// Allocation for lpPartition class
+	partition = (struct lpPartition *)calloc( (1), sizeof(struct lpPartition) );
 	partition->cell.resize(nTot);
   	partition->cellFront.resize(nTot);
   	partition->cellSize.resize(nTot);
@@ -207,14 +208,16 @@ void HighsEquitable::doSaucyEquitable(){
 	saucy_free(s);
 }
 // Refine function to call everything thing else
-void HighsEquitable::refine(){
+lpPartition* HighsEquitable::refine(){
 	lp2Graph();
 	doSaucyEquitable();
+	convertToLpPartition();
+	return partition;
 	// return partitions;
 } 
 
 // Convert the saucy partition to lpPartition
-lpPartition* HighsEquitable::convertToLpPartition(){
+void HighsEquitable::convertToLpPartition(){
 	int i = 0, c = 0, r = 0, rep, cRep, pRep, v, pf, cf, colCounter = 0, rowCounter = 0;
 	map<int, int> fCell;
 	vector<bool> cellMarked(nTot, false);
@@ -259,7 +262,6 @@ lpPartition* HighsEquitable::convertToLpPartition(){
 		}
 	}
 	partition->numTot_ = partition->numCol_ + partition->numRow_;
-	return partition;
 }
 
 // Return number of refinements
