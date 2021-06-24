@@ -684,13 +684,13 @@ void HQPrimal::unfold() {
   // double uTime = 0;
   // std::cout << "REBUILD TIME: " << rebTime << std::endl;
   // std::cout << "START PIVOTS" << std::endl;
-  int idx = workHMO.lp_.numCol_ - workHMO.lp_.numLinkers;
+  int idx = workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_;
   // init = timer.readRunHighsClock();
   int cnt = 0;
-  int update_limit = min(100 + workHMO.lp_.numLinkers_ / 100,
+  int update_limit = min(100 + workHMO.lp_.numResiduals_ / 100,
           1000);
   // std::cout << "Num Pivots Required: " << workHMO.lp_.numLinkers_ << std::endl;
-  for (int i = 0; i < workHMO.lp_.numLinkers; ++i){
+  for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
     cnt++;
     ++workHMO.lp_.unfoldIter;
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);

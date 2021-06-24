@@ -90,7 +90,7 @@ class HighsLp {
   int numRow_ = 0;
   int numInt_ = 0;
   int nnz_ = 0;
-  int numLinkers_ = 0;
+  int numResiduals_ = 0;
 
   std::vector<int> Astart_;
   std::vector<int> Aindex_;
@@ -106,7 +106,6 @@ class HighsLp {
   // sense 1 = minimize, -1 = maximize
   int sense_ = 1;
   double offset_ = 0;
-  int numLinkers;
 
   std::string model_name_ = "";
   std::string lp_name_ = "";

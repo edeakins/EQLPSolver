@@ -289,8 +289,8 @@ void HighsAggregate::appendRowsToMatrix(){
     }
     elp->Astart_[col + 1] = start_col_plus_1;
   }
-  for (int i = elpNumCol_; i < elpNumCol_ + elpNumResCols_; ++i)
-    elp->Astart_[i + 1] = elp->Astart_[i];
+  // for (int i = elpNumCol_ - elpNumResCols_; i < elpNumCol_; ++i)
+  //   elp->Astart_[i + 1] = elp->Astart_[i];
   assert(new_el == 0);
   // Insert the new entries
   for (int row = 0; row < num_new_row; row++) {
@@ -305,7 +305,7 @@ void HighsAggregate::appendRowsToMatrix(){
     }
   }
   elp->numRow_ += num_new_row;
-  elp->numLinkers_ = num_new_row;
+  elp->numResiduals_ = num_new_row;
   elp->nnz_ += num_new_nz;
 }
 
@@ -319,7 +319,7 @@ void HighsAggregate::addCols(){
     ++elp->numCol_; ++elpNumCol_;
     ++elpBasis->numCol_;
   }
-  elp->numLinkers = elpNumResCols_;
+  // elp->numLinkers = elpNumResCols_;
 }
 
 void HighsAggregate::countNonbasicSplits(){
