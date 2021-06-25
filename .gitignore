@@ -233,6 +233,7 @@ lpi_h2gmp.cpp
 devBuild
 build
 mittleman_symmetric_mps
+mittleman_symmetric_5
 
 ##Lp files with cbc cuts
 CutGenerationLpFiles

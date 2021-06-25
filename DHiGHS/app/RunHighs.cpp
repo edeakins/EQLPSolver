@@ -282,14 +282,15 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     for (int i = 0; i < solution.col_value.size(); ++i){
       obj += solution.col_value[i] * lp.colCost_[i];
     }
-    const char *fileName = "HiGHS_Symmetric_timings.csv";
+    // const char *fileName = "HiGHS_Symmetric_timings.csv";
+    const char *fileName = "HiGHS_Mittleman_timings.csv";
     std::ofstream resultsFile(fileName, std::ios_base::app);
     std::ifstream in(fileName);
     std::string name = options.model_file.c_str();
     std::string tTime = std::to_string(sTime);
     std::string objval = std::to_string(obj);
-    name.erase(0,33);
-    // name.erase(0,42);
+    name.erase(0,31);
+    // name.erase(0,41);
     std::string outP = name + "," + tTime + "," + objval + "\n";
     if (in.peek() == std::ifstream::traits_type::eof()){
       std::string column0 = "Instance";
@@ -313,14 +314,14 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   HighsStatus init_status;
   HighsStatus basis_status;
   // HighsLp class to contain aggregates and HighsBasis class to contain bases
-  HighsLp* alp;
+  HighsLp alp;
   // HighsLp* alpBasis;
-  HighsLp* elp;
+  HighsLp elp;
   HighsBasis* elpBasis;
   // Basis and solution to store from unfold interations
   HighsBasis basis;
   HighsSolution solution;
-  init_status = highs.passModel(lp);
+  // init_status = highs.passModel(lp);
   // write_status = highs.writeModel("Original.lp");
   // Set options
   alpOpt.presolve = string("off");
@@ -345,9 +346,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   lpFolder.fold();
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
   alp = lpFolder.getAlp();
-  int nRCol = alp->numCol_;
-  int nRRow = alp->numRow_;
-  int nnzR = alp->nnz_;
+  int nRCol = alp.numCol_;
+  int nRRow = alp.numRow_;
+  int nnzR = alp.nnz_;
   int nCol = lp.numCol_;
   int nRow = lp.numRow_;
   int nnz = lp.nnz_;
@@ -367,7 +368,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // alpBasis = lpFolder.getBasis();
   // Intitial solve of level 0 aggregate
   return_status = highs.passHighsOptions(alpOpt);
-  init_status = highs.passModel(*alp);
+  init_status = highs.passModel(alp);
   // write_status = highs.writeModel("level_0.lp");
   initial_time = timer.readRunHighsClock();
   run_status = highs.run(); 
@@ -387,20 +388,21 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
   elp = lpFolder.getElp();
   elpBasis = lpFolder.getElpBasis();
-  init_status = highs.passModel(*elp);
+  init_status = highs.passModel(elp);
   // write_status = highs.writeModel("level_n.lp");
   basis_status = highs.setBasis(*elpBasis);
   initial_time = timer.readRunHighsClock();
   run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
   basis = highs.getBasis();
-  // for (int i = basis.col_status.size() - elp->numResiduals_; i < basis.col_status.size(); ++i)
+  // for (int i = basis.col_status.size() - elp.numResiduals_; i < basis.col_status.size(); ++i)
   //   if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
   solution = highs.getSolution();
   double obj = 0;
   for (int i = 0; i < solution.col_value.size(); ++i)
-    obj += solution.col_value[i] * elp->colCost_[i];
-  const char *fileName = "OC_Symmetric_timings.csv";
+    obj += solution.col_value[i] * elp.colCost_[i];
+  // const char *fileName = "OC_Symmetric_timings.csv";
+  const char *fileName = "OC_Mittleman_timings.csv";
   std::ofstream resultsFile(fileName, std::ios_base::app);
   std::ifstream in(fileName);
   std::string name = options.model_file.c_str();
@@ -410,8 +412,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::string uTime = std::to_string(highs.totUnfoldTime_ - foldSolveTime);
   std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
   std::string objval = std::to_string(obj);
-  // name.erase(0,33);
-  name.erase(0,41);
+  name.erase(0,31);
+  // name.erase(0,41);
   std::string outP = name + "," + pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + cRed +
   "," + rRed + "," + nRed + "," + objval + "\n";
   if (in.peek() == std::ifstream::traits_type::eof()){
@@ -429,7 +431,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     "," + column7 + "," + column8 + "," + column5 + "\n";
     resultsFile << outCols;
   }
-  resultsFile << outP;
+  // resultsFile << outP;
   resultsFile.close(); 
   return run_status;
 }

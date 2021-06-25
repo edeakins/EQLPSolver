@@ -55,31 +55,18 @@ enum class HighsModelStatus {
 
 class HighsLp {
  public:
-  // ~HighsLp(){
-  //   printf("\ndtor called\n");
+  // HighsLp(const HighsLp& lp){
+  //   nnz_ = lp.nnz_;
+  //   numCol_ = lp.numCol_;
+  //   numRow_ = lp.numRow_;
+  //   colLower_ = lp.colLower_;
+  //   colUpper_ = lp.colUpper_;
+  //   rowLower_ = lp.rowLower_;
+  //   rowUpper_ = lp.rowUpper_;
+  //   Astart_ = lp.Astart_;
+  //   Avalue_ = lp.Avalue_;
+  //   Aindex_ = lp.Aindex_;
   // }
-  // Specifically for Deakins (nice to have to clear things out)
-  void clear(){
-    numCol_ = 0;
-    numRow_ = 0;
-    numInt_ = 0;
-    nnz_ = 0;
-    Astart_.resize(0);
-    Aindex_.resize(0);
-    Avalue_.resize(0);
-    colCost_.resize(0);
-    colLower_.resize(0);
-    colUpper_.resize(0);
-    rowLower_.resize(0);
-    rowUpper_.resize(0);
-    sense_ = 1;
-    offset_ = 0;
-    model_name_ = "";
-    lp_name_ = "";
-    row_names_.resize(0);
-    col_names_.resize(0);
-    integrality_.resize(0);
-  }
   // Iteration Data
   int masterIter = 0;
   int unfoldIter = 0;
@@ -136,9 +123,6 @@ class HighsLp {
 
     return true;
   }
-
-  int numRealRows;
-  int numRealCols;
 };
 
 struct lpPartition{

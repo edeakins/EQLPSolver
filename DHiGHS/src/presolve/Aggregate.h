@@ -1,6 +1,8 @@
 #ifndef AGGREGATE_H_
 #define AGGREGATE_H_
 
+#include <cstring>
+
 #include "HighsLp.h"
 #include "HighsEquitable.h"
 #include "HighsQRmodule.h"
@@ -10,7 +12,10 @@
 class HighsAggregate{
 public:
 	// Create and allocate
-	HighsAggregate(HighsLp& lp, const struct lpPartition* ep);
+	HighsAggregate(HighsLp& lp, const struct lpPartition* ep)
+		:alpRetract(lp), elp(lp), partition(ep),
+		elpNnz_(elp.nnz_), elpNumCol_(elp.numCol_),
+		elpNumRow_(elp.numRow_), elpNumTot_(elpNumCol_ + elpNumRow_) {}
 	void allocateAlp();
 	void resizeElp();
 	void copyPartition();
@@ -20,6 +25,8 @@ public:
 	void packVectors();
 	void foldObj();
 	void foldMatrix();
+	void foldRebuild();
+	void foldRetract();
 	void foldRhs();
 	void foldBnd();
 	// lift to elp
@@ -31,9 +38,9 @@ public:
 	void liftColBasis();
 	void liftRowBasis();
 	// utility functions
-	HighsLp* getAlp();
+	HighsLp getAlp();
 	HighsBasis* getAlpBasis();
-	HighsLp* getElp();
+	HighsLp getElp();
 	HighsBasis* getElpBasis();
 	void countNonbasicSplits();
 	void makeLinks();
@@ -45,8 +52,9 @@ public:
 	void appendLinkersToLp();
 	/* Data structs to house the aggregated lp 
 	and the aggregated lp basis information */
-	HighsLp* alp;
-	HighsLp* elp;
+	HighsLp alpRetract; // Testing 
+	HighsLp alp;
+	HighsLp elp;
 	HighsBasis* alpBasis;
 	HighsBasis* elpBasis;
 	HighsBasis prevBasis;
