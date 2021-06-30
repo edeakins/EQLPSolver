@@ -431,7 +431,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     "," + column7 + "," + column8 + "," + column5 + "\n";
     resultsFile << outCols;
   }
-  // resultsFile << outP;
+  resultsFile << outP;
   resultsFile.close(); 
   return run_status;
 }
