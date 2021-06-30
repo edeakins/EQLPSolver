@@ -22,6 +22,8 @@ void HighsAggregate::allocateAlp(){
   alp.Aindex_.reserve(elpNnz_);
   alp.Avalue_.reserve(elpNnz_);
   coeff.assign(alpNumRow_, 0);
+  index.assign(alpNumRow_, -1);
+  nonzero.assign(alpNumRow_, false);
   fixed.assign(elpNumCol_, false);
 }
 
@@ -68,13 +70,39 @@ void HighsAggregate::copyPartition(){
 }
 
 void HighsAggregate::fold(){
+  // HighsTimer timer;
+  // bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  // if (!run_highs_clock_already_running) timer.startRunHighsClock();
+  // double iT = timer.readRunHighsClock();
   allocateAlp();
+  // double aFT = timer.readRunHighsClock() - iT;
+  // iT = timer.readRunHighsClock();
   packVectors();
+  // double pFT = timer.readRunHighsClock() - iT;
+  // iT = timer.readRunHighsClock();
   foldObj();
+  // double fOFT = timer.readRunHighsClock() - iT;
+  // iT = timer.readRunHighsClock();
   foldRetract();
+  // double fRFT = timer.readRunHighsClock() - iT;
+  // iT = timer.readRunHighsClock();
   foldMatrix();
+  // double fMFT = timer.readRunHighsClock() - iT;
+  // iT = timer.readRunHighsClock();
   foldRhs();
+  // double fRHSFT = timer.readRunHighsClock() - iT;
+  // iT = timer.readRunHighsClock();
   foldBnd();
+  // double fBFT = timer.readRunHighsClock() - iT;
+  // double tT = aFT + pFT + fOFT + fRFT + fMFT + fRHSFT + fBFT;
+  // std::cout << "Time spent in allocation: " << aFT << ", percent total: " << (aFT/tT)*100 << std::endl;
+  // std::cout << "Time spent in packing: " << pFT << ", percent total: " << (pFT/tT)*100 << std::endl;
+  // std::cout << "Time spent in folding objective: " << fOFT << ", percent total: " << (fOFT/tT)*100 << std::endl;
+  // std::cout << "Time spent in folding retract: " << fRFT << ", percent total: " << (fRFT/tT)*100 << std::endl;
+  // std::cout << "Time spent in folding matrix: " << fMFT << ", percent total: " << (fMFT/tT)*100 << std::endl;
+  // std::cout << "Time spent in folding rhs: " << fRHSFT << ", percent total: " << (fRHSFT/tT)*100 << std::endl;
+  // std::cout << "Time spent in folding bnds: " << fBFT << ", percent total: " << (fBFT/tT)*100 << std::endl;
+  // std::cout << "Total time spent folding: " << tT << std::endl;
 }
 
 void HighsAggregate::lift(HighsSolution &solution, HighsBasis& basis){
@@ -207,24 +235,29 @@ void HighsAggregate::foldObj(){
 
 // Fold the matrix down based on current ep
 void HighsAggregate::foldMatrix(){
-  int i, j, r, c, cf, l, rep;
+  int i, j, r, c, cf, l, rep, cnt = 0, rIdx;
+  double iT1, iT2, lT1 = 0, lT2 = 0, lT3 = 0, fLT = 0;
   alp.Astart_[0] = 0;
   for (i = 0; i < alpNumCol_; ++i){
+    cnt = 0;
     rep = colsToReps[i];
-    // cf = cellFront[i];
-    // rep = labels[cf];
     for (j = elp.Astart_[rep]; j < elp.Astart_[rep + 1]; ++j){
       r = AindexPacked_[j];
+      if (!nonzero[r]){
+        nonzero[r] = true;
+        index[cnt] = r;
+        cnt++;
+      }
       coeff[r] += elp.Avalue_[j];
     }
-    for (j = 0; j < alpNumRow_; ++j){
-      if (coeff[j]){
-        c = cell[rep];
-        alp.Avalue_.push_back(coeff[j] * cellSize[c]);
-        alp.Aindex_.push_back(j);
-        alp.nnz_++;
-        coeff[j] = 0;
-      }
+    for (j = 0; j < cnt; ++j){
+      rIdx = index[j];
+      c = cell[rep];
+      alp.Avalue_.push_back(coeff[rIdx] * cellSize[c]);
+      alp.Aindex_.push_back(rIdx);
+      alp.nnz_++;
+      coeff[rIdx] = 0;
+      nonzero[rIdx] = false;
     }
     alp.Astart_[i + 1] = alp.nnz_;
   }
