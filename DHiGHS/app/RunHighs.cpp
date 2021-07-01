@@ -28,7 +28,7 @@ void reportLpStatsOrError(FILE* output, int message_level,
 void reportSolvedLpStats(FILE* output, int message_level,
                          const HighsStatus run_status, const Highs& highs);
 HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
-                         FILE* output, int message_level, bool run_quiet, int run_aggregate);
+                         FILE* output, int message_level, bool run_quiet, int run_aggregate, int run_mitt);
 HighsStatus callMipSolver(const HighsOptions& options, const HighsLp& lp,
                           FILE* output, int message_level, bool run_quiet);
 
@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
 
   bool run_quiet = false;  // true;//
   int run_aggregate = std::atoi(argv[2]);
+  int run_mitt = std::atoi(argv[3]);
   if (run_quiet) {
     HighsPrintMessage(output, message_level, ML_ALWAYS,
                       "In main: running highs.run() quietly\n");
@@ -77,7 +78,7 @@ int main(int argc, char** argv) {
     }
   }
   if (!mip) {
-    run_status = callLpSolver(options, lp, output, message_level, run_quiet, run_aggregate);
+    run_status = callLpSolver(options, lp, output, message_level, run_quiet, run_aggregate, run_mitt);
   } else {
     run_status = callMipSolver(options, lp, output, message_level, run_quiet);
   }
@@ -229,7 +230,7 @@ void reportSolvedLpStats(FILE* output, int message_level,
 // }
 
 HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
-  		         FILE* output, int message_level, bool run_quiet, int run_aggregate) {
+  		         FILE* output, int message_level, bool run_quiet, int run_aggregate, int run_mitt) {
   // // New options for aggregate models (work around for const input)
   // if (lp.numCol_ > 100000 || lp.numRow_ > 100000){
   //   HighsStatus run_status;
@@ -282,8 +283,13 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     for (int i = 0; i < solution.col_value.size(); ++i){
       obj += solution.col_value[i] * lp.colCost_[i];
     }
-    // const char *fileName = "HiGHS_Symmetric_timings.csv";
-    const char *fileName = "HiGHS_Mittleman_timings.csv";
+    const char *filenName;
+    if (run_mitt){
+      *fileName = "HiGHS_Mittleman_timings.csv";
+    }
+    else{
+      *fileName = "HiGHS_Symmetric_timings.csv";
+    }
     std::ofstream resultsFile(fileName, std::ios_base::app);
     std::ifstream in(fileName);
     std::string name = options.model_file.c_str();
