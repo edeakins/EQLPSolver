@@ -705,7 +705,10 @@ void HQPrimal::unfold() {
     workHMO.simplex_info_.workCost_[columnIn] = 0;
     workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
     workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF;
-    
+    if (cnt > simplex_info.update_limit){
+      primalRebuild();
+      cnt = 0;
+    }
   }
   primalRebuild();
   if (workHMO.scaled_solution_params_.num_dual_infeasibilities > 0) solvePhase2();

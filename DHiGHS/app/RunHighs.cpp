@@ -387,8 +387,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::string uTime = std::to_string(highs.totUnfoldTime_);
   std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
   std::string objval = std::to_string(obj);
-  // name.erase(0,33);
-  name.erase(0,42);
+  name.erase(0,33);
+  // name.erase(0,42);
   std::string outP = name + "," + pTime + "," + fTime + "," + uTime + "," + tTime + "," + objval + "\n";
   if (in.peek() == std::ifstream::traits_type::eof()){
     std::string column0 = "Instance";

@@ -146,6 +146,8 @@ public:
 	vector<int> parent;
 	vector<int> child;
 	vector<double> coeff;
+	vector<int> index;
+	vector<bool> nonzero;
 	// For linker additions
 	int maxLinkCols;
 	int maxLinkSpace;

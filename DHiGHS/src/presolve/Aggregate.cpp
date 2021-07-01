@@ -3,6 +3,7 @@ using namespace std;
 
 int cCounter = 0;
 int rCounter = 0;
+int stopAndPivot = 0;
 
 HighsAggregate::HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis, 
 int numRefinements){
@@ -13,6 +14,8 @@ int numRefinements){
   // From the original lp
   iter = 0;
 	numRow = lp.numRow_;
+  stopAndPivot = min(100 + numRow/ 100,
+          1000);
 	numCol = lp.numCol_;
 	numTot = numRow + numCol;
   nnz = lp.nnz_;
@@ -100,6 +103,8 @@ int numRefinements){
   parent.resize(maxLinkCols);
   child.resize(maxLinkCols);
   coeff.assign(numRow, 0);
+  index.assign(numRow, -1);
+  nonzero.assign(numRow, false);
   linkARstart.resize(maxLinkCols + 1);
   linkARindex.resize(maxLinkSpace);
   linkARvalue.resize(maxLinkSpace);
@@ -135,7 +140,7 @@ int HighsAggregate::update(HighsSolution& solution, HighsBasis& basis){
   translateFrontsToColors();
   identifyLinks();
   if (!numLinkers_) return 0;
-  (numLinkers_ == maxLinkCols) ? solve = true : solve = false;
+  (numLinkers_ >= stopAndPivot) ? solve = true : solve = false;
   solved = solve;
   if (solve){
     packVectors();
@@ -351,23 +356,29 @@ void HighsAggregate::foldObj(){
 
 // Fold the matrix down based on current ep
 void HighsAggregate::foldMatrix(){
-  int i, j, r, c, cf, l, rep;
+  int i, j, r, c, cf, l, rep, cnt, rIdx;
   alp->Astart_[0] = 0;
   for (i = 0; i < numCol_; ++i){
+    cnt = 0;
     rep = colsToReps[i];
     // cf = cellFront[i];
     // rep = labels[cf];
     for (j = Astart[rep]; j < Astart[rep + 1]; ++j){
       r = AindexPacked_[j];
+      if (!nonzero[r]){
+        nonzero[r] = true;
+        index[cnt] = r;
+        cnt++;
+      }
       coeff[r] += Avalue[j];
     }
-    for (j = 0; j < numRow_; ++j){
-      if (coeff[j]){
+    for (j = 0; j < cnt; ++j){
+        rIdx = index[j];
         c = cell[rep];
-        alp->Avalue_[alp->nnz_] = coeff[j] * cellSize[c];
-        alp->Aindex_[alp->nnz_++] = j;
-        coeff[j] = 0;
-      }
+        alp->Avalue_[alp->nnz_] = coeff[rIdx] * cellSize[c];
+        alp->Aindex_[alp->nnz_++] = rIdx;
+        coeff[rIdx] = 0;
+        nonzero[rIdx] = false;
     }
     alp->Astart_[i + 1] = alp->nnz_;
   }
