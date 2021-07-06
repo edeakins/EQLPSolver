@@ -379,12 +379,6 @@ struct HighsSolutionParams {
 };
 
 struct HighsSolution {
-  void clear(){
-    col_value.resize(0);
-    col_dual.resize(0);
-    row_value.resize(0);
-    row_dual.resize(0);
-  }
   std::vector<double> col_value;
   std::vector<double> col_dual;
   std::vector<double> row_value;

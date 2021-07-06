@@ -1,53 +1,30 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "CXX"
   )
-# The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/Avgas.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/Avgas.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestBasisSolves.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestFilereader.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestIO.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestIO.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestInfo.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestIpx.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestIpx.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestLpModification.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestLpValidation.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestMain.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestMain.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestOptions.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestPresolve.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestSetup.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestSetup.cpp.o"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestSort.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/unit_tests.dir/TestSort.cpp.o"
-  )
-set(CMAKE_CXX_COMPILER_ID "GNU")
 
-# The include file search paths:
-set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "."
-  "../app"
-  "../external"
-  "../src"
-  "../src/io"
-  "../src/ipm/ipx"
-  "../src/ipm/basiclu"
-  "../src/lp_data"
-  "../src/mip"
-  "../src/presolve"
-  "../src/simplex"
-  "../src/test"
-  "../src/util"
-  "../src/equitable"
-  "../src/external/catch"
-  "../src/ipm/ipx/src"
-  "../src/ipm/basiclu/src"
-  "../src/ipm/ipx/include"
-  "../src/ipm/basiclu/include"
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/Avgas.cpp" "check/CMakeFiles/unit_tests.dir/Avgas.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/Avgas.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestBasisSolves.cpp" "check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestFilereader.cpp" "check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestIO.cpp" "check/CMakeFiles/unit_tests.dir/TestIO.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestIO.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestInfo.cpp" "check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestLpModification.cpp" "check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestLpValidation.cpp" "check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestMain.cpp" "check/CMakeFiles/unit_tests.dir/TestMain.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestMain.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestOptions.cpp" "check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestPresolve.cpp" "check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestSetup.cpp" "check/CMakeFiles/unit_tests.dir/TestSetup.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestSetup.cpp.o.d"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestSort.cpp" "check/CMakeFiles/unit_tests.dir/TestSort.cpp.o" "gcc" "check/CMakeFiles/unit_tests.dir/TestSort.cpp.o.d"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libipx.dir/DependInfo.cmake"
-  "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libbasiclu.dir/DependInfo.cmake"
+  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

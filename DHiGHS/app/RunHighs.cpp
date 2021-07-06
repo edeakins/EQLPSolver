@@ -332,9 +332,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   for (int i = 1; i < numRefinements; ++i){
     // double foldTime = timer.readRunHighsClock();
     initial_time = timer.readRunHighsClock();
-    int links = lpFolder.update(solution, basis);
-    if (!links) break;
-    if (links == 1) continue;
+    OCSolveStatus solve = lpFolder.update(solution, basis);
+    if (solve == OCSolveStatus::NOLINKS) break;
+    if (solve == OCSolveStatus::LINKING) continue;
     // foldTime = timer.readRunHighsClock() - foldTime;
     highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
     alp = lpFolder.getAlp();

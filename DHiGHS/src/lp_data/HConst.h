@@ -61,6 +61,12 @@ enum class HighsBasisStatus {
           // nonzero or not at a bound. No SCIP equivalent
 };
 
+enum class OCSolveStatus{
+	NOLINKS = 0,
+	LINKING,
+	LIFT
+};
+
 /** Simplex nonbasicFlag status for columns and rows. Don't use enum
     class since they are used as int to replace conditional statements
     by multiplication */

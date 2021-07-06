@@ -1257,6 +1257,8 @@ static char *bits(int n) { return (char *)calloc(n, sizeof(char)); }
 struct saucy *
 saucy_alloc(int n, int w)
 {
+    std::cout << "n: " << n << std::endl;
+    std::cout << "w: " << w << std::endl;
     struct saucy *s = (struct saucy *)malloc(sizeof(struct saucy));
     if (s == NULL){ return NULL; std::cout << "NULL" << std::endl; }
 

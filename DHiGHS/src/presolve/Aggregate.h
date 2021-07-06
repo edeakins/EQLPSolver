@@ -5,13 +5,14 @@
 #include "HighsEquitable.h"
 #include "HighsQRmodule.h"
 #include "HighsTimer.h"
+#include "HConst.h"
 //#include "Highs.h"
 
 class HighsAggregate{
 public:
 	HighsAggregate(HighsLp& lp, const struct eq_part* ep, HighsSolution& solution, HighsBasis& basis,
 	int numRefinements);
-	int update(HighsSolution& solution, HighsBasis& basis);
+	OCSolveStatus update(HighsSolution& solution, HighsBasis& basis);
 	void translateFrontsToColors();
 	void findNonbasicRows();
 	void findNonbasicCols();
@@ -61,6 +62,7 @@ public:
 
 	/* Data structs to house the aggregated lp 
 	and the aggregated lp basis information */
+	HighsLp* lp;
 	HighsLp* alp;
 	HighsBasis* alpBasis;
 	HighsBasis prevBasis;
@@ -148,6 +150,7 @@ public:
 	vector<double> coeff;
 	vector<int> index;
 	vector<bool> nonzero;
+	vector<bool> noLinkNeeded;
 	// For linker additions
 	int maxLinkCols;
 	int maxLinkSpace;
