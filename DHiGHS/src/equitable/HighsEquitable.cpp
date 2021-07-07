@@ -186,7 +186,7 @@ void HighsEquitable::lp2Graph(){
 
 void HighsEquitable::doSaucyEquitable(){
 	int i, j, k = 0, maxSplit = 0;
-	s = saucy_alloc(nTot, g->sg.w); // TO DO: add second argument to this function
+	s = saucy_alloc(nTot, g->sg.w, g->sg.e); // TO DO: add second argument to this function
 	partitions = (struct eq_part *)calloc( (1), sizeof(struct eq_part) );
     // for( i = 0; i <+1; ++i)
     // {

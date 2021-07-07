@@ -270,7 +270,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     sOptions.presolve = string("off");
     sOptions.parallel = string("off");
     sOptions.simplex_scale_strategy = 0;
-    sOptions.time_limit = (double)3600;
+    sOptions.time_limit = (double)3;
     highs.passHighsOptions(sOptions);
     init_status = highs.passModel(lp);
     bool run_highs_clock_already_running = timer.runningRunHighsClock();
@@ -283,19 +283,19 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     for (int i = 0; i < solution.col_value.size(); ++i){
       obj += solution.col_value[i] * lp.colCost_[i];
     }
-    const char *filenName;
+    const char *fileName;
     if (run_mitt){
-      *fileName = "HiGHS_Mittleman_timings.csv";
+      fileName = "HiGHS_Mittleman_timings.csv";
     }
     else{
-      *fileName = "HiGHS_Symmetric_timings.csv";
+      fileName = "HiGHS_Symmetric_timings.csv";
     }
     std::ofstream resultsFile(fileName, std::ios_base::app);
     std::ifstream in(fileName);
     std::string name = options.model_file.c_str();
     std::string tTime = std::to_string(sTime);
     std::string objval = std::to_string(obj);
-    name.erase(0,31);
+    name.erase(0,21);
     // name.erase(0,41);
     std::string outP = name + "," + tTime + "," + objval + "\n";
     if (in.peek() == std::ifstream::traits_type::eof()){
@@ -364,51 +364,57 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::stringstream cstream;
   std::stringstream rstream;
   std::stringstream nstream;
-  cstream << std::fixed << std::setprecision(2) << colRed;
+  cstream << std::fixed << std::setprecision(3) << colRed;
   // std::string name = options.model_file.c_str();
   std::string cRed = cstream.str();
-  rstream << std::fixed << std::setprecision(2) << rowRed;
+  rstream << std::fixed << std::setprecision(3) << rowRed;
   std::string rRed = rstream.str();
-  nstream << std::fixed << std::setprecision(2) << nnzRed;
+  nstream << std::fixed << std::setprecision(3) << nnzRed;
   std::string nRed = nstream.str();
   // alpBasis = lpFolder.getBasis();
   // Intitial solve of level 0 aggregate
-  return_status = highs.passHighsOptions(alpOpt);
-  init_status = highs.passModel(alp);
+  // return_status = highs.passHighsOptions(alpOpt);
+  // init_status = highs.passModel(alp);
   // write_status = highs.writeModel("level_0.lp");
   initial_time = timer.readRunHighsClock();
-  run_status = highs.run(); 
+  // run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
   double foldSolveTime = timer.readRunHighsClock() - initial_time;
-  basis = highs.getBasis();
-  solution = highs.getSolution();
+  // basis = highs.getBasis();
+  // solution = highs.getSolution();
   // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
   // for (int i = 0; i < solution.col_value.size(); ++i){
   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
   // }
   // Start loop for level 1+ aggregates
   alpOpt.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
-  return_status = highs.passHighsOptions(alpOpt);
+  // return_status = highs.passHighsOptions(alpOpt);
   initial_time = timer.readRunHighsClock();
-  lpFolder.lift(solution, basis);
+  // lpFolder.lift(solution, basis);
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
-  elp = lpFolder.getElp();
-  elpBasis = lpFolder.getElpBasis();
-  init_status = highs.passModel(elp);
+  // elp = lpFolder.getElp();
+  // elpBasis = lpFolder.getElpBasis();
+  // init_status = highs.passModel(elp);
   // write_status = highs.writeModel("level_n.lp");
-  basis_status = highs.setBasis(*elpBasis);
+  // basis_status = highs.setBasis(*elpBasis);
   initial_time = timer.readRunHighsClock();
-  run_status = highs.run(); 
+  // run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
-  basis = highs.getBasis();
+  // basis = highs.getBasis();
   // for (int i = basis.col_status.size() - elp.numResiduals_; i < basis.col_status.size(); ++i)
   //   if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
-  solution = highs.getSolution();
+  // solution = highs.getSolution();
   double obj = 0;
-  for (int i = 0; i < solution.col_value.size(); ++i)
-    obj += solution.col_value[i] * elp.colCost_[i];
+  // for (int i = 0; i < solution.col_value.size(); ++i)
+    // obj += solution.col_value[i] * elp.colCost_[i];
   // const char *fileName = "OC_Symmetric_timings.csv";
-  const char *fileName = "OC_Mittleman_timings.csv";
+  const char *fileName;
+  if (run_mitt){
+    fileName = "OC_Mittleman_timings.csv";
+  }
+  else{
+    fileName = "OC_Symmetric_timings.csv";
+  }
   std::ofstream resultsFile(fileName, std::ios_base::app);
   std::ifstream in(fileName);
   std::string name = options.model_file.c_str();
@@ -418,10 +424,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::string uTime = std::to_string(highs.totUnfoldTime_ - foldSolveTime);
   std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
   std::string objval = std::to_string(obj);
-  name.erase(0,31);
+  name.erase(0,21);
   // name.erase(0,41);
-  std::string outP = name + "," + pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + cRed +
-  "," + rRed + "," + nRed + "," + objval + "\n";
+  std::string outP = name + "," + /*pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + */cRed +
+  "," + rRed + "," + nRed + /*"," + objval*/ + "\n";
   if (in.peek() == std::ifstream::traits_type::eof()){
     std::string column0 = "Instance";
     std::string column1 = "Partition Time";
@@ -433,8 +439,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     std::string column6 = "Column Reduction (%)";
     std::string column7 = "Row Reduction (%)";
     std::string column8 = "Nonzero Reduction (%)";
-    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column9 + "," + column3 + "," + column4 + "," + column6 +
-    "," + column7 + "," + column8 + "," + column5 + "\n";
+    std::string outCols = column0 + "," + /*column1 + "," + column2 + "," + column9 + "," + column3 + "," + column4 + "," + */column6 +
+    "," + column7 + "," + column8 + /*"," + column5*/ + "\n";
     resultsFile << outCols;
   }
   resultsFile << outP;

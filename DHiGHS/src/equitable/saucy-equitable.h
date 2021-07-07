@@ -2,6 +2,7 @@
 #define SAUCY_H
 
 #define SAUCY_VERSION "2.0"
+#include <limits>
 
 typedef int saucy_consumer(int, const int *, int, int *, void *);
 
@@ -36,7 +37,7 @@ struct eq_part {
     int *parents;
 };
 
-struct saucy *saucy_alloc(int n, int w);
+struct saucy *saucy_alloc(int n, long int w, long int nnz);
 
 void saucy_search(
     struct saucy *s,

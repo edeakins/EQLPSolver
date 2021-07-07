@@ -791,7 +791,7 @@ ref_singleton(struct saucy *s, struct coloring *c,
         temp = DCCOUNT(0, wght[i]);
         DCCOUNT(temp, wght[i]) = i;
     }
-
+    // std::cout << "dccount populated" << std::endl;
     for( j = 0; j < wcount && ret; j++ ){
         for( i = 1; i <= DCCOUNT(0, s->diffL[j]); i++ ){
             data_mark( s, c, edg[ DCCOUNT(i, s->diffL[j]) ] );
@@ -921,7 +921,7 @@ ref_nonsingle(struct saucy *s, struct coloring *c,
             */
         }
     }
-
+    // std::cout << "dccount populated nonsingle" << std::endl;
     for( j = 0; j < wcount && ret; ++j ){
         for( i = 1; i <= DCCOUNT(0, s->diffL[j]); ++i ){
             data_count( s, c, edg[ DCCOUNT(i, s->diffL[j]) ] );
@@ -1111,6 +1111,8 @@ descend_leftmost( struct saucy *s, struct eq_part *eq_steps )
     
     /* Keep going until we're discrete */
     while (!at_terminal(s)) {
+        // std::cout << "idx: " << idx << std::endl;
+        // std::cin.get();
         idx++;
         ++s->stats->iter;
         target = s->nextnon[-1];
@@ -1275,16 +1277,41 @@ saucy_search(
     // descend_leftmost( s, eq_steps );
 }
 
-static int *ints(int n) { return (int *)malloc(n * sizeof(int)); }
-static int *zeros(int n) { return (int *)calloc(n, sizeof(uint64_t)); }
-static char *bits(int n) { return (char *)calloc(n, sizeof(char)); }
+static int *ints(int n) {
+    int *p = (int *)malloc(n * sizeof(int));
+    if (p == NULL){
+        // std::cout << "NULL" << std::endl;
+        // std::cin.get();
+        return NULL;
+    }
+    return p;
+}
+static int *zeros(long int n) {
+    int *p = (int *)calloc(n, sizeof(uint64_t));
+    if (p == NULL){
+        // std::cout << "NULL" << std::endl;
+        // std::cin.get();
+        return NULL;
+    }
+    return p; 
+}
+static char *bits(int n) {
+    char *p = (char *)calloc(n, sizeof(char));
+    if (p == NULL){
+        // std::cout << "NULL" << std::endl;
+        // std::cin.get();
+        return NULL;
+    }
+    return p; 
+}
 
 struct saucy *
-saucy_alloc(int n, int w)
+saucy_alloc(int n, long int w, long int nnz)
 {
     struct saucy *s = (struct saucy *)malloc(sizeof(struct saucy));
     if (s == NULL){ return NULL; std::cout << "NULL" << std::endl; }
-
+    long space = w * (nnz + 1);
+    std::cout << "space: " << space << std::endl;
     s->ninduce = ints(n);
     s->sinduce = ints(n);
     s->indmark = bits(n);
@@ -1301,7 +1328,14 @@ saucy_alloc(int n, int w)
     /* TODO: some improvement likely available if number of 
              different weights recorded, s->dccount = zeros(w*n) */
     //s->dccount = zeros(w*n);
-    s->dccount = zeros((n*n+1)*w);
+    // std::cout << std::numeric_limits<int>::max() << std::endl;
+    s->dccount = zeros((nnz+1)*w);
+    if (s->dccount){
+        std::cout << "dccount good" << std::endl;
+    }
+    else{
+        std::cout << "dccount null" << std::endl;
+    }
     /* s->diffL = (double *)malloc(n * n * sizeof(double)); */
     /* s->diffL = (int *)calloc(e, sizeof(int)); */ /* TODO: figure out if this is right */
     /* TODO: this becomes s->diffL = zeros(w) if number of different
