@@ -25,10 +25,10 @@ using namespace OsiUnitTest;
 
 int main (int argc, const char *argv[])
 {
-#if !COINSAMPLEFOUND
-  std::cerr << "Path to Data/Sample not known. Cannot run tests without sample MPS files." << std::endl;
-  return EXIT_FAILURE;
-#endif
+//#if !COINSAMPLEFOUND
+ // std::cerr << "Path to Data/Sample not known. Cannot run tests without sample MPS files." << std::endl;
+ // return EXIT_FAILURE;
+//#endif
 
   // Synchronise C++ stream i/o with C stdio.
   std::ios::sync_with_stdio();
