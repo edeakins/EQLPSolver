@@ -1311,7 +1311,7 @@ saucy_alloc(int n, long int w, long int nnz)
     struct saucy *s = (struct saucy *)malloc(sizeof(struct saucy));
     if (s == NULL){ return NULL; std::cout << "NULL" << std::endl; }
     long space = w * (nnz + 1);
-    std::cout << "space: " << space << std::endl;
+    // std::cout << "space: " << space << std::endl;
     s->ninduce = ints(n);
     s->sinduce = ints(n);
     s->indmark = bits(n);
@@ -1330,12 +1330,12 @@ saucy_alloc(int n, long int w, long int nnz)
     //s->dccount = zeros(w*n);
     // std::cout << std::numeric_limits<int>::max() << std::endl;
     s->dccount = zeros((nnz+1)*w);
-    if (s->dccount){
-        std::cout << "dccount good" << std::endl;
-    }
-    else{
-        std::cout << "dccount null" << std::endl;
-    }
+    // if (s->dccount){
+    //     std::cout << "dccount good" << std::endl;
+    // }
+    // else{
+    //     std::cout << "dccount null" << std::endl;
+    // }
     /* s->diffL = (double *)malloc(n * n * sizeof(double)); */
     /* s->diffL = (int *)calloc(e, sizeof(int)); */ /* TODO: figure out if this is right */
     /* TODO: this becomes s->diffL = zeros(w) if number of different

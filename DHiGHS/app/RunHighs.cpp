@@ -270,7 +270,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     sOptions.presolve = string("off");
     sOptions.parallel = string("off");
     sOptions.simplex_scale_strategy = 0;
-    sOptions.time_limit = (double)3;
+    sOptions.time_limit = (double)3600;
     highs.passHighsOptions(sOptions);
     init_status = highs.passModel(lp);
     bool run_highs_clock_already_running = timer.runningRunHighsClock();
@@ -373,41 +373,40 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::string nRed = nstream.str();
   // alpBasis = lpFolder.getBasis();
   // Intitial solve of level 0 aggregate
-  // return_status = highs.passHighsOptions(alpOpt);
-  // init_status = highs.passModel(alp);
+  return_status = highs.passHighsOptions(alpOpt);
+  init_status = highs.passModel(alp);
   // write_status = highs.writeModel("level_0.lp");
   initial_time = timer.readRunHighsClock();
-  // run_status = highs.run(); 
+  run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
   double foldSolveTime = timer.readRunHighsClock() - initial_time;
-  // basis = highs.getBasis();
-  // solution = highs.getSolution();
+  basis = highs.getBasis();
+  solution = highs.getSolution();
   // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
   // for (int i = 0; i < solution.col_value.size(); ++i){
   //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
   // }
   // Start loop for level 1+ aggregates
   alpOpt.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
-  // return_status = highs.passHighsOptions(alpOpt);
+  return_status = highs.passHighsOptions(alpOpt);
   initial_time = timer.readRunHighsClock();
-  // lpFolder.lift(solution, basis);
+  lpFolder.lift(solution, basis);
   highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
-  // elp = lpFolder.getElp();
-  // elpBasis = lpFolder.getElpBasis();
-  // init_status = highs.passModel(elp);
+  elp = lpFolder.getElp();
+  elpBasis = lpFolder.getElpBasis();
+  init_status = highs.passModel(elp);
   // write_status = highs.writeModel("level_n.lp");
-  // basis_status = highs.setBasis(*elpBasis);
+  basis_status = highs.setBasis(*elpBasis);
   initial_time = timer.readRunHighsClock();
-  // run_status = highs.run(); 
+  run_status = highs.run(); 
   highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
-  // basis = highs.getBasis();
-  // for (int i = basis.col_status.size() - elp.numResiduals_; i < basis.col_status.size(); ++i)
-  //   if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
-  // solution = highs.getSolution();
+  basis = highs.getBasis();
+  for (int i = basis.col_status.size() - elp.numResiduals_; i < basis.col_status.size(); ++i)
+    if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
+  solution = highs.getSolution();
   double obj = 0;
-  // for (int i = 0; i < solution.col_value.size(); ++i)
-    // obj += solution.col_value[i] * elp.colCost_[i];
-  // const char *fileName = "OC_Symmetric_timings.csv";
+  for (int i = 0; i < solution.col_value.size(); ++i)
+    obj += solution.col_value[i] * elp.colCost_[i];
   const char *fileName;
   if (run_mitt){
     fileName = "OC_Mittleman_timings.csv";
@@ -426,8 +425,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::string objval = std::to_string(obj);
   name.erase(0,21);
   // name.erase(0,41);
-  std::string outP = name + "," + /*pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + */cRed +
-  "," + rRed + "," + nRed + /*"," + objval*/ + "\n";
+  std::string outP = name + "," + pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + cRed +
+  "," + rRed + "," + nRed + "," + objval + "\n";
   if (in.peek() == std::ifstream::traits_type::eof()){
     std::string column0 = "Instance";
     std::string column1 = "Partition Time";
@@ -439,8 +438,8 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     std::string column6 = "Column Reduction (%)";
     std::string column7 = "Row Reduction (%)";
     std::string column8 = "Nonzero Reduction (%)";
-    std::string outCols = column0 + "," + /*column1 + "," + column2 + "," + column9 + "," + column3 + "," + column4 + "," + */column6 +
-    "," + column7 + "," + column8 + /*"," + column5*/ + "\n";
+    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column9 + "," + column3 + "," + column4 + "," + column6 +
+    "," + column7 + "," + column8 + "," + column5 + "\n";
     resultsFile << outCols;
   }
   resultsFile << outP;
