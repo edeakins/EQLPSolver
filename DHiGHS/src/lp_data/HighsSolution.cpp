@@ -333,6 +333,8 @@ void getPrimalDualInfeasibilitiesAndErrorsFromHighsBasicSolution(const HighsLp& 
 
   // Initialise the objective value calculations
   primal_objective_value = lp.offset_;
+  // std::cout << "lp offset: " << lp.offset_ << std::endl;
+  // std::cin.get();
   dual_objective_value = lp.offset_;
 
   bool header_written = false;

@@ -131,8 +131,12 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
   // Now we know whether the simplex basis at least has the right number
   // of basic and nonbasic variables
   if (!simplex_lp_status.has_basis) {
+    // std::cout << "no simplex basis" << std::endl;
+    // std::cin.get();
     // There is no simplex basis (or it was found to be invalid) so try to identify one
     if (basis.valid_) {
+      // std::cout << "has valid highs basis" << std::endl;
+      // std::cin.get();
       // There is is HiGHS basis: use it to construct nonbasicFlag,
       // checking that it has the right number of basic variables
       //
@@ -335,7 +339,8 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
   if (highs_model_object.options_.simplex_initial_condition_check) {
     basis_condition_ok = basisConditionOk(highs_model_object, "Initial");
   }
-  basis_condition_ok = true;
+  basis_condition_ok = true; //////// ETHAN YOU DID THIS /////////
+
   // ToDo Handle ill-conditioned basis with basis crash, in which case
   // ensure that HiGHS and simplex basis are invalidated and simplex
   // work and base arrays are re-populated
@@ -576,6 +581,8 @@ bool basisConditionOk(HighsModelObject& highs_model_object, const std::string me
   timer.stop(simplex_info.clock_[BasisConditionClock]);
   double basis_condition_tolerance =
     highs_model_object.options_.simplex_initial_condition_tolerance;
+    // std::cout << highs_model_object.options_.simplex_initial_condition_tolerance << std::endl;
+    // std::cin.get();
   basis_condition_ok = basis_condition < basis_condition_tolerance;
   HighsMessageType message_type = HighsMessageType::INFO;
   std::string condition_comment;

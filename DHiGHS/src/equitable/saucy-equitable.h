@@ -37,7 +37,7 @@ struct eq_part {
     int *parents;
 };
 
-struct saucy *saucy_alloc(int n, long int w, long int nnz);
+struct saucy *saucy_alloc(long int n, long int w, long int nnz);
 
 void saucy_search(
     struct saucy *s,

@@ -230,7 +230,7 @@ void HighsAggregate::foldObj(){
     c = cell[rep];
     alp.colCost_[i] = elp.colCost_[rep] * cellSize[c];
   }
-  alp.sense_ = 1;
+  alp.sense_ = elp.sense_;
 }
 
 // Fold the matrix down based on current ep

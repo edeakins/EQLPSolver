@@ -791,7 +791,7 @@ ref_singleton(struct saucy *s, struct coloring *c,
         temp = DCCOUNT(0, wght[i]);
         DCCOUNT(temp, wght[i]) = i;
     }
-    // std::cout << "dccount populated" << std::endl;
+    std::cout << "dccount populated" << std::endl;
     for( j = 0; j < wcount && ret; j++ ){
         for( i = 1; i <= DCCOUNT(0, s->diffL[j]); i++ ){
             data_mark( s, c, edg[ DCCOUNT(i, s->diffL[j]) ] );
@@ -921,7 +921,7 @@ ref_nonsingle(struct saucy *s, struct coloring *c,
             */
         }
     }
-    // std::cout << "dccount populated nonsingle" << std::endl;
+    std::cout << "dccount populated nonsingle" << std::endl;
     for( j = 0; j < wcount && ret; ++j ){
         for( i = 1; i <= DCCOUNT(0, s->diffL[j]); ++i ){
             data_count( s, c, edg[ DCCOUNT(i, s->diffL[j]) ] );
@@ -1306,7 +1306,7 @@ static char *bits(int n) {
 }
 
 struct saucy *
-saucy_alloc(int n, long int w, long int nnz)
+saucy_alloc(long int n, long int w, long int nnz)
 {
     struct saucy *s = (struct saucy *)malloc(sizeof(struct saucy));
     if (s == NULL){ return NULL; std::cout << "NULL" << std::endl; }

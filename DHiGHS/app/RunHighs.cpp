@@ -382,10 +382,13 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   double foldSolveTime = timer.readRunHighsClock() - initial_time;
   basis = highs.getBasis();
   solution = highs.getSolution();
+  double fobj = 0;
   // cout << "\n DOKS UNFOLD SOLUTION:\n " << endl;
-  // for (int i = 0; i < solution.col_value.size(); ++i){
-  //   cout << "var_" << i << " = " << solution.col_value[i] << endl;
-  // }
+  for (int i = 0; i < solution.col_value.size(); ++i){
+    fobj += solution.col_value[i] * alp.colCost_[i];
+  }
+  // std::cout << "folded objective: " << fobj << std::endl;
+  // std::cin.get();
   // Start loop for level 1+ aggregates
   alpOpt.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
   return_status = highs.passHighsOptions(alpOpt);
@@ -405,8 +408,9 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
   solution = highs.getSolution();
   double obj = 0;
-  for (int i = 0; i < solution.col_value.size(); ++i)
+  for (int i = 0; i < solution.col_value.size() - elp.numResiduals_; ++i){
     obj += solution.col_value[i] * elp.colCost_[i];
+  }
   const char *fileName;
   if (run_mitt){
     fileName = "OC_Mittleman_timings.csv";

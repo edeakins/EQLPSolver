@@ -738,6 +738,8 @@ void HighsSimplexAnalysis::reportAlgorithmPhaseIterationObjective(const bool hea
     } else {
       algorithm = "Pr";
     }
+    // std::cout << "objective: " << objective_value << std::endl;
+    // std::cin.get();
     HighsPrintMessage(output, message_level, this_message_level,
 		      "%2sPh%1d %10d %20.10e",
 		      algorithm.c_str(), solve_phase,
