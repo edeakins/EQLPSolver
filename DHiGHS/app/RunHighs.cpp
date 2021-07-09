@@ -295,7 +295,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     std::string name = options.model_file.c_str();
     std::string tTime = std::to_string(sTime);
     std::string objval = std::to_string(obj);
-    name.erase(0,21);
+    name.erase(0,31);
     // name.erase(0,41);
     std::string outP = name + "," + tTime + "," + objval + "\n";
     if (in.peek() == std::ifstream::traits_type::eof()){
@@ -341,10 +341,10 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
   double initial_time = timer.readRunHighsClock();
-  HighsEquitable ep(lp);
+  HighsEquitable ep(lp, options.model_file.c_str());
   struct lpPartition *partition;
   partition = ep.refine();
-  int numRefinements = ep.getNumRefinements();
+  // int numRefinements = ep.getNumRefinements();
   highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
   // Use aggregator to get first aggregate lp (level 0)
   initial_time = timer.readRunHighsClock();
@@ -427,7 +427,7 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::string uTime = std::to_string(highs.totUnfoldTime_ - foldSolveTime);
   std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
   std::string objval = std::to_string(obj);
-  name.erase(0,21);
+  name.erase(0,31);
   // name.erase(0,41);
   std::string outP = name + "," + pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + cRed +
   "," + rRed + "," + nRed + "," + objval + "\n";

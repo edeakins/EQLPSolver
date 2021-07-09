@@ -16,8 +16,10 @@
 //#include <stdint.h>
 #include <cstdlib> /* malloc, calloc, and free */
 #include <cstring> /* memcpy */
+#include <string>
 #include <cstdint>
 #include <iostream>
+#include <fstream>
 #include <stdint.h>
 
 #include "saucy-equitable.h"
@@ -791,7 +793,7 @@ ref_singleton(struct saucy *s, struct coloring *c,
         temp = DCCOUNT(0, wght[i]);
         DCCOUNT(temp, wght[i]) = i;
     }
-    std::cout << "dccount populated" << std::endl;
+    // std::cout << "dccount populated" << std::endl;
     for( j = 0; j < wcount && ret; j++ ){
         for( i = 1; i <= DCCOUNT(0, s->diffL[j]); i++ ){
             data_mark( s, c, edg[ DCCOUNT(i, s->diffL[j]) ] );
@@ -921,7 +923,7 @@ ref_nonsingle(struct saucy *s, struct coloring *c,
             */
         }
     }
-    std::cout << "dccount populated nonsingle" << std::endl;
+    // std::cout << "dccount populated nonsingle" << std::endl;
     for( j = 0; j < wcount && ret; ++j ){
         for( i = 1; i <= DCCOUNT(0, s->diffL[j]); ++i ){
             data_count( s, c, edg[ DCCOUNT(i, s->diffL[j]) ] );
@@ -1277,6 +1279,15 @@ saucy_search(
     // descend_leftmost( s, eq_steps );
 }
 
+static int overFlow(long long int a, long long int b){
+    if (a == 0 || b == 0)
+        return false;
+    long long result = a * b;
+    if (a == result/b)
+        return false;
+    else return true;
+}
+
 static int *ints(int n) {
     int *p = (int *)malloc(n * sizeof(int));
     if (p == NULL){
@@ -1306,12 +1317,18 @@ static char *bits(int n) {
 }
 
 struct saucy *
-saucy_alloc(long int n, long int w, long int nnz)
+saucy_alloc(long long int n, long long int w, std::string model_name)
 {
     struct saucy *s = (struct saucy *)malloc(sizeof(struct saucy));
     if (s == NULL){ return NULL; std::cout << "NULL" << std::endl; }
-    long space = w * (nnz + 1);
-    // std::cout << "space: " << space << std::endl;
+    // const char* fileName = "saucyOut.csv";
+    // std::ofstream saucyFile(fileName, std::ios_base::app);
+    // saucyFile << "Instance, Status\n";
+    if (overFlow(n * n + 1, w)){
+        // saucyFile << model_name + ",bad overFlow" + "\n";
+        // saucyFile.close();
+        return NULL;
+    }
     s->ninduce = ints(n);
     s->sinduce = ints(n);
     s->indmark = bits(n);
@@ -1329,7 +1346,7 @@ saucy_alloc(long int n, long int w, long int nnz)
              different weights recorded, s->dccount = zeros(w*n) */
     //s->dccount = zeros(w*n);
     // std::cout << std::numeric_limits<int>::max() << std::endl;
-    s->dccount = zeros((nnz+1)*w);
+    s->dccount = zeros((n * n + 1)*w);
     // if (s->dccount){
     //     std::cout << "dccount good" << std::endl;
     // }
@@ -1377,6 +1394,8 @@ saucy_alloc(long int n, long int w, long int nnz)
     s->diffnons = ints(n);
     s->undiffnons = ints(n);
 
+    
+
     if (s->ninduce && s->sinduce && s->left.cfront && s->left.clen
         && s->right.cfront && s->right.clen
         && s->stuff && s->bucket && s->count && s->ccount
@@ -1392,10 +1411,14 @@ saucy_alloc(long int n, long int w, long int nnz)
         && s->pairs && s->unpairs && s->diffnons && s->undiffnons
         && s->difflev && s->undifflev && s->specmin)
     {
+        // saucyFile << model_name + ",good" + "\n";
+        // saucyFile.close();
         return s;
     }
     else {
         std::cout << "saucy_free called" << std::endl;
+        // saucyFile << model_name + ",bad memory" + "\n";
+        // saucyFile.close();
         saucy_free(s);
         return NULL;
     }

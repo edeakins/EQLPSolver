@@ -16,9 +16,11 @@
 #include <stdexcept>
 #include <numeric>
 using namespace std;
+std::string mname;
 
-HighsEquitable::HighsEquitable(const HighsLp& lp){
+HighsEquitable::HighsEquitable(const HighsLp& lp, std::string model_name){
 	// Original Lp info but edited for cuts
+	mname = model_name;
     nCols = lp.numCol_;
 	nRows = lp.numRow_;
     nTot = lp.numCol_ + lp.numRow_;
@@ -186,7 +188,7 @@ void HighsEquitable::lp2Graph(){
 
 void HighsEquitable::doSaucyEquitable(){
 	int i, j, k = 0, maxSplit = 0;
-	s = saucy_alloc(nTot, g->sg.w, g->sg.e); // TO DO: add second argument to this function
+	s = saucy_alloc(nTot, g->sg.w, mname); // TO DO: add second argument to this function
 	partitions = (struct eq_part *)calloc( (1), sizeof(struct eq_part) );
     // for( i = 0; i <+1; ++i)
     // {
