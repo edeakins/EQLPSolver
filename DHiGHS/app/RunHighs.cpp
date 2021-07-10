@@ -273,11 +273,14 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     sOptions.time_limit = (double)3600;
     highs.passHighsOptions(sOptions);
     init_status = highs.passModel(lp);
-    bool run_highs_clock_already_running = timer.runningRunHighsClock();
-    if (!run_highs_clock_already_running) timer.startRunHighsClock();
-    double initial_time = timer.readRunHighsClock();
+    int runHighsClockIdx = highs.timer_.run_highs_clock;
+    // bool run_highs_clock_already_running = timer.runningRunHighsClock();
+    // if (!run_highs_clock_already_running) timer.startRunHighsClock();
+    // double initial_time = timer.readRunHighsClock();
     run_status = highs.run();
-    double sTime = timer.readRunHighsClock() - initial_time;
+    // double sTime = timer.readRunHighsClock() - initial_time;
+    
+    double sTime = highs.timer_.clock_time[runHighsClockIdx];
     solution = highs.getSolution();
     double obj = 0;
     for (int i = 0; i < solution.col_value.size(); ++i){
@@ -295,8 +298,12 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     std::string name = options.model_file.c_str();
     std::string tTime = std::to_string(sTime);
     std::string objval = std::to_string(obj);
-    name.erase(0,31);
-    // name.erase(0,41);
+    if (run_mitt){
+      name.erase(0,31);
+    }
+    else{
+      name.erase(0,21);
+    }
     std::string outP = name + "," + tTime + "," + objval + "\n";
     if (in.peek() == std::ifstream::traits_type::eof()){
       std::string column0 = "Instance";
@@ -310,6 +317,12 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
     return run_status;
   }
   double time;
+  double saucyTime = 0;
+  double foldTime = 0;
+  double foldSolveTime = 0;
+  double liftTime = 0;
+  double pivotTime = 0;
+  double runOCTime = 0;
   // Timer, options, highs solver, write_status, run_status
   HighsTimer timer;
   HighsOptions alpOpt;
@@ -338,19 +351,24 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   alpOpt.time_limit = (double)3600;
   std::string mitName = options.model_file.c_str();
   // initialize partitioning tool/class
-  bool run_highs_clock_already_running = timer.runningRunHighsClock();
-  if (!run_highs_clock_already_running) timer.startRunHighsClock();
-  double initial_time = timer.readRunHighsClock();
+  // bool run_highs_clock_already_running = timer.runningRunHighsClock();
+  // if (!run_highs_clock_already_running) timer.startRunHighsClock();
+  // double initial_time = timer.readRunHighsClock();
   HighsEquitable ep(lp, options.model_file.c_str());
+  int saucyClockIdx = highs.timer_.saucy_clock;
   struct lpPartition *partition;
+  highs.timer_.start(saucyClockIdx);
   partition = ep.refine();
+  highs.timer_.stop(saucyClockIdx);
   // int numRefinements = ep.getNumRefinements();
-  highs.totPartTime_ += timer.readRunHighsClock() - initial_time;
+  saucyTime = highs.timer_.clock_time[saucyClockIdx];
   // Use aggregator to get first aggregate lp (level 0)
-  initial_time = timer.readRunHighsClock();
   HighsAggregate lpFolder(lp, partition);
+  int foldClockIdx = highs.timer_.fold_clock;
+  highs.timer_.start(foldClockIdx);
   lpFolder.fold();
-  highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
+  highs.timer_.stop(foldClockIdx);
+  foldTime = highs.timer_.clock_time[foldClockIdx];
   alp = lpFolder.getAlp();
   int nRCol = alp.numCol_;
   int nRRow = alp.numRow_;
@@ -376,10 +394,11 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   return_status = highs.passHighsOptions(alpOpt);
   init_status = highs.passModel(alp);
   // write_status = highs.writeModel("level_0.lp");
-  initial_time = timer.readRunHighsClock();
+  int runHighsClockIdx = highs.timer_.run_highs_clock;
+  highs.timer_.start(runHighsClockIdx);
   run_status = highs.run(); 
-  highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time; // Add this timer to highs
-  double foldSolveTime = timer.readRunHighsClock() - initial_time;
+  highs.timer_.stop(runHighsClockIdx);
+  foldSolveTime = highs.timer_.clock_time[runHighsClockIdx];
   basis = highs.getBasis();
   solution = highs.getSolution();
   double fobj = 0;
@@ -392,20 +411,24 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   // Start loop for level 1+ aggregates
   alpOpt.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
   return_status = highs.passHighsOptions(alpOpt);
-  initial_time = timer.readRunHighsClock();
+  int liftClockIdx = highs.timer_.lift_clock;
+  highs.timer_.start(liftClockIdx);
   lpFolder.lift(solution, basis);
-  highs.totFoldTime_ += timer.readRunHighsClock() - initial_time;
+  highs.timer_.stop(liftClockIdx);
+  liftTime = highs.timer_.clock_time[liftClockIdx];
   elp = lpFolder.getElp();
+  elp.foldSolveTime = foldSolveTime;
   elpBasis = lpFolder.getElpBasis();
   init_status = highs.passModel(elp);
   // write_status = highs.writeModel("level_n.lp");
   basis_status = highs.setBasis(*elpBasis);
-  initial_time = timer.readRunHighsClock();
+  highs.timer_.start(runHighsClockIdx);
   run_status = highs.run(); 
-  highs.totUnfoldTime_ += timer.readRunHighsClock() - initial_time;
+  highs.timer_.stop(runHighsClockIdx);
+  pivotTime = highs.timer_.clock_time[runHighsClockIdx] - foldSolveTime;
   basis = highs.getBasis();
-  for (int i = basis.col_status.size() - elp.numResiduals_; i < basis.col_status.size(); ++i)
-    if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
+  // for (int i = basis.col_status.size() - elp.numResiduals_; i < basis.col_status.size(); ++i)
+  //   if (basis.col_status[i] != HighsBasisStatus::BASIC) std::cout << "r_ " << i << " not basic anymore" << std::endl;
   solution = highs.getSolution();
   double obj = 0;
   for (int i = 0; i < solution.col_value.size() - elp.numResiduals_; ++i){
@@ -421,28 +444,34 @@ HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
   std::ofstream resultsFile(fileName, std::ios_base::app);
   std::ifstream in(fileName);
   std::string name = options.model_file.c_str();
-  std::string pTime = std::to_string(highs.totPartTime_);
-  std::string fTime = std::to_string(highs.totFoldTime_);
+  std::string pTime = std::to_string(saucyTime);
+  std::string fTime = std::to_string(foldTime);
+  std::string lTime = std::to_string(liftTime);
   std::string fSTime = std::to_string(foldSolveTime);
-  std::string uTime = std::to_string(highs.totUnfoldTime_ - foldSolveTime);
-  std::string tTime = std::to_string(highs.totPartTime_ + highs.totFoldTime_ + highs.totUnfoldTime_);
+  std::string uTime = std::to_string(pivotTime);
+  std::string tTime = std::to_string(saucyTime + foldTime + foldSolveTime + liftTime + pivotTime);
   std::string objval = std::to_string(obj);
-  name.erase(0,31);
-  // name.erase(0,41);
-  std::string outP = name + "," + pTime + "," + fTime + "," + fSTime + "," + uTime + "," + tTime + "," + cRed +
+  if (run_mitt){
+    name.erase(0,31);
+  }
+  else{
+    name.erase(0,21);
+  }
+  std::string outP = name + "," + pTime + "," + fTime + "," + fSTime + "," + lTime + "," + uTime + "," + tTime + "," + cRed +
   "," + rRed + "," + nRed + "," + objval + "\n";
   if (in.peek() == std::ifstream::traits_type::eof()){
     std::string column0 = "Instance";
-    std::string column1 = "Partition Time";
-    std::string column2 = "Fold Time";
-    std::string column9 = "Folded Solve Time";
-    std::string column3 = "Unfold Time";
-    std::string column4 = "Total Time";
+    std::string column1 = "Saucy";
+    std::string column2 = "Fold LP";
+    std::string column9 = "ALP(0) Solve";
+    std::string column10 = "Lift LP";
+    std::string column3 = "ELP(N) Solve";
+    std::string column4 = "Total";
     std::string column5 = "Objective";
     std::string column6 = "Column Reduction (%)";
     std::string column7 = "Row Reduction (%)";
     std::string column8 = "Nonzero Reduction (%)";
-    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column9 + "," + column3 + "," + column4 + "," + column6 +
+    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column9 + "," + column10 + "," + column3 + "," + column4 + "," + column6 +
     "," + column7 + "," + column8 + "," + column5 + "\n";
     resultsFile << outCols;
   }

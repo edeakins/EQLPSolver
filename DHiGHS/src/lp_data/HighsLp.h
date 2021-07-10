@@ -88,6 +88,7 @@ class HighsLp {
   std::vector<double> rowLower_;
   std::vector<double> rowUpper_;
   std::vector<int> residuals_;
+  int foldSolveTime;
 
 
   // sense 1 = minimize, -1 = maximize

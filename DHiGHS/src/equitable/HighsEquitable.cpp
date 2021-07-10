@@ -202,7 +202,7 @@ void HighsEquitable::doSaucyEquitable(){
 	partitions[0].fronts = (int *)calloc(nTot, sizeof(int));
 	partitions[0].parents = (int *)calloc(nTot, sizeof(int));
 	saucy_search(s, &g->sg, 0, g->colors, on_automorphism, g, &stats, partitions); 
-	int iter = stats.iter;
+	// int iter = stats.iter;
 	// for (i = 0; i < iter; ++i)
 	// 	if (partitions[i].nsplits > maxSplit) maxSplit = partitions[i].nsplits;
 	// for (j = 0; j < i; ++j)

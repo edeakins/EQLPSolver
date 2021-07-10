@@ -56,6 +56,10 @@ class HighsTimer {
     presolve_clock = clock_def("Presolve", "Pre");
     solve_clock = clock_def("Solve", "Slv");
     postsolve_clock = clock_def("Postsolve", "Pst");
+    fold_clock = clock_def("Aggregation", "Agg");
+    lift_clock = clock_def("Lifting", "Lft");
+    saucy_clock = clock_def("Saucy", "Scy");
+    pivot_clock = clock_def("Pivot", "Pvt");
     // partition_clock = clock_def("Refinement", "Ref");
     // lp_fold_clock = clock_def("Aggregate", "Agg");
     // lp_unfold_clock = clock_def("Unfold", "Ufd");
@@ -126,7 +130,6 @@ class HighsTimer {
     this->presolve_clock = clock_def("Presolve", "Pre");
     this->solve_clock = clock_def("Solve", "Slv");
     this->postsolve_clock = clock_def("Postsolve", "Pst");
-    this->gram_schmidt_clock = clock_def("Gram Schmidt Reduction", "Gsr");
 
     this->run_highs_clock_time = 0;
     this->run_highs_clock_start_time = initial_clock_start;
@@ -494,7 +497,10 @@ class HighsTimer {
   int presolve_clock;
   int solve_clock;
   int postsolve_clock;
-  int gram_schmidt_clock;
+  int fold_clock;
+  int lift_clock;
+  int saucy_clock;
+  int pivot_clock;
   // HiGHS run time - used to scale ticks to time
   double run_highs_clock_time = 0;
   // HiGHS run start time - used to compute HiGHS run time
