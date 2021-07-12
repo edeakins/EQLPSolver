@@ -14,10 +14,16 @@ src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o: ../src/util/HighsTim
 src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o: ../src/equitable/HighsEquitable.cpp
 src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.o: ../src/equitable/saucy-equitable.cpp
 src/CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.o: ../src/equitable/saucy-equitable.h
 
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/Highs.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/equitable/HighsEquitable.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/equitable/amorph.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/equitable/platform.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/equitable/saucy-equitable.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HighsInfo.h
@@ -25,6 +31,7 @@ src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HighsLp
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HighsModelObject.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/Presolve.h
@@ -37,6 +44,7 @@ src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/simplex/HighsSi
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/test/KktChStep.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/interfaces/highs_c_api.cpp
@@ -84,6 +92,11 @@ src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/io/FilereaderLp.cpp
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/Highs.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/equitable/HighsEquitable.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/equitable/amorph.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/equitable/platform.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/equitable/saucy-equitable.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/FilereaderMps.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/HMPSIO.h
@@ -98,6 +111,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HighsModelObj
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HighsModelUtils.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/Presolve.h
@@ -110,6 +124,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/simplex/HighsSimplexA
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/test/KktChStep.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/util/stringutil.h
@@ -117,6 +132,11 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/FilereaderMps.cpp
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/Highs.h
+src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/equitable/HighsEquitable.h
+src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/equitable/amorph.h
+src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/equitable/platform.h
+src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/equitable/saucy-equitable.h
+src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/io/HMPSIO.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/io/HighsIO.h
@@ -128,6 +148,7 @@ src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/lp_data/HighsModelObject.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/lp_data/HighsModelUtils.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/Presolve.h
@@ -140,6 +161,7 @@ src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/simplex/HighsSimplexAnalysis
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/test/KktChStep.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/util/stringutil.h
@@ -214,6 +236,7 @@ src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsSolution.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsSolve.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/Presolve.h
@@ -260,6 +283,11 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o: ../src/lp_data/HighsLp.cpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/Highs.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/equitable/HighsEquitable.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/equitable/amorph.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/equitable/platform.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/equitable/saucy-equitable.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/io/HMPSIO.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/io/HighsIO.h
@@ -272,6 +300,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HighsMode
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HighsModelUtils.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/Presolve.h
@@ -284,6 +313,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/simplex/HighsSimp
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/test/KktChStep.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/util/HighsSort.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/util/HighsUtils.h
@@ -298,6 +328,11 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.o: ../src/lp_data/High
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelBuilder.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/Highs.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/equitable/HighsEquitable.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/equitable/amorph.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/equitable/platform.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/equitable/saucy-equitable.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/lp_data/HighsInfo.h
@@ -306,6 +341,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/lp_data/HighsM
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/lp_data/HighsModelUtils.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/Presolve.h
@@ -318,6 +354,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/simplex/HighsS
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/test/KktChStep.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/lp_data/HighsModelUtils.cpp
@@ -336,6 +373,11 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.o: ../src/lp_data/HighsQRm
 src/CMakeFiles/libhighs.dir/lp_data/HighsQRmodule.cpp.o: ../src/lp_data/HighsQRmodule.h
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/Highs.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/equitable/HighsEquitable.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/equitable/amorph.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/equitable/platform.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/equitable/saucy-equitable.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/ipm/IpxSolution.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/ipm/IpxStatus.h
@@ -364,6 +406,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/lp_data/HighsMod
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/lp_data/HighsSolution.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/Presolve.h
@@ -376,6 +419,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/simplex/HighsSim
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/test/KktChStep.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/lp_data/HighsSolution.cpp
@@ -410,6 +454,11 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o: ../src/lp_data/HighsStatu
 src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/Highs.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/equitable/HighsEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/equitable/amorph.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/equitable/platform.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/equitable/saucy-equitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/lp_data/HighsInfo.h
@@ -420,6 +469,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/lp_data/HighsOption
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/mip/HighsMipSolver.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/mip/SolveMip.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/Presolve.h
@@ -432,6 +482,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/simplex/HighsSimple
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/test/KktChStep.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/mip/HighsMipSolver.cpp
@@ -453,7 +504,6 @@ src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/equitable/saucy-equ
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/lp_data/HighsLp.h
-src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/lp_data/HighsQRmodule.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o: ../src/util/HighsTimer.h
@@ -678,6 +728,11 @@ src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o: ../src/simplex/HQPrimal.cpp
 src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/Highs.h
+src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/equitable/HighsEquitable.h
+src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/equitable/amorph.h
+src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/equitable/platform.h
+src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/equitable/saucy-equitable.h
+src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/lp_data/HighsInfo.h
@@ -688,6 +743,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/lp_data/HighsModelUti
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/lp_data/HighsSolution.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/Presolve.h
@@ -704,6 +760,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/simplex/SimplexConst.
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/simplex/SimplexTimer.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/test/KktChStep.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/simplex/HSimplex.cpp
@@ -729,6 +786,11 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o: ../src/simplex/H
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/Highs.h
+src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/equitable/HighsEquitable.h
+src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/equitable/amorph.h
+src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/equitable/platform.h
+src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/equitable/saucy-equitable.h
+src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/equitable/util.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/io/HMPSIO.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/io/HighsIO.h
@@ -741,6 +803,7 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/lp_data/
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/lp_data/HighsModelUtils.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/ICrash.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/Presolve.h
@@ -755,6 +818,7 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/simplex/
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/test/KktChStep.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/util/HighsSimpleDec.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/util/HighsSort.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/util/HighsTimer.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/util/HighsUtils.h

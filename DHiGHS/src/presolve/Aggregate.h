@@ -3,19 +3,14 @@
 
 #include <cstring>
 
-#include "HighsLp.h"
 #include "HighsEquitable.h"
-#include "HighsQRmodule.h"
 #include "HighsTimer.h"
 //#include "Highs.h"
 
 class HighsAggregate{
 public:
 	// Create and allocate
-	HighsAggregate(HighsLp& lp, const struct lpPartition* ep)
-		:alpRetract(lp), elp(lp), partition(ep),
-		elpNnz_(elp.nnz_), elpNumCol_(elp.numCol_),
-		elpNumRow_(elp.numRow_), elpNumTot_(elpNumCol_ + elpNumRow_) {}
+	void setUp(const struct lpPartition* ep, HighsLp* lp);
 	void allocateAlp();
 	void resizeElp();
 	void copyPartition();
@@ -38,9 +33,9 @@ public:
 	void liftColBasis();
 	void liftRowBasis();
 	// utility functions
-	HighsLp getAlp();
+	HighsLp* getAlp();
 	HighsBasis* getAlpBasis();
-	HighsLp getElp();
+	HighsLp* getElp();
 	HighsBasis* getElpBasis();
 	void countNonbasicSplits();
 	void makeLinks();
@@ -53,8 +48,8 @@ public:
 	/* Data structs to house the aggregated lp 
 	and the aggregated lp basis information */
 	HighsLp alpRetract; // Testing 
-	HighsLp alp;
-	HighsLp elp;
+	HighsLp *alp;
+	HighsLp *elp;
 	HighsBasis* alpBasis;
 	HighsBasis* elpBasis;
 	HighsBasis prevBasis;

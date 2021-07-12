@@ -146,6 +146,24 @@ struct lpPartition{
   std::vector<int> parents;
 };
 
+// Keep relevant solve time info for OC vs HiGHS
+struct solveTimeInfo{
+  double saucyTime = 0;
+  double foldTime = 0;
+  double alpSolveTime = 0;
+  double liftTime = 0;
+  double elpSolveTime = 0;
+  double solveTime = 0;
+  double runTime = 0;
+};
+
+// Keep relevant symmetry reduction metrics for OC
+struct symmetryReductionInfo{
+  double colReductions = 0;
+  double rowReductions = 0;
+  double nnzReductions = 0;
+};
+
 // Cost, column and row scaling factors
 struct HighsScale {
   bool is_scaled_;

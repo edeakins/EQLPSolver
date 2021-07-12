@@ -57,9 +57,10 @@ class HighsTimer {
     solve_clock = clock_def("Solve", "Slv");
     postsolve_clock = clock_def("Postsolve", "Pst");
     fold_clock = clock_def("Aggregation", "Agg");
+    alp_solve_clock = clock_def("SolveALP", "SlvALP");
     lift_clock = clock_def("Lifting", "Lft");
     saucy_clock = clock_def("Saucy", "Scy");
-    pivot_clock = clock_def("Pivot", "Pvt");
+    elp_solve_clock = clock_def("Pivot", "Pvt");
     // partition_clock = clock_def("Refinement", "Ref");
     // lp_fold_clock = clock_def("Aggregate", "Agg");
     // lp_unfold_clock = clock_def("Unfold", "Ufd");
@@ -498,9 +499,11 @@ class HighsTimer {
   int solve_clock;
   int postsolve_clock;
   int fold_clock;
+  int alp_solve_clock;
   int lift_clock;
   int saucy_clock;
-  int pivot_clock;
+  int elp_solve_clock;
+  
   // HiGHS run time - used to scale ticks to time
   double run_highs_clock_time = 0;
   // HiGHS run start time - used to compute HiGHS run time

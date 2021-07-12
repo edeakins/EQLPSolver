@@ -15,7 +15,6 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HighsInfo.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HighsLp.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HighsModelObject.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HighsOptions.h
-app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HighsQRmodule.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HighsRuntimeOptions.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HighsStatus.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/mip/HighsMipSolver.h

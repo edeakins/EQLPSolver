@@ -22,6 +22,8 @@
 #include "presolve/ICrash.h"
 #include "presolve/Presolve.h"
 #include "util/HighsTimer.h"
+#include "presolve/Aggregate.h"
+// #include "equitable/HighsEquitable.h"
 
 #include <sstream>
 
@@ -33,9 +35,27 @@ class Highs {
   // see if an empty lp should have Astart[0] = 0
   Highs();
   Highs(HighsOptions& options) { options_ = options; }
-  // ~Highs(){
-  //   delete hmo;
-  // }
+ /* Methods for Orbital crossover */
+ /** @brief Calls for equitable partition setup and then 
+  * calls saucy for equitable partition calculation
+ */
+  void partitonLp(const HighsLp& lp, std::string model_name);
+  
+  /** @brief
+   * Calls for aggregator setup and then aggregates original lp
+   * based off the equitable partition for level k
+   */
+  void foldLp(const lpPartition* ep, HighsLp* lp);
+
+  /** @brief
+   * Calls for lifter to lift the aggregate lp, solution, and basis
+   * from level k to level j where j > k
+   */
+  void liftLp(HighsBasis& basis, HighsSolution& solution);
+
+  /** @brief
+   * Calls 
+   */
 
   //  virtual ~Highs() { delete &hmos_; }
 
@@ -77,6 +97,11 @@ class Highs {
 			    const std::string filename,  //!< the filename
 			    const bool pretty=false      //!< Write in pretty (human-readable) format
 			    ) const;
+
+  /** 
+   * @brief writes OC or HiGHS comp data to same given file
+   */
+  HighsStatus writeTimes(const std::string filename, int writeOrNot, int solvedHmo);
   /**
    * Methods for HiGHS option input/output
    */
@@ -718,8 +743,25 @@ class Highs {
   HighsSolution solution_;
   HighsBasis basis_;
   HighsLp lp_;
+  HighsLp originalLp;
   ICrashInfo icrash_info_;
   HighsTableau tableau_;
+  HighsAggregate lpFolder_;
+  HighsEquitable ep_;
+  HighsLp *alp_, *elp_;
+
+  // Containers for OC
+  HighsBasis alpBasis_;
+  HighsSolution alpSolution_;
+  HighsBasis* elpBasis_;
+  HighsSolution elpSolution_;
+  lpPartition* OCPartition_;
+  // Final HiGHS Run Time
+  double runTime = 0;
+  /* Time info struct for HiGHS vs
+  OC */
+  struct solveTimeInfo* sTimes;
+  struct symmetryReductionInfo* reducs;
 
   
   HighsOptions options_;

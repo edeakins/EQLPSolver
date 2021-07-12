@@ -6,6 +6,11 @@ check/CMakeFiles/unit_tests.dir/Avgas.cpp.o: ../check/Avgas.h
 
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../external/catch.hpp
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/Highs.h
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/equitable/HighsEquitable.h
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/equitable/amorph.h
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/equitable/platform.h
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/equitable/saucy-equitable.h
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/equitable/util.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/lp_data/HConst.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/lp_data/HighsInfo.h
@@ -13,6 +18,7 @@ check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/lp_data/HighsLp.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/lp_data/HighsModelObject.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/lp_data/HighsOptions.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/lp_data/HighsStatus.h
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/ICrash.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/Presolve.h
@@ -25,6 +31,7 @@ check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/simplex/HighsSimpl
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/simplex/SimplexConst.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/test/KktChStep.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/util/HighsRandom.h
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/util/HighsSimpleDec.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/util/HighsTimer.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/util/HighsUtils.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../check/TestBasisSolves.cpp
@@ -32,6 +39,11 @@ check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../external/catch.hpp
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/Highs.h
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/equitable/HighsEquitable.h
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/equitable/amorph.h
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/equitable/platform.h
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/equitable/saucy-equitable.h
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/equitable/util.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/io/Filereader.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/io/FilereaderEms.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/io/HMPSIO.h
@@ -46,6 +58,7 @@ check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/lp_data/HighsModelB
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/lp_data/HighsModelObject.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/lp_data/HighsOptions.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/lp_data/HighsStatus.h
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/ICrash.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/Presolve.h
@@ -58,6 +71,7 @@ check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/simplex/HighsSimple
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/simplex/SimplexConst.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/test/KktChStep.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/util/HighsRandom.h
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/util/HighsSimpleDec.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/util/HighsTimer.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/util/HighsUtils.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/util/stringutil.h
@@ -74,6 +88,11 @@ check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../external/catch.hpp
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/Highs.h
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/equitable/HighsEquitable.h
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/equitable/amorph.h
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/equitable/platform.h
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/equitable/saucy-equitable.h
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/equitable/util.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/io/Filereader.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/io/FilereaderEms.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/io/HMPSIO.h
@@ -85,6 +104,7 @@ check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/lp_data/HighsModelBuilder
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/lp_data/HighsModelObject.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/lp_data/HighsOptions.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/lp_data/HighsStatus.h
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/ICrash.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/Presolve.h
@@ -97,6 +117,7 @@ check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/simplex/HighsSimplexAnaly
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/simplex/SimplexConst.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/test/KktChStep.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/util/HighsRandom.h
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/util/HighsSimpleDec.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/util/HighsTimer.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/util/HighsUtils.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../check/TestInfo.cpp
@@ -129,6 +150,11 @@ check/CMakeFiles/unit_tests.dir/TestIpx.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../external/catch.hpp
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/Highs.h
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/equitable/HighsEquitable.h
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/equitable/amorph.h
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/equitable/platform.h
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/equitable/saucy-equitable.h
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/equitable/util.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/lp_data/HConst.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/lp_data/HighsInfo.h
@@ -137,6 +163,7 @@ check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/lp_data/HighsLp
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/lp_data/HighsModelObject.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/lp_data/HighsOptions.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/lp_data/HighsStatus.h
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/ICrash.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/Presolve.h
@@ -149,6 +176,7 @@ check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/simplex/HighsSi
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/simplex/SimplexConst.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/test/KktChStep.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/util/HighsRandom.h
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/util/HighsSimpleDec.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/util/HighsTimer.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/util/HighsUtils.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../check/Avgas.h
@@ -157,6 +185,11 @@ check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../external/catch.hpp
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/Highs.h
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/equitable/HighsEquitable.h
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/equitable/amorph.h
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/equitable/platform.h
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/equitable/saucy-equitable.h
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/equitable/util.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/lp_data/HConst.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/lp_data/HighsInfo.h
@@ -165,6 +198,7 @@ check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/lp_data/HighsLpUt
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/lp_data/HighsModelObject.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/lp_data/HighsOptions.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/lp_data/HighsStatus.h
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/ICrash.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/Presolve.h
@@ -179,6 +213,7 @@ check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/simplex/HighsSimp
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/simplex/SimplexConst.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/test/KktChStep.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/util/HighsRandom.h
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/util/HighsSimpleDec.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/util/HighsTimer.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/util/HighsUtils.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../check/Avgas.h
@@ -190,6 +225,11 @@ check/CMakeFiles/unit_tests.dir/TestMain.cpp.o: ../check/TestMain.cpp
 
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../external/catch.hpp
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/Highs.h
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/equitable/HighsEquitable.h
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/equitable/amorph.h
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/equitable/platform.h
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/equitable/saucy-equitable.h
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/equitable/util.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/io/Filereader.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/io/HMPSIO.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/io/HighsIO.h
@@ -201,6 +241,7 @@ check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/lp_data/HighsModelBuil
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/lp_data/HighsModelObject.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/lp_data/HighsOptions.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/lp_data/HighsStatus.h
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/ICrash.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/Presolve.h
@@ -213,6 +254,7 @@ check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/simplex/HighsSimplexAn
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/simplex/SimplexConst.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/test/KktChStep.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/util/HighsRandom.h
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/util/HighsSimpleDec.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/util/HighsTimer.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/util/HighsUtils.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/util/stringutil.h
@@ -221,6 +263,11 @@ check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../external/catch.hpp
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/Highs.h
+check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/equitable/HighsEquitable.h
+check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/equitable/amorph.h
+check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/equitable/platform.h
+check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/equitable/saucy-equitable.h
+check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/equitable/util.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/io/LoadProblem.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/lp_data/HConst.h
@@ -230,6 +277,7 @@ check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/lp_data/HighsLpUtils.
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/lp_data/HighsModelObject.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/lp_data/HighsOptions.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/lp_data/HighsStatus.h
+check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/ICrash.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/Presolve.h
@@ -242,6 +290,7 @@ check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/simplex/HighsSimplexA
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/simplex/SimplexConst.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/test/KktChStep.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/util/HighsRandom.h
+check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/util/HighsSimpleDec.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/util/HighsTimer.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/util/HighsUtils.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../check/TestPresolve.cpp

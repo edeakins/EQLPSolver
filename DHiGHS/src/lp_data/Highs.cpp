@@ -20,6 +20,8 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <filesystem>
+#include <iostream>
 
 #include "HConfig.h"
 #include "io/Filereader.h"
@@ -340,7 +342,42 @@ HighsStatus Highs::run() {
   // Initial solve. Presolve, choose solver (simplex, ipx), postsolve.
   //  printf("\nHighs::run() 1: basis_.valid_ = %d\n", basis_.valid_);
   //  fflush(stdout);
-  if (!basis_.valid_ && options_.presolve != off_string) {
+  originalLp = lp_;
+  if (options_.aggregate == on_string){
+    // Compute equitable parititon from original lp
+    timer_.start(timer_.saucy_clock);
+    partitonLp(lp_, options_.model_file.c_str());
+    timer_.stop(timer_.saucy_clock);
+    // Fold original lp
+    timer_.start(timer_.fold_clock);
+    foldLp(OCPartition_, &originalLp);
+    timer_.stop(timer_.fold_clock);
+    // Do alp solve 
+    this->passModel(*alp_);
+    timer_.start(timer_.alp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
+    timer_.stop(timer_.alp_solve_clock);
+    return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
+    // Record basis and solution
+    alpSolution_ = hmos_[original_hmo].solution_;
+    alpBasis_ = hmos_[original_hmo].basis_;
+    // Lift to elp
+    timer_.start(timer_.lift_clock);
+    liftLp(alpBasis_, alpSolution_);
+    timer_.stop(timer_.lift_clock);
+    // Do ELP UNFOLD
+    this->passModel(*elp_);
+    this->setBasis(*elpBasis_);
+    hmos_[solved_hmo].lp_.model_name_ = options_.model_file.c_str();
+    hmos_[solved_hmo].basis_ = basis_;
+    options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
+    timer_.start(timer_.elp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
+    timer_.stop(timer_.elp_solve_clock);
+    if (return_status == HighsStatus::Error) return return_status;
+    // Lift the alp and alp solution/basis to elp format
+  }
+  else if (!basis_.valid_ && options_.presolve != off_string) {
     // cout << "here" << endl;
     // cin.get();
     // No HiGHS basis so consider presolve
@@ -496,11 +533,12 @@ HighsStatus Highs::run() {
       // The original model inherits the solved model's status
       hmos_[original_hmo].unscaled_model_status_ = hmos_[solved_hmo].unscaled_model_status_;
     }
-  } else {
+  }
+  else {
     // The problem has been solved before so we ignore presolve/postsolve/ipx.
     solved_hmo = original_hmo;
-    hmos_[solved_hmo].lp_.lp_name_ = "Aggregate LP";
-    hmos_[solved_hmo].basis_ = basis_;
+    // hmos_[solved_hmo].lp_.lp_name_ = "Aggregate LP";
+    // hmos_[solved_hmo].basis_ = basis_;
     call_status = runLpSolver(hmos_[solved_hmo], "Unfolding the current aggregate");
     return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
     if (return_status == HighsStatus::Error) return return_status;
@@ -520,7 +558,7 @@ HighsStatus Highs::run() {
   // for them to have the right dimension.
   solution_ = hmos_[original_hmo].solution_;
   basis_ = hmos_[original_hmo].basis_;
-  tableau_ = hmos_[original_hmo].tableau_;
+  // tableau_ = hmos_[original_hmo].tableau_;
   // Report times
   if (hmos_[original_hmo].report_model_operations_clock) {
     std::vector<int> clockList{timer_.presolve_clock, timer_.solve_clock,
@@ -529,12 +567,38 @@ HighsStatus Highs::run() {
   }
   // Stop and read the HiGHS clock, then work out time for this call
   if (!run_highs_clock_already_running) timer_.stopRunHighsClock();
+  // Record all revelavant times for OC and symmetry reducs
+  if (options_.aggregate == on_string){
+    // Times
+    sTimes = (struct solveTimeInfo*)malloc(sizeof(struct solveTimeInfo));
+    sTimes->saucyTime = timer_.clock_time[timer_.saucy_clock];
+    sTimes->foldTime = timer_.clock_time[timer_.fold_clock];
+    sTimes->alpSolveTime = timer_.clock_time[timer_.alp_solve_clock];
+    sTimes->liftTime = timer_.clock_time[timer_.lift_clock];
+    sTimes->elpSolveTime = timer_.clock_time[timer_.elp_solve_clock];
+    sTimes->solveTime = timer_.clock_time[timer_.solve_clock];
+    sTimes->runTime = timer_.clock_time[timer_.run_highs_clock];
+    // Reductions
+    reducs = (struct symmetryReductionInfo*)malloc(sizeof(struct symmetryReductionInfo));
+    // Original numCol, numRow, numNnz
+    int oNCol = originalLp.numCol_;
+    int oNRow = originalLp.numRow_;
+    int oNnz = originalLp.nnz_;
+    // ALP numCol, numRwo, numNnz
+    int alpNCol = alp_->numCol_;
+    int alpNRow = alp_->numRow_;
+    int alpNnz = alp_->nnz_;
+    reducs->colReductions = (double)(oNCol - alpNCol)/oNCol * 100;
+    reducs->rowReductions = (double)(oNRow - alpNRow)/oNRow * 100;
+    reducs->nnzReductions = (double)(oNnz - alpNnz)/oNnz * 100;
+  }
+  runTime = timer_.clock_time[timer_.run_highs_clock];
 
-  double lp_solve_final_time = timer_.readRunHighsClock();
+  // double lp_solve_final_time = timer_.readRunHighsClock();
   HighsPrintMessage(options_.output, options_.message_level, ML_MINIMAL,
 		    "Postsolve  : %d\n", postsolve_iteration_count);
   HighsPrintMessage(options_.output, options_.message_level, ML_MINIMAL,
-		    "Time       : %0.3g\n", lp_solve_final_time - initial_time);
+		    "Time       : %0.3g\n", runTime);
   // totUnfoldTime_ += (lp_solve_final_time - initial_time);
   totIter_ += hmos_[solved_hmo].unscaled_solution_params_.simplex_iteration_count;
 
@@ -543,6 +607,26 @@ HighsStatus Highs::run() {
   call_status = highsStatusFromHighsModelStatus(scaled_model_status_);
   return_status = interpretCallStatus(call_status, return_status);
   return return_status;
+}
+
+// Compute equitable partition
+void Highs::partitonLp(const HighsLp& lp, std::string model_name){
+  ep_.setUp(lp, options_.model_file.c_str());
+  OCPartition_ = ep_.refine();
+}
+
+// Fold Lp
+void Highs::foldLp(const lpPartition* lpP, HighsLp* lp){
+  lpFolder_.setUp(lpP, lp);
+  lpFolder_.fold();
+  alp_ = lpFolder_.getAlp();
+}
+
+// Lift ALP to ELP
+void Highs::liftLp(HighsBasis& alpBasis_, HighsSolution& alpSolution_){
+  lpFolder_.lift(alpSolution_, alpBasis_);
+  elp_ = lpFolder_.getElp();
+  elpBasis_ = lpFolder_.getElpBasis();
 }
 
 const HighsLp& Highs::getLp() const { return lp_; }
@@ -1279,6 +1363,59 @@ HighsStatus Highs::writeSolution(const std::string filename, const bool pretty) 
 
   writeSolutionToFile(file, lp, basis, solution, pretty);
   return HighsStatus::OK;
+}
+
+HighsStatus Highs::writeTimes(const std::string filename, int writeOrNot, int solvedHmo){
+  if (!writeOrNot) return HighsStatus::OK;
+  /* For HiGHS results transfer to deeper write funciton next */
+  std::ofstream timeFileOut(filename, std::ios_base::app);
+  std::ifstream timeFileIn(filename);
+  if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
+    std::string column0 = "Instance";
+    std::string column1 = "Solve Time";
+    std::string column2 = "Highs Run Time";
+    std::string column3 = "Objective";
+    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "\n";
+    timeFileOut << outCols;
+  }
+  std::string name = options_.model_file.c_str();
+  name = name.substr(name.find_last_of("/\\") + 1);
+  std::string solveTime = std::to_string(sTimes->solveTime);
+  std::string hRunTime = std::to_string(sTimes->runTime);
+  double pObj = hmos_[0].simplex_info_.primal_objective_value;
+  double dObj = hmos_[0].simplex_info_.dual_objective_value;
+  std::string objVal;
+  if (std::fabs(pObj - dObj)<1e-6)
+    objVal = std::to_string(hmos_[0].simplex_info_.primal_objective_value);
+  else objVal = "DUAL AND PRIMAL INCOSISTENT";
+  std::string outCols = name + "," + solveTime + "," + hRunTime + "," + objVal + "\n";
+  /* For OC results transfer to deeper write function next */
+  std::ofstream timeFileOut(filename, std::ios_base::app);
+  std::ifstream timeFileIn(filename);
+  if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
+    std::string column0 = "Instance";
+    std::string column1 = "Partition Time";
+    std::string column2 = "Fold LP Time";
+    std::string column3 = "Solve ALP Time";
+    std::string column4 = "Lift ALP Time";
+    std::string column5 = "Solve ELP Time";
+    std::string column6 = "Total Solve Time";
+    std::string column7 = "OC Run Time";
+    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + column4 + "," + column5 + "," + column6 + "," + column7 + "\n";
+    timeFileOut << outCols;
+  }
+  std::string name = options_.model_file.c_str();
+  name = name.substr(name.find_last_of("/\\") + 1);
+  std::string solveTime = std::to_string(sTimes->solveTime);
+  std::string hRunTime = std::to_string(sTimes->runTime);
+  double pObj = hmos_[0].simplex_info_.primal_objective_value;
+  double dObj = hmos_[0].simplex_info_.dual_objective_value;
+  std::string objVal;
+  if (std::fabs(pObj - dObj)<1e-6)
+    objVal = std::to_string(hmos_[0].simplex_info_.primal_objective_value);
+  else objVal = "DUAL AND PRIMAL INCOSISTENT";
+  std::string outCols = name + "," + solveTime + "," + hRunTime + "," + objVal + "\n";
+  // Also need to create a separate write function to write the column,row, nnz reductions.
 }
 
 bool Highs::updateHighsSolutionBasis() {

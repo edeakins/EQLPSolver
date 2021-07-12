@@ -3,6 +3,7 @@
 
 #define SAUCY_VERSION "2.0"
 #include <limits>
+#include "HighsSimpleDec.h"
 
 typedef int saucy_consumer(int, const int *, int, int *, void *);
 

@@ -3,11 +3,25 @@
 
 #include <vector>
 #include <stack>
-using namespace std;
+#include <map>
+#include <tuple>
+#include <math.h>
+#include <filesystem>
+// using namespace std;
+using std::map;
+using std::min;
+using std::max;
+using std::string;
+using std::stack;
+using std::pair;
+using std::make_tuple;
+using std::tuple;
+using std::vector;
+using std::fabs;
 
-typedef vector<int> intVec;
-typedef vector<double> doubleVec;
-typedef vector<bool> boolVec;
-typedef stack<int> intStack;
+// typedef vector<int> intVec;
+// typedef vector<double> doubleVec;
+// typedef vector<bool> boolVec;
+// typedef stack<int> intStack;
 
 #endif

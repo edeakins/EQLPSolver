@@ -21,12 +21,13 @@
 #include <functional>
 #include <forward_list>
 #include <signal.h>
-using namespace std;
+
+// using namespace std;
 
 class HighsEquitable {
 public:
 	// Setup for equitable ptn
-	HighsEquitable(const HighsLp& lp, std::string model_name);
+    void setUp(const HighsLp& lp, std::string model_name);
     void convertToLpPartition();
     lpPartition* refine();
     int getNumRefinements();

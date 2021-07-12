@@ -246,6 +246,8 @@ const string solver_string = "solver";
 const string parallel_string = "parallel";
 const string time_limit_string = "time_limit";
 const string options_file_string = "options_file";
+const string aggregate_string = "aggregate";
+const string time_file_string = "time_file";
 
 /** SCIP/HiGHS Objective sense */
 enum objSense { OBJSENSE_MINIMIZE = 1, OBJSENSE_MAXIMIZE = -1 };
@@ -294,6 +296,16 @@ class HighsOptions {
 					   "Options file",
 					   advanced, &options_file,
 					   FILENAME_DEFAULT);
+    records.push_back(record_string);
+    record_string = new OptionRecordString(aggregate_string,
+              "Aggregate option: \"off\", \"choose\" or \"on\"",
+              advanced, &aggregate,
+              choose_string);
+    records.push_back(record_string);
+    record_string = new OptionRecordString(time_file_string,
+              "Time file",
+              advanced, &time_file,
+              FILENAME_DEFAULT);
     records.push_back(record_string);
     // Options read from the file
     record_double = new OptionRecordDouble("infinite_cost",
@@ -564,6 +576,8 @@ class HighsOptions {
   std::string parallel;
   double time_limit;
   std::string options_file;
+  std::string aggregate;
+  std::string time_file;
   
   // Options read from the file
   double infinite_cost;

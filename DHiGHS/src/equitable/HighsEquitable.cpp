@@ -15,10 +15,10 @@
 #include <iostream>
 #include <stdexcept>
 #include <numeric>
-using namespace std;
+// using namespace std;
 std::string mname;
 
-HighsEquitable::HighsEquitable(const HighsLp& lp, std::string model_name){
+void HighsEquitable::setUp(const HighsLp& lp, std::string model_name){
 	// Original Lp info but edited for cuts
 	mname = model_name;
     nCols = lp.numCol_;
