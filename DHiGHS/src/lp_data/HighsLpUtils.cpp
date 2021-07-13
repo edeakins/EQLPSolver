@@ -1838,7 +1838,8 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
                       double dObj){
   /* For HiGHS results transfer to deeper write funciton next */
   if (agg.compare(on_string)){
-    std::ofstream timeFileOut(filename, std::ios_base::app);
+    std::string newPath = "../../../ResultLogs" + filename;
+    std::ofstream timeFileOut(newPath, std::ios_base::app);
     std::ifstream timeFileIn(filename);
     if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
       std::string column0 = "Instance";
@@ -1862,7 +1863,8 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
   }
   /* For OC results transfer to deeper write function next */
   else{
-    std::ofstream timeFileOut(filename, std::ios_base::app);
+    std::string newPath = "../../../ResultLogs" + filename;
+    std::ofstream timeFileOut(newPath, std::ios_base::app);
     std::ifstream timeFileIn(filename);
     if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
       std::string column0 = "Instance";
@@ -1901,7 +1903,8 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
 
 void writeReductionsToFile(std::string filename, struct symmetryReductionInfo* reducs, std::string model_name){
   // For reductions that come from OC process
-  std::ofstream timeFileOut(filename, std::ios_base::app);
+  std::string newPath = "../../../ResultLogs" + filename;
+  std::ofstream timeFileOut(newPath, std::ios_base::app);
   std::ifstream timeFileIn(filename);
   if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
     std::string column0 = "Instance";
