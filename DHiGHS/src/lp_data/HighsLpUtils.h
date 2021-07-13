@@ -284,7 +284,8 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
                       double dObj);
 
 void writeReductionsToFile(std::string filename,
-                struct symmetryReductionInfo* reducs);
+                struct symmetryReductionInfo* reducs,
+                std::string model_name);
 
 HighsBasis getSimplexBasis(const HighsLp& lp, const SimplexBasis& basis);
 

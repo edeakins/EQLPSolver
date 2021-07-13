@@ -361,11 +361,11 @@ class HighsOptions {
 				     advanced, &simplex_strategy,
 				     SIMPLEX_STRATEGY_MIN, SIMPLEX_STRATEGY_DUAL, SIMPLEX_STRATEGY_MAX);
     records.push_back(record_int);
-
+    // Ethan you set scaling default to none
     record_int = new OptionRecordInt("simplex_scale_strategy",
 				     "Strategy for scaling before simplex solver: off / on (0/1)",
 				     advanced, &simplex_scale_strategy,
-				     SIMPLEX_SCALE_STRATEGY_MIN, SIMPLEX_SCALE_STRATEGY_HIGHS, SIMPLEX_SCALE_STRATEGY_MAX);
+				     SIMPLEX_SCALE_STRATEGY_MIN, SIMPLEX_SCALE_STRATEGY_MIN, SIMPLEX_SCALE_STRATEGY_MAX);
     records.push_back(record_int);
 
     record_int = new OptionRecordInt("simplex_crash_strategy",

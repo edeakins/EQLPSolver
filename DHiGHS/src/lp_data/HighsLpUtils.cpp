@@ -1854,7 +1854,7 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
     std::string hRunTime = std::to_string(sTimes->runTime);
     std::string objVal;
     if (std::fabs(pObj - dObj)<1e-6)
-      objVal = std::to_string(hmos_[0].simplex_info_.primal_objective_value);
+      objVal = std::to_string(pObj);
     else objVal = "DUAL AND PRIMAL INCOSISTENT";
     std::string outCols = name + "," + solveTime + "," + hRunTime + "," + objVal + "\n";
     timeFileOut << outCols;
@@ -1888,7 +1888,7 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
     std::string hRunTime = std::to_string(sTimes->runTime);
     std::string objVal;
     if (std::fabs(pObj - dObj)<1e-6)
-      objVal = std::to_string(hmos_[0].simplex_info_.primal_objective_value);
+      objVal = std::to_string(pObj);
     else objVal = "DUAL AND PRIMAL INCOSISTENT";
     std::string outCols = name + "," + saucyTime + "," + foldTime + "," + alpSolvetime
       + "," + liftTime + "," + elpSolveTime + "," + solveTime + "," + hRunTime
@@ -1909,7 +1909,7 @@ void writeReductionsToFile(std::string filename, struct symmetryReductionInfo* r
     std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "\n";
     timeFileOut << outCols;
   }
-  std::string name = options_.model_file.c_str();
+  std::string name = model_name.c_str();
   name = name.substr(name.find_last_of("/\\") + 1);
   std::string colRedPer = std::to_string(reducs->colReductions);
   std::string rowRedPer = std::to_string(reducs->rowReductions);

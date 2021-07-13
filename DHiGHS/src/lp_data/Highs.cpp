@@ -592,6 +592,11 @@ HighsStatus Highs::run() {
     reducs->rowReductions = (double)(oNRow - alpNRow)/oNRow * 100;
     reducs->nnzReductions = (double)(oNnz - alpNnz)/oNnz * 100;
   }
+  else{
+    sTimes = (struct solveTimeInfo*)malloc(sizeof(struct solveTimeInfo));
+    sTimes->solveTime = timer_.clock_time[timer_.solve_clock];
+    sTimes->runTime = timer_.clock_time[timer_.run_highs_clock];
+  }
   runTime = timer_.clock_time[timer_.run_highs_clock];
 
   // double lp_solve_final_time = timer_.readRunHighsClock();
@@ -600,8 +605,11 @@ HighsStatus Highs::run() {
   HighsPrintMessage(options_.output, options_.message_level, ML_MINIMAL,
 		    "Time       : %0.3g\n", runTime);
   // totUnfoldTime_ += (lp_solve_final_time - initial_time);
-  totIter_ += hmos_[solved_hmo].unscaled_solution_params_.simplex_iteration_count;
-
+  // totIter_ += hmos_[solved_hmo].unscaled_solution_params_.simplex_iteration_count;
+  /* Determin whether to write time info to output file and reduction
+  info to output file */
+  if (options_.time_file != "") writeTimes(options_.time_file, solved_hmo);
+  if (options_.reduction_file != "") writeReductions(options_.reduction_file);
   // Assess success according to the scaled model status, unless
   // something worse has happened earlier
   call_status = highsStatusFromHighsModelStatus(scaled_model_status_);
@@ -1372,6 +1380,12 @@ HighsStatus Highs::writeTimes(const std::string filename, int solvedHmo){
   else writeTimesToFile(filename, sTimes, off_string,
                         options_.model_file, hmos_[solvedHmo].simplex_info_.primal_objective_value,
                         hmos_[solvedHmo].simplex_info_.dual_objective_value);
+}
+
+HighsStatus Highs::writeReductions(const std::string filename){
+  if (options_.aggregate == on_string) writeReductionsToFile(filename, reducs, options_.model_file);
+  else HighsLogMessage(options_.logfile, HighsMessageType::INFO,
+                        "Cannot write reductions stats without using Orbital Crossover");
 }
 
 bool Highs::updateHighsSolutionBasis() {

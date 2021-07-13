@@ -28,7 +28,7 @@ void reportLpStatsOrError(FILE* output, int message_level,
 void reportSolvedLpStats(FILE* output, int message_level,
                          const HighsStatus run_status, const Highs& highs);
 HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
-                         FILE* output, int message_level, bool run_quiet, int run_aggregate, int run_mitt);
+                         FILE* output, int message_level, bool run_quiet);
 HighsStatus callMipSolver(const HighsOptions& options, const HighsLp& lp,
                           FILE* output, int message_level, bool run_quiet);
 
@@ -51,8 +51,8 @@ int main(int argc, char** argv) {
   message_level = options.message_level;
 
   bool run_quiet = false;  // true;//
-  int run_aggregate = std::atoi(argv[2]);
-  int run_mitt = std::atoi(argv[3]);
+  // int run_aggregate = std::atoi(argv[2]);
+  // int run_mitt = std::atoi(argv[3]);
   if (run_quiet) {
     HighsPrintMessage(output, message_level, ML_ALWAYS,
                       "In main: running highs.run() quietly\n");
@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
     }
   }
   if (!mip) {
-    run_status = callLpSolver(options, lp, output, message_level, run_quiet, run_aggregate, run_mitt);
+    run_status = callLpSolver(options, lp, output, message_level, run_quiet);
   } else {
     run_status = callMipSolver(options, lp, output, message_level, run_quiet);
   }
@@ -230,13 +230,9 @@ void reportSolvedLpStats(FILE* output, int message_level,
 // }
 
 HighsStatus callLpSolver(const HighsOptions& options, HighsLp& lp,
-  		         FILE* output, int message_level, bool run_quiet, int run_aggregate, int run_mitt) {
-  HighsOptions runOptions;
-  runOptions.aggregate = std::string("on");
-  runOptions.simplex_scale_strategy = 0;
-  runOptions.model_file = options.model_file.c_str();
+  		         FILE* output, int message_level, bool run_quiet) {
   Highs highs;
-  highs.passHighsOptions(runOptions);
+  highs.passHighsOptions(options);
   highs.passModel(lp);
   highs.run();
   // // New options for aggregate models (work around for const input)

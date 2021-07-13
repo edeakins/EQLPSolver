@@ -105,7 +105,7 @@ class Highs {
   /**
    * @brief writes OC reductions if needed
    */
-  HighsStatus writeReductions(const std::string filename, int solvedHmo);
+  HighsStatus writeReductions(const std::string filename);
   /**
    * Methods for HiGHS option input/output
    */
