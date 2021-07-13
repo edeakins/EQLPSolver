@@ -1837,7 +1837,7 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
                       std::string model_file, double pObj,
                       double dObj){
   /* For HiGHS results transfer to deeper write funciton next */
-  if (agg == off_string){
+  if (agg.compare(on_string)){
     std::ofstream timeFileOut(filename, std::ios_base::app);
     std::ifstream timeFileIn(filename);
     if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
@@ -1858,6 +1858,7 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
     else objVal = "DUAL AND PRIMAL INCOSISTENT";
     std::string outCols = name + "," + solveTime + "," + hRunTime + "," + objVal + "\n";
     timeFileOut << outCols;
+    timeFileOut.close();
   }
   /* For OC results transfer to deeper write function next */
   else{
@@ -1894,6 +1895,7 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
       + "," + liftTime + "," + elpSolveTime + "," + solveTime + "," + hRunTime
       + "," + objVal + "\n";
     timeFileOut << outCols;
+    timeFileOut.close();
   }
 }
 
@@ -1916,6 +1918,7 @@ void writeReductionsToFile(std::string filename, struct symmetryReductionInfo* r
   std::string nnzRedPer = std::to_string(reducs->nnzReductions);
   std::string outCols = name + "," + colRedPer + "," + rowRedPer + "," + nnzRedPer + "\n";
   timeFileOut << outCols;
+  timeFileOut.close();
 }
 
 HighsStatus convertBasis(const HighsLp& lp, const SimplexBasis& basis,

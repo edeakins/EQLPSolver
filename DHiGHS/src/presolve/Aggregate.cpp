@@ -19,7 +19,7 @@ void HighsAggregate::allocateAlp(){
   // alp = (HighsLp *)calloc(1, sizeof(HighsLp));
   // alpRetract = (HighsLp *)calloc(1, sizeof(HighsLp));
   copyPartition();
-  alp = (HighsLp*)malloc(sizeof(HighsLp));
+  alp = (HighsLp*)calloc((1), sizeof(HighsLp));
   alp->numCol_ = alpNumCol_ = partition->numCol_;
   alp->numRow_ = alpNumRow_ = partition->numRow_;
   alpNumTot_ = alpNumCol_ + alpNumRow_;

@@ -353,7 +353,7 @@ HighsStatus Highs::run() {
     foldLp(OCPartition_, &originalLp);
     timer_.stop(timer_.fold_clock);
     // Do alp solve 
-    this->passModel(*alp_);
+    passModel(*alp_);
     timer_.start(timer_.alp_solve_clock);
     call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
     timer_.stop(timer_.alp_solve_clock);
@@ -366,8 +366,8 @@ HighsStatus Highs::run() {
     liftLp(alpBasis_, alpSolution_);
     timer_.stop(timer_.lift_clock);
     // Do ELP UNFOLD
-    this->passModel(*elp_);
-    this->setBasis(*elpBasis_);
+    passModel(*elp_);
+    setBasis(*elpBasis_);
     hmos_[solved_hmo].lp_.model_name_ = options_.model_file.c_str();
     hmos_[solved_hmo].basis_ = basis_;
     options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
@@ -568,9 +568,10 @@ HighsStatus Highs::run() {
   // Stop and read the HiGHS clock, then work out time for this call
   if (!run_highs_clock_already_running) timer_.stopRunHighsClock();
   // Record all revelavant times for OC and symmetry reducs
+  sTimes = new struct solveTimeInfo;
+  reducs = new struct symmetryReductionInfo;
   if (options_.aggregate == on_string){
     // Times
-    sTimes = (struct solveTimeInfo*)malloc(sizeof(struct solveTimeInfo));
     sTimes->saucyTime = timer_.clock_time[timer_.saucy_clock];
     sTimes->foldTime = timer_.clock_time[timer_.fold_clock];
     sTimes->alpSolveTime = timer_.clock_time[timer_.alp_solve_clock];
@@ -579,7 +580,7 @@ HighsStatus Highs::run() {
     sTimes->solveTime = timer_.clock_time[timer_.solve_clock];
     sTimes->runTime = timer_.clock_time[timer_.run_highs_clock];
     // Reductions
-    reducs = (struct symmetryReductionInfo*)malloc(sizeof(struct symmetryReductionInfo));
+    reducs = (struct symmetryReductionInfo*)calloc((1), sizeof(struct symmetryReductionInfo));
     // Original numCol, numRow, numNnz
     int oNCol = originalLp.numCol_;
     int oNRow = originalLp.numRow_;
@@ -593,7 +594,6 @@ HighsStatus Highs::run() {
     reducs->nnzReductions = (double)(oNnz - alpNnz)/oNnz * 100;
   }
   else{
-    sTimes = (struct solveTimeInfo*)malloc(sizeof(struct solveTimeInfo));
     sTimes->solveTime = timer_.clock_time[timer_.solve_clock];
     sTimes->runTime = timer_.clock_time[timer_.run_highs_clock];
   }
@@ -609,7 +609,9 @@ HighsStatus Highs::run() {
   /* Determin whether to write time info to output file and reduction
   info to output file */
   if (options_.time_file != "") writeTimes(options_.time_file, solved_hmo);
+  delete sTimes;
   if (options_.reduction_file != "") writeReductions(options_.reduction_file);
+  delete reducs;
   // Assess success according to the scaled model status, unless
   // something worse has happened earlier
   call_status = highsStatusFromHighsModelStatus(scaled_model_status_);
@@ -1374,18 +1376,20 @@ HighsStatus Highs::writeSolution(const std::string filename, const bool pretty) 
 }
 
 HighsStatus Highs::writeTimes(const std::string filename, int solvedHmo){
-  if (options_.aggregate == on_string) writeTimesToFile(filename, sTimes, on_string,
+  if (!options_.aggregate.compare(on_string)) writeTimesToFile(filename, sTimes, on_string,
                                                         options_.model_file, hmos_[solvedHmo].simplex_info_.primal_objective_value,
                                                         hmos_[solvedHmo].simplex_info_.dual_objective_value);
   else writeTimesToFile(filename, sTimes, off_string,
                         options_.model_file, hmos_[solvedHmo].simplex_info_.primal_objective_value,
                         hmos_[solvedHmo].simplex_info_.dual_objective_value);
+  return HighsStatus::OK;
 }
 
 HighsStatus Highs::writeReductions(const std::string filename){
-  if (options_.aggregate == on_string) writeReductionsToFile(filename, reducs, options_.model_file);
+  if (!options_.aggregate.compare(on_string)) writeReductionsToFile(filename, reducs, options_.model_file);
   else HighsLogMessage(options_.logfile, HighsMessageType::INFO,
                         "Cannot write reductions stats without using Orbital Crossover");
+  return HighsStatus::OK;
 }
 
 bool Highs::updateHighsSolutionBasis() {

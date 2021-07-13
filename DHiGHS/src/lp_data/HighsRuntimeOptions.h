@@ -24,7 +24,7 @@ bool loadOptions(int argc, char** argv, HighsOptions& options) {
     cxxopts::Options cxx_options(argv[0], "HiGHS options");
     cxx_options.positional_help("[file]").show_positional_help();
 
-    std::string presolve, solver, parallel;
+    std::string presolve, solver, parallel, aggregate;
 
     cxx_options.add_options()
       (model_file_string, "File of model to solve.",
@@ -37,6 +37,12 @@ bool loadOptions(int argc, char** argv, HighsOptions& options) {
        cxxopts::value<std::string>(parallel))
       (time_limit_string, "Run time limit (double).",
        cxxopts::value<double>())
+      (aggregate_string, "Aggregate model: \"choose\" by default - \"on\"/\"off\" are alternatives.",
+       cxxopts::value<std::string>(aggregate))
+      (time_file_string, "File containing run time information.",
+       cxxopts::value<std::string>())
+      (reduction_file_string, "File containing lp reductions from OC routine.",
+       cxxopts::value<std::string>())
       (options_file_string, "File containing HiGHS options.",
        cxxopts::value<std::vector<std::string>>())
       ("h, help", "Print help.");
@@ -92,6 +98,24 @@ bool loadOptions(int argc, char** argv, HighsOptions& options) {
       double value = result[time_limit_string].as<double>();
       if (setOptionValue(options.logfile,
 			 time_limit_string, options.records, value) != OptionStatus::OK) return false;
+    }
+
+    if (result.count(aggregate_string)) {
+      std::string value = result[aggregate_string].as<std::string>();
+      if (setOptionValue(options.logfile, 
+        aggregate_string, options.records, value) != OptionStatus::OK) return false;
+    }
+
+    if (result.count(time_file_string)) {
+      std::string value = result[time_file_string].as<std::string>();
+      if (setOptionValue(options.logfile, 
+        time_file_string, options.records, value) != OptionStatus::OK) return false;
+    }
+
+    if (result.count(reduction_file_string)) {
+      std::string value = result[reduction_file_string].as<std::string>();
+      if (setOptionValue(options.logfile, 
+        reduction_file_string, options.records, value) != OptionStatus::OK) return false;
     }
 
     if (result.count(options_file_string)) {

@@ -276,7 +276,7 @@ class HighsOptions {
     record_string = new OptionRecordString(presolve_string,
 					   "Presolve option: \"off\", \"choose\" or \"on\"",
 					   advanced, &presolve,
-					   choose_string);
+					   off_string);
     records.push_back(record_string);
     record_string = new OptionRecordString(solver_string,
 					   "Solver option: \"simplex\", \"choose\" or \"ipm\"",
@@ -293,15 +293,10 @@ class HighsOptions {
 					   advanced, &time_limit,
 					   0, HIGHS_CONST_INF, HIGHS_CONST_INF);
     records.push_back(record_double);
-    record_string = new OptionRecordString(options_file_string,
-					   "Options file",
-					   advanced, &options_file,
-					   FILENAME_DEFAULT);
-    records.push_back(record_string);
     record_string = new OptionRecordString(aggregate_string,
               "Aggregate option: \"off\", \"choose\" or \"on\"",
               advanced, &aggregate,
-              choose_string);
+              off_string);
     records.push_back(record_string);
     record_string = new OptionRecordString(time_file_string,
               "Time file",
@@ -312,6 +307,11 @@ class HighsOptions {
               "Reduction file",
               advanced, &reduction_file,
               FILENAME_DEFAULT);
+    records.push_back(record_string);
+    record_string = new OptionRecordString(options_file_string,
+					   "Options file",
+					   advanced, &options_file,
+					   FILENAME_DEFAULT);
     records.push_back(record_string);
     // Options read from the file
     record_double = new OptionRecordDouble("infinite_cost",
@@ -581,10 +581,11 @@ class HighsOptions {
   std::string solver;
   std::string parallel;
   double time_limit;
-  std::string options_file;
   std::string aggregate;
   std::string time_file;
   std::string reduction_file;
+  std::string options_file;
+  
   
   // Options read from the file
   double infinite_cost;
