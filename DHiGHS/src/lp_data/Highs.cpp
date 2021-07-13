@@ -1365,57 +1365,13 @@ HighsStatus Highs::writeSolution(const std::string filename, const bool pretty) 
   return HighsStatus::OK;
 }
 
-HighsStatus Highs::writeTimes(const std::string filename, int writeOrNot, int solvedHmo){
-  if (!writeOrNot) return HighsStatus::OK;
-  /* For HiGHS results transfer to deeper write funciton next */
-  std::ofstream timeFileOut(filename, std::ios_base::app);
-  std::ifstream timeFileIn(filename);
-  if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
-    std::string column0 = "Instance";
-    std::string column1 = "Solve Time";
-    std::string column2 = "Highs Run Time";
-    std::string column3 = "Objective";
-    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "\n";
-    timeFileOut << outCols;
-  }
-  std::string name = options_.model_file.c_str();
-  name = name.substr(name.find_last_of("/\\") + 1);
-  std::string solveTime = std::to_string(sTimes->solveTime);
-  std::string hRunTime = std::to_string(sTimes->runTime);
-  double pObj = hmos_[0].simplex_info_.primal_objective_value;
-  double dObj = hmos_[0].simplex_info_.dual_objective_value;
-  std::string objVal;
-  if (std::fabs(pObj - dObj)<1e-6)
-    objVal = std::to_string(hmos_[0].simplex_info_.primal_objective_value);
-  else objVal = "DUAL AND PRIMAL INCOSISTENT";
-  std::string outCols = name + "," + solveTime + "," + hRunTime + "," + objVal + "\n";
-  /* For OC results transfer to deeper write function next */
-  std::ofstream timeFileOut(filename, std::ios_base::app);
-  std::ifstream timeFileIn(filename);
-  if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
-    std::string column0 = "Instance";
-    std::string column1 = "Partition Time";
-    std::string column2 = "Fold LP Time";
-    std::string column3 = "Solve ALP Time";
-    std::string column4 = "Lift ALP Time";
-    std::string column5 = "Solve ELP Time";
-    std::string column6 = "Total Solve Time";
-    std::string column7 = "OC Run Time";
-    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + column4 + "," + column5 + "," + column6 + "," + column7 + "\n";
-    timeFileOut << outCols;
-  }
-  std::string name = options_.model_file.c_str();
-  name = name.substr(name.find_last_of("/\\") + 1);
-  std::string solveTime = std::to_string(sTimes->solveTime);
-  std::string hRunTime = std::to_string(sTimes->runTime);
-  double pObj = hmos_[0].simplex_info_.primal_objective_value;
-  double dObj = hmos_[0].simplex_info_.dual_objective_value;
-  std::string objVal;
-  if (std::fabs(pObj - dObj)<1e-6)
-    objVal = std::to_string(hmos_[0].simplex_info_.primal_objective_value);
-  else objVal = "DUAL AND PRIMAL INCOSISTENT";
-  std::string outCols = name + "," + solveTime + "," + hRunTime + "," + objVal + "\n";
-  // Also need to create a separate write function to write the column,row, nnz reductions.
+HighsStatus Highs::writeTimes(const std::string filename, int solvedHmo){
+  if (options_.aggregate == on_string) writeTimesToFile(filename, sTimes, on_string,
+                                                        options_.model_file, hmos_[solvedHmo].simplex_info_.primal_objective_value,
+                                                        hmos_[solvedHmo].simplex_info_.dual_objective_value);
+  else writeTimesToFile(filename, sTimes, off_string,
+                        options_.model_file, hmos_[solvedHmo].simplex_info_.primal_objective_value,
+                        hmos_[solvedHmo].simplex_info_.dual_objective_value);
 }
 
 bool Highs::updateHighsSolutionBasis() {
@@ -1469,7 +1425,8 @@ bool Highs::getHighsModelStatusAndInfo(const int solved_hmo) {
   return true;
 }
 
-HighsStatus Highs::openWriteFile(const string filename, const string method_name, FILE*& file, bool& html) const {
+HighsStatus Highs::
+openWriteFile(const string filename, const string method_name, FILE*& file, bool& html) const {
   html = false;
   if (filename == "") {
     // Empty file name: use stdout

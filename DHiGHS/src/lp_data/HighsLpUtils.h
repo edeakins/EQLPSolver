@@ -18,6 +18,7 @@
 
 #include "HConfig.h"
 #include "lp_data/HighsStatus.h"
+#include "lp_data/HighsLp.h"
 
 class HighsLp;
 class HighsBasis;
@@ -277,6 +278,13 @@ void writeSolutionToFile(FILE* file,
 			 const HighsBasis& basis,
 			 const HighsSolution& solution,
 			 const bool pretty);
+
+void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::string agg,
+                      std::string model_file, double pObj,
+                      double dObj);
+
+void writeReductionsToFile(std::string filename,
+                struct symmetryReductionInfo* reducs);
 
 HighsBasis getSimplexBasis(const HighsLp& lp, const SimplexBasis& basis);
 

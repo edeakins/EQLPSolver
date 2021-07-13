@@ -1833,6 +1833,91 @@ void writeSolutionToFile(FILE* file, const HighsLp& lp,
   }
 }
 
+void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::string agg,
+                      std::string model_file, double pObj,
+                      double dObj){
+  /* For HiGHS results transfer to deeper write funciton next */
+  if (agg == off_string){
+    std::ofstream timeFileOut(filename, std::ios_base::app);
+    std::ifstream timeFileIn(filename);
+    if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
+      std::string column0 = "Instance";
+      std::string column1 = "Solve Time";
+      std::string column2 = "Highs Run Time";
+      std::string column3 = "Objective";
+      std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "\n";
+      timeFileOut << outCols;
+    }
+    std::string name = model_file.c_str();
+    name = name.substr(name.find_last_of("/\\") + 1);
+    std::string solveTime = std::to_string(sTimes->solveTime);
+    std::string hRunTime = std::to_string(sTimes->runTime);
+    std::string objVal;
+    if (std::fabs(pObj - dObj)<1e-6)
+      objVal = std::to_string(hmos_[0].simplex_info_.primal_objective_value);
+    else objVal = "DUAL AND PRIMAL INCOSISTENT";
+    std::string outCols = name + "," + solveTime + "," + hRunTime + "," + objVal + "\n";
+    timeFileOut << outCols;
+  }
+  /* For OC results transfer to deeper write function next */
+  else{
+    std::ofstream timeFileOut(filename, std::ios_base::app);
+    std::ifstream timeFileIn(filename);
+    if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
+      std::string column0 = "Instance";
+      std::string column1 = "Partition Time";
+      std::string column2 = "Fold LP Time";
+      std::string column3 = "Solve ALP Time";
+      std::string column4 = "Lift ALP Time";
+      std::string column5 = "Solve ELP Time";
+      std::string column6 = "Total Solve Time";
+      std::string column7 = "OC Run Time";
+      std::string column8 = "Objective";
+      std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + 
+        column4 + "," + column5 + "," + column6 + "," + column7 + "," + column8 + "\n";
+      timeFileOut << outCols;
+    }
+    std::string name = model_file.c_str();
+    name = name.substr(name.find_last_of("/\\") + 1);
+    std::string saucyTime = std::to_string(sTimes->saucyTime);
+    std::string foldTime = std::to_string(sTimes->foldTime);
+    std::string alpSolvetime = std::to_string(sTimes->alpSolveTime);
+    std::string liftTime = std::to_string(sTimes->liftTime);
+    std::string elpSolveTime = std::to_string(sTimes->elpSolveTime);
+    std::string solveTime = std::to_string(sTimes->solveTime);
+    std::string hRunTime = std::to_string(sTimes->runTime);
+    std::string objVal;
+    if (std::fabs(pObj - dObj)<1e-6)
+      objVal = std::to_string(hmos_[0].simplex_info_.primal_objective_value);
+    else objVal = "DUAL AND PRIMAL INCOSISTENT";
+    std::string outCols = name + "," + saucyTime + "," + foldTime + "," + alpSolvetime
+      + "," + liftTime + "," + elpSolveTime + "," + solveTime + "," + hRunTime
+      + "," + objVal + "\n";
+    timeFileOut << outCols;
+  }
+}
+
+void writeReductionsToFile(std::string filename, struct symmetryReductionInfo* reducs, std::string model_name){
+  // For reductions that come from OC process
+  std::ofstream timeFileOut(filename, std::ios_base::app);
+  std::ifstream timeFileIn(filename);
+  if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
+    std::string column0 = "Instance";
+    std::string column1 = "Column Reduction (%)";
+    std::string column2 = "Row Reduction (%)";
+    std::string column3 = "Nonzero Reduction (%)";
+    std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "\n";
+    timeFileOut << outCols;
+  }
+  std::string name = options_.model_file.c_str();
+  name = name.substr(name.find_last_of("/\\") + 1);
+  std::string colRedPer = std::to_string(reducs->colReductions);
+  std::string rowRedPer = std::to_string(reducs->rowReductions);
+  std::string nnzRedPer = std::to_string(reducs->nnzReductions);
+  std::string outCols = name + "," + colRedPer + "," + rowRedPer + "," + nnzRedPer + "\n";
+  timeFileOut << outCols;
+}
+
 HighsStatus convertBasis(const HighsLp& lp, const SimplexBasis& basis,
                          HighsBasis& new_basis) {
   new_basis.col_status.clear();

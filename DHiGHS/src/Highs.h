@@ -101,7 +101,11 @@ class Highs {
   /** 
    * @brief writes OC or HiGHS comp data to same given file
    */
-  HighsStatus writeTimes(const std::string filename, int writeOrNot, int solvedHmo);
+  HighsStatus writeTimes(const std::string filename, int solvedHmo);
+  /**
+   * @brief writes OC reductions if needed
+   */
+  HighsStatus writeReductions(const std::string filename, int solvedHmo);
   /**
    * Methods for HiGHS option input/output
    */

@@ -248,6 +248,7 @@ const string time_limit_string = "time_limit";
 const string options_file_string = "options_file";
 const string aggregate_string = "aggregate";
 const string time_file_string = "time_file";
+const string reduction_file_string = "reduction_file";
 
 /** SCIP/HiGHS Objective sense */
 enum objSense { OBJSENSE_MINIMIZE = 1, OBJSENSE_MAXIMIZE = -1 };
@@ -305,6 +306,11 @@ class HighsOptions {
     record_string = new OptionRecordString(time_file_string,
               "Time file",
               advanced, &time_file,
+              FILENAME_DEFAULT);
+    records.push_back(record_string);
+    record_string = new OptionRecordString(reduction_file_string,
+              "Reduction file",
+              advanced, &reduction_file,
               FILENAME_DEFAULT);
     records.push_back(record_string);
     // Options read from the file
@@ -578,6 +584,7 @@ class HighsOptions {
   std::string options_file;
   std::string aggregate;
   std::string time_file;
+  std::string reduction_file;
   
   // Options read from the file
   double infinite_cost;
