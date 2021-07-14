@@ -693,10 +693,10 @@ void HQPrimal::unfold() {
   // std::cout << "Num Pivots Required: " << workHMO.lp_.numLinkers_ << std::endl;
   for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
     current_run_time = timer.readRunHighsClock();
-    // if (current_run_time + workHMO.lp_.foldSolveTime > workHMO.options_.time_limit){
-    //   workHMO.scaled_model_status_ = HighsModelStatus::REACHED_TIME_LIMIT;
-    //   return;
-    // }
+    if (current_run_time + workHMO.lp_.foldSolveTime > workHMO.options_.time_limit){
+      workHMO.scaled_model_status_ = HighsModelStatus::REACHED_TIME_LIMIT;
+      return;
+    }
     ++workHMO.lp_.unfoldIter;
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);
     columnIn = workHMO.lp_.residuals_[i];
