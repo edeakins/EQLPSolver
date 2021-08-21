@@ -61,6 +61,17 @@ void HighsAggregate::resizeElp(){
   linkAlength.assign(elpNumCol_ + elpNumResCols_, 0);
 }
 
+void HighsAggregate::resizeLpSym(){
+  lpBasis = (HighsBasis *)calloc(1, sizeof(HighsBasis));
+  lpSolution = (HighsSolution *)calloc(1, sizeof(HighsSolution));
+  lpBasis->col_status.resize(elpNumCol_);
+  lpBasis->row_status.resize(elpNumRow_);
+  lpSolution->col_value.resize(elpNumCol_);
+  lpSolution->col_dual.resize(elpNumCol_);
+  lpSolution->row_value.resize(elpNumRow_);
+  lpSolution->row_dual.resize(elpNumRow_);
+}
+
 void HighsAggregate::copyPartition(){
   /* Allocate space for partition info */
   cell = partition->cell;
@@ -187,6 +198,18 @@ void HighsAggregate::liftColBasis(){
   }
 }
 
+void HighsAggregate::liftColBasis(HighsBasis& aBasis){
+  int i; 
+  HighsBasisStatus status, basic = HighsBasisStatus::BASIC;
+  lpBasis->numCol_ = elpNumCol_;
+  for (i = 0; i < elpNumCol_; ++i){
+    int rep = i;
+    int pCol = col[i];
+    status = aBasis.col_status[pCol];
+    lpBasis->col_status[i] = status;
+  }
+}
+
 void HighsAggregate::liftRowBasis(){
   int i;
   HighsBasisStatus status, basic = HighsBasisStatus::BASIC;
@@ -200,6 +223,41 @@ void HighsAggregate::liftRowBasis(){
       elpBasis->row_status[pRep] = status;
     }
   }
+}
+
+void HighsAggregate::liftRowBasis(HighsBasis& aBasis){
+  int i;
+  HighsBasisStatus status, basic = HighsBasisStatus::BASIC;
+  lpBasis->numRow_ = elpNumRow_;
+  for (i = 0; i < elpNumRow_; ++i)
+    lpBasis->row_status[i] = basic;
+  for (i = 0; i < alpNumRow_; ++i){
+    status = aBasis.row_status[i];
+    if (status != basic){
+      int pRep = rowsToReps[i];
+      lpBasis->row_status[pRep] = status;
+    }
+  }
+}
+
+void HighsAggregate::liftSolution(HighsSolution& aSolution){
+ int i;
+ for (i = 0; i < elpNumCol_; ++i){
+   int pCol = col[i];
+   double x = aSolution.col_value[pCol];
+   double xDual = aSolution.col_dual[pCol];
+   lpSolution->col_value[i] = x;
+   lpSolution->col_dual[i] = xDual;
+ }
+ for (i = 0; i < elpNumRow_; ++i){
+   int pSlack = row[i];
+   double s = aSolution.row_value[pSlack];
+   double c = cell[i + elpNumCol_];
+   double rhsScale = cellSize[c];
+   double sDual = aSolution.row_dual[pSlack];
+   lpSolution->row_value[i] = (double)s/rhsScale;
+   lpSolution->row_dual[i] = sDual;
+ }
 }
 
 void HighsAggregate::fixAstart(){
@@ -388,8 +446,16 @@ HighsLp* HighsAggregate::getElp(){
   return elp;
 }
 
+HighsSolution* HighsAggregate::getLpSolution(){
+  return lpSolution;
+}
+
 HighsBasis* HighsAggregate::getElpBasis(){
   return elpBasis;
+}
+
+HighsBasis* HighsAggregate::getLpBasis(){
+  return lpBasis;
 }
 
 HighsLp* HighsAggregate::getAlp(){

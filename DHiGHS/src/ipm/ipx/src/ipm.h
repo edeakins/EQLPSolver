@@ -28,6 +28,9 @@ public:
     // IPX_STATUS_failed     if the KKT solver failed with info->errflag.
     // If the method did not terminate successfully, @iterate is unchanged.
     void StartingPoint(KKTSolver* kkt, Iterate* iterate, Info* info);
+    void FinishStartingPoint(KKTSolver* kkt, Iterate* iterate, Info* info, 
+                             const double* x_start, const double* s_start,
+                             const double* y_start, const double* z_start);
 
     // Updates @iterate by interior point iterations. On return ipm_status is
     // IPX_STATUS_optimal       if iterate->term_crit_reached() is true,
@@ -44,6 +47,8 @@ private:
     struct Step;
 
     void ComputeStartingPoint();
+    void FinishComputingStartingPoint(const double* x_start, const double* s_start,
+                                       const double* y_start, const double* z_start);
     void Predictor(Step& step);
     void AddCorrector(Step& step);
     void StepSizes(const Step& step);

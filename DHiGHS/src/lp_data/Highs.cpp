@@ -343,7 +343,7 @@ HighsStatus Highs::run() {
   //  printf("\nHighs::run() 1: basis_.valid_ = %d\n", basis_.valid_);
   //  fflush(stdout);
   originalLp = lp_;
-  if (options_.aggregate == on_string){
+  if (options_.aggregate == on_string && options_.solver != ipm_sym_string){
     // Compute equitable parititon from original lp
     timer_.start(timer_.saucy_clock);
     partitonLp(lp_, options_.model_file.c_str());
@@ -376,6 +376,22 @@ HighsStatus Highs::run() {
     timer_.stop(timer_.elp_solve_clock);
     if (return_status == HighsStatus::Error) return return_status;
     // Lift the alp and alp solution/basis to elp format
+  }
+  else if (options_.aggregate == on_string && options_.solver == ipm_sym_string){
+    // Compute equitable parititon from original lp
+    timer_.start(timer_.saucy_clock);
+    partitonLp(lp_, options_.model_file.c_str());
+    timer_.stop(timer_.saucy_clock);
+    // Fold original lp
+    timer_.start(timer_.fold_clock);
+    foldLp(OCPartition_, &originalLp);
+    timer_.stop(timer_.fold_clock);
+    // Do alp solve 
+    passModel(*alp_);
+    timer_.start(timer_.alp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
+    timer_.stop(timer_.alp_solve_clock);
+    return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
   }
   else if (!basis_.valid_ && options_.presolve != off_string) {
     // cout << "here" << endl;
@@ -580,7 +596,7 @@ HighsStatus Highs::run() {
     sTimes->solveTime = timer_.clock_time[timer_.solve_clock];
     sTimes->runTime = timer_.clock_time[timer_.run_highs_clock];
     // Reductions
-    reducs = (struct symmetryReductionInfo*)calloc((1), sizeof(struct symmetryReductionInfo));
+    // reducs = (struct symmetryReductionInfo*)calloc((1), sizeof(struct symmetryReductionInfo));
     // Original numCol, numRow, numNnz
     int oNCol = originalLp.numCol_;
     int oNRow = originalLp.numRow_;
@@ -637,6 +653,18 @@ void Highs::liftLp(HighsBasis& alpBasis_, HighsSolution& alpSolution_){
   lpFolder_.lift(alpSolution_, alpBasis_);
   elp_ = lpFolder_.getElp();
   elpBasis_ = lpFolder_.getElpBasis();
+}
+
+void Highs::liftBasis(HighsBasis& alpBasis_){
+  lpFolder_.resizeLpSym();
+  lpFolder_.liftColBasis(alpBasis_);
+  lpFolder_.liftRowBasis(alpBasis_);
+  lpSymBasis_ = lpFolder_.getLpBasis();
+}
+
+void Highs::liftSolution(HighsSolution& alpSolution_){
+  lpFolder_.liftSolution(alpSolution_);
+  lpSymSolution_ = lpFolder_.getLpSolution();
 }
 
 const HighsLp& Highs::getLp() const { return lp_; }
@@ -1338,7 +1366,32 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
 		    "Model cannot be solved with IPM");
     return HighsStatus::Error;
 #endif
-  } else {
+  } else if (options_.solver == ipm_sym_string &&
+             options_.aggregate == on_string){
+    // Use Simplex
+    call_status = solveLpSimplex(model);
+    return_status = interpretCallStatus(call_status, return_status, "solveLpSimplex");
+    if (return_status == HighsStatus::Error) return return_status;
+
+    if (!isSolutionConsistent(model.lp_, model.solution_)) {
+      HighsLogMessage(options_.logfile, HighsMessageType::ERROR,
+		      "Inconsistent solution returned from solver");
+      return HighsStatus::Error;
+    }
+    // Record basis and solution
+    alpSolution_ = hmos_[0].solution_;
+    alpBasis_ = hmos_[0].basis_;
+    liftBasis(alpBasis_);
+    liftSolution(alpSolution_);
+    HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
+		      "Starting Crossover From Symmetric Solution...\n");
+    passModel(originalLp);
+    call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
+			     *lpSymBasis_, *lpSymSolution_,
+			     model.unscaled_model_status_,
+			     model.unscaled_solution_params_);
+  }
+   else {
     // Use Simplex
     call_status = solveLpSimplex(model);
     return_status = interpretCallStatus(call_status, return_status, "solveLpSimplex");

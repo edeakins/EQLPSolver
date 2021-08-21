@@ -190,6 +190,8 @@ void Crossover::PushPrimal(Basis* basis, Vector& x,
             lbbasic[pblock] = lb[jn];
             ubbasic[pblock] = ub[jn];
         } else {
+            // control_.Log() << "next: " << next << " \n";
+            // control_.Log() << "move_to: " << move_to << " \n";
             x[jn] = move_to; // make clean
             assert(std::isfinite(x[jn]));
         }

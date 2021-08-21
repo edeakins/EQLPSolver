@@ -13,6 +13,7 @@ public:
 	void setUp(const struct lpPartition* ep, HighsLp* lp);
 	void allocateAlp();
 	void resizeElp();
+	void resizeLpSym();
 	void copyPartition();
 	// Fold to alp
 	void fold();
@@ -31,12 +32,17 @@ public:
 	void liftBnd();
 	void liftRhs();
 	void liftColBasis();
+	void liftColBasis(HighsBasis& aBasis);
 	void liftRowBasis();
+	void liftRowBasis(HighsBasis& aBasis);
+	void liftSolution(HighsSolution& aSolution);
 	// utility functions
 	HighsLp* getAlp();
 	HighsBasis* getAlpBasis();
 	HighsLp* getElp();
 	HighsBasis* getElpBasis();
+	HighsBasis* getLpBasis();
+	HighsSolution* getLpSolution();
 	void countNonbasicSplits();
 	void makeLinks();
 	void createLinkRows();
@@ -52,6 +58,8 @@ public:
 	HighsLp *elp;
 	HighsBasis* alpBasis;
 	HighsBasis* elpBasis;
+	HighsBasis* lpBasis;
+	HighsSolution* lpSolution;
 	HighsBasis prevBasis;
 	HighsSolution prevSol;
 	/* Scalar values that contain dimensional and

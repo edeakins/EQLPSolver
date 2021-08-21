@@ -1,4 +1,4 @@
-Instance,Column Reduction (%),Row Reduction (%),Nonzero Reduction (%)
+Instance,Column (%),Row (%),Nonzero (%)
 30_70_45_095_100.mps,0.018220,0.015966,0.017152
 ash608gpia-3col.mps,80.000000,66.669119,69.651485
 core2536-691.mps,0.078452,1.888277,0.612103

@@ -53,6 +53,10 @@ class Highs {
    */
   void liftLp(HighsBasis& basis, HighsSolution& solution);
 
+  void liftBasis(HighsBasis& basis);
+
+  void liftSolution(HighsSolution& solution);
+
   /** @brief
    * Calls 
    */
@@ -760,6 +764,8 @@ class Highs {
   HighsBasis* elpBasis_;
   HighsSolution elpSolution_;
   lpPartition* OCPartition_;
+  HighsBasis* lpSymBasis_;
+  HighsSolution* lpSymSolution_;
   // Final HiGHS Run Time
   double runTime = 0;
   /* Time info struct for HiGHS vs

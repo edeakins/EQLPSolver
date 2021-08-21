@@ -1,4 +1,4 @@
-Instance,Solve Time,Highs Run Time,Objective
+Instance,HiGHS (secs),Program Excecution Time,Objective
 cod103.mps,1.911035,1.913786,-93.090909
 cod105.mps,7.062293,7.068311,-18.285714
 cod733.mps,49.239742,49.245955,-145.800000

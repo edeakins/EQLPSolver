@@ -41,6 +41,17 @@ void IPM::StartingPoint(KKTSolver* kkt, Iterate* iterate, Info* info) {
     }
 }
 
+void IPM::FinishStartingPoint(KKTSolver* kkt, Iterate* iterate, Info* info, 
+                              const double* x_start, const double* s_start,
+                              const double* y_start, const double* z_start){
+    kkt_ = kkt;
+    iterate_ = iterate;
+    info_ = info;
+    PrintHeader();
+    FinishComputingStartingPoint(x_start, s_start, y_start, z_start);
+    PrintOutput();
+}
+
 void IPM::Driver(KKTSolver* kkt, Iterate* iterate, Info* info) {
     const Model& model = iterate->model();
     const Int m = model.rows();
@@ -89,6 +100,72 @@ void IPM::Driver(KKTSolver* kkt, Iterate* iterate, Info* info) {
             info->status_ipm = IPX_STATUS_failed;
         }
     }
+}
+
+void IPM::FinishComputingStartingPoint(const double* x_start, const double* s_start,
+                                       const double* y_start, const double* z_start){
+    const Model& model = iterate_->model();
+    const Int m = model.rows();
+    const Int n = model.cols();
+    const SparseMatrix& AI = model.AI();
+    const Vector& b = model.b();
+    const Vector& c = model.c();
+    const Vector& lb = model.lb();
+    const Vector& ub = model.ub();
+    Vector x(n+m), xl(n+m), xu(n+m), y(m), zl(n+m), zu(n+m);
+    Vector rb(m);
+    // Factorize the KKT matrix with the identity matrix in the (1,1) block.
+    kkt_->Factorize(nullptr, info_);
+    if (info_->errflag)
+        return;
+    // Set rb = b - AI*x, here we have a starting point so
+    // rb is not assumed to be b
+    for (Int j = 0; j < m; ++j){
+        rb[j] = s_start[j];
+    }
+    // Set x equal to its value from sym basis
+    for (Int j = 0; j < n+m; j++) {
+        double xj = 0.0;
+        if (j < n){
+            xj = x_start[j];
+            x[j] = xj;
+        }
+        else{
+            xj = s_start[j - n];
+            x[j] = xj;
+        }
+        // if (xj != 0.0)
+        //     ScatterColumn(AI, j, -xj, rb);
+    }
+    // double tol = 0.1 * Infnorm(rb);
+    // zl = 0.0;
+    // kkt_->Solve(zl, rb, tol, xl, y, info_);
+    // if (info_->errflag)
+    //     return;
+    // x += xl;
+    double xinfeas = 0;
+    // Set xl, xu
+    for (Int j = 0; j < n + m; ++j){
+        xl[j] = x[j] - lb[j];
+        xu[j] = ub[j] - x[j];
+    }
+    // Set y
+    for (Int j = 0; j < m; ++j){
+        y[j] = y_start[j];
+    }
+    // Set zu, zl
+    for (Int j = 0; j < n + m; ++j){
+        if (j < n){
+            zl[j] = z_start[j] - lb[j];
+            zu[j] = ub[j] - z_start[j];
+        }
+        else{
+            zl = y_start[j - n] - lb[j];
+            zu = ub[j] - y_start[j - n];
+        }
+    }
+    iterate_->Initialize(x, xl, xu, y, zl, zu);
+    control_.Log() << "iterate was initialized using fucked way of construcdting starting point \n";
 }
 
 void IPM::ComputeStartingPoint() {

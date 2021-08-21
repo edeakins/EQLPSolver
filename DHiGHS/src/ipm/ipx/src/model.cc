@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cmath>
 #include "utils.h"
+#include <iostream>
 
 namespace ipx {
 
@@ -31,6 +32,7 @@ void Model::Load(const Control& control, Int num_constr, Int num_var,
     Int dualize = control.dualize();
     if (dualize < 0)
         dualize = num_constr > 2*num_var;
+    // dualize = true;
     if (dualize)
         LoadDual();
     else
@@ -872,6 +874,17 @@ void Model::WriteInfo(Info *info) const {
     info->dense_cols = num_dense_cols();
 }
 
+void Model::GetInfo(Info *info) const{
+    info->num_var = num_var_;
+    info->num_constr = num_constr_;
+    info->num_entries = num_entries_;
+    info->num_rows_solver = num_rows_;
+    info->num_cols_solver = num_cols_ + num_rows_; // including slack columns
+    info->num_entries_solver = AI_.entries();
+    info->dualized = dualized_;
+    info->dense_cols = num_dense_cols();
+}
+
 void Model::ScaleBasicSolution(Vector& x, Vector& slack, Vector& y, Vector& z)
     const {
     if (colscale_.size() > 0) {
@@ -1301,10 +1314,20 @@ double DualInfeasibility(const Model& model, const Vector& x,
 
     double infeas = 0.0;
     for (Int j = 0; j < (Int) x.size(); j++) {
-        if (x[j] > lb[j])
+        if (x[j] > lb[j]){
             infeas = std::max(infeas, z[j]);
-        if (x[j] < ub[j])
+            // if (infeas){
+            // std::cout << "x[" << j << "]: " << x[j] << ", lb: " << lb[j] << ", z[" << j << "]: " << z[j] << std::endl; 
+            // std::cin.get();
+            // }
+        }
+        if (x[j] < ub[j]){
             infeas = std::max(infeas, -z[j]);
+            // if (infeas){
+            // std::cout << "x[" << j << "]: " << x[j] << ", ub: " << ub[j] << ", -z[" << j << "]: " << -z[j] << std::endl; 
+            // std::cin.get();
+            // }
+        }
     }
     return infeas;
 }

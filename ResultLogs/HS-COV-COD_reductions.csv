@@ -1,4 +1,4 @@
-Instance,Column Reduction (%),Row Reduction (%),Nonzero Reduction (%)
+Instance,Column (%),Row (%),Nonzero (%)
 cod103.mps,99.951148,99.951148,99.993023
 cod105.mps,99.951148,99.951148,99.998345
 cod733.mps,99.977132,99.977132,99.997460

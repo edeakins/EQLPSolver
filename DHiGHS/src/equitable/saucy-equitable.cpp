@@ -1275,7 +1275,7 @@ saucy_search(
     memcpy( eq_steps[0].fronts, s->left.cfront, s->n*sizeof(int) );
     memcpy( eq_steps[0].parents, s->left.parent, s->n*sizeof(int) );
 
-    /* Descend along the leftmost branch and compute zeta */
+    // /* Descend along the leftmost branch and compute zeta */
     // descend_leftmost( s, eq_steps );
 }
 

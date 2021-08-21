@@ -1,4 +1,4 @@
-Instance,Solve Time,Highs Run Time,Objective
+Instance,HiGHS (secs),Program Execution Time,Objective
 30_70_45_095_100.mps,13.034979,13.048318,3.000000
 ash608gpia-3col.mps,1.230679,1.248794,2.000000
 core2536-691.mps,3.810274,3.825646,688.476034

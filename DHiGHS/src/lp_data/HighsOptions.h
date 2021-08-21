@@ -235,6 +235,7 @@ void reportOption(FILE* file,
 
 const string simplex_string = "simplex";
 const string ipm_string = "ipm";
+const string ipm_sym_string = "ipm_sym";
 const int KEEP_N_ROWS_DELETE_ROWS = -1;
 const int KEEP_N_ROWS_DELETE_ENTRIES = 0;
 const int KEEP_N_ROWS_KEEP_ROWS = 1;
@@ -279,7 +280,7 @@ class HighsOptions {
 					   off_string);
     records.push_back(record_string);
     record_string = new OptionRecordString(solver_string,
-					   "Solver option: \"simplex\", \"choose\" or \"ipm\"",
+					   "Solver option: \"simplex\", \"choose\", \"ipm_sym\" or \"ipm\"",
 					   advanced, &solver,
 					   choose_string);
     records.push_back(record_string);

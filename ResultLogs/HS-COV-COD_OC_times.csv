@@ -1,4 +1,4 @@
-Instance,Partition Time,Fold LP Time,Solve ALP Time,Lift ALP Time,Solve ELP Time,Total Solve Time,OC Run Time,Objective
+Instance,Partition,Fold LP,Solve ALP,Lift ALP,Solve ELP,OC (secs),Program Execution Time,Objective
 cod103.mps,0.001938,0.000080,0.001999,0.000423,0.642698,0.640570,0.646549,-93.090909
 cod105.mps,0.005428,0.000366,0.001946,0.000888,1.158682,1.151237,1.166287,-18.285714
 cod733.mps,0.004656,0.000217,0.001891,0.000737,4.116096,4.109873,4.122790,-145.800000

@@ -57,6 +57,9 @@ public:
               const double* rhs, const char* constr_type, const double* obj,
               const double* lbuser, const double* ubuser, Info* info);
 
+    // Get model info 
+    void GetInfo(Info* info) const;
+
     // Returns true if the model is empty.
     bool empty() const { return cols() == 0; }
 

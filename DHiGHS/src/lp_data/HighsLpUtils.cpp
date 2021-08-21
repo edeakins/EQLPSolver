@@ -1843,8 +1843,8 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
     std::ifstream timeFileIn(newPath);
     if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
       std::string column0 = "Instance";
-      std::string column1 = "Solve Time";
-      std::string column2 = "Highs Run Time";
+      std::string column1 = "HiGHS (secs)";
+      std::string column2 = "Program Execution Time";
       std::string column3 = "Objective";
       std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "\n";
       timeFileOut << outCols;
@@ -1856,7 +1856,7 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
     std::string objVal;
     if (std::fabs(pObj - dObj)<1e-6)
       objVal = std::to_string(pObj);
-    else objVal = "DUAL AND PRIMAL INCOSISTENT";
+    else objVal = "DUAL AND PRIMAL INCOSISTENT OR REACHED TIME LIMIT";
     std::string outCols = name + "," + solveTime + "," + hRunTime + "," + objVal + "\n";
     timeFileOut << outCols;
     timeFileOut.close();
@@ -1868,13 +1868,13 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
     std::ifstream timeFileIn(newPath);
     if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
       std::string column0 = "Instance";
-      std::string column1 = "Partition Time";
-      std::string column2 = "Fold LP Time";
-      std::string column3 = "Solve ALP Time";
-      std::string column4 = "Lift ALP Time";
-      std::string column5 = "Solve ELP Time";
-      std::string column6 = "Total Solve Time";
-      std::string column7 = "OC Run Time";
+      std::string column1 = "Partition";
+      std::string column2 = "Fold LP";
+      std::string column3 = "Solve ALP";
+      std::string column4 = "Lift ALP";
+      std::string column5 = "Solve ELP";
+      std::string column6 = "OC (secs)";
+      std::string column7 = "Program Execution Time";
       std::string column8 = "Objective";
       std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + 
         column4 + "," + column5 + "," + column6 + "," + column7 + "," + column8 + "\n";
@@ -1892,7 +1892,7 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
     std::string objVal;
     if (std::fabs(pObj - dObj)<1e-6)
       objVal = std::to_string(pObj);
-    else objVal = "DUAL AND PRIMAL INCOSISTENT";
+    else objVal = "DUAL AND PRIMAL INCOSISTENT OR REACHED TIME LIMIT";
     std::string outCols = name + "," + saucyTime + "," + foldTime + "," + alpSolvetime
       + "," + liftTime + "," + elpSolveTime + "," + solveTime + "," + hRunTime
       + "," + objVal + "\n";
@@ -1908,9 +1908,9 @@ void writeReductionsToFile(std::string filename, struct symmetryReductionInfo* r
   std::ifstream timeFileIn(newPath);
   if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
     std::string column0 = "Instance";
-    std::string column1 = "Column Reduction (%)";
-    std::string column2 = "Row Reduction (%)";
-    std::string column3 = "Nonzero Reduction (%)";
+    std::string column1 = "Column (%)";
+    std::string column2 = "Row (%)";
+    std::string column3 = "Nonzero (%)";
     std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "\n";
     timeFileOut << outCols;
   }

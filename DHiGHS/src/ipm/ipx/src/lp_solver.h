@@ -28,6 +28,11 @@ public:
               const double* ub, Int num_constr, const Int* Ap, const Int* Ai,
               const double* Ax, const double* rhs, const char* constr_type);
 
+    void LoadModel(Int num_var, const double* obj, const double* lb,
+        const double* ub, Int num_constr, const Int* Ap,
+        const Int* Ai, const double* Ax, const double* rhs,
+        const char* constr_type);
+
     // Returns the solver info from the last call to Solve(). See the reference
     // documentation for the meaning of Info values.
     Info GetInfo() const;
@@ -100,6 +105,11 @@ public:
     // Returns -1 if no basis was available and 0 otherwise.
     Int SymbolicInvert(Int* rowcounts, Int* colcounts);
 
+    Int CrossoverFromStartingPoint(const double* x_start,
+                                   const double* s_start,
+                                   const double* y_start,
+                                   const double* z_start);
+
 private:
     void InteriorPointSolve();
     void RunIPM();
@@ -108,6 +118,7 @@ private:
     void BuildStartingBasis();
     void RunMainIPM(IPM& ipm);
     void RunCrossover();
+    void ClearSolution();
     void PrintSummary();
 
     Control control_;
@@ -119,7 +130,7 @@ private:
     // Basic solution computed by crossover and basic status of each variable
     // (one of IPX_nonbasic_lb, IPX_nonbasic_ub, IPX_basic, IPX_superbasic).
     // If crossover was not run or failed, then basic_statuses_ is empty.
-    Vector x_crossover_, y_crossover_, z_crossover_;
+    Vector x_crossover_, y_crossover_, z_crossover_, crossover_weights_;
     std::vector<Int> basic_statuses_;
 };
 

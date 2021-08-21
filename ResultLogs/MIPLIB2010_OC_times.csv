@@ -1,4 +1,4 @@
-Instance,Partition Time,Fold LP Time,Solve ALP Time,Lift ALP Time,Solve ELP Time,Total Solve Time,OC Run Time,Objective
+Instance,Partition,Fold LP,Solve ALP,Lift ALP,Solve ELP,OC (secs),Program Execution Time,Objective
 30_70_45_095_100.mps,0.022948,0.001570,12.225416,0.001232,0.021973,12.224073,12.269799,3.000000
 ash608gpia-3col.mps,0.026380,0.001097,0.015744,0.000509,0.244527,0.237289,0.284378,2.000000
 core2536-691.mps,0.034681,0.004108,4.440784,0.001543,0.011254,4.433729,4.487586,688.476034

@@ -36,7 +36,7 @@ bool commandLineOffChooseOnOk(FILE* logfile, const string& value) {
 }
 
 bool commandLineSolverOk(FILE* logfile, const string& value) {
-  if (value == simplex_string || value == choose_string || value == ipm_string) return true;
+  if (value == simplex_string || value == choose_string || value == ipm_string || value == ipm_sym_string) return true;
   HighsLogMessage(logfile, HighsMessageType::WARNING, 
 		  "Value \"%s\" is not one of \"%s\", \"%s\" or \"%s\"\n",
 		  value.c_str(), simplex_string.c_str(), choose_string.c_str(), ipm_string.c_str());
