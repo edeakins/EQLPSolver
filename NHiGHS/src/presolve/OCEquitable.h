@@ -76,7 +76,7 @@ public:
     BERKHOLZ INSPIRED 
     ///////////////////////////////////////////////////////////// */
     /* Mark cells that are adjacent to refinement cell */
-    void markCell(int cf);
+    void markCell(int cf, int edg, int wght);
     /* Split cells that were marked */
     void splitCell(int cf);
 
