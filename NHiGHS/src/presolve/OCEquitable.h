@@ -107,7 +107,7 @@ public:
     std::vector<int> wghtStart; // Sparse storage for refinement wghts
     std::vector<int> wghtEdg; // Sparse storage for refinement wghts
     std::vector<int> scount; // Number of connections to refining cell
-    std::vector<int> count; // Number of vertices with same adj count to ref cell
+     // Number of vertices with same adj count to ref cell
     std::vector<int> conncnts; // Connection counts for cell fronts
     std::vector<int> nInd; // Nonsingleton inducers of refinement
     std::vector<int> sInd; // Singleton inducers of refinement
@@ -132,11 +132,14 @@ public:
     std::vector<int> newFront;
     std::vector<int> adjCell;
     std::vector<int> cellAdj;
+    std::vector<int> set;
     std::vector<int> label;
+    std::vector<int> index;
     std::vector<int> junk;
     std::vector<int> front;
     std::vector<int> len;
     std::vector<int> size;
+    std::vector<int> count;
     std::vector<int> refSize;
     std::vector<int> nodeAdj;
     // std::vector<bool> cDegB;

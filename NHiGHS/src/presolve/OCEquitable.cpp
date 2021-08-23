@@ -6,35 +6,44 @@ void HighsOCEquitablePartition::runToDiscrete(){
 }
 
 void HighsOCEquitablePartition::isolate(){
-    int targ = nextNon[0];
+    int i, targ;
+    for (i = 0; i < g->numTot_; i += len[i] + 1){
+        if (len[i]){
+            targ = i;
+            break;
+        }
+    }
+    // int targ = nextNon[0];
     int min = targ;
-    int back = targ + partition->setLen[targ];
+    int back = targ + len[targ];
+    int nsf = back;
     // Additions, hopefully better
-    front[targ + partition->setLen[targ]] = partition->setLen[targ];
-    len[targ]--; len[targ + partition->setLen[targ]] = 0;
-    size[targ]--; size[targ + partition->setLen[targ]] = 1;
-    swapLabels(min, back);
-    split(targ, back);
+    front[targ + len[targ]] = len[targ]; index[label[len[targ]]] = front[targ + len[targ]]; /// fix this should be targ + len[targ] and index should be reworked too
+    len[targ]--; len[targ + len[targ]] = 0;
+    size[targ]--; size[len[targ]] = 1;
+    addInduce(nsf);
+    // swapLabels(min, back);
+    // split(targ, back);
     refine();
 }
 
 void HighsOCEquitablePartition::refine(){
-    int front;
+    int f;
     while (!S.empty()){
         if (discrete()){ 
             clear();
             break;
         }
-        front = S.top(), S.pop();
-        if (partition->setLen[front]){
+        f = S.top(), S.pop();
+        if (len[f]){
             nIndSize--;
-            indMark[front] = false;
-            if (!refineNonsingleCell(front)) break;
+            indMark[f] = false;
+            if (!refineNonsingleCell(f)) break;
         }
         else{ 
             sIndSize--;
-            indMark[front] = false;
-            if (!refineSinlgeCell(front)) break;
+            indMark[f] = false;
+            if (!refineSinlgeCell(f)) break;
         }
     }
     clear();
@@ -45,19 +54,20 @@ bool HighsOCEquitablePartition::refineNonsingleCell(int sf){
     int i, j, k, edg, wght, sb, cf, ssize, e, w, 
     wcount = 0, ecount = 0, numAdj = 0, idx;
     bool ret = true;
-    // sf = partition->front[node];
-    sb = sf + partition->setLen[sf];
-    ssize = sb - sf + 1;
+    // sb = sf + partition->setLen[sf];
+    sb = sf + len[sf];
     maxDeg = 0; adjCellCnt = 0;
     // Compute degree sums for all vertices adjacent to refining cell
     for (i = sf; i < sb + 1; ++i){
-        j = partition->label[i];
+        // j = partition->label[i];
+        j = label[i];
         for (k = g->adj[j]; k < g->adj[j + 1]; ++k){
-            edg = g->edg[k]; wght = g->wght[k]; cf = partition->front[edg];
-            if (!wghtFreq[wght]++) wcount++;
-            vEdgColor[ecount] = wght;
-            vEdg[ecount++] = edg;
-            // Additions to move away from saucy
+            // edg = g->edg[k]; wght = g->wght[k]; cf = partition->front[edg];
+            edg = g->edg[k]; wght = g->wght[k]; cf = front[index[edg]];
+            // if (!wghtFreq[wght]++) wcount++;
+            // vEdgColor[ecount] = wght;
+            // vEdg[ecount++] = edg;
+            // // Additions to move away from saucy
             markCell(cf, edg, wght);
         }
     }
@@ -70,59 +80,61 @@ bool HighsOCEquitablePartition::refineNonsingleCell(int sf){
         adjCell[k] = 0;
     }
     for (i = sf; i < sb + 1; ++i){
-        j = partition->label[i];
+        // j = partition->label[i];
+        j = label[i];
         for (k = g->adj[j]; k < g->adj[j + 1]; ++k){
             edg = g->edg[k];
             if (cDeg[edg]) cDeg[edg] = 0;
             if (nodeAdj[edg]) nodeAdj[edg] = 0;
         }
     }
-    // Populate sparse start array for edge weights
-    for (i = 0; i < wcount; ++i){
-        wghtStart[i + 1] += wghtFreq[i];
-        wghtOffset[i] = wghtStart[i];
-    }
-    // Populate sparse weight index array.  
-    // Don't need sparse val array as the indices are stored
-    // according to their weight.
-    for (i = 0; i < ecount; ++i){
-        w = vEdgColor[i];
-        e = vEdg[i];
-        idx = wghtOffset[w]++;
-        wghtEdg[idx] = e;
-    }
+    // // Populate sparse start array for edge weights
+    // for (i = 0; i < wcount; ++i){
+    //     wghtStart[i + 1] += wghtFreq[i];
+    //     wghtOffset[i] = wghtStart[i];
+    // }
+    // // Populate sparse weight index array.  
+    // // Don't need sparse val array as the indices are stored
+    // // according to their weight.
+    // for (i = 0; i < ecount; ++i){
+    //     w = vEdgColor[i];
+    //     e = vEdg[i];
+    //     idx = wghtOffset[w]++;
+    //     wghtEdg[idx] = e;
+    // }
 
-    for (i = 0; i < wcount; ++i){
-        for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
-            dataCount(wghtEdg[j]);
-        }
-        ret = ret && refineNonSingles();
-        for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
-            scount[wghtEdg[j]] = 0;
-            wghtEdg[j] = 0;
-            vEdgColor[j] = 0;
-            vEdg[j] = 0;
-        }
-        wghtStart[i] = 0;
-        wghtOffset[i] = 0;
-        wghtFreq[i] = 0;
-    }
-    wghtStart[wcount] = 0;
+    // for (i = 0; i < wcount; ++i){
+    //     for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
+    //         dataCount(wghtEdg[j]);
+    //     }
+    //     ret = ret && refineNonSingles();
+    //     for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
+    //         scount[wghtEdg[j]] = 0;
+    //         wghtEdg[j] = 0;
+    //         vEdgColor[j] = 0;
+    //         vEdg[j] = 0;
+    //     }
+    //     wghtStart[i] = 0;
+    //     wghtOffset[i] = 0;
+    //     wghtFreq[i] = 0;
+    // }
+    // wghtStart[wcount] = 0;
     return ret;
 }
 
 // Refining cell is a singleton
 bool HighsOCEquitablePartition::refineSinlgeCell(int sf){
-    int i, j = partition->label[sf], k, edg, wght, sb, cf, 
+    int i, j = label[sf], k, edg, wght, sb, cf, 
     ssize, e, w, wcount = 0, ecount = 0, numAdj = 0, idx, cdeg;
     bool ret = true;
     maxDeg = 0; adjCellCnt = 0;
     for (k = g->adj[j]; k < g->adj[j + 1]; ++k){
-        edg = g->edg[k]; wght = g->wght[k]; cf = partition->front[edg];
-        if (!wghtFreq[wght]++) wcount++;
-        vEdgColor[ecount] = wght;
-        vEdg[ecount++] = edg;
-        // Additions to move away from saucy
+        // edg = g->edg[k]; wght = g->wght[k]; cf = partition->front[edg];
+        edg = g->edg[k]; wght = g->wght[k]; cf = front[index[edg]];
+        // if (!wghtFreq[wght]++) wcount++;
+        // vEdgColor[ecount] = wght;
+        // vEdg[ecount++] = edg;
+        // // Additions to move away from saucy
         markCell(cf, edg, wght);
     }
 
@@ -138,38 +150,38 @@ bool HighsOCEquitablePartition::refineSinlgeCell(int sf){
         if (cDeg[edg]) cDeg[edg] = 0;
         if (nodeAdj[edg]) nodeAdj[edg] = 0;
     }
-    // Populate sparse start array for edge weights
-    for (i = 0; i < wcount; ++i){
-        wghtStart[i + 1] += wghtFreq[i];
-        wghtOffset[i] = wghtStart[i];
-    }
+//     // Populate sparse start array for edge weights
+//     for (i = 0; i < wcount; ++i){
+//         wghtStart[i + 1] += wghtFreq[i];
+//         wghtOffset[i] = wghtStart[i];
+//     }
 
-    // Populate sparse weight index array.  
-    // Don't need sparse val array as the indices are stored
-    // according to their weight.
-    for (i = 0; i < ecount; ++i){
-        w = vEdgColor[i];
-        e = vEdg[i];
-        idx = wghtOffset[w]++;
-        wghtEdg[idx] = e;
-    }
+//     // Populate sparse weight index array.  
+//     // Don't need sparse val array as the indices are stored
+//     // according to their weight.
+//     for (i = 0; i < ecount; ++i){
+//         w = vEdgColor[i];
+//         e = vEdg[i];
+//         idx = wghtOffset[w]++;
+//         wghtEdg[idx] = e;
+//     }
 
-    for (i = 0; i < wcount; ++i){
-        for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
-            dataMark(wghtEdg[j]);
-        }
-        ret = ret && refineSingles();
-        for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
-            scount[wghtEdg[j]] = 0;
-            wghtEdg[j] = 0;
-            vEdgColor[j] = 0;
-            vEdg[j] = 0;
-        }
-        wghtStart[i] = 0;
-        wghtOffset[i] = 0;
-        wghtFreq[i] = 0;
-    }
-    wghtStart[wcount] = 0;
+//     for (i = 0; i < wcount; ++i){
+//         for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
+//             dataMark(wghtEdg[j]);
+//         }
+//         ret = ret && refineSingles();
+//         for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
+//             scount[wghtEdg[j]] = 0;
+//             wghtEdg[j] = 0;
+//             vEdgColor[j] = 0;
+//             vEdg[j] = 0;
+//         }
+//         wghtStart[i] = 0;
+//         wghtOffset[i] = 0;
+//         wghtFreq[i] = 0;
+//     }
+//     wghtStart[wcount] = 0;
     return ret;
 }
 
@@ -314,7 +326,7 @@ void HighsOCEquitablePartition::allocatePartition(){
     wghtEdg.assign(g->nnz_, 0);
     wghtOffset.assign(g->numWeights_, 0);
     scount.assign(g->numTot_, 0);
-    count.assign(g->numTot_ + 1, 0);
+    
     conncnts.assign(g->numTot_, 0);
     indMark.assign(g->numTot_, false);
     nInd.assign(g->numTot_, 0);
@@ -332,41 +344,52 @@ void HighsOCEquitablePartition::allocatePartition(){
     nodeAdj.assign(g->numTot_, 0);
     cellAdj.assign(g->numTot_, 0);
     refSize.assign(g->numTot_, 0);
+    label.assign(g->numTot_, 0);
+    front.assign(g->numTot_, 0);
+    index.assign(g->numTot_, 0);
+    len.assign(g->numTot_, 0);
     size.assign(g->numTot_, 0);
+    count.assign(g->numTot_ + 1, 0);
+    set.assign(g->numTot_, 0);
+    junk.assign(g->numTot_, 0);
     // Fill in partition
     for (i = 0; i < g->numTot_; ++i){
-        partition->setCount[g->colors[i]]++;
+        // partition->setCount[g->colors[i]]++;
+        count[g->colors[i]]++;
         if (max < g->colors[i]) max = g->colors[i]; 
     }
-    partition->setSize = partition->setCount;
-    partition->setLen[0] = partition->setCount[0] - 1;
-    size[0] = partition->setLen[0] + 1;
+    // partition->setSize = partition->setCount;
+    // partition->setLen[0] = partition->setCount[0] - 1;
+    len[0] = count[0] - 1;
+    size[0] = len[0] + 1;
     for (i = 0; i < max; ++i){
-        partition->setLen[partition->setCount[i]] = partition->setCount[i + 1] - 1;
-        partition->setCount[i + 1] += partition->setCount[i];
-        size[partition->setCount[i]] = partition->setLen[partition->setCount[i]] + 1; 
+        // partition->setLen[partition->setCount[i]] = partition->setCount[i + 1] - 1;
+        // partition->setCount[i + 1] += partition->setCount[i];
+        len[count[i]] = count[i + 1] - 1;
+        count[i + 1] += count[i];
+        size[count[i]] = len[count[i]] + 1; 
     }
     for (i = 0; i < g->numTot_; ++i){
-        setLabel(--partition->setCount[g->colors[i]], i);
-        partition->set[i] = g->colors[i];
+        // setLabel(--partition->setCount[g->colors[i]], i);
+        setLabel(--count[g->colors[i]], i);
+        set[i] = g->colors[i];
     }
-    for (i = 0; i < g->numTot_; i += partition->setLen[i] + 1){
+    for (i = 0; i < g->numTot_; i += len[i] + 1){
         addInduce(i);
         fixFronts(i, i);
     }
-    // Prepare the nextNon and prevNon lists
-    for (i = 0, j = -1; i < g->numTot_; i += partition->setLen[i] + 1){
-        if (!partition->setLen[i]) continue;
-        prevNon[i] = j;
-        nextNon[j + 1] = i;
-        j = i;
-    }
-    prevNon[g->numTot_] = j;
-    nextNon[j] = g->numTot_;
-    label.assign(partition->label.begin(), partition->label.end());
-    junk.assign(g->numTot_, 0);
-    front.assign(partition->front.begin(), partition->front.end());
-    len.assign(partition->setLen.begin(), partition->setLen.end());
+    // // Prepare the nextNon and prevNon lists
+    // for (i = 0, j = -1; i < g->numTot_; i += partition->setLen[i] + 1){
+    //     if (!partition->setLen[i]) continue;
+    //     prevNon[i] = j;
+    //     nextNon[j + 1] = i;
+    //     j = i;
+    // }
+    // prevNon[g->numTot_] = j;
+    // nextNon[j] = g->numTot_;
+    // label.assign(partition->label.begin(), partition->label.end());
+    // front.assign(partition->front.begin(), partition->front.end());
+    // len.assign(partition->setLen.begin(), partition->setLen.end());
     refine();
 }
 
@@ -481,15 +504,19 @@ void HighsOCEquitablePartition::fixAdjEnds(int n, int e, int* adj){
 
 void HighsOCEquitablePartition::fixFronts(int cf, int ff){
     /* cf, ff are current front and fixed front resp. */
-    int i, end = cf + partition->setLen[cf];
+    // int i, end = cf + partition->setLen[cf];
+    int i, end = cf + len[cf];
     for (i = ff; i <= end; ++i){
-        partition->front[partition->label[i]] = cf;
+        // partition->front[partition->label[i]] = cf;
+        front[label[i]] = cf;
     }
 }
 
-void HighsOCEquitablePartition::setLabel(int index, int value){
-    partition->label[index] = value;
-    partition->unlabel[value] = index;
+void HighsOCEquitablePartition::setLabel(int idx, int val){
+    // partition->label[index] = value;
+    // partition->unlabel[value] = index;
+    label[idx] = val;
+    index[val] = idx;
 }
 
 void HighsOCEquitablePartition::dataCount(int edg){
@@ -517,10 +544,11 @@ void HighsOCEquitablePartition::swapLabels(int a, int b){
 }
 
 void HighsOCEquitablePartition::addInduce(int cf){
-    if (!partition->setLen[cf])
-        sInd[sIndSize++] = cf;
-    else
+    // if (!partition->setLen[cf])
+    if (len[cf])
         nInd[nIndSize++] = cf;
+    else
+        sInd[sIndSize++] = cf;
     indMark[cf] = true;
     S.push(cf);
 }
@@ -552,7 +580,7 @@ void HighsOCEquitablePartition::markCell(int cf, int edg, int wght){
 
 void HighsOCEquitablePartition::splitCell(int cf){
     int i, j = label[cf], k, edg, cb = cf + len[cf], 
-    nf = cf, cdeg, numCDeg = 0, lab, idx;
+    nf = cf, cdeg, numCDeg = 0, lab, idx, maxSSize, maxSizeFront;
     /* if size[cf] != refSize[cf], numCDeg += 1 */
     if (refSize[cf] != size[cf]){
         cDegIndex[0] = numCDeg;
@@ -566,9 +594,19 @@ void HighsOCEquitablePartition::splitCell(int cf){
             indexCDeg[numCDeg++] = cDeg[edg];
         }
     }
+    if (numCDeg == 1){
+        for (k = 0; k < numCDeg; ++k){
+            cdeg = indexCDeg[k];
+            // splitOffset[k] = 0;
+            cDegIndex[k] = 0;
+            cDegFreq[cdeg] = 0;
+        }
+        return;
+    }
     newFront[0] = nf;
     len[nf] = cDegFreq[indexCDeg[0]] - 1;
     size[nf] = cDegFreq[indexCDeg[0]];
+    maxSSize = size[nf]; maxSizeFront = nf;
     for (k = 1; k < numCDeg; ++k){
         cdeg = indexCDeg[k - 1];
         splitOffset[k] = cDegFreq[cdeg];
@@ -576,31 +614,30 @@ void HighsOCEquitablePartition::splitCell(int cf){
         newFront[k] = nf;
         cdeg = indexCDeg[k];
         len[nf] = cDegFreq[cdeg] - 1;
-        size[nf] = cDegFreq[cdeg]; 
+        if ((size[nf] = cDegFreq[cdeg]) > maxSSize){
+            maxSSize = size[nf];
+            maxSizeFront = nf;
+        } 
     }
-    
     for (k = cf; k < cb + 1; ++k){
         lab = label[k];
         cdeg = cDeg[lab];
         idx = cDegIndex[cdeg];
         nf = cf + splitOffset[idx]++;
         junk[nf] = lab;
+        index[lab] = nf;
     }
     for (k = cf; k < cb + 1; ++k){
         cdeg = cDeg[junk[k]];
         idx = cDegIndex[cdeg];
         label[k] = junk[k];
         front[k] = newFront[idx];
+        if (!(front[k] == maxSizeFront) && !indMark[front[k]]) addInduce(front[k]);
     }
-    // for (i = 0; i < numCDeg; ++i){
-    //     newFront[i] = nf;
-    //     nf += cDegFreq[]
-    // }
     for (k = 0; k < numCDeg; ++k){
         cdeg = indexCDeg[k];
         splitOffset[k] = 0;
         cDegIndex[k] = 0;
         cDegFreq[cdeg] = 0;
     }
-    
 }
