@@ -15,12 +15,15 @@ void HighsOCEquitablePartition::isolate(){
     }
     // int targ = nextNon[0];
     int min = targ;
-    int back = targ + len[targ];
+    int length = len[targ];
+    int back = targ + length;
+    int lab = label[back];
     int nsf = back;
     // Additions, hopefully better
-    front[targ + len[targ]] = len[targ]; index[label[len[targ]]] = front[targ + len[targ]]; /// fix this should be targ + len[targ] and index should be reworked too
-    len[targ]--; len[targ + len[targ]] = 0;
-    size[targ]--; size[len[targ]] = 1;
+    front[back] = nsf; 
+    index[lab] = front[nsf]; /// fix this should be targ + len[targ] and index should be reworked too
+    len[targ]--; len[nsf] = 0;
+    size[targ]--; size[nsf] = 1; ++nSplits;
     addInduce(nsf);
     // swapLabels(min, back);
     // split(targ, back);
@@ -28,7 +31,7 @@ void HighsOCEquitablePartition::isolate(){
 }
 
 void HighsOCEquitablePartition::refine(){
-    int f;
+    int f, i;
     while (!S.empty()){
         if (discrete()){ 
             clear();
@@ -554,7 +557,7 @@ void HighsOCEquitablePartition::addInduce(int cf){
 }
 
 bool HighsOCEquitablePartition::discrete(){
-    return nSplits == g->numTot_;
+    return nSplits >= g->numTot_;
 }
 
 void HighsOCEquitablePartition::clear(){
@@ -597,20 +600,20 @@ void HighsOCEquitablePartition::splitCell(int cf){
     if (numCDeg == 1){
         for (k = 0; k < numCDeg; ++k){
             cdeg = indexCDeg[k];
-            // splitOffset[k] = 0;
             cDegIndex[k] = 0;
             cDegFreq[cdeg] = 0;
         }
         return;
     }
+    splitOffset[0] = nf;
     newFront[0] = nf;
     len[nf] = cDegFreq[indexCDeg[0]] - 1;
     size[nf] = cDegFreq[indexCDeg[0]];
     maxSSize = size[nf]; maxSizeFront = nf;
     for (k = 1; k < numCDeg; ++k){
         cdeg = indexCDeg[k - 1];
-        splitOffset[k] = cDegFreq[cdeg];
-        nf += splitOffset[k];
+        splitOffset[k] = newFront[k - 1] + cDegFreq[cdeg];
+        nf = splitOffset[k];
         newFront[k] = nf;
         cdeg = indexCDeg[k];
         len[nf] = cDegFreq[cdeg] - 1;
@@ -618,12 +621,13 @@ void HighsOCEquitablePartition::splitCell(int cf){
             maxSSize = size[nf];
             maxSizeFront = nf;
         } 
+        ++nSplits;
     }
     for (k = cf; k < cb + 1; ++k){
         lab = label[k];
         cdeg = cDeg[lab];
         idx = cDegIndex[cdeg];
-        nf = cf + splitOffset[idx]++;
+        nf = splitOffset[idx]++;
         junk[nf] = lab;
         index[lab] = nf;
     }
