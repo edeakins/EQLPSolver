@@ -353,36 +353,35 @@ HighsStatus Highs::run() {
     // nep_.allocatePartition(&lp_);
     // nep_.runToDiscrete();
     // timer_.stop(timer_.equipart_clock);
-    std::cout << "saucy time: " << timer_.clock_time[timer_.saucy_clock] << std::endl;
-    std::cout << "new equi time: " << timer_.clock_time[timer_.equipart_clock] << std::endl;
-    // // // Fold original lp
-    // timer_.start(timer_.fold_clock);
-    // foldLp(OCPartition_, &originalLp);
-    // timer_.stop(timer_.fold_clock);
-    // // Do alp solve 
-    // passModel(*alp_);
-    // timer_.start(timer_.alp_solve_clock);
-    // call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
-    // timer_.stop(timer_.alp_solve_clock);
-    // return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
-    // // Record basis and solution
-    // alpSolution_ = hmos_[original_hmo].solution_;
-    // alpBasis_ = hmos_[original_hmo].basis_;
-    // // Lift to elp
-    // timer_.start(timer_.lift_clock);
-    // liftLp(alpBasis_, alpSolution_);
-    // timer_.stop(timer_.lift_clock);
-    // // Do ELP UNFOLD
-    // passModel(*elp_);
-    // setBasis(*elpBasis_);
-    // hmos_[solved_hmo].lp_.model_name_ = options_.model_file.c_str();
-    // hmos_[solved_hmo].basis_ = basis_;
-    // options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
-    // timer_.start(timer_.elp_solve_clock);
-    // call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
-    // timer_.stop(timer_.elp_solve_clock);
-    // if (return_status == HighsStatus::Error) return return_status;
-    // Lift the alp and alp solution/basis to elp format
+    // std::cout << "saucy time: " << timer_.clock_time[timer_.saucy_clock] << std::endl;
+    // std::cout << "new equi time: " << timer_.clock_time[timer_.equipart_clock] << ", nSplits: " << nep_.nSplits << std::endl;
+    // Fold original lp
+    timer_.start(timer_.fold_clock);
+    foldLp(OCPartition_, &originalLp);
+    timer_.stop(timer_.fold_clock);
+    // Do alp solve 
+    passModel(*alp_);
+    timer_.start(timer_.alp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
+    timer_.stop(timer_.alp_solve_clock);
+    return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
+    // Record basis and solution
+    alpSolution_ = hmos_[original_hmo].solution_;
+    alpBasis_ = hmos_[original_hmo].basis_;
+    // Lift to elp
+    timer_.start(timer_.lift_clock);
+    liftLp(alpBasis_, alpSolution_);
+    timer_.stop(timer_.lift_clock);
+    // Do ELP UNFOLD
+    passModel(*elp_);
+    setBasis(*elpBasis_);
+    hmos_[solved_hmo].lp_.model_name_ = options_.model_file.c_str();
+    hmos_[solved_hmo].basis_ = basis_;
+    options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
+    timer_.start(timer_.elp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
+    timer_.stop(timer_.elp_solve_clock);
+    if (return_status == HighsStatus::Error) return return_status;
   }
   else if (options_.aggregate == on_string && options_.solver == ipm_sym_string){
     // Compute equitable parititon from original lp
