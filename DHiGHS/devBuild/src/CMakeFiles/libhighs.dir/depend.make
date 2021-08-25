@@ -34,6 +34,8 @@ src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HighsSt
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/simplex/HFactor.h
@@ -114,6 +116,8 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/simplex/HFactor.h
@@ -151,6 +155,8 @@ src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o: ../src/simplex/HFactor.h
@@ -239,6 +245,8 @@ src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/simplex/HApp.h
@@ -303,6 +311,8 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HighsStat
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/simplex/HFactor.h
@@ -344,6 +354,8 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/lp_data/HighsS
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o: ../src/simplex/HFactor.h
@@ -409,6 +421,8 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/lp_data/HighsSta
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/simplex/HFactor.h
@@ -472,6 +486,8 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/mip/SolveMip.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/simplex/HFactor.h
@@ -539,6 +555,21 @@ src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o: ../src/presolve/ICrashUtil.cpp
 src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o: ../src/presolve/ICrashUtil.h
 src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o: HConfig.h
+
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HConst.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HighsLp.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/simplex/SimplexConst.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/presolve/OCAggregate.cpp
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: HConfig.h
+
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: ../src/lp_data/HConst.h
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: ../src/lp_data/HighsLp.h
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: ../src/simplex/SimplexConst.h
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: ../src/presolve/OCEquitable.cpp
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o: ../src/lp_data/HConst.h
@@ -746,6 +777,8 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/simplex/HCrash.h
@@ -806,6 +839,8 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/lp_data/
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/Aggregate.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/ICrash.h
+src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/OCAggregate.h
+src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/simplex/FactorTimer.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/simplex/HFactor.h

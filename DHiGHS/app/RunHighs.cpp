@@ -20,6 +20,7 @@
 #include "HighsTimer.h"
 #include "LoadProblem.h"
 #include "Aggregate.h"
+#include "OCAggregate.h"
 
 void printHighsVersionCopyright(FILE* output, const int message_level,
                                 const char* message = nullptr);

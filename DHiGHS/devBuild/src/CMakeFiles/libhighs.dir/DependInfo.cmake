@@ -32,6 +32,8 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/HPreData.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/ICrash.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/ICrash.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/ICrashUtil.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o"
+  "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCAggregate.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o"
+  "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/Presolve.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HCrash.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HDual.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o"

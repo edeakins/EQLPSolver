@@ -97,6 +97,8 @@ set(sources
     presolve/Presolve.cpp
     presolve/HPreData.cpp
     presolve/Aggregate.cpp
+    presolve/OCAggregate.cpp
+    presolve/OCEquitable.cpp
     simplex/HCrash.cpp
     simplex/HDual.cpp
     simplex/HDualRHS.cpp
@@ -168,6 +170,8 @@ set(headers
     presolve/Presolve.h
     presolve/HPreData.h
     presolve/Aggregate.h
+    presolve/OCAggregate.h
+    presolve/OCEquitable.h
     simplex/HTimerPre.h
     simplex/HVector.h
     test/KktCheck.h

@@ -395,9 +395,35 @@ src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.s"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/Aggregate.cpp -o CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.s
 
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/presolve/OCAggregate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCAggregate.cpp
+
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.i"
+	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCAggregate.cpp > CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.i
+
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.s"
+	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCAggregate.cpp -o CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.s
+
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: ../src/presolve/OCEquitable.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.cpp
+
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.i"
+	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.cpp > CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.i
+
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.s"
+	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.cpp -o CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.s
+
 src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o: ../src/simplex/HCrash.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HCrash.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.i: cmake_force
@@ -410,7 +436,7 @@ src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o: ../src/simplex/HDual.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDual.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HDual.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.i: cmake_force
@@ -423,7 +449,7 @@ src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o: ../src/simplex/HDualRHS.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HDualRHS.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.i: cmake_force
@@ -436,7 +462,7 @@ src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o: ../src/simplex/HDualRow.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HDualRow.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.i: cmake_force
@@ -449,7 +475,7 @@ src/CMakeFiles/libhighs.dir/simplex/HDualRow.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o: ../src/simplex/HDualMulti.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HDualMulti.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.i: cmake_force
@@ -462,7 +488,7 @@ src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o: ../src/simplex/HFactor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HFactor.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HFactor.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.i: cmake_force
@@ -475,7 +501,7 @@ src/CMakeFiles/libhighs.dir/simplex/HFactor.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o: ../src/simplex/HighsSimplexAnalysis.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HighsSimplexAnalysis.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.i: cmake_force
@@ -488,7 +514,7 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o: ../src/simplex/HighsSimplexInterface.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HighsSimplexInterface.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.i: cmake_force
@@ -501,7 +527,7 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o: ../src/simplex/HMatrix.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HMatrix.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.i: cmake_force
@@ -514,7 +540,7 @@ src/CMakeFiles/libhighs.dir/simplex/HMatrix.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o: ../src/simplex/HPrimal.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HPrimal.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.i: cmake_force
@@ -527,7 +553,7 @@ src/CMakeFiles/libhighs.dir/simplex/HPrimal.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o: ../src/simplex/HQPrimal.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HQPrimal.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.i: cmake_force
@@ -540,7 +566,7 @@ src/CMakeFiles/libhighs.dir/simplex/HQPrimal.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o: ../src/simplex/HSimplex.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HSimplex.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.i: cmake_force
@@ -553,7 +579,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.o: ../src/simplex/HVector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/simplex/HVector.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HVector.cpp
 
 src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.i: cmake_force
@@ -566,7 +592,7 @@ src/CMakeFiles/libhighs.dir/simplex/HVector.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.o: ../src/test/KktCheck.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/test/KktCheck.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/test/KktCheck.cpp
 
 src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.i: cmake_force
@@ -579,7 +605,7 @@ src/CMakeFiles/libhighs.dir/test/KktCheck.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.o: ../src/test/KktChStep.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/test/KktChStep.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/test/KktChStep.cpp
 
 src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.i: cmake_force
@@ -592,7 +618,7 @@ src/CMakeFiles/libhighs.dir/test/KktChStep.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o: ../src/util/HighsSort.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/util/HighsSort.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/util/HighsSort.cpp
 
 src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.i: cmake_force
@@ -605,7 +631,7 @@ src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o: ../src/util/HighsUtils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/util/HighsUtils.cpp
 
 src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.i: cmake_force
@@ -618,7 +644,7 @@ src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o: ../src/util/stringutil.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/util/stringutil.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/util/stringutil.cpp
 
 src/CMakeFiles/libhighs.dir/util/stringutil.cpp.i: cmake_force
@@ -631,7 +657,7 @@ src/CMakeFiles/libhighs.dir/util/stringutil.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.o: ../src/equitable/saucy-equitable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object src/CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object src/CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/equitable/saucy-equitable.cpp
 
 src/CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.i: cmake_force
@@ -644,7 +670,7 @@ src/CMakeFiles/libhighs.dir/equitable/saucy-equitable.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o: ../src/equitable/HighsEquitable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/equitable/HighsEquitable.cpp
 
 src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.i: cmake_force
@@ -657,7 +683,7 @@ src/CMakeFiles/libhighs.dir/equitable/HighsEquitable.cpp.s: cmake_force
 
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: src/CMakeFiles/libhighs.dir/flags.make
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/interfaces/highs_c_api.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o -c /home/edeakins/LP/EQLPSolver/DHiGHS/src/interfaces/highs_c_api.cpp
 
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.i: cmake_force
@@ -696,6 +722,8 @@ libhighs_OBJECTS = \
 "CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o" \
 "CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o" \
 "CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o" \
+"CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o" \
+"CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o" \
 "CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o" \
 "CMakeFiles/libhighs.dir/simplex/HDual.cpp.o" \
 "CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o" \
@@ -747,6 +775,8 @@ lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o
 lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o
 lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o
 lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/presolve/Aggregate.cpp.o
+lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o
+lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o
 lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o
 lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o
 lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/simplex/HDualRHS.cpp.o
@@ -772,7 +802,7 @@ lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/build.make
 lib/libhighs.so.1.0.0: lib/libipx.so
 lib/libhighs.so.1.0.0: lib/libbasiclu.so
 lib/libhighs.so.1.0.0: src/CMakeFiles/libhighs.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Linking CXX shared library ../lib/libhighs.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Linking CXX shared library ../lib/libhighs.so"
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/libhighs.dir/link.txt --verbose=$(VERBOSE)
 	cd /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src && $(CMAKE_COMMAND) -E cmake_symlink_library ../lib/libhighs.so.1.0.0 ../lib/libhighs.so.1.0 ../lib/libhighs.so
 

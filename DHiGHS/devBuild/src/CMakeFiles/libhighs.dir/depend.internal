@@ -35,6 +35,8 @@ src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HFactor.h
@@ -115,6 +117,8 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HFactor.h
@@ -152,6 +156,8 @@ src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HFactor.h
@@ -240,6 +246,8 @@ src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HApp.h
@@ -304,6 +312,8 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HFactor.h
@@ -345,6 +355,8 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HFactor.h
@@ -410,6 +422,8 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HFactor.h
@@ -473,6 +487,8 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HFactor.h
@@ -539,6 +555,21 @@ src/CMakeFiles/libhighs.dir/presolve/ICrashUtil.cpp.o
  ../src/util/HighsUtils.h
  /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/ICrashUtil.cpp
  /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/ICrashUtil.h
+ HConfig.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o
+ ../src/lp_data/HConst.h
+ ../src/lp_data/HighsLp.h
+ ../src/simplex/SimplexConst.h
+ /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCAggregate.cpp
+ /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCAggregate.h
+ /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.h
+ HConfig.h
+src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o
+ ../src/lp_data/HConst.h
+ ../src/lp_data/HighsLp.h
+ ../src/simplex/SimplexConst.h
+ /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.cpp
+ /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o
  ../src/io/HighsIO.h
@@ -747,6 +778,8 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HCrash.h
@@ -807,6 +840,8 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexInterface.cpp.o
  ../src/presolve/Aggregate.h
  ../src/presolve/HPreData.h
  ../src/presolve/ICrash.h
+ ../src/presolve/OCAggregate.h
+ ../src/presolve/OCEquitable.h
  ../src/presolve/Presolve.h
  ../src/simplex/FactorTimer.h
  ../src/simplex/HFactor.h

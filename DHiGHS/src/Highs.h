@@ -23,6 +23,8 @@
 #include "presolve/Presolve.h"
 #include "util/HighsTimer.h"
 #include "presolve/Aggregate.h"
+#include "presolve/OCEquitable.h"
+#include "presolve/OCAggregate.h"
 // #include "equitable/HighsEquitable.h"
 
 #include <sstream>
@@ -756,6 +758,7 @@ class Highs {
   HighsTableau tableau_;
   HighsAggregate lpFolder_;
   HighsEquitable ep_;
+  HighsOCEquitablePartition nep_;
   HighsLp *alp_, *elp_;
 
   // Containers for OC

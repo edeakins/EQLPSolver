@@ -21,6 +21,8 @@ check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/lp_data/HighsStatu
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/ICrash.h
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/OCAggregate.h
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/OCEquitable.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/presolve/Presolve.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/simplex/FactorTimer.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/simplex/HFactor.h
@@ -61,6 +63,8 @@ check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/lp_data/HighsStatus
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/ICrash.h
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/OCAggregate.h
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/OCEquitable.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/presolve/Presolve.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/simplex/FactorTimer.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/simplex/HFactor.h
@@ -107,6 +111,8 @@ check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/lp_data/HighsStatus.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/ICrash.h
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/OCAggregate.h
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/OCEquitable.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/presolve/Presolve.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/simplex/FactorTimer.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/simplex/HFactor.h
@@ -166,6 +172,8 @@ check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/lp_data/HighsSt
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/ICrash.h
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/OCAggregate.h
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/OCEquitable.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/presolve/Presolve.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/simplex/FactorTimer.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/simplex/HFactor.h
@@ -201,6 +209,8 @@ check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/lp_data/HighsStat
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/ICrash.h
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/OCAggregate.h
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/OCEquitable.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/presolve/Presolve.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/simplex/FactorTimer.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/simplex/HFactor.h
@@ -244,6 +254,8 @@ check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/lp_data/HighsStatus.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/ICrash.h
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/OCAggregate.h
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/OCEquitable.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/presolve/Presolve.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/simplex/FactorTimer.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/simplex/HFactor.h
@@ -280,6 +292,8 @@ check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/lp_data/HighsStatus.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/Aggregate.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/HPreData.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/ICrash.h
+check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/OCAggregate.h
+check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/OCEquitable.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/presolve/Presolve.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/simplex/FactorTimer.h
 check/CMakeFiles/unit_tests.dir/TestPresolve.cpp.o: ../src/simplex/HFactor.h

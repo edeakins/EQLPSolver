@@ -126,6 +126,33 @@ class HighsLp {
   }
 };
 
+struct OCgraph {
+  int numCol_;
+  int numRow_;
+  int nnz_;
+  int numWeights_;
+  int numTot_;
+  int* adj;
+  int* edg;
+  int* wght;
+  int* colors;
+  int* edgColors;
+};
+
+struct OCpartition {
+  int target;
+  int nplits;
+  std::vector<int> front;
+  std::vector<int> label;
+  std::vector<int> unlabel;
+  std::vector<int> parent;
+  std::vector<int> set;
+  std::vector<int> setSize;
+  std::vector<int> setCount;
+  std::vector<int> setLen;
+  std::vector<int> setFront;
+};
+
 struct lpPartition{
   int numCol_ = 0;
   int numRow_ = 0;
