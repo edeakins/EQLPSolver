@@ -1267,15 +1267,15 @@ saucy_search(
     // clear_parent(s, &s->left);
     refine(s, &s->left);
     ++s->stats->iter;
-    for (int i = 0; i < s->n; i += s->left.clen[i]+1)
-        qsort(&s->left.lab[i], s->left.clen[i] + 1, sizeof(int), comp);
-    find_links(s, &s->left, 0);
+    // for (int i = 0; i < s->n; i += s->left.clen[i]+1)
+    //     qsort(&s->left.lab[i], s->left.clen[i] + 1, sizeof(int), comp);
+    // find_links(s, &s->left, 0);
     eq_steps[0].target = -1;
     memcpy( eq_steps[0].labels, s->left.lab, s->n*sizeof(int) );
     memcpy( eq_steps[0].fronts, s->left.cfront, s->n*sizeof(int) );
     memcpy( eq_steps[0].parents, s->left.parent, s->n*sizeof(int) );
 
-    /* Descend along the leftmost branch and compute zeta */
+    // /* Descend along the leftmost branch and compute zeta */
     descend_leftmost( s, eq_steps );
 }
 
@@ -1325,6 +1325,7 @@ saucy_alloc(long long int n, long long int w, std::string model_name)
     // std::ofstream saucyFile(fileName, std::ios_base::app);
     // saucyFile << "Instance, Status\n";
     if (overFlow(n * n + 1, w)){
+        std::cout << "overflow" << std::endl;
         // saucyFile << model_name + ",bad overFlow" + "\n";
         // saucyFile.close();
         return NULL;

@@ -177,10 +177,10 @@ function(enable_cxx_compiler_flag_if_supported flag)
 endfunction()
 
 # usage: turn pedantic on for even more warnings.
-enable_cxx_compiler_flag_if_supported("-Wall")
-enable_cxx_compiler_flag_if_supported("-Wextra")
-enable_cxx_compiler_flag_if_supported("-Wno-unused-parameter")
-enable_cxx_compiler_flag_if_supported("-pedantic")
+# enable_cxx_compiler_flag_if_supported("-Wall")
+# enable_cxx_compiler_flag_if_supported("-Wextra")
+# enable_cxx_compiler_flag_if_supported("-Wno-unused-parameter")
+# enable_cxx_compiler_flag_if_supported("-pedantic")
 # enable_cxx_compiler_flag_if_supported("-O0") #######ETHAN YOU DID THIS#######
 # enable_cxx_compiler_flag_if_supported("-g") #######ETHAN YOU DID THIS#######
 

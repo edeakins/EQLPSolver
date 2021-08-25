@@ -4,6 +4,7 @@
 // Includes
 #include <string>
 #include "HighsLp.h"
+#include "OCEquitable.h"
 
 /* Aggregator class for LPs based off a equitable partition */
 class HighsOCAggregate{};

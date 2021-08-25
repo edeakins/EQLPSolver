@@ -17,6 +17,7 @@
 class HighsOCEquitablePartition{
 public:
     /* Initialize and copy lp to equitable lp container */
+    HighsOCEquitablePartition(){}
     HighsOCEquitablePartition(HighsLp* lp):
     originalLp(lp){
         allocatePartition();
@@ -29,11 +30,11 @@ public:
     /* Calls isolation of nonsingleton class and new refinement round */
     void isolate();
     /* Refinement algorithm Berkholz 2017 */
-    void refine();
+    bool refine();
     /* Refine cell */
     bool refineNonsingleCell(int sf);
     /* Refine cell based on sinlgeton */
-    bool refineSinlgeCell(int sf);
+    bool refineSingleCell(int sf);
     /* Calls splitting technique for all cells connected to nonsingle refining cell */
     bool refineNonSingles();
     /* Calls splitting technique for all cells connected to singleton refining cell */
@@ -48,6 +49,7 @@ public:
     bool possiblySplit(int cf, int ff);
     /* Allocate for all partition stuff */
     void allocatePartition();
+    void allocatePartition(HighsLp* lp);
     /* Translate lp into bipartite graph */
     void lp2Graph();
     /* Fix adj middle positions */
@@ -79,6 +81,7 @@ public:
     void markCell(int cf, int edg, int wght);
     /* Split cells that were marked */
     void splitCell(int cf);
+    int* allocInts(int n);
 
 
     /* HighsLp container for the original lp being passed in */
@@ -103,17 +106,19 @@ public:
     std::vector<int> vEdgColor; // Color of edg (u, v)
     std::vector<int> vEdg; // Keeps track of the current adj edges tor refining cell
     std::vector<int> wghtFreq; // Number of adjacencies to refinment cell with wght w
+    std::vector<int> wcountIdx;
     std::vector<int> wghtOffset; // Keeps track of where next edg is places in wghtEdg and wght Index
     std::vector<int> wghtStart; // Sparse storage for refinement wghts
     std::vector<int> wghtEdg; // Sparse storage for refinement wghts
+    std::map<int, std::vector<int> > wghtCnt;
     std::vector<int> scount; // Number of connections to refining cell
      // Number of vertices with same adj count to ref cell
     std::vector<int> conncnts; // Connection counts for cell fronts
     std::vector<int> nInd; // Nonsingleton inducers of refinement
     std::vector<int> sInd; // Singleton inducers of refinement
     std::vector<bool> indMark; // Marks if a cell front is marked for refinement
-    std::vector<int> nextNon; // Next non singleton cell from cf;
-    std::vector<int> prevNon; // Prvious non singleton cell from cf;
+    int* nextNon; // Next non singleton cell from cf;
+    int* prevNon; // Prvious non singleton cell from cf;
 
     /*
      NOT CURRENTLY BEING USED
