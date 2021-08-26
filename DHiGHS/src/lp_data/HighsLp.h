@@ -141,16 +141,14 @@ struct OCgraph {
 
 struct OCpartition {
   int target;
-  int nplits;
+  int nsplits;
+  int ncsplits;
+  int nrsplits;
   std::vector<int> front;
   std::vector<int> label;
   std::vector<int> unlabel;
   std::vector<int> parent;
-  std::vector<int> set;
-  std::vector<int> setSize;
-  std::vector<int> setCount;
-  std::vector<int> setLen;
-  std::vector<int> setFront;
+  std::vector<int> len;
 };
 
 struct lpPartition{

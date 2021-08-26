@@ -81,7 +81,10 @@ public:
     void markCell(int cf, int edg, int wght);
     /* Split cells that were marked */
     void splitCell(int cf);
+    /* Used to allocate arrays for next refinement inducers */
     int* allocInts(int n);
+    /* Returns a partition in a better format for lp construction */
+    OCpartition* getPartition();
 
 
     /* HighsLp container for the original lp being passed in */

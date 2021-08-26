@@ -1,6 +1,10 @@
 #include "OCEquitable.h"
 using namespace std;
 
+OCpartition* HighsOCEquitablePartition::getPartition(){
+    return partition;
+}
+
 void HighsOCEquitablePartition::runToDiscrete(){
     while (!discrete()) isolate();
 }
@@ -16,7 +20,7 @@ void HighsOCEquitablePartition::isolate(){
     int targ = nextNon[-1];
     int min = targ;
     // int length = len[targ];
-    int back = targ + partition->setLen[targ];
+    int back = targ + partition->len[targ];
     int lab = partition->label[back];
     // int nsf = back;
     // // Additions, hopefully better
@@ -60,7 +64,7 @@ bool HighsOCEquitablePartition::refineNonsingleCell(int sf){
     int i, j, k, edg, wght, sb, cf, ssize, e, w, 
     wcount = 0, ecount = 0, numAdj = 0, idx;
     bool ret = true;
-    sb = sf + partition->setLen[sf];
+    sb = sf + partition->len[sf];
     /* Double check for nonsingles which became singles later */
     if (sf == sb) {
         return refineSingleCell(sf);
@@ -123,6 +127,9 @@ bool HighsOCEquitablePartition::refineNonsingleCell(int sf){
             dataCount(wghtCnt[wght][j]);
         }
         ret = ret && refineNonSingles();
+        for (j = 0; j < wghtCnt[wght].size(); ++j){
+            scount[wghtCnt[wght][j]] = 0;
+        }
         // for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
         //     scount[wghtEdg[j]] = 0;
         //     wghtEdg[j] = 0;
@@ -191,6 +198,9 @@ bool HighsOCEquitablePartition::refineSingleCell(int sf){
             dataMark(wghtCnt[wght][j]);
         }
         ret = ret && refineNonSingles();
+        for (j = 0; j < wghtCnt[wght].size(); ++j){
+            scount[wghtCnt[wght][j]] = 0;
+        }
         // for (j = wghtStart[i]; j < wghtStart[i + 1]; ++j){
         //     scount[wghtEdg[j]] = 0;
         //     wghtEdg[j] = 0;
@@ -243,7 +253,7 @@ bool HighsOCEquitablePartition::refineSingles(){
 // Split cell when refining cell was nonsingleton
 bool HighsOCEquitablePartition::splitNonsingleCell(int cf){
     int cnt, i, cb, nzf, ff, fb, sMin, sMax;
-    cb = cf + partition->setLen[cf];
+    cb = cf + partition->len[cf];
     nzf = cb - conncnts[cf] + 1;
     ff = nzf;
     cnt = scount[partition->label[ff]];
@@ -276,35 +286,36 @@ bool HighsOCEquitablePartition::splitNonsingleCell(int cf){
 
 // Split cell when refining cell was singleton
 bool HighsOCEquitablePartition::splitSinlgeCell(int cf){
-    int zcnt = partition->setLen[cf] + 1 - conncnts[cf];
+    int zcnt = partition->len[cf] + 1 - conncnts[cf];
     return possiblySplit(cf, cf + zcnt);
 }
 
 // Does the acutal splitting of a cell once new cell sizes are known
 bool HighsOCEquitablePartition::split(int cf, int ff){
     // Track number of splits
-    ++nSplits;
+    ++partition->nsplits;
+    cf < g->numCol_ ? ++partition->ncsplits : ++partition->nrsplits;
     // Do splitting
     int cb, fb;
     fb = ff - 1;
-    cb = cf + partition->setLen[cf];
-    partition->setLen[cf] = fb - cf;
-    partition->setLen[ff] = cb - ff;
+    cb = cf + partition->len[cf];
+    partition->len[cf] = fb - cf;
+    partition->len[ff] = cb - ff;
     // Fix the fronts
     fixFronts(ff, ff);
     // Add inducers
-    if (indMark[cf] || partition->setLen[ff] < partition->setLen[cf])
+    if (indMark[cf] || partition->len[ff] < partition->len[cf])
         addInduce(ff);
     else   
         addInduce(cf);
     // Keep track of non singletons for new targets for inducing another level of refinement
-    if (partition->setLen[ff]){
+    if (partition->len[ff]){
         prevNon[nextNon[cf]] = ff;
         nextNon[ff] = nextNon[cf];
         prevNon[ff] = cf;
         nextNon[cf] = ff;
     }
-    if (!partition->setLen[cf]){
+    if (!partition->len[cf]){
         nextNon[prevNon[cf]] = nextNon[cf];
         prevNon[nextNon[cf]] = prevNon[cf];
     }
@@ -324,15 +335,16 @@ void HighsOCEquitablePartition::allocatePartition(){
     // Allocate partition storage
     partition = (struct OCpartition*)calloc(1, sizeof(struct OCpartition));
     partition->target = -1;
-    partition->nplits = 0;
+    partition->nsplits = 0;
+    partition->ncsplits = 0;
+    partition->nrsplits = 0;
     partition->front.resize(g->numTot_);
     partition->label.resize(g->numTot_);
     partition->unlabel.resize(g->numTot_);
+    partition->len.resize(g->numTot_);
     // partition->parent.resize(g->numTot_);
-    partition->set.resize(g->numTot_);
+    // partition->set.resize(g->numTot_);
     // partition->setSize.resize(g->numTot_);
-    partition->setLen.resize(g->numTot_);
-    partition->setCount.resize(g->numTot_);
     // partition->setFront.resize(g->numTot_);
     // Allocate refinement stuff
     refSet.resize(g->numTot_);
@@ -375,44 +387,48 @@ void HighsOCEquitablePartition::allocatePartition(){
     // junk.assign(g->numTot_, 0);
     // Fill in partition
     for (i = 0; i < g->numTot_; ++i){
-        partition->setCount[g->colors[i]]++;
+        scount[g->colors[i]]++;
         // count[g->colors[i]]++;
         if (max < g->colors[i]) max = g->colors[i]; 
     }
-    // partition->setSize = partition->setCount;
-    partition->setLen[0] = partition->setCount[0] - 1;
+    // partition->setSize = scount;
+    partition->len[0] = scount[0] - 1;
     // len[0] = count[0] - 1;
     // size[0] = len[0] + 1;
     for (i = 0; i < max; ++i){
-        partition->setLen[partition->setCount[i]] = partition->setCount[i + 1] - 1;
-        partition->setCount[i + 1] += partition->setCount[i];
-        // partition->setSize[partition->setCount[i]] = partition->setLen[partition->setCount[i]] + 1;
+        partition->len[scount[i]] = scount[i + 1] - 1;
+        scount[i + 1] += scount[i];
+        // partition->setSize[scount[i]] = partition->len[scount[i]] + 1;
         // len[count[i]] = count[i + 1] - 1;
         // count[i + 1] += count[i];
         // size[count[i]] = len[count[i]] + 1; 
     }
-    nSplits = max + 1;
+    partition->nsplits = max + 1;
     for (i = 0; i < g->numTot_; ++i){
-        setLabel(--partition->setCount[g->colors[i]], i);
+        setLabel(--scount[g->colors[i]], i);
         // setLabel(--count[g->colors[i]], i);
         // set[i] = g->colors[i];
     }
-    for (i = 0; i < g->numTot_; i += partition->setLen[i] + 1){
+    for (i = 0; i < g->numTot_; i += partition->len[i] + 1){
         addInduce(i);
         fixFronts(i, i);
+        partition->front[i] < g->numCol_ ? partition->ncsplits++ : partition->nrsplits++;
     }
     // Prepare the nextNon and prevNon lists
-    for (i = 0, j = -1; i < g->numTot_; i += partition->setLen[i] + 1){
-        if (!partition->setLen[i]) continue;
+    for (i = 0, j = -1; i < g->numTot_; i += partition->len[i] + 1){
+        if (!partition->len[i]) continue;
         prevNon[i] = j;
         nextNon[j] = i;
         j = i;
     }
     prevNon[g->numTot_] = j;
     nextNon[j] = g->numTot_;
+    /* Clear out scount */
+    for (i = 0; i <= max; ++i)
+        scount[i] = 0;
     // label.assign(partition->label.begin(), partition->label.end());
     // front.assign(partition->front.begin(), partition->front.end());
-    // len.assign(partition->setLen.begin(), partition->setLen.end());
+    // len.assign(partition->len.begin(), partition->len.end());
     refine();
 }
 
@@ -423,17 +439,18 @@ void HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     int i, j, max = 0, maxSetSize = 0, idx = 0;
     // maxSetSize = g->numCol_ > g->numRow_ ? g->numCol_ : g->numRow_;
     // Allocate partition storage
-    partition = (struct OCpartition*)calloc(1, sizeof(struct OCpartition));
+     partition = (struct OCpartition*)calloc(1, sizeof(struct OCpartition));
     partition->target = -1;
-    partition->nplits = 0;
+    partition->nsplits = 0;
+    partition->ncsplits = 0;
+    partition->nrsplits = 0;
     partition->front.resize(g->numTot_);
     partition->label.resize(g->numTot_);
     partition->unlabel.resize(g->numTot_);
+    partition->len.resize(g->numTot_);
     // partition->parent.resize(g->numTot_);
-    partition->set.resize(g->numTot_);
+    // partition->set.resize(g->numTot_);
     // partition->setSize.resize(g->numTot_);
-    partition->setLen.resize(g->numTot_);
-    partition->setCount.resize(g->numTot_);
     // partition->setFront.resize(g->numTot_);
     // Allocate refinement stuff
     refSet.resize(g->numTot_);
@@ -476,44 +493,47 @@ void HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     // junk.assign(g->numTot_, 0);
     // Fill in partition
     for (i = 0; i < g->numTot_; ++i){
-        partition->setCount[g->colors[i]]++;
+        scount[g->colors[i]]++;
         // count[g->colors[i]]++;
         if (max < g->colors[i]) max = g->colors[i]; 
     }
-    // partition->setSize = partition->setCount;
-    partition->setLen[0] = partition->setCount[0] - 1;
+    // partition->setSize = scount;
+    partition->len[0] = scount[0] - 1;
     // len[0] = count[0] - 1;
     // size[0] = len[0] + 1;
     for (i = 0; i < max; ++i){
-        partition->setLen[partition->setCount[i]] = partition->setCount[i + 1] - 1;
-        partition->setCount[i + 1] += partition->setCount[i];
-        // partition->setSize[partition->setCount[i]] = partition->setLen[partition->setCount[i]] + 1;
+        partition->len[scount[i]] = scount[i + 1] - 1;
+        scount[i + 1] += scount[i];
+        // partition->setSize[scount[i]] = partition->len[scount[i]] + 1;
         // len[count[i]] = count[i + 1] - 1;
         // count[i + 1] += count[i];
         // size[count[i]] = len[count[i]] + 1; 
     }
-    nSplits = max + 1;
+    partition->nsplits = max + 1;
     for (i = 0; i < g->numTot_; ++i){
-        setLabel(--partition->setCount[g->colors[i]], i);
+        setLabel(--scount[g->colors[i]], i);
         // setLabel(--count[g->colors[i]], i);
         // set[i] = g->colors[i];
     }
-    for (i = 0; i < g->numTot_; i += partition->setLen[i] + 1){
+    for (i = 0; i < g->numTot_; i += partition->len[i] + 1){
         addInduce(i);
         fixFronts(i, i);
+        partition->front[i] < g->numCol_ ? partition->ncsplits++ : partition->nrsplits++;
     }
     // Prepare the nextNon and prevNon lists
-    for (i = 0, j = -1; i < g->numTot_; i += partition->setLen[i] + 1){
-        if (!partition->setLen[i]) continue;
+    for (i = 0, j = -1; i < g->numTot_; i += partition->len[i] + 1){
+        if (!partition->len[i]) continue;
         prevNon[i] = j;
         nextNon[j] = i;
         j = i;
     }
     prevNon[g->numTot_] = j;
     nextNon[j] = g->numTot_;
+    for (i = 0; i <= max; ++i)
+        scount[i] = 0;
     // label.assign(partition->label.begin(), partition->label.end());
     // front.assign(partition->front.begin(), partition->front.end());
-    // len.assign(partition->setLen.begin(), partition->setLen.end());
+    // len.assign(partition->len.begin(), partition->len.end());
     refine();
 }
 
@@ -628,7 +648,7 @@ void HighsOCEquitablePartition::fixAdjEnds(int n, int e, int* adj){
 
 void HighsOCEquitablePartition::fixFronts(int cf, int ff){
     /* cf, ff are current front and fixed front resp. */
-    int i, end = cf + partition->setLen[cf];
+    int i, end = cf + partition->len[cf];
     // int i, end = cf + len[cf];
     for (i = ff; i <= end; ++i){
         partition->front[partition->label[i]] = cf;
@@ -645,17 +665,17 @@ void HighsOCEquitablePartition::setLabel(int idx, int val){
 
 void HighsOCEquitablePartition::dataCount(int edg){
     int cf = partition->front[edg];
-    if (partition->setLen[cf] && !scount[edg]++) moveTo(edg);
+    if (partition->len[cf] && !scount[edg]++) moveTo(edg);
 }
 
 void HighsOCEquitablePartition::dataMark(int edg){
     int cf = partition->front[edg];
-    if (partition->setLen[cf]) moveTo(edg);
+    if (partition->len[cf]) moveTo(edg);
 }
 
 void HighsOCEquitablePartition::moveTo(int edg){
     int cf = partition->front[edg];
-    int cb = cf + partition->setLen[cf];
+    int cb = cf + partition->len[cf];
     int offset = conncnts[cf]++;
     swapLabels(cb - offset, partition->unlabel[edg]);
     if (!offset) sList[sListSize++] = cf;
@@ -668,7 +688,7 @@ void HighsOCEquitablePartition::swapLabels(int a, int b){
 }
 
 void HighsOCEquitablePartition::addInduce(int cf){
-    if (!partition->setLen[cf])
+    if (!partition->len[cf])
         sInd[sIndSize++] = cf;
     else
         nInd[nIndSize++] = cf;
@@ -677,7 +697,7 @@ void HighsOCEquitablePartition::addInduce(int cf){
 }
 
 bool HighsOCEquitablePartition::discrete(){
-    return nSplits == g->numTot_;
+    return partition->nsplits == g->numTot_;
 }
 
 void HighsOCEquitablePartition::clear(){

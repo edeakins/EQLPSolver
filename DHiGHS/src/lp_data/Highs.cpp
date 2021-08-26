@@ -342,6 +342,7 @@ HighsStatus Highs::run() {
   // Initial solve. Presolve, choose solver (simplex, ipx), postsolve.
   //  printf("\nHighs::run() 1: basis_.valid_ = %d\n", basis_.valid_);
   //  fflush(stdout);
+  // writeModel("olp.lp");
   originalLp = lp_;
   if (options_.aggregate == on_string && options_.solver != ipm_sym_string){
     // // Compute equitable parititon from original lp
@@ -351,20 +352,29 @@ HighsStatus Highs::run() {
     // Try out new equitable partition code
     timer_.start(timer_.equipart_clock);
     nep_.allocatePartition(&lp_);
-    nep_.runToDiscrete();
+    // nep_.runToDiscrete();
     timer_.stop(timer_.equipart_clock);
     std::cout << "saucy time: " << timer_.clock_time[timer_.saucy_clock] << std::endl;
     std::cout << "new equi time: " << timer_.clock_time[timer_.equipart_clock] << ", nSplits: " << nep_.nSplits << std::endl;
+    // New aggregator, fold lp
+    HighsSolution s;
+    HighsBasis b;
+    timer_.start(timer_.fold_clock);
+    part_ = nep_.getPartition();
+    timer_.stop(timer_.fold_clock);
+    // nep_.isolate();
+    alp_ = agg_.allocate(&originalLp, part_, &b, &s); 
     // Fold original lp
     // timer_.start(timer_.fold_clock);
     // foldLp(OCPartition_, &originalLp);
     // timer_.stop(timer_.fold_clock);
-    // // Do alp solve 
-    // passModel(*alp_);
-    // timer_.start(timer_.alp_solve_clock);
-    // call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
-    // timer_.stop(timer_.alp_solve_clock);
-    // return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
+    // Do alp solve 
+    passModel(*alp_);
+    writeModel("lp.lp");
+    timer_.start(timer_.alp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
+    timer_.stop(timer_.alp_solve_clock);
+    return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
     // // Record basis and solution
     // alpSolution_ = hmos_[original_hmo].solution_;
     // alpBasis_ = hmos_[original_hmo].basis_;

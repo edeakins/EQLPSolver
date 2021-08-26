@@ -759,6 +759,7 @@ class Highs {
   HighsAggregate lpFolder_;
   HighsEquitable ep_;
   HighsOCEquitablePartition nep_;
+  HighsOCAggregate agg_;
   HighsLp *alp_, *elp_;
 
   // Containers for OC
@@ -767,6 +768,7 @@ class Highs {
   HighsBasis* elpBasis_;
   HighsSolution elpSolution_;
   lpPartition* OCPartition_;
+  OCpartition* part_;
   HighsBasis* lpSymBasis_;
   HighsSolution* lpSymSolution_;
   // Final HiGHS Run Time

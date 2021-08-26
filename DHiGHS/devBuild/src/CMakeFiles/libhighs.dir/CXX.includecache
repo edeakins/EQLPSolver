@@ -28,7 +28,15 @@ simplex/SimplexConst.h
 
 ../src/simplex/SimplexConst.h
 
-/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.cpp
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCAggregate.cpp
+OCAggregate.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCAggregate.h
+
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCAggregate.h
+string
+-
+HighsLp.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/HighsLp.h
 OCEquitable.h
 /home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.h
 
