@@ -32,6 +32,7 @@ HighsLp* HighsOCAggregate::allocate(HighsLp* lp, OCpartition* partition, HighsBa
     buildColPointers();
     buildRowPointers();
     buildLp();
+    return elp;
 }
 
 HighsLp* HighsOCAggregate::buildLp(){

@@ -181,8 +181,8 @@ endfunction()
 # enable_cxx_compiler_flag_if_supported("-Wextra")
 # enable_cxx_compiler_flag_if_supported("-Wno-unused-parameter")
 # enable_cxx_compiler_flag_if_supported("-pedantic")
-# enable_cxx_compiler_flag_if_supported("-O0") #######ETHAN YOU DID THIS#######
-# enable_cxx_compiler_flag_if_supported("-g") #######ETHAN YOU DID THIS#######
+enable_cxx_compiler_flag_if_supported("-O0") #######ETHAN YOU DID THIS#######
+enable_cxx_compiler_flag_if_supported("-g") #######ETHAN YOU DID THIS#######
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL debug)
     enable_cxx_compiler_flag_if_supported("-D_GLIBCXX_DEBUG")

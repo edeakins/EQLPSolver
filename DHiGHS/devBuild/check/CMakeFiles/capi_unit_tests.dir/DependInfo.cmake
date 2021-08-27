@@ -17,4 +17,4 @@ set(CMAKE_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.
-set(CMAKE_Fortran_TARGET_MODULE_DIR "")
+set(CMAKE_Fortran_TARGET_MODULE_DIR "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/devBuild/modules")
