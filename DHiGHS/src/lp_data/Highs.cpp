@@ -375,9 +375,22 @@ HighsStatus Highs::run() {
     call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
     timer_.stop(timer_.alp_solve_clock);
     return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
-    // // Record basis and solution
-    // alpSolution_ = hmos_[original_hmo].solution_;
-    // alpBasis_ = hmos_[original_hmo].basis_;
+    // Record basis and solution
+    alpSolution_ = hmos_[original_hmo].solution_;
+    alpBasis_ = hmos_[original_hmo].basis_;
+    // Make new lp
+    nep_.isolate();
+    part_ = nep_.getPartition();
+    alp_ = agg_.buildLp(part_, &alpBasis_, &alpSolution_);
+    // Solve new lp
+    passModel(*alp_);
+    writeModel("lp.lp");
+    timer_.start(timer_.alp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
+    timer_.stop(timer_.alp_solve_clock);
+    return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
+    alpSolution_ = hmos_[original_hmo].solution_;
+    alpBasis_ = hmos_[original_hmo].basis_;
     // // Lift to elp
     // timer_.start(timer_.lift_clock);
     // liftLp(alpBasis_, alpSolution_);

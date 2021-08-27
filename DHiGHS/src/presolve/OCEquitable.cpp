@@ -17,6 +17,7 @@ void HighsOCEquitablePartition::isolate(){
     //         break;
     //     }
     // }
+    partition->level++;
     int targ = nextNon[-1];
     int min = targ;
     // int length = len[targ];
@@ -335,6 +336,7 @@ void HighsOCEquitablePartition::allocatePartition(){
     // Allocate partition storage
     partition = (struct OCpartition*)calloc(1, sizeof(struct OCpartition));
     partition->target = -1;
+    partition->level = 0;
     partition->nsplits = 0;
     partition->ncsplits = 0;
     partition->nrsplits = 0;
@@ -441,6 +443,7 @@ void HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     // Allocate partition storage
      partition = (struct OCpartition*)calloc(1, sizeof(struct OCpartition));
     partition->target = -1;
+    partition->level = 0;
     partition->nsplits = 0;
     partition->ncsplits = 0;
     partition->nrsplits = 0;

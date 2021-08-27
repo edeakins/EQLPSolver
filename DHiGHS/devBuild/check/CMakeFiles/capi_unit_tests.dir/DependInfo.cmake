@@ -1,20 +1,37 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "C"
   )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_C
+  "/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestCAPI.c" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/check/CMakeFiles/capi_unit_tests.dir/TestCAPI.c.o"
+  )
+set(CMAKE_C_COMPILER_ID "GNU")
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/check/TestCAPI.c" "check/CMakeFiles/capi_unit_tests.dir/TestCAPI.c.o" "gcc" "check/CMakeFiles/capi_unit_tests.dir/TestCAPI.c.o.d"
+# The include file search paths:
+set(CMAKE_C_TARGET_INCLUDE_PATH
+  "."
+  "../app"
+  "../external"
+  "../src"
+  "../src/io"
+  "../src/ipm/ipx"
+  "../src/ipm/basiclu"
+  "../src/lp_data"
+  "../src/mip"
+  "../src/presolve"
+  "../src/simplex"
+  "../src/test"
+  "../src/util"
+  "../src/equitable"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake"
+  "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/DependInfo.cmake"
+  "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libipx.dir/DependInfo.cmake"
+  "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libbasiclu.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.
-set(CMAKE_Fortran_TARGET_MODULE_DIR "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/devBuild/modules")
+set(CMAKE_Fortran_TARGET_MODULE_DIR "")

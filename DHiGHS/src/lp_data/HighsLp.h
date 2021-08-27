@@ -141,6 +141,7 @@ struct OCgraph {
 
 struct OCpartition {
   int target;
+  int level;
   int nsplits;
   int ncsplits;
   int nrsplits;

@@ -2,7 +2,6 @@ file(REMOVE_RECURSE
   "../bin/capi_unit_tests"
   "../bin/capi_unit_tests.pdb"
   "CMakeFiles/capi_unit_tests.dir/TestCAPI.c.o"
-  "CMakeFiles/capi_unit_tests.dir/TestCAPI.c.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

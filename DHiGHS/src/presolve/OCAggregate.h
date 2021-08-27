@@ -20,6 +20,9 @@ public:
     void buildBndsFromScratch();
     void buildBndsFromSolution();
     void buildObj();
+    void buildResiduals();
+    void buildResidualLinks();
+    void buildResidualSubMatrix();
     void buildResidualCols();
     void buildResidualRows();
     void buildRowPointers();
@@ -33,13 +36,14 @@ public:
 
     HighsLp *elp, *olp;
     OCpartition* ep;
-    HighsBasis* basis;
+    HighsBasis* basis, elpBasis;
     HighsSolution* solution;
     int numTot;
     int numCol; 
     int numRow; 
     int nnz;
     int numResiduals;
+    int numTotResiduals;
     std::vector<int> col;
     std::vector<int> pcol;
     std::vector<int> row;
@@ -47,6 +51,10 @@ public:
     std::vector<double> columnX;
     std::vector<int> columnI;
     std::vector<int> columnF;
+    std::vector<int> rowF;
+    std::vector<int> parent;
+    std::vector<int> parentStart;
+    std::vector<int> child;
 };
 
 #endif
