@@ -232,7 +232,7 @@ lpi_h2gmp.cpp
 ##Build Directory for DHiGHS"
 devBuild
 build
-mittleman_symmetric_mps
+# mittleman_symmetric_mps
 mittleman_symmetric_5
 
 ##Lp files with cbc cuts

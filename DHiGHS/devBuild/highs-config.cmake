@@ -3,5 +3,5 @@ if(NOT TARGET libhighs)
 endif()
 
 set(HIGHS_LIBRARIES libhighs)
-set(HIGHS_INCLUDE_DIRS "/home/edeakins/LP/EQLPSolver/DHiGHS/src;/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild")
+set(HIGHS_INCLUDE_DIRS "/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/src;/Users/ethanjedidahdeakins/Work/LP/EQLPSolver/DHiGHS/devBuild")
 set(HIGHS_FOUND TRUE)

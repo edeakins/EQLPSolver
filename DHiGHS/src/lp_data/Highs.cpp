@@ -1402,10 +1402,10 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
     HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
 		      "Starting Crossover From Symmetric Solution...\n");
     passModel(originalLp);
-    call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
-			     *lpSymBasis_, *lpSymSolution_,
-			     model.unscaled_model_status_,
-			     model.unscaled_solution_params_);
+    // call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
+		// 	     *lpSymBasis_, *lpSymSolution_,
+		// 	     model.unscaled_model_status_,
+		// 	     model.unscaled_solution_params_);
   }
    else {
     // Use Simplex
