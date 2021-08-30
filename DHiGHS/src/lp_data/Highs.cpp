@@ -345,32 +345,16 @@ HighsStatus Highs::run() {
   // writeModel("olp.lp");
   originalLp = lp_;
   if (options_.aggregate == on_string && options_.solver != ipm_sym_string){
-    // // Compute equitable parititon from original lp
-    // timer_.start(timer_.saucy_clock);
-    // partitonLp(lp_, options_.model_file.c_str());
-    // timer_.stop(timer_.saucy_clock);
-    // Try out new equitable partition code
+    // Compute equitable partition
     timer_.start(timer_.equipart_clock);
-    nep_.allocatePartition(&lp_);
-    // nep_.runToDiscrete();
+    partitonLp();
     timer_.stop(timer_.equipart_clock);
-    std::cout << "saucy time: " << timer_.clock_time[timer_.saucy_clock] << std::endl;
-    std::cout << "new equi time: " << timer_.clock_time[timer_.equipart_clock] << ", nSplits: " << nep_.nSplits << std::endl;
-    // New aggregator, fold lp
-    HighsSolution s;
-    HighsBasis b;
+    // Initial Aggregate
     timer_.start(timer_.fold_clock);
-    part_ = nep_.getPartition();
+    foldLp();
     timer_.stop(timer_.fold_clock);
-    // nep_.isolate();
-    alp_ = agg_.allocate(&originalLp, part_, &b, &s); 
-    // Fold original lp
-    // timer_.start(timer_.fold_clock);
-    // foldLp(OCPartition_, &originalLp);
-    // timer_.stop(timer_.fold_clock);
-    // Do alp solve 
+    // Run dual solver on ALP(A,b,c,P^0)
     passModel(*alp_);
-    writeModel("lp.lp");
     timer_.start(timer_.alp_solve_clock);
     call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
     timer_.stop(timer_.alp_solve_clock);
@@ -378,19 +362,22 @@ HighsStatus Highs::run() {
     // Record basis and solution
     alpSolution_ = hmos_[original_hmo].solution_;
     alpBasis_ = hmos_[original_hmo].basis_;
-    // Make new lp
-    nep_.isolate();
-    part_ = nep_.getPartition();
-    alp_ = agg_.buildLp(part_, &alpBasis_, &alpSolution_);
-    // Solve new lp
-    passModel(*alp_);
-    writeModel("lp.lp");
-    timer_.start(timer_.alp_solve_clock);
-    call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
-    timer_.stop(timer_.alp_solve_clock);
-    return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
-    alpSolution_ = hmos_[original_hmo].solution_;
-    alpBasis_ = hmos_[original_hmo].basis_;
+    // Lift to final elp
+    timer_.start(timer_.lift_clock);
+    liftLp();
+    timer_.stop(timer_.lift_clock);
+    // Run primal solver on elp/alp
+    // passModel(*alp_);
+    // part_ = nep_.getPartition();
+    // alp_ = agg_.buildLp(part_, &alpBasis_, &alpSolution_);
+    // // Solve new lp
+    // passModel(*alp_);
+    // timer_.start(timer_.alp_solve_clock);
+    // call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
+    // timer_.stop(timer_.alp_solve_clock);
+    // return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
+    // alpSolution_ = hmos_[original_hmo].solution_;
+    // alpBasis_ = hmos_[original_hmo].basis_;
     // // Lift to elp
     // timer_.start(timer_.lift_clock);
     // liftLp(alpBasis_, alpSolution_);
@@ -408,12 +395,12 @@ HighsStatus Highs::run() {
   }
   else if (options_.aggregate == on_string && options_.solver == ipm_sym_string){
     // Compute equitable parititon from original lp
-    timer_.start(timer_.saucy_clock);
-    partitonLp(lp_, options_.model_file.c_str());
-    timer_.stop(timer_.saucy_clock);
+    timer_.start(timer_.equipart_clock);
+    partitonLp();
+    timer_.stop(timer_.equipart_clock);
     // Fold original lp
     timer_.start(timer_.fold_clock);
-    foldLp(OCPartition_, &originalLp);
+    foldLp();
     timer_.stop(timer_.fold_clock);
     // Do alp solve 
     passModel(*alp_);
@@ -665,35 +652,34 @@ HighsStatus Highs::run() {
 }
 
 // Compute equitable partition
-void Highs::partitonLp(const HighsLp& lp, std::string model_name){
-  ep_.setUp(lp, options_.model_file.c_str());
-  OCPartition_ = ep_.refine();
+void Highs::partitonLp(){
+  // ep_.setUp(lp, options_.model_file.c_str());
+  nep_.allocatePartition(&originalLp);
+  part_ = nep_.getPartition();
 }
 
 // Fold Lp
-void Highs::foldLp(const lpPartition* lpP, HighsLp* lp){
-  lpFolder_.setUp(lpP, lp);
-  lpFolder_.fold();
-  alp_ = lpFolder_.getAlp();
+void Highs::foldLp(){
+  agg_.allocate(&originalLp, part_);
+  alp_ = agg_.getLp();
 }
 
 // Lift ALP to ELP
-void Highs::liftLp(HighsBasis& alpBasis_, HighsSolution& alpSolution_){
-  lpFolder_.lift(alpSolution_, alpBasis_);
-  elp_ = lpFolder_.getElp();
-  elpBasis_ = lpFolder_.getElpBasis();
+void Highs::liftLp(){
+  agg_.buildLp(part_, &alpBasis_, &alpSolution_, true);
+  alp_ = agg_.getLp();
 }
 
-void Highs::liftBasis(HighsBasis& alpBasis_){
+void Highs::liftBasis(){
   lpFolder_.resizeLpSym();
   lpFolder_.liftColBasis(alpBasis_);
   lpFolder_.liftRowBasis(alpBasis_);
   lpSymBasis_ = lpFolder_.getLpBasis();
 }
 
-void Highs::liftSolution(HighsSolution& alpSolution_){
-  lpFolder_.liftSolution(alpSolution_);
-  lpSymSolution_ = lpFolder_.getLpSolution();
+void Highs::liftSolution(){
+  agg_.buildSolution();
+  lpSymSolution_ = agg_.getSolution();
 }
 
 const HighsLp& Highs::getLp() const { return lp_; }
@@ -1410,15 +1396,16 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
     // Record basis and solution
     alpSolution_ = hmos_[0].solution_;
     alpBasis_ = hmos_[0].basis_;
-    liftBasis(alpBasis_);
-    liftSolution(alpSolution_);
+    liftLp();
+    // liftBasis();
+    liftSolution();
     HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
 		      "Starting Crossover From Symmetric Solution...\n");
-    passModel(originalLp);
-    // call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
-		// 	     *lpSymBasis_, *lpSymSolution_,
-		// 	     model.unscaled_model_status_,
-		// 	     model.unscaled_solution_params_);
+    passModel(*alp_);
+    call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
+			     *lpSymBasis_, *lpSymSolution_,
+			     model.unscaled_model_status_,
+			     model.unscaled_solution_params_);
   }
    else {
     // Use Simplex

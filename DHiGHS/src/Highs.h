@@ -41,23 +41,24 @@ class Highs {
  /** @brief Calls for equitable partition setup and then 
   * calls saucy for equitable partition calculation
  */
-  void partitonLp(const HighsLp& lp, std::string model_name);
+  void partitonLp();
+  void refinePartition();
   
   /** @brief
    * Calls for aggregator setup and then aggregates original lp
    * based off the equitable partition for level k
    */
-  void foldLp(const lpPartition* ep, HighsLp* lp);
+  void foldLp();
 
   /** @brief
    * Calls for lifter to lift the aggregate lp, solution, and basis
    * from level k to level j where j > k
    */
-  void liftLp(HighsBasis& basis, HighsSolution& solution);
+  void liftLp();
 
-  void liftBasis(HighsBasis& basis);
+  void liftBasis();
 
-  void liftSolution(HighsSolution& solution);
+  void liftSolution();
 
   /** @brief
    * Calls 

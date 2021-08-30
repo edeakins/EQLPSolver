@@ -9,35 +9,62 @@
 /* Aggregator class for LPs based off a equitable partition */
 class HighsOCAggregate{
 public:
-    HighsLp* allocate(HighsLp* lp, OCpartition* partition, HighsBasis* b, HighsSolution* s);
-    HighsLp* buildLp();
-    HighsLp* buildLp(OCpartition* partition, HighsBasis* b, HighsSolution* s);
+    void allocate(HighsLp* lp, OCpartition* partition);
+    void buildLp();
+    void buildLp(OCpartition* partition, HighsBasis* b,
+                HighsSolution* s, bool finish);
     void buildAmatrix();
+    void buildFinalAmatrix();
     void buildRhs();
     void buildRhsFromScratch();
     void buildRhsFromSolution();
+    void buildFinalRhs();
+    void buildFinalRhsFromScratch();
+    void buildFinalRhsFromSolution();
     void buildBnds();
     void buildBndsFromScratch();
     void buildBndsFromSolution();
+    void buildFinalBnds();
+    void buildFinalBndsFromScratch();
+    void buildFinalBndsFromSolution();
     void buildObj();
+    void buildFinalObj();
     void buildResiduals();
+    void buildFinalResiduals();
     void buildResidualLinks();
+    void buildFinalResidualLinks();
     void buildResidualSubMatrix();
     void buildResidualCols();
     void buildResidualRows();
     void buildRowPointers();
     void buildColPointers();
-    HighsBasis* buildBasis();
+    void buildFinalPointers();
+    void buildSolution();
+    void buildColSolution();
+    void buildRowSolution();
+    void buildResidualColSolution();
+    void buildResidualRowSolution();
+    void buildBasis();
     void buildColBasis();
     void buildRowBasis();
-    void buildResidualsBasis();
     void buildResidualColBasis();
     void buildResidualRowBasis();
+    void buildFinalBasis();
+    void buildFinalColBasis();
+    void buildFinalRowBasis();
+    // Get parts of agg
+    HighsLp* getLp();
+    HighsSolution* getSolution();
+    HighsBasis* getBasis();
 
-    HighsLp *elp, *olp;
+    HighsLp *elp; 
+    HighsLp* olp;
     OCpartition* ep;
-    HighsBasis* basis, elpBasis;
+    HighsBasis* basis;
+    HighsBasis* elpBasis;
     HighsSolution* solution;
+    HighsSolution* elpSolution;
+    bool buildFinalLp = false;
     int numTot;
     int numCol; 
     int numRow; 
