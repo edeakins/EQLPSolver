@@ -5,6 +5,7 @@
 
 #include "control.h"
 #include "model.h"
+#include "HighsLp.h"
 
 namespace ipx {
 
@@ -17,6 +18,8 @@ namespace ipx {
 //
 std::vector<Int> GuessBasis(const Control& control, const Model& model,
                             const double* colweights);
+std::vector<Int> GuessBasisOC(const Control& control, const Model& model,
+                              const HighsBasis& b);
 
 }  // namespace ipx
 

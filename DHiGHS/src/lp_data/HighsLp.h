@@ -422,6 +422,8 @@ struct HighsSolution {
     row_value.resize(0);
     row_dual.resize(0);
   }
+  int numCol;
+  int numRow;
   std::vector<double> col_value;
   std::vector<double> col_dual;
   std::vector<double> row_value;

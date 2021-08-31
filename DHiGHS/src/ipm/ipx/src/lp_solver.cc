@@ -23,7 +23,7 @@ Int LpSolver::Solve(Int num_var, const double* obj, const double* lb,
     control_.OpenLogfile();
     control_.Log() << "IPX version 1.0\n";
     try {
-        model_.Load(control_, num_constr, num_var, Ap, Ai, Ax, rhs, constr_type,
+        model_.Load(control_, num_constr, num_var, 0, Ap, Ai, Ax, rhs, constr_type,
                     obj, lb, ub, &info_);
         if (info_.errflag) {
             control_.CloseLogfile();
@@ -79,12 +79,16 @@ Int LpSolver::Solve(Int num_var, const double* obj, const double* lb,
 void LpSolver::LoadModel(Int num_var, const double* obj, const double* lb,
                         const double* ub, Int num_constr, const Int* Ap,
                         const Int* Ai, const double* Ax, const double* rhs,
-                        const char* constr_type) {
+                        const char* constr_type, int num_res) {
     ClearModel();
-    model_.Load(control_, num_constr, num_var, Ap, Ai, Ax, rhs,
+    model_.Load(control_, num_constr, num_var, num_res, Ap, Ai, Ax, rhs,
                               constr_type, obj, lb, ub, &info_);
     model_.GetInfo(&info_);
 }
+
+void LpSolver::LoadBasis(HighsBasis b){
+    hBasis_ = b;
+}   
 
 Info LpSolver::GetInfo() const {
     return info_;

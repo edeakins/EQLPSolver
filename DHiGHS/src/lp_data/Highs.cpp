@@ -364,7 +364,7 @@ HighsStatus Highs::run() {
     alpBasis_ = hmos_[original_hmo].basis_;
     // Lift to final elp
     timer_.start(timer_.lift_clock);
-    liftLp();
+    liftLpExtended();
     timer_.stop(timer_.lift_clock);
     // Run primal solver on elp/alp
     // passModel(*alp_);
@@ -664,21 +664,45 @@ void Highs::foldLp(){
   alp_ = agg_.getLp();
 }
 
+// Lift ALP to LP
+void Highs::liftLpFinal(){
+  agg_.buildLp(part_, &alpBasis_, &alpSolution_, true, false);
+  alp_ = agg_.getLp();
+}
+
 // Lift ALP to ELP
-void Highs::liftLp(){
-  agg_.buildLp(part_, &alpBasis_, &alpSolution_, true);
+void Highs::liftLpExtended(){
+  agg_.buildLp(part_, &alpBasis_, &alpSolution_, false, false);
+  alp_ = agg_.getLp();
+}
+
+void Highs::liftLpExtendedFinal(){
+  agg_.buildLp(part_, &alpBasis_, &alpSolution_, true, true);
   alp_ = agg_.getLp();
 }
 
 void Highs::liftBasis(){
-  lpFolder_.resizeLpSym();
-  lpFolder_.liftColBasis(alpBasis_);
-  lpFolder_.liftRowBasis(alpBasis_);
-  lpSymBasis_ = lpFolder_.getLpBasis();
+  agg_.buildBasis(false);
+  lpSymBasis_ = agg_.getBasis();
 }
 
-void Highs::liftSolution(){
-  agg_.buildSolution();
+void Highs::liftBasisFinal(){
+  agg_.buildBasis(true);
+  lpSymBasis_ = agg_.getBasis();
+}
+
+void Highs::liftSolutionFinal(){
+  agg_.buildSolution(false, false);
+  lpSymSolution_ = agg_.getSolution();
+}
+
+void Highs::liftSolutionExtended(){
+  agg_.buildSolution(false, true);
+  lpSymSolution_ = agg_.getSolution();
+}
+
+void Highs::liftSolutionExtendedFinal(){
+  agg_.buildSolution(true, true);
   lpSymSolution_ = agg_.getSolution();
 }
 
@@ -1362,6 +1386,56 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
     call_status = solveUnconstrainedLp(model);
     return_status = interpretCallStatus(call_status, return_status, "solveUnconstrainedLp");
     if (return_status == HighsStatus::Error) return return_status;
+  } else if (options_.aggregate == on_string && 
+             options_.solver == ipm_sym_string){
+    // Use Simplex
+    call_status = solveLpSimplex(model);
+    return_status = interpretCallStatus(call_status, return_status, "solveLpSimplex");
+    if (return_status == HighsStatus::Error) return return_status;
+
+    if (!isSolutionConsistent(model.lp_, model.solution_)) {
+      HighsLogMessage(options_.logfile, HighsMessageType::ERROR,
+		      "Inconsistent solution returned from solver");
+      return HighsStatus::Error;
+    }
+    // Record basis and solution
+    alpSolution_ = hmos_[0].solution_;
+    alpBasis_ = hmos_[0].basis_;
+    liftLpExtendedFinal();
+    liftBasisFinal();
+    liftSolutionExtendedFinal();
+    HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
+		      "Starting Crossover From Symmetric Solution...\n");
+    passModel(*alp_);
+    call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
+			     *lpSymBasis_, *lpSymSolution_,
+			     model.unscaled_model_status_,
+			     model.unscaled_solution_params_);
+  } else if (options_.aggregate == on_string &&
+             options_.solver == ipm_string){
+    // Use Simplex
+    call_status = solveLpSimplex(model);
+    return_status = interpretCallStatus(call_status, return_status, "solveLpSimplex");
+    if (return_status == HighsStatus::Error) return return_status;
+
+    if (!isSolutionConsistent(model.lp_, model.solution_)) {
+      HighsLogMessage(options_.logfile, HighsMessageType::ERROR,
+		      "Inconsistent solution returned from solver");
+      return HighsStatus::Error;
+    }
+    // Record basis and solution
+    alpSolution_ = hmos_[0].solution_;
+    alpBasis_ = hmos_[0].basis_;
+    liftLpFinal();
+    // liftBasis();
+    liftSolutionFinal();
+    HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
+		      "Starting Crossover From Symmetric Solution...\n");
+    passModel(*alp_);
+    call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
+			     *lpSymBasis_, *lpSymSolution_,
+			     model.unscaled_model_status_,
+			     model.unscaled_solution_params_);
   } else if (options_.solver == ipm_string) {
     // Use IPM
 #ifdef IPX_ON
@@ -1381,33 +1455,7 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
 		    "Model cannot be solved with IPM");
     return HighsStatus::Error;
 #endif
-  } else if (options_.solver == ipm_sym_string &&
-             options_.aggregate == on_string){
-    // Use Simplex
-    call_status = solveLpSimplex(model);
-    return_status = interpretCallStatus(call_status, return_status, "solveLpSimplex");
-    if (return_status == HighsStatus::Error) return return_status;
-
-    if (!isSolutionConsistent(model.lp_, model.solution_)) {
-      HighsLogMessage(options_.logfile, HighsMessageType::ERROR,
-		      "Inconsistent solution returned from solver");
-      return HighsStatus::Error;
-    }
-    // Record basis and solution
-    alpSolution_ = hmos_[0].solution_;
-    alpBasis_ = hmos_[0].basis_;
-    liftLp();
-    // liftBasis();
-    liftSolution();
-    HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
-		      "Starting Crossover From Symmetric Solution...\n");
-    passModel(*alp_);
-    call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
-			     *lpSymBasis_, *lpSymSolution_,
-			     model.unscaled_model_status_,
-			     model.unscaled_solution_params_);
-  }
-   else {
+  } else {
     // Use Simplex
     call_status = solveLpSimplex(model);
     return_status = interpretCallStatus(call_status, return_status, "solveLpSimplex");

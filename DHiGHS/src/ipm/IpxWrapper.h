@@ -29,9 +29,10 @@ IpxStatus fillInIpxData(const HighsLp& lp, ipx::Int& num_col,
                         std::vector<double>& col_ub, ipx::Int& num_row,
                         std::vector<ipx::Int>& Ap, std::vector<ipx::Int>& Ai,
                         std::vector<double>& Ax, std::vector<double>& rhs,
-                        std::vector<char>& constraint_type) {
+                        std::vector<char>& constraint_type, ipx::Int& num_residuals) {
   num_col = lp.numCol_;
   num_row = lp.numRow_;
+  num_residuals = lp.numResiduals_;
 
   // For each row with both a lower and an upper bound introduce one new column
   // so num_col may increase. Ignore each free row so num_row may decrease.
@@ -40,8 +41,8 @@ IpxStatus fillInIpxData(const HighsLp& lp, ipx::Int& num_col,
 
   // For each row with bounds on both sides introduce explicit slack and
   // transfer bounds.
-  assert(lp.rowLower_.size() == (unsigned int)num_row);
-  assert(lp.rowUpper_.size() == (unsigned int)num_row);
+  // assert(lp.rowLower_.size() == (unsigned int)num_row);
+  // assert(lp.rowUpper_.size() == (unsigned int)num_row);
 
   std::vector<int> general_bounded_rows;
   std::vector<int> free_rows;
@@ -207,15 +208,15 @@ HighsStatus CrossoverFromSymmetricSolution(const HighsLp& lp, const HighsOptions
   parameters.ipm_optimality_tol = unscaled_solution_params.dual_feasibility_tolerance;
   // Set the internal IPX parameters
   lps.SetParameters(parameters);
-  ipx::Int num_col, num_row;
+  ipx::Int num_col, num_row, num_residuals;
   std::vector<ipx::Int> Ap, Ai;
   std::vector<double> objective, col_lb, col_ub, Av, rhs;
   std::vector<char> constraint_type;
   IpxStatus result = fillInIpxData(lp, num_col, objective, col_lb, col_ub,
-                                   num_row, Ap, Ai, Av, rhs, constraint_type);
+                                   num_row, Ap, Ai, Av, rhs, constraint_type, num_residuals);
   if (result != IpxStatus::OK) return HighsStatus::Error;
   lps.LoadModel(num_col, &objective[0], &col_lb[0], &col_ub[0], num_row,
-                    &Ap[0], &Ai[0], &Av[0], &rhs[0], &constraint_type[0]);
+                    &Ap[0], &Ai[0], &Av[0], &rhs[0], &constraint_type[0], num_residuals);
   // Call crossover from given (interior) solution
   // Build slacks and set in bounds
   std::vector<double> slack(rhs);
@@ -291,12 +292,12 @@ HighsStatus solveLpIpx(const HighsLp& lp, const HighsOptions& options,
   // Set the internal IPX parameters
   lps.SetParameters(parameters);
 
-  ipx::Int num_col, num_row;
+  ipx::Int num_col, num_row, num_residuals;
   std::vector<ipx::Int> Ap, Ai;
   std::vector<double> objective, col_lb, col_ub, Av, rhs;
   std::vector<char> constraint_type;
   IpxStatus result = fillInIpxData(lp, num_col, objective, col_lb, col_ub,
-                                   num_row, Ap, Ai, Av, rhs, constraint_type);
+                                   num_row, Ap, Ai, Av, rhs, constraint_type, num_residuals);
   if (result != IpxStatus::OK) return HighsStatus::Error;
 
   ipx::Int status =

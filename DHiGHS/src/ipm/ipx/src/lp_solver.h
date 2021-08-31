@@ -9,6 +9,7 @@
 #include "ipm.h"
 #include "iterate.h"
 #include "model.h"
+#include "HighsLp.h"
 
 namespace ipx {
 
@@ -31,7 +32,9 @@ public:
     void LoadModel(Int num_var, const double* obj, const double* lb,
         const double* ub, Int num_constr, const Int* Ap,
         const Int* Ai, const double* Ax, const double* rhs,
-        const char* constr_type);
+        const char* constr_type, int num_res);
+
+    void LoadBasis(HighsBasis b);
 
     // Returns the solver info from the last call to Solve(). See the reference
     // documentation for the meaning of Info values.
@@ -126,6 +129,7 @@ private:
     Model model_;
     std::unique_ptr<Iterate> iterate_;
     std::unique_ptr<Basis> basis_;
+    HighsBasis hBasis_;
 
     // Basic solution computed by crossover and basic status of each variable
     // (one of IPX_nonbasic_lb, IPX_nonbasic_ub, IPX_basic, IPX_superbasic).

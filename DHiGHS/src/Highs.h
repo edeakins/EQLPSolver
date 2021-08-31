@@ -54,11 +54,16 @@ class Highs {
    * Calls for lifter to lift the aggregate lp, solution, and basis
    * from level k to level j where j > k
    */
-  void liftLp();
+  void liftLpFinal();
+  void liftLpExtended();
+  void liftLpExtendedFinal();
 
   void liftBasis();
+  void liftBasisFinal();
 
-  void liftSolution();
+  void liftSolutionFinal();
+  void liftSolutionExtended();
+  void liftSolutionExtendedFinal();
 
   /** @brief
    * Calls 

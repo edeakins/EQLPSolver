@@ -12,7 +12,7 @@ public:
     void allocate(HighsLp* lp, OCpartition* partition);
     void buildLp();
     void buildLp(OCpartition* partition, HighsBasis* b,
-                HighsSolution* s, bool finish);
+                HighsSolution* s, bool finish, bool extended);
     void buildAmatrix();
     void buildFinalAmatrix();
     void buildRhs();
@@ -39,17 +39,18 @@ public:
     void buildRowPointers();
     void buildColPointers();
     void buildFinalPointers();
-    void buildSolution();
+    void buildSolution(bool finish, bool extended);
     void buildColSolution();
     void buildRowSolution();
     void buildResidualColSolution();
     void buildResidualRowSolution();
-    void buildBasis();
+    void buildBasis(bool finish);
     void buildColBasis();
     void buildRowBasis();
     void buildResidualColBasis();
     void buildResidualRowBasis();
-    void buildFinalBasis();
+    void buildFinalColSolution();
+    void buildFinalRowSolution();
     void buildFinalColBasis();
     void buildFinalRowBasis();
     // Get parts of agg
@@ -72,13 +73,18 @@ public:
     int numResiduals;
     int numTotResiduals;
     std::vector<int> col;
+    std::vector<int> colrep;
     std::vector<int> pcol;
+    std::vector<int> pcolrep;
     std::vector<int> row;
+    std::vector<int> rowrep;
     std::vector<int> prow;
+    std::vector<int> prowrep;
     std::vector<double> columnX;
     std::vector<int> columnI;
     std::vector<int> columnF;
     std::vector<int> rowF;
+    std::vector<int> rowNonbasic;
     std::vector<int> parent;
     std::vector<int> parentStart;
     std::vector<int> child;

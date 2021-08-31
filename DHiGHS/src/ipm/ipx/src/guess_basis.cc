@@ -231,4 +231,27 @@ std::vector<Int> GuessBasis(const Control& control, const Model& model,
     return basis;
 }
 
+std::vector<Int> GuessBasisOC(const Control& control, const Model& model,
+                              const HighsBasis& b){
+    const Int m = model.rows();
+    const Int n = model.cols() - model.residuals(); 
+    const Int r = model.cols();
+
+    // basis starts empty and is filled one index at a time. rownumber[i] >= 0
+    // iff row i was pivot row when a column was added to the basis. (The
+    // specific value has a different meaning in each method.) A column is
+    // "active" if it is eligible for being added to the basis.
+    std::vector<Int> basis, rownumber(m, -1);
+    std::vector<int> active(n+m, 1);
+    for (int i = 0; i < n; ++i){
+        if (b.col_status[i] == HighsBasisStatus::BASIC)
+            basis.push_back(i);
+    }
+    for (int i = 0; i < m; ++i){
+        if (b.row_status[i] == HighsBasisStatus::BASIC)
+            basis.push_back(i + r);
+    }
+    return basis;
+}
+
 }  // namespace ipx

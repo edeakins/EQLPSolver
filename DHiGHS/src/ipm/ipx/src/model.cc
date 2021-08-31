@@ -9,12 +9,12 @@
 
 namespace ipx {
 
-void Model::Load(const Control& control, Int num_constr, Int num_var,
+void Model::Load(const Control& control, Int num_constr, Int num_var, Int num_res,
                  const Int* Ap, const Int* Ai, const double* Ax,
                  const double* rhs, const char* constr_type, const double* obj,
                  const double* lbuser, const double* ubuser, Info* info) {
     clear();
-    CopyInput(num_constr, num_var, Ap, Ai, Ax, rhs, constr_type, obj, lbuser,
+    CopyInput(num_constr, num_var, num_res, Ap, Ai, Ax, rhs, constr_type, obj, lbuser,
               ubuser, info);
     if (info->errflag)
         return;
@@ -444,7 +444,7 @@ Int CheckMatrix(Int m, Int n, const Int *Ap, const Int *Ai, const double *Ax) {
     return 0;
 }
 
-void Model::CopyInput(Int num_constr, Int num_var, const Int* Ap, const Int* Ai,
+void Model::CopyInput(Int num_constr, Int num_var, Int num_res, const Int* Ap, const Int* Ai,
                       const double* Ax, const double* rhs,
                       const char* constr_type, const double* obj,
                       const double* lbuser, const double* ubuser, Info* info) {
@@ -492,6 +492,7 @@ void Model::CopyInput(Int num_constr, Int num_var, const Int* Ap, const Int* Ai,
     for (double x : scaled_ubuser_)
         if (std::isfinite(x))
             norm_rhs_ = std::max(norm_rhs_, std::abs(x));
+    num_residuals_ = num_res;
 }
 
 void Model::ScaleModel(const Control& control) {
