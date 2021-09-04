@@ -542,9 +542,10 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
             return IPX_ERROR_invalid_vector;
         }
     }
-    control_.Log() << "good\n";
+    // control_.Log() << "good\n";
     // Construct starting basis.
     basis_.reset(new Basis(control_, model_));
+    // basis_->ConstructBasisFromHighsBasis(hBasis_);
     if (control_.crash_basis()) {
         // Take columns in the following order of priority:
         // - free columns
@@ -566,7 +567,10 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
             else
                 colweight[j] = m-nz+1;
         }
-        basis_->ConstructBasisFromWeights(&colweight[0], &info_);
+        if (hBasis_.numCol_)
+            basis_->ConstructBasisFromHighsBasis(hBasis_, &info_, &colweight[0]);
+        else
+            basis_->ConstructBasisFromWeights(&colweight[0], &info_);
         info_.time_starting_basis += timer.Elapsed();
         if (info_.errflag) {
             ClearSolution();
@@ -581,6 +585,68 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
     GetBasicSolution(&xb[0], &sb[0], &yb[0], &zb[0],
                      &cbas[0], &vbas[0]);
     return 0;
+}
+
+std::vector<Int> LpSolver::CrashSimplexBasisFromHighsBasis(const double* x_start,
+                                         const double* s_start,
+                                         const double* y_start,
+                                         const double* z_start){
+    std::vector<Int> basicCols;
+    const Int m = model_.rows();
+    const Int n = model_.cols();
+    const Vector& lb = model_.lb();
+    const Vector& ub = model_.ub();
+    const SparseMatrix& AI = model_.AI();
+    Vector x(n + m), xl(n + m), xu(n + m);
+    Vector y(m), z(n+m), zl(n + m), zu(n + m);
+
+    control_.Log() << "Starting crash basis for lifted LP\n";
+    x_crossover_.resize(n+m);
+    y_crossover_.resize(m);
+    z_crossover_.resize(n+m);
+    crossover_weights_.resize(0);
+    model_.PresolveStartingPoint(x_start, s_start, y_start, z_start,
+                                 x_crossover_, y_crossover_, z_crossover_);
+
+    // Check that starting point is complementary and satisfies bound and sign
+    // conditions.
+    for (Int j = 0; j < n+m; j++) {
+        if (x_crossover_[j] < lb[j] || x_crossover_[j] > ub[j]){
+            return basicCols;
+        }
+        if (x_crossover_[j] != lb[j] && z_crossover_[j] > 0.0){
+            return basicCols;
+        }
+        if (x_crossover_[j] != ub[j] && z_crossover_[j] < 0.0){
+            return basicCols;
+        }
+    }
+    // Construct starting basis.
+    basis_.reset(new Basis(control_, model_));
+    if (control_.crash_basis()) {
+        Timer timer;
+        Vector colweight(n+m);
+        for (Int j = 0; j < n+m; j++) {
+            Int nz = AI.entries(j);
+            if (lb[j] == ub[j])
+                colweight[j] = 0.0;
+            else if (std::isinf(lb[j]) && std::isinf(ub[j]))
+                colweight[j] = INFINITY;
+            else if (z_crossover_[j] != 0.0)
+                colweight[j] = 0.0;
+            else if (x_crossover_[j] != lb[j] && x_crossover_[j] != ub[j])
+                colweight[j] = m + (m-nz+1);
+            else
+                colweight[j] = m-nz+1;
+        }
+        basicCols = basis_->ConstructBasisFromHighsBasis(hBasis_, &info_, &colweight[0]);
+        info_.time_starting_basis += timer.Elapsed();
+    }
+    return basicCols;
+}
+
+std::vector<Int> LpSolver::CrashDroppedCols(){
+    return basis_->getDroppedBasicCols(); 
 }
 
 void LpSolver::ClearSolution(){

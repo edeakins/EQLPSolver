@@ -9,6 +9,7 @@
 #include "indexed_vector.h"
 #include "lu_update.h"
 #include "model.h"
+#include "HighsLp.h"
 #include "sparse_matrix.h"
 
 namespace ipx {
@@ -195,7 +196,10 @@ public:
     // zero or infinite weight out of or into the basis one at a time.
     //
     // @colweights: vector of length n+m with nonnegative entries
-    void ConstructBasisFromWeights(const double* colweights, Info* info);
+    void ConstructBasisFromWeights(const double* colscale, Info* info);
+
+    std::vector<Int> ConstructBasisFromHighsBasis(const HighsBasis b, Info* info, const double* colscale);
+    std::vector<Int> getDroppedBasicCols();
 
     // Estimates the smallest singular value of the basis matrix.
     double MinSingularValue() const;
@@ -245,6 +249,8 @@ private:
     // in exact arithmetic. The condition number of the basis matrix can be
     // unacceptably high, however.
     void CrashBasis(const double* colweights);
+    void CrashBasisOC(const HighsBasis b);
+    // std::vector<Int> CrashBasisOC(const HighsBasis b);
 
     // Repairs singularities in the basis matrix by replacing basic columns by
     // slack columns. The status of slack variables that enter the basis becomes
@@ -285,6 +291,7 @@ private:
     const Control& control_;
     const Model& model_;
     std::vector<Int> basis_;    // m column indices of AI
+    std::vector<Int> droppedCols_;
 
     // For 0 <= j < n+m, map2basis_[j] is one of the following:
     //  -2:            variable is NONBASIC_FIXED

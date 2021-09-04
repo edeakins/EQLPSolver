@@ -364,20 +364,46 @@ HighsStatus Highs::run() {
     alpBasis_ = hmos_[original_hmo].basis_;
     // Lift to final elp
     timer_.start(timer_.lift_clock);
-    liftLpExtended();
+    liftLpExtendedFinal();
+    liftBasisFinal();
+    liftSolutionExtendedFinal();
     timer_.stop(timer_.lift_clock);
+    passModel(*alp_);
+    // Construct Crash Basis
+    std::vector<int64_t> crashBasis = ConstructCrashBasisForOC(hmos_[original_hmo].lp_, options_,
+			     *lpSymBasis_, *lpSymSolution_,
+			     hmos_[original_hmo].unscaled_model_status_,
+			     hmos_[original_hmo].unscaled_solution_params_);
+    std::vector<int64_t> crashDroppedCols = GetDroppedColsFromCrashBasis();
+    for (int i = 0; i < lpSymBasis_->col_status.size(); ++i)
+      lpSymBasis_->col_status[i] = HighsBasisStatus::NONBASIC;
+    for (int i = 0; i < lpSymBasis_->row_status.size(); ++i)
+      lpSymBasis_->row_status[i] = HighsBasisStatus::NONBASIC;
+    for (int i = 0; i < crashBasis.size(); ++i){
+      if (crashBasis[i] < alp_->numCol_)
+        lpSymBasis_->col_status[crashBasis[i]] = HighsBasisStatus::BASIC;
+      else 
+        lpSymBasis_->row_status[crashBasis[i] - alp_->numCol_] = HighsBasisStatus::BASIC;
+    }
+    for (int i = 0; i < crashDroppedCols.size(); ++i)
+      alp_->residuals_.push_back(crashDroppedCols[i]);
+    alp_->numResiduals_ = crashDroppedCols.size();
+    passModel(*alp_);
+    setBasis(*lpSymBasis_);
+    hmos_[solved_hmo].basis_ = basis_;
     // Run primal solver on elp/alp
     // passModel(*alp_);
     // part_ = nep_.getPartition();
     // alp_ = agg_.buildLp(part_, &alpBasis_, &alpSolution_);
     // // Solve new lp
     // passModel(*alp_);
-    // timer_.start(timer_.alp_solve_clock);
-    // call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
-    // timer_.stop(timer_.alp_solve_clock);
-    // return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
-    // alpSolution_ = hmos_[original_hmo].solution_;
-    // alpBasis_ = hmos_[original_hmo].basis_;
+    options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
+    timer_.start(timer_.alp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
+    timer_.stop(timer_.alp_solve_clock);
+    return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
+    alpSolution_ = hmos_[original_hmo].solution_;
+    alpBasis_ = hmos_[original_hmo].basis_;
     // // Lift to elp
     // timer_.start(timer_.lift_clock);
     // liftLp(alpBasis_, alpSolution_);

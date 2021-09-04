@@ -241,15 +241,25 @@ std::vector<Int> GuessBasisOC(const Control& control, const Model& model,
     // iff row i was pivot row when a column was added to the basis. (The
     // specific value has a different meaning in each method.) A column is
     // "active" if it is eligible for being added to the basis.
-    std::vector<Int> basis, rownumber(m, -1);
-    std::vector<int> active(n+m, 1);
-    for (int i = 0; i < n; ++i){
-        if (b.col_status[i] == HighsBasisStatus::BASIC)
-            basis.push_back(i);
+    std::vector<Int> basis;
+    int numBasic = 0;
+    int rIdx, sIdx, xIdx;
+    xIdx = 0;
+    while (numBasic <= m && xIdx < n){
+        if (b.col_status[xIdx] == HighsBasisStatus::BASIC){
+            basis.push_back(xIdx++);
+            numBasic++;
+        }
     }
-    for (int i = 0; i < m; ++i){
-        if (b.row_status[i] == HighsBasisStatus::BASIC)
-            basis.push_back(i + r);
+    rIdx = n;
+    while (numBasic++ <= m && rIdx < r)
+        basis.push_back(rIdx++);
+    sIdx = 0;
+    while (numBasic <= m){
+        if (b.row_status[sIdx] == HighsBasisStatus::BASIC){
+            basis.push_back(r + sIdx++);
+            numBasic++;
+        }
     }
     return basis;
 }

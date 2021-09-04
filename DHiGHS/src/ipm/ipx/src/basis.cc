@@ -383,6 +383,46 @@ void Basis::ConstructBasisFromWeights(const double* colscale, Info* info) {
         return;
 }
 
+std::vector<Int> Basis::ConstructBasisFromHighsBasis(const HighsBasis b, Info* info, const double* colscale){
+    info->errflag = 0;
+    info->dependent_rows = 0;
+    info->dependent_cols = 0;
+    std::vector<Int> errVec;
+
+    if (control_.crash_basis()) {
+        CrashBasisOC(b);
+        double sigma = MinSingularValue();
+        control_.Debug()
+            << Textline("Minimum singular value of crash basis:") << sci2(sigma)
+            << '\n';
+        Repair(info);
+        if (info->basis_repairs < 0) {
+            control_.Log() << " discarding crash basis\n";
+            SetToSlackBasis();
+        }
+        else if (info->basis_repairs > 0) {
+            sigma = MinSingularValue();
+            control_.Debug()
+                << Textline("Minimum singular value of repaired crash basis:")
+                << sci2(sigma) << '\n';
+        }
+    } else {
+        SetToSlackBasis();
+    }
+    PivotFreeVariablesIntoBasis(colscale, info);
+    if (info->errflag)
+        return errVec; 
+    PivotFixedVariablesOutOfBasis(colscale, info);
+    if (info->errflag)
+        return errVec;
+    return basis_;
+    // CrashBasisOC(b);
+}
+
+std::vector<Int> Basis::getDroppedBasicCols(){
+    return droppedCols_;
+}
+
 double Basis::MinSingularValue() const {
     const Int m = model_.rows();
     Vector v(m);
@@ -465,11 +505,11 @@ double Basis::max_fill() const {
 Int Basis::AdaptToSingularFactorization() {
     const Int m = model_.rows();
     const Int n = model_.cols();
-    std::vector<Int> rowperm(m), colperm(m), dependent_cols;
+    std::vector<Int> rowperm(m), colperm(m);
 
     lu_->GetFactors(nullptr, nullptr, rowperm.data(), colperm.data(),
-                    &dependent_cols);
-    for (Int k : dependent_cols) {
+                    &droppedCols_);
+    for (Int k : droppedCols_) {
         // Column p of the basis matrix was replaced by the i-th unit
         // column. Insert the corresponding slack variable jn into
         // position p of the basis.
@@ -483,7 +523,7 @@ Int Basis::AdaptToSingularFactorization() {
         if (jb >= 0)
             map2basis_[jb] = -1; // now NONBASIC
     }
-    return dependent_cols.size();
+    return droppedCols_.size();
 }
 
 bool Basis::TightenLuPivotTol() {
@@ -509,6 +549,35 @@ void Basis::CrashBasis(const double* colweights) {
     // rank revealing factorization, but it detects many dependencies in
     // practice.
     std::vector<Int> cols_guessed = GuessBasis(control_, model_, colweights);
+    assert((int)cols_guessed.size() <= m);
+    assert((int)cols_guessed.size() == m); // at the moment
+
+    // Initialize the Basis object and factorize the (partial) basis. If
+    // basis_[p] is negative, the p-th column of the basis matrix is zero,
+    // and a slack column will be inserted by CrashFacorize().
+    std::fill(basis_.begin(), basis_.end(), -1);
+    std::fill(map2basis_.begin(), map2basis_.end(), -1);
+    for (Int k = 0; k < (Int) cols_guessed.size(); k++) {
+        basis_[k] = cols_guessed[k];
+        assert(map2basis_[basis_[k]] == -1); // must not have duplicates
+        map2basis_[basis_[k]] = k;
+    }
+    Int num_dropped = 0;
+    CrashFactorize(&num_dropped);
+    control_.Debug()
+        << Textline("Number of columns dropped from guessed basis:")
+        << num_dropped << '\n';
+    (void)(m);
+}
+
+void Basis::CrashBasisOC(const HighsBasis b) {
+    const Int m = model_.rows();
+
+    // Make a guess for a basis. Then use LU factorization with a strict
+    // absolute pivot tolerance to remove dependent columns. This is not a
+    // rank revealing factorization, but it detects many dependencies in
+    // practice.
+    std::vector<Int> cols_guessed = GuessBasisOC(control_, model_, b);
     assert((int)cols_guessed.size() <= m);
     assert((int)cols_guessed.size() == m); // at the moment
 

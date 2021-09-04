@@ -25,6 +25,7 @@
 #include "presolve/Aggregate.h"
 #include "presolve/OCEquitable.h"
 #include "presolve/OCAggregate.h"
+// #include "ipm/IpxWrapper.h"
 // #include "equitable/HighsEquitable.h"
 
 #include <sstream>
@@ -775,8 +776,8 @@ class Highs {
   HighsSolution elpSolution_;
   lpPartition* OCPartition_;
   OCpartition* part_;
-  HighsBasis* lpSymBasis_;
-  HighsSolution* lpSymSolution_;
+  HighsBasis* lpSymBasis_ = NULL;
+  HighsSolution* lpSymSolution_ = NULL;
   // Final HiGHS Run Time
   double runTime = 0;
   /* Time info struct for HiGHS vs

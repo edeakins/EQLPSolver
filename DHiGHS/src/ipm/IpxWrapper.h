@@ -24,6 +24,9 @@
 #include "lp_data/HighsLp.h"
 #include "lp_data/HighsSolution.h"
 
+std::vector<int64_t> crashSimplexBasis_;
+std::vector<int64_t> crashDroppedCols_;
+
 IpxStatus fillInIpxData(const HighsLp& lp, ipx::Int& num_col,
                         std::vector<double>& obj, std::vector<double>& col_lb,
                         std::vector<double>& col_ub, ipx::Int& num_row,
@@ -217,6 +220,7 @@ HighsStatus CrossoverFromSymmetricSolution(const HighsLp& lp, const HighsOptions
   if (result != IpxStatus::OK) return HighsStatus::Error;
   lps.LoadModel(num_col, &objective[0], &col_lb[0], &col_ub[0], num_row,
                     &Ap[0], &Ai[0], &Av[0], &rhs[0], &constraint_type[0], num_residuals);
+  if (&highs_basis) lps.LoadBasis(highs_basis);
   // Call crossover from given (interior) solution
   // Build slacks and set in bounds
   std::vector<double> slack(rhs);
@@ -263,6 +267,87 @@ HighsStatus CrossoverFromSymmetricSolution(const HighsLp& lp, const HighsOptions
   // lps.CrossoverFromStartingPoint(&x[0], &slack[0],
   //                                NULL, NULL);
   return HighsStatus::OK;
+}
+
+std::vector<int64_t> ConstructCrashBasisForOC(const HighsLp& lp, const HighsOptions& options,
+		       HighsBasis& highs_basis, HighsSolution& highs_solution,
+		       HighsModelStatus& unscaled_model_status,
+		       HighsSolutionParams& unscaled_solution_params){
+  resetModelStatusAndSolutionParams(unscaled_model_status, unscaled_solution_params, options);
+  int debug = 0;
+  #ifdef CMAKE_BUILD_TYPE
+    debug = 1;
+  #endif
+  std::vector<int64_t> crashSimplexBasis_;
+  ipx::LpSolver crashBasisSolver_;
+  ipx::Parameters parameters;
+  if (debug) parameters.debug = 1;
+  // Set IPX parameters from options
+  // Just test feasibility and optimality tolerances for now
+  // ToDo Set more parameters
+  parameters.ipm_feasibility_tol = unscaled_solution_params.primal_feasibility_tolerance;
+  parameters.ipm_optimality_tol = unscaled_solution_params.dual_feasibility_tolerance;
+  // Set the internal IPX parameters
+  crashBasisSolver_.SetParameters(parameters);
+  ipx::Int num_col, num_row, num_residuals;
+  std::vector<ipx::Int> Ap, Ai;
+  std::vector<double> objective, col_lb, col_ub, Av, rhs;
+  std::vector<char> constraint_type;
+  IpxStatus result = fillInIpxData(lp, num_col, objective, col_lb, col_ub,
+                                   num_row, Ap, Ai, Av, rhs, constraint_type, num_residuals);
+  if (result != IpxStatus::OK) return crashSimplexBasis_;
+  crashBasisSolver_.LoadModel(num_col, &objective[0], &col_lb[0], &col_ub[0], num_row,
+                    &Ap[0], &Ai[0], &Av[0], &rhs[0], &constraint_type[0], num_residuals);
+  crashBasisSolver_.LoadBasis(highs_basis);
+  // Call crossover from given (interior) solution
+  // Build slacks and set in bounds
+  std::vector<double> slack(rhs);
+  for (int i = 0; i < num_col; ++i){
+    for (int p = Ap[i]; p < Ap[i + 1]; ++p) slack[Ai[p]] -= Av[p] * highs_solution.col_value[i];
+  }
+  for (int i = 0; i < num_row; i++) {
+    switch (constraint_type[i]) {
+      case '=':
+        slack[i] = 0.0;
+        break;
+      case '<':
+        slack[i] = std::max(slack[i], 0.0);
+        break;
+      case '>':
+        slack[i] = std::min(slack[i], 0.0);
+        break;
+    }
+  }
+  // Set x within bounds
+  std::vector<double> x(highs_solution.col_value);
+  for (int i = 0; i < num_col; ++i){
+    x[i] = std::max(x[i], col_lb[i]);
+    x[i] = std::min(x[i], col_ub[i]);
+  }
+  // Flip y, z to fit dual solution
+  for (int i = 0; i < num_col; ++i)
+    highs_solution.col_dual[i] = -highs_solution.col_dual[i];
+  for (int i = 0; i < num_row; ++i)
+    highs_solution.row_dual[i] = -highs_solution.row_dual[i];
+  std::vector<double> y(highs_solution.row_dual);
+  std::vector<double> z(highs_solution.col_dual);
+  // Fix numerical issues
+  for (int i = 0; i < num_col; ++i){
+    if (std::fabs(x[i]) < 1e-6) x[i] = 0;
+    if (std::fabs(z[i]) < 1e-6) z[i] = 0;
+  }
+  for (int i = 0; i < num_row; ++i){
+    if (std::fabs(slack[i]) < 1e-6) slack[i] = 0;
+    if (std::fabs(y[i]) < 1e-6) y[i] = 0;
+  }
+  crashSimplexBasis_ = crashBasisSolver_.CrashSimplexBasisFromHighsBasis(&x[0], &slack[0],
+                                                    &y[0], &z[0]);
+  crashDroppedCols_ = crashBasisSolver_.CrashDroppedCols();
+  return crashSimplexBasis_;
+}
+
+std::vector<int64_t> GetDroppedColsFromCrashBasis(){
+  return crashDroppedCols_;
 }
 
 HighsStatus solveLpIpx(const HighsLp& lp, const HighsOptions& options,

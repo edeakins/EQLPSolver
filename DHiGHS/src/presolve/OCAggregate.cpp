@@ -164,7 +164,8 @@ void HighsOCAggregate::buildRhs(){
 }
 
 void HighsOCAggregate::buildFinalRhs(){
-    buildFinalRhsFromScratch(); // buildFinalRhsFromSolution();
+    // buildFinalRhsFromScratch(); 
+    buildFinalRhsFromSolution();
 }
 
 void HighsOCAggregate::buildRhsFromScratch(){
@@ -192,7 +193,30 @@ void HighsOCAggregate::buildFinalRhsFromScratch(){
 }
 
 void HighsOCAggregate::buildFinalRhsFromSolution(){
-
+    int i, r, pr, pclen;
+    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
+    for (i = numCol; i < numTot; ++i){
+        r = i - numCol;
+        pr = prow[i - numCol];
+        pclen = ep->len[ep->front[i]] + 1;
+        pv = (double)solution->row_value[pr]/pclen;
+        lb = olp->rowLower_[r];
+        ub = olp->rowUpper_[r];
+        lbDiff = std::fabs(pv - lb);
+        ubDiff = std::fabs(pv - ub);
+        if (ubDiff < tol){
+            elp->rowLower_[r] = ub;
+            elp->rowUpper_[r] = ub;
+        }
+        else if (lbDiff < tol){
+            elp->rowLower_[r] = lb;
+            elp->rowUpper_[r] = lb;
+        }
+        else{
+            elp->rowLower_[r] = lb;
+            elp->rowUpper_[r] = ub;
+        }
+    }
 }
 
 void HighsOCAggregate::buildBnds(){
@@ -203,7 +227,8 @@ void HighsOCAggregate::buildBnds(){
 }
 
 void HighsOCAggregate::buildFinalBnds(){
-    buildFinalBndsFromScratch(); // buildFinalBndsFromSolution();
+    // buildFinalBndsFromScratch(); 
+    buildFinalBndsFromSolution();
 }
 
 void HighsOCAggregate::buildBndsFromScratch(){
@@ -229,8 +254,30 @@ void HighsOCAggregate::buildFinalBndsFromScratch(){
 }
 
 void HighsOCAggregate::buildFinalBndsFromSolution(){
-
-}
+    int i, pc, c;
+    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
+    for (i = 0; i < numCol; ++i){
+        c = i;
+        pc = pcol[i];
+        pv = solution->col_value[pc];
+        ub = olp->colUpper_[c];
+        lb = olp->colLower_[c];
+        ubDiff = std::fabs(pv - ub);
+        lbDiff = std::fabs(pv - lb);
+        if (ubDiff < tol){
+            elp->colLower_[c] = ub;
+            elp->colUpper_[c] = ub;
+        }
+        else if (lbDiff < tol){
+            elp->colLower_[c] = lb;
+            elp->colUpper_[c] = lb;
+        }
+        else{
+            elp->colLower_[c] = lb;
+            elp->colUpper_[c] = ub;
+        }
+    }
+}   
 
 void HighsOCAggregate::buildResiduals(){
     if (!ep->level) return;
@@ -414,7 +461,7 @@ void HighsOCAggregate::buildFinalRowSolution(){
         ppv = solution->row_value[pr];
         pdv = solution->row_dual[pr];
         elpSolution->row_value[r] = (double)ppv/pclen;
-        elpSolution->row_dual[r] = (double)pdv/pclen;
+        elpSolution->row_dual[r] = pdv;// (double)pdv/pclen;
     }
 }
 

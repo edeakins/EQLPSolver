@@ -9,6 +9,8 @@
 #include <map>
 #include <unordered_map>
 #include <set>
+#include <cstdlib>
+#include <cmath>
 // #include <limits>
 #include "HighsLp.h"
 // #include "HStruct.h"

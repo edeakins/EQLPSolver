@@ -113,6 +113,13 @@ public:
                                    const double* y_start,
                                    const double* z_start);
 
+    std::vector<Int> CrashSimplexBasisFromHighsBasis(const double* x_start,
+                                   const double* s_start,
+                                   const double* y_start,
+                                   const double* z_start);
+                            
+    std::vector<Int> CrashDroppedCols();
+
 private:
     void InteriorPointSolve();
     void RunIPM();
