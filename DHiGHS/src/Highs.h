@@ -61,6 +61,7 @@ class Highs {
 
   void liftBasis();
   void liftBasisFinal();
+  void liftBasisExtendedFinal();
 
   void liftSolutionFinal();
   void liftSolutionExtended();

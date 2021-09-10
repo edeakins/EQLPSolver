@@ -119,6 +119,7 @@ public:
                                    const double* z_start);
                             
     std::vector<Int> CrashDroppedCols();
+    std::vector<Int> CrashReplacementCols();
 
 private:
     void InteriorPointSolve();

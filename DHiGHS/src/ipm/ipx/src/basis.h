@@ -200,6 +200,7 @@ public:
 
     std::vector<Int> ConstructBasisFromHighsBasis(const HighsBasis b, Info* info, const double* colscale);
     std::vector<Int> getDroppedBasicCols();
+    std::vector<Int> getReplacementBasisCols();
 
     // Estimates the smallest singular value of the basis matrix.
     double MinSingularValue() const;
@@ -239,6 +240,7 @@ private:
     // variables inserted into the basis (0 if the factorization was
     // nonsingular).
     Int AdaptToSingularFactorization();
+    Int AdaptToSingularFactorizationOC();
 
     // If possible, tightens the pivot tolerance for subsequent LU
     // factorizations. Returns true if the tolerance was tightened.
@@ -265,6 +267,7 @@ private:
     // @num_dropped: if not NULL, returns the # columns that were dropped from
     //               the basis matrix and replaced by unit columns.
     void CrashFactorize(Int* num_dropped);
+    void CrashFactorizeOC(Int* num_dropped);
 
     // Similar to ExchangeIfStable() but is guaranteed to exchange jb and jn.
     // If refactorization is required (either for speed or because the LU
@@ -292,6 +295,7 @@ private:
     const Model& model_;
     std::vector<Int> basis_;    // m column indices of AI
     std::vector<Int> droppedCols_;
+    std::vector<Int> replacementCols_;
 
     // For 0 <= j < n+m, map2basis_[j] is one of the following:
     //  -2:            variable is NONBASIC_FIXED

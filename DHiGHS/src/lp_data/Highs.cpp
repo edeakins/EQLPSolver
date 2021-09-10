@@ -365,45 +365,63 @@ HighsStatus Highs::run() {
     // Lift to final elp
     timer_.start(timer_.lift_clock);
     liftLpExtendedFinal();
-    liftBasisFinal();
+    liftBasisExtendedFinal();
     liftSolutionExtendedFinal();
     timer_.stop(timer_.lift_clock);
-    passModel(*alp_);
-    // Construct Crash Basis
-    std::vector<int64_t> crashBasis = ConstructCrashBasisForOC(hmos_[original_hmo].lp_, options_,
-			     *lpSymBasis_, *lpSymSolution_,
-			     hmos_[original_hmo].unscaled_model_status_,
-			     hmos_[original_hmo].unscaled_solution_params_);
-    std::vector<int64_t> crashDroppedCols = GetDroppedColsFromCrashBasis();
-    for (int i = 0; i < lpSymBasis_->col_status.size(); ++i)
-      lpSymBasis_->col_status[i] = HighsBasisStatus::NONBASIC;
-    for (int i = 0; i < lpSymBasis_->row_status.size(); ++i)
-      lpSymBasis_->row_status[i] = HighsBasisStatus::NONBASIC;
-    for (int i = 0; i < crashBasis.size(); ++i){
-      if (crashBasis[i] < alp_->numCol_)
-        lpSymBasis_->col_status[crashBasis[i]] = HighsBasisStatus::BASIC;
-      else 
-        lpSymBasis_->row_status[crashBasis[i] - alp_->numCol_] = HighsBasisStatus::BASIC;
-    }
-    for (int i = 0; i < crashDroppedCols.size(); ++i)
-      alp_->residuals_.push_back(crashDroppedCols[i]);
-    alp_->numResiduals_ = crashDroppedCols.size();
+    // passModel(*alp_);
+    // // Construct Crash Basis
+    // std::vector<int64_t> crashBasis = ConstructCrashBasisForOC(hmos_[original_hmo].lp_, options_,
+		// 	     *lpSymBasis_, *lpSymSolution_,
+		// 	     hmos_[original_hmo].unscaled_model_status_,
+		// 	     hmos_[original_hmo].unscaled_solution_params_);
+    // std::vector<int64_t> crashDroppedCols = GetDroppedColsFromCrashBasis();
+    // std::vector<int64_t> crashReplacmentCols = GetReplacementColsFromCrashBasis();
+    // // Set all variables to nonbasic
+    // for (int i = 0; i < lpSymBasis_->col_status.size(); ++i)
+    //   lpSymBasis_->col_status[i] = HighsBasisStatus::NONBASIC;
+    // for (int i = 0; i < lpSymBasis_->row_status.size(); ++i)
+    //   lpSymBasis_->row_status[i] = HighsBasisStatus::NONBASIC;
+    // // Set the basic slack variables
+    // for (int i = 0; i < crashBasis.size(); ++i){
+    //   if (crashBasis[i] > alp_->numCol_ - 1)
+    //     lpSymBasis_->row_status[crashBasis[i] - alp_->numCol_] = HighsBasisStatus::BASIC;
+    // }
+    // // Set the basic x variables
+    // for (int i = 0; i < crashBasis.size(); ++i){
+    //   if (crashBasis[i] < alp_->numCol_)
+    //     lpSymBasis_->col_status[crashBasis[i]] = HighsBasisStatus::BASIC;
+    // }
+    // // Swap in super basic x variables with corresponing r variables
+    // int residualCnt = 0;
+    // for (int i = 0; i < crashDroppedCols.size(); ++i){
+    //   int residual = agg_.residuals[crashDroppedCols[i]];
+    //   lpSymBasis_->col_status[crashDroppedCols[i]] = HighsBasisStatus::BASIC;
+    //   lpSymBasis_->col_status[residual] = HighsBasisStatus::NONBASIC;
+    //   alp_->colLower_[residual] = 0;
+    //   alp_->colUpper_[residual] = 0;
+    //   alp_->residuals_.push_back(residual);
+    //   residualCnt++;
+    // }
+    // alp_->numResiduals_ = residualCnt;
+    // for (int i = 0; i < crashDroppedCols.size(); ++i)
+    //   alp_->residuals_.push_back(crashDroppedCols[i]);
+    // alp_->numResiduals_ = crashDroppedCols.size();
     passModel(*alp_);
     setBasis(*lpSymBasis_);
     hmos_[solved_hmo].basis_ = basis_;
-    // Run primal solver on elp/alp
-    // passModel(*alp_);
-    // part_ = nep_.getPartition();
-    // alp_ = agg_.buildLp(part_, &alpBasis_, &alpSolution_);
-    // // Solve new lp
-    // passModel(*alp_);
+    // // Run primal solver on elp/alp
+    // // passModel(*alp_);
+    // // part_ = nep_.getPartition();
+    // // alp_ = agg_.buildLp(part_, &alpBasis_, &alpSolution_);
+    // // // Solve new lp
+    // // passModel(*alp_);
     options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
     timer_.start(timer_.alp_solve_clock);
     call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
     timer_.stop(timer_.alp_solve_clock);
     return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
-    alpSolution_ = hmos_[original_hmo].solution_;
-    alpBasis_ = hmos_[original_hmo].basis_;
+    // alpSolution_ = hmos_[original_hmo].solution_;
+    // alpBasis_ = hmos_[original_hmo].basis_;
     // // Lift to elp
     // timer_.start(timer_.lift_clock);
     // liftLp(alpBasis_, alpSolution_);
@@ -708,12 +726,17 @@ void Highs::liftLpExtendedFinal(){
 }
 
 void Highs::liftBasis(){
-  agg_.buildBasis(false);
+  agg_.buildBasis(false, false);
   lpSymBasis_ = agg_.getBasis();
 }
 
 void Highs::liftBasisFinal(){
-  agg_.buildBasis(true);
+  agg_.buildBasis(true, false);
+  lpSymBasis_ = agg_.getBasis();
+}
+
+void Highs::liftBasisExtendedFinal(){
+  agg_.buildBasis(true, true);
   lpSymBasis_ = agg_.getBasis();
 }
 
@@ -1428,8 +1451,11 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
     alpSolution_ = hmos_[0].solution_;
     alpBasis_ = hmos_[0].basis_;
     liftLpExtendedFinal();
-    liftBasisFinal();
+    liftBasisExtendedFinal();
     liftSolutionExtendedFinal();
+    // liftLpFinal();
+    // liftBasisFinal();
+    // liftSolutionFinal();
     HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
 		      "Starting Crossover From Symmetric Solution...\n");
     passModel(*alp_);

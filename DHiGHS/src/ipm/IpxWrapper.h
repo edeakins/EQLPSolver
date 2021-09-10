@@ -26,6 +26,7 @@
 
 std::vector<int64_t> crashSimplexBasis_;
 std::vector<int64_t> crashDroppedCols_;
+std::vector<int64_t> crashReplacementCols_;
 
 IpxStatus fillInIpxData(const HighsLp& lp, ipx::Int& num_col,
                         std::vector<double>& obj, std::vector<double>& col_lb,
@@ -220,7 +221,7 @@ HighsStatus CrossoverFromSymmetricSolution(const HighsLp& lp, const HighsOptions
   if (result != IpxStatus::OK) return HighsStatus::Error;
   lps.LoadModel(num_col, &objective[0], &col_lb[0], &col_ub[0], num_row,
                     &Ap[0], &Ai[0], &Av[0], &rhs[0], &constraint_type[0], num_residuals);
-  if (&highs_basis) lps.LoadBasis(highs_basis);
+  if (highs_basis.numCol_) lps.LoadBasis(highs_basis);
   // Call crossover from given (interior) solution
   // Build slacks and set in bounds
   std::vector<double> slack(rhs);
@@ -343,11 +344,16 @@ std::vector<int64_t> ConstructCrashBasisForOC(const HighsLp& lp, const HighsOpti
   crashSimplexBasis_ = crashBasisSolver_.CrashSimplexBasisFromHighsBasis(&x[0], &slack[0],
                                                     &y[0], &z[0]);
   crashDroppedCols_ = crashBasisSolver_.CrashDroppedCols();
+  crashReplacementCols_ = crashBasisSolver_.CrashReplacementCols();
   return crashSimplexBasis_;
 }
 
 std::vector<int64_t> GetDroppedColsFromCrashBasis(){
   return crashDroppedCols_;
+}
+
+std::vector<int64_t> GetReplacementColsFromCrashBasis(){
+  return crashReplacementCols_;
 }
 
 HighsStatus solveLpIpx(const HighsLp& lp, const HighsOptions& options,

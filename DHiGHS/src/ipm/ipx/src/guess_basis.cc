@@ -244,23 +244,32 @@ std::vector<Int> GuessBasisOC(const Control& control, const Model& model,
     std::vector<Int> basis;
     int numBasic = 0;
     int rIdx, sIdx, xIdx;
-    xIdx = 0;
-    while (numBasic <= m && xIdx < n){
-        if (b.col_status[xIdx] == HighsBasisStatus::BASIC){
-            basis.push_back(xIdx++);
-            numBasic++;
-        }
-    }
     rIdx = n;
-    while (numBasic++ <= m && rIdx < r)
+    while (numBasic < m && rIdx < r){
         basis.push_back(rIdx++);
-    sIdx = 0;
-    while (numBasic <= m){
-        if (b.row_status[sIdx] == HighsBasisStatus::BASIC){
-            basis.push_back(r + sIdx++);
+        numBasic++;
+    }
+    xIdx = 0;
+    while (numBasic < m && xIdx < n){
+        if (b.col_status[xIdx] == HighsBasisStatus::BASIC){
+            basis.push_back(xIdx);
             numBasic++;
         }
+        xIdx++;
     }
+    sIdx = 0;
+    while (numBasic < m && sIdx < m){
+        if (b.row_status[sIdx] == HighsBasisStatus::BASIC){
+            basis.push_back(r + sIdx);
+            numBasic++;
+        }
+        sIdx++;
+    }
+    // rIdx = n;
+    // while (numBasic < m && rIdx < r){
+    //     basis.push_back(rIdx++);
+    //     numBasic++;
+    // }
     return basis;
 }
 

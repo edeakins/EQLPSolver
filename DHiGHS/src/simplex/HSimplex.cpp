@@ -2703,7 +2703,7 @@ void computePrimalInfeasible(HighsModelObject& highs_model_object,
 	max_nonbasic_primal_infeasibility =
 	  std::max(primal_infeasibility, max_nonbasic_primal_infeasibility);
 	sum_nonbasic_primal_infeasibilities += primal_infeasibility;
-  // std::cout << "NONBASIC INFEAS\n" << std::endl;
+  // std::cout << "\nNONBASIC INFEAS" << std::endl;
   // std::cout << "col: " << i << std::endl;
   // std::cout << "current value: " << value << std::endl;
   // std::cout << "lower: " << lower << std::endl;
@@ -2713,8 +2713,11 @@ void computePrimalInfeasible(HighsModelObject& highs_model_object,
       }
     }
   }
+  // std::cin.get();
   for (int i = 0; i < simplex_lp.numRow_; i++) {
     // Basic variable
+    // if (simplex_basis.basicIndex_[i] == 0) 
+      // std::cin.get();
     double value = simplex_info.baseValue_[i];
     double lower = simplex_info.baseLower_[i];
     double upper = simplex_info.baseUpper_[i];
@@ -2725,7 +2728,7 @@ void computePrimalInfeasible(HighsModelObject& highs_model_object,
       max_basic_primal_infeasibility =
 	std::max(primal_infeasibility, max_basic_primal_infeasibility);
       sum_basic_primal_infeasibilities += primal_infeasibility;
-      // std::cout << "BASIC INFEAS\n" << std::endl; 
+      // std::cout << "\nBASIC INFEAS" << std::endl; 
       // std::cout << "col: " << simplex_basis.basicIndex_[i] << std::endl;
       // std::cout << "current value: " << value << std::endl;
       // std::cout << "lower: " << lower << std::endl;
@@ -2734,6 +2737,7 @@ void computePrimalInfeasible(HighsModelObject& highs_model_object,
       // std::cin.get();
     }
   }
+  // std::cin.get();
   int num_primal_infeasibilities =
       num_nonbasic_primal_infeasibilities + num_basic_primal_infeasibilities;
   double max_primal_infeasibility = std::max(max_nonbasic_primal_infeasibility,

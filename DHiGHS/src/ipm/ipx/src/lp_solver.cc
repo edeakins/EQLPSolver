@@ -642,11 +642,26 @@ std::vector<Int> LpSolver::CrashSimplexBasisFromHighsBasis(const double* x_start
         basicCols = basis_->ConstructBasisFromHighsBasis(hBasis_, &info_, &colweight[0]);
         info_.time_starting_basis += timer.Elapsed();
     }
+    RunCrossover();
+    PrintSummary();
+    std::vector<double> xb(n), yb(m), sb(m), zb(n);
+    std::vector<Int> cbas(m), vbas(n);
+    // GetBasis(&cbas[0], &vbas[0]);
+    GetBasicSolution(&xb[0], &sb[0], &yb[0], &zb[0],
+                     &cbas[0], &vbas[0]);
+    for (int i = 0; i < n; ++i){
+        if (vbas[i] != 0 && i >= 792)
+            control_.Debug() << "r_" << i << " not basic and shoudl be \n";
+    }
     return basicCols;
 }
 
 std::vector<Int> LpSolver::CrashDroppedCols(){
     return basis_->getDroppedBasicCols(); 
+}
+
+std::vector<Int> LpSolver::CrashReplacementCols(){
+    return basis_->getReplacementBasisCols();
 }
 
 void LpSolver::ClearSolution(){

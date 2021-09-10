@@ -278,6 +278,9 @@ void HQPrimal::solvePhase3() {
   row_ep.setup(solver_num_row);
   row_ap.setup(solver_num_col);
 
+  // Setup local dep graph vectors
+  depStart.resize(workHMO.lp_.numResiduals_ + 1);
+
   ph1SorterR.reserve(solver_num_row);
   ph1SorterT.reserve(solver_num_row);
 
@@ -652,6 +655,23 @@ void HQPrimal::primalRebuild() {
   simplex_lp_status.has_fresh_rebuild = true;
 }
 
+void HQPrimal::buildDependencyGraph(int slack){
+  depInd.push_back(slack);
+}
+
+void HQPrimal::computeReduceResiduals(int col){
+  col_aq.clear();
+  col_aq.packFlag = true;
+  workHMO.matrix_.collect_aj(col_aq, col, 1);
+  workHMO.factor_.ftran(col_aq, analysis->col_aq_density);
+  for (int i = 0; i < col_aq.count; ++i){
+    if (col_aq.index[i] < workHMO.lp_.numRow_ - workHMO.lp_.numResiduals_ && col_aq.array[i] && 
+        workHMO.basis_.row_status[col_aq.index[i]] == HighsBasisStatus::BASIC)
+      buildDependencyGraph(col_aq.index[i] + workHMO.lp_.numCol_);
+  }
+  depStart[col - workHMO.lp_.numCol_ + workHMO.lp_.numResiduals_ + 1] = depInd.size();
+}
+
 void HQPrimal::unfold() {
   ++workHMO.lp_.masterIter;
   fTranTime = 0;
@@ -677,14 +697,11 @@ void HQPrimal::unfold() {
   // double init = timer.readRunHighsClock();
   liftStart = true;
   primalRebuild();
+  for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
+    computeReduceResiduals(workHMO.lp_.residuals_[i]);
+  }
   // buildTableau();
   liftStart = false;
-  // double rebTime = timer.readRunHighsClock() - init;
-  // workHMO.lp_.invertTime = rebTime;
-  // double cRowTime = 0;
-  // double uTime = 0;
-  // std::cout << "REBUILD TIME: " << rebTime << std::endl;
-  // std::cout << "START PIVOTS" << std::endl;
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_;
   // init = timer.readRunHighsClock();
   int cnt = 0;

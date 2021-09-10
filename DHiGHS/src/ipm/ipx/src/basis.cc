@@ -423,6 +423,10 @@ std::vector<Int> Basis::getDroppedBasicCols(){
     return droppedCols_;
 }
 
+std::vector<Int> Basis::getReplacementBasisCols(){
+    return replacementCols_;
+}
+
 double Basis::MinSingularValue() const {
     const Int m = model_.rows();
     Vector v(m);
@@ -517,6 +521,33 @@ Int Basis::AdaptToSingularFactorization() {
         Int i = rowperm[k];
         Int jb = basis_[p];
         Int jn = n+i;
+        // replacementCols_.push_back(jn);
+        assert(map2basis_[jn] < 0);
+        basis_[p] = jn;
+        map2basis_[jn] = p; // now BASIC at position p
+        if (jb >= 0)
+            map2basis_[jb] = -1; // now NONBASIC
+    }
+    return droppedCols_.size();
+}
+
+Int Basis::AdaptToSingularFactorizationOC() {
+    const Int m = model_.rows();
+    const Int n = model_.cols();
+    std::vector<Int> rowperm(m), colperm(m), dropped(m);
+
+    lu_->GetFactors(nullptr, nullptr, rowperm.data(), colperm.data(),
+                    &dropped);
+    for (Int k : dropped) {
+        // Column p of the basis matrix was replaced by the i-th unit
+        // column. Insert the corresponding slack variable jn into
+        // position p of the basis.
+        Int p = colperm[k];
+        Int i = rowperm[k];
+        Int jb = basis_[p];
+        Int jn = n+i;
+        replacementCols_.push_back(jn);
+        droppedCols_.push_back(jb);
         assert(map2basis_[jn] < 0);
         basis_[p] = jn;
         map2basis_[jn] = p; // now BASIC at position p
@@ -592,7 +623,7 @@ void Basis::CrashBasisOC(const HighsBasis b) {
         map2basis_[basis_[k]] = k;
     }
     Int num_dropped = 0;
-    CrashFactorize(&num_dropped);
+    CrashFactorizeOC(&num_dropped);
     control_.Debug()
         << Textline("Number of columns dropped from guessed basis:")
         << num_dropped << '\n';
@@ -699,6 +730,46 @@ void Basis::CrashFactorize(Int* num_dropped) {
     Int ndropped = 0;
     if (flag & 2)
         ndropped = AdaptToSingularFactorization();
+    if (num_dropped)
+        *num_dropped = ndropped;
+
+    time_factorize_ += timer.Elapsed();
+    factorization_is_fresh_ = true;
+
+    #ifndef NDEBUG
+    // All empty slots must have been replaced by slack variables.
+    for (Int i = 0; i < m; i++)
+        assert(basis_[i] >= 0);
+    #endif
+}
+
+void Basis::CrashFactorizeOC(Int* num_dropped) {
+    const Int m = model_.rows();
+    const SparseMatrix& AI = model_.AI();
+    Timer timer;
+
+    // Build column pointers for passing to LU factorization. A negative index
+    // in basis_ means an empty slot. This option is kept for use by the crash
+    // procedure, if an incomplete basis was constructed. The zero column in the
+    // basis matrix causes a singularity in the LU factorization, so that the
+    // empty slot will be replaced by a slack variable below.
+    std::vector<Int> begin(m), end(m);
+    for (Int i = 0; i < m; i++) {
+        if (basis_[i] >= 0) {
+            begin[i] = AI.begin(basis_[i]);
+            end[i] = AI.end(basis_[i]);
+        } else {
+            begin[i] = 0;
+            end[i] = 0;
+        }
+    }
+    Int flag = lu_->Factorize(begin.data(), end.data(), AI.rowidx(),
+                              AI.values(), true);
+    num_factorizations_++;
+    fill_factors_.push_back(lu_->fill_factor());
+    Int ndropped = 0;
+    if (flag & 2)
+        ndropped = AdaptToSingularFactorizationOC();
     if (num_dropped)
         *num_dropped = ndropped;
 
@@ -843,6 +914,9 @@ void Basis::PivotFreeVariablesIntoBasis(const double* colweights, Info* info) {
         }
         control_.IntervalLog()
             << " " << remaining.size() << " free variables remaining\n";
+        // control_.Debug()
+        //     << Textline("Number of free variables remaining:")
+        //     << remaining.size() << '\n';
     }
     control_.Debug()
         << Textline("Number of free variables swapped for stability:")

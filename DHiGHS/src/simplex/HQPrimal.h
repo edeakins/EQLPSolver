@@ -48,6 +48,8 @@ class HQPrimal {
   void primalRebuild();
   void primalChooseColumn();
   void unfold();
+  void computeReduceResiduals(int i);
+  void buildDependencyGraph(int slack);
   void primalChooseRow();
   void primalUpdate();
 
@@ -117,6 +119,10 @@ class HQPrimal {
   HVector row_ep;
   HVector row_ap;
   HVector col_aq;
+
+  // Storage for dependency graph
+  vector<int> depStart;
+  vector<int> depInd;
 
   // Artificial variable tracker
   vector<bool> pivotArtificial;

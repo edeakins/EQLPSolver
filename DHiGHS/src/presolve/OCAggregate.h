@@ -44,7 +44,7 @@ public:
     void buildRowSolution();
     void buildResidualColSolution();
     void buildResidualRowSolution();
-    void buildBasis(bool finish);
+    void buildBasis(bool finish, bool extended);
     void buildColBasis();
     void buildRowBasis();
     void buildResidualColBasis();
@@ -86,8 +86,8 @@ public:
     std::vector<int> rowF;
     std::vector<int> rowNonbasic;
     std::vector<int> parent;
-    std::vector<int> parentStart;
     std::vector<int> child;
+    std::vector<int> residuals;
 };
 
 #endif
