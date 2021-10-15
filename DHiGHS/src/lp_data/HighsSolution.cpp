@@ -363,10 +363,10 @@ void getPrimalDualInfeasibilitiesAndErrorsFromHighsBasicSolution(const HighsLp& 
     sum_off_bound_nonbasic += off_bound_nonbasic;
     if (primal_infeasibility > primal_feasibility_tolerance){
       num_primal_infeasibilities++;
-      // std::cout << "col: " << iCol << std::endl;
-      // std::cout << "infeasibility: " << primal_infeasibility << std::endl;
-      // std::cout << "lower: " << lower << std::endl;
-      // std::cout << "upper: " << upper << std::endl;
+      std::cout << "col: " << iCol << std::endl;
+      std::cout << "infeasibility: " << primal_infeasibility << std::endl;
+      std::cout << "lower: " << lower << std::endl;
+      std::cout << "upper: " << upper << std::endl;
     }
     max_primal_infeasibility =
         std::max(primal_infeasibility, max_primal_infeasibility);

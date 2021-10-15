@@ -75,6 +75,7 @@ class HighsLp {
   // Model data
   int numCol_ = 0;
   int numRow_ = 0;
+  int numDegenSlack_ = 0;
   int numInt_ = 0;
   int nnz_ = 0;
   int numResiduals_ = 0;
@@ -88,6 +89,7 @@ class HighsLp {
   std::vector<double> rowLower_;
   std::vector<double> rowUpper_;
   std::vector<int> residuals_;
+  std::vector<int> degenSlack_;
   int foldSolveTime;
 
 

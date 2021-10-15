@@ -30,7 +30,7 @@ public:
     /* If necessary, call run to discrete without intermediary code */
     void runToDiscrete();
     /* Calls isolation of nonsingleton class and new refinement round */
-    void isolate();
+    bool isolate();
     /* Refinement algorithm Berkholz 2017 */
     bool refine();
     /* Refine cell */
@@ -50,8 +50,8 @@ public:
     /* Used to maybe split when there are 0 wght frequencies */
     bool possiblySplit(int cf, int ff);
     /* Allocate for all partition stuff */
-    void allocatePartition();
-    void allocatePartition(HighsLp* lp);
+    bool allocatePartition();
+    bool allocatePartition(HighsLp* lp);
     /* Translate lp into bipartite graph */
     void lp2Graph();
     /* Fix adj middle positions */

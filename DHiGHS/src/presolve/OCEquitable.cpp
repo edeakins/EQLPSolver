@@ -9,7 +9,7 @@ void HighsOCEquitablePartition::runToDiscrete(){
     while (!discrete()) isolate();
 }
 
-void HighsOCEquitablePartition::isolate(){
+bool HighsOCEquitablePartition::isolate(){
     // int i, targ;
     // for (i = 0; i < g->numTot_; i += len[i] + 1){
     //     if (len[i]){
@@ -33,6 +33,8 @@ void HighsOCEquitablePartition::isolate(){
     swapLabels(min, back);
     split(targ, back);
     refine();
+    if (discrete()) return true;
+    else return false;
 }
 
 bool HighsOCEquitablePartition::refine(){
@@ -328,7 +330,7 @@ bool HighsOCEquitablePartition::possiblySplit(int cf, int ff){
     return cf == ff ? true : split(cf, ff);
 }
 
-void HighsOCEquitablePartition::allocatePartition(){
+bool HighsOCEquitablePartition::allocatePartition(){
     // Convert LP to sparse graph rep
     lp2Graph();
     int i, j, max = 0, maxSetSize = 0, idx = 0;
@@ -432,9 +434,11 @@ void HighsOCEquitablePartition::allocatePartition(){
     // front.assign(partition->front.begin(), partition->front.end());
     // len.assign(partition->len.begin(), partition->len.end());
     refine();
+    if (discrete()) return true;
+    return false;
 }
 
-void HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
+bool HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     // Convert LP to sparse graph rep
     originalLp = lp;
     lp2Graph();
@@ -538,6 +542,8 @@ void HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     // front.assign(partition->front.begin(), partition->front.end());
     // len.assign(partition->len.begin(), partition->len.end());
     refine();
+    if (discrete()) return true;
+    return false;
 }
 
 void HighsOCEquitablePartition::lp2Graph(){

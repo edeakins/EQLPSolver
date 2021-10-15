@@ -344,10 +344,17 @@ HighsStatus Highs::run() {
   //  fflush(stdout);
   // writeModel("olp.lp");
   originalLp = lp_;
+  // Count total number of r pivots that could be done
+  int possibleRPivots = 0;
+  // Count total number of actual r pivots done
+  int actualRPivots = 0;
+  // Count total pivots (ALP and all R pivots)
+  int totalPivots = 0;
   if (options_.aggregate == on_string && options_.solver != ipm_sym_string){
     // Compute equitable partition
     timer_.start(timer_.equipart_clock);
-    partitonLp();
+    partitionLp();
+    possibleRPivots = originalLp.numCol_ - part_->ncsplits;
     timer_.stop(timer_.equipart_clock);
     // Initial Aggregate
     timer_.start(timer_.fold_clock);
@@ -359,69 +366,66 @@ HighsStatus Highs::run() {
     call_status = runLpSolver(hmos_[solved_hmo], "Solving ALP");
     timer_.stop(timer_.alp_solve_clock);
     return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
+    totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
     // Record basis and solution
     alpSolution_ = hmos_[original_hmo].solution_;
     alpBasis_ = hmos_[original_hmo].basis_;
-    // Lift to final elp
+    // refine partition
+    timer_.start(timer_.equipart_clock);
+    refinePartitionFinal();
+    timer_.stop(timer_.equipart_clock);
+    // std::cout << "Refine done" << std::endl;
+    // std::cin.get();
+    // lift to next elp
     timer_.start(timer_.lift_clock);
-    liftLpExtendedFinal();
-    liftBasisExtendedFinal();
-    liftSolutionExtendedFinal();
+    liftLpExtended();
+    liftBasis();
     timer_.stop(timer_.lift_clock);
-    // passModel(*alp_);
-    // // Construct Crash Basis
-    // std::vector<int64_t> crashBasis = ConstructCrashBasisForOC(hmos_[original_hmo].lp_, options_,
-		// 	     *lpSymBasis_, *lpSymSolution_,
-		// 	     hmos_[original_hmo].unscaled_model_status_,
-		// 	     hmos_[original_hmo].unscaled_solution_params_);
-    // std::vector<int64_t> crashDroppedCols = GetDroppedColsFromCrashBasis();
-    // std::vector<int64_t> crashReplacmentCols = GetReplacementColsFromCrashBasis();
-    // // Set all variables to nonbasic
-    // for (int i = 0; i < lpSymBasis_->col_status.size(); ++i)
-    //   lpSymBasis_->col_status[i] = HighsBasisStatus::NONBASIC;
-    // for (int i = 0; i < lpSymBasis_->row_status.size(); ++i)
-    //   lpSymBasis_->row_status[i] = HighsBasisStatus::NONBASIC;
-    // // Set the basic slack variables
-    // for (int i = 0; i < crashBasis.size(); ++i){
-    //   if (crashBasis[i] > alp_->numCol_ - 1)
-    //     lpSymBasis_->row_status[crashBasis[i] - alp_->numCol_] = HighsBasisStatus::BASIC;
-    // }
-    // // Set the basic x variables
-    // for (int i = 0; i < crashBasis.size(); ++i){
-    //   if (crashBasis[i] < alp_->numCol_)
-    //     lpSymBasis_->col_status[crashBasis[i]] = HighsBasisStatus::BASIC;
-    // }
-    // // Swap in super basic x variables with corresponing r variables
-    // int residualCnt = 0;
-    // for (int i = 0; i < crashDroppedCols.size(); ++i){
-    //   int residual = agg_.residuals[crashDroppedCols[i]];
-    //   lpSymBasis_->col_status[crashDroppedCols[i]] = HighsBasisStatus::BASIC;
-    //   lpSymBasis_->col_status[residual] = HighsBasisStatus::NONBASIC;
-    //   alp_->colLower_[residual] = 0;
-    //   alp_->colUpper_[residual] = 0;
-    //   alp_->residuals_.push_back(residual);
-    //   residualCnt++;
-    // }
-    // alp_->numResiduals_ = residualCnt;
-    // for (int i = 0; i < crashDroppedCols.size(); ++i)
-    //   alp_->residuals_.push_back(crashDroppedCols[i]);
-    // alp_->numResiduals_ = crashDroppedCols.size();
+    // Pass new elp
     passModel(*alp_);
     setBasis(*lpSymBasis_);
+    // std::cout << "set basis done" << std::endl;
+    // std::cin.get();
     hmos_[solved_hmo].basis_ = basis_;
-    // // Run primal solver on elp/alp
-    // // passModel(*alp_);
-    // // part_ = nep_.getPartition();
-    // // alp_ = agg_.buildLp(part_, &alpBasis_, &alpSolution_);
-    // // // Solve new lp
-    // // passModel(*alp_);
     options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
-    timer_.start(timer_.alp_solve_clock);
+    // std::string itercnt = std::string(cnt);
+    writeModel("../../DOKSmps/codbt021.lp");
+    timer_.start(timer_.elp_solve_clock);
     call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
-    timer_.stop(timer_.alp_solve_clock);
-    return_status = interpretCallStatus(call_status, return_status, "runLpSolver");
-    // alpSolution_ = hmos_[original_hmo].solution_;
-    // alpBasis_ = hmos_[original_hmo].basis_;
+    timer_.stop(timer_.elp_solve_clock);
+    return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
+    actualRPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    // Lift to final elp
+    // // Start lift loop
+    // int cnt = 1;
+    // while (!discrete){
+    //   // refine partition
+    //   timer_.start(timer_.equipart_clock);
+    //   refinePartition();
+    //   timer_.stop(timer_.equipart_clock);
+    //   // lift to next elp
+    //   timer_.start(timer_.lift_clock);
+    //   liftLpExtended();
+    //   liftBasis();
+    //   timer_.stop(timer_.lift_clock);
+    //   // Pass new elp
+    //   passModel(*alp_);
+    //   setBasis(*lpSymBasis_);
+    //   hmos_[solved_hmo].basis_ = basis_;
+    //   options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
+    //   // std::string itercnt = std::string(cnt);
+    //   writeModel("../../DOKSmps/codbt021.lp");
+    //   timer_.start(timer_.elp_solve_clock);
+    //   call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
+    //   timer_.stop(timer_.elp_solve_clock);
+    //   return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
+    //   actualRPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    //   totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    //   alpSolution_ = hmos_[original_hmo].solution_;
+    //   alpBasis_ = hmos_[original_hmo].basis_;
+    //   ++cnt;
+    // }
     // // Lift to elp
     // timer_.start(timer_.lift_clock);
     // liftLp(alpBasis_, alpSolution_);
@@ -440,7 +444,7 @@ HighsStatus Highs::run() {
   else if (options_.aggregate == on_string && options_.solver == ipm_sym_string){
     // Compute equitable parititon from original lp
     timer_.start(timer_.equipart_clock);
-    partitonLp();
+    partitionLp();
     timer_.stop(timer_.equipart_clock);
     // Fold original lp
     timer_.start(timer_.fold_clock);
@@ -677,9 +681,16 @@ HighsStatus Highs::run() {
 
   // double lp_solve_final_time = timer_.readRunHighsClock();
   HighsPrintMessage(options_.output, options_.message_level, ML_MINIMAL,
-		    "Postsolve  : %d\n", postsolve_iteration_count);
+		    "Postsolve            : %d\n", postsolve_iteration_count);
   HighsPrintMessage(options_.output, options_.message_level, ML_MINIMAL,
-		    "Time       : %0.3g\n", runTime);
+		    "Time                 : %0.3g\n", runTime);
+  // HighsPrintMessage(options_.output, options_.message_level, ML_MINIMAL,
+  //       "Possible R Piots : %0.3g\n", possibleRPivots);
+  // HighsPrintMessage(options_.output, options_.message_level, ML_MINIMAL,
+  //       "Actual R Piots   : %0.3g\n", actualRPivots);     
+  std::cout << "Possible R Pivots    : " << possibleRPivots << std::endl;
+  std::cout << "Actual R Pivots      : " << actualRPivots << std::endl;
+  std::cout << "Total Simplex Pivots : " << totalPivots << std::endl;
   // totUnfoldTime_ += (lp_solve_final_time - initial_time);
   // totIter_ += hmos_[solved_hmo].unscaled_solution_params_.simplex_iteration_count;
   /* Determin whether to write time info to output file and reduction
@@ -696,9 +707,19 @@ HighsStatus Highs::run() {
 }
 
 // Compute equitable partition
-void Highs::partitonLp(){
+void Highs::partitionLp(){
   // ep_.setUp(lp, options_.model_file.c_str());
-  nep_.allocatePartition(&originalLp);
+  discrete = nep_.allocatePartition(&originalLp);
+  part_ = nep_.getPartition();
+}
+
+void Highs::refinePartition(){
+  discrete = nep_.isolate();
+  part_ = nep_.getPartition();
+}
+
+void Highs::refinePartitionFinal(){
+  nep_.runToDiscrete();
   part_ = nep_.getPartition();
 }
 

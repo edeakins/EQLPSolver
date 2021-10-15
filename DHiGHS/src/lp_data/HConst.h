@@ -18,6 +18,7 @@
 
 const int HIGHS_CONST_I_INF = 2147483647;  // 32767;
 const double HIGHS_CONST_INF = 1e200;
+const double HIGHS_OCMATCHING_TINY = 1e-6;
 const double HIGHS_CONST_TINY = 1e-14;
 const double HIGHS_CONST_ZERO = 1e-50;
 const std::string off_string = "off";

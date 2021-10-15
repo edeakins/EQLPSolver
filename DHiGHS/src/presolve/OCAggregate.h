@@ -3,6 +3,7 @@
 
 // Includes
 #include <string>
+#include <set>
 #include "HighsLp.h"
 #include "OCEquitable.h"
 
@@ -61,6 +62,7 @@ public:
     HighsLp *elp; 
     HighsLp* olp;
     OCpartition* ep;
+    OCpartition epMinusOne;
     HighsBasis* basis;
     HighsBasis* elpBasis;
     HighsSolution* solution;
@@ -72,6 +74,7 @@ public:
     int nnz;
     int numResiduals;
     int numTotResiduals;
+    int degenCnt = 0;
     std::vector<int> col;
     std::vector<int> colrep;
     std::vector<int> pcol;
@@ -88,6 +91,10 @@ public:
     std::vector<int> parent;
     std::vector<int> child;
     std::vector<int> residuals;
+    std::vector<int> degenSlack;
+    std::vector<bool> degenRow;
+    std::vector<bool> finalRowRep;
+    std::set<std::pair<int, int> > brokenPairs;
 };
 
 #endif

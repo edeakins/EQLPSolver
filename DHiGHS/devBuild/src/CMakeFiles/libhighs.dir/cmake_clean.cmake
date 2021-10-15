@@ -34,6 +34,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o"
   "CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o"
   "CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o"
+  "CMakeFiles/libhighs.dir/presolve/hopcroftKarp.cpp.o"
   "CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o"
   "CMakeFiles/libhighs.dir/simplex/HDual.cpp.o"
   "CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o"

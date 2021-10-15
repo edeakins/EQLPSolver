@@ -24,6 +24,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../src/test"
   "../src/util"
   "../src/equitable"
+  "../src/eigen"
   )
 
 # Targets to which this target links.

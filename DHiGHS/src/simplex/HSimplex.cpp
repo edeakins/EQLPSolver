@@ -122,6 +122,8 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
     initialiseSimplexLpRandomVectors(highs_model_object);
   }
   if (simplex_lp_status.has_basis) {
+    // std::cout << "simplex_lp_status.has_basis = " << simplex_lp_status.has_basis << std::endl;
+    // std::cin.get();
     // There is a simplex basis: it should be valid - since it's set internally - but check
     bool nonbasic_flag_ok = nonbasicFlagOk(highs_model_object.options_.logfile,
 					   simplex_lp, simplex_basis);
@@ -2809,8 +2811,16 @@ void computeDualInfeasible(HighsModelObject& highs_model_object,
       if (lower == upper && simplex_basis.nonbasicMove_[iVar]) num_fixed_variable_move_errors++;
     }
     if (dual_infeasibility > 0) {
-      if (dual_infeasibility >= scaled_dual_feasibility_tolerance)
+      if (dual_infeasibility >= scaled_dual_feasibility_tolerance){
 	num_dual_infeasibilities++;
+      // std::cout << "\nBASIC INFEAS DUAL" << std::endl; 
+      // std::cout << "col: " << iVar << std::endl;
+      // std::cout << "current value: " << dual << std::endl;
+      // std::cout << "lower: " << lower << std::endl;
+      // std::cout << "upper: " << upper << std::endl;
+      // std::cout << "primal_infeas: " << dual_infeasibility << std::endl;
+      // std::cin.get();
+      }
       max_dual_infeasibility =
 	std::max(dual_infeasibility, max_dual_infeasibility);
       sum_dual_infeasibilities += dual_infeasibility;

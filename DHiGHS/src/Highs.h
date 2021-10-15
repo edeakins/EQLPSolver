@@ -42,8 +42,9 @@ class Highs {
  /** @brief Calls for equitable partition setup and then 
   * calls saucy for equitable partition calculation
  */
-  void partitonLp();
+  void partitionLp();
   void refinePartition();
+  void refinePartitionFinal();
   
   /** @brief
    * Calls for aggregator setup and then aggregates original lp
@@ -91,6 +92,7 @@ class Highs {
   double totPartTime_ = 0;
   double totTime_ = 0;
   int totIter_ = 0;
+  bool discrete = false;
 
   /**
    * @brief reads in a model and initializes the HighsModelObject

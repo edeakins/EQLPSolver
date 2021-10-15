@@ -141,7 +141,8 @@ include_directories(
     ${HIGHS_SOURCE_DIR}/src/simplex
     ${HIGHS_SOURCE_DIR}/src/test
     ${HIGHS_SOURCE_DIR}/src/util
-    ${HIGHS_SOURCE_DIR}/src/equitable)
+    ${HIGHS_SOURCE_DIR}/src/equitable
+    ${HIGHS_SOURCE_DIR}/src/eigen)
 
 # set the correct rpath for OS X
 set(CMAKE_MACOSX_RPATH ON)

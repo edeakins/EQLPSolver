@@ -20,8 +20,12 @@
 #include "lp_data/HighsModelObject.h"
 #include "simplex/HSimplex.h"
 #include "simplex/HVector.h"
+#include "presolve/hopcroftKarp.h"
+#include "eigen/Eigen/Sparse"
+#include "eigen/Eigen/Dense"
 
 using std::pair;
+
 
 /**
  * @brief Phase 2 primal simplex solver for HiGHS
@@ -50,6 +54,16 @@ class HQPrimal {
   void unfold();
   void computeReduceResiduals(int i);
   void buildDependencyGraph(int slack);
+  void buildDependencyMatrix();
+  void buildSlackRSubMatrix();
+  void buildGeneralLU();
+  void buildMaximumMatching();
+  void matchingHeuristic();
+  void buildNewBasis();
+  void buildNewQRBasis();
+  void changeDegenSlack();
+  void appendLeftOverResiduals();
+  void buildInitialFactor();
   void primalChooseRow();
   void primalUpdate();
 
@@ -81,6 +95,7 @@ class HQPrimal {
 
   // Model pointer
   HighsModelObject& workHMO;
+  hopcroftKarp hK;
 
   int solver_num_col;
   int solver_num_row;
@@ -123,12 +138,39 @@ class HQPrimal {
   // Storage for dependency graph
   vector<int> depStart;
   vector<int> depInd;
+  vector<int> depMatStart;
+  vector<int> depMatIndex;
+  vector<int> depMatValue;
+  vector<Eigen::Triplet<double> > spTriplets;
+  Eigen::SparseMatrix<double> spDepMat;
+  Eigen::SparseMatrix<double> spSubMat;
+  // Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int> > LU;
+  Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int> > QR;
+  Eigen::FullPivLU<Eigen::SparseMatrix<double> > LU;
+  const int* spSubMatQRPerm;
+  std::vector<int> spSubMatRowPerm;
+  std::vector<int> spSubMatRowUnperm;
+  std::vector<int> spSubMatColPerm;
+  std::vector<int> spSubMatColUnperm;
+  int rowPerms = -1;
+  int colPerms = -1;
+  int spSubMatRank;
+  int spSubMatCols;
+  matching swap;
+  HFactor crashBasis;
 
   // Artificial variable tracker
   vector<bool> pivotArtificial;
 
   double row_epDensity;
   double columnDensity;
+  bool degeneratePivot;
+  std::vector<bool> skipRow;
+  std::vector<bool> rColPaired;
+  std::vector<bool> slackPaired;
+  std::vector<bool> rInNeighborhood;
+  std::vector<int> rColPairing;
+  std::vector<int> slackPairing;
 };
 
 #endif /* SIMPLEX_HQPRIMAL_H_ */
