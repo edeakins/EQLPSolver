@@ -69,6 +69,7 @@ enum iClockSimplex {
   Chuzc4Clock,         //!< CHUZC - Dual stage 4
   DevexWtClock,        //!< Calculation of Devex weight of entering variable
   FtranClock,          //!< FTRAN - pivotal column
+  FtranPreClock,
   BtranClock,          //!< BTRAN
   PriceClock,          //!< PRICE
   FtranDseClock,       //!< FTRAN for DSE weights
@@ -162,6 +163,7 @@ class SimplexTimer {
     simplex_info.clock_[Chuzc4Clock] = timer.clock_def("CHUZC4", "CC4");
     simplex_info.clock_[DevexWtClock] = timer.clock_def("DEVEX_WT", "DWT");
     simplex_info.clock_[FtranClock] = timer.clock_def("FTRAN", "COL");
+    simplex_info.clock_[FtranPreClock] = timer.clock_def("FTRANPRE", "COLPRE");
     simplex_info.clock_[BtranClock] = timer.clock_def("BTRAN", "REP");
     simplex_info.clock_[PriceClock] = timer.clock_def("PRICE", "RAP");
     simplex_info.clock_[FtranDseClock] = timer.clock_def("FTRAN_DSE", "DSE");

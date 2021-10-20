@@ -56,7 +56,7 @@ class HQPrimal {
   void buildDependencyGraph(int slack);
   void buildDependencyMatrix();
   void buildSlackRSubMatrix();
-  void buildGeneralLU();
+  void buildGeneralQR();
   void buildMaximumMatching();
   void matchingHeuristic();
   void buildNewBasis();
@@ -135,7 +135,7 @@ class HQPrimal {
   HVector row_ap;
   HVector col_aq;
 
-  // Storage for dependency graph
+  // Eigen Stuff for factorization
   vector<int> depStart;
   vector<int> depInd;
   vector<int> depMatStart;
@@ -152,12 +152,19 @@ class HQPrimal {
   std::vector<int> spSubMatRowUnperm;
   std::vector<int> spSubMatColPerm;
   std::vector<int> spSubMatColUnperm;
+  std::vector<int> rColSwapped;
   int rowPerms = -1;
   int colPerms = -1;
   int spSubMatRank;
   int spSubMatCols;
   matching swap;
-  HFactor crashBasis;
+  // New method using highs LU factorization
+  std::vector<int> rReduceAstart;
+  std::vector<int> rReduceAindex;
+  std::vector<int> rReduceAvalue;
+  std::vector<int> rSwapBasis;
+  HFactor rReduceFactor;
+  HMatrix rReduceMatrix;
 
   // Artificial variable tracker
   vector<bool> pivotArtificial;

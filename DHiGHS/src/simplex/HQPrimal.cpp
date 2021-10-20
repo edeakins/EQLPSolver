@@ -571,9 +571,7 @@ void HQPrimal::primalRebuild() {
     // std::cout << "reinvert called" << std::endl;
     // std::cin.get();
     timer.start(simplex_info.clock_[InvertClock]);
-    init = timer.readRunHighsClock();
     int rankDeficiency = compute_factor(workHMO);
-    invertTime += timer.readRunHighsClock() - init;
     timer.stop(simplex_info.clock_[InvertClock]);
     if (rankDeficiency) {
       throw runtime_error("Primal reInvert: singular-basis-matrix");
@@ -581,22 +579,16 @@ void HQPrimal::primalRebuild() {
     simplex_info.update_count = 0;
   }
   timer.start(simplex_info.clock_[ComputeDualClock]);
-  init = timer.readRunHighsClock();
   compute_dual(workHMO);
-  computeDualTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputeDualClock]);
 
   timer.start(simplex_info.clock_[ComputePrimalClock]);
-  init = timer.readRunHighsClock();
   compute_primal(workHMO);
-  computePrimalTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputePrimalClock]);
 
   // Primal objective section
   timer.start(simplex_info.clock_[ComputePrObjClock]);
-  init = timer.readRunHighsClock();
   computePrimalObjectiveValue(workHMO);
-  computePrimalObjTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputePrObjClock]);
 
   double primal_objective_value = simplex_info.primal_objective_value;
@@ -620,15 +612,11 @@ void HQPrimal::primalRebuild() {
   simplex_info.updated_primal_objective_value = primal_objective_value;
 
   timer.start(simplex_info.clock_[ComputePrIfsClock]);
-  init = timer.readRunHighsClock();
   computePrimalInfeasible(workHMO);
-  computePrimalInfsTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputePrIfsClock]);
 
   timer.start(simplex_info.clock_[ComputeDuIfsClock]);
-  init = timer.readRunHighsClock();
   computeDualInfeasible(workHMO);
-  computeDualInfsTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ComputeDuIfsClock]);
 
   /* Whether to switch to primal phase 1 */
@@ -640,9 +628,7 @@ void HQPrimal::primalRebuild() {
   }
 
   timer.start(simplex_info.clock_[ReportRebuildClock]);
-  init = timer.readRunHighsClock();
   reportRebuild(sv_invertHint);
-  reportRebTime += timer.readRunHighsClock() - init;
   timer.stop(simplex_info.clock_[ReportRebuildClock]);
 #ifdef HiGHSDEV
   if (simplex_info.analyse_rebuild_time) {
@@ -762,9 +748,26 @@ void HQPrimal::changeDegenSlack(){
   }
 }
 
-void HQPrimal::buildGeneralLU(){
+void HQPrimal::buildGeneralQR(){
+  HighsTimer& timer = workHMO.timer_;
+  HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
+  spSubMatRowPerm.assign(workHMO.lp_.numRow_, -1);
+  spSubMatRowUnperm.assign(workHMO.lp_.numRow_, -1);
+  spSubMatColPerm.assign(workHMO.lp_.numCol_, -1);
+  spSubMatColUnperm.assign(workHMO.lp_.numCol_, -1);
+  for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
+    computeReduceResiduals(workHMO.lp_.residuals_[i]);
+  }
+  std::cout << "Compute Res Col Clock: " << timer.clock_time[simplex_info.clock_[FtranPreClock]] << std::endl;
+  std::cin.get();
+  timer.start(timer.presolve_qr_clock);
+  spSubMat.resize(rowPerms + 1, colPerms + 1);
+  spSubMat.setFromTriplets(spTriplets.begin(), spTriplets.end());
   QR.analyzePattern(spSubMat);
   QR.factorize(spSubMat);
+  timer.stop(timer.presolve_qr_clock);
+  std::cout << "Compute QR Factor Clock: " << timer.clock_time[timer.presolve_qr_clock] << std::endl;
+  std::cin.get();
   spSubMatQRPerm = QR.colsPermutation().indices().data();
   spSubMatRank = QR.rank(), spSubMatCols = QR.cols();
 }
@@ -774,6 +777,8 @@ void HQPrimal::buildDependencyGraph(int slack){
 }
 
 void HQPrimal::computeReduceResiduals(int col){
+  HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
+  HighsTimer& timer = workHMO.timer_;
   HighsBasis& workBasis = workHMO.basis_;
   HighsLp& workLp = workHMO.lp_;
   bool degen;
@@ -783,7 +788,9 @@ void HQPrimal::computeReduceResiduals(int col){
   col_aq.clear();
   col_aq.packFlag = true;
   workHMO.matrix_.collect_aj(col_aq, col, 1);
+  timer.start(simplex_info.clock_[FtranPreClock]);
   workHMO.factor_.ftran(col_aq, analysis->col_aq_density);
+  timer.stop(simplex_info.clock_[FtranPreClock]);
   for (int i = 0; i < col_aq.count; ++i){
     row = col_aq.index[i];
     degen = (workLp.degenSlack_[row]);
@@ -826,73 +833,30 @@ void HQPrimal::buildNewBasis(){
 }
 
 void HQPrimal::buildNewQRBasis(){
-  int iCol, iRow, i, j, degen, inv;
-  int rank = spSubMatRank, cols = spSubMatCols;
-  int numXCol = workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_;
-  int numRCol = workHMO.lp_.numResiduals_;
-  const int* colPerm = spSubMatQRPerm;
-  std::vector<int>& rowUnperm = spSubMatRowUnperm;
-  std::vector<HighsBasisStatus>& workColBasis = workHMO.basis_.col_status;
-  std::vector<HighsBasisStatus>& workRowBasis = workHMO.basis_.row_status;
-  std::vector<int> basicIndexInverse_(workHMO.lp_.numCol_, -1);
-  for (iRow = 0; iRow < workHMO.lp_.numRow_; ++iRow)
-    if (workHMO.simplex_basis_.basicIndex_[iRow] < workHMO.lp_.numCol_)
-      basicIndexInverse_[workHMO.simplex_basis_.basicIndex_[iRow]] = iRow;
+  HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
+  HighsTimer& timer = workHMO.timer_;
+  int iColPerm, iRowPerm, iColUnperm, iRowUnperm;
+  int iRank, numResiduals = workHMO.lp_.numResiduals_;
+  int numCol = workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_;
   HighsBasisStatus basic = HighsBasisStatus::BASIC;
-  HighsBasisStatus nonbasic = HighsBasisStatus::NONBASIC;
-  for (i = 0; i < rank; ++i){
-    iCol = colPerm[i];
-    iRow = rowUnperm[i];
-    workHMO.basis_.col_status[iCol] = basic;
-    workHMO.basis_.row_status[iRow] = nonbasic;
+  HighsBasisStatus lower = HighsBasisStatus::LOWER;
+  rColSwapped.resize(numResiduals);
+  for (iRank = 0; iRank < spSubMatRank; ++iRank){
+    iColPerm = spSubMatQRPerm[iRank];
+    iColUnperm = spSubMatColUnperm[iColPerm];
+    iRowPerm = iRank;
+    iRowUnperm = spSubMatRowUnperm[iRowPerm]; 
+    workHMO.basis_.col_status[iColUnperm] = basic;
+    workHMO.basis_.row_status[iRowUnperm] = lower;
+    workHMO.lp_.colLower_[iColUnperm] = -HIGHS_CONST_INF;
+    workHMO.lp_.colUpper_[iColUnperm] = HIGHS_CONST_INF;
+    rColSwapped[iColUnperm - numCol] = 1;
   }
-  int numBasicCols = 0, numNonbasicCols = 0;
-  int numBasicRows = 0, numNonbasicRows = 0;
-  for (i = 0; i < workHMO.lp_.numCol_; ++i){
-    if (workHMO.basis_.col_status[i] == basic)
-      numBasicCols++;
-    else
-      numNonbasicCols++;
-  }
-  for (i = 0; i < workHMO.lp_.numRow_; ++i){
-    if (workHMO.basis_.row_status[i] == basic)
-      numBasicRows++;
-    else
-      numNonbasicRows++;
-  }
-  workHMO.lp_.numResiduals_ = 0;
-  workHMO.lp_.residuals_.clear();
-  for (i = rank; i < cols; ++i){
-    // inv = basicIndexInverse_[colPerm[i]];
-    // if (inv > -1)
-    //   degen = workHMO.lp_.degenSlack_[inv];
-    if (colPerm[i] >= numXCol){
-      workHMO.lp_.residuals_.push_back(colPerm[i]);
-      workHMO.lp_.numResiduals_++;
-    }
-    // else if (!degen)
-    //   workHMO.basis_.col_status[colPerm[i]] = basic;
-    else{
-      workHMO.basis_.col_status[colPerm[i]] = nonbasic;
-      numBasicCols--;
-      numNonbasicCols++;
-    }
-  }
-  for (iRow = 0; iRow < workHMO.lp_.numRow_ - numRCol; ++iRow){
-    if (workHMO.lp_.degenSlack_[iRow]) continue;
-    if (workHMO.simplex_basis_.basicIndex_[iRow] < workHMO.lp_.numCol_){
-      numBasicCols++;
-      numNonbasicCols--;
-      workHMO.basis_.col_status[workHMO.simplex_basis_.basicIndex_[iRow]] = basic;
-    }
-    else{
-      numBasicRows++;
-      numNonbasicRows--;
-      workHMO.basis_.row_status[workHMO.simplex_basis_.basicIndex_[iRow] - workHMO.lp_.numCol_] = basic;
-    }
-  }
+  workHMO.simplex_lp_status_.valid = false;
   workHMO.simplex_lp_status_.has_basis = false;
   transition(workHMO);
+  std::cout << "Total LU Factor Clock Before Unfold: " << timer.clock_time[simplex_info.clock_[InvertClock]] << std::endl;
+  std::cin.get();
 }
 
 void HQPrimal::appendLeftOverResiduals(){
@@ -926,71 +890,30 @@ void HQPrimal::buildInitialFactor(){
 
 void HQPrimal::unfold() {
   ++workHMO.lp_.masterIter;
-  fTranTime = 0;
-  Chuzc1Time = 0;
-  Chuzc2Time = 0;
-  bTranTime = 0;
-  updatePrimalTime = 0;
-  updateDualTime = 0;
-  collectPrimalInfsTime = 0;
-  updateFactorTime = 0;
-  invertTime = 0;
-  computePrimalTime = 0;
-  computePrimalObjTime = 0;
-  computeDualTime = 0;
-  computePrimalInfsTime = 0;
-  computeDualInfsTime = 0;
-  reportRebTime = 0;
   double current_run_time = 0;
   HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
   HighsTimer& timer = workHMO.timer_;
   bool run_highs_clock_already_running = timer.runningRunHighsClock();
   if (!run_highs_clock_already_running) timer.startRunHighsClock();
-  double init = timer.readRunHighsClock();
-  liftStart = true;
   // skipRow.assign(workHMO.lp_.numRow_,false);
-  rColPaired.assign(workHMO.lp_.numCol_, false);
-  rColPairing.assign(workHMO.lp_.numCol_, -1);
-  rInNeighborhood.assign(workHMO.lp_.numCol_, false);
-  slackPaired.assign(workHMO.lp_.numRow_, false);
-  slackPairing.assign(workHMO.lp_.numRow_, -1);
-  spSubMatRowPerm.assign(workHMO.lp_.numRow_, -1);
-  spSubMatRowUnperm.assign(workHMO.lp_.numRow_, -1);
-  spSubMatColPerm.assign(workHMO.lp_.numRow_, -1);
-  spSubMatColUnperm.assign(workHMO.lp_.numRow_, -1);
-  // buildInitialFactor();
-  for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
-    computeReduceResiduals(workHMO.lp_.residuals_[i]);
-  }
-  spSubMat.resize(rowPerms + 1, colPerms + 1);
-  spSubMat.setFromTriplets(spTriplets.begin(), spTriplets.end());
-  std::cout << spSubMat << std::endl;
-  buildGeneralLU();
-  std::cout << QR.matrixR() << std::endl;
-  // buildMaximumMatching();
-  // buildNewBasis(swap);
-  // primalRebuild();
-  // buildTableau();
-  // buildDependencyMatrix();
-  // matchingHeuristic();
-  // buildNewBasis();
-  // appendLeftOverResiduals();
-  // buildSlackRSubMatrix();
-  // // init = timer.readRunHighsClock();
-  // buildGeneralLU();
-  // std::cout << QR.matrixR() << std::endl;
-  // std::cout << spSubMat << std::endl;
-  // // std::cout << "QR decomp time: " << timer.readRunHighsClock() - init << std::endl;
-  // buildNewQRBasis(); 
+  // rColPaired.assign(workHMO.lp_.numCol_, false);
+  // rColPairing.assign(workHMO.lp_.numCol_, -1);
+  // rInNeighborhood.assign(workHMO.lp_.numCol_, false);
+  // slackPaired.assign(workHMO.lp_.numRow_, false);
+  // slackPairing.assign(workHMO.lp_.numRow_, -1);
+  buildGeneralQR();
+  buildNewQRBasis();
   primalRebuild();
-  liftStart = false;
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_;
-  // init = timer.readRunHighsClock();
+  int offset = 0;
   int cnt = 0;
   int update_limit = min(100 + workHMO.lp_.numRow_ / 100,
           1000);
-  // std::cout << "Num Pivots Required: " << workHMO.lp_.numLinkers_ << std::endl;
+  ////////////////////// Orbital Crossover //////////////////////
   for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
+    columnIn = workHMO.lp_.residuals_[i];
+    offset = workHMO.lp_.residuals_[i] - workHMO.lp_.numX_;
+    if (rColSwapped[offset]) continue;
     ++cnt;
     current_run_time = timer.readRunHighsClock();
     // degeneratePivot = false;
@@ -1001,76 +924,36 @@ void HQPrimal::unfold() {
     ++workHMO.lp_.unfoldIter;
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);
     columnIn = workHMO.lp_.residuals_[i];
-    // std::cout << "columnIn: " << columnIn << std::endl;
     timer.stop(simplex_info.clock_[ChuzcPrimalClock]);
-    workHMO.simplex_info_.workCost_[columnIn] = 1;
+    // Edit work and bounds for residual columns
+    workHMO.simplex_info_.workCost_[columnIn] = 0;
     workHMO.simplex_info_.workUpper_[columnIn] = +HIGHS_CONST_INF;
     workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
     workHMO.simplex_info_.workValue_[columnIn] = 0;
     workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
-    
+    workHMO.lp_.colLower_[columnIn] = -HIGHS_CONST_INF;
+    workHMO.lp_.colUpper_[columnIn] = HIGHS_CONST_INF;
+    // Highs choose row function nothing changed from normal simplex
     primalChooseRow();
-    // if (degeneratePivot) continue;
-    // cRowTime += timer.readRunHighsClock() - init;
-    // initial_time = timer.readRunHighsClock();
+    // Highs primal update function nothing change from normal simplex
     primalUpdate();
-    // std::cout << "invertHint: " << invertHint << std::endl;
-    // std::cin.get();
+    // // Check for numerical instability in basis inverse
     // if (ivHint == INVERT_HINT_POSSIBLY_SINGULAR_BASIS){
     //   primalRebuild(); 
     //   ivHint = 0;
     //   cnt = 0;
-    //   // std::cout << "primalRebuild called" << std::endl;
     // }
+    // Check if we need to refactor LU factorization based on pivots done
     if (cnt > update_limit){
       primalRebuild();
       cnt = 0;
     }
-    // uTime += timer.readRunHighsClock() - initial_time;
-    workHMO.simplex_info_.workCost_[columnIn] = 0;
-    workHMO.lp_.colLower_[idx] = -HIGHS_CONST_INF;
-    workHMO.lp_.colUpper_[idx++] = HIGHS_CONST_INF;
-    // if (cnt > update_limit){ primalRebuild(); cnt = 0;}
   }
-  // std::cout << "done pivoting" << std::endl;
-  // std::cin.get();
+  ////////////////////// Orbital Crossover Done //////////////////////
+  // Final Rebuild
   primalRebuild();
+  // Clean up if we have dual infeas after all r pivots
   if (workHMO.scaled_solution_params_.num_dual_infeasibilities > 0) solvePhase2();
-  // solvePhase2();
-  columnIn = -1;
-  // for (int i = 0; i < workHMO.simplex_basis_.basicIndex_.size(); ++i){
-  //   if (workHMO.simplex_basis_.basicIndex_[i] < workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_)
-  //     std::cout << workHMO.simplex_basis_.basicIndex_[i] << std::endl;
-  // }
-  // std::cout << "\n" << std::endl;
-  // for (int i = 0; i < QR.rank(); ++i){
-  //   if (spSubMatColPerm[i] < workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_)
-  //     std::cout << spSubMatColPerm[i] << std::endl;
-  // }
-  // buildTableau();
-  // double uTime = timer.readRunHighsClock() - init;
-  // workHMO.lp_.pivotTime = uTime;
-  // std::cout << "Ftran time: " << fTranTime << std::endl;
-  // std::cout << "Chuzc1 time: " << Chuzc1Time << std::endl;
-  // std::cout << "Chuzc2 time: " << Chuzc2Time << std::endl;
-  // std::cout << "Primal Update Time: " << updatePrimalTime << std::endl;
-  // std::cout << "Dual Update Time: " << updateDualTime << std::endl;
-  // std::cout << "Btran Update Time: " << bTranTime << std::endl;
-  // std::cout << "Collect Primal Infeasibilities Time: " << collectPrimalInfsTime << std::endl;
-  // std::cout << "Factor Update Time: " << updateFactorTime << std::endl;
-  // std::cout << "Invert Time: " << invertTime << std::endl;
-  // std::cout << "Compute Primal Time: " << computePrimalTime << std::endl;
-  // std::cout << "Compute Primal Objective Time: " << computePrimalObjTime << std::endl;
-  // std::cout << "Compute Dual Time: " << computeDualTime << std::endl;
-  // std::cout << "Compute Primal Infeasibilities Time: " << computePrimalInfsTime << std::endl;
-  // std::cout << "Compute Dual Infeasibilities Time: " << computeDualInfsTime << std::endl;
-  // std::cout << "Report Rebuild Time: " << reportRebTime << std::endl;
-  // std::cin.get();
-  // std::cout << "NUM DUAL INFEAS: " << workHMO.scaled_solution_params_.num_dual_infeasibilities << std::endl;
-  // std::cout << "NUM PRIMAL INFEAS: " << workHMO.scaled_solution_params_.num_primal_infeasibilities << std::endl;
-  // // std::cout << "END PIVOTS" << std::endl;
-  // std::cin.get();
-  // columnIn = -1;
 }
 
 void HQPrimal::primalChooseColumn() {

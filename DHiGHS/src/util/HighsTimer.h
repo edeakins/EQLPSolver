@@ -62,6 +62,7 @@ class HighsTimer {
     saucy_clock = clock_def("Saucy", "Scy");
     equipart_clock = clock_def("Equitable", "Eqp");
     elp_solve_clock = clock_def("Pivot", "Pvt");
+    presolve_qr_clock = clock_def("PresolveQR", "PreQR");
     // partition_clock = clock_def("Refinement", "Ref");
     // lp_fold_clock = clock_def("Aggregate", "Agg");
     // lp_unfold_clock = clock_def("Unfold", "Ufd");
@@ -505,6 +506,7 @@ class HighsTimer {
   int saucy_clock;
   int equipart_clock;
   int elp_solve_clock;
+  int presolve_qr_clock;
   
   // HiGHS run time - used to scale ticks to time
   double run_highs_clock_time = 0;

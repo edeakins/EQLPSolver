@@ -79,6 +79,8 @@ class HighsLp {
   int numInt_ = 0;
   int nnz_ = 0;
   int numResiduals_ = 0;
+  int numX_;
+  int numS_;
 
   std::vector<int> Astart_;
   std::vector<int> Aindex_;

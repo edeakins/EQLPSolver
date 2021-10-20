@@ -350,6 +350,8 @@ HighsStatus Highs::run() {
   int actualRPivots = 0;
   // Count total pivots (ALP and all R pivots)
   int totalPivots = 0;
+  // Count number of residuals swapped with pre-solve factorization
+  int rSwapPivots = 0;
   if (options_.aggregate == on_string && options_.solver != ipm_sym_string){
     // Compute equitable partition
     timer_.start(timer_.equipart_clock);
@@ -389,12 +391,13 @@ HighsStatus Highs::run() {
     hmos_[solved_hmo].basis_ = basis_;
     options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
     // std::string itercnt = std::string(cnt);
-    writeModel("../../DOKSmps/codbt021.lp");
+    // writeModel("../../DOKSmps/codbt021.lp");
     timer_.start(timer_.elp_solve_clock);
     call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
     timer_.stop(timer_.elp_solve_clock);
     return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
     actualRPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    rSwapPivots = possibleRPivots - actualRPivots;
     totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
     // Lift to final elp
     // // Start lift loop
@@ -690,6 +693,7 @@ HighsStatus Highs::run() {
   //       "Actual R Piots   : %0.3g\n", actualRPivots);     
   std::cout << "Possible R Pivots    : " << possibleRPivots << std::endl;
   std::cout << "Actual R Pivots      : " << actualRPivots << std::endl;
+  std::cout << "Presolve R Swaps     : " << rSwapPivots << std::endl;
   std::cout << "Total Simplex Pivots : " << totalPivots << std::endl;
   // totUnfoldTime_ += (lp_solve_final_time - initial_time);
   // totIter_ += hmos_[solved_hmo].unscaled_solution_params_.simplex_iteration_count;

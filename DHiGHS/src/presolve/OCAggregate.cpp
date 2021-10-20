@@ -666,6 +666,7 @@ void HighsOCAggregate::buildColPointers(){
         ++cnt;
     }
     elp->numCol_ = ep->ncsplits;
+    elp->numX_ = ep->ncsplits;
 }
 
 void HighsOCAggregate::buildRowPointers(){
@@ -678,6 +679,7 @@ void HighsOCAggregate::buildRowPointers(){
         ++cnt;
     }
     elp->numRow_ = ep->nrsplits;
+    elp->numS_ = ep->nrsplits;
 }
 
 void HighsOCAggregate::buildFinalPointers(){
