@@ -57,10 +57,12 @@ class HQPrimal {
   void buildDependencyMatrix();
   void buildSlackRSubMatrix();
   void buildGeneralQR();
+  void buildReduceLUFactor();
   void buildMaximumMatching();
   void matchingHeuristic();
   void buildNewBasis();
   void buildNewQRBasis();
+  void buildNewLUBasis();
   void changeDegenSlack();
   void appendLeftOverResiduals();
   void buildInitialFactor();
@@ -159,11 +161,17 @@ class HQPrimal {
   int spSubMatCols;
   matching swap;
   // New method using highs LU factorization
+  int rReduceNumCol = 0;
+  int rReduceNumRow = 0;
+  int rReduceNnz = 0;
   std::vector<int> rReduceAstart;
   std::vector<int> rReduceAindex;
-  std::vector<int> rReduceAvalue;
+  std::vector<double> rReduceAvalue;
   std::vector<int> rSwapBasis;
+  std::vector<int> rReduceColPerm;
   HFactor rReduceFactor;
+  int rReduceRankDeficiency;
+  int rReduceRank;
   HMatrix rReduceMatrix;
 
   // Artificial variable tracker

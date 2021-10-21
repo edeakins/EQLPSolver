@@ -44,6 +44,7 @@ enum iClockSimplex {
   BasisConditionClock,  //!< Basis condition estimation
   DseIzClock,           //!< DSE weight initialisation
   InvertClock,          //!< Invert in dual rebuild()
+  InvertPreClock,          //!< R sub matrix invert to determine swaps 
   PermWtClock,       //!< Permutation of SED weights each side of INVERT in dual
                      //!< rebuild()
   ComputeDualClock,  //!< Computation of dual values in dual rebuild()
@@ -69,7 +70,7 @@ enum iClockSimplex {
   Chuzc4Clock,         //!< CHUZC - Dual stage 4
   DevexWtClock,        //!< Calculation of Devex weight of entering variable
   FtranClock,          //!< FTRAN - pivotal column
-  FtranPreClock,
+  FtranPreClock,       //!< presolve FTRAN clock for R Cols to find R col swaps
   BtranClock,          //!< BTRAN
   PriceClock,          //!< PRICE
   FtranDseClock,       //!< FTRAN for DSE weights
@@ -131,6 +132,7 @@ class SimplexTimer {
         timer.clock_def("BASIS_CONDITION", "CON");
     simplex_info.clock_[DseIzClock] = timer.clock_def("DSE_IZ", "DEI");
     simplex_info.clock_[InvertClock] = timer.clock_def("INVERT", "INV");
+    simplex_info.clock_[InvertPreClock] = timer.clock_def("INVERTPRE", "INVPRE");
     simplex_info.clock_[PermWtClock] = timer.clock_def("PERM_WT", "PWT");
     simplex_info.clock_[ComputeDualClock] =
         timer.clock_def("COMPUTE_DUAL", "CPD");

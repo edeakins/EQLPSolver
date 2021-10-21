@@ -194,6 +194,9 @@ class HFactor {
    * @brief Columns not pivoted on
    */
   vector<int> noPvC;
+  
+  // Records non-singular columns
+  vector<int> unPermute;
 
   /**
    * @brief Gets noPvR when HFactor.h cannot be included

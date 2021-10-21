@@ -199,6 +199,7 @@ void HFactor::setup(int numCol_, int numRow_, const int* Astart_,
   // Allocate space for pivot records
   //    permute.resize(numRow);
   permute.assign(numRow, -1);
+  unPermute.assign(numRow, -1);
 
   // Allocate space for Markowitz matrices
   MCstart.resize(numRow);
@@ -319,6 +320,8 @@ int HFactor::build() {
 #endif
     //      buildMarkSingC();
   }
+  else  
+    std::copy(baseIndex, baseIndex + numRow, unPermute.begin());
   // Complete INVERT
 #ifdef HiGHSDEV
   if (omp_max_threads <= 1) timer_.start(clock_[FactorInvertFinish]);
@@ -505,6 +508,7 @@ void HFactor::buildSimple() {
       // 1.3 Record unit column
       // Uindex.size());
       permute[iCol] = iRow;
+      unPermute[iRow] = iCol;
       Lstart.push_back(Lindex.size());
       UpivotIndex.push_back(iRow);
       UpivotValue.push_back(1);
@@ -579,6 +583,7 @@ void HFactor::buildSimple() {
         int iRow = Bindex[pivot_k];
         MRcountb4[iRow] = 0;
         permute[iCol] = iRow;
+        unPermute[iRow] = iCol;
         Lstart.push_back(Lindex.size());
 
         UpivotIndex.push_back(iRow);
@@ -598,6 +603,7 @@ void HFactor::buildSimple() {
         int iRow = Bindex[pivot_k];
         MRcountb4[iRow] = 0;
         permute[iCol] = iRow;
+        unPermute[iRow] = iCol;
         Lstart.push_back(Lindex.size());
 
         UpivotIndex.push_back(iRow);
@@ -987,6 +993,7 @@ void HFactor::buildHandleRankDeficiency() {
   for (int i = 0; i < numRow; i++) {
     int perm_i = permute[i];
     if (perm_i >= 0) {
+      unPermute[perm_i] = baseIndex[i];
       iwork[perm_i] = baseIndex[i];
     } else {
       noPvC[lc_rankDeficiency] = i;
@@ -1028,6 +1035,7 @@ void HFactor::buildHandleRankDeficiency() {
     if (permute[iCol] != -1)
       printf("ERROR: permute[iCol] = %d != -1\n", permute[iCol]);
     permute[iCol] = iRow;
+    unPermute[iRow] = iCol;
     Lstart.push_back(Lindex.size());
     UpivotIndex.push_back(iRow);
     UpivotValue.push_back(1);
