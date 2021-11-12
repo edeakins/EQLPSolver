@@ -381,8 +381,18 @@ HighsStatus Highs::run() {
     // lift to next elp
     timer_.start(timer_.lift_clock);
     liftLpExtended();
-    liftBasis();
+    // liftBasis();
     timer_.stop(timer_.lift_clock);
+    // Do pivoting routine on B^-1 * A_r submatrix to find degenerate r columns
+    passModel(*slp_);
+    setBasis(*slpSymBasis_);
+    hmos_[solved_hmo].basis_ = basis_;
+    options_.simplex_strategy = SIMPLEX_STRATEGY_SWAP;
+    writeModel("../../DOKSmps/B^-1*A_r.lp");
+    timer_.start(timer_.elp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
+    timer_.stop(timer_.elp_solve_clock);
+    return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
     // Pass new elp
     passModel(*alp_);
     setBasis(*lpSymBasis_);
@@ -391,7 +401,7 @@ HighsStatus Highs::run() {
     hmos_[solved_hmo].basis_ = basis_;
     options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
     // std::string itercnt = std::string(cnt);
-    // writeModel("../../DOKSmps/codbt021.lp");
+    writeModel("../../DOKSmps/Extended.lp");
     timer_.start(timer_.elp_solve_clock);
     call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
     timer_.stop(timer_.elp_solve_clock);
@@ -743,6 +753,9 @@ void Highs::liftLpFinal(){
 void Highs::liftLpExtended(){
   agg_.buildLp(part_, &alpBasis_, &alpSolution_, false, false);
   alp_ = agg_.getLp();
+  slp_ = agg_.getSubLp();
+  lpSymBasis_ = agg_.getBasis();
+  slpSymBasis_ = agg_.getSubBasis();
 }
 
 void Highs::liftLpExtendedFinal(){
@@ -751,7 +764,7 @@ void Highs::liftLpExtendedFinal(){
 }
 
 void Highs::liftBasis(){
-  agg_.buildBasis(false, false);
+  // agg_.buildBasis(false, false);
   lpSymBasis_ = agg_.getBasis();
 }
 

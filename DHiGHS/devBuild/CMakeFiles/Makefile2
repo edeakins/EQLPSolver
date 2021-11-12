@@ -1012,7 +1012,7 @@ src/CMakeFiles/libhighs.dir/all: src/CMakeFiles/libipx.dir/all
 src/CMakeFiles/libhighs.dir/all: src/CMakeFiles/libbasiclu.dir/all
 	$(MAKE) -f src/CMakeFiles/libhighs.dir/build.make src/CMakeFiles/libhighs.dir/depend
 	$(MAKE) -f src/CMakeFiles/libhighs.dir/build.make src/CMakeFiles/libhighs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64 "Built target libhighs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65 "Built target libhighs"
 .PHONY : src/CMakeFiles/libhighs.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1039,12 +1039,12 @@ src/CMakeFiles/libhighs.dir/clean:
 src/CMakeFiles/libipx.dir/all: src/CMakeFiles/libbasiclu.dir/all
 	$(MAKE) -f src/CMakeFiles/libipx.dir/build.make src/CMakeFiles/libipx.dir/depend
 	$(MAKE) -f src/CMakeFiles/libipx.dir/build.make src/CMakeFiles/libipx.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89 "Built target libipx"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles --progress-num=66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89 "Built target libipx"
 .PHONY : src/CMakeFiles/libipx.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/libipx.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles 47
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles 46
 	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/libipx.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/CMakeFiles 0
 .PHONY : src/CMakeFiles/libipx.dir/rule

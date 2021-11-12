@@ -36,6 +36,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/OCEquitable.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/Presolve.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/hopcroftKarp.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/hopcroftKarp.cpp.o"
+  "/home/edeakins/LP/EQLPSolver/DHiGHS/src/presolve/sparseMat.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/presolve/sparseMat.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HCrash.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/simplex/HCrash.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HDual.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/simplex/HDual.cpp.o"
   "/home/edeakins/LP/EQLPSolver/DHiGHS/src/simplex/HDualMulti.cpp" "/home/edeakins/LP/EQLPSolver/DHiGHS/devBuild/src/CMakeFiles/libhighs.dir/simplex/HDualMulti.cpp.o"

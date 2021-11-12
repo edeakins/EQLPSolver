@@ -770,16 +770,19 @@ class Highs {
   HighsEquitable ep_;
   HighsOCEquitablePartition nep_;
   HighsOCAggregate agg_;
-  HighsLp *alp_, *elp_;
+  HighsLp *alp_, *elp_, *slp_;
 
   // Containers for OC
   HighsBasis alpBasis_;
   HighsSolution alpSolution_;
   HighsBasis* elpBasis_;
   HighsSolution elpSolution_;
+  HighsBasis slpBasis_;
+  HighsSolution slpSolution_;
   lpPartition* OCPartition_;
   OCpartition* part_;
   HighsBasis* lpSymBasis_ = NULL;
+  HighsBasis* slpSymBasis_ = NULL;
   HighsSolution* lpSymSolution_ = NULL;
   // Final HiGHS Run Time
   double runTime = 0;

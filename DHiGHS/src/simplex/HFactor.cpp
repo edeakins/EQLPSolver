@@ -278,6 +278,7 @@ void HFactor::setup(int numCol_, int numRow_, const int* Astart_,
 void HFactor::change(int updateMethod_) { updateMethod = updateMethod_; }
 #endif
 
+// Regular build process
 int HFactor::build() {
   // std::cout << "build called" << std::endl;
   // std::cin.get();
@@ -318,10 +319,8 @@ int HFactor::build() {
 #ifdef HiGHSDEV
     if (omp_max_threads <= 1) timer_.stop(clock_[FactorInvertDeficient]);
 #endif
-    //      buildMarkSingC();
+    // buildMarkSingC();
   }
-  else  
-    std::copy(baseIndex, baseIndex + numRow, unPermute.begin());
   // Complete INVERT
 #ifdef HiGHSDEV
   if (omp_max_threads <= 1) timer_.start(clock_[FactorInvertFinish]);
@@ -347,6 +346,79 @@ int HFactor::build() {
 #ifdef HiGHSDEV
   if (omp_max_threads <= 1) timer_.stop(clock_[FactorInvert]);
 #endif
+  return rankDeficiency;
+}
+
+// Build for OC
+int HFactor::buildOC() {
+  // std::cout << "build called" << std::endl;
+  // std::cin.get();
+#ifdef HiGHSDEV
+  if (omp_max_threads <= 1) timer_.start(clock_[FactorInvert]);
+#endif
+  HighsTimer build_timer;
+  build_timer.resetHighsTimer();
+  build_syntheticTick = 0;
+  build_realTick = build_timer.getTick();
+#ifdef HiGHSDEV
+  if (omp_max_threads <= 1) timer_.start(clock_[FactorInvertSimple]);
+#endif
+  // Build the L, U factor
+  // printf("Before buildSimple(): Model has %d basic indices: ", numRow);
+  // for (int i=0; i<numRow; i++){printf(" %d", baseIndex[i]);} printf("\n");
+  buildSimple();
+#ifdef HiGHSDEV
+  if (omp_max_threads <= 1) timer_.stop(clock_[FactorInvertSimple]);
+#endif
+#ifdef HiGHSDEV
+  if (omp_max_threads <= 1) timer_.start(clock_[FactorInvertKernel]);
+#endif
+  rankDeficiency = buildKernel();
+#ifdef HiGHSDEV
+  if (omp_max_threads <= 1) timer_.stop(clock_[FactorInvertKernel]);
+#endif
+//   if (rankDeficiency > 0) {
+// #ifdef HiGHSDEV
+//     if (omp_max_threads <= 1) timer_.start(clock_[FactorInvertDeficient]);
+// #endif
+//     printf("buildKernel() returns rankDeficiency = %d\n", rankDeficiency);
+//     // Singular matrix B: reorder the basic variables so that the
+//     // singular columns are in the position corresponding to the
+//     // logical which replaces them
+//     buildHandleRankDeficiency();
+//     buildRpRankDeficiency();
+// #ifdef HiGHSDEV
+//     if (omp_max_threads <= 1) timer_.stop(clock_[FactorInvertDeficient]);
+// #endif
+//     //      buildMarkSingC();
+//   } 
+//   else
+//     std::copy(baseIndex, baseIndex + numRow, unPermute.begin());
+//   // Complete INVERT
+// #ifdef HiGHSDEV
+//   if (omp_max_threads <= 1) timer_.start(clock_[FactorInvertFinish]);
+// #endif
+//   buildFinish();
+// #ifdef HiGHSDEV
+//   if (omp_max_threads <= 1) timer_.stop(clock_[FactorInvertFinish]);
+// #endif
+//   build_realTick = build_timer.getTick() - build_realTick;
+//   // Record the number of entries in the INVERT
+//   invert_num_el = Lstart[numRow] + Ulastp[numRow-1] + numRow;
+  
+//   if (rankDeficiency) {
+//     kernel_dim -= rankDeficiency;
+//     printf("Rank deficiency %1d: basis_matrix (%d el); INVERT (%d el); kernel (%d dim; %d el): nwork = %d\n",
+// 	   rankDeficiency,
+// 	   basis_matrix_num_el,
+// 	   invert_num_el,
+// 	   kernel_dim,
+// 	   kernel_num_el,
+// 	   nwork);
+//   }
+// #ifdef HiGHSDEV
+//   if (omp_max_threads <= 1) timer_.stop(clock_[FactorInvert]);
+// #endif
   return rankDeficiency;
 }
 
@@ -1218,6 +1290,7 @@ void HFactor::buildFinish() {
   // Finally, permute the base index
   iwork.assign(baseIndex, baseIndex + numRow);
   for (int i = 0; i < numRow; i++) baseIndex[permute[i]] = iwork[i];
+  unPermute.assign(baseIndex, baseIndex + numRow);
 
 #ifdef HiGHSDEV
   FtotalX = LcountX + UcountX + numRow;

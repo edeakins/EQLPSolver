@@ -47,17 +47,22 @@ class HQPrimal {
    */
   void solvePhase2();
   void solvePhase3();
+  void solvePhaseSwap();
 
  private:
   void primalRebuild();
   void primalChooseColumn();
   void unfold();
+  void swapDegenerate();
+  void primalChooseR();
+  void primalChooseDegenerateSlack();
   void computeReduceResiduals(int i);
   void buildDependencyGraph(int slack);
   void buildDependencyMatrix();
   void buildSlackRSubMatrix();
   void buildGeneralQR();
   void buildReduceLUFactor();
+  void buildZeroMatching();
   void buildMaximumMatching();
   void matchingHeuristic();
   void buildNewBasis();
@@ -155,6 +160,7 @@ class HQPrimal {
   std::vector<int> spSubMatColPerm;
   std::vector<int> spSubMatColUnperm;
   std::vector<int> rColSwapped;
+  std::vector<std::vector<double> > printBinvAr;
   int rowPerms = -1;
   int colPerms = -1;
   int spSubMatRank;
@@ -165,10 +171,16 @@ class HQPrimal {
   int rReduceNumRow = 0;
   int rReduceNnz = 0;
   std::vector<int> rReduceAstart;
+  std::vector<int> rZeroStart;
   std::vector<int> rReduceAindex;
+  std::vector<int> rZeroIndex;
   std::vector<double> rReduceAvalue;
   std::vector<int> rSwapBasis;
   std::vector<int> rReduceColPerm;
+  std::vector<int> degenRowPair;
+  std::vector<int> rColPair;
+  std::vector<int> zeros;
+  int numPairs = 0;
   HFactor rReduceFactor;
   int rReduceRankDeficiency;
   int rReduceRank;
@@ -186,6 +198,10 @@ class HQPrimal {
   std::vector<bool> rInNeighborhood;
   std::vector<int> rColPairing;
   std::vector<int> slackPairing;
+
+  // Containers for variable swapping in degenerate submatrix
+  std::vector<int> rSwapped;
+  std::vector<int> sSwapped;
 };
 
 #endif /* SIMPLEX_HQPRIMAL_H_ */

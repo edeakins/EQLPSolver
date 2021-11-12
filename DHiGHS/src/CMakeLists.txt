@@ -100,6 +100,7 @@ set(sources
     presolve/OCAggregate.cpp
     presolve/OCEquitable.cpp
     presolve/hopcroftKarp.cpp
+    presolve/sparseMat.cpp
     simplex/HCrash.cpp
     simplex/HDual.cpp
     simplex/HDualRHS.cpp
@@ -173,6 +174,7 @@ set(headers
     presolve/Aggregate.h
     presolve/OCAggregate.h
     presolve/OCEquitable.h
+    presolve/sparseMat.h
     presolve/hopcroftKarp.h
     simplex/HTimerPre.h
     simplex/HVector.h

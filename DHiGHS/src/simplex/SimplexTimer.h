@@ -45,6 +45,7 @@ enum iClockSimplex {
   DseIzClock,           //!< DSE weight initialisation
   InvertClock,          //!< Invert in dual rebuild()
   InvertPreClock,          //!< R sub matrix invert to determine swaps 
+  InvertInitClock,   //!<Invert done in transition()
   PermWtClock,       //!< Permutation of SED weights each side of INVERT in dual
                      //!< rebuild()
   ComputeDualClock,  //!< Computation of dual values in dual rebuild()
@@ -133,6 +134,7 @@ class SimplexTimer {
     simplex_info.clock_[DseIzClock] = timer.clock_def("DSE_IZ", "DEI");
     simplex_info.clock_[InvertClock] = timer.clock_def("INVERT", "INV");
     simplex_info.clock_[InvertPreClock] = timer.clock_def("INVERTPRE", "INVPRE");
+    simplex_info.clock_[InvertInitClock] = timer.clock_def("INVERTINIT", "INVINI");
     simplex_info.clock_[PermWtClock] = timer.clock_def("PERM_WT", "PWT");
     simplex_info.clock_[ComputeDualClock] =
         timer.clock_def("COMPUTE_DUAL", "CPD");

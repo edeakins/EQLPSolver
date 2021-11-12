@@ -377,7 +377,9 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
                     "Crash has created a basis with %d/%d structurals",
                     num_basic_structurals, simplex_lp.numRow_);
     // Now reinvert
+    timer.start(simplex_info.clock_[InvertInitClock]);
     int rankDeficiency = compute_factor(highs_model_object);
+    timer.stop(simplex_info.clock_[InvertInitClock]);
     if (rankDeficiency) {
       // ToDo Handle rank deficiency by replacing singular columns with logicals
       throw runtime_error("Transition has singular basis matrix");
@@ -2727,8 +2729,7 @@ void computePrimalInfeasible(HighsModelObject& highs_model_object,
     if (primal_infeasibility > 0) {
       // std::cout << "row: " << i << std::endl;
       if (primal_infeasibility > scaled_primal_feasibility_tolerance) num_basic_primal_infeasibilities++;
-      max_basic_primal_infeasibility =
-	std::max(primal_infeasibility, max_basic_primal_infeasibility);
+      max_basic_primal_infeasibility = std::max(primal_infeasibility, max_basic_primal_infeasibility);
       sum_basic_primal_infeasibilities += primal_infeasibility;
       // std::cout << "\nBASIC INFEAS" << std::endl; 
       // std::cout << "col: " << simplex_basis.basicIndex_[i] << std::endl;

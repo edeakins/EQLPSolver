@@ -25,6 +25,7 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/ICrash.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/OCAggregate.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/OCEquitable.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/Presolve.h
+app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/sparseMat.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/simplex/FactorTimer.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/simplex/HFactor.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/simplex/HMatrix.h

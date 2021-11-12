@@ -100,6 +100,8 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
   //
   // Transition to the best possible simplex basis and solution
   call_status = transition(highs_model_object);
+  // std::cout << "Time to do initial invert on transition: " << timer.clock_time[simplex_info.clock_[InvertInitClock]] << std::endl;
+  // std::cin.get();
   return_status = interpretCallStatus(call_status, return_status, "transition");
   if (return_status == HighsStatus::Error) return return_status;
   //
@@ -122,7 +124,9 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
   int use_simplex_strategy = illegal_simplex_strategy;
   HighsSolutionParams& scaled_solution_params = highs_model_object.scaled_solution_params_;
   if (scaled_solution_params.num_primal_infeasibilities == 0) {
-    if (highs_model_object.options_.simplex_strategy == SIMPLEX_STRATEGY_UNFOLD)
+    if (highs_model_object.options_.simplex_strategy == SIMPLEX_STRATEGY_SWAP)
+      use_simplex_strategy = SIMPLEX_STRATEGY_SWAP;
+    else if (highs_model_object.options_.simplex_strategy == SIMPLEX_STRATEGY_UNFOLD)
       use_simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
     // Primal feasible
     else if (scaled_solution_params.num_dual_infeasibilities == 0) {
@@ -220,7 +224,7 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
     }
     else if (use_simplex_strategy == SIMPLEX_STRATEGY_UNFOLD){
       HighsLogMessage(highs_model_object.options_.logfile, HighsMessageType::INFO,
-                      "Using unfold technique (DOKS)");
+                      "Using unfold technique (OC)");
       HQPrimal primal_solver(highs_model_object);
       // HDual dual_solver(highs_model_object);
       call_status = primal_solver.solve();
@@ -304,6 +308,25 @@ HighsStatus runSimplexSolver(HighsModelObject& highs_model_object) {
   if (omp_max_threads <= 1 && simplex_info.report_HFactor_clock)
     highs_model_object.factor_.reportTimer();
 #endif
+  }
+  else{
+    if (use_simplex_strategy == SIMPLEX_STRATEGY_SWAP){
+      HighsLogMessage(highs_model_object.options_.logfile, HighsMessageType::INFO,
+                      "Swapping Degenerate Slacks (OC)");
+      HQPrimal primal_solver(highs_model_object);
+      // HDual dual_solver(highs_model_object);
+      call_status = primal_solver.solve();
+      // call_status = dual_solver.solve();
+      return_status = interpretCallStatus(call_status, return_status, "HQPrimal::solve");
+      if (return_status == HighsStatus::Error) return return_status;
+    }
+    if (highs_model_object.options_.simplex_initial_condition_check) {
+      timer.start(simplex_info.clock_[BasisConditionClock]);
+      double basis_condition = computeBasisCondition(highs_model_object);
+      timer.stop(simplex_info.clock_[BasisConditionClock]);
+      HighsLogMessage(highs_model_object.options_.logfile, HighsMessageType::INFO,
+                      "Final basis condition estimate is %g", basis_condition);
+    }
   }
 
   if (simplex_info.analyse_lp_solution) {
