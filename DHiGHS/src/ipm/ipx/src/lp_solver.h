@@ -9,7 +9,6 @@
 #include "ipm.h"
 #include "iterate.h"
 #include "model.h"
-#include "HighsLp.h"
 
 namespace ipx {
 
@@ -28,13 +27,6 @@ public:
     Int Solve(Int num_var, const double* obj, const double* lb,
               const double* ub, Int num_constr, const Int* Ap, const Int* Ai,
               const double* Ax, const double* rhs, const char* constr_type);
-
-    void LoadModel(Int num_var, const double* obj, const double* lb,
-        const double* ub, Int num_constr, const Int* Ap,
-        const Int* Ai, const double* Ax, const double* rhs,
-        const char* constr_type, int num_res);
-
-    void LoadBasis(HighsBasis b);
 
     // Returns the solver info from the last call to Solve(). See the reference
     // documentation for the meaning of Info values.
@@ -108,19 +100,6 @@ public:
     // Returns -1 if no basis was available and 0 otherwise.
     Int SymbolicInvert(Int* rowcounts, Int* colcounts);
 
-    Int CrossoverFromStartingPoint(const double* x_start,
-                                   const double* s_start,
-                                   const double* y_start,
-                                   const double* z_start);
-
-    std::vector<Int> CrashSimplexBasisFromHighsBasis(const double* x_start,
-                                   const double* s_start,
-                                   const double* y_start,
-                                   const double* z_start);
-                            
-    std::vector<Int> CrashDroppedCols();
-    std::vector<Int> CrashReplacementCols();
-
 private:
     void InteriorPointSolve();
     void RunIPM();
@@ -129,7 +108,6 @@ private:
     void BuildStartingBasis();
     void RunMainIPM(IPM& ipm);
     void RunCrossover();
-    void ClearSolution();
     void PrintSummary();
 
     Control control_;
@@ -137,12 +115,11 @@ private:
     Model model_;
     std::unique_ptr<Iterate> iterate_;
     std::unique_ptr<Basis> basis_;
-    HighsBasis hBasis_;
 
     // Basic solution computed by crossover and basic status of each variable
     // (one of IPX_nonbasic_lb, IPX_nonbasic_ub, IPX_basic, IPX_superbasic).
     // If crossover was not run or failed, then basic_statuses_ is empty.
-    Vector x_crossover_, y_crossover_, z_crossover_, crossover_weights_;
+    Vector x_crossover_, y_crossover_, z_crossover_;
     std::vector<Int> basic_statuses_;
 };
 

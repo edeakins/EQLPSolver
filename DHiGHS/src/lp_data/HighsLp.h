@@ -92,6 +92,7 @@ class HighsLp {
   std::vector<double> rowUpper_;
   std::vector<int> residuals_;
   std::vector<int> degenSlack_;
+  std::vector<int> basicResiduals_;
   int foldSolveTime;
 
 

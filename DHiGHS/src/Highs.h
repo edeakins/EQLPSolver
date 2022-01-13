@@ -68,6 +68,8 @@ class Highs {
   void liftSolutionExtended();
   void liftSolutionExtendedFinal();
 
+  int swapInRColumns();
+
   /** @brief
    * Calls 
    */

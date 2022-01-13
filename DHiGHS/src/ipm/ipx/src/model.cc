@@ -5,16 +5,15 @@
 #include <cassert>
 #include <cmath>
 #include "utils.h"
-#include <iostream>
 
 namespace ipx {
 
-void Model::Load(const Control& control, Int num_constr, Int num_var, Int num_res,
+void Model::Load(const Control& control, Int num_constr, Int num_var,
                  const Int* Ap, const Int* Ai, const double* Ax,
                  const double* rhs, const char* constr_type, const double* obj,
                  const double* lbuser, const double* ubuser, Info* info) {
     clear();
-    CopyInput(num_constr, num_var, num_res, Ap, Ai, Ax, rhs, constr_type, obj, lbuser,
+    CopyInput(num_constr, num_var, Ap, Ai, Ax, rhs, constr_type, obj, lbuser,
               ubuser, info);
     if (info->errflag)
         return;
@@ -32,7 +31,6 @@ void Model::Load(const Control& control, Int num_constr, Int num_var, Int num_re
     Int dualize = control.dualize();
     if (dualize < 0)
         dualize = num_constr > 2*num_var;
-    // dualize = true;
     if (dualize)
         LoadDual();
     else
@@ -444,7 +442,7 @@ Int CheckMatrix(Int m, Int n, const Int *Ap, const Int *Ai, const double *Ax) {
     return 0;
 }
 
-void Model::CopyInput(Int num_constr, Int num_var, Int num_res, const Int* Ap, const Int* Ai,
+void Model::CopyInput(Int num_constr, Int num_var, const Int* Ap, const Int* Ai,
                       const double* Ax, const double* rhs,
                       const char* constr_type, const double* obj,
                       const double* lbuser, const double* ubuser, Info* info) {
@@ -492,7 +490,6 @@ void Model::CopyInput(Int num_constr, Int num_var, Int num_res, const Int* Ap, c
     for (double x : scaled_ubuser_)
         if (std::isfinite(x))
             norm_rhs_ = std::max(norm_rhs_, std::abs(x));
-    num_residuals_ = num_res;
 }
 
 void Model::ScaleModel(const Control& control) {
@@ -865,17 +862,6 @@ void Model::PrintPreprocessingLog(const Control& control) const {
 }
 
 void Model::WriteInfo(Info *info) const {
-    info->num_var = num_var_;
-    info->num_constr = num_constr_;
-    info->num_entries = num_entries_;
-    info->num_rows_solver = num_rows_;
-    info->num_cols_solver = num_cols_ + num_rows_; // including slack columns
-    info->num_entries_solver = AI_.entries();
-    info->dualized = dualized_;
-    info->dense_cols = num_dense_cols();
-}
-
-void Model::GetInfo(Info *info) const{
     info->num_var = num_var_;
     info->num_constr = num_constr_;
     info->num_entries = num_entries_;
@@ -1315,20 +1301,10 @@ double DualInfeasibility(const Model& model, const Vector& x,
 
     double infeas = 0.0;
     for (Int j = 0; j < (Int) x.size(); j++) {
-        if (x[j] > lb[j]){
+        if (x[j] > lb[j])
             infeas = std::max(infeas, z[j]);
-            // if (infeas){
-            // std::cout << "x[" << j << "]: " << x[j] << ", lb: " << lb[j] << ", z[" << j << "]: " << z[j] << std::endl; 
-            // std::cin.get();
-            // }
-        }
-        if (x[j] < ub[j]){
+        if (x[j] < ub[j])
             infeas = std::max(infeas, -z[j]);
-            // if (infeas){
-            // std::cout << "x[" << j << "]: " << x[j] << ", ub: " << ub[j] << ", -z[" << j << "]: " << -z[j] << std::endl; 
-            // std::cin.get();
-            // }
-        }
     }
     return infeas;
 }

@@ -52,13 +52,10 @@ public:
     // @ubuser: array of size num_var, entries can be +INFINITY
     // If the input is invalid, info->errflag is set to nonzero and the Model
     // object becomes empty.
-    void Load(const Control& control, Int num_constr, Int num_var, Int num_res,
+    void Load(const Control& control, Int num_constr, Int num_var,
               const Int* Ap, const Int* Ai, const double* Ax,
               const double* rhs, const char* constr_type, const double* obj,
               const double* lbuser, const double* ubuser, Info* info);
-
-    // Get model info 
-    void GetInfo(Info* info) const;
 
     // Returns true if the model is empty.
     bool empty() const { return cols() == 0; }
@@ -72,8 +69,6 @@ public:
     // Returns the number of structural columns of AI (i.e. without the
     // rightmost identity matrix).
     Int cols() const { return num_cols_; }
-
-    Int residuals() const {return num_residuals_; }
 
     // Returns the number of columns classified as dense.
     Int num_dense_cols() const { return num_dense_cols_; }
@@ -172,7 +167,7 @@ private:
     // Checks that the input is valid, and if so copies into the members below
     // (see "User model after scaling"). If the input is invalid, info->errflag
     // is set and the object remains unchanged.
-    void CopyInput(Int num_constr, Int num_var, Int num_res, const Int* Ap, const Int* Ai,
+    void CopyInput(Int num_constr, Int num_var, const Int* Ap, const Int* Ai,
                    const double* Ax, const double* rhs, const char* constr_type,
                    const double* obj, const double* lbuser,
                    const double* ubuser, Info* info);
@@ -324,7 +319,6 @@ private:
     Int num_var_{0};              // # variables
     Int num_free_var_{0};         // # free variables
     Int num_entries_{0};          // # entries in input matrix
-    Int num_residuals_{0};
     std::vector<Int> boxed_vars_; // indices of boxed variables
     std::vector<char> constr_type_;
     double norm_obj_{0.0};        // Infnorm(obj) as given by user

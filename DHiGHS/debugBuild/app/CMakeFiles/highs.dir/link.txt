@@ -1,0 +1,1 @@
+/usr/bin/c++   -fopenmp -g  -rdynamic CMakeFiles/highs.dir/RunHighs.cpp.o  -o ../bin/highs  -Wl,-rpath,/home/edeakins/LP/EQLPSolver/DHiGHS/debugBuild/lib: ../lib/libhighs.so.1.0.0 ../lib/libipx.so ../lib/libbasiclu.so 

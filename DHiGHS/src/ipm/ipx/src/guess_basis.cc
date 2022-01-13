@@ -231,46 +231,4 @@ std::vector<Int> GuessBasis(const Control& control, const Model& model,
     return basis;
 }
 
-std::vector<Int> GuessBasisOC(const Control& control, const Model& model,
-                              const HighsBasis& b){
-    const Int m = model.rows();
-    const Int n = model.cols() - model.residuals(); 
-    const Int r = model.cols();
-
-    // basis starts empty and is filled one index at a time. rownumber[i] >= 0
-    // iff row i was pivot row when a column was added to the basis. (The
-    // specific value has a different meaning in each method.) A column is
-    // "active" if it is eligible for being added to the basis.
-    std::vector<Int> basis;
-    int numBasic = 0;
-    int rIdx, sIdx, xIdx;
-    rIdx = n;
-    while (numBasic < m && rIdx < r){
-        basis.push_back(rIdx++);
-        numBasic++;
-    }
-    xIdx = 0;
-    while (numBasic < m && xIdx < n){
-        if (b.col_status[xIdx] == HighsBasisStatus::BASIC){
-            basis.push_back(xIdx);
-            numBasic++;
-        }
-        xIdx++;
-    }
-    sIdx = 0;
-    while (numBasic < m && sIdx < m){
-        if (b.row_status[sIdx] == HighsBasisStatus::BASIC){
-            basis.push_back(r + sIdx);
-            numBasic++;
-        }
-        sIdx++;
-    }
-    // rIdx = n;
-    // while (numBasic < m && rIdx < r){
-    //     basis.push_back(rIdx++);
-    //     numBasic++;
-    // }
-    return basis;
-}
-
 }  // namespace ipx

@@ -16,6 +16,7 @@
 #include "lp_data/HConst.h"
 #include "simplex/HSimplex.h"
 #include "simplex/SimplexTimer.h"
+#include "simplex/HighsSimplexInterface.h"
 #include "util/HighsRandom.h"
 #include "util/HighsUtils.h"
 
@@ -276,7 +277,7 @@ void HQPrimal::solvePhaseSwap() {
   // Set invertHint so that it's assigned when first tested
   invertHint = INVERT_HINT_NO;
   // Set solvePhase=2 so it's set if solvePhase2() is called directly
-  solvePhase = 3;
+  solvePhase = 4;
   // Set up local copies of model dimensions
   solver_num_col = workHMO.simplex_lp_.numCol_;
   solver_num_row = workHMO.simplex_lp_.numRow_;
@@ -716,9 +717,12 @@ void HQPrimal::primalRebuild() {
   if (reInvert) {
     // std::cout << "reinvert called" << std::endl;
     // std::cin.get();
+    double init = timer.readRunHighsClock();
     timer.start(simplex_info.clock_[InvertClock]);
     int rankDeficiency = compute_factor(workHMO);
     timer.stop(simplex_info.clock_[InvertClock]);
+    double invertTime = timer.readRunHighsClock() - init;
+    // std::cout << "invert time: " << invertTime << std::endl;
     if (rankDeficiency) {
       throw runtime_error("Primal reInvert: singular-basis-matrix");
     }
@@ -1148,6 +1152,123 @@ void HQPrimal::buildInitialFactor(){
     simplex_info.update_count = 0;
 }
 
+void HQPrimal::updateHighsBasis(){
+  int iCol, iRow;
+  std::fill(workHMO.basis_.col_status.begin(), workHMO.basis_.col_status.end(), HighsBasisStatus::NONBASIC);
+  std::fill(workHMO.basis_.row_status.begin(), workHMO.basis_.row_status.end(), HighsBasisStatus::NONBASIC);
+  for (int iRow = 0; iRow < solver_num_row; ++iRow){
+    int basicCol = workHMO.simplex_basis_.basicIndex_[iRow];
+    if (basicCol < workHMO.lp_.numCol_)
+      workHMO.basis_.col_status[basicCol] = HighsBasisStatus::BASIC;
+    else if (basicCol < solver_num_col)
+      continue;
+    else if (basicCol < solver_num_col + workHMO.lp_.numRow_)
+      workHMO.basis_.row_status[basicCol - solver_num_col] = HighsBasisStatus::BASIC;
+    else
+      continue;
+  }
+  // int numX = 0, numR = 0, numS = 0;
+  // for (iRow = 0; iRow < solver_num_row; ++iRow){
+  //   int basicCol = workHMO.simplex_basis_.basicIndex_[iRow];
+  //   if (basicCol < workHMO.lp_.numX_)
+  //     numX++;
+  //   else if (basicCol < solver_num_col)
+  //     numR++;
+  //   else numS++;
+  // }
+  // std::cout << "num x basic: " << numX << std::endl;
+  // std::cout << "num r basic: " << numR << std::endl;
+  // std::cout << "num slack basic: " << numS << std::endl;
+  // std::cin.get();
+}
+
+void HQPrimal::updateSolver(){
+  HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
+  HighsSimplexLpStatus& simplex_lp_status = workHMO.simplex_lp_status_;
+  HighsTimer& timer = workHMO.timer_;
+  printf("HQPrimal::solvePhase3 --- REMOVING BASIC R COLS/ROWS\n");
+  // When starting a new phase the (updated) primal objective function
+  // value isn't known. Indicate this so that when the value
+  // computed from scratch in build() isn't checked against the the
+  // updated value
+  simplex_lp_status.has_primal_objective_value = 0;
+  // Set invertHint so that it's assigned when first tested
+  invertHint = INVERT_HINT_NO;
+  // Set solvePhase=2 so it's set if solvePhase2() is called directly
+  solvePhase = 3;
+  // Set up local copies of model dimensions
+  solver_num_col = workHMO.simplex_lp_.numCol_;
+  solver_num_row = workHMO.simplex_lp_.numRow_;
+  solver_num_tot = solver_num_col + solver_num_row;
+
+  analysis = &workHMO.simplex_analysis_;
+
+  // Setup update limits
+  simplex_info.update_limit =
+      min(100 + solver_num_row / 100,
+          1000);  // TODO: Consider allowing the dual limit to be used
+  simplex_info.update_count = 0;
+
+  // Setup local vectors
+  col_aq.setup(solver_num_row);
+  row_ep.setup(solver_num_row);
+  row_ap.setup(solver_num_col);
+
+  // Setup local dep graph vectors
+  depStart.resize(workHMO.lp_.numResiduals_ + 1);
+
+  ph1SorterR.reserve(solver_num_row);
+  ph1SorterT.reserve(solver_num_row);
+
+#ifdef HiGHSDEV
+  printf("HQPrimal::solvePhase3 - WARNING: Setting analysis->col_aq_density = 0\n");
+  printf("HQPrimal::solvePhase3 - WARNING: Setting analysis->row_ep_density = 0\n");
+#endif
+  analysis->col_aq_density = 0;
+  analysis->row_ep_density = 0;
+
+  devexReset();
+
+  no_free_columns = true;
+  for (int iCol = 0; iCol < solver_num_tot; iCol++) {
+    if (highs_isInfinity(-workHMO.simplex_info_.workLower_[iCol])) {
+      if (highs_isInfinity(workHMO.simplex_info_.workUpper_[iCol])) {
+        // Free column
+        no_free_columns = false;
+        break;
+      }
+    }
+  }
+  #ifdef HiGHSDEV
+    if (no_free_columns) {
+      printf("Model has no free columns\n");
+    } else {
+      printf("Model has free columns\n");
+    }
+  #endif
+}
+
+void HQPrimal::updateAMatrix(){
+  int iRow, iCol, idx, nnz = 0;
+  std::vector<int> tempStart, tempIndex;
+  std::vector<double> tempValue;
+  tempStart.push_back(0);
+  for (iCol = 0; iCol < workHMO.lp_.numCol_; ++iCol){
+    for (idx = workHMO.lp_.Astart_[iCol]; idx < workHMO.lp_.Astart_[iCol + 1]; ++idx){
+      iRow = workHMO.lp_.Aindex_[idx];
+      if (iRow < workHMO.lp_.numRow_){
+        ++nnz;
+        tempIndex.push_back(workHMO.lp_.Aindex_[idx]);
+        tempValue.push_back(workHMO.lp_.Avalue_[idx]);
+      }
+    }
+    tempStart.push_back(nnz);
+  }
+  workHMO.lp_.Astart_ = tempStart;
+  workHMO.lp_.Aindex_ = tempIndex;
+  workHMO.lp_.Avalue_ = tempValue;
+}
+
 void HQPrimal::unfold() {
   ++workHMO.lp_.masterIter;
   double current_run_time = 0;
@@ -1167,18 +1288,29 @@ void HQPrimal::unfold() {
   // buildZeroMatching();
   // buildNewLUBasis();
   // rColSwapped.assign(workHMO.lp_.numResiduals_, 0);
+  // HighsSimplexInterface workInterface(workHMO);
+  originalNumCol = workHMO.lp_.numCol_;
+  originalNumRow = workHMO.lp_.numRow_;
   primalRebuild();
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_;
   int offset = 0;
   int cnt = 0;
+  int tPivCnt = 0;
   int update_limit = min(100 + workHMO.lp_.numRow_ / 100,
           1000);
+  update_limit = 1200;
+  double chooseRowTime = 0;
+  int fromCol, toCol, fromRow, toRow;
+  bool fromColBool = false;
   ////////////////////// Orbital Crossover //////////////////////
-  for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
+  for (int i = workHMO.lp_.numResiduals_ - 1; i >= 0; --i){
+  // for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
     // columnIn = workHMO.lp_.residuals_[i];
+    // // Use this when we do linker swapping before main unfold
     // offset = workHMO.lp_.residuals_[i] - workHMO.lp_.numX_;
-    // if (rColSwapped[offset]) continue;
+    // if (workHMO.lp_.basicResiduals_[offset]) continue;
     ++cnt;
+    ++tPivCnt;
     current_run_time = timer.readRunHighsClock();
     // degeneratePivot = false;
     if (current_run_time + workHMO.lp_.foldSolveTime > workHMO.options_.time_limit){
@@ -1189,35 +1321,66 @@ void HQPrimal::unfold() {
     timer.start(simplex_info.clock_[ChuzcPrimalClock]);
     columnIn = workHMO.lp_.residuals_[i];
     timer.stop(simplex_info.clock_[ChuzcPrimalClock]);
+    if (!fromColBool){
+      fromCol = columnIn;
+      fromColBool = true;
+      fromRow = workHMO.lp_.numS_ + i;
+    }
     // Edit work and bounds for residual columns
-    workHMO.simplex_info_.workCost_[columnIn] = 0;
+    workHMO.simplex_info_.workCost_[columnIn] = 1;
     workHMO.simplex_info_.workUpper_[columnIn] = +HIGHS_CONST_INF;
     workHMO.simplex_info_.workLower_[columnIn] = -HIGHS_CONST_INF;
     workHMO.simplex_info_.workValue_[columnIn] = 0;
     workHMO.simplex_basis_.nonbasicMove_[columnIn] = 1;
-    workHMO.lp_.colLower_[columnIn] = -HIGHS_CONST_INF;
-    workHMO.lp_.colUpper_[columnIn] = HIGHS_CONST_INF;
     // Highs choose row function nothing changed from normal simplex
+    double init = timer.readRunHighsClock();
     primalChooseRow();
+    chooseRowTime += timer.readRunHighsClock() - init;
     // Highs primal update function nothing change from normal simplex
     primalUpdate();
-    // // Check for numerical instability in basis inverse
-    // if (ivHint == INVERT_HINT_POSSIBLY_SINGULAR_BASIS){
-    //   primalRebuild(); 
-    //   ivHint = 0;
-    //   cnt = 0;
-    // }
-    // Check if we need to refactor LU factorization based on pivots done
+    workHMO.simplex_info_.workCost_[columnIn] = 0;
+    workHMO.lp_.colUpper_[columnIn] = +HIGHS_CONST_INF;
+    workHMO.lp_.colLower_[columnIn] = -HIGHS_CONST_INF;
+  //   // Check for numerical instability in basis inverse
+  //   if (ivHint == INVERT_HINT_POSSIBLY_SINGULAR_BASIS){
+  //     // std::cout << "choose row time: " << chooseRowTime << std::endl;
+  //     primalRebuild(); 
+  //     ivHint = 0;
+  //     cnt = 0;
+  //     chooseRowTime = 0;
+  //     // toCol = columnIn;
+  //     // toRow = workHMO.lp_.numS_ + i;
+  //     // workInterface.deleteCols(fromCol, toCol);
+  //     // workInterface.deleteRows(fromRow, toRow);
+  //     // fromColBool = false;
+  //   }
+  //   // Check if we need to refactor LU factorization based on pivots done
     if (cnt > update_limit){
-      primalRebuild();
+      workHMO.lp_.numCol_ -= tPivCnt;
+      workHMO.lp_.numRow_ -= tPivCnt;
+      workHMO.basis_.numCol_ -= tPivCnt;
+      workHMO.basis_.numRow_ -= tPivCnt;
+      workHMO.simplex_lp_status_.valid = false;
+      workHMO.simplex_lp_status_.has_basis = false;
+      updateSolver();
+      updateHighsBasis();
+      updateAMatrix();
+      transition(workHMO);
+      // primalRebuild();
       cnt = 0;
+      tPivCnt = 0;
+      // toCol = columnIn;
+      // toRow = workHMO.lp_.numS_ + i;
+      // workInterface.deleteCols(fromCol, toCol);
+      // workInterface.deleteRows(fromRow, toRow);
+      // fromColBool = false;
     }
   }
   ////////////////////// Orbital Crossover Done //////////////////////
   // Final Rebuild
   primalRebuild();
   // Clean up if we have dual infeas after all r pivots
-  std::sort(workHMO.simplex_basis_.basicIndex_.begin(), workHMO.simplex_basis_.basicIndex_.end());
+  // std::sort(workHMO.simplex_basis_.basicIndex_.begin(), workHMO.simplex_basis_.basicIndex_.end());
   // for (int i = 0; i < workHMO.simplex_basis_.basicIndex_.size(); ++i){
   //   std::cout << workHMO.simplex_basis_.basicIndex_[i] << std::endl;
   // }
@@ -1654,7 +1817,7 @@ void HQPrimal::primalUpdate() {
   double aRow = fabs(alphaRow);
   double aDiff = fabs(aCol - aRow);
   numericalTrouble = aDiff / min(aCol, aRow);
-  // if (numericalTrouble > 1e-7)
+  // if (numericalTrouble > 1e-7 && solvePhase != 4)
   //   printf("NumericalTrouble - Reinverting\n");
   // Reinvert if the relative difference is large enough, and updates have been
   //performed

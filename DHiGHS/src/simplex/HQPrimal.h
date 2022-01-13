@@ -71,6 +71,9 @@ class HQPrimal {
   void changeDegenSlack();
   void appendLeftOverResiduals();
   void buildInitialFactor();
+  void updateHighsBasis();
+  void updateSolver();
+  void updateAMatrix();
   void primalChooseRow();
   void primalUpdate();
 
@@ -105,7 +108,9 @@ class HQPrimal {
   hopcroftKarp hK;
 
   int solver_num_col;
+  int originalNumCol;
   int solver_num_row;
+  int originalNumRow;
   int solver_num_tot;
   HighsSimplexAnalysis* analysis;
 

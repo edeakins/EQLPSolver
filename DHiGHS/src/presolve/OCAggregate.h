@@ -78,6 +78,7 @@ public:
     HighsBasis* getBasis();
     HighsLp* getSubLp();
     HighsBasis* getSubBasis();
+    std::vector<int>& getUnPerm();
 
     HighsLp *elp; 
     HighsLp* olp;
@@ -116,6 +117,7 @@ public:
     std::vector<int> parent;
     std::vector<int> isParent;
     std::vector<int> parentStart;
+    std::vector<int> parentRow;
     std::vector<int> child;
     std::vector<int> isChild;
     std::vector<int> childRow;
@@ -132,6 +134,10 @@ public:
     std::vector<int> rowUnperm;
     std::vector<int> colPerm;
     std::vector<int> colUnperm;
+    std::vector<int> frontCol;
+    std::vector<int> pFrontCol;
+    std::vector<int> frontRow;
+    std::vector<int> pFrontRow;
 
     // New sparse mat class for initial LU to remove some r columns hopefull
     SparseMatrix A;
