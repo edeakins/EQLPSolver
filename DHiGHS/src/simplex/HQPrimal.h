@@ -71,6 +71,7 @@ class HQPrimal {
   void changeDegenSlack();
   void appendLeftOverResiduals();
   void buildInitialFactor();
+  void updateSimplexLp();
   void updateHighsBasis();
   void updateSolver();
   void updateAMatrix();
@@ -120,6 +121,7 @@ class HQPrimal {
 
   int solvePhase;
   // Pivot related
+  int numDrop;
   int invertHint;
   int columnIn;
   int rowOut;

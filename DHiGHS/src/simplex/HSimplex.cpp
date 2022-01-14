@@ -339,7 +339,8 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
   // Possibly check for basis condition. ToDo Override this for MIP hot start
   bool basis_condition_ok = true;
   if (highs_model_object.options_.simplex_initial_condition_check) {
-    basis_condition_ok = basisConditionOk(highs_model_object, "Initial");
+    ///////////// ETHAN YOU COMMENTED THIS OUT (Jan - 13 -2022)
+    // basis_condition_ok = basisConditionOk(highs_model_object, "Initial");
   }
   // basis_condition_ok = true; //////// ETHAN YOU DID THIS /////////
 
