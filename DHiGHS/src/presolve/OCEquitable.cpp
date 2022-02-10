@@ -33,6 +33,8 @@ bool HighsOCEquitablePartition::isolate(){
     swapLabels(min, back);
     split(targ, back);
     refine();
+    // for (int i = 0; i < g->numTot_; i += partition->len[i] + 1)
+    //     sort(partition->label.begin() + i, partition->label.begin() + i + partition->len[i] + 1);
     if (discrete()) return true;
     else return false;
 }
@@ -542,6 +544,8 @@ bool HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     // front.assign(partition->front.begin(), partition->front.end());
     // len.assign(partition->len.begin(), partition->len.end());
     refine();
+    for (int i = 0; i < g->numTot_; i += partition->len[i] + 1)
+        sort(partition->label.begin() + i, partition->label.begin() + i + partition->len[i] + 1);
     if (discrete()) return true;
     return false;
 }

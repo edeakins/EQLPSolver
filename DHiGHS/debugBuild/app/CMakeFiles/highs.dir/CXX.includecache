@@ -301,6 +301,8 @@ cstdlib
 -
 cmath
 -
+algorithm
+-
 HighsLp.h
 ../src/presolve/HighsLp.h
 

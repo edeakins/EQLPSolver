@@ -1166,9 +1166,9 @@ void HQPrimal::updateSimplexLp(){
   simplexLp.colCost_.resize(simplexLp.numCol_);
   std::vector<int> tempStart(1);
   std::vector<int> tempIndex;
-  std::vector<int> tempValue;
+  std::vector<double> tempValue;
   int iCol, iRow, rowVal, j, numEl = 0;
-  for (iCol = 0; iCol < simplexLp.numCol_; ++i){
+  for (iCol = 0; iCol < simplexLp.numCol_; ++iCol){
     for (j = simplexLp.Astart_[iCol]; j < simplexLp.Astart_[iCol + 1]; ++j){
       iRow = simplexLp.Aindex_[j];
       rowVal = simplexLp.Avalue_[j];
@@ -1385,8 +1385,8 @@ void HQPrimal::unfold() {
     workHMO.simplex_info_.workCost_[columnIn] = 0;
     workHMO.lp_.colUpper_[columnIn] = +HIGHS_CONST_INF;
     workHMO.lp_.colLower_[columnIn] = -HIGHS_CONST_INF;
-    // // Check for numerical instability in basis inverse
-    // if (ivHint == INVERT_HINT_POSSIBLY_SINGULAR_BASIS){
+    // Check for numerical instability in basis inverse
+    if (ivHint == INVERT_HINT_POSSIBLY_SINGULAR_BASIS){
     //   workHMO.lp_.numCol_ -= tPivCnt;
     //   workHMO.lp_.numRow_ -= tPivCnt;
     //   workHMO.basis_.numCol_ -= tPivCnt;
@@ -1397,24 +1397,24 @@ void HQPrimal::unfold() {
     //   updateHighsBasis();
     //   updateAMatrix();
     //   transition(workHMO);
-    //   primalRebuild(); 
-    //   ivHint = 0;
-    //   cnt = 0;
+      primalRebuild(); 
+      ivHint = 0;
+      cnt = 0;
     //   tPivCnt = 0;
     //   chooseRowTime = 0;
-    // }
+    }
   //   // Check if we need to refactor LU factorization based on pivots done
     if (cnt > update_limit){
-      workHMO.lp_.numCol_ -= tPivCnt;
-      workHMO.lp_.numRow_ -= tPivCnt;
-      workHMO.basis_.numCol_ -= tPivCnt;
-      workHMO.basis_.numRow_ -= tPivCnt;
-      workHMO.simplex_lp_status_.valid = false;
-      workHMO.simplex_lp_status_.has_basis = false;
-      updateSolver();
-      updateHighsBasis();
-      updateAMatrix();
-      transition(workHMO);
+      // workHMO.lp_.numCol_ -= tPivCnt;
+      // workHMO.lp_.numRow_ -= tPivCnt;
+      // workHMO.basis_.numCol_ -= tPivCnt;
+      // workHMO.basis_.numRow_ -= tPivCnt;
+      // workHMO.simplex_lp_status_.valid = false;
+      // workHMO.simplex_lp_status_.has_basis = false;
+      // updateSolver();
+      // updateHighsBasis();
+      // updateAMatrix();
+      // transition(workHMO);
       primalRebuild();
       cnt = 0;
       tPivCnt = 0;

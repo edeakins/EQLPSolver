@@ -11,6 +11,7 @@
 #include <set>
 #include <cstdlib>
 #include <cmath>
+#include <algorithm>
 // #include <limits>
 #include "HighsLp.h"
 // #include "HStruct.h"
