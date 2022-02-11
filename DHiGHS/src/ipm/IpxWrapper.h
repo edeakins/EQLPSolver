@@ -24,6 +24,8 @@
 #include "lp_data/HighsLp.h"
 #include "lp_data/HighsSolution.h"
 
+double crossoverTime = 0;
+
 IpxStatus fillInIpxData(const HighsLp& lp, ipx::Int& num_col,
                         std::vector<double>& obj, std::vector<double>& col_lb,
                         std::vector<double>& col_ub, ipx::Int& num_row,
@@ -219,7 +221,7 @@ HighsStatus solveLpIpx(const HighsLp& lp, const HighsOptions& options,
   ipx::Int status =
       lps.Solve(num_col, &objective[0], &col_lb[0], &col_ub[0], num_row, &Ap[0],
                 &Ai[0], &Av[0], &rhs[0], &constraint_type[0]);
-
+  crossoverTime = lps.crossoverTime;
 #ifdef HiGHSDEV
   int int_status = status;
   if (status != 1000) printf("IPX Solve: status = %d\n", int_status);
@@ -316,5 +318,9 @@ HighsStatus solveLpIpx(const HighsLp& lp, const HighsOptions& options,
   }
   //  return IpxStatus::OK;
   return HighsStatus::OK;
+}
+
+double getCrossoverTime(){
+  return crossoverTime;
 }
 #endif

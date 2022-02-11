@@ -99,6 +99,7 @@ public:
     // @rowcounts, @colcounts: either NULL or size num_rows_solver arrays.
     // Returns -1 if no basis was available and 0 otherwise.
     Int SymbolicInvert(Int* rowcounts, Int* colcounts);
+    double crossoverTime = 0;
 
 private:
     void InteriorPointSolve();
@@ -115,6 +116,7 @@ private:
     Model model_;
     std::unique_ptr<Iterate> iterate_;
     std::unique_ptr<Basis> basis_;
+    double crossoverTimer = 0;
 
     // Basic solution computed by crossover and basic status of each variable
     // (one of IPX_nonbasic_lb, IPX_nonbasic_ub, IPX_basic, IPX_superbasic).

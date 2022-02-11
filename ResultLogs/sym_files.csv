@@ -1,0 +1,2 @@
+Instance,Partition,Fold LP,Solve ALP,Lift ALP,Solve ELP,OC (secs),Program Execution Time,Objective
+cov1052.mps,0.000000,0.000113,0.000766,0.000098,0.017695,0.017220,0.019425,4.500000

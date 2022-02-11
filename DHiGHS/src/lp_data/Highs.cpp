@@ -373,14 +373,14 @@ HighsStatus Highs::run() {
     alpSolution_ = hmos_[original_hmo].solution_;
     alpBasis_ = hmos_[original_hmo].basis_;
     // refine partition
-    timer_.start(timer_.equipart_clock);
-    refinePartitionFinal();
-    timer_.stop(timer_.equipart_clock);
+    // timer_.start(timer_.equipart_clock);
+    // refinePartitionFinal();
+    // timer_.stop(timer_.equipart_clock);
     // std::cout << "Refine done" << std::endl;
     // std::cin.get();
     // lift to next elp
     timer_.start(timer_.lift_clock);
-    liftLpExtended();
+    liftLpExtendedFinal();
     // liftBasis();
     timer_.stop(timer_.lift_clock);
     /////////////// Pivot in as many swappable linkers as Possible Before Unfold /////////////////
@@ -409,7 +409,7 @@ HighsStatus Highs::run() {
       hmos_[solved_hmo].basis_ = basis_;
       options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
       // std::string itercnt = std::string(cnt);
-      writeModel("../../DOKSmps/Extended.lp");
+      // writeModel("../../DOKSmps/Extended.lp");
       timer_.start(timer_.elp_solve_clock);
       call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
       timer_.stop(timer_.elp_solve_clock);
@@ -679,7 +679,7 @@ HighsStatus Highs::run() {
     sTimes->foldTime = timer_.clock_time[timer_.fold_clock];
     sTimes->alpSolveTime = timer_.clock_time[timer_.alp_solve_clock];
     sTimes->liftTime = timer_.clock_time[timer_.lift_clock];
-    sTimes->elpSolveTime = timer_.clock_time[timer_.elp_solve_clock];
+    sTimes->elpSolveTime = hmos_[solved_hmo].timer_.clock_time[hmos_[solved_hmo].timer_.orbital_crossover_clock];
     sTimes->solveTime = timer_.clock_time[timer_.solve_clock];
     sTimes->runTime = timer_.clock_time[timer_.run_highs_clock];
     // Reductions
@@ -695,6 +695,9 @@ HighsStatus Highs::run() {
     reducs->colReductions = (double)(oNCol - alpNCol)/oNCol * 100;
     reducs->rowReductions = (double)(oNRow - alpNRow)/oNRow * 100;
     reducs->nnzReductions = (double)(oNnz - alpNnz)/oNnz * 100;
+  }
+  else if (options_.solver == ipm_string){
+    sTimes->solveTime = getCrossoverTime();
   }
   else{
     sTimes->solveTime = timer_.clock_time[timer_.solve_clock];
@@ -771,6 +774,9 @@ void Highs::liftLpExtended(){
 void Highs::liftLpExtendedFinal(){
   agg_.buildLp(part_, &alpBasis_, &alpSolution_, true, true);
   alp_ = agg_.getLp();
+  slp_ = agg_.getSubLp();
+  lpSymBasis_ = agg_.getBasis();
+  slpSymBasis_ = agg_.getSubBasis();
 }
 
 void Highs::liftBasis(){
@@ -1617,6 +1623,9 @@ HighsStatus Highs::writeSolution(const std::string filename, const bool pretty) 
 
 HighsStatus Highs::writeTimes(const std::string filename, int solvedHmo){
   if (!options_.aggregate.compare(on_string)) writeTimesToFile(filename, sTimes, on_string,
+                                                        options_.model_file, hmos_[solvedHmo].simplex_info_.primal_objective_value,
+                                                        hmos_[solvedHmo].simplex_info_.dual_objective_value);
+  else if (!options_.solver.compare(ipm_string)) writeTimesToFile(filename, sTimes, ipm_string,
                                                         options_.model_file, hmos_[solvedHmo].simplex_info_.primal_objective_value,
                                                         hmos_[solvedHmo].simplex_info_.dual_objective_value);
   else writeTimesToFile(filename, sTimes, off_string,

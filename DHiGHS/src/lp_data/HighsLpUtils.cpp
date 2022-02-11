@@ -1837,8 +1837,8 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
                       std::string model_file, double pObj,
                       double dObj){
   /* For HiGHS results transfer to deeper write funciton next */
-  if (agg.compare(on_string)){
-    std::string newPath = "../ResultLogs/" + filename;
+  if (agg.compare(on_string) && agg.compare(ipm_string)){
+    std::string newPath = "../../../ResultLogs/" + filename;
     std::ofstream timeFileOut(newPath, std::ios_base::app);
     std::ifstream timeFileIn(newPath);
     if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
@@ -1861,9 +1861,33 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
     timeFileOut << outCols;
     timeFileOut.close();
   }
+  else if (!agg.compare(ipm_string)){
+    std::string newPath = "../../../ResultLogs/" + filename;
+    std::ofstream timeFileOut(newPath, std::ios_base::app);
+    std::ifstream timeFileIn(newPath);
+    if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
+      std::string column0 = "Instance";
+      std::string column1 = "HiGHS (secs)";
+      std::string column2 = "Crossover Time";
+      std::string column3 = "Objective";
+      std::string outCols = column0 + "," + column2 + "," + column3 + "\n";
+      timeFileOut << outCols;
+    }
+    std::string name = model_file.c_str();
+    name = name.substr(name.find_last_of("/\\") + 1);
+    std::string solveTime = std::to_string(sTimes->solveTime);
+    // std::string hRunTime = std::to_string(sTimes->runTime);
+    std::string objVal;
+    if (std::fabs(pObj - dObj)<1e-6)
+      objVal = std::to_string(pObj);
+    else objVal = "DUAL AND PRIMAL INCOSISTENT OR REACHED TIME LIMIT";
+    std::string outCols = name + "," + solveTime + "," + objVal + "\n";
+    timeFileOut << outCols;
+    timeFileOut.close();
+  }
   /* For OC results transfer to deeper write function next */
   else{
-    std::string newPath = "../ResultLogs/" + filename;
+    std::string newPath = "../../../ResultLogs/" + filename;
     std::ofstream timeFileOut(newPath, std::ios_base::app);
     std::ifstream timeFileIn(newPath);
     if (timeFileIn.peek() == std::ifstream::traits_type::eof()){
@@ -1872,12 +1896,13 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
       std::string column2 = "Fold LP";
       std::string column3 = "Solve ALP";
       std::string column4 = "Lift ALP";
-      std::string column5 = "Solve ELP";
-      std::string column6 = "OC (secs)";
+      std::string column5 = "Orbital Crossover Time";
+      std::string column6 = "Total Solve (secs)";
       std::string column7 = "Program Execution Time";
       std::string column8 = "Objective";
-      std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + 
-        column4 + "," + column5 + "," + column6 + "," + column7 + "," + column8 + "\n";
+      // std::string outCols = column0 + "," + column1 + "," + column2 + "," + column3 + "," + 
+      //   column4 + "," + column5 + "," + column6 + "," + column7 + "," + column8 + "\n";
+      std::string outCols = column0 + "," + column5 + "," + column8 + "\n";
       timeFileOut << outCols;
     }
     std::string name = model_file.c_str();
@@ -1893,9 +1918,10 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
     if (std::fabs(pObj - dObj)<1e-6)
       objVal = std::to_string(pObj);
     else objVal = "DUAL AND PRIMAL INCOSISTENT OR REACHED TIME LIMIT";
-    std::string outCols = name + "," + saucyTime + "," + foldTime + "," + alpSolvetime
-      + "," + liftTime + "," + elpSolveTime + "," + solveTime + "," + hRunTime
-      + "," + objVal + "\n";
+    // std::string outCols = name + "," + saucyTime + "," + foldTime + "," + alpSolvetime
+    //   + "," + liftTime + "," + elpSolveTime + "," + solveTime + "," + hRunTime
+    //   + "," + objVal + "\n";
+    std::string outCols = name + "," + elpSolveTime + "," + objVal + "\n";
     timeFileOut << outCols;
     timeFileOut.close();
   }
@@ -1903,7 +1929,7 @@ void writeTimesToFile(std::string filename, struct solveTimeInfo* sTimes, std::s
 
 void writeReductionsToFile(std::string filename, struct symmetryReductionInfo* reducs, std::string model_name){
   // For reductions that come from OC process
-  std::string newPath = "../ResultLogs/" + filename;
+  std::string newPath = "../../../ResultLogs/" + filename;
   std::ofstream timeFileOut(newPath, std::ios_base::app);
   std::ifstream timeFileIn(newPath);
   if (timeFileIn.peek() == std::ifstream::traits_type::eof()){

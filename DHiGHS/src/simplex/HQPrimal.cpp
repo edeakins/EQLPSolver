@@ -1332,6 +1332,7 @@ void HQPrimal::unfold() {
   // HighsSimplexInterface workInterface(workHMO);
   originalNumCol = workHMO.lp_.numCol_;
   originalNumRow = workHMO.lp_.numRow_;
+  timer.start(timer.orbital_crossover_clock);
   primalRebuild();
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_;
   int offset = 0;
@@ -1428,6 +1429,7 @@ void HQPrimal::unfold() {
   ////////////////////// Orbital Crossover Done //////////////////////
   // Final Rebuild
   primalRebuild();
+  timer.stop(timer.orbital_crossover_clock);
   // Clean up if we have dual infeas after all r pivots
   // std::sort(workHMO.simplex_basis_.basicIndex_.begin(), workHMO.simplex_basis_.basicIndex_.end());
   // for (int i = 0; i < workHMO.simplex_basis_.basicIndex_.size(); ++i){

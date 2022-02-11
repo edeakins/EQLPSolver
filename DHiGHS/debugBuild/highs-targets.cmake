@@ -58,21 +58,21 @@ set_target_properties(libipx PROPERTIES
 # Create imported target libbasiclu
 add_library(libbasiclu SHARED IMPORTED)
 
-# Import target "libhighs" for configuration "DEBUG"
+# Import target "libhighs" for configuration "Debug"
 set_property(TARGET libhighs APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(libhighs PROPERTIES
   IMPORTED_LOCATION_DEBUG "/home/edeakins/LP/EQLPSolver/DHiGHS/debugBuild/lib/libhighs.so.1.0.0"
   IMPORTED_SONAME_DEBUG "libhighs.so.1.0"
   )
 
-# Import target "libipx" for configuration "DEBUG"
+# Import target "libipx" for configuration "Debug"
 set_property(TARGET libipx APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(libipx PROPERTIES
   IMPORTED_LOCATION_DEBUG "/home/edeakins/LP/EQLPSolver/DHiGHS/debugBuild/lib/libipx.so"
   IMPORTED_SONAME_DEBUG "libipx.so"
   )
 
-# Import target "libbasiclu" for configuration "DEBUG"
+# Import target "libbasiclu" for configuration "Debug"
 set_property(TARGET libbasiclu APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(libbasiclu PROPERTIES
   IMPORTED_LOCATION_DEBUG "/home/edeakins/LP/EQLPSolver/DHiGHS/debugBuild/lib/libbasiclu.so"

@@ -76,7 +76,7 @@ void HighsOCAggregate::buildLp(){
     buildAmatrix();
     buildRhs();
     buildBnds();
-    buildResiduals();
+    // buildResiduals();
     epMinusOne = *ep;
 }
 
@@ -143,7 +143,7 @@ void HighsOCAggregate::buildAmatrix(){
     double xlen, xv;
     for (i = 0; i < numCol; i += ep->len[i] + 1){
         xi = col[ep->label[i]];
-        xf = ep->front[ep->label[i]];
+        xf = i;
         xlen = ep->len[xf] + 1;
         for (j = olp->Astart_[ep->label[i]]; j < olp->Astart_[ep->label[i] + 1]; ++j){
             ci = row[olp->Aindex_[j]];
@@ -277,7 +277,7 @@ void HighsOCAggregate::buildRhsFromScratch(){
     int i;
     double clen;
     for (i = numCol; i < numTot; i += ep->len[i] + 1){
-        clen = ep->len[ep->front[ep->label[i]]] + 1;
+        clen = ep->len[i] + 1;
         elp->rowLower_[row[ep->label[i] - numCol]] = 
             olp->rowLower_[ep->label[i] - numCol] * clen;
         elp->rowUpper_[row[ep->label[i] - numCol]] = 
@@ -330,7 +330,7 @@ void HighsOCAggregate::buildFinalRhsFromSolution(){
     double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
     for (i = numCol; i < numTot; ++i){
         r = i - numCol;
-        pr = prow[i - numCol];
+        pr = prow[r];
         pclen = ep->len[ep->front[i]] + 1;
         pv = (double)solution->row_value[pr]/pclen;
         lb = olp->rowLower_[r];
@@ -524,18 +524,18 @@ void HighsOCAggregate::buildResidualLinks(){
 }
 
 void HighsOCAggregate::buildFinalResidualLinks(){
-    int i, x1, x2, x0, of, nf;
+    int i, oldCol, newCol, oldRep, newRep, of, nf;
     numResiduals = 0;
     for (i = 0; i < numCol; ++i){
         nf = i;
         of = ep->front[i];
-        if (nf == of) continue;
-        x0 = pcol[ep->label[of]];
-        x1 = col[ep->label[of]];
-        x2 = i;
-        if (x1 == x2) continue;
-        parent[numResiduals] = x1;
-        child[numResiduals] = x2;
+        oldRep = ep->label[of];
+        newRep = i;
+        oldCol = pcol[of];
+        newCol = col[nf];
+        if (oldRep == newRep) continue;
+        parent[numResiduals] = oldRep;
+        child[numResiduals] = newRep;
         residuals[numResiduals] = elp->numCol_ + numResiduals;
         numResiduals++;
     }
@@ -937,30 +937,35 @@ void HighsOCAggregate::buildResidualRowBasis(){
 }
 
 void HighsOCAggregate::buildFinalColBasis(){
-    int i, c, pc, rep;
+    int i, c, oldRep, newRep, nf, of, oldCol, newCol;
     HighsBasisStatus status;;
     for (i = 0; i < numCol; ++i){
-        c = i;
-        pc = pcol[i];
-        rep = pcolrep[pc];
-        status = basis->col_status[pc];
-        elpBasis->col_status[i] = status;
+        nf = i;
+        of = ep->front[i];
+        oldRep = ep->label[of];
+        newRep = i;
+        oldCol = pcol[of];
+        newCol = i;
+        status = basis->col_status[oldCol];
+        elpBasis->col_status[newCol] = status;
     }
     elpBasis->numCol_ = numCol;
 }
 
 void HighsOCAggregate::buildFinalRowBasis(){
-    int i, r, pr, rep, cnt = 0;
+    int i, r, pr, rep, of, nf, oldRep, newRep, oldRow, newRow, cnt = 0;
     HighsBasisStatus basic = HighsBasisStatus::BASIC, status;
     for (i = 0; i < basis->row_status.size(); ++i){
         if (basis->row_status[i] != basic){
-            rep = prowrep[i];
-            elpBasis->row_status[rep] = basis->row_status[i];
-            finalRowRep[rep] = true;
+            oldRep = prowrep[i];
+            elpBasis->row_status[oldRep] = basis->row_status[i];
+            finalRowRep[oldRep] = true;
         }
     }
     for (i = 0; i < numRow; ++i){
         if (finalRowRep[i]) continue;
+        of = ep->front[i + numCol];
+        nf = i + numCol;
         pr = prow[i];
         if (basis->row_status[pr] != basic){
             degenSlack[i] = 1;
@@ -982,8 +987,10 @@ void HighsOCAggregate::buildColPointers(){
     int i, j, cnt = 0;
     // front.clear();
     // std::pair<std::set<int>::iterator, bool> ret;
-    for (i = 0; i < numCol; i += ep->len[i] + 1)
-        frontCol[i] = cnt++;
+    for (i = 0; i < numCol; i += ep->len[i] + 1){
+        frontCol[i] = cnt;
+        colrep[cnt++] = ep->label[i];
+    }
     for (i = 0; i < numCol; ++i)
         col[i] = frontCol[ep->front[i]];
     elp->numCol_ = ep->ncsplits;
@@ -992,8 +999,10 @@ void HighsOCAggregate::buildColPointers(){
 
 void HighsOCAggregate::buildRowPointers(){
     int i, j, cnt = 0;
-    for (i = numCol; i < numTot; i += ep->len[i] + 1)
-        frontRow[i] = cnt++;
+    for (i = numCol; i < numTot; i += ep->len[i] + 1){
+        frontRow[i] = cnt;
+        rowrep[cnt++] = ep->label[i] - numCol;
+    }
     for (i = numCol; i < numTot; ++i)
         row[i - numCol] = frontRow[ep->front[i]];
     elp->numRow_ = ep->nrsplits;
