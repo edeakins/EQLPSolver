@@ -1346,8 +1346,8 @@ void HQPrimal::unfold() {
   int fromCol, toCol, fromRow, toRow;
   bool fromColBool = false;
   ////////////////////// Orbital Crossover //////////////////////
-  for (int i = workHMO.lp_.numResiduals_ - 1; i >= 0; --i){
-  // for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
+  // for (int i = workHMO.lp_.numResiduals_ - 1; i >= 0; --i){
+  for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
     // columnIn = workHMO.lp_.residuals_[i];
     // // Use this when we do linker swapping before main unfold
     // offset = workHMO.lp_.residuals_[i] - workHMO.lp_.numX_;
@@ -1380,7 +1380,12 @@ void HQPrimal::unfold() {
     double init = timer.readRunHighsClock();
     primalChooseRow();
     chooseRowTime += timer.readRunHighsClock() - init;
-    // std::cout << "rowOut: " << rowOut << std::endl;
+    // if (workHMO.simplex_basis_.basicIndex_[rowOut] >= workHMO.lp_.numX_ && 
+    //   workHMO.simplex_basis_.basicIndex_[rowOut] < workHMO.lp_.numCol_){
+      std::cout << "column in: " << columnIn << std::endl;
+      std::cout << "columnOut: " << workHMO.simplex_basis_.basicIndex_[rowOut] << std::endl;
+      std::cout << "rowOut: " << rowOut << std::endl;
+    // }
     // Highs primal update function nothing change from normal simplex
     primalUpdate();
     workHMO.simplex_info_.workCost_[columnIn] = 0;

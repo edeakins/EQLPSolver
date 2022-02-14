@@ -1016,7 +1016,9 @@ void HighsOCAggregate::buildFinalPointers(){
     for (i = 0; i < numRow; ++i)
         row[i] = rowrep[i] = i;
     elp->numCol_ = numCol;
+    elp->numX_ = numCol;
     elp->numRow_ = numRow;
+    elp->numS_ = numRow;
 }
 
 HighsLp* HighsOCAggregate::getLp(){

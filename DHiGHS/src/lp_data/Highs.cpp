@@ -409,7 +409,7 @@ HighsStatus Highs::run() {
       hmos_[solved_hmo].basis_ = basis_;
       options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
       // std::string itercnt = std::string(cnt);
-      // writeModel("../../DOKSmps/Extended.lp");
+      writeModel("../../DOKSmps/Extended.lp");
       timer_.start(timer_.elp_solve_clock);
       call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
       timer_.stop(timer_.elp_solve_clock);
