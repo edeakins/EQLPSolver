@@ -1382,9 +1382,9 @@ void HQPrimal::unfold() {
     chooseRowTime += timer.readRunHighsClock() - init;
     // if (workHMO.simplex_basis_.basicIndex_[rowOut] >= workHMO.lp_.numX_ && 
     //   workHMO.simplex_basis_.basicIndex_[rowOut] < workHMO.lp_.numCol_){
-      std::cout << "column in: " << columnIn << std::endl;
-      std::cout << "columnOut: " << workHMO.simplex_basis_.basicIndex_[rowOut] << std::endl;
-      std::cout << "rowOut: " << rowOut << std::endl;
+      // std::cout << "column in: " << columnIn << std::endl;
+      // std::cout << "columnOut: " << workHMO.simplex_basis_.basicIndex_[rowOut] << std::endl;
+      // std::cout << "rowOut: " << rowOut << std::endl;
     // }
     // Highs primal update function nothing change from normal simplex
     primalUpdate();
@@ -1440,7 +1440,7 @@ void HQPrimal::unfold() {
   // for (int i = 0; i < workHMO.simplex_basis_.basicIndex_.size(); ++i){
   //   std::cout << workHMO.simplex_basis_.basicIndex_[i] << std::endl;
   // }
-  if (workHMO.scaled_solution_params_.num_dual_infeasibilities > 0) solvePhase2();
+  // if (workHMO.scaled_solution_params_.num_dual_infeasibilities > 0) solvePhase2();
 }
 
 void HQPrimal::swapDegenerate(){

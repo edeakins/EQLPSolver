@@ -373,14 +373,14 @@ HighsStatus Highs::run() {
     alpSolution_ = hmos_[original_hmo].solution_;
     alpBasis_ = hmos_[original_hmo].basis_;
     // refine partition
-    // timer_.start(timer_.equipart_clock);
-    // refinePartitionFinal();
-    // timer_.stop(timer_.equipart_clock);
+    timer_.start(timer_.equipart_clock);
+    refinePartitionFinal();
+    timer_.stop(timer_.equipart_clock);
     // std::cout << "Refine done" << std::endl;
     // std::cin.get();
     // lift to next elp
     timer_.start(timer_.lift_clock);
-    liftLpExtendedFinal();
+    liftLpExtended();
     // liftBasis();
     timer_.stop(timer_.lift_clock);
     /////////////// Pivot in as many swappable linkers as Possible Before Unfold /////////////////
@@ -398,7 +398,7 @@ HighsStatus Highs::run() {
     // alpSolution_ = hmos_[original_hmo].solution_;
     // alpBasis_ = hmos_[original_hmo].basis_;
     // int swaps = swapInRColumns();
-    int swaps = 0;
+    int swaps = -1;
     //////////// Do remaining linker pivots that didn't have swap ////////////////////////////
     if (swaps < alp_->numResiduals_){
       // Pass new elp

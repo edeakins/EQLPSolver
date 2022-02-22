@@ -98,6 +98,10 @@ public:
     int numResiduals = 0;
     int numTotResiduals;
     int degenCnt = 0;
+    int colCnt = 0;
+    int pcolCnt = 0;
+    int rowCnt = 0;
+    int prowCnt = 0;
     std::vector<int> AdegenRStart;
     std::vector<int> AdegenRIndex;
     std::vector<double> AdegenRValue;
@@ -117,6 +121,7 @@ public:
     std::vector<int> parent;
     std::vector<int> isParent;
     std::vector<int> parentStart;
+    std::vector<int> parentFreq;
     std::vector<int> parentRow;
     std::vector<int> child;
     std::vector<int> isChild;
@@ -135,9 +140,15 @@ public:
     std::vector<int> colPerm;
     std::vector<int> colUnperm;
     std::vector<int> frontCol;
+    std::vector<int> colFront;
     std::vector<int> pFrontCol;
     std::vector<int> frontRow;
+    std::vector<int> rowFront;
     std::vector<int> pFrontRow;
+    std::set<int> colReps;
+    std::set<int> newColReps;
+    std::set<int> rowReps;
+    std::set<int> newRowReps;
 
     // New sparse mat class for initial LU to remove some r columns hopefull
     SparseMatrix A;
