@@ -45,6 +45,7 @@ class Highs {
   void partitionLp();
   void refinePartition();
   void refinePartitionFinal();
+  void trimOCSolution(HighsModelObject& ocModel, HighsModelObject& model);
   
   /** @brief
    * Calls for aggregator setup and then aggregates original lp

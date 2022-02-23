@@ -490,6 +490,7 @@ void HighsOCAggregate::buildResidualLinks(){
         rep = colrep[iCol];
         pcf = epMinusOne.front[rep];
         xOld = pFrontCol[pcf];
+        if (basis->col_status[xOld] != basic) continue;
         if (xOld < minParent) minParent = xOld;
         isParent[xOld] = 1;
         isChild[xNew] = 1;
@@ -862,122 +863,41 @@ void HighsOCAggregate::buildBasis(bool finish, bool extended){
 
 void HighsOCAggregate::buildColBasis(){
     int iCol, pCol, pf, pc, crep, pcrep;
-    HighsBasisStatus status;
+    HighsBasisStatus basic = HighsBasisStatus::BASIC, status;
     std::set<int> cols;
     int numOldBasic = 0;
     int numOldBasicToSplit = 0;
     int numNewBasic = 0;
     int numNonSingle = 0;
-    // for (iCol = 0; iCol < pcolCnt; ++iCol){
-    //     if (basis->col_status[iCol] == HighsBasisStatus::BASIC){
-    //         numOldBasic++;
-    //         numNewBasic++;
-    //         pcrep = pcolrep[iCol];
-    //         pf = epMinusOne.front[pcrep];
-    //         if (epMinusOne.len[pf]){
-    //             numOldBasicToSplit++;
-    //             numNewBasic += epMinusOne.len[pf] + 1;
-    //         }
-    //     }
-    // }
+    std::fill(elpBasis->col_status.begin(), elpBasis->col_status.end(), basic);
     for (iCol = 0; iCol < colCnt; ++iCol){
         crep = colrep[iCol];
         pf = epMinusOne.front[crep];
         pCol = pFrontCol[pf];
-        // if (cols.insert(pCol).second && basis->col_status[pCol] == HighsBasisStatus::BASIC){
-        //     std::cout << pCol << std::endl;
-        //     std::cout << iCol << std::endl;
-        // }
         status = basis->col_status[pCol];
         elpBasis->col_status[iCol] = status;
-        // if (crep == 4204)
-        //     std::cin.get();
-        // if (crep == 4202)
-        //     std::cin.get();
-        // if (elpBasis->col_status[iCol] == HighsBasisStatus::BASIC){
-        //     if (epMinusOne.len[pf]){
-        //         numNonSingle += 1;
-        //     }
-        //     // numOldBasic++;
-        // }
     }
-    for (iCol = 0; iCol < pcolCnt; ++iCol){
-        if (basis->col_status[iCol] == HighsBasisStatus::BASIC){
-            if (epMinusOne.len[epMinusOne.front[colrep[iCol]]]){
-                numNonSingle += 1;
-            }
-        }
-    }
-    // for (i = 0; i < numCol; i += ep->len[i] + 1){
-    //     c = col[ep->label[i]];
-    //     pc = pcol[ep->label[i]];
-    //     status = basis->col_status[pc];
-    //     elpBasis->col_status[c] = status;
-    // }
     for (iCol = colCnt; iCol < colCnt + numResiduals; ++iCol)
         elpBasis->col_status[iCol] = HighsBasisStatus::LOWER;
-    // elpBasis->numCol_ = elp->numCol_;
 }
 
 void HighsOCAggregate::buildRowBasis(){
-    int iRow, r, pr, pf, rep;
+    int iRow, r, pr, pf, rrep, rlen;
     int of, nf;
     HighsBasisStatus basic = HighsBasisStatus::BASIC, status;
     std::fill(elpBasis->row_status.begin(), elpBasis->row_status.end(), basic);
-    int numOldBasic = 0;
     int numNewBasic = 0;
-    int numOldBasicToSplit = 0;
+    int numBasicToSplit = 0;
+    int numBasicSplits = 0;
+    int numNonBasicToSplit = 0;
+    int numNonBasicSplits = 0;
     int numNonBasic = 0;
-    // for (iRow = 0; iRow < prowCnt; ++iRow){
-    //     if (basis->row_status[iRow] == HighsBasisStatus::BASIC){
-    //         numOldBasic++;
-    //         numNewBasic++;
-    //         rep = pcolrep[iRow];
-    //         pf = epMinusOne.front[rep];
-    //         if (epMinusOne.len[pf]){
-    //             numOldBasicToSplit++;
-    //             numNewBasic += epMinusOne.len[pf] + 1;
-    //         }
-    //     }
-    // }
     for (iRow = 0; iRow < prowCnt; ++iRow){
         elpBasis->row_status[iRow] = basis->row_status[iRow];
-        // if (elpBasis->row_status[iRow] != HighsBasisStatus::BASIC)
-        //     numNonBasic++;
-    }
-    // for (i = numCol; i < numTot; i += epMinusOne.len[i] + 1){
-    //     pr = prow[epMinusOne.label[i] - numCol];
-    //     if (basis->row_status[pr] != basic){
-    //         r = row[ep->label[i] - numCol];
-    //         degenRow[r] = false;
-    //         elpBasis->row_status[r] = basis->row_status[pr];
-    //     }
-    //     // else degenRow[r]
-    // }
-    // degenCnt = 0;
-    // for (i = numCol; i < numTot; i += ep->len[i] + 1){
-    //     nf = i;
-    //     of = epMinusOne.front[ep->label[nf]];
-    //     pr = prow[epMinusOne.label[of] - numCol];
-    //     r = row[ep->label[nf] - numCol];
-    //     if (!degenRow[r]) continue;
-    //     if (basis->row_status[pr] == basic) continue;
-    //     degenSlack[r] = 1;
-    //     ++degenCnt;
-    // }
-    // elp->degenSlack_ = degenSlack;
-    // elp->numDegenSlack_ = degenCnt;
-    for (iRow = 0; iRow < prowCnt; ++iRow){
-        if (basis->row_status[iRow] != HighsBasisStatus::BASIC){
-            // if (epMinusOne.len[epMinusOne.front[prowrep[iRow]]]){
-                numNonBasic++;
-            // }
-        }
     }
     for (iRow = rowCnt; iRow < rowCnt + numResiduals; ++iRow){
         elpBasis->row_status[iRow] = HighsBasisStatus::LOWER;
     }
-    // elpBasis->numRow_ = elp->numRow_;
 }
 
 void HighsOCAggregate::buildResidualColBasis(){
@@ -1045,13 +965,15 @@ void HighsOCAggregate::buildColPointers(){
     int i, j;
     // front.clear();
     std::set<int> fronts;
+    std::set<int> testCols;
     std::vector<int> colFreq(numCol, 0);
     bool newFront;
+    bool duplicatedRep;
     std::pair<std::set<int>::iterator,bool> newRep;
     newColReps.clear();
     for (i = 0; i < numCol; ++i){
         if (col[i] > -1){
-            colFreq[col[i]] ++;
+            // colFreq[col[i]] ++;
             fronts.insert(ep->front[i]);
             frontCol[ep->front[i]] = col[i];
             colFront[col[i]] = ep->front[i];
@@ -1064,18 +986,17 @@ void HighsOCAggregate::buildColPointers(){
             colFront[colCnt] = ep->front[i];
             colrep[colCnt] = i;
             col[i] = colCnt++;
-            colFreq[col[i]]++;
+            // colFreq[col[i]]++;
         }
     }
     elp->numCol_ = ep->ncsplits;
     elp->numX_ = ep->ncsplits;
-    // for (i = 0; i < numCol; ++i){
-    //     if (colFreq[i] > 1){
-    //         std::cin.get();
-    //     }
-    // }
     // for (i = 0; i < colCnt; ++i){
-    //     if (colrep[i] == 4202 || colrep[i] == 4204)
+    //     if (testCols.insert(colrep[i]).second)
+    //         colFreq[colrep[i]]++;
+    // }
+    // for (i = 0; i < numCol; ++i){
+    //     if (colFreq[i] > 1)
     //         std::cin.get();
     // }
 }
@@ -1083,13 +1004,14 @@ void HighsOCAggregate::buildColPointers(){
 void HighsOCAggregate::buildRowPointers(){
     int i, j;
     std::set<int> fronts;
+    std::set<int> testRows;
     std::vector<int> rowFreq(numRow, 0);
     bool newFront;
     std::pair<std::set<int>::iterator,bool> newRep;
     newRowReps.clear();
     for (i = numCol; i < numTot; ++i){
         if (row[i - numCol] > -1){
-            rowFreq[row[i - numCol]]++;
+            // rowFreq[row[i - numCol]]++;
             fronts.insert(ep->front[i]);
             frontRow[ep->front[i]] = row[i - numCol];
             rowFront[row[i - numCol]] = ep->front[i];
@@ -1102,15 +1024,18 @@ void HighsOCAggregate::buildRowPointers(){
             rowFront[rowCnt] = ep->front[i];
             rowrep[rowCnt] = i;
             row[i - numCol] = rowCnt++;
-            rowFreq[row[i - numCol]]++;
+            // rowFreq[row[i - numCol]]++;
         }
     }
     elp->numRow_ = ep->nrsplits;
     elp->numS_ = ep->nrsplits;
+    // for (i = 0; i < rowCnt; ++i){
+    //     if (testRows.insert(rowrep[i]).second)
+    //         rowFreq[colrep[i]]++;
+    // }
     // for (i = 0; i < numRow; ++i){
-    //     if (rowFreq[i] > 1){
+    //     if (rowFreq[i] > 1)
     //         std::cin.get();
-    //     }
     // }
 }
 

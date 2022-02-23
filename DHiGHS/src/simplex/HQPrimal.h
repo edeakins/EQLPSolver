@@ -75,8 +75,10 @@ class HQPrimal {
   void updateHighsBasis();
   void updateSolver();
   void updateAMatrix();
+  void countNonBoundedVars();
   void primalChooseRow();
   void primalUpdate();
+  int isReadyForHighs();
 
   void phase1ComputeDual();
   void phase1ChooseColumn();
@@ -113,6 +115,9 @@ class HQPrimal {
   int solver_num_row;
   int originalNumRow;
   int solver_num_tot;
+  int solver_num_between_bounds;
+  int solver_num_at_bounds;
+  int readyForHighs = 0;
   HighsSimplexAnalysis* analysis;
 
   bool no_free_columns;

@@ -99,9 +99,15 @@ public:
     // @rowcounts, @colcounts: either NULL or size num_rows_solver arrays.
     // Returns -1 if no basis was available and 0 otherwise.
     Int SymbolicInvert(Int* rowcounts, Int* colcounts);
+
+    Int CrossoverFromStartingPoint(const double* x_start,
+                                   const double* slack_start,
+                                   const double* y_start,
+                                   const double* z_start);
     double crossoverTime = 0;
 
 private:
+    void ClearSolution();
     void InteriorPointSolve();
     void RunIPM();
     void ComputeStartingPoint(IPM& ipm);

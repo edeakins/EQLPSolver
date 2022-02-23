@@ -1310,6 +1310,32 @@ void HQPrimal::updateAMatrix(){
   workHMO.lp_.Avalue_ = tempValue;
 }
 
+void HQPrimal::countNonBoundedVars(){
+  double* workLower = &workHMO.simplex_info_.workLower_[0];
+  double* workUpper = &workHMO.simplex_info_.workUpper_[0];
+  double* baseValue = &workHMO.simplex_info_.baseValue_[0];
+  int* baseIndex = &workHMO.simplex_basis_.basicIndex_[0];
+  int numS = workHMO.lp_.numS_;
+  int numRow = workHMO.lp_.numRow_;
+  double lb = 0, ub = 0, varVal = 0, tol = 1e-6;
+  bool tolLB, tolUB;
+  int index = 0;
+  solver_num_between_bounds = 0;
+  solver_num_at_bounds = 0;
+  for (int iRow = 0; iRow < numRow; ++iRow){
+    index = baseIndex[iRow];
+    varVal = baseValue[iRow];
+    lb = workLower[index];
+    ub = workUpper[index];
+    tolLB = std::fabs(lb - varVal) > tol;
+    tolUB = std::fabs(ub - varVal) > tol;
+    if (tolLB && tolUB)
+      solver_num_between_bounds++;
+    else
+      solver_num_at_bounds++;
+  }
+}
+
 void HQPrimal::unfold() {
   ++workHMO.lp_.masterIter;
   double current_run_time = 0;
@@ -1337,24 +1363,31 @@ void HQPrimal::unfold() {
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_;
   int offset = 0;
   int cnt = 0;
-  int tPivCnt = 0;
-  numDrop = 0;
+  int numPivot = 0;
+  int numResiduals = workHMO.lp_.numResiduals_;
+  int numS = workHMO.lp_.numS_;
   int update_limit = min(100 + workHMO.lp_.numRow_ / 100,
           1000);
   // update_limit = 1200;
   double chooseRowTime = 0;
   int fromCol, toCol, fromRow, toRow;
   bool fromColBool = false;
+  countNonBoundedVars();
+  if (solver_num_between_bounds <= numS){
+    columnIn = -1;
+    rowOut = -1;
+    workHMO.readyForHighs = 1;
+    return;
+  }
   ////////////////////// Orbital Crossover //////////////////////
   // for (int i = workHMO.lp_.numResiduals_ - 1; i >= 0; --i){
-  for (int i = 0; i < workHMO.lp_.numResiduals_; ++i){
+  for (int i = 0; i < numResiduals; ++i){
     // columnIn = workHMO.lp_.residuals_[i];
     // // Use this when we do linker swapping before main unfold
     // offset = workHMO.lp_.residuals_[i] - workHMO.lp_.numX_;
     // if (workHMO.lp_.basicResiduals_[offset]) continue;
     ++cnt;
-    ++tPivCnt;
-    ++numDrop;
+    ++numPivot;
     current_run_time = timer.readRunHighsClock();
     // degeneratePivot = false;
     if (current_run_time + workHMO.lp_.foldSolveTime > workHMO.options_.time_limit){
@@ -1423,12 +1456,18 @@ void HQPrimal::unfold() {
       // transition(workHMO);
       primalRebuild();
       cnt = 0;
-      tPivCnt = 0;
       // toCol = columnIn;
       // toRow = workHMO.lp_.numS_ + i;
       // workInterface.deleteCols(fromCol, toCol);
       // workInterface.deleteRows(fromRow, toRow);
       // fromColBool = false;
+    }
+    countNonBoundedVars();
+    if (solver_num_between_bounds <= numS && numPivot < numResiduals){
+      columnIn = -1;
+      rowOut = -1;
+      workHMO.readyForHighs = 1;
+      return;
     }
   }
   ////////////////////// Orbital Crossover Done //////////////////////
@@ -1441,6 +1480,10 @@ void HQPrimal::unfold() {
   //   std::cout << workHMO.simplex_basis_.basicIndex_[i] << std::endl;
   // }
   // if (workHMO.scaled_solution_params_.num_dual_infeasibilities > 0) solvePhase2();
+}
+
+int HQPrimal::isReadyForHighs(){
+  return readyForHighs;
 }
 
 void HQPrimal::swapDegenerate(){

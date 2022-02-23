@@ -383,40 +383,30 @@ HighsStatus Highs::run() {
     liftLpExtended();
     // liftBasis();
     timer_.stop(timer_.lift_clock);
-    /////////////// Pivot in as many swappable linkers as Possible Before Unfold /////////////////
-    // // Do pivoting routine on B^-1 * A_r submatrix to find degenerate r columns
-    // passModel(*slp_);
-    // // setBasis(*slpSymBasis_);
-    // // hmos_[solved_hmo].basis_ = basis_;
-    // options_.simplex_strategy = SIMPLEX_STRATEGY_SWAP;
-    // writeModel("../../DOKSmps/B^-1*A_r.lp");
-    // timer_.start(timer_.elp_solve_clock);
-    // call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
-    // timer_.stop(timer_.elp_solve_clock);
-    // return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
-    // // Record basis and solution
-    // alpSolution_ = hmos_[original_hmo].solution_;
-    // alpBasis_ = hmos_[original_hmo].basis_;
-    // int swaps = swapInRColumns();
     int swaps = -1;
-    //////////// Do remaining linker pivots that didn't have swap ////////////////////////////
-    if (swaps < alp_->numResiduals_){
-      // Pass new elp
-      passModel(*alp_);
-      setBasis(*lpSymBasis_);
-      // std::cout << "set basis done" << std::endl;
-      // std::cin.get();
-      hmos_[solved_hmo].basis_ = basis_;
-      options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
-      // std::string itercnt = std::string(cnt);
-      writeModel("../../DOKSmps/Extended.lp");
-      timer_.start(timer_.elp_solve_clock);
-      call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
-      timer_.stop(timer_.elp_solve_clock);
-      return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
-      actualRPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
-      rSwapPivots = possibleRPivots - actualRPivots;
-      totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    // Pass new elp
+    passModel(*alp_);
+    writeModel("../../DOKSmps/Extended.lp");
+    setBasis(*lpSymBasis_);
+    // std::cout << "set basis done" << std::endl;
+    // std::cin.get();
+    hmos_[solved_hmo].basis_ = basis_;
+    options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
+    // std::string itercnt = std::string(cnt);
+    timer_.start(timer_.elp_solve_clock);
+    call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
+    timer_.stop(timer_.elp_solve_clock);
+    return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
+    actualRPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    rSwapPivots = possibleRPivots - actualRPivots;
+    totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    if (hmos_[original_hmo].readyForHighs){
+      HighsModelObject* postOChmo = new HighsModelObject(originalLp, options_, timer_);
+      int postOC_hmo = 1;
+      hmos_.push_back(*postOChmo);
+      trimOCSolution(hmos_[original_hmo], hmos_[postOC_hmo]);
+      options_.solver = ipm_string;
+      runLpSolver(hmos_[postOC_hmo], "Cleaning OC with HighsCrossover");
     }
     //////////////////////// Iterative Lifting /////////////////////////////////////////////
     // Lift to final elp
@@ -731,6 +721,53 @@ HighsStatus Highs::run() {
   call_status = highsStatusFromHighsModelStatus(scaled_model_status_);
   return_status = interpretCallStatus(call_status, return_status);
   return return_status;
+}
+
+// Time Orbital Crossover solution for highs crossover for clean up if needed.
+void Highs::trimOCSolution(HighsModelObject& ocModel, HighsModelObject& model){
+  // Original Model
+  int numCol = model.lp_.numCol_;
+  int numRow = model.lp_.numRow_;
+  std::vector<double>& col_value = model.solution_.col_value;
+  std::vector<double>& col_dual = model.solution_.col_dual;
+  std::vector<double>& row_value = model.solution_.row_value;
+  std::vector<double>& row_dual = model.solution_.row_dual;
+  std::vector<HighsBasisStatus>& col_status = model.basis_.col_status;
+  std::vector<HighsBasisStatus>& row_status = model.basis_.row_status;
+  col_value.resize(numCol);
+  col_dual.resize(numCol);
+  row_value.resize(numRow);
+  row_dual.resize(numRow);
+  col_status.resize(numCol);
+  row_status.resize(numRow);
+  int& basisNumCol = model.basis_.numCol_;
+  int& basisNumRow = model.basis_.numRow_;
+  basisNumCol = numCol;
+  basisNumRow = numRow;
+  // OC model after OC
+  int numX = ocModel.lp_.numX_;
+  int numS = ocModel.lp_.numS_;
+  std::vector<int>& colrep = agg_.colrep;
+  std::vector<int>& rowrep = agg_.rowrep;
+  std::vector<double>& occol_value = ocModel.solution_.col_value;
+  std::vector<double>& occol_dual = ocModel.solution_.col_dual;
+  std::vector<double>& ocrow_value = ocModel.solution_.row_value;
+  std::vector<double>& ocrow_dual = ocModel.solution_.row_dual;
+  std::vector<HighsBasisStatus>& occol_status = ocModel.basis_.col_status;
+  std::vector<HighsBasisStatus>& ocrow_status = ocModel.basis_.row_status;
+  // Fill in original model basis and solution by trimming OC solution/basis
+  for (int iCol = 0; iCol < numX; ++iCol){
+    int rep = colrep[iCol];
+    col_value[rep] = occol_value[iCol];
+    col_dual[rep] = occol_dual[iCol];
+    col_status[rep] = occol_status[iCol];
+  }
+  for (int iRow; iRow < numS; ++iRow){
+    int rep = rowrep[iRow] - numX;
+    row_value[rep] = ocrow_value[iRow];
+    row_dual[rep] = ocrow_dual[iRow];
+    row_status[rep] = ocrow_status[iRow];
+  }
 }
 
 // Compute equitable partition

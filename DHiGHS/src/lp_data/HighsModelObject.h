@@ -53,6 +53,7 @@ class HighsModelObject {
 
   bool report_model_operations_clock = false;
   int unfoldCount_ = 0;
+  int readyForHighs = 0;
 };
 
 #endif  // LP_DATA_HIGHS_MODEL_OBJECT_H_
