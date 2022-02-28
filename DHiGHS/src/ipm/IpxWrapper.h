@@ -320,6 +320,56 @@ HighsStatus solveLpIpx(const HighsLp& lp, const HighsOptions& options,
   return HighsStatus::OK;
 }
 
+HighsStatus CleanupOCInterior(const HighsLp& lp, const HighsOptions& options,
+		       HighsBasis& highs_basis, HighsSolution& highs_solution,
+		       HighsModelStatus& unscaled_model_status,
+		       HighsSolutionParams& unscaled_solution_params,
+           OrbitalCrossoverInteriorPoint interior){
+  int debug = 0;
+  // resetModelStatusAndSolutionParams(unscaled_model_status, unscaled_solution_params, options);
+#ifdef CMAKE_BUILD_TYPE
+  debug = 1;
+#endif
+
+  // Create the LpSolver instance
+  ipx::LpSolver lps;
+  // Set IPX parameters
+  //
+  // Cannot set internal IPX parameters directly since they are
+  // private, so create instance of parameters
+  ipx::Parameters parameters;
+  // parameters.crossover = 1; by default
+  if (debug) parameters.debug = 1;
+  // Set IPX parameters from options
+  // Just test feasibility and optimality tolerances for now
+  // ToDo Set more parameters
+  parameters.ipm_feasibility_tol = unscaled_solution_params.primal_feasibility_tolerance;
+  parameters.ipm_optimality_tol = unscaled_solution_params.dual_feasibility_tolerance;
+  // Set the internal IPX parameters
+  lps.SetParameters(parameters);
+
+  ipx::Int num_col, num_row;
+  std::vector<ipx::Int> Ap, Ai;
+  std::vector<double> objective, col_lb, col_ub, Av, rhs;
+  std::vector<char> constraint_type;
+  IpxStatus result = fillInIpxData(lp, num_col, objective, col_lb, col_ub,
+                                   num_row, Ap, Ai, Av, rhs, constraint_type);
+  if (result != IpxStatus::OK) return HighsStatus::Error;
+
+  // Grab interior point to start crossover from
+  std::vector<double>& x_start = interior.x;
+  std::vector<double>& y_start = interior.y;
+  std::vector<double>& z_start = interior.z;
+  std::vector<double>& slack_start = interior.slack;
+  ipx::Int loadStatus = 
+      lps.LoadModel(num_col, &objective[0], &col_lb[0], &col_ub[0], num_row, &Ap[0],
+                &Ai[0], &Av[0], &rhs[0], &constraint_type[0]);
+  ipx::Int status =
+      lps.CrossoverFromStartingPoint(&x_start[0], &slack_start[0], &y_start[0], &z_start[0]);
+  crossoverTime = lps.crossoverTime;
+  
+}
+
 double getCrossoverTime(){
   return crossoverTime;
 }

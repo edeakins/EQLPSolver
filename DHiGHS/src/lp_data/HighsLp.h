@@ -435,6 +435,13 @@ struct HighsSolution {
   std::vector<double> row_dual;
 };
 
+struct OrbitalCrossoverInteriorPoint {
+  std::vector<double> x;
+  std::vector<double> y;
+  std::vector<double> z;
+  std::vector<double> slack;
+};
+
 // This is a csc collection of the previous iterations reduced A matrix
 // that we use with the EP to construct the current LP
 // Struct to contain tableau info

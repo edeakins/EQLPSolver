@@ -104,6 +104,9 @@ public:
                                    const double* slack_start,
                                    const double* y_start,
                                    const double* z_start);
+    Int LoadModel(Int num_var, const double* obj, const double* lb,
+              const double* ub, Int num_constr, const Int* Ap, const Int* Ai,
+              const double* Ax, const double* rhs, const char* constr_type);
     double crossoverTime = 0;
 
 private:
@@ -128,6 +131,7 @@ private:
     // (one of IPX_nonbasic_lb, IPX_nonbasic_ub, IPX_basic, IPX_superbasic).
     // If crossover was not run or failed, then basic_statuses_ is empty.
     Vector x_crossover_, y_crossover_, z_crossover_;
+    Vector crossover_weights_;
     std::vector<Int> basic_statuses_;
 };
 

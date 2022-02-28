@@ -39,6 +39,7 @@ class HighsModelObject {
   HighsBasis basis_;
   HighsSolution solution_;
   HighsTableau tableau_;
+  OrbitalCrossoverInteriorPoint interior_;
 
   HighsLp simplex_lp_;
   SimplexBasis simplex_basis_;

@@ -406,6 +406,7 @@ HighsStatus Highs::run() {
       hmos_.push_back(*postOChmo);
       trimOCSolution(hmos_[original_hmo], hmos_[postOC_hmo]);
       options_.solver = ipm_string;
+      hmos_[postOC_hmo].readyForHighs = 1;
       runLpSolver(hmos_[postOC_hmo], "Cleaning OC with HighsCrossover");
     }
     //////////////////////// Iterative Lifting /////////////////////////////////////////////
@@ -734,6 +735,14 @@ void Highs::trimOCSolution(HighsModelObject& ocModel, HighsModelObject& model){
   std::vector<double>& row_dual = model.solution_.row_dual;
   std::vector<HighsBasisStatus>& col_status = model.basis_.col_status;
   std::vector<HighsBasisStatus>& row_status = model.basis_.row_status;
+  std::vector<double>& x = model.interior_.x;
+  std::vector<double>& y = model.interior_.y;
+  std::vector<double>& z = model.interior_.z;
+  std::vector<double>& slack = model.interior_.slack;
+  x.resize(numCol);
+  y.resize(numRow);
+  z.resize(numCol + numRow);
+  slack.resize(numRow);
   col_value.resize(numCol);
   col_dual.resize(numCol);
   row_value.resize(numRow);
@@ -749,6 +758,9 @@ void Highs::trimOCSolution(HighsModelObject& ocModel, HighsModelObject& model){
   int numS = ocModel.lp_.numS_;
   std::vector<int>& colrep = agg_.colrep;
   std::vector<int>& rowrep = agg_.rowrep;
+  std::vector<double>& rowUpper = ocModel.lp_.rowUpper_;
+  std::vector<double>& rowLower = ocModel.lp_.rowLower_;
+  std::vector<double>& colCost = ocModel.lp_.colCost_;
   std::vector<double>& occol_value = ocModel.solution_.col_value;
   std::vector<double>& occol_dual = ocModel.solution_.col_dual;
   std::vector<double>& ocrow_value = ocModel.solution_.row_value;
@@ -761,12 +773,22 @@ void Highs::trimOCSolution(HighsModelObject& ocModel, HighsModelObject& model){
     col_value[rep] = occol_value[iCol];
     col_dual[rep] = occol_dual[iCol];
     col_status[rep] = occol_status[iCol];
+    x[rep] = occol_value[iCol];
+    // z[rep] = colCost[iCol] - occol_dual[iCol]; 
+    z[rep] = 0;
   }
   for (int iRow; iRow < numS; ++iRow){
     int rep = rowrep[iRow] - numX;
     row_value[rep] = ocrow_value[iRow];
     row_dual[rep] = ocrow_dual[iRow];
     row_status[rep] = ocrow_status[iRow];
+    y[rep] = - ocrow_dual[iRow];
+    double low = std::fabs(rowLower[iRow]);
+    double high = std::fabs(rowUpper[iRow]);
+    double rhs = std::min(low, high);
+    slack[rep] = rhs - ocrow_value[iRow];
+    // z[rep + numX] = - ocrow_dual[iRow];
+    z[rep + numX] = 0;
   }
 }
 
@@ -1604,6 +1626,7 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
   // } 
   else if (options_.solver == ipm_string) {
     // Use IPM
+    if (!model.readyForHighs){
 #ifdef IPX_ON
     HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
 		      "Starting IPX...\n");
@@ -1621,6 +1644,27 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
 		    "Model cannot be solved with IPM");
     return HighsStatus::Error;
 #endif
+    }
+    else{
+      #ifdef IPX_ON
+    HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
+		      "Starting IPX...\n");
+    call_status = CleanupOCInterior(model.lp_, options_,
+			     model.basis_, model.solution_,
+			     model.unscaled_model_status_,
+			     model.unscaled_solution_params_,
+           model.interior_);
+    return_status = interpretCallStatus(call_status, return_status, "Clean up OC Interior Basis");
+    if (return_status == HighsStatus::Error) return return_status;
+    // Set the scaled model status and solution params for completeness
+    model.scaled_model_status_ = model.unscaled_model_status_;
+    model.scaled_solution_params_ = model.unscaled_solution_params_;
+#else
+    HighsLogMessage(options_.logfile, HighsMessageType::ERROR,
+		    "Model cannot be solved with IPM");
+    return HighsStatus::Error;
+#endif
+    }
   } else {
     // Use Simplex
     call_status = solveLpSimplex(model);

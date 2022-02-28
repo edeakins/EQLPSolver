@@ -162,6 +162,7 @@ public:
     // of the pointer arguments can be NULL.
     void PostsolveBasis(const std::vector<Int>& basic_status_solver,
                         Int* cbasis, Int* vbasis) const;
+    int cleanUpOnly;
 
 private:
     // Checks that the input is valid, and if so copies into the members below

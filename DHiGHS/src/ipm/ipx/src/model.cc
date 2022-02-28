@@ -35,6 +35,7 @@ void Model::Load(const Control& control, Int num_constr, Int num_var,
         LoadDual();
     else
         LoadPrimal();
+    // LoadDual();
 
     A_.clear();
     AIt_ = Transpose(AI_);

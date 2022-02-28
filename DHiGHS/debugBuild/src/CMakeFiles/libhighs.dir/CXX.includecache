@@ -2408,5 +2408,29 @@ ipm/IpxWrapper.h
 ipm/IpxWrapperEmpty.h
 /home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/ipm/IpxWrapperEmpty.h
 
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/HighsSolution.cpp
+vector
+-
+string
+-
+util/HighsUtils.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/util/HighsUtils.h
+lp_data/HighsModelUtils.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/lp_data/HighsModelUtils.h
+lp_data/HighsOptions.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/lp_data/HighsOptions.h
+lp_data/HighsSolution.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/lp_data/HighsSolution.h
+lp_data/HighsInfo.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/lp_data/HighsInfo.h
+ipm/IpxSolution.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/ipm/IpxSolution.h
+ipm/IpxStatus.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/ipm/IpxStatus.h
+ipm/ipx/include/ipx_status.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/ipm/ipx/include/ipx_status.h
+ipm/ipx/src/lp_solver.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/src/lp_data/ipm/ipx/src/lp_solver.h
+
 HConfig.h
 
