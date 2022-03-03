@@ -423,8 +423,40 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
             return 0;
         }
     }
-
     RunCrossover();
+    if (basis_) {
+            info_.ftran_sparse = basis_->frac_ftran_sparse();
+            info_.btran_sparse = basis_->frac_btran_sparse();
+            info_.time_lu_invert = basis_->time_factorize();
+            info_.time_lu_update = basis_->time_update();
+            info_.time_ftran = basis_->time_ftran();
+            info_.time_btran = basis_->time_btran();
+            info_.mean_fill = basis_->mean_fill();
+            info_.max_fill = basis_->max_fill();
+        }
+        if (info_.status_ipm == IPX_STATUS_primal_infeas ||
+            info_.status_ipm == IPX_STATUS_dual_infeas ||
+            info_.status_crossover == IPX_STATUS_primal_infeas ||
+            info_.status_crossover == IPX_STATUS_dual_infeas) {
+            // When IPM or crossover detect the model to be infeasible
+            // (currently only the former is implemented), then the problem is
+            // solved.
+            info_.status = IPX_STATUS_solved;
+        } else {
+            Int method_status = control_.crossover() ?
+                info_.status_crossover : info_.status_ipm;
+            if (method_status == IPX_STATUS_optimal ||
+                method_status == IPX_STATUS_imprecise)
+                info_.status = IPX_STATUS_solved;
+            else
+                info_.status = IPX_STATUS_stopped;
+        }
+        PrintSummary();
+        std::vector<double> xsol(n), slacksol(m), ysol(m), zsol(n + m);
+        std::vector<Int> cbasissol(m), vbasissol(n);
+        GetBasis(&cbasissol[0], &vbasissol[0]);
+        GetBasicSolution(&xsol[0], &slacksol[0], &ysol[0], &zsol[0],
+                               &cbasissol[0], &vbasissol[0]);
     return 0;
 }
 

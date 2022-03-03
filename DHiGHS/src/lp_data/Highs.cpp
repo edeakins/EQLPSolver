@@ -774,8 +774,7 @@ void Highs::trimOCSolution(HighsModelObject& ocModel, HighsModelObject& model){
     col_dual[rep] = occol_dual[iCol];
     col_status[rep] = occol_status[iCol];
     x[rep] = occol_value[iCol];
-    // z[rep] = colCost[iCol] - occol_dual[iCol]; 
-    z[rep] = 0;
+    z[rep] = occol_dual[iCol]; 
   }
   for (int iRow; iRow < numS; ++iRow){
     int rep = rowrep[iRow] - numX;
@@ -1649,11 +1648,11 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
       #ifdef IPX_ON
     HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
 		      "Starting IPX...\n");
-    call_status = CleanupOCInterior(model.lp_, options_,
-			     model.basis_, model.solution_,
-			     model.unscaled_model_status_,
-			     model.unscaled_solution_params_,
-           model.interior_);
+    // call_status = CleanupOCInterior(model.lp_, options_,
+		// 	     model.basis_, model.solution_,
+		// 	     model.unscaled_model_status_,
+		// 	     model.unscaled_solution_params_,
+    //        model.interior_);
     return_status = interpretCallStatus(call_status, return_status, "Clean up OC Interior Basis");
     if (return_status == HighsStatus::Error) return return_status;
     // Set the scaled model status and solution params for completeness

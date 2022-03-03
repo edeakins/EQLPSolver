@@ -217,10 +217,10 @@ std::vector<Int> GuessBasis(const Control& control, const Model& model,
 
     ProcessFreeColumns(control, model, colweights, &basis, rownumber.data(),
                        active.data());
-    ProcessSingletons(control, model, colweights, &basis, rownumber.data(),
-                      active.data());
     ProcessRemaining(control, model, colweights, &basis, rownumber.data(),
                      active.data());
+    ProcessSingletons(control, model, colweights, &basis, rownumber.data(),
+                      active.data());
 
     // Complete basis with unit columns.
     for (Int i = 0; i < m; i++) {
