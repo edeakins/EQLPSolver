@@ -1316,6 +1316,8 @@ void HQPrimal::countNonBoundedVars(){
   double* baseValue = &workHMO.simplex_info_.baseValue_[0];
   int* baseIndex = &workHMO.simplex_basis_.basicIndex_[0];
   int numS = workHMO.lp_.numS_;
+  int numX = workHMO.lp_.numX_;
+  int numCol = workHMO.lp_.numCol_;
   int numRow = workHMO.lp_.numRow_;
   double lb = 0, ub = 0, varVal = 0, tol = 1e-6;
   bool tolLB, tolUB;
@@ -1324,6 +1326,8 @@ void HQPrimal::countNonBoundedVars(){
   solver_num_at_bounds = 0;
   for (int iRow = 0; iRow < numRow; ++iRow){
     index = baseIndex[iRow];
+    if (index >= numX && index < numCol)
+      continue;
     varVal = baseValue[iRow];
     lb = workLower[index];
     ub = workUpper[index];
