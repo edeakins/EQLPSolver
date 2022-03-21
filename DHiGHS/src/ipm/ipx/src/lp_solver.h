@@ -82,7 +82,7 @@ public:
     // @vbasis: either NULL or size num_var array.
     // Returns -1 if no basis was available and 0 otherwise.
     Int GetBasis(Int* cbasis, Int* vbasis);
-
+    
     // Returns the constraint matrix from the solver (including slack columns)
     // and the diagonal from the (1,1) block of the KKT matrix corresponding to
     // the current IPM iterate. The method does nothing when no IPM iterate is

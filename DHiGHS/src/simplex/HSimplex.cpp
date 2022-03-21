@@ -122,8 +122,6 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
     initialiseSimplexLpRandomVectors(highs_model_object);
   }
   if (simplex_lp_status.has_basis) {
-    // std::cout << "simplex_lp_status.has_basis = " << simplex_lp_status.has_basis << std::endl;
-    // std::cin.get();
     // There is a simplex basis: it should be valid - since it's set internally - but check
     bool nonbasic_flag_ok = nonbasicFlagOk(highs_model_object.options_.logfile,
 					   simplex_lp, simplex_basis);
@@ -133,12 +131,8 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
   // Now we know whether the simplex basis at least has the right number
   // of basic and nonbasic variables
   if (!simplex_lp_status.has_basis) {
-    // std::cout << "no simplex basis" << std::endl;
-    // std::cin.get();
     // There is no simplex basis (or it was found to be invalid) so try to identify one
     if (basis.valid_) {
-      // std::cout << "has valid highs basis" << std::endl;
-      // std::cin.get();
       // There is is HiGHS basis: use it to construct nonbasicFlag,
       // checking that it has the right number of basic variables
       //
@@ -339,11 +333,9 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
   // Possibly check for basis condition. ToDo Override this for MIP hot start
   bool basis_condition_ok = true;
   if (highs_model_object.options_.simplex_initial_condition_check) {
-    ///////////// ETHAN YOU COMMENTED THIS OUT (Jan - 13 -2022)
-    // basis_condition_ok = basisConditionOk(highs_model_object, "Initial");
+    basis_condition_ok = basisConditionOk(highs_model_object, "Initial");
   }
-  // basis_condition_ok = true; //////// ETHAN YOU DID THIS /////////
-
+  basis_condition_ok = true;
   // ToDo Handle ill-conditioned basis with basis crash, in which case
   // ensure that HiGHS and simplex basis are invalidated and simplex
   // work and base arrays are re-populated
@@ -378,9 +370,7 @@ HighsStatus transition(HighsModelObject& highs_model_object) {
                     "Crash has created a basis with %d/%d structurals",
                     num_basic_structurals, simplex_lp.numRow_);
     // Now reinvert
-    timer.start(simplex_info.clock_[InvertInitClock]);
     int rankDeficiency = compute_factor(highs_model_object);
-    timer.stop(simplex_info.clock_[InvertInitClock]);
     if (rankDeficiency) {
       // ToDo Handle rank deficiency by replacing singular columns with logicals
       throw runtime_error("Transition has singular basis matrix");
@@ -586,8 +576,6 @@ bool basisConditionOk(HighsModelObject& highs_model_object, const std::string me
   timer.stop(simplex_info.clock_[BasisConditionClock]);
   double basis_condition_tolerance =
     highs_model_object.options_.simplex_initial_condition_tolerance;
-    // std::cout << highs_model_object.options_.simplex_initial_condition_tolerance << std::endl;
-    // std::cin.get();
   basis_condition_ok = basis_condition < basis_condition_tolerance;
   HighsMessageType message_type = HighsMessageType::INFO;
   std::string condition_comment;
@@ -2654,15 +2642,23 @@ void compute_primal(HighsModelObject& highs_model_object) {
     //    i);
     if (simplex_basis.nonbasicFlag_[i] && simplex_info.workValue_[i] != 0) {
       matrix.collect_aj(buffer, i, simplex_info.workValue_[i]);
-      //      printf("\nAfter adding in %12g*a[%2d]\nRow     value\n",
-      //      simplex_info.workValue_[i], i); for (int iRow = 0; iRow <
-      //      simplex_lp.numRow_; iRow++) printf("%3d %12g\n", iRow,
-      //      buffer.array[iRow]);
+          //  printf("\nAfter adding in %12g*a[%2d]\nRow     value\n",
+          //  simplex_info.workValue_[i], i); for (int iRow = 0; iRow <
+          //  simplex_lp.numRow_; iRow++) printf("%3d %12g\n", iRow,
+          //  buffer.array[iRow]);
     }
   }
-  //  for (int i = 0; i < simplex_lp.numRow_; i++) printf("Bf FTRAN: Row %2d has
-  //  value %12g\n", i, buffer.array[i]);
+  // if (highs_model_object.lp_.numResiduals_){
+  //   for (int i = 0; i < simplex_lp.numRow_; i++) 
+  //     printf("Bf FTRAN: Row %2d has value %12g\n", i, buffer.array[i]);
+  //   std::cin.get();
+  // }
   factor.ftran(buffer, 1);
+  // if (highs_model_object.lp_.numResiduals_){
+  //   for (int i = 0; i < simplex_lp.numRow_; i++) 
+  //     printf("Bf FTRAN: Row %2d, Basic Col %2d has value %12g\n", i, simplex_basis.basicIndex_[i] ,-buffer.array[i]);
+  //   std::cin.get();
+  // }
 
   for (int i = 0; i < simplex_lp.numRow_; i++) {
     int iCol = simplex_basis.basicIndex_[i];
@@ -2703,47 +2699,26 @@ void computePrimalInfeasible(HighsModelObject& highs_model_object,
       //      primal_infeasibility = %12g\n", nonbasic_ix, i, lower, value,
       //      upper, primal_infeasibility); nonbasic_ix++;
       if (primal_infeasibility > 0) {
-        // std::cout << "row: " << i << std::endl;
-	if (primal_infeasibility > scaled_primal_feasibility_tolerance){ num_nonbasic_primal_infeasibilities++;
-        max_nonbasic_primal_infeasibility =
-          std::max(primal_infeasibility, max_nonbasic_primal_infeasibility);
-        sum_nonbasic_primal_infeasibilities += primal_infeasibility;
-        // std::cout << "\nNONBASIC INFEAS" << std::endl;
-        // std::cout << "col: " << i << std::endl;
-        // std::cout << "current value: " << value << std::endl;
-        // std::cout << "lower: " << lower << std::endl;
-        // std::cout << "upper: " << upper << std::endl;
-        // std::cout << "primal_infeas: " << primal_infeasibility << std::endl;
-        // std::cin.get();
-        }
+	if (primal_infeasibility > scaled_primal_feasibility_tolerance) num_nonbasic_primal_infeasibilities++;
+	max_nonbasic_primal_infeasibility =
+	  std::max(primal_infeasibility, max_nonbasic_primal_infeasibility);
+	sum_nonbasic_primal_infeasibilities += primal_infeasibility;
       }
     }
   }
-  // std::cin.get();
   for (int i = 0; i < simplex_lp.numRow_; i++) {
     // Basic variable
-    // if (simplex_basis.basicIndex_[i] == 0) 
-      // std::cin.get();
     double value = simplex_info.baseValue_[i];
     double lower = simplex_info.baseLower_[i];
     double upper = simplex_info.baseUpper_[i];
     double primal_infeasibility = max(lower - value, value - upper);
     if (primal_infeasibility > 0) {
-      // std::cout << "row: " << i << std::endl;
-      if (primal_infeasibility > scaled_primal_feasibility_tolerance){ num_basic_primal_infeasibilities++;
-      max_basic_primal_infeasibility = std::max(primal_infeasibility, max_basic_primal_infeasibility);
+      if (primal_infeasibility > scaled_primal_feasibility_tolerance) num_basic_primal_infeasibilities++;
+      max_basic_primal_infeasibility =
+	std::max(primal_infeasibility, max_basic_primal_infeasibility);
       sum_basic_primal_infeasibilities += primal_infeasibility;
-      // std::cout << "\nBASIC INFEAS" << std::endl; 
-      // std::cout << "col: " << simplex_basis.basicIndex_[i] << std::endl;
-      // std::cout << "current value: " << value << std::endl;
-      // std::cout << "lower: " << lower << std::endl;
-      // std::cout << "upper: " << upper << std::endl;
-      // std::cout << "primal_infeas: " << primal_infeasibility << std::endl;
-      // std::cin.get();
-      }
     }
   }
-  // std::cin.get();
   int num_primal_infeasibilities =
       num_nonbasic_primal_infeasibilities + num_basic_primal_infeasibilities;
   double max_primal_infeasibility = std::max(max_nonbasic_primal_infeasibility,
@@ -2815,16 +2790,8 @@ void computeDualInfeasible(HighsModelObject& highs_model_object,
       if (lower == upper && simplex_basis.nonbasicMove_[iVar]) num_fixed_variable_move_errors++;
     }
     if (dual_infeasibility > 0) {
-      if (dual_infeasibility >= scaled_dual_feasibility_tolerance){
+      if (dual_infeasibility >= scaled_dual_feasibility_tolerance)
 	num_dual_infeasibilities++;
-      // std::cout << "\nBASIC INFEAS DUAL" << std::endl; 
-      // std::cout << "col: " << iVar << std::endl;
-      // std::cout << "current value: " << dual << std::endl;
-      // std::cout << "lower: " << lower << std::endl;
-      // std::cout << "upper: " << upper << std::endl;
-      // std::cout << "primal_infeas: " << dual_infeasibility << std::endl;
-      // std::cin.get();
-      }
       max_dual_infeasibility =
 	std::max(dual_infeasibility, max_dual_infeasibility);
       sum_dual_infeasibilities += dual_infeasibility;
@@ -3407,7 +3374,6 @@ HighsStatus analyseSimplexBasicSolution(const HighsModelObject& highs_model_obje
   unscaled_model_status = scaled_model_status;
   unscaled_solution_params.primal_status = scaled_solution_params.primal_status;
   unscaled_solution_params.dual_status = scaled_solution_params.dual_status;
-
   // The solution status for the unscaled LP is inherited from the
   // scaled LP, unless there are infeasibilities in the unscaled
   // solution

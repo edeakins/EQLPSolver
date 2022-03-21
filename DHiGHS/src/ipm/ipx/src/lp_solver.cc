@@ -184,6 +184,7 @@ Int LpSolver::GetBasis(Int* cbasis, Int* vbasis) {
         // crossover provides basic statuses
         model_.PostsolveBasis(basic_statuses_, cbasis, vbasis);
     } else {
+        basic_statuses_ = BuildBasicStatuses(*basis_);
         model_.PostsolveBasis(BuildBasicStatuses(*basis_), cbasis, vbasis);
     }
     return 0;
@@ -392,7 +393,6 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
         if (x_crossover_[j] != ub[j] && z_crossover_[j] < 0.0)
             return IPX_ERROR_invalid_vector;
     }
-
     // Construct starting basis.
     basis_.reset(new Basis(control_, model_));
     if (control_.crash_basis()) {
@@ -423,7 +423,7 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
             return 0;
         }
     }
-    RunCrossover();
+    // RunCrossover();
     if (basis_) {
             info_.ftran_sparse = basis_->frac_ftran_sparse();
             info_.btran_sparse = basis_->frac_btran_sparse();
@@ -454,9 +454,9 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
         PrintSummary();
         std::vector<double> xsol(n), slacksol(m), ysol(m), zsol(n + m);
         std::vector<Int> cbasissol(m), vbasissol(n);
-        GetBasis(&cbasissol[0], &vbasissol[0]);
-        GetBasicSolution(&xsol[0], &slacksol[0], &ysol[0], &zsol[0],
-                               &cbasissol[0], &vbasissol[0]);
+        // GetBasis(&cbasissol[0], &vbasissol[0]);
+        // GetBasicSolution(&xsol[0], &slacksol[0], &ysol[0], &zsol[0],
+        //                        &cbasissol[0], &vbasissol[0]);
     return 0;
 }
 

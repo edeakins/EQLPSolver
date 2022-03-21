@@ -342,7 +342,7 @@ HighsStatus Highs::run() {
   // Initial solve. Presolve, choose solver (simplex, ipx), postsolve.
   //  printf("\nHighs::run() 1: basis_.valid_ = %d\n", basis_.valid_);
   //  fflush(stdout);
-  // writeModel("../../DOKSmps/olp.lp");
+  // writeModel("../../DOKSmps/Original.lp");
   originalLp = lp_;
   // Count total number of r pivots that could be done
   int possibleRPivots = 0;
@@ -386,7 +386,7 @@ HighsStatus Highs::run() {
     int swaps = -1;
     // Pass new elp
     passModel(*alp_);
-    writeModel("../../DOKSmps/Extended.lp");
+    // writeModel("../../DOKSmps/Extended.lp");
     setBasis(*lpSymBasis_);
     // std::cout << "set basis done" << std::endl;
     // std::cin.get();
@@ -1648,11 +1648,11 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
       #ifdef IPX_ON
     HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
 		      "Starting IPX...\n");
-    // call_status = CleanupOCInterior(model.lp_, options_,
-		// 	     model.basis_, model.solution_,
-		// 	     model.unscaled_model_status_,
-		// 	     model.unscaled_solution_params_,
-    //        model.interior_);
+    call_status = BuildOCFinalBasis(model.lp_, options_,
+			     model.basis_, model.solution_,
+			     model.unscaled_model_status_,
+			     model.unscaled_solution_params_,
+           model.interior_);
     return_status = interpretCallStatus(call_status, return_status, "Clean up OC Interior Basis");
     if (return_status == HighsStatus::Error) return return_status;
     // Set the scaled model status and solution params for completeness

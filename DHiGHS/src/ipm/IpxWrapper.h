@@ -320,7 +320,24 @@ HighsStatus solveLpIpx(const HighsLp& lp, const HighsOptions& options,
   return HighsStatus::OK;
 }
 
-HighsStatus CleanupOCInterior(const HighsLp& lp, const HighsOptions& options,
+void CleanUpOCInterior(OrbitalCrossoverInteriorPoint& interior){
+  double tolerance = 1e-10;
+  int i;
+  for (i = 0; i < interior.x.size(); ++i){
+    if (fabs(interior.x[i]) < tolerance) interior.x[i] = 0;
+  }
+  for (i = 0; i < interior.y.size(); ++i){
+    if (fabs(interior.y[i]) < tolerance) interior.y[i] = 0;
+  }
+  for (i = 0; i < interior.z.size(); ++i){
+    if (fabs(interior.z[i]) < tolerance) interior.z[i] = 0;
+  }
+  for (i = 0; i < interior.slack.size(); ++i){
+    if (fabs(interior.slack[i]) < tolerance) interior.slack[i] = 0;
+  }
+}
+
+HighsStatus BuildOCFinalBasis(const HighsLp& lp, const HighsOptions& options,
 		       HighsBasis& highs_basis, HighsSolution& highs_solution,
 		       HighsModelStatus& unscaled_model_status,
 		       HighsSolutionParams& unscaled_solution_params,
@@ -357,6 +374,7 @@ HighsStatus CleanupOCInterior(const HighsLp& lp, const HighsOptions& options,
   if (result != IpxStatus::OK) return HighsStatus::Error;
 
   // Grab interior point to start crossover from
+  CleanUpOCInterior(interior);
   std::vector<double>& x_start = interior.x;
   std::vector<double>& y_start = interior.y;
   std::vector<double>& z_start = interior.z;
@@ -367,7 +385,6 @@ HighsStatus CleanupOCInterior(const HighsLp& lp, const HighsOptions& options,
   ipx::Int status =
       lps.CrossoverFromStartingPoint(&x_start[0], &slack_start[0], &y_start[0], &z_start[0]);
   crossoverTime = lps.crossoverTime;
-  
 }
 
 double getCrossoverTime(){

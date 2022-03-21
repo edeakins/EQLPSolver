@@ -72,6 +72,7 @@ public:
     void reduceColumn(int iCol);
     void buildSubLp();
     void buildSubLpBasis();
+    void checkAMatrix();
     // Get parts of agg
     HighsLp* getLp();
     HighsSolution* getSolution();

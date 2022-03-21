@@ -129,7 +129,6 @@ class HFactor {
    *
    */
   int build();
-  int buildOC();
 
   /**
    * @brief Solve \f$B\mathbf{x}=\mathbf{b}\f$ (FTRAN)
@@ -195,9 +194,6 @@ class HFactor {
    * @brief Columns not pivoted on
    */
   vector<int> noPvC;
-  
-  // Records non-singular columns
-  vector<int> unPermute;
 
   /**
    * @brief Gets noPvR when HFactor.h cannot be included
@@ -234,8 +230,6 @@ class HFactor {
   int invert_num_el = 0;
   int kernel_dim = 0;
   int kernel_num_el = 0;
-  // Permutation
-  vector<int> permute;
 
   /**
    * Data of the factor
@@ -262,6 +256,9 @@ class HFactor {
   vector<int> Bstart;
   vector<int> Bindex;
   vector<double> Bvalue;
+
+  // Permutation
+  vector<int> permute;
 
   // Kernel matrix
   vector<int> MCstart;

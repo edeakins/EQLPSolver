@@ -121,6 +121,7 @@ void HighsOCAggregate::buildLp(OCpartition* partition, HighsBasis* b,
         buildBasis(false, false);
         buildObj();
         buildAmatrix();
+        checkAMatrix();
         // buildStandardMatrix();
         buildRhs();
         buildBnds();
@@ -209,6 +210,35 @@ void HighsOCAggregate::buildAmatrix(){
     elp->nnz_ = nnz;
     elpBasis->numCol_ = elp->numCol_;
     elpBasis->numRow_ = elp->numRow_;
+}
+
+void HighsOCAggregate::checkAMatrix(){
+    int iCol, crep, iRow, rrep, aIndex;
+    std::vector<int> compareElp(numRow);
+    std::vector<int> compareOlp(numRow);
+    for (iCol = 0; iCol < elp->numX_; ++iCol){
+        crep = colrep[iCol];
+        for (aIndex = elp->Astart_[iCol]; aIndex < elp->Astart_[iCol + 1]; ++aIndex){
+            iRow = elp->Aindex_[aIndex];
+            if (iRow >= numRow) continue;
+            rrep = rowrep[iRow] - numCol;
+            compareElp[rrep] = 1;
+        }
+        for (aIndex = olp->Astart_[crep]; aIndex < olp->Astart_[crep + 1]; ++aIndex){
+            iRow = olp->Aindex_[aIndex];
+            compareOlp[iRow] = 1;
+        }
+        for (iRow = 0; iRow < numRow; ++iRow){
+            if (compareElp[iRow] != compareOlp[iRow]){
+                std::cout << "bad col: " << iCol << std::endl;
+                std::cout << "bad col rep: " << crep << std::endl;
+                std::cout << "bad row: " << iRow << std::endl; 
+                std::cin.get();
+            }
+            compareElp[iRow] = 0;
+            compareOlp[iRow] = 0;
+        }
+    }
 }
 
 // void HighsOCAggregate::buildStandardMatrix(){
@@ -472,7 +502,7 @@ void HighsOCAggregate::buildFinalResiduals(){
 
 void HighsOCAggregate::buildResidualLinks(){
     int i, x1, x2, x0, nf, of, newNumRow = elp->numRow_;
-    int rep, xOld, xNew, pcf, minParent = numCol;
+    int rep, xOld, xNew, pcf, minParent = numCol, oldRep, newRep;
     HighsBasisStatus basic = HighsBasisStatus::BASIC;
     std::pair<std::set<std::pair<int, int> >::iterator, bool> ret;
     numResiduals = 0;
@@ -488,9 +518,13 @@ void HighsOCAggregate::buildResidualLinks(){
     for (int iCol = pcolCnt; iCol < colCnt; ++iCol){
         xNew = iCol;
         rep = colrep[iCol];
+        newRep = colrep[iCol];
         pcf = epMinusOne.front[rep];
         xOld = pFrontCol[pcf];
+        oldRep = colrep[xOld];
         if (basis->col_status[xOld] != basic) continue;
+        if (oldRep == newRep) 
+            std::cout << xOld << " " << xNew << std::endl;
         if (xOld < minParent) minParent = xOld;
         isParent[xOld] = 1;
         isChild[xNew] = 1;
@@ -879,6 +913,16 @@ void HighsOCAggregate::buildColBasis(){
     }
     for (iCol = colCnt; iCol < colCnt + numResiduals; ++iCol)
         elpBasis->col_status[iCol] = HighsBasisStatus::LOWER;
+    // for (iCol = 0; iCol < pcolCnt; ++iCol){
+    //     if (basis->col_status[iCol] != HighsBasisStatus::BASIC &&
+    //         basis->col_status[iCol] != HighsBasisStatus::LOWER &&
+    //         basis->col_status[iCol] != HighsBasisStatus::UPPER)
+    //         std::cout << "iCol: " << iCol << std::endl;
+    // }
+    for (iCol = pcolCnt; iCol < colCnt; ++iCol){
+        if (elpBasis->col_status[iCol] == HighsBasisStatus::BASIC)
+            numNewBasic++;
+    }
 }
 
 void HighsOCAggregate::buildRowBasis(){

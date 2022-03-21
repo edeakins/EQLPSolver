@@ -860,6 +860,7 @@ void Model::PrintPreprocessingLog(const Control& control) const {
             << Scientific(minscale, 8, 2) << ", "
             << Scientific(maxscale, 8, 2) << "]\n";
     }
+    
 }
 
 void Model::WriteInfo(Info *info) const {
