@@ -85,6 +85,9 @@ Makefile
 Makefile_opt_sw
 ml.mps
 
+# Visual studio config files
+/.vs
+
 # Visual C++ cache files
 ipch/
 *.aps
