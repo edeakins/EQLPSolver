@@ -234,6 +234,7 @@ devBuild
 build
 # mittleman_symmetric_mps
 mittleman_symmetric_5
+symmetric_1
 
 ##Lp files with cbc cuts
 CutGenerationLpFiles
