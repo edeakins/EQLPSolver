@@ -385,6 +385,7 @@ HighsStatus BuildOCFinalBasis(const HighsLp& lp, const HighsOptions& options,
   ipx::Int status =
       lps.CrossoverFromStartingPoint(&x_start[0], &slack_start[0], &y_start[0], &z_start[0]);
   crossoverTime = lps.crossoverTime;
+  return HighsStatus::OK;
 }
 
 double getCrossoverTime(){

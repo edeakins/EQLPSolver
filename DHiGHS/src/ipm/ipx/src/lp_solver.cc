@@ -85,8 +85,13 @@ Int LpSolver::LoadModel(Int num_var, const double* obj, const double* lb,
     control_.OpenLogfile();
     control_.Log() << "IPX version 1.0\n";
     model_.Load(control_, num_constr, num_var, Ap, Ai, Ax, rhs, constr_type,
-                    obj, lb, ub, &info_);      
-    // model_.LoadDual();             
+                    obj, lb, ub, &info_); 
+    if (info_.errflag) {
+        control_.CloseLogfile();
+        return info_.status = IPX_STATUS_invalid_input;
+    }    
+    // model_.LoadDual();
+    return 0;             
 }
 
 Info LpSolver::GetInfo() const {
@@ -454,9 +459,9 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
         PrintSummary();
         std::vector<double> xsol(n), slacksol(m), ysol(m), zsol(n + m);
         std::vector<Int> cbasissol(m), vbasissol(n);
-        // GetBasis(&cbasissol[0], &vbasissol[0]);
-        // GetBasicSolution(&xsol[0], &slacksol[0], &ysol[0], &zsol[0],
-        //                        &cbasissol[0], &vbasissol[0]);
+        GetBasis(&cbasissol[0], &vbasissol[0]);
+        GetBasicSolution(&xsol[0], &slacksol[0], &ysol[0], &zsol[0],
+                               &cbasissol[0], &vbasissol[0]);
     return 0;
 }
 
