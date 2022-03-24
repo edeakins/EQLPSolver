@@ -73,6 +73,7 @@ public:
     void buildSubLp();
     void buildSubLpBasis();
     void checkAMatrix();
+    void printAMatrixToMatlabFormat();
     // Get parts of agg
     HighsLp* getLp();
     HighsSolution* getSolution();
@@ -127,7 +128,7 @@ public:
     std::vector<int> child;
     std::vector<int> isChild;
     std::vector<int> childRow;
-    std::vector<int> residuals;
+    std::vector<int> residualCol;
     std::vector<int> residualRow;
     std::vector<int> degenSlack;
     std::vector<bool> degenRow;
@@ -150,6 +151,7 @@ public:
     std::set<int> newColReps;
     std::set<int> rowReps;
     std::set<int> newRowReps;
+    std::map<int, std::vector<int> > splitCells;
 
     // New sparse mat class for initial LU to remove some r columns hopefull
     SparseMatrix A;

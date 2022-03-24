@@ -372,74 +372,74 @@ HighsStatus Highs::run() {
     // Record basis and solution
     alpSolution_ = hmos_[original_hmo].solution_;
     alpBasis_ = hmos_[original_hmo].basis_;
-    // refine partition
-    timer_.start(timer_.equipart_clock);
-    refinePartitionFinal();
-    timer_.stop(timer_.equipart_clock);
-    // std::cout << "Refine done" << std::endl;
-    // std::cin.get();
-    // lift to next elp
-    timer_.start(timer_.lift_clock);
-    liftLpExtended();
-    // liftBasis();
-    timer_.stop(timer_.lift_clock);
-    int swaps = -1;
-    // Pass new elp
-    passModel(*alp_);
-    // writeModel("../../DOKSmps/Extended.lp");
-    setBasis(*lpSymBasis_);
-    // std::cout << "set basis done" << std::endl;
-    // std::cin.get();
-    hmos_[solved_hmo].basis_ = basis_;
-    options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
-    // std::string itercnt = std::string(cnt);
-    timer_.start(timer_.elp_solve_clock);
-    call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
-    timer_.stop(timer_.elp_solve_clock);
-    return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
-    actualRPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
-    rSwapPivots = possibleRPivots - actualRPivots;
-    totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
-    if (hmos_[original_hmo].readyForHighs){
-      HighsModelObject* postOChmo = new HighsModelObject(originalLp, options_, timer_);
-      int postOC_hmo = 1;
-      hmos_.push_back(*postOChmo);
-      trimOCSolution(hmos_[original_hmo], hmos_[postOC_hmo]);
-      options_.solver = ipm_string;
-      hmos_[postOC_hmo].readyForHighs = 1;
-      runLpSolver(hmos_[postOC_hmo], "Cleaning OC with HighsCrossover");
-    }
-    //////////////////////// Iterative Lifting /////////////////////////////////////////////
-    // Lift to final elp
-    // // Start lift loop
-    // int cnt = 1;
-    // while (!discrete){
-    //   // refine partition
-    //   timer_.start(timer_.equipart_clock);
-    //   refinePartition();
-    //   timer_.stop(timer_.equipart_clock);
-    //   // lift to next elp
-    //   timer_.start(timer_.lift_clock);
-    //   liftLpExtended();
-    //   liftBasis();
-    //   timer_.stop(timer_.lift_clock);
-    //   // Pass new elp
-    //   passModel(*alp_);
-    //   setBasis(*lpSymBasis_);
-    //   hmos_[solved_hmo].basis_ = basis_;
-    //   options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
-    //   // std::string itercnt = std::string(cnt);
-    //   writeModel("../../DOKSmps/codbt021.lp");
-    //   timer_.start(timer_.elp_solve_clock);
-    //   call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
-    //   timer_.stop(timer_.elp_solve_clock);
-    //   return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
-    //   actualRPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
-    //   totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
-    //   alpSolution_ = hmos_[original_hmo].solution_;
-    //   alpBasis_ = hmos_[original_hmo].basis_;
-    //   ++cnt;
+    // // refine partition
+    // timer_.start(timer_.equipart_clock);
+    // refinePartitionFinal();
+    // timer_.stop(timer_.equipart_clock);
+    // // std::cout << "Refine done" << std::endl;
+    // // std::cin.get();
+    // // lift to next elp
+    // timer_.start(timer_.lift_clock);
+    // liftLpExtended();
+    // // liftBasis();
+    // timer_.stop(timer_.lift_clock);
+    // int swaps = -1;
+    // // Pass new elp
+    // passModel(*alp_);
+    // // writeModel("../../DOKSmps/Extended.lp");
+    // setBasis(*lpSymBasis_);
+    // // std::cout << "set basis done" << std::endl;
+    // // std::cin.get();
+    // hmos_[solved_hmo].basis_ = basis_;
+    // options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
+    // // std::string itercnt = std::string(cnt);
+    // timer_.start(timer_.elp_solve_clock);
+    // call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
+    // timer_.stop(timer_.elp_solve_clock);
+    // return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
+    // actualRPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    // rSwapPivots = possibleRPivots - actualRPivots;
+    // totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+    // if (hmos_[original_hmo].readyForHighs){
+    //   HighsModelObject* postOChmo = new HighsModelObject(originalLp, options_, timer_);
+    //   int postOC_hmo = 1;
+    //   hmos_.push_back(*postOChmo);
+    //   trimOCSolution(hmos_[original_hmo], hmos_[postOC_hmo]);
+    //   options_.solver = ipm_string;
+    //   hmos_[postOC_hmo].readyForHighs = 1;
+    //   runLpSolver(hmos_[postOC_hmo], "Cleaning OC with HighsCrossover");
     // }
+    //////////////////////// Iterative Lifting /////////////////////////////////////////////
+    // Start lift loop
+    int cnt = 1;
+    while (!discrete){
+      // refine partition
+      timer_.start(timer_.equipart_clock);
+      refinePartition();
+      timer_.stop(timer_.equipart_clock);
+      // lift to next elp
+      timer_.start(timer_.lift_clock);
+      liftLpExtended();
+      liftBasis();
+      timer_.stop(timer_.lift_clock);
+      // Pass new elp
+      passModel(*alp_);
+      setBasis(*lpSymBasis_);
+      hmos_[solved_hmo].basis_ = basis_;
+      options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
+      std::string itercnt = std::to_string(cnt);
+      std::string fName = "../../DOKSmps/ELP_" + itercnt + ".lp";
+      writeModel(fName);
+      timer_.start(timer_.elp_solve_clock);
+      call_status = runLpSolver(hmos_[solved_hmo], "Solving ELP");
+      timer_.stop(timer_.elp_solve_clock);
+      return_status = interpretCallStatus(call_status, return_status, "runLpSolver"); 
+      actualRPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+      totalPivots += hmos_[original_hmo].scaled_solution_params_.simplex_iteration_count;
+      alpSolution_ = hmos_[original_hmo].solution_;
+      alpBasis_ = hmos_[original_hmo].basis_;
+      ++cnt;
+    }
     // // Lift to elp
     // timer_.start(timer_.lift_clock);
     // liftLp(alpBasis_, alpSolution_);
