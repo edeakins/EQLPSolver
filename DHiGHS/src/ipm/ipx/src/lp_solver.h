@@ -108,6 +108,7 @@ public:
               const double* ub, Int num_constr, const Int* Ap, const Int* Ai,
               const double* Ax, const double* rhs, const char* constr_type);
     double crossoverTime = 0;
+    std::vector<Int> vbasissol, cbasissol;
 
 private:
     void ClearSolution();
@@ -133,6 +134,7 @@ private:
     Vector x_crossover_, y_crossover_, z_crossover_;
     Vector crossover_weights_;
     std::vector<Int> basic_statuses_;
+    
 };
 
 }  // namespace ipx

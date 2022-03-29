@@ -458,7 +458,8 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
         }
         PrintSummary();
         std::vector<double> xsol(n), slacksol(m), ysol(m), zsol(n + m);
-        std::vector<Int> cbasissol(m), vbasissol(n);
+        cbasissol.resize(m);
+        vbasissol.resize(n);
         GetBasis(&cbasissol[0], &vbasissol[0]);
         GetBasicSolution(&xsol[0], &slacksol[0], &ysol[0], &zsol[0],
                                &cbasissol[0], &vbasissol[0]);

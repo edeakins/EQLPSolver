@@ -387,7 +387,7 @@ HighsStatus Highs::run() {
     // // Pass new elp
     // passModel(*alp_);
     // // writeModel("../../DOKSmps/Extended.lp");
-    // setBasis(*lpSymBasis_);
+    // setBasis(*startBasis_);
     // // std::cout << "set basis done" << std::endl;
     // // std::cin.get();
     // hmos_[solved_hmo].basis_ = basis_;
@@ -423,8 +423,8 @@ HighsStatus Highs::run() {
       liftBasis();
       timer_.stop(timer_.lift_clock);
       // Pass new elp
-      passModel(*alp_);
-      setBasis(*lpSymBasis_);
+      passModel(*elp_);
+      setBasis(*startBasis_);
       hmos_[solved_hmo].basis_ = basis_;
       options_.simplex_strategy = SIMPLEX_STRATEGY_UNFOLD;
       std::string itercnt = std::to_string(cnt);
@@ -439,6 +439,15 @@ HighsStatus Highs::run() {
       alpSolution_ = hmos_[original_hmo].solution_;
       alpBasis_ = hmos_[original_hmo].basis_;
       ++cnt;
+      if (hmos_[original_hmo].readyForHighs){
+        HighsModelObject* postOChmo = new HighsModelObject(originalLp, options_, timer_);
+        int postOC_hmo = 1;
+        hmos_.push_back(*postOChmo);
+        trimOCSolution(hmos_[original_hmo], hmos_[postOC_hmo]);
+        options_.solver = ipm_string;
+        hmos_[postOC_hmo].readyForHighs = 1;
+        runLpSolver(hmos_[postOC_hmo], "Cleaning OC with HighsCrossover");
+      }
     }
     // // Lift to elp
     // timer_.start(timer_.lift_clock);
@@ -668,7 +677,7 @@ HighsStatus Highs::run() {
     // Times
     sTimes->saucyTime = timer_.clock_time[timer_.saucy_clock];
     sTimes->foldTime = timer_.clock_time[timer_.fold_clock];
-    sTimes->alpSolveTime = timer_.clock_time[timer_.alp_solve_clock];
+    sTimes->alpSolveTime = timer_.clock_time[timer_.elp_solve_clock];
     sTimes->liftTime = timer_.clock_time[timer_.lift_clock];
     sTimes->elpSolveTime = hmos_[solved_hmo].timer_.clock_time[hmos_[solved_hmo].timer_.orbital_crossover_clock];
     sTimes->solveTime = timer_.clock_time[timer_.solve_clock];
@@ -680,9 +689,9 @@ HighsStatus Highs::run() {
     int oNRow = originalLp.numRow_;
     int oNnz = originalLp.nnz_;
     // ALP numCol, numRwo, numNnz
-    int alpNCol = alp_->numCol_;
-    int alpNRow = alp_->numRow_;
-    int alpNnz = alp_->nnz_;
+    int alpNCol = elp_->numCol_;
+    int alpNRow = elp_->numRow_;
+    int alpNnz = elp_->nnz_;
     reducs->colReductions = (double)(oNCol - alpNCol)/oNCol * 100;
     reducs->rowReductions = (double)(oNRow - alpNRow)/oNRow * 100;
     reducs->nnzReductions = (double)(oNnz - alpNnz)/oNnz * 100;
@@ -817,39 +826,39 @@ void Highs::foldLp(){
 // Lift ALP to LP
 void Highs::liftLpFinal(){
   agg_.buildLp(part_, &alpBasis_, &alpSolution_, true, false);
-  alp_ = agg_.getLp();
+  elp_ = agg_.getLp();
 }
 
 // Lift ALP to ELP
 void Highs::liftLpExtended(){
   agg_.buildLp(part_, &alpBasis_, &alpSolution_, false, false);
-  alp_ = agg_.getLp();
+  elp_ = agg_.getLp();
   slp_ = agg_.getSubLp();
-  lpSymBasis_ = agg_.getBasis();
+  startBasis_ = agg_.getBasis();
   slpSymBasis_ = agg_.getSubBasis();
 }
 
 void Highs::liftLpExtendedFinal(){
   agg_.buildLp(part_, &alpBasis_, &alpSolution_, true, true);
-  alp_ = agg_.getLp();
+  elp_ = agg_.getLp();
   slp_ = agg_.getSubLp();
-  lpSymBasis_ = agg_.getBasis();
+  startBasis_ = agg_.getBasis();
   slpSymBasis_ = agg_.getSubBasis();
 }
 
 void Highs::liftBasis(){
   // agg_.buildBasis(false, false);
-  lpSymBasis_ = agg_.getBasis();
+  startBasis_ = agg_.getBasis();
 }
 
 void Highs::liftBasisFinal(){
   agg_.buildBasis(true, false);
-  lpSymBasis_ = agg_.getBasis();
+  startBasis_ = agg_.getBasis();
 }
 
 void Highs::liftBasisExtendedFinal(){
   agg_.buildBasis(true, true);
-  lpSymBasis_ = agg_.getBasis();
+  startBasis_ = agg_.getBasis();
 }
 
 void Highs::liftSolutionFinal(){
@@ -867,20 +876,26 @@ void Highs::liftSolutionExtendedFinal(){
   lpSymSolution_ = agg_.getSolution();
 }
 
+void Highs::ipxBasisToHighsBasis(){
+  vbasis = getVbasis();
+  cbasis = getCbasis();
+  int numX_ = elp_->numX_;
+}
+
 int Highs::swapInRColumns(){
   std::vector<int>& unPerm = agg_.getUnPerm();
   int i, iRow, iCol, swaps = 0;
   for (i = 0; i < slp_->numRow_; ++i){
     if (alpBasis_.row_status[i] != HighsBasisStatus::BASIC){
       iRow = unPerm[i];
-      lpSymBasis_->row_status[iRow] = alpBasis_.row_status[i];
+      startBasis_->row_status[iRow] = alpBasis_.row_status[i];
     }
   }
   for (i = 0; i < slp_->numCol_; ++i){
     if (alpBasis_.col_status[i] == HighsBasisStatus::BASIC){
-      iCol = i + alp_->numX_;
-      lpSymBasis_->col_status[iCol] = HighsBasisStatus::BASIC;
-      alp_->basicResiduals_[i] = 1;
+      iCol = i + elp_->numX_;
+      startBasis_->col_status[iCol] = HighsBasisStatus::BASIC;
+      elp_->basicResiduals_[i] = 1;
       swaps++;
     }
   }
@@ -1591,9 +1606,9 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
   //   // liftSolutionFinal();
   //   HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
 	// 	      "Starting Crossover From Symmetric Solution...\n");
-  //   passModel(*alp_);
+  //   passModel(*elp_);
   //   call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
-	// 		     *lpSymBasis_, *lpSymSolution_,
+	// 		     *startBasis_, *lpSymSolution_,
 	// 		     model.unscaled_model_status_,
 	// 		     model.unscaled_solution_params_);
   // } 
@@ -1617,9 +1632,9 @@ HighsStatus Highs::runLpSolver(HighsModelObject& model, const string message) {
   //   liftSolutionFinal();
   //   HighsPrintMessage(options_.output, options_.message_level, ML_ALWAYS,
 	// 	      "Starting Crossover From Symmetric Solution...\n");
-  //   passModel(*alp_);
+  //   passModel(*elp_);
   //   call_status = CrossoverFromSymmetricSolution(model.lp_, options_,
-	// 		     *lpSymBasis_, *lpSymSolution_,
+	// 		     *startBasis_, *lpSymSolution_,
 	// 		     model.unscaled_model_status_,
 	// 		     model.unscaled_solution_params_);
   // } 

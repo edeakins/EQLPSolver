@@ -78,6 +78,7 @@ class HQPrimal {
   void countNonBoundedVars();
   void primalChooseRow();
   void primalUpdate();
+  void primalUpdateOC();
   int isReadyForHighs();
 
   void phase1ComputeDual();

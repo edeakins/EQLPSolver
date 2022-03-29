@@ -974,12 +974,12 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
   for (int row = 0; row < model.numRow_; row++) {
     if (model.rowLower_[row] == model.rowUpper_[row]) {
       // equality constraint
-      this->writeToFile(" con%d: ", row + 1);
+      this->writeToFile(" con%d: ", row);
       for (int var = 0; var < model.numCol_; var++) {
         for (int idx = model.Astart_[var]; idx < model.Astart_[var + 1];
              idx++) {
           if (model.Aindex_[idx] == row) {
-            this->writeToFile("%+g x%d ", model.Avalue_[idx], var + 1);
+            this->writeToFile("%+g x%d ", model.Avalue_[idx], var);
           }
         }
       }
@@ -993,7 +993,7 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
           for (int idx = model.Astart_[var]; idx < model.Astart_[var + 1];
                idx++) {
             if (model.Aindex_[idx] == row) {
-              this->writeToFile("%+g x%d ", model.Avalue_[idx], var + 1);
+              this->writeToFile("%+g x%d ", model.Avalue_[idx], var);
             }
           }
         }
@@ -1006,7 +1006,7 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
           for (int idx = model.Astart_[var]; idx < model.Astart_[var + 1];
                idx++) {
             if (model.Aindex_[idx] == row) {
-              this->writeToFile("%+g x%d ", model.Avalue_[idx], var + 1);
+              this->writeToFile("%+g x%d ", model.Avalue_[idx], var);
             }
           }
         }
@@ -1026,20 +1026,20 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
     // if both lower/upper bound are +/-infinite: [name] free
     if (model.colLower_[i] > -HIGHS_CONST_INF &&
         model.colUpper_[i] < HIGHS_CONST_INF) {
-      this->writeToFile(" %+g <= x%d <= %+g", model.colLower_[i], i + 1,
+      this->writeToFile(" %+g <= x%d <= %+g", model.colLower_[i], i,
                         model.colUpper_[i]);
       this->writeToFileLineend();
     } else if (model.colLower_[i] <= -HIGHS_CONST_INF &&
                model.colUpper_[i] < HIGHS_CONST_INF) {
-      this->writeToFile(" -inf <= x%d <= %+g", i + 1, model.colUpper_[i]);
+      this->writeToFile(" -inf <= x%d <= %+g", i, model.colUpper_[i]);
       this->writeToFileLineend();
 
     } else if (model.colLower_[i] > -HIGHS_CONST_INF &&
                model.colUpper_[i] >= HIGHS_CONST_INF) {
-      this->writeToFile(" %+g <= x%d <= +inf", model.colLower_[i], i + 1);
+      this->writeToFile(" %+g <= x%d <= +inf", model.colLower_[i], i);
       this->writeToFileLineend();
     } else {
-      this->writeToFile(" x%d %s", i + 1, LP_KEYWORD_FREE[0]);
+      this->writeToFile(" x%d %s", i, LP_KEYWORD_FREE[0]);
       this->writeToFileLineend();
     }
   }

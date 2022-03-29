@@ -1435,7 +1435,7 @@ void HQPrimal::unfold() {
       // std::cout << "rowOut: " << rowOut << std::endl;
     // }
     // Highs primal update function nothing change from normal simplex
-    primalUpdate();
+    primalUpdateOC();
     workHMO.simplex_info_.workCost_[columnIn] = 0;
     workHMO.lp_.colUpper_[columnIn] = +HIGHS_CONST_INF;
     workHMO.lp_.colLower_[columnIn] = -HIGHS_CONST_INF;
@@ -1879,6 +1879,223 @@ void HQPrimal::primalUpdate() {
   // PRICE
   //
   computeTableauRowFromPiP(workHMO, row_ep, row_ap);
+  /*
+#ifdef HiGHSDEV
+  if (simplex_info.analyse_iterations) {
+    analysis->operationRecordBefore(ANALYSIS_OPERATION_TYPE_PRICE_AP, row_ep, analysis->row_ap_density);
+    analysis->num_row_price++;
+  }
+#endif
+  timer.start(simplex_info.clock_[PriceClock]);
+  workHMO.matrix_.priceByRowSparseResult(row_ap, row_ep);
+  timer.stop(simplex_info.clock_[PriceClock]);
+#ifdef HiGHSDEV
+  if (simplex_info.analyse_iterations)
+    analysis->operationRecordAfter(ANALYSIS_OPERATION_TYPE_PRICE_AP, row_ep);
+#endif
+
+  const double local_row_ep_density = (double)row_ep.count / solver_num_row;
+  analysis->updateOperationResultDensity(local_row_ep_density, analysis->row_ep_density);
+  */
+  timer.start(simplex_info.clock_[UpdateDualClock]);
+  init = timer.readRunHighsClock();
+  //  double
+  thetaDual = workDual[columnIn] / alpha;
+  for (int i = 0; i < row_ap.count; i++) {
+    int iCol = row_ap.index[i];
+    workDual[iCol] -= thetaDual * row_ap.array[iCol];
+  }
+  for (int i = 0; i < row_ep.count; i++) {
+    int iGet = row_ep.index[i];
+    int iCol = iGet + solver_num_col;
+    workDual[iCol] -= thetaDual * row_ep.array[iGet];
+  }
+  updateDualTime += timer.readRunHighsClock() - init;
+  timer.stop(simplex_info.clock_[UpdateDualClock]);
+
+  /* Update the devex weight */
+  devexUpdate();
+
+  // After dual update in primal simplex the dual objective value is not known
+  workHMO.simplex_lp_status_.has_dual_objective_value = false;
+
+  // updateVerify for primal
+  numericalTrouble = 0;
+  double aCol = fabs(alpha);
+  double alphaRow;
+  if (columnIn < workHMO.simplex_lp_.numCol_) {
+    alphaRow = row_ap.array[columnIn];
+  } else {
+    alphaRow = row_ep.array[rowOut];
+  }
+  double aRow = fabs(alphaRow);
+  double aDiff = fabs(aCol - aRow);
+  numericalTrouble = aDiff / min(aCol, aRow);
+  if (numericalTrouble > 1e-7 && solvePhase != 4)
+    printf("NumericalTrouble - Reinverting\n");
+  // Reinvert if the relative difference is large enough, and updates have been
+  //performed
+  if (numericalTrouble > 1e-7 && workHMO.simplex_info_.update_count > 0){
+    invertHint = INVERT_HINT_POSSIBLY_SINGULAR_BASIS;
+    ivHint = INVERT_HINT_POSSIBLY_SINGULAR_BASIS;
+    // std::cout << "invertHint: " << (int)invertHint << std::endl;
+    // // std::cout << "update_count: " << workHMO.simplex_info_.update_count << std::endl;
+    // std::cin.get();
+  }
+  // Dual for the pivot
+  workDual[columnIn] = 0;
+  workDual[columnOut] = -thetaDual;
+
+  // Update workHMO.factor_ basis
+  init = timer.readRunHighsClock();
+  update_factor(workHMO, &col_aq, &row_ep, &rowOut, &invertHint);
+  // std::cout << "invertHint: " << (int)invertHint << std::endl;
+  // std::cin.get();
+  update_matrix(workHMO, columnIn, columnOut);
+  if (simplex_info.update_count >= simplex_info.update_limit) {
+    invertHint = INVERT_HINT_UPDATE_LIMIT_REACHED;
+  }
+  updateFactorTime += timer.readRunHighsClock() - init;
+  // std::cout << "INVERT_HINT_UPDATE_LIMIT_REACHED: " << (int)INVERT_HINT_UPDATE_LIMIT_REACHED << std::endl;
+  // std::cout << "UPDATE LIMIT: " << (int)simplex_info.update_limit << std::endl;
+  // std::cout << "UPDATE COUNT: " << (int)simplex_info.update_count << std::endl;
+  // std::cout << "INVERT HINT: " << (int)invertHint << std::endl;
+  // std::cin.get();
+  // Move this to Simplex class once it's created
+  // simplex_method.record_pivots(columnIn, columnOut, alpha);
+  workHMO.scaled_solution_params_.simplex_iteration_count++;
+
+  /* Reset the devex when there are too many errors */
+  if(num_bad_devex_weight > 3) {
+    devexReset();
+  }
+
+  // Report on the iteration
+  iterationAnalysis();
+}
+
+void HQPrimal::primalUpdateOC() {
+  
+  HighsTimer& timer = workHMO.timer_;
+  int* jMove = &workHMO.simplex_basis_.nonbasicMove_[0];
+  double* workDual = &workHMO.simplex_info_.workDual_[0];
+  const double* workLower = &workHMO.simplex_info_.workLower_[0];
+  const double* workUpper = &workHMO.simplex_info_.workUpper_[0];
+  const double* baseLower = &workHMO.simplex_info_.baseLower_[0];
+  const double* baseUpper = &workHMO.simplex_info_.baseUpper_[0];
+  double* workValue = &workHMO.simplex_info_.workValue_[0];
+  double* baseValue = &workHMO.simplex_info_.baseValue_[0];
+  const double primalTolerance =
+      workHMO.scaled_solution_params_.primal_feasibility_tolerance;
+  HighsSimplexInfo& simplex_info = workHMO.simplex_info_;
+
+  // Compute thetaPrimal
+  int moveIn = jMove[columnIn];
+  //  int
+  columnOut = workHMO.simplex_basis_.basicIndex_[rowOut];
+  //  double
+  alpha = col_aq.array[rowOut];
+  //  double
+  thetaPrimal = 0;
+  if (alpha * moveIn > 0) {
+    // Lower bound
+    thetaPrimal = (baseValue[rowOut] - baseLower[rowOut]) / alpha;
+  } else {
+    // Upper bound
+    thetaPrimal = (baseValue[rowOut] - baseUpper[rowOut]) / alpha;
+  }
+
+  // 1. Make sure it is inside bounds or just flip bound
+  double lowerIn = workLower[columnIn];
+  double upperIn = workUpper[columnIn];
+  double valueIn = workValue[columnIn] + thetaPrimal;
+  bool flipped = false;
+  if (jMove[columnIn] == 1) {
+    if (valueIn > upperIn + primalTolerance) {
+      // Flip to upper
+      workValue[columnIn] = upperIn;
+      thetaPrimal = upperIn - lowerIn;
+      flipped = true;
+      jMove[columnIn] = -1;
+    }
+  } else if (jMove[columnIn] == -1) {
+    if (valueIn < lowerIn - primalTolerance) {
+      // Flip to lower
+      workValue[columnIn] = lowerIn;
+      thetaPrimal = lowerIn - upperIn;
+      flipped = true;
+      jMove[columnIn] = 1;
+    }
+  }
+
+  timer.start(simplex_info.clock_[UpdatePrimalClock]);
+  double init = timer.readRunHighsClock();
+  for (int i = 0; i < col_aq.count; i++) {
+    int index = col_aq.index[i];
+    baseValue[index] -= thetaPrimal * col_aq.array[index];
+  }
+  updatePrimalTime += timer.readRunHighsClock() - init;
+  timer.stop(simplex_info.clock_[UpdatePrimalClock]);
+
+  simplex_info.updated_primal_objective_value +=
+      workDual[columnIn] * thetaPrimal;
+
+  computePrimalInfeasible(workHMO);
+
+  // If flipped, then no need touch the pivots
+  if (flipped) {
+    rowOut = -1;
+    numericalTrouble = 0;
+    thetaDual = workDual[columnIn];
+    iterationAnalysis();
+    num_flip_since_rebuild++;
+    return;
+  }
+
+  // Pivot in
+  int sourceOut = alpha * moveIn > 0 ? -1 : 1;
+  update_pivots(workHMO, columnIn, rowOut, sourceOut);
+
+  baseValue[rowOut] = valueIn;
+
+  timer.start(simplex_info.clock_[CollectPrIfsClock]);
+  init = timer.readRunHighsClock();
+  // Check for any possible infeasible
+  for (int iRow = 0; iRow < solver_num_row; iRow++) {
+    if (baseValue[iRow] < baseLower[iRow] - primalTolerance) {
+      invertHint = INVERT_HINT_PRIMAL_INFEASIBLE_IN_PRIMAL_SIMPLEX;
+    } else if (baseValue[iRow] > baseUpper[iRow] + primalTolerance) {
+      invertHint = INVERT_HINT_PRIMAL_INFEASIBLE_IN_PRIMAL_SIMPLEX;
+    }
+  }
+  collectPrimalInfsTime += timer.readRunHighsClock() - init;
+  timer.stop(simplex_info.clock_[CollectPrIfsClock]);
+
+  // 2. Now we can update the dual
+
+  timer.start(simplex_info.clock_[BtranClock]);
+  init = timer.readRunHighsClock();
+  row_ep.clear();
+  row_ap.clear();
+  row_ep.count = 1;
+  row_ep.index[0] = rowOut;
+  row_ep.array[rowOut] = 1;
+  row_ep.packFlag = true;
+#ifdef HiGHSDEV
+  if (simplex_info.analyse_iterations)
+    analysis->operationRecordBefore(ANALYSIS_OPERATION_TYPE_BTRAN_EP, row_ep, analysis->row_ep_density);
+#endif
+  workHMO.factor_.btran(row_ep, analysis->row_ep_density);
+#ifdef HiGHSDEV
+  if (simplex_info.analyse_iterations)
+    analysis->operationRecordAfter(ANALYSIS_OPERATION_TYPE_BTRAN_EP, row_ep);
+#endif
+  bTranTime += timer.readRunHighsClock() - init;
+  timer.stop(simplex_info.clock_[BtranClock]);
+  //
+  // PRICE
+  //
+  computeTableauRowFull(workHMO, row_ep, row_ap);
   /*
 #ifdef HiGHSDEV
   if (simplex_info.analyse_iterations) {

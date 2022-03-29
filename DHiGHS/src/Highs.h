@@ -776,15 +776,17 @@ class Highs {
   HighsLp *alp_, *elp_, *slp_;
 
   // Containers for OC
+  std::vector<int64_t> ipxVbasis;
+  std::vector<int64_t> ipxCbasis;
   HighsBasis alpBasis_;
   HighsSolution alpSolution_;
-  HighsBasis* elpBasis_;
+  HighsBasis elpBasis_;
   HighsSolution elpSolution_;
   HighsBasis slpBasis_;
   HighsSolution slpSolution_;
   lpPartition* OCPartition_;
   OCpartition* part_;
-  HighsBasis* lpSymBasis_ = NULL;
+  HighsBasis* startBasis_ = NULL;
   HighsBasis* slpSymBasis_ = NULL;
   HighsSolution* lpSymSolution_ = NULL;
   // Final HiGHS Run Time
@@ -828,6 +830,9 @@ class Highs {
   bool getHighsModelStatusAndInfo(const int solved_hmo);
 
   void underDevelopmentLogMessage(const string method_name);
+
+  // Ethan Deakins (Oribtal Crossover)
+  void ipxBasisToHighsBasis();
 
   friend class HighsMipSolver;
 };

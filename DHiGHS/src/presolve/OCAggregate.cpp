@@ -121,11 +121,11 @@ void HighsOCAggregate::buildLp(OCpartition* partition, HighsBasis* b,
         buildBasis(false, false);
         buildObj();
         buildAmatrix();
-        checkAMatrix();
+        // checkAMatrix();
         // buildStandardMatrix();
         buildRhs();
         buildBnds();
-        printAMatrixToMatlabFormat();
+        // printAMatrixToMatlabFormat();
         // setUpPreBasicIndex();
         // setUpPreNonbasicFlag();
         // setUpColAq();

@@ -25,6 +25,8 @@
 #include "lp_data/HighsSolution.h"
 
 double crossoverTime = 0;
+std::vector<ipx::Int> vbasis;
+std::vector<ipx::Int> cbasis;
 
 IpxStatus fillInIpxData(const HighsLp& lp, ipx::Int& num_col,
                         std::vector<double>& obj, std::vector<double>& col_lb,
@@ -385,10 +387,20 @@ HighsStatus BuildOCFinalBasis(const HighsLp& lp, const HighsOptions& options,
   ipx::Int status =
       lps.CrossoverFromStartingPoint(&x_start[0], &slack_start[0], &y_start[0], &z_start[0]);
   crossoverTime = lps.crossoverTime;
+  vbasis = lps.vbasissol;
+  cbasis = lps.cbasissol;
   return HighsStatus::OK;
 }
 
 double getCrossoverTime(){
   return crossoverTime;
+}
+
+std::vector<ipx::Int> getVbasis(){
+  return vbasis;
+}
+
+std::vector<ipx::Int> getCbasis(){
+  return cbasis;
 }
 #endif
