@@ -1056,6 +1056,8 @@ cmath
 filesystem
 -
 
+../src/util/HighsSort.h
+
 ../src/util/HighsTimer.h
 cassert
 -
@@ -1121,6 +1123,16 @@ lp_data/HighsLp.h
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/lp_data/HighsLp.h
 lp_data/HighsLpUtils.h
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/lp_data/HighsLpUtils.h
+catch.hpp
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/catch.hpp
+
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestIO.cpp
+cstdio
+-
+cstring
+-
+HighsIO.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/HighsIO.h
 catch.hpp
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/catch.hpp
 
@@ -1213,6 +1225,28 @@ lp_data/HighsLpUtils.h
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/lp_data/HighsLpUtils.h
 util/HighsUtils.h
 /home/edeakins/LP/EQLPSolver/DHiGHS/check/util/HighsUtils.h
+
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestSetup.cpp
+catch.hpp
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/catch.hpp
+HighsLp.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/HighsLp.h
+HighsStatus.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/HighsStatus.h
+
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/TestSort.cpp
+catch.hpp
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/catch.hpp
+lp_data/HConst.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/lp_data/HConst.h
+util/HighsSort.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/util/HighsSort.h
+util/HighsRandom.h
+/home/edeakins/LP/EQLPSolver/DHiGHS/check/util/HighsRandom.h
+vector
+-
+algorithm
+-
 
 HConfig.h
 

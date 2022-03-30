@@ -1388,12 +1388,12 @@ void HQPrimal::unfold() {
   int fromCol, toCol, fromRow, toRow;
   bool fromColBool = false;
   countNonBoundedVars();
-  // if (solver_num_between_bounds <= numS){
-  //   columnIn = -1;
-  //   rowOut = -1;
-  //   workHMO.readyForHighs = 1;
-  //   return;
-  // }
+  if (solver_num_between_bounds <= numS){
+    columnIn = -1;
+    rowOut = -1;
+    workHMO.readyForHighs = 1;
+    return;
+  }
   ////////////////////// Orbital Crossover //////////////////////
   // for (int i = workHMO.lp_.numResiduals_ - 1; i >= 0; --i){
   for (int i = 0; i < numResiduals; ++i){
@@ -1478,12 +1478,12 @@ void HQPrimal::unfold() {
       // fromColBool = false;
     }
     countNonBoundedVars();
-    // if (solver_num_between_bounds <= numS && numPivot < numResiduals){
-    //   columnIn = -1;
-    //   rowOut = -1;
-    //   workHMO.readyForHighs = 1;
-    //   return;
-    // }
+    if (solver_num_between_bounds <= numS && numPivot < numResiduals){
+      columnIn = -1;
+      rowOut = -1;
+      workHMO.readyForHighs = 1;
+      return;
+    }
   }
   ////////////////////// Orbital Crossover Done //////////////////////
   // Final Rebuild
