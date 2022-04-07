@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -Wextra -Wno-unused-parameter -Wno-format-truncation -pedantic -g -fno-omit-frame-pointer   CMakeFiles/highs.dir/RunHighs.cpp.o  -o ../bin/highs  -Wl,-rpath,/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/lib: ../lib/libhighs.so.1.2.1 ../lib/libipx.so ../lib/libbasiclu.so /usr/lib/x86_64-linux-gnu/libz.so -lpthread 
