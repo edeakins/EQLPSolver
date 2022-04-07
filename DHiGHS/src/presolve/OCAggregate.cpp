@@ -9,23 +9,26 @@ void HighsOCAggregate::allocate(HighsLp* lp, OCpartition* partition){
     nnz = lp->Avalue_.size();
     numTotResiduals = numCol - partition->ncsplits;
     // Allocate new lp container, new lp solution, new lp basis
+    agglp = (HighsLp*)calloc(1, sizeof(HighsLp));
+    agglp->colCost_.resize(numCol);
+    agglp->colUpper_.resize(numCol);
+    agglp->colLower_.resize(numCol);
+    agglp->rowUpper_.resize(numRow);
+    agglp->rowLower_.resize(numRow);
+    agglp->Astart_.resize(numCol + 1);
+    agglp->Aindex_.resize(nnz);
+    agglp->Avalue_.resize(nnz);
     elp = (HighsLp*)calloc(1, sizeof(HighsLp));
-    sublp = (HighsLp*)calloc(1, sizeof(HighsLp));
     elpSolution = (HighsSolution*)calloc(1, sizeof(HighsSolution));
     elpBasis = (HighsBasis*)calloc(1, sizeof(HighsBasis));
-    sublpBasis = (HighsBasis*)calloc(1, sizeof(HighsBasis));
     elp->colCost_.resize(numCol + numTotResiduals);
     elp->colUpper_.resize(numCol + numTotResiduals);
     elp->colLower_.resize(numCol + numTotResiduals);
     elp->rowUpper_.resize(numRow + numTotResiduals);
     elp->rowLower_.resize(numRow + numTotResiduals);
     elp->Astart_.resize(numCol + numTotResiduals + 1);
-    AdegenRStart.resize(numCol + numRow + numTotResiduals + 1);
     elp->Aindex_.resize(nnz + numTotResiduals * 3);
-    AdegenRIndex.resize(nnz + numRow + numTotResiduals * 3);
     elp->Avalue_.resize(nnz + numTotResiduals * 3);
-    AdegenRValue.resize(nnz + numRow + numTotResiduals * 3);
-    elp->basicResiduals_.resize(numTotResiduals);
     elpSolution->col_value.resize(numCol + numTotResiduals);
     elpSolution->col_dual.resize(numCol + numTotResiduals);
     elpSolution->row_value.resize(numRow + numTotResiduals);
@@ -120,11 +123,15 @@ void HighsOCAggregate::buildLp(OCpartition* partition, HighsBasis* b,
         buildResidualLinks();
         buildBasis(false, false);
         buildObj();
+        buildObjExtended();
         buildAmatrix();
+        buildAmatrixExtended();
         // checkAMatrix();
         // buildStandardMatrix();
         buildRhs();
+        buildRhsExtended();
         buildBnds();
+        buildBndsExtended();
         // printAMatrixToMatlabFormat();
         // setUpPreBasicIndex();
         // setUpPreNonbasicFlag();
@@ -142,8 +149,51 @@ void HighsOCAggregate::buildLp(OCpartition* partition, HighsBasis* b,
     epMinusOne = *ep;
 }
 
-// Build A matrix with linkers if they exist
+// Build A matrix without linkers if they exist
 void HighsOCAggregate::buildAmatrix(){
+    int iCol, cf, crep, clen, c;
+    int mIdx, ro, rf, r, rlen;
+    int nnzStan = 0, start = 0, startStan = 0;
+    nnz = 0;
+    double xlen, xv;
+    std::set<int>::iterator it;
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        crep = colrep[iCol];
+        cf = colFront[iCol];
+        clen = ep->len[cf] + 1;
+        c = iCol;
+        for (mIdx = olp->Astart_[crep]; mIdx < olp->Astart_[crep + 1]; ++mIdx){
+            ro = olp->Aindex_[mIdx];
+            rf = ep->front[ro + numCol];
+            r = frontRow[rf];
+            rlen = ep->len[rf] + 1;
+            if (!columnF[r]++){ 
+                columnI[nnz++] = r;
+                // nnzStan++;
+            }
+            columnX[r] += olp->Avalue_[mIdx] * clen;
+        }
+        for (mIdx = start; mIdx < nnz; ++mIdx){
+            agglp->Aindex_[mIdx] = columnI[mIdx];
+            // AdegenRIndex[j] = columnI[j];
+            agglp->Avalue_[mIdx] = columnX[columnI[mIdx]];
+            // AdegenRValue[j] = columnX[columnI[j]];
+            columnF[columnI[mIdx]] = 0;
+            columnX[columnI[mIdx]] = 0;
+            columnI[mIdx] = 0;
+        }
+        agglp->Astart_[c + 1] = nnz;
+        // AdegenRStart[xi + 1] = nnzStan;
+        start = nnz;
+    }
+    agglp->numCol_ = colCnt;
+    agglp->numRow_ = rowCnt;
+    agglp->numResiduals_ = 0;
+    agglp->nnz_ = nnz;
+}
+
+// Build A matrix with linkers if they exist
+void HighsOCAggregate::buildAmatrixExtended(){
     int iCol, cf, crep, clen, c;
     int mIdx, ro, rf, r, rlen;
     int nnzStan = 0, start = 0, startStan = 0;
@@ -342,6 +392,20 @@ void HighsOCAggregate::buildFinalAmatrix(){
 void HighsOCAggregate::buildObj(){
     int iCol, rep, cf;
     double c, clen;
+    agglp->colCost_.resize(colCnt);
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        rep = colrep[iCol];
+        cf = colFront[iCol];
+        clen = ep->len[cf] + 1;
+        c = olp->colCost_[rep];
+        agglp->colCost_[iCol] = clen * c;
+    }
+    agglp->sense_ = olp->sense_;
+}
+
+void HighsOCAggregate::buildObjExtended(){
+    int iCol, rep, cf;
+    double c, clen;
     for (iCol = 0; iCol < colCnt; ++iCol){
         rep = colrep[iCol];
         cf = colFront[iCol];
@@ -366,12 +430,35 @@ void HighsOCAggregate::buildRhs(){
         buildRhsFromScratch();
 }
 
+void HighsOCAggregate::buildRhsExtended(){
+    if (ep->level)
+        buildRhsFromSolutionExtended();
+    else
+        buildRhsFromScratchExtended();
+}
+
 void HighsOCAggregate::buildFinalRhs(){
     // buildFinalRhsFromScratch(); 
     buildFinalRhsFromSolution();
 }
 
 void HighsOCAggregate::buildRhsFromScratch(){
+    int iRow, rf, rrep;
+    double rlen;
+    agglp->rowUpper_.resize(rowCnt);
+    agglp->rowLower_.resize(rowCnt);
+    for (iRow = 0; iRow < rowCnt; ++iRow){
+        rrep = rowrep[iRow];
+        rf = rowFront[iRow];
+        rlen = ep->len[rf] + 1;
+        agglp->rowLower_[iRow] = 
+            olp->rowLower_[rrep - numCol] * rlen;
+        agglp->rowUpper_[iRow] = 
+            olp->rowUpper_[rrep - numCol] * rlen;
+    }
+}
+
+void HighsOCAggregate::buildRhsFromScratchExtended(){
     int iRow, rf, rrep;
     double rlen;
     for (iRow = 0; iRow < rowCnt; ++iRow){
@@ -386,6 +473,38 @@ void HighsOCAggregate::buildRhsFromScratch(){
 }
 
 void HighsOCAggregate::buildRhsFromSolution(){
+    int iRow, pr, rf, rpf, rlen, prlen, rep;
+    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
+    agglp->rowUpper_.resize(rowCnt);
+    agglp->rowLower_.resize(rowCnt);
+    for (iRow = 0; iRow < rowCnt; ++iRow){
+        rep = rowrep[iRow];
+        rf = ep->front[rep];
+        rpf = epMinusOne.front[rep];
+        rlen = ep->len[rf] + 1;
+        pr = pFrontRow[rpf];
+        prlen = epMinusOne.len[rpf] + 1;
+        pv = (double)solution->row_value[pr]/prlen;
+        lb = olp->rowLower_[rep - numCol];
+        ub = olp->rowUpper_[rep - numCol];
+        lbDiff = std::fabs(pv - lb);
+        ubDiff = std::fabs(pv - ub);
+        if (ubDiff < tol){
+            agglp->rowLower_[iRow] = ub * rlen;
+            agglp->rowUpper_[iRow] = ub * rlen;
+        }
+        else if (lbDiff < tol){
+            agglp->rowLower_[iRow] = lb * rlen;
+            agglp->rowUpper_[iRow] = lb * rlen;
+        }
+        else{
+            agglp->rowLower_[iRow] = lb * rlen;
+            agglp->rowUpper_[iRow] = ub * rlen;
+        }
+    }
+}
+
+void HighsOCAggregate::buildRhsFromSolutionExtended(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
     double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
     for (iRow = 0; iRow < rowCnt; ++iRow){
@@ -461,12 +580,32 @@ void HighsOCAggregate::buildBnds(){
         buildBndsFromScratch();
 }
 
+void HighsOCAggregate::buildBndsExtended(){
+    if (ep->level)
+        buildBndsFromSolutionExtended();
+    else
+        buildBndsFromScratchExtended();
+}
+
 void HighsOCAggregate::buildFinalBnds(){
     // buildFinalBndsFromScratch(); 
     buildFinalBndsFromSolution();
 }
 
 void HighsOCAggregate::buildBndsFromScratch(){
+    int iCol, crep;
+    agglp->colLower_.resize(colCnt);
+    agglp->colUpper_.resize(colCnt);
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        crep = colrep[iCol];
+        agglp->colLower_[iCol] = 
+            olp->colLower_[crep];
+        agglp->colUpper_[iCol] = 
+            olp->colUpper_[crep];
+    }
+}
+
+void HighsOCAggregate::buildBndsFromScratchExtended(){
     int iCol, crep;
     for (iCol = 0; iCol < colCnt; ++iCol){
         crep = colrep[iCol];
@@ -478,6 +617,36 @@ void HighsOCAggregate::buildBndsFromScratch(){
 }
 
 void HighsOCAggregate::buildBndsFromSolution(){
+    int iCol, pc, cf, pcf, rep;
+    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
+    agglp->colLower_.resize(colCnt);
+    agglp->colUpper_.resize(colCnt);
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        rep = colrep[iCol];
+        cf = ep->front[rep];
+        pcf = epMinusOne.front[rep];
+        pc = pFrontCol[pcf];
+        pv = solution->col_value[pc];
+        ub = olp->colUpper_[rep];
+        lb = olp->colLower_[rep];
+        ubDiff = std::fabs(pv - ub);
+        lbDiff = std::fabs(pv - lb);
+        if (ubDiff < tol){
+            agglp->colLower_[iCol] = ub;
+            agglp->colUpper_[iCol] = ub;
+        }
+        else if (lbDiff < tol){
+            agglp->colLower_[iCol] = lb;
+            agglp->colUpper_[iCol] = lb;
+        }
+        else{
+            agglp->colLower_[iCol] = lb;
+            agglp->colUpper_[iCol] = ub;
+        }
+    }
+}
+
+void HighsOCAggregate::buildBndsFromSolutionExtended(){
     int iCol, pc, cf, pcf, rep;
     double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
     for (iCol = 0; iCol < colCnt; ++iCol){
@@ -1166,6 +1335,10 @@ void HighsOCAggregate::buildFinalPointers(){
 
 HighsLp* HighsOCAggregate::getLp(){
     return elp;
+}
+
+HighsLp* HighsOCAggregate::getAggLp(){
+    return agglp;
 }
 
 HighsSolution* HighsOCAggregate::getSolution(){

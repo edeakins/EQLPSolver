@@ -19,21 +19,29 @@ public:
     void buildLp(OCpartition* partition, HighsBasis* b,
                 HighsSolution* s, bool finish, bool extended);
     void buildAmatrix();
+    void buildAmatrixExtended();
     void buildFinalAmatrix();
     void buildStandardMatrix();
     void buildRhs();
     void buildRhsFromScratch();
     void buildRhsFromSolution();
+    void buildRhsExtended();
+    void buildRhsFromScratchExtended();
+    void buildRhsFromSolutionExtended();
     void buildFinalRhs();
     void buildFinalRhsFromScratch();
     void buildFinalRhsFromSolution();
     void buildBnds();
     void buildBndsFromScratch();
     void buildBndsFromSolution();
+    void buildBndsExtended();
+    void buildBndsFromScratchExtended();
+    void buildBndsFromSolutionExtended();
     void buildFinalBnds();
     void buildFinalBndsFromScratch();
     void buildFinalBndsFromSolution();
     void buildObj();
+    void buildObjExtended();
     void buildFinalObj();
     void buildResiduals();
     void buildFinalResiduals();
@@ -76,15 +84,17 @@ public:
     void printAMatrixToMatlabFormat();
     // Get parts of agg
     HighsLp* getLp();
+    HighsLp* getAggLp();
     HighsSolution* getSolution();
     HighsBasis* getBasis();
     HighsLp* getSubLp();
     HighsBasis* getSubBasis();
     std::vector<int>& getUnPerm();
 
-    HighsLp *elp; 
+    HighsLp* elp; 
     HighsLp* olp;
     HighsLp* sublp;
+    HighsLp* agglp;
     OCpartition* ep;
     OCpartition epMinusOne;
     HighsBasis* basis;

@@ -1366,15 +1366,15 @@ void HQPrimal::unfold() {
   primalRebuild();
   int numBasicInfeas = 0;
   int numBasicFeas = 0;
-  for (int i = 0; i < workHMO.lp_.numRow_; ++i){
-    double lb = workHMO.simplex_info_.baseLower_[i];
-    double ub = workHMO.simplex_info_.baseUpper_[i];
-    int iCol = workHMO.simplex_basis_.basicIndex_[i];
-    double val = workHMO.simplex_info_.baseValue_[i];
-    if (val - lb < -1e-6 || val - ub > 1e-6)
-      numBasicInfeas++;
-    else numBasicFeas++;
-  }
+  // for (int i = 0; i < workHMO.lp_.numRow_; ++i){
+  //   double lb = workHMO.simplex_info_.baseLower_[i];
+  //   double ub = workHMO.simplex_info_.baseUpper_[i];
+  //   int iCol = workHMO.simplex_basis_.basicIndex_[i];
+  //   double val = workHMO.simplex_info_.baseValue_[i];
+  //   if (val - lb < -1e-6 || val - ub > 1e-6)
+  //     numBasicInfeas++;
+  //   else numBasicFeas++;
+  // }
   int idx = workHMO.lp_.numCol_ - workHMO.lp_.numResiduals_;
   int offset = 0;
   int cnt = 0;
@@ -1392,6 +1392,7 @@ void HQPrimal::unfold() {
     columnIn = -1;
     rowOut = -1;
     workHMO.readyForHighs = 1;
+    timer.stop(timer.orbital_crossover_clock);
     return;
   }
   ////////////////////// Orbital Crossover //////////////////////
@@ -1482,6 +1483,7 @@ void HQPrimal::unfold() {
       columnIn = -1;
       rowOut = -1;
       workHMO.readyForHighs = 1;
+      timer.stop(timer.orbital_crossover_clock);
       return;
     }
   }

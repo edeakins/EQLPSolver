@@ -378,7 +378,7 @@ void Basis::ConstructBasisFromWeights(const double* colscale, Info* info) {
     PivotFreeVariablesIntoBasis(colscale, info);
     if (info->errflag)
         return;
-    PivotFixedVariablesOutOfBasis(colscale, info);
+    // PivotFixedVariablesOutOfBasis(colscale, info);
     if (info->errflag)
         return;
 }

@@ -60,6 +60,7 @@ class Highs {
   void liftLpFinal();
   void liftLpExtended();
   void liftLpExtendedFinal();
+  void liftLpAggregated();
 
   void liftBasis();
   void liftBasisFinal();
@@ -773,7 +774,7 @@ class Highs {
   HighsEquitable ep_;
   HighsOCEquitablePartition nep_;
   HighsOCAggregate agg_;
-  HighsLp *alp_, *elp_, *slp_;
+  HighsLp *alp_, *ealp_, *slp_;
 
   // Containers for OC
   std::vector<int64_t> ipxVbasis;
