@@ -141,6 +141,8 @@ set(sources
     presolve/PresolveComponent.cpp
     presolve/Presolve.cpp
     presolve/PresolveUtils.cpp
+    presolve/OCEquitable.cpp
+    presolve/OCAggregate.cpp
     qpsolver/basis.cpp
     qpsolver/quass.cpp
     qpsolver/ratiotest.cpp
@@ -274,6 +276,8 @@ set(headers
     presolve/PresolveComponent.h
     presolve/Presolve.h
     presolve/PresolveUtils.h
+    presolve/OCEquitable.h
+    presolve/OCAggregate.h
     test/DevKkt.h
     test/KktCh2.h
     util/FactorTimer.h
@@ -303,6 +307,8 @@ set(headers
     util/HVector.h
     util/HVectorBase.h
     util/stringutil.h
+    util/OCGraph.h
+    util/OCPartition.h
     Highs.h
     interfaces/highs_c_api.h
 )

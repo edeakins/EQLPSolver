@@ -65,6 +65,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/libhighs.dir/presolve/HighsPostsolveStack.cpp.o"
   "CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o"
   "CMakeFiles/libhighs.dir/presolve/ICrashX.cpp.o"
+  "CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o"
+  "CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o"
   "CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o"
   "CMakeFiles/libhighs.dir/presolve/PresolveAnalysis.cpp.o"
   "CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o"

@@ -28,12 +28,17 @@ class HighsLp {
   // Model data
   HighsInt num_col_;
   HighsInt num_row_;
+  HighsInt num_residual_cols_;
+  HighsInt num_residual_rows_;
+  HighsInt num_aggregate_cols_;
+  HighsInt num_aggregate_rows_;
 
   std::vector<double> col_cost_;
   std::vector<double> col_lower_;
   std::vector<double> col_upper_;
   std::vector<double> row_lower_;
   std::vector<double> row_upper_;
+  std::vector<int> residual_cols_;
 
   HighsSparseMatrix a_matrix_;
 

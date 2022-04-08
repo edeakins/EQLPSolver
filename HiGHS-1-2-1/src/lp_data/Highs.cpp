@@ -727,6 +727,11 @@ HighsStatus Highs::run() {
   HighsLp& incumbent_lp = model_.lp_;
   HighsLogOptions& log_options = options_.log_options;
   bool no_incumbent_lp_solution_or_basis = false;
+  initialEquitablePartition(incumbent_lp);
+  buildALP(incumbent_lp);
+  while (!discrete){
+    refinePartition();
+  }
   //
   // Record the initial time and set the component times and postsolve
   // iteration count to -1 to identify whether they are not required
@@ -2210,6 +2215,22 @@ std::string Highs::basisStatusToString(
 
 std::string Highs::basisValidityToString(const HighsInt basis_validity) const {
   return utilBasisValidityToString(basis_validity);
+}
+
+// Ethan Deakins' methods for Orbital Crossover (private methods)
+void Highs::initialEquitablePartition(HighsLp& original_lp){
+  discrete = equitablePartition_.allocatePartition(&original_lp);
+  partition_ = equitablePartition_.getPartition(); 
+}
+
+void Highs::refinePartition(){
+  discrete = equitablePartition_.isolate();
+  partition_ = equitablePartition_.getPartition();
+}
+
+void Highs::buildALP(HighsLp& original_lp){
+  aggregator_.allocate(&original_lp, partition_);
+  alp_ = aggregator_.getAggLp();
 }
 
 // Private methods

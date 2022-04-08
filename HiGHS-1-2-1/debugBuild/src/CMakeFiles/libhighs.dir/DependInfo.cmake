@@ -66,6 +66,8 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/HighsPostsolveStack.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/HighsPostsolveStack.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/HighsSymmetry.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/ICrashX.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/ICrashX.cpp.o"
+  "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OCAggregate.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o"
+  "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OCEquitable.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/Presolve.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveAnalysis.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/PresolveAnalysis.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveComponent.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o"

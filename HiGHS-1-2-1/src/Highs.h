@@ -23,6 +23,7 @@
 #include "lp_data/HighsSolutionDebug.h"
 #include "model/HighsModel.h"
 #include "presolve/PresolveComponent.h"
+#include "presolve/OCAggregate.h"
 
 /**
  * @brief Class to set parameters and run HiGHS
@@ -891,6 +892,13 @@ class Highs {
 #ifdef OSI_FOUND
   friend class OsiHiGHSSolverInterface;
 #endif
+  // Start of Ethan Deakins' public methods and vars for Orbital Crossover
+
+  OCPartition* partition_;
+  HighsOCEquitablePartition equitablePartition_;
+  HighsOCAggregate aggregator_;
+  HighsLp* alp_; 
+
   // Start of deprecated methods
 
   HighsInt getNumCols() const {
@@ -1158,6 +1166,13 @@ class Highs {
   HighsStatus checkOptimality(const std::string solver_type,
                               HighsStatus return_status);
   HighsStatus invertRequirementError(std::string method_name);
+
+  // Ethan Deakins' private methods and vars for Orbital Crossover
+  void initialEquitablePartition(HighsLp& original_lp);
+  void refinePartition();
+  void buildALP(HighsLp& original_lp);
+  void buildEALP();
+  bool discrete;
 };
 
 #endif
