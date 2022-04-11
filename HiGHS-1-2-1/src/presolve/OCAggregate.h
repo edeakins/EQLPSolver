@@ -13,7 +13,7 @@ public:
     void allocate(HighsLp* lp, OCPartition* partition);
     void buildLp();
     void buildLp(OCPartition* partition, HighsBasis* b,
-                HighsSolution* s, bool finish, bool extended);
+                HighsSolution* s);
     // Build aggregate A matrices for ALP and EALP
     void buildAmatrix();
     void buildAmatrixExtended();

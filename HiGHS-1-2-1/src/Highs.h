@@ -898,6 +898,11 @@ class Highs {
   HighsOCEquitablePartition equitablePartition_;
   HighsOCAggregate aggregator_;
   HighsLp* alp_; 
+  HighsLp* ealp_;
+  HighsBasis alpBasis_;
+  HighsSolution alpSolution_;
+  // HighsSolution getSolution() { return solution_; }
+  // HighsBasis getBasis() { return basis_; }
 
   // Start of deprecated methods
 
@@ -1168,10 +1173,13 @@ class Highs {
   HighsStatus invertRequirementError(std::string method_name);
 
   // Ethan Deakins' private methods and vars for Orbital Crossover
-  void initialEquitablePartition(HighsLp& original_lp);
+  void initializeEquitablePartition(HighsLp& original_lp);
+  void initializeAggregator(HighsLp& original_lp);
   void refinePartition();
-  void buildALP(HighsLp& original_lp);
+  void buildALP();
   void buildEALP();
+  void getOCBasis();
+  void getOCSolution();
   bool discrete;
 };
 

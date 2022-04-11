@@ -29,8 +29,8 @@ void HighsOCAggregate::allocate(HighsLp* lp, OCPartition* partition){
     elp->a_matrix_.start_.resize(numCol + numTotResiduals + 1);
     elp->a_matrix_.index_.resize(nnz + numTotResiduals * 3);
     elp->a_matrix_.value_.resize(nnz + numTotResiduals * 3);
-    elpBasis->col_status.resize(numCol + numTotResiduals, HighsBasisStatus::kNonbasic);
-    elpBasis->row_status.resize(numRow + numTotResiduals, HighsBasisStatus::kBasic);
+    elpBasis->col_status.reserve(numCol + numTotResiduals);
+    elpBasis->row_status.resize(numRow + numTotResiduals);
     // Allocate col and row pointers
     col.assign(numCol, -1);
     colrep.assign(numCol, -1);
@@ -83,7 +83,7 @@ void HighsOCAggregate::buildLp(){
 }
 
 void HighsOCAggregate::buildLp(OCPartition* partition, HighsBasis* b,
-                               HighsSolution* s, bool finish, bool extended){
+                               HighsSolution* s){
     ep = partition;
     basis = b;
     solution = s;
@@ -162,9 +162,11 @@ void HighsOCAggregate::buildAmatrix(){
         // AdegenRStart[xi + 1] = nnzStan;
         start = nnz;
     }
-    agglp->num_col_ = colCnt;
-    agglp->num_row_ = rowCnt;
+    agglp->num_col_ = agglp->a_matrix_.num_col_ = colCnt;
+    agglp->num_row_ = agglp->a_matrix_.num_row_ = rowCnt;
+    agglp->a_matrix_.format_ = MatrixFormat::kColwise;
     agglp->num_residual_cols_ = 0;
+
 }
 
 // Build A matrix with linkers if they exist
@@ -233,6 +235,9 @@ void HighsOCAggregate::buildAmatrixExtended(){
     elp->num_row_ += numResiduals;
     elp->num_residual_cols_ = numResiduals;
     elp->residual_cols_ = residualCol;
+    elp->a_matrix_.num_col_ = elp->num_col_;
+    elp->a_matrix_.num_row_ = elp->num_row_;
+    elp->a_matrix_.format_ = MatrixFormat::kColwise;
     elpBasis->num_col_ = elp->num_col_;
     elpBasis->num_row_ = elp->num_row_;
 }
@@ -640,7 +645,7 @@ void HighsOCAggregate::buildColBasis(){
     int numOldBasicToSplit = 0;
     int numNewBasic = 0;
     int numNonSingle = 0;
-    std::fill(elpBasis->col_status.begin(), elpBasis->col_status.end(), basic);
+    elpBasis->col_status.resize(colCnt + numResiduals, basic);
     for (iCol = 0; iCol < colCnt; ++iCol){
         crep = colrep[iCol];
         pf = epMinusOne->front[crep];
@@ -660,7 +665,8 @@ void HighsOCAggregate::buildRowBasis(){
     int iRow, r, pr, pf, rrep, rlen;
     int of, nf;
     HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
-    std::fill(elpBasis->row_status.begin(), elpBasis->row_status.end(), basic);
+    // std::fill(elpBasis->row_status.begin(), elpBasis->row_status.end(), basic);
+    elpBasis->row_status.resize(rowCnt + numResiduals, basic);
     int numNewBasic = 0;
     int numBasicToSplit = 0;
     int numBasicSplits = 0;

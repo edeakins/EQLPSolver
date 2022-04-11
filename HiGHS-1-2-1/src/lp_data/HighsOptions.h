@@ -244,6 +244,7 @@ void reportOption(FILE* file, const OptionRecordString& option,
 
 const string kSimplexString = "simplex";
 const string kIpmString = "ipm";
+const string kOCString = "orbital_crossover";
 
 const HighsInt kKeepNRowsDeleteRows = -1;
 const HighsInt kKeepNRowsDeleteEntries = 0;
@@ -430,7 +431,7 @@ class HighsOptions : public HighsOptionsStruct {
     records.push_back(record_string);
 
     record_string = new OptionRecordString(
-        kSolverString, "Solver option: \"simplex\", \"choose\" or \"ipm\"",
+        kSolverString, "Solver option: \"simplex\", \"choose\", \"orbital_crossover\", or \"ipm\"",
         advanced, &solver, kHighsChooseString);
     records.push_back(record_string);
 

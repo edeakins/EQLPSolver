@@ -727,11 +727,7 @@ HighsStatus Highs::run() {
   HighsLp& incumbent_lp = model_.lp_;
   HighsLogOptions& log_options = options_.log_options;
   bool no_incumbent_lp_solution_or_basis = false;
-  initialEquitablePartition(incumbent_lp);
-  buildALP(incumbent_lp);
-  while (!discrete){
-    refinePartition();
-  }
+  
   //
   // Record the initial time and set the component times and postsolve
   // iteration count to -1 to identify whether they are not required
@@ -743,8 +739,30 @@ HighsStatus Highs::run() {
   HighsInt postsolve_iteration_count = -1;
   const bool ipx_no_crossover =
       options_.solver == kIpmString && !options_.run_crossover;
-
-  if (basis_.valid || options_.presolve == kHighsOffString) {
+  // Call orbital crossover methods if user chooses to use it.
+  if (options_.solver == kOCString){
+    initializeEquitablePartition(incumbent_lp);
+    initializeAggregator(incumbent_lp);
+    buildALP();
+    // Validate the reduced LP
+    assert(assessLp(*alp_, options_) == HighsStatus::kOk);
+    // Set up the aggregate lp
+    ekk_instance_.clear();
+    ekk_instance_.lp_name_ = "Aggregate LP";
+    // Solve the initial aggregate lp
+    timer_.start(timer_.solve_clock);
+    call_status =
+        callSolveLp(*alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
+    getOCBasis();
+    getOCSolution();
+    while (!discrete){
+      refinePartition();
+      buildEALP();
+      buildALP();
+    }
+  }
+  else if (basis_.valid || options_.presolve == kHighsOffString) {
     // There is a valid basis for the problem or presolve is off
     ekk_instance_.lp_name_ = "LP without presolve or with basis";
     // If there is a valid HiGHS basis, refine any status values that
@@ -2218,7 +2236,7 @@ std::string Highs::basisValidityToString(const HighsInt basis_validity) const {
 }
 
 // Ethan Deakins' methods for Orbital Crossover (private methods)
-void Highs::initialEquitablePartition(HighsLp& original_lp){
+void Highs::initializeEquitablePartition(HighsLp& original_lp){
   discrete = equitablePartition_.allocatePartition(&original_lp);
   partition_ = equitablePartition_.getPartition(); 
 }
@@ -2228,10 +2246,27 @@ void Highs::refinePartition(){
   partition_ = equitablePartition_.getPartition();
 }
 
-void Highs::buildALP(HighsLp& original_lp){
+void Highs::initializeAggregator(HighsLp& original_lp){
   aggregator_.allocate(&original_lp, partition_);
+}
+
+void Highs::buildALP(){
   alp_ = aggregator_.getAggLp();
 }
+
+void Highs::buildEALP(){
+  aggregator_.buildLp(partition_, &alpBasis_, &alpSolution_);
+  alp_ = aggregator_.getAggLp();
+  ealp_ = aggregator_.getLp();
+}
+
+void Highs::getOCBasis(){
+  alpBasis_ = getBasis();
+}
+
+void Highs::getOCSolution(){
+  alpSolution_ = getSolution();
+} 
 
 // Private methods
 HighsPresolveStatus Highs::runPresolve() {
