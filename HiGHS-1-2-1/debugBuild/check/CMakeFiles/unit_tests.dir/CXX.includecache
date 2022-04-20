@@ -980,35 +980,11 @@ string
 io/HighsIO.h
 ../src/lp_data/io/HighsIO.h
 
-../src/mip/HighsGFkSolve.h
-algorithm
--
-cassert
--
-queue
--
-tuple
--
-vector
--
-lp_data/HConst.h
-../src/mip/lp_data/HConst.h
-
 ../src/model/HighsHessian.h
 vector
 -
 lp_data/HConst.h
 ../src/model/lp_data/HConst.h
-
-../src/model/HighsHessianUtils.h
-vector
--
-lp_data/HighsOptions.h
-../src/model/lp_data/HighsOptions.h
-lp_data/HighsStatus.h
-../src/model/lp_data/HighsStatus.h
-model/HighsHessian.h
-../src/model/model/HighsHessian.h
 
 ../src/model/HighsModel.h
 vector
@@ -1380,12 +1356,6 @@ cassert
 util/HighsHash.h
 ../src/util/util/HighsHash.h
 
-../src/util/HighsSort.h
-vector
--
-lp_data/HConst.h
-../src/util/lp_data/HConst.h
-
 ../src/util/HighsSparseMatrix.h
 vector
 -
@@ -1562,26 +1532,6 @@ Highs.h
 catch.hpp
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/catch.hpp
 
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsGFkSolve.cpp
-numeric
--
-catch.hpp
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/catch.hpp
-mip/HighsGFkSolve.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/mip/HighsGFkSolve.h
-util/HighsRandom.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/util/HighsRandom.h
-
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsHessian.cpp
-catch.hpp
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/catch.hpp
-lp_data/HighsOptions.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/lp_data/HighsOptions.h
-model/HighsHessian.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/model/HighsHessian.h
-model/HighsHessianUtils.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/model/HighsHessianUtils.h
-
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsModel.cpp
 cassert
 -
@@ -1755,20 +1705,6 @@ HighsStatus.h
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/HighsStatus.h
 catch.hpp
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/catch.hpp
-
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSort.cpp
-algorithm
--
-vector
--
-catch.hpp
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/catch.hpp
-lp_data/HConst.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/lp_data/HConst.h
-util/HighsRandom.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/util/HighsRandom.h
-util/HighsSort.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/util/HighsSort.h
 
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSpecialLps.cpp
 Highs.h

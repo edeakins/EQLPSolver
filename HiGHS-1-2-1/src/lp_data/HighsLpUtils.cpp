@@ -680,8 +680,10 @@ bool considerScaling(const HighsOptions& options, HighsLp& lp) {
   const bool new_scaling_strategy =
       options.simplex_scale_strategy != lp.scale_.strategy &&
       options.simplex_scale_strategy != kSimplexScaleStrategyChoose;
+  const bool oc_no_scaling = 
+      options.solver == kOCString;
   const bool try_scaling =
-      allow_scaling && (scaling_not_tried || new_scaling_strategy);
+      allow_scaling && (scaling_not_tried || new_scaling_strategy) && !oc_no_scaling;
   if (try_scaling) {
     // Scaling will be tried, so ensure that any previous scaling is not applied
     lp.unapplyScale();

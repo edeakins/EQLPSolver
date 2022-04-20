@@ -725,6 +725,7 @@ HighsStatus Highs::run() {
   }
   // Solve the model as an LP
   HighsLp& incumbent_lp = model_.lp_;
+  HighsLp original_lp = model_.lp_;
   HighsLogOptions& log_options = options_.log_options;
   bool no_incumbent_lp_solution_or_basis = false;
   
@@ -743,30 +744,42 @@ HighsStatus Highs::run() {
   if (options_.solver == kOCString){
     scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
     model_status_ = HighsModelStatus::kPreOrbitalCrossover;
-    initializeEquitablePartition(incumbent_lp);
-    initializeAggregator(incumbent_lp);
+    initializeEquitablePartition(original_lp);
+    initializeAggregator(original_lp);
     buildALP();
     returnFromRun(HighsStatus::kOk);
     passModel(*alp_);
+    zeroIterationCounts();
     // Validate the reduced LP
     // assert(assessLp(*alp_, options_) == HighsStatus::kOk);
     // Set up the aggregate lp
     // ekk_instance_.clear();
     // ekk_instance_.lp_name_ = "Aggregate LP";
     // Solve the initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/ALP.lp");
     timer_.start(timer_.solve_clock);
     call_status =
         callSolveLp(*alp_, "Solving LP with Orbital Crossover");
     timer_.stop(timer_.solve_clock);
+    setBasisValidity();
     getOCBasis();
     getOCSolution();
     while (!discrete){
+      // called_return_from_run = false;
       refinePartition();
       buildEALP();
       buildALP();
       getLiftedBasis();
-      
+      // returnFromRun(HighsStatus::kOk);
+      passModel(*ealp_);
       setBasis(*ealpBasis_);
+      zeroIterationCounts();
+      // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+      timer_.start(timer_.solve_clock);
+      call_status =
+          callSolveLp(*ealp_, "Solving LP with Orbital Crossover");
+      timer_.stop(timer_.solve_clock);
+      setBasisValidity();
       int lol = 101;
     }
   }
@@ -958,7 +971,7 @@ HighsStatus Highs::run() {
           return returnFromRun(return_status);
         }
         // Presolve has returned kUnboundedOrInfeasible, but HiGHS
-        // can't reurn this. Use primal simplex solver on the original
+        // can't return this. Use primal simplex solver on the original
         // LP
         HighsOptions save_options = options_;
         options_.solver = "simplex";
@@ -2264,7 +2277,7 @@ void Highs::buildALP(){
 
 void Highs::buildEALP(){
   aggregator_.buildLp(partition_, &alpBasis_, &alpSolution_);
-  alp_ = aggregator_.getAggLp();
+  // alp_ = aggregator_.getAggLp();
   ealp_ = aggregator_.getLp();
 }
 
@@ -2956,8 +2969,9 @@ HighsStatus Highs::returnFromRun(const HighsStatus run_return_status) {
       assert(have_info == false);
       assert(have_primal_solution == false);
       assert(have_basis == false);
-    case HighsModelStatus::kPeriOrbitalCrossover:
-    case HighsModelStatus::kPostOrbitalCrossover:
+      break;
+    case HighsModelStatus::kPeriOrbitalCrossover: //Ethan set this
+    case HighsModelStatus::kPostOrbitalCrossover: //Ethan set this
     case HighsModelStatus::kOptimal:
     case HighsModelStatus::kInfeasible:
     case HighsModelStatus::kUnbounded:

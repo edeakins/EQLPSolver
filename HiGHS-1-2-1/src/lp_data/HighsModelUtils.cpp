@@ -490,6 +490,11 @@ std::string utilModelStatusToString(const HighsModelStatus model_status) {
     case HighsModelStatus::kUnknown:
       return "Unknown";
       break;
+    case HighsModelStatus::kPreOrbitalCrossover:
+      return "Pre Orbital Crossover Phase";
+      break;
+    case HighsModelStatus::kPeriOrbitalCrossover:
+    case HighsModelStatus::kPostOrbitalCrossover:
     default:
       assert(1 == 0);
       return "Unrecognised HiGHS model status";

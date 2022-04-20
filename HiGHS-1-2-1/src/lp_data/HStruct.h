@@ -59,8 +59,6 @@ struct HighsBasis {
   bool was_alien = true;
   HighsInt debug_id = -1;
   HighsInt debug_update_count = -1;
-  HighsInt num_col_;
-  HighsInt num_row_;
   std::string debug_origin_name = "None";
   std::vector<HighsBasisStatus> col_status;
   std::vector<HighsBasisStatus> row_status;
