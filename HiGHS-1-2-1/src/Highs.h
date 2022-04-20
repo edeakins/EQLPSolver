@@ -901,6 +901,7 @@ class Highs {
   HighsLp* ealp_;
   HighsBasis alpBasis_;
   HighsSolution alpSolution_;
+  HighsBasis* ealpBasis_;
   // HighsSolution getSolution() { return solution_; }
   // HighsBasis getBasis() { return basis_; }
 
@@ -1173,6 +1174,7 @@ class Highs {
   HighsStatus invertRequirementError(std::string method_name);
 
   // Ethan Deakins' private methods and vars for Orbital Crossover
+  // void passOCLp();
   void initializeEquitablePartition(HighsLp& original_lp);
   void initializeAggregator(HighsLp& original_lp);
   void refinePartition();
@@ -1180,6 +1182,7 @@ class Highs {
   void buildEALP();
   void getOCBasis();
   void getOCSolution();
+  void getLiftedBasis();
   bool discrete;
 };
 

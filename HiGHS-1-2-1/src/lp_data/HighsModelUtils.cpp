@@ -511,6 +511,12 @@ HighsStatus highsStatusFromHighsModelStatus(HighsModelStatus model_status) {
       return HighsStatus::kError;
     case HighsModelStatus::kPostsolveError:
       return HighsStatus::kError;
+    case HighsModelStatus::kPreOrbitalCrossover:
+      return HighsStatus::kOk;
+    case HighsModelStatus::kPeriOrbitalCrossover:
+      return HighsStatus::kOk;
+    case HighsModelStatus::kPostOrbitalCrossover:
+      return HighsStatus::kOk;
     case HighsModelStatus::kModelEmpty:
       return HighsStatus::kOk;
     case HighsModelStatus::kOptimal:

@@ -741,14 +741,18 @@ HighsStatus Highs::run() {
       options_.solver == kIpmString && !options_.run_crossover;
   // Call orbital crossover methods if user chooses to use it.
   if (options_.solver == kOCString){
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
     initializeEquitablePartition(incumbent_lp);
     initializeAggregator(incumbent_lp);
     buildALP();
+    returnFromRun(HighsStatus::kOk);
+    passModel(*alp_);
     // Validate the reduced LP
-    assert(assessLp(*alp_, options_) == HighsStatus::kOk);
+    // assert(assessLp(*alp_, options_) == HighsStatus::kOk);
     // Set up the aggregate lp
-    ekk_instance_.clear();
-    ekk_instance_.lp_name_ = "Aggregate LP";
+    // ekk_instance_.clear();
+    // ekk_instance_.lp_name_ = "Aggregate LP";
     // Solve the initial aggregate lp
     timer_.start(timer_.solve_clock);
     call_status =
@@ -760,6 +764,10 @@ HighsStatus Highs::run() {
       refinePartition();
       buildEALP();
       buildALP();
+      getLiftedBasis();
+      
+      setBasis(*ealpBasis_);
+      int lol = 101;
     }
   }
   else if (basis_.valid || options_.presolve == kHighsOffString) {
@@ -2268,6 +2276,10 @@ void Highs::getOCSolution(){
   alpSolution_ = getSolution();
 } 
 
+void Highs::getLiftedBasis(){
+  ealpBasis_ = aggregator_.getBasis();
+}
+
 // Private methods
 HighsPresolveStatus Highs::runPresolve() {
   presolve_.clear();
@@ -2859,6 +2871,14 @@ HighsStatus Highs::returnFromRun(const HighsStatus run_return_status) {
       assert(model_status_ == scaled_model_status_);
       assert(return_status == HighsStatus::kOk);
       break;
+    
+    case HighsModelStatus::kPreOrbitalCrossover:
+      // clearInfo();
+      // clearSolution();
+      // clearBasis();
+      assert(model_status_ == scaled_model_status_);
+      assert(return_status == HighsStatus::kOk);
+      break;
 
     case HighsModelStatus::kOptimal:
       // The following is an aspiration
@@ -2932,6 +2952,12 @@ HighsStatus Highs::returnFromRun(const HighsStatus run_return_status) {
       assert(have_primal_solution == false);
       assert(have_basis == false);
       break;
+    case HighsModelStatus::kPreOrbitalCrossover:
+      assert(have_info == false);
+      assert(have_primal_solution == false);
+      assert(have_basis == false);
+    case HighsModelStatus::kPeriOrbitalCrossover:
+    case HighsModelStatus::kPostOrbitalCrossover:
     case HighsModelStatus::kOptimal:
     case HighsModelStatus::kInfeasible:
     case HighsModelStatus::kUnbounded:
