@@ -18,7 +18,7 @@
 
 #include "util/HighsInt.h"
 
-enum class SimplexAlgorithm { kNone = 0, kPrimal, kDual };
+enum class SimplexAlgorithm { kNone = 0, kPrimal, kDual, kOrbitalCrossover };
 
 enum SimplexStrategy {
   kSimplexStrategyMin = 0,
@@ -27,7 +27,8 @@ enum SimplexStrategy {
   kSimplexStrategyDualPlain = kSimplexStrategyDual,  // 1
   kSimplexStrategyDualTasks,                         // 2
   kSimplexStrategyDualMulti,                         // 3
-  kSimplexStrategyPrimal,                            // 4
+  kSimplexStrategyOrbitalCrossover,                  // 4
+  kSimplexStrategyPrimal,                            // 5
   kSimplexStrategyMax = kSimplexStrategyPrimal,
   kSimplexStrategyNum
 };
@@ -50,9 +51,10 @@ enum SimplexSolvePhase {
   kSolvePhaseOptimal,                  // 0
   kSolvePhase1,                        // 1
   kSolvePhase2,                        // 2
-  kSolvePhasePrimalInfeasibleCleanup,  // 3
-  kSolvePhaseOptimalCleanup,           // 4
-  kSolvePhaseTabooBasis,               // 5
+  kSolvePhaseOrbitalCrossover,         // 3
+  kSolvePhasePrimalInfeasibleCleanup,  // 4
+  kSolvePhaseOptimalCleanup,           // 5
+  kSolvePhaseTabooBasis,               // 6
   kSolvePhaseMax = kSolvePhaseTabooBasis
 };
 

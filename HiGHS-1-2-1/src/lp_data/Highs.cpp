@@ -765,22 +765,22 @@ HighsStatus Highs::run() {
     getOCBasis();
     getOCSolution();
     while (!discrete){
-      // called_return_from_run = false;
+      options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
       refinePartition();
       buildEALP();
       buildALP();
       getLiftedBasis();
-      // returnFromRun(HighsStatus::kOk);
       passModel(*ealp_);
       setBasis(*ealpBasis_);
       zeroIterationCounts();
-      // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+      writeModel("../../debugBuild/testLpFiles/EALP.lp");
       timer_.start(timer_.solve_clock);
       call_status =
           callSolveLp(*ealp_, "Solving LP with Orbital Crossover");
       timer_.stop(timer_.solve_clock);
       setBasisValidity();
-      int lol = 101;
+      getOCBasis();
+      getOCSolution();
     }
   }
   else if (basis_.valid || options_.presolve == kHighsOffString) {
@@ -2283,6 +2283,7 @@ void Highs::buildEALP(){
 
 void Highs::getOCBasis(){
   alpBasis_ = getBasis();
+  // alpBasis_.debug_origin_name = "Aggregate LP Basis";
 }
 
 void Highs::getOCSolution(){
@@ -2291,6 +2292,7 @@ void Highs::getOCSolution(){
 
 void Highs::getLiftedBasis(){
   ealpBasis_ = aggregator_.getBasis();
+  ealpBasis_->debug_origin_name = "EALP Start Basis";
 }
 
 // Private methods

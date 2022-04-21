@@ -1118,6 +1118,17 @@ HighsStatus HEkk::solve(const bool force_phase2) {
     assert(called_return_from_solve_);
     return_status = interpretCallStatus(options_->log_options, call_status,
                                         return_status, "HEkkPrimal::solve");
+  } else if (simplex_strategy == kSimplexStrategyOrbitalCrossover){
+    algorithm_name = "orbital_crossover";
+    reportSimplexPhaseIterations(options_->log_options, iteration_count_, info_,
+                                 true);
+    highsLogUser(options_->log_options, HighsLogType::kInfo,
+                 "Using Orbital Crossover\n");
+    HEkkPrimal primal_solver(*this);
+    call_status = primal_solver.solve(force_phase2);
+    assert(called_return_from_solve_);
+    return_status = interpretCallStatus(options_->log_options, call_status,
+                                        return_status, "HEkkPrimal::solve");
   } else {
     algorithm_name = "dual";
     reportSimplexPhaseIterations(options_->log_options, iteration_count_, info_,

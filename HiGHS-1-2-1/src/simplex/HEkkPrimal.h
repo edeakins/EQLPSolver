@@ -48,12 +48,13 @@ class HEkkPrimal {
   void initialiseSolve();
   void solvePhase1();
   void solvePhase2();
+  void orbitalCrossover();
   void cleanup();
   void rebuild();
 
   void iterate();
   void chuzc();
-  void chooseColumn(const bool hyper_sparse = false);
+  void chooseColumn(const bool hyper_sparse = false, const bool choose_residual = false);
   bool useVariableIn();
   void phase1ChooseRow();
   void chooseRow();

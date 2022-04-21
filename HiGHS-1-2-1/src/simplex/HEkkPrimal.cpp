@@ -228,6 +228,8 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
              ekk_instance_.model_status_ == HighsModelStatus::kUnbounded);
       info.primal_phase2_iteration_count +=
           (ekk_instance_.iteration_count_ - it0);
+    } else if (solve_phase == kSolvePhaseOrbitalCrossover){
+      orbitalCrossvoer();
     } else {
       // Should only be kSolvePhase1 or kSolvePhase2
       ekk_instance_.model_status_ = HighsModelStatus::kSolveError;
@@ -970,7 +972,7 @@ void HEkkPrimal::chuzc() {
   ekk_instance_.unapplyTabooVariableIn(workDual);
 }
 
-void HEkkPrimal::chooseColumn(const bool hyper_sparse) {
+void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residual) {
   assert(!hyper_sparse || !done_next_chuzc);
   const vector<int8_t>& nonbasicMove = ekk_instance_.basis_.nonbasicMove_;
   const vector<double>& workDual = ekk_instance_.info_.workDual_;
@@ -1031,6 +1033,8 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse) {
               best_measure, variable_in, max_hyper_chuzc_non_candidate_measure);
       }
     }
+  } else if (choose_residual){
+
   } else {
     analysis->simplexTimerStart(ChuzcPrimalClock);
     // Choose any attractive nonbasic free column
