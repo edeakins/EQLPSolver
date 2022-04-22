@@ -1125,7 +1125,7 @@ HighsStatus HEkk::solve(const bool force_phase2) {
     highsLogUser(options_->log_options, HighsLogType::kInfo,
                  "Using Orbital Crossover\n");
     HEkkPrimal primal_solver(*this);
-    call_status = primal_solver.solve(force_phase2);
+    call_status = primal_solver.solve(false);
     assert(called_return_from_solve_);
     return_status = interpretCallStatus(options_->log_options, call_status,
                                         return_status, "HEkkPrimal::solve");
@@ -1678,10 +1678,11 @@ void HEkk::initialiseForSolve() {
 
   bool primal_feasible = info_.num_primal_infeasibilities == 0;
   bool dual_feasible = info_.num_dual_infeasibilities == 0;
+  bool solve_strategy = options_->simplex_strategy == kSimplexStrategyOrbitalCrossover;
   visited_basis_.clear();
   visited_basis_.insert(basis_.hash);
   model_status_ = HighsModelStatus::kNotset;
-  if (primal_feasible && dual_feasible)
+  if (primal_feasible && dual_feasible && !solve_strategy)
     model_status_ = HighsModelStatus::kOptimal;
 }
 
@@ -1761,7 +1762,8 @@ void HEkk::chooseSimplexStrategyThreads(const HighsOptions& options,
                                         HighsSimplexInfo& info) {
   // Ensure that this is not called with an optimal basis
   assert(info.num_dual_infeasibilities > 0 ||
-         info.num_primal_infeasibilities > 0);
+         info.num_primal_infeasibilities > 0 || 
+         options.simplex_strategy == kSimplexStrategyOrbitalCrossover);
   // Set the internal simplex strategy and number of threads for dual
   // simplex
   HighsInt& simplex_strategy = info.simplex_strategy;

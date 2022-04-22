@@ -619,6 +619,8 @@ void HighsOCAggregate::buildResidualCols(){
         c = child[i];
         elp->col_lower_[idx] = 0;
         elp->col_upper_[idx++] = 0;
+        // elp->col_lower_[idx] = -kHighsInf;
+        // elp->col_upper_[idx++] = kHighsInf;
     }
 }
 

@@ -162,6 +162,7 @@ class HEkkPrimal {
   HSet nonbasic_free_col_set;
   // Hyper-sparse CHUZC data
   bool use_hyper_chuzc = false;
+  bool use_residual_chuzc = false;
   bool initialise_hyper_chuzc;
   bool done_next_chuzc;
   const HighsInt max_num_hyper_chuzc_candidates = 50;
@@ -188,6 +189,7 @@ class HEkkPrimal {
 
   const HighsInt check_iter = 9999999;
   const HighsInt check_column = -2133;
+  HighsInt residual_col;
 };
 
 #endif /* SIMPLEX_HEKKPRIMAL_H_ */

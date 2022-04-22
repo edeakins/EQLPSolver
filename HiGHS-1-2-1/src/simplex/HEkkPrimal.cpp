@@ -154,6 +154,7 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
       ekk_instance_.computeSimplexPrimalInfeasible();
       num_primal_infeasibility = ekk_instance_.info_.num_primal_infeasibilities;
       solve_phase = num_primal_infeasibility > 0 ? kSolvePhase1 : kSolvePhase2;
+      // if ()
       if (info.backtracking_) {
         // Backtracking
         ekk_instance_.initialiseCost(SimplexAlgorithm::kPrimal, solve_phase);
@@ -229,7 +230,19 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
       info.primal_phase2_iteration_count +=
           (ekk_instance_.iteration_count_ - it0);
     } else if (solve_phase == kSolvePhaseOrbitalCrossover){
-      orbitalCrossvoer();
+      residual_col = ekk_instance_.lp_.num_aggregate_cols_;
+      orbitalCrossover();
+      assert(solve_phase == kSolvePhaseOptimal || solve_phase == kSolvePhase1 ||
+             solve_phase == kSolvePhase2 ||
+             solve_phase == kSolvePhaseOptimalCleanup ||
+             solve_phase == kSolvePhaseUnknown ||
+             solve_phase == kSolvePhaseExit ||
+             solve_phase == kSolvePhaseTabooBasis ||
+             solve_phase == kSolvePhaseError);
+      assert(solve_phase != kSolvePhaseExit ||
+             ekk_instance_.model_status_ == HighsModelStatus::kUnbounded);
+      info.primal_phase2_iteration_count +=
+          (ekk_instance_.iteration_count_ - it0);
     } else {
       // Should only be kSolvePhase1 or kSolvePhase2
       ekk_instance_.model_status_ = HighsModelStatus::kSolveError;
@@ -644,6 +657,135 @@ void HEkkPrimal::solvePhase2() {
   }
 }
 
+void HEkkPrimal::orbitalCrossover(){
+  HighsOptions& options = *ekk_instance_.options_;
+  HighsSimplexStatus& status = ekk_instance_.status_;
+  HighsModelStatus& model_status = ekk_instance_.model_status_;
+  // When starting a new phase the (updated) primal objective function
+  // value isn't known. Indicate this so that when the value
+  // computed from scratch in build() isn't checked against the the
+  // updated value
+  status.has_primal_objective_value = false;
+  status.has_dual_objective_value = false;
+  // Possibly bail out immediately if iteration limit is current value
+  if (ekk_instance_.bailoutOnTimeIterations()) return;
+  highsLogDev(options.log_options, HighsLogType::kDetailed,
+              "primal-phase2-start\n");
+  phase2UpdatePrimal(true);
+
+  // If there's no backtracking basis Save the initial basis in case of
+  // backtracking
+  if (!ekk_instance_.info_.valid_backtracking_basis_)
+    ekk_instance_.putBacktrackingBasis();
+
+  // Iterate until all primal residual columns have been pivoted in completing 
+  // current level of oribtal crossover routine
+  for (;;){
+    // Initial build of primal values using lifted basis from orbital crossover master 
+    // iteration k - 1
+    rebuild();
+    if (solve_phase == kSolvePhaseError) return;
+    if (solve_phase == kSolvePhaseUnknown) return;
+    if (ekk_instance_.bailoutOnTimeIterations()) return;
+    assert(solve_phase == kSolvePhase1 || solve_phase == kSolvePhase2);
+    //
+    // solve_phase = kSolvePhase1 is set if primal infeasibilities
+    // are found in rebuild(), in which case return for phase 1
+    if (solve_phase == kSolvePhase1) break;
+    if (solve_phase == kSolvePhase2) break;
+    for (;;) {
+      iterate();
+      if (ekk_instance_.bailoutOnTimeIterations()) return;
+      if (solve_phase == kSolvePhaseError) return;
+      assert(solve_phase == kSolvePhaseOrbitalCrossover);
+      if (rebuild_reason) break;
+    }
+    // If the data are fresh from rebuild() and no flips have
+    // occurred, possibly break out of the outer loop to see what's
+    // ocurred
+    bool finished = status.has_fresh_rebuild && num_flip_since_rebuild == 0 &&
+                    !ekk_instance_.rebuildRefactor(rebuild_reason);
+    if (finished && ekk_instance_.tabooBadBasisChange()) {
+      // A bad basis change has had to be made taboo without any other
+      // basis changes or flips having been performed from a fresh
+      // rebuild. In other words, the only basis change that could be
+      // made is not permitted, so no definitive statement about the
+      // LP can be made.
+      solve_phase = kSolvePhaseTabooBasis;
+      return;
+    }
+    if (finished) break;
+  }
+  // If bailing out, should have returned already
+  assert(!ekk_instance_.solve_bailout_);
+  if (debugPrimalSimplex("End of orbitalCrossover") ==
+      HighsDebugStatus::kLogicalError) {
+    solve_phase = kSolvePhaseError;
+    return;
+  }
+  if (solve_phase == kSolvePhase1) {
+    highsLogDev(options.log_options, HighsLogType::kDetailed,
+                "primal-return-phase1\n");
+  } else if (variable_in == -1) {
+    // There is no candidate in CHUZC, even after rebuild so probably optimal
+    highsLogDev(options.log_options, HighsLogType::kDetailed,
+                "primal-orbital-crossover-optimal\n");
+    // Remove any bound perturbations and see if basis is still primal feasible
+    cleanup();
+    if (ekk_instance_.info_.num_primal_infeasibilities > 0) {
+      // There are primal infeasiblities, so consider performing dual
+      // simplex iterations to get primal feasibility
+      solve_phase = kSolvePhaseOptimalCleanup;
+    } else {
+      // There are no primal infeasiblities so optimal!
+      solve_phase = kSolvePhaseOptimal;
+      highsLogDev(options.log_options, HighsLogType::kDetailed,
+                  "problem-optimal\n");
+      model_status = HighsModelStatus::kOptimal;
+      ekk_instance_.computeDualObjectiveValue();  // Why?
+    }
+  } else if (row_out == kNoRowSought) {
+    // CHUZR has not been performed - because the chosen reduced cost
+    // was unattractive when computed from scratch and no rebuild was
+    // required. This is very rare and should be handled otherwise
+    //
+    printf("HEkkPrimal::solvePhase2 row_out = %d solve %d\n", (int)row_out,
+           (int)ekk_instance_.debug_solve_call_num_);
+    fflush(stdout);
+    assert(row_out != kNoRowSought);
+  } else {
+    // No candidate in CHUZR
+    if (row_out >= 0) {
+      printf("HEkkPrimal::solvePhase2 row_out = %d solve %d\n", (int)row_out,
+             (int)ekk_instance_.debug_solve_call_num_);
+      fflush(stdout);
+    }
+    // Ensure that CHUZR was performed and found no row
+    assert(row_out == kNoRowChosen);
+
+    // There is no candidate in CHUZR, so probably primal unbounded
+    highsLogDev(options.log_options, HighsLogType::kInfo,
+                "primal-phase-2-unbounded\n");
+    if (ekk_instance_.info_.bounds_perturbed) {
+      // If the bounds have been perturbed, clean up and return
+      cleanup();
+      // If there are primal infeasiblities, go back to phase 1
+      if (ekk_instance_.info_.num_primal_infeasibilities > 0)
+        solve_phase = kSolvePhase1;
+    } else {
+      // The bounds have not been perturbed, so primal unbounded
+      solve_phase = kSolvePhaseExit;
+      // Primal unbounded, so save primal ray
+      savePrimalRay();
+      // Model status should be unset
+      assert(model_status == HighsModelStatus::kNotset);
+      highsLogDev(options.log_options, HighsLogType::kInfo,
+                  "problem-primal-unbounded\n");
+      model_status = HighsModelStatus::kUnbounded;
+    }
+  }
+}
+
 void HEkkPrimal::cleanup() {
   HighsSimplexInfo& info = ekk_instance_.info_;
   if (!info.bounds_perturbed) return;
@@ -795,12 +937,14 @@ void HEkkPrimal::rebuild() {
   } else {
     use_hyper_chuzc = false;  // true;
   }
+  if (solve_phase == kSolvePhaseOrbitalCrossover)
+    use_residual_chuzc = true;
   hyperChooseColumnClear();
 
   num_flip_since_rebuild = 0;
   // Data are fresh from rebuild
   status.has_fresh_rebuild = true;
-  assert(solve_phase == kSolvePhase1 || solve_phase == kSolvePhase2);
+  assert(solve_phase == kSolvePhase1 || solve_phase == kSolvePhase2 || solve_phase == kSolvePhaseOrbitalCrossover);
 }
 
 void HEkkPrimal::iterate() {
@@ -966,8 +1110,10 @@ void HEkkPrimal::chuzc() {
       assert(!measure_error);
       variable_in = hyper_sparse_variable_in;
     }
+  } else if (use_residual_chuzc){
+    chooseColumn(false, true);
   } else {
-    chooseColumn(false);
+    chooseColumn(false, false);
   }
   ekk_instance_.unapplyTabooVariableIn(workDual);
 }
@@ -976,10 +1122,12 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
   assert(!hyper_sparse || !done_next_chuzc);
   const vector<int8_t>& nonbasicMove = ekk_instance_.basis_.nonbasicMove_;
   const vector<double>& workDual = ekk_instance_.info_.workDual_;
+  const HighsInt num_col = ekk_instance_.lp_.num_col_;
   double best_measure = 0;
   variable_in = -1;
 
   const bool local_use_hyper_chuzc = hyper_sparse;
+  const bool local_use_residual_chuzc = choose_residual;
   // Consider nonbasic free columns first
   const HighsInt& num_nonbasic_free_col = nonbasic_free_col_set.count();
   if (local_use_hyper_chuzc) {
@@ -1033,8 +1181,8 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
               best_measure, variable_in, max_hyper_chuzc_non_candidate_measure);
       }
     }
-  } else if (choose_residual){
-
+  } else if (local_use_residual_chuzc){
+    variable_in = num_col == residual_col ? -1 : residual_col++;
   } else {
     analysis->simplexTimerStart(ChuzcPrimalClock);
     // Choose any attractive nonbasic free column
