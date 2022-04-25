@@ -22,6 +22,8 @@
 void HighsInfo::clear() {
   valid = false;
   mip_node_count = -1;
+  orbital_crossover_major_iteration_count = -1;
+  orbital_crossover_minor_iteration_count = -1;
   simplex_iteration_count = -1;
   ipm_iteration_count = -1;
   crossover_iteration_count = -1;

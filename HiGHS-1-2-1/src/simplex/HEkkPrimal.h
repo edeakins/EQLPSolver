@@ -81,6 +81,7 @@ class HEkkPrimal {
   void basicFeasibilityChangeUpdateDual();
 
   void phase2UpdatePrimal(const bool initialise = false);
+  void phaseOrbitalCrossoverUpdatePrimal(const bool initialise = false);
 
   void considerInfeasibleValueIn();
 

@@ -49,9 +49,10 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
   const bool primal_feasible_with_unperturbed_bounds =
       info.num_primal_infeasibilities == 0;
   const bool force_phase2 =
-      pass_force_phase2 ||
+      (pass_force_phase2 ||
       info.max_primal_infeasibility * info.max_primal_infeasibility <
-          options.primal_feasibility_tolerance;
+          options.primal_feasibility_tolerance) &&
+          ekk_instance_.info_.simplex_strategy != kSimplexStrategyOrbitalCrossover;
   // Determine whether the solution is near-optimal. Values 1000 and
   // 1e-3 (ensuring sum<1) are unimportant, as the sum of dual
   // infeasiblilities for near-optimal solutions is typically many
@@ -105,7 +106,9 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
   // Now to do some iterations!
   HighsInt num_primal_infeasibility =
       ekk_instance_.info_.num_primal_infeasibilities;
+  HighsInt simplexStrategy = ekk_instance_.info_.simplex_strategy;
   solve_phase = num_primal_infeasibility > 0 ? kSolvePhase1 : kSolvePhase2;
+  solve_phase = simplexStrategy == kSimplexStrategyOrbitalCrossover ? kSolvePhaseOrbitalCrossover : solve_phase;
   if (force_phase2) {
     // Dual infeasiblilities without cost perturbation involved
     // fixed variables or were (at most) small, so can easily be
@@ -153,8 +156,9 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
       // phase
       ekk_instance_.computeSimplexPrimalInfeasible();
       num_primal_infeasibility = ekk_instance_.info_.num_primal_infeasibilities;
+      HighsInt simplexStrategy = ekk_instance_.info_.simplex_strategy;
       solve_phase = num_primal_infeasibility > 0 ? kSolvePhase1 : kSolvePhase2;
-      // if ()
+      solve_phase = simplexStrategy == kSimplexStrategyOrbitalCrossover ? kSolvePhaseOrbitalCrossover : solve_phase;
       if (info.backtracking_) {
         // Backtracking
         ekk_instance_.initialiseCost(SimplexAlgorithm::kPrimal, solve_phase);
@@ -163,7 +167,7 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
         info.backtracking_ = false;
       }
     }
-    assert(solve_phase == kSolvePhase1 || solve_phase == kSolvePhase2);
+    assert(solve_phase == kSolvePhase1 || solve_phase == kSolvePhase2 || solve_phase == kSolvePhaseOrbitalCrossover);
     if (solve_phase == kSolvePhase1) {
       //
       // Phase 1
@@ -687,7 +691,7 @@ void HEkkPrimal::orbitalCrossover(){
     if (solve_phase == kSolvePhaseError) return;
     if (solve_phase == kSolvePhaseUnknown) return;
     if (ekk_instance_.bailoutOnTimeIterations()) return;
-    assert(solve_phase == kSolvePhase1 || solve_phase == kSolvePhase2);
+    assert(solve_phase == kSolvePhase1 || solve_phase == kSolvePhase2 || solve_phase == kSolvePhaseOrbitalCrossover);
     //
     // solve_phase = kSolvePhase1 is set if primal infeasibilities
     // are found in rebuild(), in which case return for phase 1
@@ -1013,7 +1017,7 @@ void HEkkPrimal::iterate() {
   // in phase 2 if there's no pivot or bound swap. In phase 1 there is
   // always a pivot at this stage since row_out < 0 is trapped (above)
   // as an error.
-  assert(solve_phase == kSolvePhase2 || row_out >= 0);
+  assert(solve_phase == kSolvePhase2 || solve_phase == kSolvePhaseOrbitalCrossover || row_out >= 0);
   considerBoundSwap();
   if (rebuild_reason == kRebuildReasonPossiblyPrimalUnbounded) return;
   assert(!rebuild_reason);
@@ -1069,7 +1073,7 @@ void HEkkPrimal::iterate() {
     fflush(stdout);
   }
   assert(ok_rebuild_reason);
-  assert(solve_phase == kSolvePhase1 || solve_phase == kSolvePhase2);
+  assert(solve_phase == kSolvePhase1 || solve_phase == kSolvePhase2 || solve_phase == kSolvePhaseOrbitalCrossover);
 }
 
 void HEkkPrimal::chuzc() {
@@ -1260,6 +1264,8 @@ bool HEkkPrimal::useVariableIn() {
   // so reduce the number of dual infeasiblilities. Otherwise an error
   // is identified in debugSimplex
   if (theta_dual_small) ekk_instance_.info_.num_dual_infeasibilities--;
+  if (solve_phase == kSolvePhaseOrbitalCrossover)
+    return true;
   if (theta_dual_small || theta_dual_sign_error) {
     // The computed dual is small or has a sign error, so don't use it
     std::string theta_dual_size = "";
@@ -1495,7 +1501,7 @@ void HEkkPrimal::considerBoundSwap() {
     // becoming feasible - moves up to lower (down to upper) - or
     // remaining feasible - moves down to lower (up to upper) - so
     // can't be set so easily as in phase 2
-    if (solve_phase == kSolvePhase2)
+    if (solve_phase == kSolvePhase2 || solve_phase == kSolvePhaseOrbitalCrossover)
       move_out = alpha_col * move_in > 0 ? -1 : 1;
     theta_primal = 0;
     if (move_out == 1) {
@@ -1595,6 +1601,8 @@ void HEkkPrimal::update() {
     // For hyper-sparse CHUZC, analyse the duals that have just changed
     hyperChooseColumnBasicFeasibilityChange();
 
+  } else if (solve_phase == kSolvePhaseOrbitalCrossover) {
+    phaseOrbitalCrossoverUpdatePrimal();
   } else {
     // Update primal values, and identify any infeasibilities
     //
@@ -1643,7 +1651,8 @@ void HEkkPrimal::update() {
   }
 
   // If entering column was nonbasic free, remove it from the set
-  removeNonbasicFreeColumn();
+  if (!solve_phase == kSolvePhaseOrbitalCrossover)
+    removeNonbasicFreeColumn();
 
   // For hyper-sparse CHUZC, analyse the duals and weights that have
   // just changed
@@ -2093,6 +2102,108 @@ void HEkkPrimal::considerInfeasibleValueIn() {
 }
 
 void HEkkPrimal::phase2UpdatePrimal(const bool initialise) {
+  static double max_max_local_primal_infeasibility;
+  static double max_max_ignored_violation;
+  if (initialise) {
+    max_max_local_primal_infeasibility = 0;
+    max_max_ignored_violation = 0;
+    return;
+  }
+  analysis->simplexTimerStart(UpdatePrimalClock);
+  HighsSimplexInfo& info = ekk_instance_.info_;
+  bool primal_infeasible = false;
+  double max_local_primal_infeasibility = 0;
+  double max_ignored_violation = 0;
+  // If shifts are only identified in rebuild() the bounds can be
+  // ignored. If they aren't ignored, then violations lead to either
+  // identification of infeasiblilities (and return to Phase 1) or
+  // shifting of bounds to accommodate them.
+  const bool ignore_bounds =
+      primal_correction_strategy == kSimplexPrimalCorrectionStrategyInRebuild;
+  HighsInt to_entry;
+  const bool use_col_indices = ekk_instance_.simplex_nla_.sparseLoopStyle(
+      col_aq.count, num_row, to_entry);
+  for (HighsInt iEntry = 0; iEntry < to_entry; iEntry++) {
+    const HighsInt iRow = use_col_indices ? col_aq.index[iEntry] : iEntry;
+    info.baseValue_[iRow] -= theta_primal * col_aq.array[iRow];
+    //    if (ignore_bounds) continue;
+    // Determine whether a bound is violated and take action
+    double lower = info.baseLower_[iRow];
+    double upper = info.baseUpper_[iRow];
+    double value = info.baseValue_[iRow];
+    HighsInt bound_violated = 0;
+    if (value < lower - primal_feasibility_tolerance) {
+      bound_violated = -1;
+    } else if (value > upper + primal_feasibility_tolerance) {
+      bound_violated = 1;
+    }
+    if (!bound_violated) continue;
+    // A bound is violated
+    if (primal_correction_strategy == kSimplexPrimalCorrectionStrategyNone) {
+      // @primal_infeasibility calculation
+      double primal_infeasibility;
+      if (bound_violated < 0) {
+        primal_infeasibility = lower - value;
+      } else {
+        primal_infeasibility = value - upper;
+      }
+      max_local_primal_infeasibility =
+          max(primal_infeasibility, max_local_primal_infeasibility);
+      if (primal_infeasibility > primal_feasibility_tolerance) {
+        info.num_primal_infeasibilities++;
+        primal_infeasible = true;
+      }
+    } else if (ignore_bounds) {
+      double ignored_violation;
+      if (bound_violated < 0) {
+        ignored_violation = lower - value;
+      } else {
+        ignored_violation = value - upper;
+      }
+      max_ignored_violation = max(ignored_violation, max_ignored_violation);
+    } else {
+      HighsInt iCol = ekk_instance_.basis_.basicIndex_[iRow];
+      double bound_shift;
+      if (bound_violated > 0) {
+        // Perturb the upper bound to accommodate the infeasiblilty
+        shiftBound(false, iCol, info.baseValue_[iRow],
+                   info.numTotRandomValue_[iCol], info.workUpper_[iCol],
+                   bound_shift, true);
+        info.baseUpper_[iRow] = info.workUpper_[iCol];
+        info.workUpperShift_[iCol] += bound_shift;
+      } else {
+        // Perturb the lower bound to accommodate the infeasiblilty
+        shiftBound(true, iCol, info.baseValue_[iRow],
+                   info.numTotRandomValue_[iCol], info.workLower_[iCol],
+                   bound_shift, true);
+        info.baseLower_[iRow] = info.workLower_[iCol];
+        info.workLowerShift_[iCol] += bound_shift;
+      }
+      assert(bound_shift > 0);
+    }
+  }
+  if (primal_infeasible) {
+    rebuild_reason = kRebuildReasonPrimalInfeasibleInPrimalSimplex;
+    if (max_local_primal_infeasibility >
+        max_max_local_primal_infeasibility * 2) {
+      max_max_local_primal_infeasibility = max_local_primal_infeasibility;
+      printf("phase2UpdatePrimal: max_local_primal_infeasibility = %g\n",
+             max_local_primal_infeasibility);
+    }
+    ekk_instance_.invalidatePrimalMaxSumInfeasibilityRecord();
+  }
+  if (max_ignored_violation > max_max_ignored_violation * 2) {
+    max_max_ignored_violation = max_ignored_violation;
+    printf("phase2UpdatePrimal: max_ignored_violation = %g\n",
+           max_ignored_violation);
+  }
+  info.updated_primal_objective_value +=
+      info.workDual_[variable_in] * theta_primal;
+
+  analysis->simplexTimerStop(UpdatePrimalClock);
+}
+
+void HEkkPrimal::phaseOrbitalCrossoverUpdatePrimal(const bool initialise) {
   static double max_max_local_primal_infeasibility;
   static double max_max_ignored_violation;
   if (initialise) {

@@ -46,6 +46,9 @@ HighsStatus returnFromSolveLpSimplex(HighsLpSolverObject& solver_object,
   // Copy the simplex iteration count to highs_info_ from ekk_instance
   solver_object.highs_info_.simplex_iteration_count =
       ekk_instance.iteration_count_;
+  solver_object.highs_info_.orbital_crossover_major_iteration_count++;
+  solver_object.highs_info_.orbital_crossover_minor_iteration_count += 
+      ekk_instance.iteration_count_;
   // Ensure that the incumbent LP is neither moved, nor scaled
   assert(!incumbent_lp.is_moved_);
   assert(!incumbent_lp.is_scaled_);

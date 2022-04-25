@@ -742,13 +742,16 @@ HighsStatus Highs::run() {
       options_.solver == kIpmString && !options_.run_crossover;
   // Call orbital crossover methods if user chooses to use it.
   if (options_.solver == kOCString){
+    running_orbital_crossover = true;
     scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
     model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
     initializeEquitablePartition(original_lp);
     initializeAggregator(original_lp);
     buildALP();
     returnFromRun(HighsStatus::kOk);
     passModel(*alp_);
+    // timer_.startRunHighsClock();
     zeroIterationCounts();
     // Validate the reduced LP
     // assert(assessLp(*alp_, options_) == HighsStatus::kOk);
@@ -762,25 +765,46 @@ HighsStatus Highs::run() {
         callSolveLp(*alp_, "Solving LP with Orbital Crossover");
     timer_.stop(timer_.solve_clock);
     setBasisValidity();
-    getOCBasis();
-    getOCSolution();
-    while (!discrete){
-      options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
-      refinePartition();
-      buildEALP();
-      buildALP();
-      getLiftedBasis();
-      passModel(*ealp_);
-      setBasis(*ealpBasis_);
-      zeroIterationCounts();
-      writeModel("../../debugBuild/testLpFiles/EALP.lp");
-      timer_.start(timer_.solve_clock);
-      call_status =
-          callSolveLp(*ealp_, "Solving LP with Orbital Crossover");
-      timer_.stop(timer_.solve_clock);
-      setBasisValidity();
+    if (discrete) {
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+    }
+    else{
+      int major_iterations = 0;
+      int minor_iterations = 0;
       getOCBasis();
       getOCSolution();
+      while (!discrete){
+        options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        refinePartition();
+        buildEALP();
+        buildALP();
+        getLiftedBasis();
+        major_iterations = info_.orbital_crossover_major_iteration_count;
+        minor_iterations = info_.orbital_crossover_minor_iteration_count;
+        passModel(*ealp_);
+        setBasis(*ealpBasis_);
+        zeroIterationCounts();
+        info_.orbital_crossover_major_iteration_count = major_iterations;
+        info_.orbital_crossover_minor_iteration_count = minor_iterations;
+        writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        timer_.start(timer_.solve_clock);
+        call_status =
+            callSolveLp(*ealp_, "Solving LP with Orbital Crossover");
+        timer_.stop(timer_.solve_clock);
+        setBasisValidity();
+        getOCBasis();
+        getOCSolution();
+      }
+      int numRequiredBasic = 0;
+      for (int i = 0; i < ealp_->num_aggregate_cols_; ++i)
+        if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+          numRequiredBasic++;
+      for (int i = 0; i < ealp_->num_aggregate_rows_; ++i)
+        if (alpBasis_.row_status[i] == HighsBasisStatus::kBasic)
+          numRequiredBasic++;
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
     }
   }
   else if (basis_.valid || options_.presolve == kHighsOffString) {
@@ -2259,11 +2283,13 @@ std::string Highs::basisValidityToString(const HighsInt basis_validity) const {
 // Ethan Deakins' methods for Orbital Crossover (private methods)
 void Highs::initializeEquitablePartition(HighsLp& original_lp){
   discrete = equitablePartition_.allocatePartition(&original_lp);
+  // if (discrete) stop_highs_run_clock = true;
   partition_ = equitablePartition_.getPartition(); 
 }
 
 void Highs::refinePartition(){
   discrete = equitablePartition_.isolate();
+  // if (discrete) stop_highs_run_clock = true;
   partition_ = equitablePartition_.getPartition();
 }
 
@@ -3065,7 +3091,7 @@ HighsStatus Highs::returnFromHighs(HighsStatus highs_return_status) {
     assert(called_return_from_run);
   }
   // Stop the HiGHS run clock if it is running
-  if (timer_.runningRunHighsClock()) timer_.stopRunHighsClock();
+  if (timer_.runningRunHighsClock() && stop_highs_run_clock) timer_.stopRunHighsClock();
   const bool dimensions_ok =
       lpDimensionsOk("returnFromHighs", model_.lp_, options_.log_options);
   if (!dimensions_ok) {
@@ -3086,30 +3112,59 @@ HighsStatus Highs::returnFromHighs(HighsStatus highs_return_status) {
 
 void Highs::reportSolvedLpQpStats() {
   HighsLogOptions& log_options = options_.log_options;
-  highsLogUser(log_options, HighsLogType::kInfo, "Model   status      : %s\n",
+  if (options_.simplex_strategy != kSimplexStrategyOrbitalCrossover &&
+      !discrete){
+    return;
+  }
+  else if (options_.simplex_strategy == kSimplexStrategyOrbitalCrossover &&
+           !discrete){
+    return;
+  }
+  else if (options_.simplex_strategy == kSimplexStrategyOrbitalCrossover &&
+           discrete){
+    highsLogUser(log_options, HighsLogType::kInfo, "Model   status      : %s\n",
                modelStatusToString(scaled_model_status_).c_str());
-  if (info_.simplex_iteration_count)
+    if (info_.orbital_crossover_major_iteration_count)
+      highsLogUser(log_options, HighsLogType::kInfo,
+                  "OC Major   iterations: %" HIGHSINT_FORMAT "\n",
+                  info_.orbital_crossover_major_iteration_count);
+    if (info_.orbital_crossover_minor_iteration_count)
+      highsLogUser(log_options, HighsLogType::kInfo,
+                  "OC Minor   iterations: %" HIGHSINT_FORMAT "\n",
+                  info_.orbital_crossover_minor_iteration_count);
     highsLogUser(log_options, HighsLogType::kInfo,
-                 "Simplex   iterations: %" HIGHSINT_FORMAT "\n",
-                 info_.simplex_iteration_count);
-  if (info_.ipm_iteration_count)
+                "Objective value     : %17.10e\n",
+                info_.objective_function_value);
+                double run_time = timer_.readRunHighsClock();
     highsLogUser(log_options, HighsLogType::kInfo,
-                 "IPM       iterations: %" HIGHSINT_FORMAT "\n",
-                 info_.ipm_iteration_count);
-  if (info_.crossover_iteration_count)
+                "HiGHS run time      : %13.2f\n", run_time);
+  }
+  else {
+    highsLogUser(log_options, HighsLogType::kInfo, "Model   status      : %s\n",
+               modelStatusToString(scaled_model_status_).c_str());
+    if (info_.simplex_iteration_count)
+      highsLogUser(log_options, HighsLogType::kInfo,
+                  "Simplex   iterations: %" HIGHSINT_FORMAT "\n",
+                  info_.simplex_iteration_count);
+    if (info_.ipm_iteration_count)
+      highsLogUser(log_options, HighsLogType::kInfo,
+                  "IPM       iterations: %" HIGHSINT_FORMAT "\n",
+                  info_.ipm_iteration_count);
+    if (info_.crossover_iteration_count)
+      highsLogUser(log_options, HighsLogType::kInfo,
+                  "Crossover iterations: %" HIGHSINT_FORMAT "\n",
+                  info_.crossover_iteration_count);
+    if (info_.qp_iteration_count)
+      highsLogUser(log_options, HighsLogType::kInfo,
+                  "QP ASM    iterations: %" HIGHSINT_FORMAT "\n",
+                  info_.qp_iteration_count);
     highsLogUser(log_options, HighsLogType::kInfo,
-                 "Crossover iterations: %" HIGHSINT_FORMAT "\n",
-                 info_.crossover_iteration_count);
-  if (info_.qp_iteration_count)
+                "Objective value     : %17.10e\n",
+                info_.objective_function_value);
+    double run_time = timer_.readRunHighsClock();
     highsLogUser(log_options, HighsLogType::kInfo,
-                 "QP ASM    iterations: %" HIGHSINT_FORMAT "\n",
-                 info_.qp_iteration_count);
-  highsLogUser(log_options, HighsLogType::kInfo,
-               "Objective value     : %17.10e\n",
-               info_.objective_function_value);
-  double run_time = timer_.readRunHighsClock();
-  highsLogUser(log_options, HighsLogType::kInfo,
-               "HiGHS run time      : %13.2f\n", run_time);
+                "HiGHS run time      : %13.2f\n", run_time);
+  }
 }
 
 void Highs::underDevelopmentLogMessage(const std::string method_name) {

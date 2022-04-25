@@ -130,6 +130,8 @@ void reportInfo(FILE* file, const InfoRecordDouble& info,
 struct HighsInfoStruct {
   bool valid;
   int64_t mip_node_count;
+  HighsInt orbital_crossover_major_iteration_count;
+  HighsInt orbital_crossover_minor_iteration_count;
   HighsInt simplex_iteration_count;
   HighsInt ipm_iteration_count;
   HighsInt qp_iteration_count;
@@ -196,6 +198,16 @@ class HighsInfo : public HighsInfoStruct {
     InfoRecordDouble* record_double;
     bool advanced;
     advanced = false;
+
+    record_int = new InfoRecordInt("orbital_crossover_major_iteration_count",
+                                   "Iteration count for orbital crossover major iterations (Lifting)",
+                                   advanced, &simplex_iteration_count, 0);
+    records.push_back(record_int);
+
+    record_int = new InfoRecordInt("orbital_crossover_minor_iteration_count",
+                                   "Iteration count for orbital crossover minor iterations (Residual Pivoting)",
+                                   advanced, &simplex_iteration_count, 0);
+    records.push_back(record_int);
 
     record_int = new InfoRecordInt("simplex_iteration_count",
                                    "Iteration count for simplex solver",

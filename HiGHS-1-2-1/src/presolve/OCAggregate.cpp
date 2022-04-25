@@ -47,12 +47,12 @@ void HighsOCAggregate::allocate(HighsLp* lp, OCPartition* partition){
     rowF.resize(numCol + numTotResiduals);
     rowNonbasic.resize(numRow);
     // Allocate link storage
-    parent.resize(numCol);
+    // parent.resize(numCol);
     isParent.resize(numCol);
     parentStart.resize(numCol + 1);
-    parentFreq.resize(numCol);
+    // parentFreq.resize(numCol);
     parentRow.resize(numCol);
-    child.resize(numCol);
+    // child.resize(numCol);
     isChild.resize(numCol);
     childRow.resize(numCol);
     residualCol.resize(numCol);
@@ -558,8 +558,8 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
         }
     }
     for (iCol = colCnt; iCol < elp->num_col_; ++iCol){
-        elp->col_lower_[iCol] = 0;
-        elp->col_upper_[iCol] = 0;
+        elp->col_lower_[iCol] = -kHighsInf;
+        elp->col_upper_[iCol] = kHighsInf;
     }
 }   
 
@@ -576,14 +576,15 @@ void HighsOCAggregate::buildResidualLinks(){
     HighsBasisStatus basic = HighsBasisStatus::kBasic;
     std::pair<std::set<std::pair<int, int> >::iterator, bool> ret;
     numResiduals = 0;
-    std::fill(parent.begin(), parent.end(), 0);
+    // std::fill(parent.begin(), parent.end(), 0);
     std::fill(isParent.begin(), isParent.end(), 0);
     std::fill(parentStart.begin(), parentStart.end(), 0);
-    std::fill(parentFreq.begin(), parentFreq.end(), 0);
-    std::fill(child.begin(), child.end(), 0);
+    // std::fill(parentFreq.begin(), parentFreq.end(), 0);
+    // std::fill(child.begin(), child.end(), 0);
     std::fill(isChild.begin(), isChild.end(), 0);
     std::fill(childRow.begin(), childRow.end(), 0);
     std::fill(residualRow.begin(), residualRow.end(), 0);
+    std::fill(residualCol.begin(), residualCol.end(), 0);
     int elpNumRow = elp->num_row_;
     int elpNumCol = elp->num_col_;
     for (int iCol = pcolCnt; iCol < colCnt; ++iCol){
@@ -617,10 +618,10 @@ void HighsOCAggregate::buildResidualCols(){
     for (i = 0; i < numResiduals; ++i){
         p = parent[i];
         c = child[i];
-        elp->col_lower_[idx] = 0;
-        elp->col_upper_[idx++] = 0;
-        // elp->col_lower_[idx] = -kHighsInf;
-        // elp->col_upper_[idx++] = kHighsInf;
+        // elp->col_lower_[idx] = 0;
+        // elp->col_upper_[idx++] = 0;
+        elp->col_lower_[idx] = -kHighsInf;
+        elp->col_upper_[idx++] = kHighsInf;
     }
 }
 
