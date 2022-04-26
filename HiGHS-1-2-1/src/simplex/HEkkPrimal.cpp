@@ -1651,7 +1651,7 @@ void HEkkPrimal::update() {
   }
 
   // If entering column was nonbasic free, remove it from the set
-  if (!solve_phase == kSolvePhaseOrbitalCrossover)
+  if (solve_phase != kSolvePhaseOrbitalCrossover)
     removeNonbasicFreeColumn();
 
   // For hyper-sparse CHUZC, analyse the duals and weights that have

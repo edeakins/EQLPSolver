@@ -787,7 +787,7 @@ HighsStatus Highs::run() {
         zeroIterationCounts();
         info_.orbital_crossover_major_iteration_count = major_iterations;
         info_.orbital_crossover_minor_iteration_count = minor_iterations;
-        writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         timer_.start(timer_.solve_clock);
         call_status =
             callSolveLp(*ealp_, "Solving LP with Orbital Crossover");
