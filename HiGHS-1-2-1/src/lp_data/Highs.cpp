@@ -795,6 +795,10 @@ HighsStatus Highs::run() {
         setBasisValidity();
         getOCBasis();
         getOCSolution();
+        if (info_.ready_for_crash_basis_construction){
+          trimOrbitalCrossoverSolution();
+          std::cout << "fuck yea" << std::endl;
+        }
       }
       int numRequiredBasic = 0;
       for (int i = 0; i < ealp_->num_aggregate_cols_; ++i)
@@ -2312,9 +2316,27 @@ void Highs::getOCBasis(){
   // alpBasis_.debug_origin_name = "Aggregate LP Basis";
 }
 
+void Highs::trimOrbitalCrossoverBasis(){
+  HighsInt numAggregateCol = alp_->num_col_;
+  HighsInt numAggregateRow = alp_->num_row_;
+  HighsBasis& trimBasis = basis_;
+  basis_.col_status.resize(numAggregateCol);
+  basis_.row_status.resize(numAggregateRow);
+}
+
 void Highs::getOCSolution(){
   alpSolution_ = getSolution();
 } 
+
+void Highs::trimOrbitalCrossoverSolution(){
+  HighsInt numAggregateCol = alp_->num_col_;
+  HighsInt numAggregateRow = alp_->num_row_;
+  HighsSolution& trimSolution = solution_;
+  trimSolution.col_value.resize(numAggregateCol);
+  trimSolution.col_dual.resize(numAggregateCol);
+  trimSolution.row_value.resize(numAggregateRow);
+  trimSolution.row_dual.resize(numAggregateRow);
+}
 
 void Highs::getLiftedBasis(){
   ealpBasis_ = aggregator_.getBasis();

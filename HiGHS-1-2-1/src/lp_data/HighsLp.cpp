@@ -114,6 +114,10 @@ void HighsLp::exactResize() {
 void HighsLp::clear() {
   this->num_col_ = 0;
   this->num_row_ = 0;
+  this->num_aggregate_cols_ = 0;
+  this->num_aggregate_rows_ = 0;
+  this->num_residual_cols_ = 0;
+  this->num_residual_rows_ = 0;
 
   this->col_cost_.clear();
   this->col_lower_.clear();

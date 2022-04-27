@@ -49,6 +49,8 @@ class HEkkPrimal {
   void solvePhase1();
   void solvePhase2();
   void orbitalCrossover();
+  HighsInt countNonboundedAggregateVariables();
+  bool orbitalCrossoverVertexPoint();
   void cleanup();
   void rebuild();
 

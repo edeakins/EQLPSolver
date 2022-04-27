@@ -3624,6 +3624,21 @@ HighsStatus HEkk::returnFromSolve(const HighsStatus return_status) {
       computeSimplexInfeasible();
       break;
     }
+    case HighsModelStatus::kHasVertexButNoBasis:{
+      if (info_.num_primal_infeasibilities) {
+        // Optimal - but not to desired primal feasibilit tolerance
+        return_primal_solution_status_ = kSolutionStatusInfeasible;
+      } else {
+        return_primal_solution_status_ = kSolutionStatusFeasible;
+      }
+      if (info_.num_dual_infeasibilities) {
+        // Optimal - but not to desired dual feasibilit tolerance
+        return_dual_solution_status_ = kSolutionStatusInfeasible;
+      } else {
+        return_dual_solution_status_ = kSolutionStatusFeasible;
+      }
+      break;
+    }
     default: {
       highsLogDev(
           options_->log_options, HighsLogType::kError,
@@ -3634,8 +3649,10 @@ HighsStatus HEkk::returnFromSolve(const HighsStatus return_status) {
       break;
     }
   }
-  assert(info_.num_primal_infeasibilities >= 0);
-  assert(info_.num_dual_infeasibilities >= 0);
+  if (model_status_ != HighsModelStatus::kHasVertexButNoBasis){
+    assert(info_.num_primal_infeasibilities >= 0);
+    assert(info_.num_dual_infeasibilities >= 0);
+  }
   if (info_.num_primal_infeasibilities == 0) {
     return_primal_solution_status_ = kSolutionStatusFeasible;
   } else {

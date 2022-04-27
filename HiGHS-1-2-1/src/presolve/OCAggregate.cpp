@@ -162,11 +162,15 @@ void HighsOCAggregate::buildAmatrix(){
         // AdegenRStart[xi + 1] = nnzStan;
         start = nnz;
     }
+    agglp->a_matrix_.format_ = MatrixFormat::kColwise;
+    agglp->a_matrix_.num_col_ = colCnt;
+    agglp->a_matrix_.num_row_ = rowCnt;
     agglp->num_col_ = agglp->a_matrix_.num_col_ = colCnt;
     agglp->num_row_ = agglp->a_matrix_.num_row_ = rowCnt;
-    agglp->a_matrix_.format_ = MatrixFormat::kColwise;
+    agglp->num_aggregate_cols_ = agglp->num_col_;
+    agglp->num_aggregate_rows_ = agglp->num_row_;
     agglp->num_residual_cols_ = 0;
-
+    agglp->num_residual_rows_ = 0;
 }
 
 // Build A matrix with linkers if they exist
@@ -228,16 +232,19 @@ void HighsOCAggregate::buildAmatrixExtended(){
         // AdegenRIndex[nnzStan] = residualRow[i];
         elp->a_matrix_.value_[nnz++] = -1;
         // AdegenRValue[nnzStan++] = -1;
-        elp->a_matrix_.start_[elp->num_col_ + iCol + 1] = nnz;
+        elp->a_matrix_.start_[colCnt + iCol + 1] = nnz;
         // AdegenRStart[elp->num_col_ + i + 1] = nnzStan;
     }
-    elp->num_col_ += numResiduals;
-    elp->num_row_ += numResiduals;
+    elp->a_matrix_.format_ = MatrixFormat::kColwise;\
+    elp->a_matrix_.num_col_ = colCnt + numResiduals;
+    elp->a_matrix_.num_row_ = rowCnt + numResiduals;
+    elp->num_col_ = colCnt + numResiduals;
+    elp->num_row_ = rowCnt + numResiduals;
+    elp->num_aggregate_cols_ = colCnt;
+    elp->num_aggregate_rows_ = rowCnt;
     elp->num_residual_cols_ = numResiduals;
+    elp->num_residual_rows_ = numResiduals;
     elp->residual_cols_ = residualCol;
-    elp->a_matrix_.num_col_ = elp->num_col_;
-    elp->a_matrix_.num_row_ = elp->num_row_;
-    elp->a_matrix_.format_ = MatrixFormat::kColwise;
 }
 
 void HighsOCAggregate::checkAMatrix(){
@@ -585,8 +592,8 @@ void HighsOCAggregate::buildResidualLinks(){
     std::fill(childRow.begin(), childRow.end(), 0);
     std::fill(residualRow.begin(), residualRow.end(), 0);
     std::fill(residualCol.begin(), residualCol.end(), 0);
-    int elpNumRow = elp->num_row_;
-    int elpNumCol = elp->num_col_;
+    int elpNumRow = rowCnt;
+    int elpNumCol = colCnt;
     for (int iCol = pcolCnt; iCol < colCnt; ++iCol){
         xNew = iCol;
         rep = colrep[iCol];
@@ -721,8 +728,6 @@ void HighsOCAggregate::buildColPointers(){
             col[i] = colCnt++;
         }
     }
-    elp->num_col_ = ep->ncsplits;
-    elp->num_aggregate_cols_ = ep->ncsplits;
 }
 
 void HighsOCAggregate::buildRowPointers(){
@@ -748,8 +753,6 @@ void HighsOCAggregate::buildRowPointers(){
             row[i - numCol] = rowCnt++;
         }
     }
-    elp->num_row_ = ep->nrsplits;
-    elp->num_aggregate_rows_ = ep->nrsplits;
 }
 
 void HighsOCAggregate::copyPartition(){

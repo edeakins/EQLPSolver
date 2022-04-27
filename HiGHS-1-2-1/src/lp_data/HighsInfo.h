@@ -132,6 +132,7 @@ struct HighsInfoStruct {
   int64_t mip_node_count;
   HighsInt orbital_crossover_major_iteration_count;
   HighsInt orbital_crossover_minor_iteration_count;
+  HighsInt ready_for_crash_basis_construction = 0;
   HighsInt simplex_iteration_count;
   HighsInt ipm_iteration_count;
   HighsInt qp_iteration_count;
@@ -198,6 +199,10 @@ class HighsInfo : public HighsInfoStruct {
     InfoRecordDouble* record_double;
     bool advanced;
     advanced = false;
+
+    record_int = new InfoRecordInt("ready_for_crash_basis_construction",
+                                   "Flag telling HiGHS to develop crash basis from a given solution from Orbital Crossover",
+                                   advanced, &simplex_iteration_count, 0);
 
     record_int = new InfoRecordInt("orbital_crossover_major_iteration_count",
                                    "Iteration count for orbital crossover major iterations (Lifting)",

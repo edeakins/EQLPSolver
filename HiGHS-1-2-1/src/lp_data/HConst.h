@@ -159,6 +159,7 @@ enum class HighsModelStatus {
   kPreOrbitalCrossover,
   kPeriOrbitalCrossover,
   kPostOrbitalCrossover,
+  kHasVertexButNoBasis,
   kModelEmpty,
   kOptimal,
   kInfeasible,

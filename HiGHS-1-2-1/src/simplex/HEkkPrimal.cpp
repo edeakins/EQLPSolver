@@ -242,7 +242,8 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
              solve_phase == kSolvePhaseUnknown ||
              solve_phase == kSolvePhaseExit ||
              solve_phase == kSolvePhaseTabooBasis ||
-             solve_phase == kSolvePhaseError);
+             solve_phase == kSolvePhaseError ||
+             solve_phase == kSolvePhaseOrbitalCrossover);
       assert(solve_phase != kSolvePhaseExit ||
              ekk_instance_.model_status_ == HighsModelStatus::kUnbounded);
       info.primal_phase2_iteration_count +=
@@ -281,6 +282,11 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
       // primal infeasibilities so use dual simplex to clean up
       break;
     }
+    if (solve_phase == kSolvePhaseOrbitalCrossover){
+      // Orbital Crossover has found a vertex point but needs to use
+      // Highs crash basis to formulate basis for point
+      break;
+    }
     // If solve_phase == kSolvePhaseOptimal == 0 then major solving
     // loop ends naturally since solve_phase is false
   }
@@ -290,9 +296,13 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
   assert(solve_phase ==
              kSolvePhaseExit ||  // solve_phase == kSolvePhaseUnknown ||
          solve_phase == kSolvePhaseOptimal ||  // solve_phase == kSolvePhase1 ||
-         solve_phase == kSolvePhaseOptimalCleanup);
+         solve_phase == kSolvePhaseOptimalCleanup ||
+         solve_phase == kSolvePhaseOrbitalCrossover);
   if (solve_phase == kSolvePhaseOptimal)
     ekk_instance_.model_status_ = HighsModelStatus::kOptimal;
+  
+  if (solve_phase == kSolvePhaseOrbitalCrossover)
+    ekk_instance_.model_status_ = HighsModelStatus::kHasVertexButNoBasis;
 
   if (solve_phase == kSolvePhaseOptimalCleanup) {
     highsLogDev(options.log_options, HighsLogType::kInfo,
@@ -665,6 +675,7 @@ void HEkkPrimal::orbitalCrossover(){
   HighsOptions& options = *ekk_instance_.options_;
   HighsSimplexStatus& status = ekk_instance_.status_;
   HighsModelStatus& model_status = ekk_instance_.model_status_;
+  bool orbitalCrossoverHasAVertex = false;
   // When starting a new phase the (updated) primal objective function
   // value isn't known. Indicate this so that when the value
   // computed from scratch in build() isn't checked against the the
@@ -698,11 +709,19 @@ void HEkkPrimal::orbitalCrossover(){
     if (solve_phase == kSolvePhase1) break;
     if (solve_phase == kSolvePhase2) break;
     for (;;) {
+      if (orbitalCrossoverVertexPoint() && 
+          residual_col < ekk_instance_.lp_.num_col_){
+        orbitalCrossoverHasAVertex = true;
+        ekk_instance_.info_.ready_for_crash_basis_construction = 1;
+        break;
+      }
       iterate();
       if (ekk_instance_.bailoutOnTimeIterations()) return;
       if (solve_phase == kSolvePhaseError) return;
       assert(solve_phase == kSolvePhaseOrbitalCrossover);
-      if (rebuild_reason) break;
+      if (rebuild_reason){ 
+        break;
+      }
     }
     // If the data are fresh from rebuild() and no flips have
     // occurred, possibly break out of the outer loop to see what's
@@ -719,6 +738,7 @@ void HEkkPrimal::orbitalCrossover(){
       return;
     }
     if (finished) break;
+    if (orbitalCrossoverHasAVertex) break;
   }
   // If bailing out, should have returned already
   assert(!ekk_instance_.solve_bailout_);
@@ -757,6 +777,8 @@ void HEkkPrimal::orbitalCrossover(){
            (int)ekk_instance_.debug_solve_call_num_);
     fflush(stdout);
     assert(row_out != kNoRowSought);
+  } else if (orbitalCrossoverHasAVertex) {
+    printf("orbitalCrossover exiting because <= m basic variables\n");
   } else {
     // No candidate in CHUZR
     if (row_out >= 0) {
@@ -788,6 +810,47 @@ void HEkkPrimal::orbitalCrossover(){
       model_status = HighsModelStatus::kUnbounded;
     }
   }
+}
+
+bool HEkkPrimal::orbitalCrossoverVertexPoint(){
+  HighsInt numAggregateRow = ekk_instance_.lp_.num_aggregate_rows_;
+  HighsInt numNonboundedAggregateVariables = 
+      countNonboundedAggregateVariables();
+  if (numNonboundedAggregateVariables <= numAggregateRow)
+    return true;
+  return false;
+}
+
+HighsInt HEkkPrimal::countNonboundedAggregateVariables(){
+  HighsSimplexInfo& info = ekk_instance_.info_;
+  SimplexBasis& basis = ekk_instance_.basis_;
+  std::vector<double>& workLower = info.workLower_;
+  std::vector<double>& workUpper = info.workUpper_;
+  std::vector<double>& baseValue = info.baseValue_;
+  std::vector<HighsInt>& baseIndex = basis.basicIndex_;
+  double tol = 1e-6;
+  bool equalToBound;
+  double lowerBound;
+  double upperBound;
+  double value;
+  HighsInt numAggregateCol = ekk_instance_.lp_.num_aggregate_cols_;
+  HighsInt numCol = ekk_instance_.lp_.num_col_;
+  HighsInt iCol;
+  HighsInt iRow;
+  HighsInt numNonboundedAggregateVariables = 0;
+  for (iRow = 0; iRow < num_row; ++iRow){
+    iCol = baseIndex[iRow];
+    if (iCol >= numAggregateCol && iCol < numCol)
+      continue;
+    value = baseValue[iCol];
+    lowerBound = workLower[iCol];
+    upperBound = workUpper[iCol];
+    equalToBound = (std::fabs(value - lowerBound) > tol) ||
+                    (std::fabs(value - upperBound) > tol);
+    if (equalToBound) continue;
+    numNonboundedAggregateVariables++;
+  }
+  return numNonboundedAggregateVariables;
 }
 
 void HEkkPrimal::cleanup() {

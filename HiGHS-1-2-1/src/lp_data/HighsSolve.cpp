@@ -110,7 +110,7 @@ HighsStatus solveLp(HighsLpSolverObject& solver_object, const string message) {
       }
     }
 #else
-    highsLogUser(options.log_options, HighsLogType::kError,
+    highsLogUser(options.log_options, HighsLogType::kError
                  "Model cannot be solved with IPM\n");
     return HighsStatus::kError;
 #endif

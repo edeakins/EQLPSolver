@@ -50,6 +50,9 @@ HighsStatus returnFromSolveLpSimplex(HighsLpSolverObject& solver_object,
     solver_object.highs_info_.orbital_crossover_major_iteration_count++;
   solver_object.highs_info_.orbital_crossover_minor_iteration_count += 
       ekk_instance.iteration_count_;
+  // Copy instructions for HiGHS crash basis
+  solver_object.highs_info_.ready_for_crash_basis_construction =
+      ekk_instance.info_.ready_for_crash_basis_construction;
   // Ensure that the incumbent LP is neither moved, nor scaled
   assert(!incumbent_lp.is_moved_);
   assert(!incumbent_lp.is_scaled_);

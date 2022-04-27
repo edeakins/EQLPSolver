@@ -1183,6 +1183,8 @@ class Highs {
   void getOCBasis();
   void getOCSolution();
   void getLiftedBasis();
+  void trimOrbitalCrossoverSolution();
+  void trimOrbitalCrossoverBasis();
   bool discrete = true;
   bool stop_highs_run_clock = true;
   bool running_orbital_crossover = false;

@@ -491,10 +491,12 @@ std::string utilModelStatusToString(const HighsModelStatus model_status) {
       return "Unknown";
       break;
     case HighsModelStatus::kPreOrbitalCrossover:
-      return "Pre Orbital Crossover Phase";
+      return "Pre Orbital Crossover phase";
       break;
     case HighsModelStatus::kPeriOrbitalCrossover:
     case HighsModelStatus::kPostOrbitalCrossover:
+    case HighsModelStatus::kHasVertexButNoBasis:
+      return "Lp has vertex solution but no basis";
     default:
       assert(1 == 0);
       return "Unrecognised HiGHS model status";

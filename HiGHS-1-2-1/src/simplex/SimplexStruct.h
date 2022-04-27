@@ -244,6 +244,9 @@ struct HighsSimplexInfo {
   double updated_primal_objective_value;
   // Number of logical variables in the basis
   HighsInt num_basic_logicals;
+  // Tell Highs to orbital crossover solution and construct 
+  // crash basis with it
+  HighsInt ready_for_crash_basis_construction = 0;
 };
 
 struct HighsSimplexBadBasisChangeRecord {
