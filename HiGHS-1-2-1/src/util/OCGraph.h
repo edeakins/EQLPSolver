@@ -11,6 +11,4 @@ class OCGraph{
         int* wght;
         int* colors;
         int* edgColors;
-        OCGraph();
-        ~OCGraph();
 };

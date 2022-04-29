@@ -895,16 +895,16 @@ class Highs {
 #endif
   // Start of Ethan Deakins' public methods and vars for Orbital Crossover
 
-  OCPartition* partition_;
+  OCPartition partition_;
   HighsOCEquitablePartition equitablePartition_;
   HighsOCAggregate aggregator_;
-  HighsLp* alp_; 
-  HighsLp* ealp_;
+  HighsLp alp_; 
+  HighsLp ealp_;
   HighsBasis alpBasis_;
   HighsBasis crashBasis_;
   HighsSolution crashSolution_;
   HighsSolution alpSolution_;
-  HighsBasis* ealpBasis_;
+  HighsBasis ealpBasis_;
   HighsSolution getSolutionCopy() { return solution_; }
   HighsBasis getBasisCopy() { return basis_; }
 

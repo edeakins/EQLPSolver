@@ -1,8 +1,8 @@
 #include "OCEquitable.h"
 using namespace std;
 
-OCPartition* HighsOCEquitablePartition::getPartition(){
-    return partition;
+OCPartition HighsOCEquitablePartition::getPartition(){
+    return *partition;
 }
 
 void HighsOCEquitablePartition::runToDiscrete(){
@@ -710,7 +710,9 @@ void HighsOCEquitablePartition::addInduce(int cf){
 }
 
 bool HighsOCEquitablePartition::discrete(){
-    return partition->nsplits == g->numTot_;
+    return partition->nsplits == g->numTot_ ||
+           partition->ncsplits == g->numCol_ ||
+           partition->nrsplits == g->numRow_;
 }
 
 void HighsOCEquitablePartition::clear(){

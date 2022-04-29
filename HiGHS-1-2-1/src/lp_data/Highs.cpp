@@ -750,19 +750,16 @@ HighsStatus Highs::run() {
     initializeAggregator(original_lp);
     buildALP();
     returnFromRun(HighsStatus::kOk);
-    passModel(*alp_);
-    // timer_.startRunHighsClock();
+    passModel(alp_);
     zeroIterationCounts();
-    // Validate the reduced LP
-    // assert(assessLp(*alp_, options_) == HighsStatus::kOk);
-    // Set up the aggregate lp
-    // ekk_instance_.clear();
-    // ekk_instance_.lp_name_ = "Aggregate LP";
-    // Solve the initial aggregate lp
-    writeModel("../../debugBuild/testLpFiles/ALP.lp");
+    timer_.start(timer_.presolve_clock);
+    model_presolve_status_ = runPresolve();
+    timer_.stop(timer_.presolve_clock);
+    HighsLp& reduced_lp = presolve_.getReducedProblem();
+    reduced_lp.setMatrixDimensions();
     timer_.start(timer_.solve_clock);
     call_status =
-        callSolveLp(*alp_, "Solving LP with Orbital Crossover");
+        callSolveLp(alp_, "Solving LP with Orbital Crossover");
     timer_.stop(timer_.solve_clock);
     setBasisValidity();
     if (discrete) {
@@ -782,34 +779,34 @@ HighsStatus Highs::run() {
         getLiftedBasis();
         major_iterations = info_.orbital_crossover_major_iteration_count;
         minor_iterations = info_.orbital_crossover_minor_iteration_count;
-        passModel(*ealp_);
-        setBasis(*ealpBasis_);
+        passModel(ealp_);
+        setBasis(ealpBasis_);
         zeroIterationCounts();
         info_.orbital_crossover_major_iteration_count = major_iterations;
         info_.orbital_crossover_minor_iteration_count = minor_iterations;
-        writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         timer_.start(timer_.solve_clock);
         call_status =
-            callSolveLp(*ealp_, "Solving LP with Orbital Crossover");
+            callSolveLp(ealp_, "Solving LP with Orbital Crossover");
         timer_.stop(timer_.solve_clock);
         setBasisValidity();
         getOrbitalCrossoverBasis();
         getOrbitalCrossoverSolution();
         if (info_.ready_for_crash_basis_construction){
           trimOrbitalCrossoverSolution();
-          passModel(*alp_);
+          passModel(alp_);
           solution_ = alpSolution_;
-          crossover(solution_, *alp_);
+          crossover(solution_, alp_);
           alpBasis_ = crashBasis_;
           alpSolution_ = crashSolution_;
           std::cout << "fuck yea" << std::endl;
         }
       }
       int numRequiredBasic = 0;
-      for (int i = 0; i < ealp_->num_aggregate_cols_; ++i)
+      for (int i = 0; i < ealp_.num_aggregate_cols_; ++i)
         if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
           numRequiredBasic++;
-      for (int i = 0; i < ealp_->num_aggregate_rows_; ++i)
+      for (int i = 0; i < ealp_.num_aggregate_rows_; ++i)
         if (alpBasis_.row_status[i] == HighsBasisStatus::kBasic)
           numRequiredBasic++;
       stop_highs_run_clock = true;
@@ -2303,7 +2300,7 @@ void Highs::refinePartition(){
 }
 
 void Highs::initializeAggregator(HighsLp& original_lp){
-  aggregator_.allocate(&original_lp, partition_);
+  aggregator_.passLpAndPartition(original_lp, partition_);
 }
 
 void Highs::buildALP(){
@@ -2311,7 +2308,7 @@ void Highs::buildALP(){
 }
 
 void Highs::buildEALP(){
-  aggregator_.buildLp(partition_, &alpBasis_, &alpSolution_);
+  aggregator_.buildLp(partition_, alpBasis_, alpSolution_);
   // alp_ = aggregator_.getAggLp();
   ealp_ = aggregator_.getLp();
 }
@@ -2326,8 +2323,8 @@ void Highs::getOrbitalCrossoverBasis(){
 }
 
 void Highs::trimOrbitalCrossoverBasis(){
-  HighsInt numAggregateCol = alp_->num_col_;
-  HighsInt numAggregateRow = alp_->num_row_;
+  HighsInt numAggregateCol = alp_.num_col_;
+  HighsInt numAggregateRow = alp_.num_row_;
   HighsBasis& trimBasis = alpBasis_;
   basis_.col_status.resize(numAggregateCol);
   basis_.row_status.resize(numAggregateRow);
@@ -2342,8 +2339,8 @@ void Highs::getOrbitalCrossoverSolution(){
 } 
 
 void Highs::trimOrbitalCrossoverSolution(){
-  HighsInt numAggregateCol = alp_->num_col_;
-  HighsInt numAggregateRow = alp_->num_row_;
+  HighsInt numAggregateCol = alp_.num_col_;
+  HighsInt numAggregateRow = alp_.num_row_;
   HighsSolution& trimSolution = alpSolution_;
   trimSolution.col_value.resize(numAggregateCol);
   trimSolution.col_dual.resize(numAggregateCol);
@@ -2355,7 +2352,7 @@ void Highs::trimOrbitalCrossoverSolution(){
 
 void Highs::getLiftedBasis(){
   ealpBasis_ = aggregator_.getBasis();
-  ealpBasis_->debug_origin_name = "EALP Start Basis";
+  ealpBasis_.debug_origin_name = "EALP Start Basis";
 }
 
 // Private methods
@@ -3243,8 +3240,8 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp) {
   getCrashBasis();
   getCrashSolution();
   double obj = 0;
-  HighsInt numCol = alp_->num_col_;
-  std::vector<double>& colCost = alp_->col_cost_;
+  HighsInt numCol = alp_.num_col_;
+  std::vector<double>& colCost = alp_.col_cost_;
   std::vector<double>& colValue = crashSolution_.col_value;
   for (int iCol = 0; iCol < numCol; ++iCol)
     obj += colCost[iCol] * colValue[iCol];

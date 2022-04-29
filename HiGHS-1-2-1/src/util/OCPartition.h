@@ -13,6 +13,4 @@ class OCPartition{
         std::vector<int> unlabel;
         std::vector<int> parent;
         std::vector<int> len;
-        OCPartition();
-        ~OCPartition();
 };

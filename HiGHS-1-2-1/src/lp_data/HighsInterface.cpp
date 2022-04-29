@@ -1319,7 +1319,7 @@ void Highs::zeroIterationCounts() {
     info_.qp_iteration_count = 0;
     return;
   }
-  info_.orbital_crossover_major_iteration_count = 0;
+  info_.orbital_crossover_minor_iteration_count = 0;
   info_.orbital_crossover_major_iteration_count = 0;
   info_.simplex_iteration_count = 0;
   info_.ipm_iteration_count = 0;

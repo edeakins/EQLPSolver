@@ -46,10 +46,11 @@ HighsStatus returnFromSolveLpSimplex(HighsLpSolverObject& solver_object,
   // Copy the simplex iteration count to highs_info_ from ekk_instance
   solver_object.highs_info_.simplex_iteration_count =
       ekk_instance.iteration_count_;
-  if (options.simplex_strategy == kSimplexStrategyOrbitalCrossover)
+  if (options.simplex_strategy == kSimplexStrategyOrbitalCrossover){
     solver_object.highs_info_.orbital_crossover_major_iteration_count++;
-  solver_object.highs_info_.orbital_crossover_minor_iteration_count += 
-      ekk_instance.iteration_count_;
+    solver_object.highs_info_.orbital_crossover_minor_iteration_count += 
+        ekk_instance.iteration_count_;
+  }
   // Copy instructions for HiGHS crash basis
   solver_object.highs_info_.ready_for_crash_basis_construction =
       ekk_instance.info_.ready_for_crash_basis_construction;

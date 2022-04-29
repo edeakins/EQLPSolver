@@ -10,10 +10,11 @@
 /* Aggregator class for LPs based off a equitable partition */
 class HighsOCAggregate{
 public:
-    void allocate(HighsLp* lp, OCPartition* partition);
+    void passLpAndPartition(HighsLp& lp, OCPartition& partition);
+    void resizeLpContainers();
     void buildLp();
-    void buildLp(OCPartition* partition, HighsBasis* b,
-                HighsSolution* s);
+    void buildLp(OCPartition& partition, HighsBasis& b,
+                HighsSolution& s);
     // Build aggregate A matrices for ALP and EALP
     void buildAmatrix();
     void buildAmatrixExtended();
@@ -54,18 +55,18 @@ public:
     // Copy partition from level k when going to level k + 1
     void copyPartition();
     // Get parts of agg
-    HighsLp* getLp();
-    HighsLp* getAggLp();
-    HighsBasis* getBasis();
+    HighsLp getLp();
+    HighsLp getAggLp();
+    HighsBasis getBasis();
 
-    HighsLp* elp; 
-    HighsLp* olp;
-    HighsLp* agglp;
-    OCPartition* ep;
-    OCPartition* epMinusOne;
-    HighsBasis* basis;
-    HighsBasis* elpBasis;
-    HighsSolution* solution;
+    HighsLp elp; 
+    HighsLp olp;
+    HighsLp agglp;
+    OCPartition ep;
+    OCPartition epMinusOne;
+    HighsBasis basis;
+    HighsBasis elpBasis;
+    HighsSolution solution;
     int numTot;
     int numCol; 
     int numRow; 

@@ -89,7 +89,7 @@ public:
     /* Used to allocate arrays for next refinement inducers */
     int* allocInts(int n);
     /* Returns a partition in a better format for lp construction */
-    OCPartition* getPartition();
+    OCPartition getPartition();
 
 
     /* HighsLp container for the original lp being passed in */
