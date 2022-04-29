@@ -759,7 +759,7 @@ HighsStatus Highs::run() {
     // ekk_instance_.clear();
     // ekk_instance_.lp_name_ = "Aggregate LP";
     // Solve the initial aggregate lp
-    // writeModel("../../debugBuild/testLpFiles/ALP.lp");
+    writeModel("../../debugBuild/testLpFiles/ALP.lp");
     timer_.start(timer_.solve_clock);
     call_status =
         callSolveLp(*alp_, "Solving LP with Orbital Crossover");
@@ -772,8 +772,8 @@ HighsStatus Highs::run() {
     else{
       int major_iterations = 0;
       int minor_iterations = 0;
-      getOCBasis();
-      getOCSolution();
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
       while (!discrete){
         options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
         refinePartition();
@@ -787,16 +787,21 @@ HighsStatus Highs::run() {
         zeroIterationCounts();
         info_.orbital_crossover_major_iteration_count = major_iterations;
         info_.orbital_crossover_minor_iteration_count = minor_iterations;
-        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        writeModel("../../debugBuild/testLpFiles/EALP.lp");
         timer_.start(timer_.solve_clock);
         call_status =
             callSolveLp(*ealp_, "Solving LP with Orbital Crossover");
         timer_.stop(timer_.solve_clock);
         setBasisValidity();
-        getOCBasis();
-        getOCSolution();
+        getOrbitalCrossoverBasis();
+        getOrbitalCrossoverSolution();
         if (info_.ready_for_crash_basis_construction){
           trimOrbitalCrossoverSolution();
+          passModel(*alp_);
+          solution_ = alpSolution_;
+          crossover(solution_, *alp_);
+          alpBasis_ = crashBasis_;
+          alpSolution_ = crashSolution_;
           std::cout << "fuck yea" << std::endl;
         }
       }
@@ -2311,32 +2316,42 @@ void Highs::buildEALP(){
   ealp_ = aggregator_.getLp();
 }
 
-void Highs::getOCBasis(){
-  alpBasis_ = getBasis();
+void Highs::getCrashBasis(){
+  crashBasis_ = getBasisCopy();
+}
+
+void Highs::getOrbitalCrossoverBasis(){
+  alpBasis_ = getBasisCopy();
   // alpBasis_.debug_origin_name = "Aggregate LP Basis";
 }
 
 void Highs::trimOrbitalCrossoverBasis(){
   HighsInt numAggregateCol = alp_->num_col_;
   HighsInt numAggregateRow = alp_->num_row_;
-  HighsBasis& trimBasis = basis_;
+  HighsBasis& trimBasis = alpBasis_;
   basis_.col_status.resize(numAggregateCol);
   basis_.row_status.resize(numAggregateRow);
 }
 
-void Highs::getOCSolution(){
-  alpSolution_ = getSolution();
+void Highs::getCrashSolution(){
+  crashSolution_ = getSolutionCopy();
+}
+
+void Highs::getOrbitalCrossoverSolution(){
+  alpSolution_ = getSolutionCopy();
 } 
 
 void Highs::trimOrbitalCrossoverSolution(){
   HighsInt numAggregateCol = alp_->num_col_;
   HighsInt numAggregateRow = alp_->num_row_;
-  HighsSolution& trimSolution = solution_;
+  HighsSolution& trimSolution = alpSolution_;
   trimSolution.col_value.resize(numAggregateCol);
   trimSolution.col_dual.resize(numAggregateCol);
   trimSolution.row_value.resize(numAggregateRow);
   trimSolution.row_dual.resize(numAggregateRow);
 }
+
+
 
 void Highs::getLiftedBasis(){
   ealpBasis_ = aggregator_.getBasis();
@@ -2465,6 +2480,8 @@ void Highs::clearPresolve() {
 }
 
 void Highs::clearUserSolverData() {
+  if (info_.ready_for_crash_basis_construction)
+    return;
   clearModelStatus();
   clearSolution();
   clearBasis();
@@ -3205,6 +3222,37 @@ HighsStatus Highs::crossover(HighsSolution& solution) {
   if (!x_status) return HighsStatus::kError;
 
   setBasis(basis);
+#else
+  // No IPX available so end here at approximate solve.
+  std::cout << "No ipx code available. Error." << std::endl;
+  return HighsStatus::kError;
+#endif
+
+  return HighsStatus::kOk;
+}
+
+HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp) {
+#ifdef IPX_ON
+  std::cout << "Loading crossover...\n";
+  HighsBasis basis;
+  bool x_status = callCrossover(lp, options_, solution, basis);
+  if (!x_status) return HighsStatus::kError;
+  info_.basis_validity = kBasisValidityValid;
+
+  setBasis(basis);
+  getCrashBasis();
+  getCrashSolution();
+  double obj = 0;
+  HighsInt numCol = alp_->num_col_;
+  std::vector<double>& colCost = alp_->col_cost_;
+  std::vector<double>& colValue = crashSolution_.col_value;
+  for (int iCol = 0; iCol < numCol; ++iCol)
+    obj += colCost[iCol] * colValue[iCol];
+  info_.objective_function_value = obj;
+  scaled_model_status_ = HighsModelStatus::kOptimal;
+  model_status_ = HighsModelStatus::kOptimal;
+  
+
 #else
   // No IPX available so end here at approximate solve.
   std::cout << "No ipx code available. Error." << std::endl;

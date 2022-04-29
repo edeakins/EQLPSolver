@@ -292,6 +292,8 @@ private:
                               Vector& x_solver, Vector& y_solver,
                               Vector& z_solver) const;
 
+    void CleanBasicSolutionNumericals(Vector& x_solver, Vector& y_solver, Vector& z_solver) const;
+
     // Applies the operations of LoadPrimal() or LoadDual() to a primal-dual
     // point. Currently only implemented for dualized_ == false. Otherwise an
     // assertion will fail.

@@ -867,6 +867,7 @@ class Highs {
    */
   HighsStatus crossover();
   HighsStatus crossover(HighsSolution& solution);
+  HighsStatus crossover(HighsSolution& solution, HighsLp& lp);
 
   /**
    * @brief Open a named log file
@@ -900,10 +901,12 @@ class Highs {
   HighsLp* alp_; 
   HighsLp* ealp_;
   HighsBasis alpBasis_;
+  HighsBasis crashBasis_;
+  HighsSolution crashSolution_;
   HighsSolution alpSolution_;
   HighsBasis* ealpBasis_;
-  // HighsSolution getSolution() { return solution_; }
-  // HighsBasis getBasis() { return basis_; }
+  HighsSolution getSolutionCopy() { return solution_; }
+  HighsBasis getBasisCopy() { return basis_; }
 
   // Start of deprecated methods
 
@@ -1180,8 +1183,10 @@ class Highs {
   void refinePartition();
   void buildALP();
   void buildEALP();
-  void getOCBasis();
-  void getOCSolution();
+  void getOrbitalCrossoverBasis();
+  void getOrbitalCrossoverSolution();
+  void getCrashBasis();
+  void getCrashSolution();
   void getLiftedBasis();
   void trimOrbitalCrossoverSolution();
   void trimOrbitalCrossoverBasis();

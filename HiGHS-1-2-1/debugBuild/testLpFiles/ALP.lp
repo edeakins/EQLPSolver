@@ -1,8 +1,8 @@
 \ File written by Highs .lp filereader
 min
- obj: +9 x1 
+ obj: +252 x1 
 st
- con1lo: +45 x1 >= +9
+ con1lo: +2520 x1 >= +45
 bounds
  +0 <= x1 <= +1
 end

@@ -127,6 +127,7 @@ void Model::PresolveStartingPoint(const double* x_user,
     ScalePoint(x_temp, slack_temp, y_temp, z_temp);
     DualizeBasicSolution(x_temp, slack_temp, y_temp, z_temp,
                          x_solver, y_solver, z_solver);
+    // CleanBasicSolutionNumericals(x_solver, y_solver, z_solver);
 }
 
 Int Model::PresolveIPMStartingPoint(const double* x_user,
@@ -1087,6 +1088,27 @@ void Model::DualizeBasicSolution(const Vector& x_user,
         std::copy_n(std::begin(z_user), n, std::begin(z_solver));
         for (Int i = 0; i < m; i++)
             z_solver[n+i] = c(n+i)-y_solver[i];
+    }
+}
+
+void Model::CleanBasicSolutionNumericals(Vector& x_solver, Vector& y_solver, Vector& z_solver) const {
+    const Int m = rows();
+    const Int n = cols();
+    double entry = 0;
+    double diff = 0;
+    double tol = 1e-6;
+    for (int i = 0; i < m + n; ++i){
+        if (i < n){
+            entry = y_solver[i];
+            diff = std::fabs(entry - 0);
+            if (diff < tol) y_solver[i] = 0;
+        }
+        entry = x_solver[i];
+        diff = std::fabs(entry - 0);
+            if (diff < tol) x_solver[i] = 0; 
+        entry = z_solver[i];
+        diff = std::fabs(entry - 0);
+            if (diff < tol) z_solver[i] = 0; 
     }
 }
 

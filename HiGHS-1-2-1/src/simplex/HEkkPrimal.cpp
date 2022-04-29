@@ -87,6 +87,7 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
 
   // Perturb bounds according to whether the solution is near-optimnal
   const bool perturb_bounds = !near_optimal;
+  info.primal_simplex_bound_perturbation_multiplier = 0;
   if (!perturb_bounds)
     highsLogDev(options.log_options, HighsLogType::kDetailed,
                 "Near-optimal, so don't use bound perturbation\n");
@@ -824,9 +825,9 @@ bool HEkkPrimal::orbitalCrossoverVertexPoint(){
 HighsInt HEkkPrimal::countNonboundedAggregateVariables(){
   HighsSimplexInfo& info = ekk_instance_.info_;
   SimplexBasis& basis = ekk_instance_.basis_;
-  std::vector<double>& workLower = info.workLower_;
-  std::vector<double>& workUpper = info.workUpper_;
   std::vector<double>& baseValue = info.baseValue_;
+  std::vector<double>& baseLower = info.baseLower_;
+  std::vector<double>& baseUpper = info.baseUpper_;
   std::vector<HighsInt>& baseIndex = basis.basicIndex_;
   double tol = 1e-6;
   bool equalToBound;
@@ -842,12 +843,13 @@ HighsInt HEkkPrimal::countNonboundedAggregateVariables(){
     iCol = baseIndex[iRow];
     if (iCol >= numAggregateCol && iCol < numCol)
       continue;
-    value = baseValue[iCol];
-    lowerBound = workLower[iCol];
-    upperBound = workUpper[iCol];
-    equalToBound = (std::fabs(value - lowerBound) > tol) ||
-                    (std::fabs(value - upperBound) > tol);
-    if (equalToBound) continue;
+    value = baseValue[iRow];
+    lowerBound = baseLower[iRow];
+    upperBound = baseUpper[iRow];
+    equalToBound = (std::fabs(value - lowerBound) < tol) ||
+                    (std::fabs(value - upperBound) < tol);
+    if (equalToBound) 
+      continue;
     numNonboundedAggregateVariables++;
   }
   return numNonboundedAggregateVariables;

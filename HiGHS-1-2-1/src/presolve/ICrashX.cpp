@@ -80,7 +80,7 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
         break;
     }
   }
-
+  solution.dual_valid = false;
   if (solution.dual_valid && solution.col_dual.size() == num_col &&
       solution.row_dual.size() == num_row) {
     std::cout << "Calling ipx crossover with dual values" << std::endl;
