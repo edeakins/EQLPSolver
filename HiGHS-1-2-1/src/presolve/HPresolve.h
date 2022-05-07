@@ -100,7 +100,7 @@ class HPresolve {
   // set with the sizes and indices of equation rows sorted by the size and a
   // vector to access there iterator positions in the set by index for quick
   // removal
-  std::set<std::pair<HighsInt, HighsInt>> equations;
+  std::set<std::pair<HighsInt, HighsInt>, std::greater<std::pair<HighsInt, HighsInt> > > equations;
   std::vector<std::set<std::pair<HighsInt, HighsInt>>::iterator> eqiters;
 
   bool shrinkProblemEnabled;
@@ -135,6 +135,10 @@ class HPresolve {
     kDualInfeasible,
     kStopped,
   };
+
+  // Hold set  of redundant rows
+  std::vector<HighsInt> redundant_rows_;
+
 
   // private functions for different shared functionality and matrix
   // modification
@@ -334,6 +338,8 @@ class HPresolve {
   void setRelaxedImpliedBounds();
 
   static void debug(const HighsLp& lp, const HighsOptions& options);
+
+  std::vector<HighsInt>& getRedundantRows() { return redundant_rows_; }
 };
 
 }  // namespace presolve

@@ -18,6 +18,7 @@ public:
     // Build aggregate A matrices for ALP and EALP
     void buildAmatrix();
     void buildAmatrixExtended();
+    void buildAmatrixExtendedNoResiduals();
     // Build aggregate b vectors for ALP and EALP 
     void buildRhs();
     void buildRhsFromScratch();
@@ -25,6 +26,8 @@ public:
     void buildRhsExtended();
     void buildRhsFromScratchExtended();
     void buildRhsFromSolutionExtended();
+    void buildRhsExtendedNoResiduals();
+    void buildRhsFromSolutionExtendedNoResiduals();
     // Build aggregate LB/UB vectors for ALP and EALP
     void buildBnds();
     void buildBndsFromScratch();
@@ -32,9 +35,12 @@ public:
     void buildBndsExtended();
     void buildBndsFromScratchExtended();
     void buildBndsFromSolutionExtended();
+    void buildBndsExtendedNoResiduals();
+    void buildBndsFromSolutionExtendedNoResiduals();
     // Build aggregate c vectors for ALP and EALP
     void buildObj();
     void buildObjExtended();
+    void buildObjExtendedNoResiduals();
     // Build and handle residual cols/rows for ALP and EALP
     void buildResiduals();
     void buildResidualLinks();
@@ -54,19 +60,30 @@ public:
     void printAMatrixToMatlabFormat();
     // Copy partition from level k when going to level k + 1
     void copyPartition();
+    // Perform dependent residuals test using gram-schmidt process to
+    // remove linking variables and rows that are not needed
+    void gramSchmidt();
+    void updateGramSchmidtMatrix(HighsSparseMatrix& matrix, HighsInt i_col, HVector& column_v);
+    void updateHVectorIndex(HVector& column_v, HighsInt insert, HighsInt idx);
+    void divideSparseVectorByScalar(HVector& column_q, double scalar);
+    void subtractSparseVector(HVector& column_v, HVector& column_q);
+    double sparseDotProduct(HVector& column_v, HVector& column_q);
     // Get parts of agg
     HighsLp getLp();
     HighsLp getAggLp();
+    HighsLp getLpNoResiduals();
     HighsBasis getBasis();
 
     HighsLp elp; 
     HighsLp olp;
     HighsLp agglp;
+    HighsLp presolvelp;
     OCPartition ep;
     OCPartition epMinusOne;
     HighsBasis basis;
     HighsBasis elpBasis;
     HighsSolution solution;
+    int level = 0;
     int numTot;
     int numCol; 
     int numRow; 
@@ -123,6 +140,8 @@ public:
     std::set<int> rowReps;
     std::set<int> newRowReps;
     std::map<int, std::vector<int> > splitCells;
+
+    HVector column_vi, column_vj, column_qi;
 };
 
 #endif

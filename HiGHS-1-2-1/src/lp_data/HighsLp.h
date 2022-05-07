@@ -32,6 +32,7 @@ class HighsLp {
   HighsInt num_residual_rows_;
   HighsInt num_aggregate_cols_;
   HighsInt num_aggregate_rows_;
+  HighsInt level;
 
   std::vector<double> col_cost_;
   std::vector<double> col_lower_;

@@ -900,11 +900,13 @@ class Highs {
   HighsOCAggregate aggregator_;
   HighsLp alp_; 
   HighsLp ealp_;
+  HighsLp pealp_;
   HighsBasis alpBasis_;
   HighsBasis crashBasis_;
   HighsSolution crashSolution_;
   HighsSolution alpSolution_;
   HighsBasis ealpBasis_;
+  std::vector<HighsInt> initialBasicIndex_;
   HighsSolution getSolutionCopy() { return solution_; }
   HighsBasis getBasisCopy() { return basis_; }
 
@@ -1040,6 +1042,7 @@ class Highs {
 
   PresolveComponent presolve_;
   HighsPresolveStatus runPresolve();
+  HighsPresolveStatus runPresolve(HighsLp& lp);
   HighsPostsolveStatus runPostsolve();
 
   HighsStatus openWriteFile(const string filename, const string method_name,
@@ -1183,6 +1186,7 @@ class Highs {
   void refinePartition();
   void buildALP();
   void buildEALP();
+  void buildPEALP();
   void getOrbitalCrossoverBasis();
   void getOrbitalCrossoverSolution();
   void getCrashBasis();
@@ -1190,6 +1194,7 @@ class Highs {
   void getLiftedBasis();
   void trimOrbitalCrossoverSolution();
   void trimOrbitalCrossoverBasis();
+  void swapDependentColsOut(std::vector<HighsInt>& redundant_rows);
   bool discrete = true;
   bool stop_highs_run_clock = true;
   bool running_orbital_crossover = false;

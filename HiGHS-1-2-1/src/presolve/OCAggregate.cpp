@@ -26,10 +26,31 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     elp.a_matrix_.start_.reserve(numCol + numTotResiduals +1);
     elp.a_matrix_.index_.reserve(nnz + 3 * numTotResiduals);
     elp.a_matrix_.value_.reserve(nnz + 3 * numTotResiduals);
+
+    // Allocate col and row pointers
+    col.assign(numCol, -1);
+    colrep.assign(numCol, -1);
+    row.assign(numRow, -1);
+    rowrep.assign(numRow, -1);
+    frontCol.assign(numCol, -1);
+    colFront.assign(numCol, -1);
+    frontRow.assign(numRow + numCol, -1);
+    rowFront.assign(numRow + numCol, -1);
+    // Allocate temp column storage
+    columnI.resize(nnz + numTotResiduals * 3);
+    columnX.resize(numRow);
+    columnF.resize(numRow);
+    // Allocate link storage
+    isParent.resize(numCol);
+    parentRow.resize(numCol + 1);
+    isChild.resize(numCol);
+    childRow.resize(numCol);
+    residualCol.resize(numCol);
+    residualRow.resize(numCol);
 }
 
 void HighsOCAggregate::resizeLpContainers(){
-    // Allocate new lp container, new lp solution, new lp basis
+    // Resize Lp containers
     agglp.col_cost_.resize(colCnt);
     agglp.col_upper_.resize(colCnt);
     agglp.col_lower_.resize(colCnt);
@@ -46,58 +67,28 @@ void HighsOCAggregate::resizeLpContainers(){
     elp.a_matrix_.start_.resize(0);
     elp.a_matrix_.index_.resize(0);
     elp.a_matrix_.value_.resize(0);
-}
-    // elpBasis.col_status.reserve(numCol + numTotResiduals);
-    // elpBasis.row_status.resize(numRow + numTotResiduals);
-    // Allocate col and row pointers
-    col.assign(numCol, -1);
-    colrep.assign(numCol, -1);
-    row.assign(numRow, -1);
-    rowrep.assign(numRow, -1);
-    finalRowRep.resize(numRow, false);
-    degenSlack.resize(numRow + numTotResiduals, 0);
-    degenRow.resize(numRow, true);
-    // Allocate temp column storage
-    columnI.resize(nnz + numTotResiduals * 3);
-    columnX.resize(numRow);
-    columnF.resize(numRow);
-    // Allocate temp row storage
-    rowF.resize(numCol + numTotResiduals);
-    rowNonbasic.resize(numRow);
-    // Allocate link storage
-    // parent.resize(numCol);
-    isParent.resize(numCol);
-    parentStart.resize(numCol + 1);
-    // parentFreq.resize(numCol);
-    parentRow.resize(numCol);
-    // child.resize(numCol);
-    isChild.resize(numCol);
-    childRow.resize(numCol);
-    residualCol.resize(numCol);
-    residualRow.resize(numCol);
-    // Reserve mem for basicIndex and nonbasicFlag
-    basicIndex.reserve(numRow + numTotResiduals);
-    nonbasicFlag.reserve(numCol + numTotResiduals + numRow);
-    rowPerm.assign(numRow, -1);
-    rowUnperm.assign(numRow, -1);
-    colPerm.assign(numCol + numTotResiduals, -1);
-    colUnperm.assign(numCol + numTotResiduals, -1);
-    frontCol.assign(numCol, -1);
-    colFront.assign(numCol, -1);
-    frontRow.assign(numRow + numCol, -1);
-    rowFront.assign(numRow + numCol, -1);
-    buildLp();
+    presolvelp.col_cost_.resize(colCnt);
+    presolvelp.col_upper_.resize(colCnt);
+    presolvelp.col_lower_.resize(colCnt);
+    presolvelp.row_upper_.resize(rowCnt + numResiduals);
+    presolvelp.row_lower_.resize(rowCnt + numResiduals);
+    presolvelp.a_matrix_.start_.resize(0);
+    presolvelp.a_matrix_.index_.resize(0);
+    presolvelp.a_matrix_.value_.resize(0);
 }
 
 void HighsOCAggregate::buildLp(){
     buildColPointers();
     buildRowPointers();
+    resizeLpContainers();
     buildObj();
     buildAmatrix();
     buildRhs();
     buildBnds();
     // buildResiduals();
     copyPartition();
+    agglp.level = level;
+    ++level;
 }
 
 void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
@@ -116,18 +107,28 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     buildColPointers();
     buildRowPointers();
     buildResidualLinks();
+    resizeLpContainers();
     buildBasis(false, false);
     buildObj();
     buildObjExtended();
+    buildObjExtendedNoResiduals();
     buildAmatrix();
     buildAmatrixExtended();
+    buildAmatrixExtendedNoResiduals();
+    gramSchmidt();
     // checkAMatrix();
     // buildStandardMatrix();
     buildRhs();
     buildRhsExtended();
+    buildRhsExtendedNoResiduals();
     buildBnds();
     buildBndsExtended();
+    buildBndsExtendedNoResiduals();
     copyPartition();
+    agglp.level = level;
+    elp.level = level;
+    presolvelp.level = level;
+    ++level;
 }
 
 // Build A matrix without linkers if they exist
@@ -138,6 +139,7 @@ void HighsOCAggregate::buildAmatrix(){
     nnz = 0;
     double xlen, xv;
     std::set<int>::iterator it;
+    agglp.a_matrix_.start_.push_back(0);
     for (iCol = 0; iCol < colCnt; ++iCol){
         crep = colrep[iCol];
         cf = colFront[iCol];
@@ -155,15 +157,15 @@ void HighsOCAggregate::buildAmatrix(){
             columnX[r] += olp.a_matrix_.value_[mIdx] * clen;
         }
         for (mIdx = start; mIdx < nnz; ++mIdx){
-            agglp.a_matrix_.index_[mIdx] = columnI[mIdx];
+            agglp.a_matrix_.index_.push_back(columnI[mIdx]);
             // AdegenRIndex[j] = columnI[j];
-            agglp.a_matrix_.value_[mIdx] = columnX[columnI[mIdx]];
+            agglp.a_matrix_.value_.push_back(columnX[columnI[mIdx]]);
             // AdegenRValue[j] = columnX[columnI[j]];
             columnF[columnI[mIdx]] = 0;
             columnX[columnI[mIdx]] = 0;
             columnI[mIdx] = 0;
         }
-        agglp.a_matrix_.start_[c + 1] = nnz;
+        agglp.a_matrix_.start_.push_back(nnz);
         // AdegenRStart[xi + 1] = nnzStan;
         start = nnz;
     }
@@ -186,6 +188,7 @@ void HighsOCAggregate::buildAmatrixExtended(){
     nnz = 0;
     double xlen, xv;
     std::set<int>::iterator it;
+    elp.a_matrix_.start_.push_back(0);
     for (iCol = 0; iCol < colCnt; ++iCol){
         crep = colrep[iCol];
         cf = colFront[iCol];
@@ -203,9 +206,9 @@ void HighsOCAggregate::buildAmatrixExtended(){
             columnX[r] += olp.a_matrix_.value_[mIdx] * clen;
         }
         for (mIdx = start; mIdx < nnz; ++mIdx){
-            elp.a_matrix_.index_[mIdx] = columnI[mIdx];
+            elp.a_matrix_.index_.push_back(columnI[mIdx]);
             // AdegenRIndex[j] = columnI[j];
-            elp.a_matrix_.value_[mIdx] = columnX[columnI[mIdx]];
+            elp.a_matrix_.value_.push_back(columnX[columnI[mIdx]]);
             // AdegenRValue[j] = columnX[columnI[j]];
             columnF[columnI[mIdx]] = 0;
             columnX[columnI[mIdx]] = 0;
@@ -213,34 +216,36 @@ void HighsOCAggregate::buildAmatrixExtended(){
         }
         // Add linking row entry for parent columns
         if (isParent[c]){
-            for (mIdx = parentStart[c]; mIdx < parentStart[c + 1]; ++mIdx){
-                elp.a_matrix_.index_[nnz] = mIdx;
+            for (mIdx = parentRow[c]; mIdx < parentRow[c + 1]; ++mIdx){
+                elp.a_matrix_.index_.push_back(mIdx);
                 // AdegenRIndex[nnzStan] = j;
-                elp.a_matrix_.value_[nnz++] = 1;
+                elp.a_matrix_.value_.push_back(1);
+                ++nnz;
                 // AdegenRValue[nnzStan++] = 1;
             }
         } 
         // Add linking row entry for child columns
         if (isChild[c]){
-            elp.a_matrix_.index_[nnz] = childRow[c];
+            elp.a_matrix_.index_.push_back(childRow[c]);
             // AdegenRIndex[nnzStan] = childRow[xi];
-            elp.a_matrix_.value_[nnz++] = -1;
+            elp.a_matrix_.value_.push_back(-1);
             // AdegenRValue[nnzStan++] = -1;
+            ++nnz;
         }
-        elp.a_matrix_.start_[c + 1] = nnz;
+        elp.a_matrix_.start_.push_back(nnz);
         // AdegenRStart[xi + 1] = nnzStan;
         start = nnz;
     }
     // Add linking row entry for residual columns
     for (iCol = 0; iCol < numResiduals; ++iCol){
-        elp.a_matrix_.index_[nnz] = residualRow[iCol];
+        elp.a_matrix_.index_.push_back(residualRow[iCol]);
         // AdegenRIndex[nnzStan] = residualRow[i];
-        elp.a_matrix_.value_[nnz++] = -1;
+        elp.a_matrix_.value_.push_back(-1);
         // AdegenRValue[nnzStan++] = -1;
-        elp.a_matrix_.start_[colCnt + iCol + 1] = nnz;
+        elp.a_matrix_.start_.push_back(++nnz);
         // AdegenRStart[elp.num_col_ + i + 1] = nnzStan;
     }
-    elp.a_matrix_.format_ = MatrixFormat::kColwise;\
+    elp.a_matrix_.format_ = MatrixFormat::kColwise;
     elp.a_matrix_.num_col_ = colCnt + numResiduals;
     elp.a_matrix_.num_row_ = rowCnt + numResiduals;
     elp.num_col_ = colCnt + numResiduals;
@@ -250,6 +255,73 @@ void HighsOCAggregate::buildAmatrixExtended(){
     elp.num_residual_cols_ = numResiduals;
     elp.num_residual_rows_ = numResiduals;
     elp.residual_cols_ = residualCol;
+}
+
+// Build A matrix with linkers if they exist
+void HighsOCAggregate::buildAmatrixExtendedNoResiduals(){
+    int iCol, cf, crep, clen, c;
+    int mIdx, ro, rf, r, rlen;
+    int nnzStan = 0, start = 0, startStan = 0;
+    nnz = 0;
+    double xlen, xv;
+    std::set<int>::iterator it;
+    presolvelp.a_matrix_.start_.push_back(0);
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        crep = colrep[iCol];
+        cf = colFront[iCol];
+        clen = ep.len[cf] + 1;
+        c = iCol;
+        for (mIdx = olp.a_matrix_.start_[crep]; mIdx < olp.a_matrix_.start_[crep + 1]; ++mIdx){
+            ro = olp.a_matrix_.index_[mIdx];
+            rf = ep.front[ro + numCol];
+            r = frontRow[rf];
+            rlen = ep.len[rf] + 1;
+            if (!columnF[r]++){ 
+                columnI[nnz++] = r;
+                // nnzStan++;
+            }
+            columnX[r] += olp.a_matrix_.value_[mIdx] * clen;
+        }
+        for (mIdx = start; mIdx < nnz; ++mIdx){
+            presolvelp.a_matrix_.index_.push_back(columnI[mIdx]);
+            // AdegenRIndex[j] = columnI[j];
+            presolvelp.a_matrix_.value_.push_back(columnX[columnI[mIdx]]);
+            // AdegenRValue[j] = columnX[columnI[j]];
+            columnF[columnI[mIdx]] = 0;
+            columnX[columnI[mIdx]] = 0;
+            columnI[mIdx] = 0;
+        }
+        // Add linking row entry for parent columns
+        if (isParent[c]){
+            for (mIdx = parentRow[c]; mIdx < parentRow[c + 1]; ++mIdx){
+                presolvelp.a_matrix_.index_.push_back(mIdx);
+                // AdegenRIndex[nnzStan] = j;
+                presolvelp.a_matrix_.value_.push_back(1);
+                ++nnz;
+                // AdegenRValue[nnzStan++] = 1;
+            }
+        } 
+        // Add linking row entry for child columns
+        if (isChild[c]){
+            presolvelp.a_matrix_.index_.push_back(childRow[c]);
+            // AdegenRIndex[nnzStan] = childRow[xi];
+            presolvelp.a_matrix_.value_.push_back(-1);
+            // AdegenRValue[nnzStan++] = -1;
+            ++nnz;
+        }
+        presolvelp.a_matrix_.start_.push_back(nnz);
+        // AdegenRStart[xi + 1] = nnzStan;
+        start = nnz;
+    }
+    presolvelp.a_matrix_.format_ = MatrixFormat::kColwise;
+    presolvelp.a_matrix_.num_col_ = colCnt;
+    presolvelp.a_matrix_.num_row_ = rowCnt + numResiduals;
+    presolvelp.num_col_ = colCnt;
+    presolvelp.num_row_ = rowCnt + numResiduals;
+    presolvelp.num_aggregate_cols_ = colCnt;
+    presolvelp.num_aggregate_rows_ = rowCnt;
+    presolvelp.num_residual_cols_ = 0;
+    presolvelp.num_residual_rows_ = numResiduals;
 }
 
 void HighsOCAggregate::checkAMatrix(){
@@ -365,6 +437,20 @@ void HighsOCAggregate::buildObjExtended(){
     elp.sense_ = olp.sense_;
 }
 
+void HighsOCAggregate::buildObjExtendedNoResiduals(){
+    int iCol, rep, cf;
+    double c, clen;
+    presolvelp.col_cost_.resize(colCnt);
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        rep = colrep[iCol];
+        cf = colFront[iCol];
+        clen = ep.len[cf] + 1;
+        c = olp.col_cost_[rep];
+        presolvelp.col_cost_[iCol] = clen * c;
+    }
+    presolvelp.sense_ = olp.sense_;
+}
+
 void HighsOCAggregate::buildRhs(){
     if (ep.level)
         buildRhsFromSolution();
@@ -377,6 +463,11 @@ void HighsOCAggregate::buildRhsExtended(){
         buildRhsFromSolutionExtended();
     else
         buildRhsFromScratchExtended();
+}
+
+void HighsOCAggregate::buildRhsExtendedNoResiduals(){
+    if (ep.level)
+        buildRhsFromSolutionExtendedNoResiduals();
 }
 
 void HighsOCAggregate::buildRhsFromScratch(){
@@ -475,6 +566,40 @@ void HighsOCAggregate::buildRhsFromSolutionExtended(){
     }
 }
 
+void HighsOCAggregate::buildRhsFromSolutionExtendedNoResiduals(){
+    int iRow, pr, rf, rpf, rlen, prlen, rep;
+    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
+    for (iRow = 0; iRow < rowCnt; ++iRow){
+        rep = rowrep[iRow];
+        rf = ep.front[rep];
+        rpf = epMinusOne.front[rep];
+        rlen = ep.len[rf] + 1;
+        pr = pFrontRow[rpf];
+        prlen = epMinusOne.len[rpf] + 1;
+        pv = (double)solution.row_value[pr]/prlen;
+        lb = olp.row_lower_[rep - numCol];
+        ub = olp.row_upper_[rep - numCol];
+        lbDiff = std::fabs(pv - lb);
+        ubDiff = std::fabs(pv - ub);
+        if (ubDiff < tol){
+            presolvelp.row_lower_[iRow] = ub * rlen;
+            presolvelp.row_upper_[iRow] = ub * rlen;
+        }
+        else if (lbDiff < tol){
+            presolvelp.row_lower_[iRow] = lb * rlen;
+            presolvelp.row_upper_[iRow] = lb * rlen;
+        }
+        else{
+            presolvelp.row_lower_[iRow] = lb * rlen;
+            presolvelp.row_upper_[iRow] = ub * rlen;
+        }
+    }
+    for (iRow = rowCnt; iRow < presolvelp.num_row_; ++iRow){
+        presolvelp.row_lower_[iRow] = 0;
+        presolvelp.row_upper_[iRow] = 0;
+    }
+}
+
 void HighsOCAggregate::buildBnds(){
     if (ep.level)
         buildBndsFromSolution();
@@ -487,6 +612,11 @@ void HighsOCAggregate::buildBndsExtended(){
         buildBndsFromSolutionExtended();
     else
         buildBndsFromScratchExtended();
+}
+
+void HighsOCAggregate::buildBndsExtendedNoResiduals(){
+    if (ep.level)
+        buildBndsFromSolutionExtendedNoResiduals();
 }
 
 void HighsOCAggregate::buildBndsFromScratch(){
@@ -572,8 +702,38 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
     for (iCol = colCnt; iCol < elp.num_col_; ++iCol){
         elp.col_lower_[iCol] = -kHighsInf;
         elp.col_upper_[iCol] = kHighsInf;
+        // elp.col_lower_[iCol] = 0;
+        // elp.col_upper_[iCol] = 0;
     }
-}   
+}  
+
+void HighsOCAggregate::buildBndsFromSolutionExtendedNoResiduals(){
+    int iCol, pc, cf, pcf, rep;
+    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        rep = colrep[iCol];
+        cf = ep.front[rep];
+        pcf = epMinusOne.front[rep];
+        pc = pFrontCol[pcf];
+        pv = solution.col_value[pc];
+        ub = olp.col_upper_[rep];
+        lb = olp.col_lower_[rep];
+        ubDiff = std::fabs(pv - ub);
+        lbDiff = std::fabs(pv - lb);
+        if (ubDiff < tol){
+            presolvelp.col_lower_[iCol] = ub;
+            presolvelp.col_upper_[iCol] = ub;
+        }
+        else if (lbDiff < tol){
+            presolvelp.col_lower_[iCol] = lb;
+            presolvelp.col_upper_[iCol] = lb;
+        }
+        else{
+            presolvelp.col_lower_[iCol] = lb;
+            presolvelp.col_upper_[iCol] = ub;
+        }
+    }
+} 
 
 void HighsOCAggregate::buildResiduals(){
     if (!ep.level) return;
@@ -588,11 +748,8 @@ void HighsOCAggregate::buildResidualLinks(){
     HighsBasisStatus basic = HighsBasisStatus::kBasic;
     std::pair<std::set<std::pair<int, int> >::iterator, bool> ret;
     numResiduals = 0;
-    // std::fill(parent.begin(), parent.end(), 0);
     std::fill(isParent.begin(), isParent.end(), 0);
-    std::fill(parentStart.begin(), parentStart.end(), 0);
-    // std::fill(parentFreq.begin(), parentFreq.end(), 0);
-    // std::fill(child.begin(), child.end(), 0);
+    std::fill(parentRow.begin(), parentRow.end(), 0);
     std::fill(isChild.begin(), isChild.end(), 0);
     std::fill(childRow.begin(), childRow.end(), 0);
     std::fill(residualRow.begin(), residualRow.end(), 0);
@@ -613,8 +770,8 @@ void HighsOCAggregate::buildResidualLinks(){
         splitCells[xOld].push_back(xNew);
     }
     for (const auto split : splitCells){
-        parentStart[split.first] = elpNumRow;
-        parentStart[split.first + 1] = elpNumRow + split.second.size();
+        parentRow[split.first] = elpNumRow;
+        parentRow[split.first + 1] = elpNumRow + split.second.size();
         for (int idx = 0; idx < split.second.size(); ++idx){
             int iCol = split.second.at(idx);
             childRow[iCol] = elpNumRow;
@@ -778,12 +935,143 @@ void HighsOCAggregate::copyPartition(){
     epMinusOne.len = ep.len;
 }
 
+void HighsOCAggregate::gramSchmidt(){
+    HighsSparseMatrix matrix = presolvelp.a_matrix_;
+    column_vi.setup(matrix.num_row_);
+    column_vj.setup(matrix.num_row_);
+    column_qi.setup(matrix.num_row_);
+    HighsInt i_col_1 = 0, i_col_2 = 0, inner_count = 0;
+    for (i_col_1 = 0; i_col_1 < matrix.num_col_ - 1; ++i_col_1){
+        column_qi.clear();
+        matrix.collectAj(column_qi, i_col_1, 1);
+        double two_norm = column_qi.norm2();
+        divideSparseVectorByScalar(column_qi, two_norm);
+        for (i_col_2 = i_col_1 + 1; i_col_2 < matrix.num_col_; ++i_col_2){
+            column_vj.clear();
+            matrix.collectAj(column_vj, i_col_2, 1);
+            double dot = sparseDotProduct(column_vj, column_qi);
+            double dot_recip = (double)1/dot;
+            divideSparseVectorByScalar(column_qi, dot_recip);
+            subtractSparseVector(column_vj, column_qi);
+            updateGramSchmidtMatrix(matrix, i_col_2, column_vj);
+            int fuck = 1;
+        }
+    }
+}
+
+void HighsOCAggregate::updateGramSchmidtMatrix(HighsSparseMatrix& matrix, HighsInt i_col, HVector& column_v){
+    std::vector<HighsInt>&start = matrix.start_;
+    std::vector<HighsInt>& index = matrix.index_;
+    std::vector<double>& value = matrix.value_;
+    HighsInt i_col_start = start[i_col];
+    HighsInt i_col_end = start[i_col + 1];
+    HighsInt i_col_nz = i_col_end - i_col_start;
+    HighsInt num_new_nz = column_v.count - i_col_nz;
+    HighsInt new_num_nz = column_v.count;
+    HighsInt insert_start = i_col_start;
+    HighsInt i_count;
+    HighsInt i_row;
+    double row_value;
+    if (num_new_nz > 0)
+        while(i_col < matrix.num_col_)
+            start[++i_col] += num_new_nz;
+    for (i_count = 0; i_count < new_num_nz; ++i_count){
+        i_row = column_v.index[i_count];
+        row_value = column_v.array[i_row];
+        if (i_count < i_col_nz){
+            index[insert_start] = i_row;
+            value[insert_start++] = row_value;
+        }
+        else{
+            index.insert(index.begin() + insert_start, i_row);
+            value.insert(value.begin() + insert_start++, row_value);
+        }
+    } 
+}
+
+void HighsOCAggregate::updateHVectorIndex(HVector& column_v, HighsInt insert, HighsInt idx){
+    HighsInt count = column_v.count;
+    std::vector<HighsInt>& index = column_v.index;
+    for (int i = column_v.count - 1; i >= insert; --i)
+        index.at(i + 1) = index.at(i);
+    index.at(insert) = idx;
+    column_v.count++;
+    int fuck = 1;
+}
+
+void HighsOCAggregate::divideSparseVectorByScalar(HVector& column_q, double scalar){
+    HighsInt i_row;
+    for (i_row = 0; i_row < column_q.count; ++i_row)
+        column_q.array[i_row] /= scalar;
+ }
+
+double HighsOCAggregate::sparseDotProduct(HVector& column_v, HVector& column_q){
+    HighsInt column_q_count = column_q.count;
+    HighsInt column_v_count = column_v.count;
+    HighsInt entry, v_index, q_index;
+    double v_value, q_value, dot;
+    if (column_v_count < column_q_count){
+        for (entry = 0; entry < column_v_count; ++entry){
+            v_index = column_v.index[entry];
+            q_index = column_q.index[entry];
+            v_value = column_v.array[v_index];
+            q_value = column_q.array[q_index];
+            dot += v_value * q_value;
+        }
+    }
+    else{
+        for (entry = 0; entry < column_q_count; ++entry){
+            v_index = column_v.index[entry];
+            q_index = column_q.index[entry];
+            v_value = column_v.array[v_index];
+            q_value = column_q.array[q_index];
+            dot += v_value * q_value;
+        }
+    }
+    return dot;
+}
+
+void HighsOCAggregate::subtractSparseVector(HVector& column_v, HVector& column_q){
+    HVector column_v_copy = column_v;
+    column_v.clear();
+    HighsInt column_q_count = column_q.count;
+    HighsInt entry;
+    HighsInt vector_index;
+    double vector_value;
+    HighsInt subtract_index;
+    double subtract_value;
+    for (entry = 0; entry < column_q_count; ++entry){
+        vector_index = column_q.index[entry];
+        vector_value = column_q.array[vector_index];
+        subtract_index = column_v_copy.index[entry];
+        subtract_value = column_v_copy.array[subtract_index];
+        column_v.index[column_v.count++] = vector_index;
+        column_v.array[vector_index] = column_v_copy.array[vector_index] - vector_value;
+    }
+    if (column_q.count < column_v_copy.count){
+        for (entry = 0; entry < column_v_copy.count; ++entry){
+            vector_index = column_v_copy.index[entry];
+            subtract_value = column_q.array[vector_index];
+            if (std::fabs(subtract_value) < 1e-6){
+                vector_value = column_v_copy.array[vector_index];
+                column_v.index[column_v.count++] = vector_index;
+                column_v.array[vector_index] = vector_value;
+            }
+        }
+    }
+    int fuck = 1;
+}
+
 HighsLp HighsOCAggregate::getLp(){
     return elp;
 }
 
 HighsLp HighsOCAggregate::getAggLp(){
     return agglp;
+}
+
+HighsLp HighsOCAggregate::getLpNoResiduals(){
+    return presolvelp;
 }
 
 HighsBasis HighsOCAggregate::getBasis(){

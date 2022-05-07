@@ -752,11 +752,13 @@ HighsStatus Highs::run() {
     returnFromRun(HighsStatus::kOk);
     passModel(alp_);
     zeroIterationCounts();
-    timer_.start(timer_.presolve_clock);
-    model_presolve_status_ = runPresolve();
-    timer_.stop(timer_.presolve_clock);
-    HighsLp& reduced_lp = presolve_.getReducedProblem();
-    reduced_lp.setMatrixDimensions();
+    // writeModel("../../debugBuild/testLpFiles/ALP.lp");
+    // timer_.start(timer_.presolve_clock);
+    // model_presolve_status_ = runPresolve();
+    // timer_.stop(timer_.presolve_clock);
+    // HighsLp& reduced_lp = presolve_.getReducedProblem();
+    // reduced_lp.setMatrixDimensions();
+    // writeModel("../../debugBuild/testLpFiles/presolveALP.lp");
     timer_.start(timer_.solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
@@ -776,15 +778,30 @@ HighsStatus Highs::run() {
         refinePartition();
         buildEALP();
         buildALP();
+        buildPEALP();
         getLiftedBasis();
         major_iterations = info_.orbital_crossover_major_iteration_count;
         minor_iterations = info_.orbital_crossover_minor_iteration_count;
         passModel(ealp_);
-        setBasis(ealpBasis_);
+        // setBasis(ealpBasis_);
         zeroIterationCounts();
+        writeModel("../../debugBuild/testLpFiles/EALP.lp");
         info_.orbital_crossover_major_iteration_count = major_iterations;
         info_.orbital_crossover_minor_iteration_count = minor_iterations;
-        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // timer_.start(timer_.presolve_clock);
+        // model_presolve_status_ = runPresolve(ealp_);
+        // timer_.stop(timer_.presolve_clock);
+        // HighsLp& reduced_lp = presolve_.getReducedProblem();
+        // reduced_lp.setMatrixDimensions();
+        // std::vector<HighsInt>& redundant_rows = presolve_.getRedundantRows();
+        // HFactor test_factor;
+        // test_factor.setup(ealp_.a_matrix_, initialBasicIndex_);
+        // test_factor.build();
+        // const HighsInt* factoredBasicIndex_ = test_factor.getBaseIndex();
+        // swapDependentColsOut(redundant_rows);
+        setBasis(ealpBasis_);
+        // passModel(reduced_lp);
+        // writeModel("../../debugBuild/testLpFiles/presolveEALP.lp");
         timer_.start(timer_.solve_clock);
         call_status =
             callSolveLp(ealp_, "Solving LP with Orbital Crossover");
@@ -2301,6 +2318,7 @@ void Highs::refinePartition(){
 
 void Highs::initializeAggregator(HighsLp& original_lp){
   aggregator_.passLpAndPartition(original_lp, partition_);
+  aggregator_.buildLp();
 }
 
 void Highs::buildALP(){
@@ -2311,6 +2329,10 @@ void Highs::buildEALP(){
   aggregator_.buildLp(partition_, alpBasis_, alpSolution_);
   // alp_ = aggregator_.getAggLp();
   ealp_ = aggregator_.getLp();
+}
+
+void Highs::buildPEALP(){
+  pealp_ = aggregator_.getLpNoResiduals();
 }
 
 void Highs::getCrashBasis(){
@@ -2348,11 +2370,39 @@ void Highs::trimOrbitalCrossoverSolution(){
   trimSolution.row_dual.resize(numAggregateRow);
 }
 
-
-
 void Highs::getLiftedBasis(){
   ealpBasis_ = aggregator_.getBasis();
   ealpBasis_.debug_origin_name = "EALP Start Basis";
+  initialBasicIndex_.clear();
+  int iCol, iRow;
+  for (iCol = 0; iCol < ealp_.num_col_; ++iCol)
+    if (ealpBasis_.col_status[iCol] == HighsBasisStatus::kBasic)
+      initialBasicIndex_.push_back(iCol);
+  for (iRow = 0; iRow < ealp_.num_row_; ++iRow)
+    if (ealpBasis_.row_status[iRow] == HighsBasisStatus::kBasic)
+      initialBasicIndex_.push_back(iRow + ealp_.num_col_);
+}
+
+void Highs::swapDependentColsOut(std::vector<HighsInt>& reduntant_rows){
+  HighsInt i_row, i_col;
+  HighsInt num_aggregate_rows = ealp_.num_aggregate_rows_;
+  HighsInt num_aggregate_cols = ealp_.num_aggregate_cols_;
+  HighsInt num_col = ealp_.num_col_;
+  for (i_col = num_aggregate_cols; i_col < num_col; ++i_col){
+    ealpBasis_.col_status[i_col] = HighsBasisStatus::kBasic;
+  }
+  for (int idx = 0; idx < reduntant_rows.size(); ++idx){
+    i_row = reduntant_rows[idx];
+    if (i_row < num_aggregate_rows && 
+      ealpBasis_.row_status[i_row] == HighsBasisStatus::kBasic){
+        ealpBasis_.row_status[i_row] = HighsBasisStatus::kNonbasic;
+    }
+    else if (i_row >= num_aggregate_rows){
+      HighsInt offset = i_row - num_aggregate_rows;
+      i_col = num_aggregate_cols + offset;
+      ealpBasis_.col_status[i_col] = HighsBasisStatus::kZero;
+    }
+  }
 }
 
 // Private methods
@@ -2371,6 +2421,98 @@ HighsPresolveStatus Highs::runPresolve() {
 
   // Ensure that the LP is column-wise
   HighsLp& original_lp = model_.lp_;
+  original_lp.ensureColwise();
+
+  if (original_lp.num_col_ == 0 && original_lp.num_row_ == 0)
+    return HighsPresolveStatus::kNullError;
+
+  // Clear info from previous runs if original_lp has been modified.
+  double start_presolve = timer_.readRunHighsClock();
+
+  // Set time limit.
+  if (options_.time_limit > 0 && options_.time_limit < kHighsInf) {
+    double left = options_.time_limit - start_presolve;
+    if (left <= 0) {
+      highsLogDev(options_.log_options, HighsLogType::kError,
+                  "Time limit reached while reading in matrix\n");
+      return HighsPresolveStatus::kTimeout;
+    }
+
+    highsLogDev(options_.log_options, HighsLogType::kVerbose,
+                "Time limit set: reading matrix took %.2g, presolve "
+                "time left: %.2g\n",
+                start_presolve, left);
+  }
+
+  // Presolve.
+  presolve_.init(original_lp, timer_);
+  presolve_.options_ = &options_;
+  if (options_.time_limit > 0 && options_.time_limit < kHighsInf) {
+    double current = timer_.readRunHighsClock();
+    double time_init = current - start_presolve;
+    double left = presolve_.options_->time_limit - time_init;
+    if (left <= 0) {
+      highsLogDev(options_.log_options, HighsLogType::kError,
+                  "Time limit reached while copying matrix into presolve.\n");
+      return HighsPresolveStatus::kTimeout;
+    }
+    highsLogDev(options_.log_options, HighsLogType::kVerbose,
+                "Time limit set: copying matrix took %.2g, presolve "
+                "time left: %.2g\n",
+                time_init, left);
+  }
+
+  HighsPresolveStatus presolve_return_status = presolve_.run();
+
+  highsLogDev(options_.log_options, HighsLogType::kVerbose,
+              "presolve_.run() returns status: %s\n",
+              presolve_.presolveStatusToString(presolve_return_status).c_str());
+
+  // Update reduction counts.
+  assert(presolve_return_status == presolve_.presolve_status_);
+  switch (presolve_.presolve_status_) {
+    case HighsPresolveStatus::kReduced: {
+      HighsLp& reduced_lp = presolve_.getReducedProblem();
+      presolve_.info_.n_cols_removed =
+          original_lp.num_col_ - reduced_lp.num_col_;
+      presolve_.info_.n_rows_removed =
+          original_lp.num_row_ - reduced_lp.num_row_;
+      presolve_.info_.n_nnz_removed = (HighsInt)original_lp.a_matrix_.numNz() -
+                                      (HighsInt)reduced_lp.a_matrix_.numNz();
+      // Clear any scaling information inherited by the reduced LP
+      reduced_lp.clearScale();
+      assert(lpDimensionsOk("RunPresolve: reduced_lp", reduced_lp,
+                            options_.log_options));
+      break;
+    }
+    case HighsPresolveStatus::kReducedToEmpty: {
+      presolve_.info_.n_cols_removed = original_lp.num_col_;
+      presolve_.info_.n_rows_removed = original_lp.num_row_;
+      presolve_.info_.n_nnz_removed = (HighsInt)original_lp.a_matrix_.numNz();
+      break;
+    }
+    default:
+      break;
+  }
+  return presolve_return_status;
+}
+
+// Private methods
+HighsPresolveStatus Highs::runPresolve(HighsLp& lp) {
+  presolve_.clear();
+  // Exit if the problem is empty or if presolve is set to off.
+  if (options_.presolve == kHighsOffString)
+    return HighsPresolveStatus::kNotPresolved;
+
+  // @FlipRowDual Side-stpe presolve until @leona has fixed it wrt row dual flip
+  const bool force_no_presolve = false;
+  if (force_no_presolve) {
+    printf("Forcing no presolve!!\n");
+    return HighsPresolveStatus::kNotPresolved;
+  }
+
+  // Ensure that the LP is column-wise
+  HighsLp& original_lp = lp;
   original_lp.ensureColwise();
 
   if (original_lp.num_col_ == 0 && original_lp.num_row_ == 0)

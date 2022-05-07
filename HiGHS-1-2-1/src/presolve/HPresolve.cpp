@@ -3840,6 +3840,13 @@ HPresolve::Result HPresolve::presolve(HighsPostsolveStack& postSolveStack) {
       }
     };
 
+    // if (options->solver == kOCString  && model->level){
+    //   storeCurrentProblemSize();
+    //   HPRESOLVE_CHECKED_CALL(removeDependentFreeCols(postSolveStack));
+    //   HPRESOLVE_CHECKED_CALL(removeDependentEquations(postSolveStack));
+    //   return Result::kOk;
+    // }
+
     HPRESOLVE_CHECKED_CALL(initialRowAndColPresolve(postSolveStack));
 
     HighsInt numParallelRowColCalls = 0;
@@ -4114,7 +4121,7 @@ void HPresolve::computeIntermediateMatrix(std::vector<HighsInt>& flagRow,
 
 HPresolve::Result HPresolve::removeDependentEquations(
     HighsPostsolveStack& postSolveStack) {
-  if (equations.empty()) return Result::kOk;
+    if (equations.empty()) return Result::kOk;
 
   HighsSparseMatrix matrix;
   matrix.num_col_ = equations.size();
@@ -4132,19 +4139,16 @@ HPresolve::Result HPresolve::removeDependentEquations(
   for (const std::pair<HighsInt, HighsInt>& p : equations) {
     HighsInt eq = p.second;
     eqSet[i++] = eq;
-
     // add entries of equation
     for (const HighsSliceNonzero& nonz : getRowVector(eq)) {
       matrix.value_.push_back(nonz.value());
       matrix.index_.push_back(nonz.index());
     }
-
     // add entry for artifical rhs column
     if (model->row_lower_[eq] != 0.0) {
       matrix.value_.push_back(model->row_lower_[eq]);
       matrix.index_.push_back(model->num_col_);
     }
-
     matrix.start_[i] = matrix.value_.size();
   }
   std::vector<HighsInt> colSet(matrix.num_col_);
@@ -4162,6 +4166,7 @@ HPresolve::Result HPresolve::removeDependentEquations(
       num_removed_nz += rowsize[redundant_row];
       postSolveStack.redundantRow(redundant_row);
       removeRow(redundant_row);
+      redundant_rows_.push_back(redundant_row);
     } else {
       num_fictitious_rows_skipped++;
     }

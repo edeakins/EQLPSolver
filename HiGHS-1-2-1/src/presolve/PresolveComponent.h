@@ -32,6 +32,7 @@ struct PresolveComponentData : public HighsComponentData {
   presolve::HighsPostsolveStack postSolveStack;
   HighsSolution recovered_solution_;
   HighsBasis recovered_basis_;
+  std::vector<HighsInt> redundant_rows_;
 
   void clear() {
     is_valid = false;
@@ -88,6 +89,7 @@ class PresolveComponent : public HighsComponent {
   HighsPresolveStatus run();
 
   HighsLp& getReducedProblem() { return data_.reduced_lp_; }
+  std::vector<HighsInt>& getRedundantRows() { return data_.redundant_rows_; }
 
   HighsStatus setOptions(const HighsOptions& options);
   std::string presolveStatusToString(const HighsPresolveStatus presolve_status);

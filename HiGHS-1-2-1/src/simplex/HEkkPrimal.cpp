@@ -710,12 +710,12 @@ void HEkkPrimal::orbitalCrossover(){
     if (solve_phase == kSolvePhase1) break;
     if (solve_phase == kSolvePhase2) break;
     for (;;) {
-      if (orbitalCrossoverVertexPoint() && 
-          residual_col < ekk_instance_.lp_.num_col_){
-        orbitalCrossoverHasAVertex = true;
-        ekk_instance_.info_.ready_for_crash_basis_construction = 1;
-        break;
-      }
+      // if (orbitalCrossoverVertexPoint() && 
+      //     residual_col < ekk_instance_.lp_.num_col_){
+      //   orbitalCrossoverHasAVertex = true;
+      //   ekk_instance_.info_.ready_for_crash_basis_construction = 1;
+      //   break;
+      // }
       iterate();
       if (ekk_instance_.bailoutOnTimeIterations()) return;
       if (solve_phase == kSolvePhaseError) return;
@@ -814,6 +814,7 @@ void HEkkPrimal::orbitalCrossover(){
 }
 
 bool HEkkPrimal::orbitalCrossoverVertexPoint(){
+  // return false;
   HighsInt numAggregateRow = ekk_instance_.lp_.num_aggregate_rows_;
   HighsInt numNonboundedAggregateVariables = 
       countNonboundedAggregateVariables();

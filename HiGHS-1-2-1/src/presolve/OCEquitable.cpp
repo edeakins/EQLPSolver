@@ -710,9 +710,17 @@ void HighsOCEquitablePartition::addInduce(int cf){
 }
 
 bool HighsOCEquitablePartition::discrete(){
-    return partition->nsplits == g->numTot_ ||
-           partition->ncsplits == g->numCol_ ||
-           partition->nrsplits == g->numRow_;
+    // if (partition->ncsplits == numColSets &&
+    //     partition->nrsplits == numRowSets)
+    //     return true;
+    // else{
+    //     numColSets = partition->ncsplits;
+    //     numRowSets = partition->nrsplits;
+    // }
+    // return partition->nsplits == g->numTot_ ||
+    //        partition->ncsplits == g->numCol_ ||
+    //        partition->nrsplits == g->numRow_;
+    return partition->nsplits == g->numTot_;
 }
 
 void HighsOCEquitablePartition::clear(){
