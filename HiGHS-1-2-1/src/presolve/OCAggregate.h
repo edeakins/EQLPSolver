@@ -63,9 +63,12 @@ public:
     // Perform dependent residuals test using gram-schmidt process to
     // remove linking variables and rows that are not needed
     void gramSchmidt();
+    void buildGramSchmidtExtendedMatrix();
     void updateGramSchmidtMatrix(HighsSparseMatrix& matrix, HighsInt i_col, HVector& column_v);
+    void markLinkerDeleted(HighsInt i_link);
+    void clearDeleteLinker();
     void updateHVectorIndex(HVector& column_v, HighsInt insert, HighsInt idx);
-    void divideSparseVectorByScalar(HVector& column_q, double scalar);
+    void divideSparseVectorByScalar(HVector& column_q, double scalar, HVector& column_temp);
     void subtractSparseVector(HVector& column_v, HVector& column_q);
     double sparseDotProduct(HVector& column_v, HVector& column_q);
     // Get parts of agg
@@ -140,8 +143,10 @@ public:
     std::set<int> rowReps;
     std::set<int> newRowReps;
     std::map<int, std::vector<int> > splitCells;
-
-    HVector column_vi, column_vj, column_qi;
+    // for gram schmidt
+    std::vector<HighsInt> deleteLink;
+    HighsSparseMatrix gs_matrix;
+    HVector column_vi, column_vj, column_qi, column_temp;
 };
 
 #endif

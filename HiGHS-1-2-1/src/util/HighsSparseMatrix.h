@@ -116,6 +116,8 @@ class HighsSparseMatrix {
                     const HighsInt use_col) const;
   void collectAj(HVector& column, const HighsInt use_col,
                  const double multiplier) const;
+  void collectAi(HVector& column, const HighsInt use_row, 
+                 const double multiplier) const;
 
  private:
   void priceByRowDenseResult(

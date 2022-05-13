@@ -1373,6 +1373,19 @@ double HighsSparseMatrix::computeDot(const std::vector<double>& array,
   return result;
 }
 
+void HighsSparseMatrix::collectAi(HVector& column, const HighsInt use_row,
+                                  const double multiplier) const {
+  assert(this->isColwise());
+  for (HighsInt iEl = this->start_[use_row]; iEl < this->start_[use_row + 1];
+        iEl++) {
+    HighsInt iCol = this->index_[iEl];
+    double value0 = column.array[iCol];
+    double value1 = value0 + multiplier * this->value_[iEl];
+    if (value0 == 0) column.index[column.count++] = iCol;
+    column.array[iCol] = (fabs(value1) < kHighsTiny) ? kHighsZero : value1;
+  }
+}
+
 void HighsSparseMatrix::collectAj(HVector& column, const HighsInt use_col,
                                   const double multiplier) const {
   assert(this->isColwise());

@@ -26,6 +26,10 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     elp.a_matrix_.start_.reserve(numCol + numTotResiduals +1);
     elp.a_matrix_.index_.reserve(nnz + 3 * numTotResiduals);
     elp.a_matrix_.value_.reserve(nnz + 3 * numTotResiduals);
+    gs_matrix.start_.reserve(numRow + numTotResiduals + numCol + 1);
+    gs_matrix.index_.reserve(nnz + 3 * numTotResiduals + numCol);
+    gs_matrix.value_.reserve(nnz + 3 * numTotResiduals + numCol);
+    
 
     // Allocate col and row pointers
     col.assign(numCol, -1);
@@ -47,6 +51,7 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     childRow.resize(numCol);
     residualCol.resize(numCol);
     residualRow.resize(numCol);
+    deleteLink.resize(numTotResiduals);
 }
 
 void HighsOCAggregate::resizeLpContainers(){
@@ -115,6 +120,7 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     buildAmatrix();
     buildAmatrixExtended();
     buildAmatrixExtendedNoResiduals();
+    buildGramSchmidtExtendedMatrix();
     gramSchmidt();
     // checkAMatrix();
     // buildStandardMatrix();
@@ -936,57 +942,125 @@ void HighsOCAggregate::copyPartition(){
 }
 
 void HighsOCAggregate::gramSchmidt(){
-    HighsSparseMatrix matrix = presolvelp.a_matrix_;
-    column_vi.setup(matrix.num_row_);
-    column_vj.setup(matrix.num_row_);
-    column_qi.setup(matrix.num_row_);
-    HighsInt i_col_1 = 0, i_col_2 = 0, inner_count = 0;
-    for (i_col_1 = 0; i_col_1 < matrix.num_col_ - 1; ++i_col_1){
+    clearDeleteLinker();
+    HighsSparseMatrix& matrix = gs_matrix;
+    column_vj.setup(matrix.num_col_);
+    column_qi.setup(matrix.num_col_);
+    column_temp.setup(matrix.num_col_);
+    HighsInt i_row_1 = 0, i_row_2 = 0, i_row, inner_count = 0;
+    for (i_row_1 = 0; i_row_1 < matrix.num_row_ - 1; ++i_row_1){
         column_qi.clear();
-        matrix.collectAj(column_qi, i_col_1, 1);
-        double two_norm = column_qi.norm2();
-        divideSparseVectorByScalar(column_qi, two_norm);
-        for (i_col_2 = i_col_1 + 1; i_col_2 < matrix.num_col_; ++i_col_2){
+        matrix.collectAi(column_qi, i_row_1, 1);
+        if (!column_qi.count) continue;
+        double two_norm = std::sqrt(column_qi.norm2());
+        divideSparseVectorByScalar(column_qi, two_norm, column_qi);
+        for (i_row_2 = i_row_1 + 1; i_row_2 < matrix.num_row_; ++i_row_2){
             column_vj.clear();
-            matrix.collectAj(column_vj, i_col_2, 1);
+            column_temp.clear();
+            matrix.collectAi(column_vj, i_row_2, 1);
+            if (!column_vj.count) continue;
             double dot = sparseDotProduct(column_vj, column_qi);
-            double dot_recip = (double)1/dot;
-            divideSparseVectorByScalar(column_qi, dot_recip);
-            subtractSparseVector(column_vj, column_qi);
-            updateGramSchmidtMatrix(matrix, i_col_2, column_vj);
-            int fuck = 1;
+            double dot_recip = std::fabs(dot) < kHighsTiny ? 0 : (double)1/dot;
+            if (i_row_1 == 6 && i_row_2 == 10){
+                divideSparseVectorByScalar(column_qi, dot_recip, column_temp);
+                subtractSparseVector(column_vj, column_temp);
+                updateGramSchmidtMatrix(matrix, i_row_2, column_vj);
+                int fuck_that_ass = 3;
+                continue;
+            }
+            divideSparseVectorByScalar(column_qi, dot_recip, column_temp);
+            subtractSparseVector(column_vj, column_temp);
+            updateGramSchmidtMatrix(matrix, i_row_2, column_vj);
+            int fuck = 2;
+        }
+        int fuck = 3;
+    }
+    HighsInt num_independent_rows = 0;
+    for (i_row = 0; i_row < matrix.num_row_; ++i_row){
+        if (matrix.start_[i_row + 1] - matrix.start_[i_row]){
+            num_independent_rows++;
         }
     }
+    int ass = 1;
 }
 
-void HighsOCAggregate::updateGramSchmidtMatrix(HighsSparseMatrix& matrix, HighsInt i_col, HVector& column_v){
-    std::vector<HighsInt>&start = matrix.start_;
+void HighsOCAggregate::buildGramSchmidtExtendedMatrix(){
+    HighsInt i_col, i, i_row;
+    gs_matrix.clear();
+    std::vector<HighsInt>& start = gs_matrix.start_;
+    std::vector<HighsInt>& index = gs_matrix.index_;
+    std::vector<double>& value = gs_matrix.value_;
+    HighsInt nonbasic_column_row_cnt = 0;
+    // for (i_col = 0; i_col < colCnt; ++i_col){
+    //     if (elpBasis.col_status.at(i_col) != HighsBasisStatus::kBasic){
+    //         index.push_back(i_col);
+    //         value.push_back(1);
+    //         start.push_back(value.size());
+    //         nonbasic_column_row_cnt++;
+    //     }
+    // }
+    HighsSparseMatrix matrix = presolvelp.a_matrix_;
+    presolvelp.a_matrix_.createRowwise(matrix);
+    presolvelp.a_matrix_.format_ = MatrixFormat::kColwise;
+    matrix = presolvelp.a_matrix_;
+    for (i_row = 0; i_row < matrix.num_row_; ++i_row){
+        for (i = matrix.start_[i_row]; i < matrix.start_[i_row + 1]; ++i){
+            index.push_back(matrix.index_[i]);
+            value.push_back(matrix.value_[i]);
+        }
+        start.push_back(value.size());
+    }
+    gs_matrix.format_ = MatrixFormat::kColwise;
+    gs_matrix.num_col_ = matrix.num_col_;
+    gs_matrix.num_row_ = matrix.num_row_ + nonbasic_column_row_cnt;
+    int ass = 1;
+}
+
+void HighsOCAggregate::updateGramSchmidtMatrix(HighsSparseMatrix& matrix, HighsInt i_row, HVector& column_v){
+    std::vector<HighsInt>& start = matrix.start_;
     std::vector<HighsInt>& index = matrix.index_;
     std::vector<double>& value = matrix.value_;
-    HighsInt i_col_start = start[i_col];
-    HighsInt i_col_end = start[i_col + 1];
-    HighsInt i_col_nz = i_col_end - i_col_start;
-    HighsInt num_new_nz = column_v.count - i_col_nz;
+    HighsInt i_row_start = start[i_row];
+    HighsInt i_row_end = start[i_row + 1];
+    HighsInt i_row_nz = i_row_end - i_row_start;
+    HighsInt num_new_nz = column_v.count - i_row_nz;
     HighsInt new_num_nz = column_v.count;
-    HighsInt insert_start = i_col_start;
+    HighsInt insert_start = i_row_start;
     HighsInt i_count;
-    HighsInt i_row;
-    double row_value;
-    if (num_new_nz > 0)
-        while(i_col < matrix.num_col_)
-            start[++i_col] += num_new_nz;
+    HighsInt i_col;
+    double col_value;
+    // if (!new_num_nz && i_row >= colCnt)
+    //     markLinkerDeleted(i_row);
+    if (num_new_nz != 0)
+        while(i_row < matrix.num_row_)
+            start[++i_row] += num_new_nz;
+    if (num_new_nz < 0){
+        value.erase(value.begin() + i_row_end + num_new_nz, value.begin() + i_row_end);
+        index.erase(index.begin() + i_row_end + num_new_nz, index.begin() + i_row_end);
+        int pussy = 1;
+        return;
+    }
     for (i_count = 0; i_count < new_num_nz; ++i_count){
-        i_row = column_v.index[i_count];
-        row_value = column_v.array[i_row];
-        if (i_count < i_col_nz){
-            index[insert_start] = i_row;
-            value[insert_start++] = row_value;
+        i_col = column_v.index[i_count];
+        col_value = column_v.array[i_col];
+        if (i_count < i_row_nz){
+            index[insert_start] = i_col;
+            value[insert_start++] = col_value;
         }
         else{
-            index.insert(index.begin() + insert_start, i_row);
-            value.insert(value.begin() + insert_start++, row_value);
+            index.insert(index.begin() + insert_start, i_col);
+            value.insert(value.begin() + insert_start++, col_value);
         }
     } 
+}
+
+void HighsOCAggregate::markLinkerDeleted(HighsInt i_col){
+    HighsInt linkIndex = i_col - colCnt;
+    deleteLink.at(linkIndex) = 1;
+}
+
+void HighsOCAggregate::clearDeleteLinker(){
+    std::fill(deleteLink.begin(), deleteLink.end(), 0);
 }
 
 void HighsOCAggregate::updateHVectorIndex(HVector& column_v, HighsInt insert, HighsInt idx){
@@ -996,34 +1070,42 @@ void HighsOCAggregate::updateHVectorIndex(HVector& column_v, HighsInt insert, Hi
         index.at(i + 1) = index.at(i);
     index.at(insert) = idx;
     column_v.count++;
-    int fuck = 1;
 }
 
-void HighsOCAggregate::divideSparseVectorByScalar(HVector& column_q, double scalar){
-    HighsInt i_row;
-    for (i_row = 0; i_row < column_q.count; ++i_row)
-        column_q.array[i_row] /= scalar;
+void HighsOCAggregate::divideSparseVectorByScalar(HVector& column_q, double scalar, HVector& column_temp){
+    HighsInt i_cnt;
+    std::vector<HighsInt>& q_index = column_q.index;
+    std::vector<double>& q_value = column_q.array;
+    std::vector<HighsInt>& temp_index = column_temp.index;
+    std::vector<double>& temp_value = column_temp.array;
+    column_temp.count = column_q.count;
+    if (!scalar){
+        column_temp.count = 0;
+        return;
+    }
+    for (i_cnt = 0; i_cnt < column_q.count; ++i_cnt){
+        temp_index[i_cnt] = q_index[i_cnt];
+        temp_value[temp_index[i_cnt]] = (double)q_value[q_index[i_cnt]] / scalar;
+    }
  }
 
 double HighsOCAggregate::sparseDotProduct(HVector& column_v, HVector& column_q){
     HighsInt column_q_count = column_q.count;
     HighsInt column_v_count = column_v.count;
     HighsInt entry, v_index, q_index;
-    double v_value, q_value, dot;
+    double v_value, q_value, dot = 0;
     if (column_v_count < column_q_count){
         for (entry = 0; entry < column_v_count; ++entry){
             v_index = column_v.index[entry];
-            q_index = column_q.index[entry];
             v_value = column_v.array[v_index];
-            q_value = column_q.array[q_index];
+            q_value = column_q.array[v_index];
             dot += v_value * q_value;
         }
     }
     else{
         for (entry = 0; entry < column_q_count; ++entry){
-            v_index = column_v.index[entry];
             q_index = column_q.index[entry];
-            v_value = column_v.array[v_index];
+            v_value = column_v.array[q_index];
             q_value = column_q.array[q_index];
             dot += v_value * q_value;
         }
@@ -1040,26 +1122,48 @@ void HighsOCAggregate::subtractSparseVector(HVector& column_v, HVector& column_q
     double vector_value;
     HighsInt subtract_index;
     double subtract_value;
-    for (entry = 0; entry < column_q_count; ++entry){
-        vector_index = column_q.index[entry];
-        vector_value = column_q.array[vector_index];
-        subtract_index = column_v_copy.index[entry];
-        subtract_value = column_v_copy.array[subtract_index];
-        column_v.index[column_v.count++] = vector_index;
-        column_v.array[vector_index] = column_v_copy.array[vector_index] - vector_value;
-    }
-    if (column_q.count < column_v_copy.count){
-        for (entry = 0; entry < column_v_copy.count; ++entry){
-            vector_index = column_v_copy.index[entry];
-            subtract_value = column_q.array[vector_index];
-            if (std::fabs(subtract_value) < 1e-6){
-                vector_value = column_v_copy.array[vector_index];
-                column_v.index[column_v.count++] = vector_index;
-                column_v.array[vector_index] = vector_value;
-            }
-        }
+    double final_value;
+    std::set<HighsInt> indices_union;
+    std::set<HighsInt>::iterator index;
+    for (entry = 0; entry < column_v_copy.count; ++entry)
+        indices_union.insert(column_v_copy.index[entry]);
+    for (entry = 0; entry < column_q.count; ++entry)
+        indices_union.insert(column_q.index[entry]);
+    for (index = indices_union.begin(); index != indices_union.end(); ++index){
+        vector_value = column_v_copy.array.at(*index);
+        subtract_value = column_q.array.at(*index);
+        final_value = vector_value - subtract_value;
+        if (std::fabs(final_value) < kHighsTiny)
+            continue;
+        column_v.index.at(column_v.count++) = *index;
+        column_v.array.at(*index) = final_value;
     }
     int fuck = 1;
+    // for (entry = 0; entry < column_q_count; ++entry){
+    //     vector_index = column_q.index[entry];
+    //     vector_value = column_q.array[vector_index];
+    //     subtract_index = column_v_copy.index[entry];
+    //     subtract_value = column_v_copy.array[subtract_index];
+    //     double test_value_for_zero = column_v_copy.array[vector_index] - vector_value;
+    //     if (std::fabs(test_value_for_zero) > 1e-6){
+    //         column_v.array[vector_index] = column_v_copy.array[vector_index] - vector_value;
+    //         column_v.index[column_v.count++] = vector_index;
+    //     }
+    //     else 
+    //         column_v.array[vector_index] = 0;
+    // }
+    // for (entry = 0; entry < column_v_copy.count; ++entry){
+    //     vector_index = column_v_copy.index[entry];
+    //     subtract_value = column_q.array[vector_index];
+    //     if (std::fabs(subtract_value) < 1e-6){
+    //         if (column_v.count >= column_v.index.size() || column_v.count < 0)
+    //             int fuck_her = 1;
+    //         vector_value = column_v_copy.array[vector_index];
+    //         column_v.index[column_v.count++] = vector_index;
+    //         column_v.array[vector_index] = vector_value;
+    //         int fuck = 1;
+    //     }
+    // }
 }
 
 HighsLp HighsOCAggregate::getLp(){
