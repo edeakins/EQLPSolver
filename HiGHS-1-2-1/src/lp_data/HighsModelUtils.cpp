@@ -134,6 +134,165 @@ std::string typeToString(const HighsVarType type) {
   return "";
 }
 
+HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo& info, bool header){
+  if (options.solver == kOCString){
+    if (header){
+      // Write the file header lines if the file is empty when opened
+      fprintf(file, "Instance,");
+      fprintf(file, "Compute EP,");
+      fprintf(file, "Build ALP,");
+      fprintf(file, "Solve ALP,");
+      fprintf(file, "Build ELP,");
+      fprintf(file, "Orbital Crossover,");
+      fprintf(file, "Solve (Total),");
+      fprintf(file, "Highs Run\n");
+      // Write instance name
+      std::stringstream instance_name;
+      instance_name << info.instance_name << ",";
+      fprintf(file, instance_name.str().c_str());
+      // Write the relevant times
+      std::stringstream time;
+      time.precision(2);
+      time << info.equitable_partition_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.build_alp_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.aggregate_solve_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.build_elp_iterative_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.orbital_crossover_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.solve_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.run_highs_time << "\n";
+      fprintf(file, time.str().c_str());
+    }
+    else{
+      // Write instance name
+      std::stringstream instance_name;
+      instance_name << info.instance_name << ",";
+      fprintf(file, instance_name.str().c_str());
+      // Write the relevant times
+      std::stringstream time;
+      time.precision(2);
+      time << info.equitable_partition_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.build_alp_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.aggregate_solve_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.build_elp_iterative_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.orbital_crossover_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.solve_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.run_highs_time << "\n";
+      fprintf(file, time.str().c_str());
+    }
+  }
+  else if (options.solver == kIpmString){
+    if (header){
+      // Write the file header lines if the file is empty when opened
+      fprintf(file, "Instance,");
+      fprintf(file, "IPM solve,");
+      fprintf(file, "Crossover,");
+      fprintf(file, "Solve,");
+      fprintf(file, "Highs run\n");
+      // Write instance name
+      std::stringstream instance_name;
+      instance_name << info.instance_name << ",";
+      fprintf(file, instance_name.str().c_str());
+      // Write the relevant times
+      std::stringstream time;
+      time.precision(2);
+      time << info.ipm_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.crossover_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.solve_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.run_highs_time << "\n";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+    }
+    else{
+      // Write instance name
+      std::stringstream instance_name;
+      instance_name << info.instance_name << ",";
+      fprintf(file, instance_name.str().c_str());
+      // Write the relevant times
+      std::stringstream time;
+      time.precision(2);
+      time << info.ipm_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.crossover_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.solve_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.run_highs_time << "\n";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+    }
+  }
+  else{
+    if (header){
+      // Write the file header lines if the file is empty when opened
+      fprintf(file, "Instance,");
+      fprintf(file, "Solve,");
+      fprintf(file, "Highs run\n");
+      // Write instance name
+      std::stringstream instance_name;
+      instance_name << info.instance_name << ",";
+      fprintf(file, instance_name.str().c_str());
+      // Write the relevant times
+      std::stringstream time;
+      time.precision(2);
+      time << info.solve_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.run_highs_time << "\n";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+    }
+    else{
+      // Write instance name
+      std::stringstream instance_name;
+      instance_name << info.instance_name << ",";
+      fprintf(file, instance_name.str().c_str());
+      // Write the relevant times
+      std::stringstream time;
+      time.precision(2);
+      time << info.solve_time << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.run_highs_time << "\n";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+    }
+  }
+  return HighsStatus::kOk;
+}
+
 void writeModelBoundSolution(
     FILE* file, const bool columns, const HighsInt dim,
     const std::vector<double>& lower, const std::vector<double>& upper,

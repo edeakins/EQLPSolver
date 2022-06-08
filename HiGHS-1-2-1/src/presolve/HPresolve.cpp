@@ -3847,7 +3847,7 @@ HPresolve::Result HPresolve::presolve(HighsPostsolveStack& postSolveStack) {
     //   return Result::kOk;
     // }
 
-    HPRESOLVE_CHECKED_CALL(initialRowAndColPresolve(postSolveStack));
+    HPRESOLVE_CHECKED_CALL(initialRowAndColPresolve(postSolveStack)); ////////////////////// Uncomment this ethan for original /////////////////
 
     HighsInt numParallelRowColCalls = 0;
 #if ENABLE_SPARSIFY_FOR_LP
@@ -3869,9 +3869,29 @@ HPresolve::Result HPresolve::presolve(HighsPostsolveStack& postSolveStack) {
         report();
       }
 
+      // /////////////////////////////////////  ETHAN REMOVE THIS //////////////////////
+      // storeCurrentProblemSize();
+      // HPRESOLVE_CHECKED_CALL(removeDependentEquations(postSolveStack));
+      // HPRESOLVE_CHECKED_CALL(removeDependentFreeCols(postSolveStack));
+      // currSize =
+      //     model->num_col_ - numDeletedCols + model->num_row_ - numDeletedRows;
+      // lastPrintSize = currSize;
+      // report();
+      // shrinkProblem(postSolveStack);
+
+      // toCSC(model->a_matrix_.value_, model->a_matrix_.index_,
+      //           model->a_matrix_.start_);
+      // fromCSC(model->a_matrix_.value_, model->a_matrix_.index_,
+      //             model->a_matrix_.start_);
+      // break;
+      // ////////////////////////////////////////////////////////////////////////////////
+
+
       HPRESOLVE_CHECKED_CALL(fastPresolveLoop(postSolveStack));
 
       storeCurrentProblemSize();
+      // HPRESOLVE_CHECKED_CALL(removeDependentEquations(postSolveStack));
+      // HPRESOLVE_CHECKED_CALL(removeDependentFreeCols(postSolveStack));
 
       // when presolving after a restart the clique table and implication
       // structure may contain substitutions which we apply directly before

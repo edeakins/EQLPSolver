@@ -299,6 +299,9 @@ bool HighsOCEquitablePartition::splitSinlgeCell(int cf){
 bool HighsOCEquitablePartition::split(int cf, int ff){
     // Track number of splits
     ++partition->nsplits;
+    // if (partition->ncsplits >= g->numCol_){
+    //     std::cin.get();
+    // }
     cf < g->numCol_ ? ++partition->ncsplits : ++partition->nrsplits;
     // Do splitting
     int cb, fb;
@@ -543,6 +546,17 @@ bool HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     // label.assign(partition->label.begin(), partition->label.end());
     // front.assign(partition->front.begin(), partition->front.end());
     // len.assign(partition->len.begin(), partition->len.end());
+    for (int i = 0; i < g->numTot_; ++i){
+        if (i < g->numCol_){
+            if (partition->front.at(i) >= g->numCol_)
+                std::cout << "bad col: " << i << std::endl;
+        }
+        else{
+            if (partition->front.at(i) < g->numCol_){
+                std::cout << "bad row: " << i - g->numCol_ << std::endl;
+            }
+        }
+    }
     refine();
     // for (int i = 0; i < g->numTot_; i += partition->len[i] + 1)
     //     sort(partition->label.begin() + i, partition->label.begin() + i + partition->len[i] + 1);

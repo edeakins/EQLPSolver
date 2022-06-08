@@ -150,6 +150,21 @@ struct HighsInfoStruct {
   HighsInt num_dual_infeasibilities;
   double max_dual_infeasibility;
   double sum_dual_infeasibilities;
+  // Highs times
+  double run_highs_time = 0;
+  double solve_time = 0;
+  // Highs dual times
+  double solve_dual_simplex_time = 0;
+  // Interior point times
+  double crossover_time = 0;
+  double ipm_time = 0;
+  // Orbital crossover times
+  double orbital_crossover_time = 0;
+  double aggregate_solve_time = 0;
+  double build_alp_time = 0;
+  double build_elp_iterative_time = 0;
+  double equitable_partition_time = 0;
+  std::string instance_name;
 };
 
 class HighsInfo : public HighsInfoStruct {

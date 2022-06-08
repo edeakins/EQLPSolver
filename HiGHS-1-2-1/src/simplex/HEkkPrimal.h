@@ -17,6 +17,8 @@
 #define SIMPLEX_HEKKPRIMAL_H_
 
 #include <utility>
+#include <fstream>
+#include <iostream>
 
 #include "simplex/HEkk.h"
 #include "util/HSet.h"

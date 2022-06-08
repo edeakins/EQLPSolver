@@ -28,18 +28,23 @@ class HighsLp {
   // Model data
   HighsInt num_col_;
   HighsInt num_row_;
+  HighsInt num_degenerate_cols_;
   HighsInt num_residual_cols_;
   HighsInt num_residual_rows_;
   HighsInt num_aggregate_cols_;
   HighsInt num_aggregate_rows_;
   HighsInt level;
-
+  std::vector<std::pair<int, int> > pairs; // remove when done debugging
+  
   std::vector<double> col_cost_;
   std::vector<double> col_lower_;
   std::vector<double> col_upper_;
   std::vector<double> row_lower_;
   std::vector<double> row_upper_;
-  std::vector<int> residual_cols_;
+  std::vector<int> residual_cols_; // remove when done debugging;
+  std::vector<int> degenerate_basic_rows; // remove when done debugging;
+  std::vector<int> degenerate_basic_index; // remove when done debugging;
+  std::vector<int> degenerate_basic_residuals; // remove when done debugging;
 
   HighsSparseMatrix a_matrix_;
 

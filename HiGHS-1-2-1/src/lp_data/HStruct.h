@@ -54,6 +54,8 @@ struct HotStart {
 };
 
 struct HighsBasis {
+  HighsInt num_basic_cols;
+  HighsInt num_basic_rows;
   bool valid = false;
   bool alien = true;
   bool was_alien = true;

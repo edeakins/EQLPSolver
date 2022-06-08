@@ -51,7 +51,13 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     childRow.resize(numCol);
     residualCol.resize(numCol);
     residualRow.resize(numCol);
-    deleteLink.resize(numTotResiduals);
+    delete_link.resize(numCol + numTotResiduals);
+    independent_row.resize(numRow + numTotResiduals);
+    gs_row_map.resize(numRow + numTotResiduals);
+    mark_degenerate.resize(numCol);
+    degenerate_basic_rows.resize(numRow + numTotResiduals);
+    degenerate_basic_index.resize(numRow + numTotResiduals);
+    degenerate_basic_residuals.resize(numCol + numTotResiduals);
 }
 
 void HighsOCAggregate::resizeLpContainers(){
@@ -72,6 +78,9 @@ void HighsOCAggregate::resizeLpContainers(){
     elp.a_matrix_.start_.resize(0);
     elp.a_matrix_.index_.resize(0);
     elp.a_matrix_.value_.resize(0);
+}
+
+void HighsOCAggregate::resizeGramSchmidtMatrixContainers(){
     presolvelp.col_cost_.resize(colCnt);
     presolvelp.col_upper_.resize(colCnt);
     presolvelp.col_lower_.resize(colCnt);
@@ -111,29 +120,40 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     prowCnt = rowCnt;
     buildColPointers();
     buildRowPointers();
+    markDegenerate();
     buildResidualLinks();
     resizeLpContainers();
     buildBasis(false, false);
-    buildObj();
     buildObjExtended();
-    buildObjExtendedNoResiduals();
-    buildAmatrix();
     buildAmatrixExtended();
-    buildAmatrixExtendedNoResiduals();
-    buildGramSchmidtExtendedMatrix();
-    gramSchmidt();
-    // checkAMatrix();
-    // buildStandardMatrix();
-    buildRhs();
     buildRhsExtended();
-    buildRhsExtendedNoResiduals();
-    buildBnds();
     buildBndsExtended();
-    buildBndsExtendedNoResiduals();
     copyPartition();
+    // if (ep.level == 1){
+    //     HighsInt num_col = elp.num_col_;
+    //     HighsInt num_row = elp.num_row_;
+    //     HighsInt num_basic = 0;
+    //     std::ofstream f;
+    //     f.open("../../debugBuild/ex9BasisResidualsSwappedIn.txt");
+    //     for (int i = 0; i < num_col + num_row; ++i){
+    //         if (i < num_col && elpBasis.col_status.at(i) == HighsBasisStatus::kBasic){
+    //             f << i << "\n";
+    //             num_basic++;
+    //         }
+    //         else if (i >= num_col && elpBasis.row_status.at(i - num_col) == HighsBasisStatus::kBasic){
+    //             f << i << "\n";
+    //             num_basic++;
+    //         }
+    //     }
+    //     f.close();
+    // }
     agglp.level = level;
-    elp.level = level;
+    elp.level = level; 
+    elp.degenerate_basic_rows = degenerate_basic_rows;
+    elp.degenerate_basic_index = degenerate_basic_index;
+    elp.degenerate_basic_residuals = degenerate_basic_residuals;
     presolvelp.level = level;
+    elp.pairs = pairs;
     ++level;
 }
 
@@ -157,6 +177,8 @@ void HighsOCAggregate::buildAmatrix(){
             r = frontRow[rf];
             rlen = ep.len[rf] + 1;
             if (!columnF[r]++){ 
+                if (nnz >= columnI.size())
+                    std::cin.get();
                 columnI[nnz++] = r;
                 // nnzStan++;
             }
@@ -253,14 +275,17 @@ void HighsOCAggregate::buildAmatrixExtended(){
     }
     elp.a_matrix_.format_ = MatrixFormat::kColwise;
     elp.a_matrix_.num_col_ = colCnt + numResiduals;
+    // elp.a_matrix_.num_col_ = colCnt;
     elp.a_matrix_.num_row_ = rowCnt + numResiduals;
     elp.num_col_ = colCnt + numResiduals;
+    // elp.num_col_ = colCnt;
     elp.num_row_ = rowCnt + numResiduals;
     elp.num_aggregate_cols_ = colCnt;
     elp.num_aggregate_rows_ = rowCnt;
+    // elp.num_residual_cols_ = 0;
     elp.num_residual_cols_ = numResiduals;
     elp.num_residual_rows_ = numResiduals;
-    elp.residual_cols_ = residualCol;
+    // elp.residual_cols_ = residualCol;
 }
 
 // Build A matrix with linkers if they exist
@@ -706,10 +731,13 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
         }
     }
     for (iCol = colCnt; iCol < elp.num_col_; ++iCol){
-        elp.col_lower_[iCol] = -kHighsInf;
-        elp.col_upper_[iCol] = kHighsInf;
-        // elp.col_lower_[iCol] = 0;
-        // elp.col_upper_[iCol] = 0;
+        // if (degenerate_basic_residuals.at(iCol)){
+        //     elp.col_lower_[iCol] = -kHighsInf;
+        //     elp.col_upper_[iCol] = kHighsInf;
+        //     continue;
+        // }
+        elp.col_lower_[iCol] = 0;
+        elp.col_upper_[iCol] = 0;
     }
 }  
 
@@ -760,8 +788,17 @@ void HighsOCAggregate::buildResidualLinks(){
     std::fill(childRow.begin(), childRow.end(), 0);
     std::fill(residualRow.begin(), residualRow.end(), 0);
     std::fill(residualCol.begin(), residualCol.end(), 0);
+    std::fill(degenerate_basic_rows.begin(), degenerate_basic_rows.end(), 0);
+    std::fill(degenerate_basic_index.begin(), degenerate_basic_index.end(), 0);
+    std::fill(degenerate_basic_residuals.begin(), degenerate_basic_residuals.end(), 0);
+    std::vector<int> residual_cols_;
+    std::vector<int> residual_to_old(numCol + numTotResiduals);
     int elpNumRow = rowCnt;
     int elpNumCol = colCnt;
+    int numSkipped = 0;
+    pairs.clear();
+    elp.residual_cols_.clear();
+    elp.num_degenerate_cols_ = colCnt;
     for (int iCol = pcolCnt; iCol < colCnt; ++iCol){
         xNew = iCol;
         rep = colrep[iCol];
@@ -769,21 +806,44 @@ void HighsOCAggregate::buildResidualLinks(){
         pcf = epMinusOne.front[rep];
         xOld = pFrontCol[pcf];
         oldRep = colrep[xOld];
-        if (basis.col_status[xOld] != basic) continue;
+        if (basis.col_status[xOld] != basic){ numSkipped++; continue; }
+        if (mark_degenerate.at(xOld)) { numSkipped++; continue; }
         if (xOld < minParent) minParent = xOld;
-        isParent[xOld] = 1;
-        isChild[xNew] = 1;
         splitCells[xOld].push_back(xNew);
     }
+    elpNumCol = colCnt;
     for (const auto split : splitCells){
+        isParent.at(split.first) = 1;
         parentRow[split.first] = elpNumRow;
         parentRow[split.first + 1] = elpNumRow + split.second.size();
         for (int idx = 0; idx < split.second.size(); ++idx){
             int iCol = split.second.at(idx);
+            if (mark_degenerate.at(split.first)){
+                degenerate_basic_rows.at(elpNumRow) = 1;
+                degenerate_basic_index.at(elpNumRow) = iCol;
+                degenerate_basic_residuals.at(elpNumCol) = 1;
+                elp.num_degenerate_cols_++;
+            }
+            isChild.at(iCol) = 1;
             childRow[iCol] = elpNumRow;
+            residual_cols_.push_back(elpNumCol);
+            residual_to_old.at(elpNumCol) = split.first;
             residualCol[numResiduals] = elpNumCol++;
             residualRow[numResiduals++] = elpNumRow++;
+            pairs.push_back(std::pair<int, int>(split.first, iCol));
         }
+    }
+    for (int iCol = 0; iCol < numResiduals; ++iCol){
+        int r_col = residual_cols_.at(iCol);
+        int x_col = residual_to_old.at(r_col);
+        if (mark_degenerate.at(x_col))
+            elp.residual_cols_.push_back(r_col);
+    }
+    for (int iCol = 0; iCol < numResiduals; ++iCol){
+        int r_col = residual_cols_.at(iCol);
+        int x_col = residual_to_old.at(r_col);
+        if (!mark_degenerate.at(x_col))
+            elp.residual_cols_.push_back(r_col);
     }
     splitCells.clear();
 }
@@ -808,7 +868,30 @@ void HighsOCAggregate::buildResidualRows(){
     }
 }
 
+void HighsOCAggregate::markDegenerate(){
+    std::fill_n(mark_degenerate.begin(), mark_degenerate.size(), 0);
+    HighsInt i_col;
+    // elp.num_degenerate_cols_ = elp.num_aggregate_cols_;
+    for (i_col = 0; i_col < pcolCnt; ++i_col){
+        HighsInt crep = colrep.at(i_col);
+        double lb = olp.col_lower_.at(crep);
+        double ub = olp.col_upper_.at(crep);
+        double value = solution.col_value.at(i_col);
+        HighsInt ub_test = std::fabs(value - ub) < kHighsTiny ? 1 : 0;
+        HighsInt lb_test = std::fabs(value - lb) < kHighsTiny ? 1 : 0;
+        // std::cout << std::fabs(value) << std::endl;
+        HighsInt basis_test = basis.col_status.at(i_col) == HighsBasisStatus::kBasic ? 1 : 0;
+        if ((ub_test || lb_test) && basis_test){
+            mark_degenerate.at(i_col) = 1;
+            // elp.num_degenerate_cols_++;
+        }
+        // if ((ub_test) && basis_test)
+        //     mark_degenerate.at(i_col) = 1;
+    }
+}
+
 void HighsOCAggregate::buildBasis(bool finish, bool extended){
+    num_basic = 0;
     buildColBasis();
     buildRowBasis();
 }
@@ -816,26 +899,37 @@ void HighsOCAggregate::buildBasis(bool finish, bool extended){
 void HighsOCAggregate::buildColBasis(){
     int iCol, pCol, pf, pc, crep, pcrep;
     HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
-    std::set<int> cols;
-    int numOldBasic = 0;
-    int numOldBasicToSplit = 0;
-    int numNewBasic = 0;
-    int numNonSingle = 0;
+    HighsBasisStatus nonbasic = HighsBasisStatus::kNonbasic;
     elpBasis.col_status.resize(colCnt + numResiduals);
+    // elpBasis.col_status.resize(colCnt);
     std::fill_n(elpBasis.col_status.begin(), elpBasis.col_status.size(), basic);
     for (iCol = 0; iCol < colCnt; ++iCol){
         crep = colrep[iCol];
         pf = epMinusOne.front[crep];
         pCol = pFrontCol[pf];
         status = basis.col_status[pCol];
+        if (mark_degenerate.at(iCol)){
+            elpBasis.col_status.at(iCol) = basic;
+            continue;
+        }
+        if (mark_degenerate.at(pCol)){
+            elpBasis.col_status.at(iCol) = nonbasic;
+            continue;
+        }
         elpBasis.col_status[iCol] = status;
     }
-    for (iCol = colCnt; iCol < colCnt + numResiduals; ++iCol)
+    HighsInt col_index = colCnt;
+    for (iCol = colCnt; iCol < colCnt + numResiduals; ++iCol){
+        // if (degenerate_basic_residuals.at(iCol)){
+        //     elpBasis.col_status.at(iCol) = HighsBasisStatus::kBasic;
+        //     continue;
+        // }
         elpBasis.col_status[iCol] = HighsBasisStatus::kLower;
-    for (iCol = pcolCnt; iCol < colCnt; ++iCol){
-        if (elpBasis.col_status[iCol] == HighsBasisStatus::kBasic)
-            numNewBasic++;
     }
+    // for (iCol = 0; iCol < colCnt + numResiduals; ++iCol){
+    //     if (elpBasis.col_status.at(iCol) == HighsBasisStatus::kBasic)
+    //         num_basic++;
+    // }
 }
 
 void HighsOCAggregate::buildRowBasis(){
@@ -857,6 +951,10 @@ void HighsOCAggregate::buildRowBasis(){
     for (iRow = rowCnt; iRow < rowCnt + numResiduals; ++iRow){
         elpBasis.row_status[iRow] = HighsBasisStatus::kLower;
     }
+    // for (iRow = 0; iRow < rowCnt + numResiduals; ++iRow){
+    //     if (elpBasis.row_status.at(iRow) == HighsBasisStatus::kBasic)
+    //         num_basic++;
+    // }
 }
 
 void HighsOCAggregate::buildResidualColBasis(){
@@ -941,8 +1039,34 @@ void HighsOCAggregate::copyPartition(){
     epMinusOne.len = ep.len;
 }
 
+void HighsOCAggregate::checkForBadNonBasics(HighsInt i_col){
+    std::set<int> nonbasics;
+    HighsSparseMatrix o_mat = elp.a_matrix_;
+    HighsSparseMatrix mat = elp.a_matrix_;
+    elp.a_matrix_.createRowwise(mat);
+    for (int i_row = 0; i_row < elp.num_row_; ++ i_row){
+        for (int idx = elp.a_matrix_.start_[i_row]; idx < elp.a_matrix_.start_[i_row + 1]; ++idx){
+            if (elp.a_matrix_.index_.at(idx) == i_col){
+               for (int id = elp.a_matrix_.start_[i_row]; id < elp.a_matrix_.start_[i_row + 1]; ++id){
+                   if (elpBasis.col_status.at(elp.a_matrix_.index_.at(id)) == HighsBasisStatus::kBasic)
+                    continue;
+                    int iCol = elp.a_matrix_.index_.at(id);
+                    int crep = colrep[iCol];
+                    int pf = epMinusOne.front[crep];
+                    int pCol = pFrontCol[pf];
+                    HighsBasisStatus status = basis.col_status[pCol];
+                    if (status == HighsBasisStatus::kBasic)
+                        nonbasics.insert(pCol);
+               } 
+            }
+        }
+    }
+    elp.a_matrix_.createColwise(o_mat);
+}
+
 void HighsOCAggregate::gramSchmidt(){
     clearDeleteLinker();
+    clearIndependentRow();
     HighsSparseMatrix& matrix = gs_matrix;
     column_vj.setup(matrix.num_col_);
     column_qi.setup(matrix.num_col_);
@@ -961,24 +1085,20 @@ void HighsOCAggregate::gramSchmidt(){
             if (!column_vj.count) continue;
             double dot = sparseDotProduct(column_vj, column_qi);
             double dot_recip = std::fabs(dot) < kHighsTiny ? 0 : (double)1/dot;
-            if (i_row_1 == 6 && i_row_2 == 10){
-                divideSparseVectorByScalar(column_qi, dot_recip, column_temp);
-                subtractSparseVector(column_vj, column_temp);
-                updateGramSchmidtMatrix(matrix, i_row_2, column_vj);
-                int fuck_that_ass = 3;
-                continue;
-            }
             divideSparseVectorByScalar(column_qi, dot_recip, column_temp);
             subtractSparseVector(column_vj, column_temp);
             updateGramSchmidtMatrix(matrix, i_row_2, column_vj);
-            int fuck = 2;
         }
-        int fuck = 3;
     }
     HighsInt num_independent_rows = 0;
     for (i_row = 0; i_row < matrix.num_row_; ++i_row){
+        if (i_row >= rowCnt && !(matrix.start_[i_row + 1] - matrix.start_[i_row])){
+            HighsInt i_link = i_row - rowCnt + colCnt;
+            markLinkerDeleted(i_link);
+        }
         if (matrix.start_[i_row + 1] - matrix.start_[i_row]){
             num_independent_rows++;
+            markRowIndependent(i_row);
         }
     }
     int ass = 1;
@@ -987,10 +1107,12 @@ void HighsOCAggregate::gramSchmidt(){
 void HighsOCAggregate::buildGramSchmidtExtendedMatrix(){
     HighsInt i_col, i, i_row;
     gs_matrix.clear();
+    std::fill(gs_row_map.begin(), gs_row_map.end(), -1);
     std::vector<HighsInt>& start = gs_matrix.start_;
     std::vector<HighsInt>& index = gs_matrix.index_;
     std::vector<double>& value = gs_matrix.value_;
     HighsInt nonbasic_column_row_cnt = 0;
+    HighsInt nonbasic_row_cnt = 0;
     // for (i_col = 0; i_col < colCnt; ++i_col){
     //     if (elpBasis.col_status.at(i_col) != HighsBasisStatus::kBasic){
     //         index.push_back(i_col);
@@ -1004,6 +1126,11 @@ void HighsOCAggregate::buildGramSchmidtExtendedMatrix(){
     presolvelp.a_matrix_.format_ = MatrixFormat::kColwise;
     matrix = presolvelp.a_matrix_;
     for (i_row = 0; i_row < matrix.num_row_; ++i_row){
+        if (i_row < prowCnt && basis.row_status[i_row] == HighsBasisStatus::kBasic)
+            continue;
+        // if (elpBasis.row_status[i_row] == HighsBasisStatus::kBasic) 
+        //     continue;
+        gs_row_map.at(nonbasic_row_cnt++) = i_row;
         for (i = matrix.start_[i_row]; i < matrix.start_[i_row + 1]; ++i){
             index.push_back(matrix.index_[i]);
             value.push_back(matrix.value_[i]);
@@ -1012,7 +1139,7 @@ void HighsOCAggregate::buildGramSchmidtExtendedMatrix(){
     }
     gs_matrix.format_ = MatrixFormat::kColwise;
     gs_matrix.num_col_ = matrix.num_col_;
-    gs_matrix.num_row_ = matrix.num_row_ + nonbasic_column_row_cnt;
+    gs_matrix.num_row_ = nonbasic_row_cnt + nonbasic_column_row_cnt;
     int ass = 1;
 }
 
@@ -1029,16 +1156,12 @@ void HighsOCAggregate::updateGramSchmidtMatrix(HighsSparseMatrix& matrix, HighsI
     HighsInt i_count;
     HighsInt i_col;
     double col_value;
-    // if (!new_num_nz && i_row >= colCnt)
-    //     markLinkerDeleted(i_row);
     if (num_new_nz != 0)
         while(i_row < matrix.num_row_)
             start[++i_row] += num_new_nz;
     if (num_new_nz < 0){
         value.erase(value.begin() + i_row_end + num_new_nz, value.begin() + i_row_end);
         index.erase(index.begin() + i_row_end + num_new_nz, index.begin() + i_row_end);
-        int pussy = 1;
-        return;
     }
     for (i_count = 0; i_count < new_num_nz; ++i_count){
         i_col = column_v.index[i_count];
@@ -1054,13 +1177,23 @@ void HighsOCAggregate::updateGramSchmidtMatrix(HighsSparseMatrix& matrix, HighsI
     } 
 }
 
-void HighsOCAggregate::markLinkerDeleted(HighsInt i_col){
-    HighsInt linkIndex = i_col - colCnt;
-    deleteLink.at(linkIndex) = 1;
+void HighsOCAggregate::markLinkerDeleted(HighsInt i_link){
+    num_deleted_links++;
+    delete_link.at(i_link) = 1;
+}
+
+void HighsOCAggregate::markRowIndependent(HighsInt i_row){
+    HighsInt real_index = gs_row_map.at(i_row);
+    independent_row.at(real_index) = 1;
 }
 
 void HighsOCAggregate::clearDeleteLinker(){
-    std::fill(deleteLink.begin(), deleteLink.end(), 0);
+    std::fill(delete_link.begin(), delete_link.end(), 0);
+    num_deleted_links = 0;
+}
+
+void HighsOCAggregate::clearIndependentRow(){
+    std::fill(independent_row.begin(), independent_row.end(), 0);
 }
 
 void HighsOCAggregate::updateHVectorIndex(HVector& column_v, HighsInt insert, HighsInt idx){
@@ -1133,7 +1266,7 @@ void HighsOCAggregate::subtractSparseVector(HVector& column_v, HVector& column_q
         vector_value = column_v_copy.array.at(*index);
         subtract_value = column_q.array.at(*index);
         final_value = vector_value - subtract_value;
-        if (std::fabs(final_value) < kHighsTiny)
+        if (std::fabs(final_value) < 1e-10)
             continue;
         column_v.index.at(column_v.count++) = *index;
         column_v.array.at(*index) = final_value;
@@ -1179,5 +1312,7 @@ HighsLp HighsOCAggregate::getLpNoResiduals(){
 }
 
 HighsBasis HighsOCAggregate::getBasis(){
+    // elpBasis.alien = false;
+    // elpBasis.was_alien = false;
     return elpBasis;
 }

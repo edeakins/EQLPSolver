@@ -56,6 +56,12 @@ int main(int argc, char** argv) {
 
   // Solve the model
   HighsStatus run_status = highs.run();
+  if (loaded_options.time_file != ""){
+    highs.populateTimesInInfo();
+    std::stringstream report_time_file;
+    report_time_file << "../../Timings/" << loaded_options.time_file << ".csv";
+    highs.writeTimes(report_time_file.str().c_str());
+  }
   if (run_status == HighsStatus::kError) return (int)run_status;
 
   // Possibly compute the ranging information

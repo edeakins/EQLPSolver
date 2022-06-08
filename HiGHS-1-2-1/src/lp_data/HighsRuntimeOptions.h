@@ -41,6 +41,9 @@ bool loadOptions(const HighsLogOptions& report_log_options, int argc,
         (kParallelString,
         "Parallel solve: \"choose\" by default - \"on\"/\"off\" are alternatives.",
         cxxopts::value<std::string>(parallel))
+        (kTimeFileString,
+        "File for writing run times of different methods.",
+        cxxopts::value<std::string>())
         (kTimeLimitString,
         "Run time limit (double).",
         cxxopts::value<double>())
@@ -108,6 +111,14 @@ bool loadOptions(const HighsLogOptions& report_log_options, int argc,
     if (result.count(kParallelString)) {
       std::string value = result[kParallelString].as<std::string>();
       if (setLocalOptionValue(report_log_options, kParallelString,
+                              options.log_options, options.records,
+                              value) != OptionStatus::kOk)
+        return false;
+    }
+
+    if (result.count(kTimeFileString)) {
+      std::string value = result[kTimeFileString].as<std::string>();
+      if (setLocalOptionValue(report_log_options, kTimeFileString,
                               options.log_options, options.records,
                               value) != OptionStatus::kOk)
         return false;

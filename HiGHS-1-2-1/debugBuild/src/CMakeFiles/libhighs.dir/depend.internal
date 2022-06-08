@@ -167,6 +167,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o
  ../src/util/HighsInt.h
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
+ ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
  /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/FilereaderMps.cpp
@@ -195,6 +196,7 @@ src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o
  ../src/util/HighsInt.h
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
+ ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
  /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/HMPSIO.cpp
@@ -624,6 +626,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o
  ../src/util/HighsInt.h
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
+ ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsModelUtils.cpp
  HConfig.h
@@ -2771,6 +2774,7 @@ src/CMakeFiles/libhighs.dir/model/HighsHessianUtils.cpp.o
  ../src/util/HighsSort.h
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
+ ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/model/HighsHessianUtils.cpp
  HConfig.h
@@ -3070,11 +3074,13 @@ src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o
  ../src/io/HighsIO.h
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
+ ../src/lp_data/HighsAnalysis.h
  ../src/lp_data/HighsLp.h
  ../src/lp_data/HighsOptions.h
  ../src/lp_data/HighsStatus.h
  ../src/simplex/SimplexConst.h
  ../src/simplex/SimplexStruct.h
+ ../src/util/HFactor.h
  ../src/util/HFactorConst.h
  ../src/util/HVector.h
  ../src/util/HVectorBase.h
@@ -3082,6 +3088,7 @@ src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o
  ../src/util/HighsInt.h
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
+ ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h

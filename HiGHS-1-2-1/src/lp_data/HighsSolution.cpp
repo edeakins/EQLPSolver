@@ -1077,6 +1077,7 @@ HighsStatus formSimplexLpBasisAndFactor(HighsLpSolverObject& solver_object,
 void accommodateAlienBasis(HighsLpSolverObject& solver_object) {
   HighsLp& lp = solver_object.lp_;
   HighsBasis& basis = solver_object.basis_;
+  HighsBasis original_basis = basis;
   HighsOptions& options = solver_object.options_;
   assert(basis.alien);
   HighsInt num_row = lp.num_row_;
@@ -1093,11 +1094,27 @@ void accommodateAlienBasis(HighsLpSolverObject& solver_object) {
       basic_index.push_back(num_col + iRow);
   }
   HighsInt num_basic_variables = basic_index.size();
-  HFactor factor;
+  HFactor factor; std::vector<HighsInt> basic_index_copy = basic_index;
   factor.setupGeneral(&lp.a_matrix_, num_basic_variables, &basic_index[0],
                       kDefaultPivotThreshold, kDefaultPivotTolerance,
                       kHighsDebugLevelMin, &options.log_options);
   HighsInt rank_deficiency = factor.build();
+  // for (int i = 0; i < num_col; ++i){
+  //   if (original_basis.col_status.at(i) != HighsBasisStatus::kBasic) continue;
+  //   std::vector<HighsInt>::iterator it = std::find(basic_index.begin(), basic_index.end(), i);
+  //   if (it == basic_index.end()){
+  //     std::cout << "col idx: " << *it << std::endl;
+  //     std::cin.get();
+  //   }
+  // }
+  // for (int i = 0; i < num_row; ++i){
+  //   if (original_basis.row_status.at(i) != HighsBasisStatus::kBasic) continue;
+  //   std::vector<HighsInt>::iterator it = std::find(basic_index.begin(), basic_index.end(), i + num_col);
+  //   if (it == basic_index.end()){
+  //     std::cout << "row idx: " << *it - num_col << std::endl;
+  //     std::cin.get();
+  //   }
+  // }
   // Deduce the basis from basic_index
   //
   // Set all basic variables to nonbasic
@@ -1131,6 +1148,9 @@ void accommodateAlienBasis(HighsLpSolverObject& solver_object) {
     num_basic_variables++;
   }
   assert(num_basic_variables == num_row);
+  // for (int i = 0; i < basic_index.size(); ++i)
+  //   if (basic_index.at(i) == 2575)
+  //     std::cout << i << std::endl;
 }
 
 void resetModelStatusAndHighsInfo(HighsLpSolverObject& solver_object) {

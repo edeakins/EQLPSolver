@@ -158,6 +158,7 @@ public:
     // @rowcounts, @colcounts: either NULL or size num_rows_solver arrays.
     // Returns -1 if no basis was available and 0 otherwise.
     Int SymbolicInvert(Int* rowcounts, Int* colcounts);
+    Info report_info_;
 
 private:
     void ClearSolution();

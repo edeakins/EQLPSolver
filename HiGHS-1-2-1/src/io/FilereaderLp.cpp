@@ -197,7 +197,7 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
   this->writeToFile(file, " obj: ");
   for (HighsInt i = 0; i < lp.num_col_; i++) {
     this->writeToFile(file, "%+g x%" HIGHSINT_FORMAT " ", lp.col_cost_[i],
-                      (i + 1));
+                      (i));
   }
   if (model.isQp()) {
     this->writeToFile(file, "+ [ ");
@@ -222,13 +222,13 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
   for (HighsInt row = 0; row < lp.num_row_; row++) {
     if (lp.row_lower_[row] == lp.row_upper_[row]) {
       // equality constraint
-      this->writeToFile(file, " con%" HIGHSINT_FORMAT ": ", row + 1);
+      this->writeToFile(file, " con%" HIGHSINT_FORMAT ": ", row );
       for (HighsInt var = 0; var < lp.num_col_; var++) {
         for (HighsInt idx = lp.a_matrix_.start_[var];
              idx < lp.a_matrix_.start_[var + 1]; idx++) {
           if (lp.a_matrix_.index_[idx] == row) {
             this->writeToFile(file, "%+g x%" HIGHSINT_FORMAT " ",
-                              lp.a_matrix_.value_[idx], var + 1);
+                              lp.a_matrix_.value_[idx], var);
           }
         }
       }
@@ -237,13 +237,13 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
     } else {
       if (lp.row_lower_[row] > -kHighsInf) {
         // has a lower bounds
-        this->writeToFile(file, " con%" HIGHSINT_FORMAT "lo: ", row + 1);
+        this->writeToFile(file, " con%" HIGHSINT_FORMAT "lo: ", row );
         for (HighsInt var = 0; var < lp.num_col_; var++) {
           for (HighsInt idx = lp.a_matrix_.start_[var];
                idx < lp.a_matrix_.start_[var + 1]; idx++) {
             if (lp.a_matrix_.index_[idx] == row) {
               this->writeToFile(file, "%+g x%" HIGHSINT_FORMAT " ",
-                                lp.a_matrix_.value_[idx], var + 1);
+                                lp.a_matrix_.value_[idx], var);
             }
           }
         }
@@ -251,13 +251,13 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
         this->writeToFileLineend(file);
       } else if (lp.row_upper_[row] < kHighsInf) {
         // has an upper bounds
-        this->writeToFile(file, " con%" HIGHSINT_FORMAT "up: ", row + 1);
+        this->writeToFile(file, " con%" HIGHSINT_FORMAT "up: ", row);
         for (HighsInt var = 0; var < lp.num_col_; var++) {
           for (HighsInt idx = lp.a_matrix_.start_[var];
                idx < lp.a_matrix_.start_[var + 1]; idx++) {
             if (lp.a_matrix_.index_[idx] == row) {
               this->writeToFile(file, "%+g x%" HIGHSINT_FORMAT " ",
-                                lp.a_matrix_.value_[idx], var + 1);
+                                lp.a_matrix_.value_[idx], var);
             }
           }
         }
@@ -277,19 +277,19 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
     // if both lower/upper bound are +/-infinite: [name] free
     if (lp.col_lower_[i] > -kHighsInf && lp.col_upper_[i] < kHighsInf) {
       this->writeToFile(file, " %+g <= x%" HIGHSINT_FORMAT " <= %+g",
-                        lp.col_lower_[i], i + 1, lp.col_upper_[i]);
+                        lp.col_lower_[i], i, lp.col_upper_[i]);
       this->writeToFileLineend(file);
     } else if (lp.col_lower_[i] <= -kHighsInf && lp.col_upper_[i] < kHighsInf) {
-      this->writeToFile(file, " -inf <= x%" HIGHSINT_FORMAT " <= %+g", i + 1,
+      this->writeToFile(file, " -inf <= x%" HIGHSINT_FORMAT " <= %+g", i,
                         lp.col_upper_[i]);
       this->writeToFileLineend(file);
 
     } else if (lp.col_lower_[i] > -kHighsInf && lp.col_upper_[i] >= kHighsInf) {
       this->writeToFile(file, " %+g <= x%" HIGHSINT_FORMAT " <= +inf",
-                        lp.col_lower_[i], i + 1);
+                        lp.col_lower_[i], i);
       this->writeToFileLineend(file);
     } else {
-      this->writeToFile(file, " x%" HIGHSINT_FORMAT " free", i + 1);
+      this->writeToFile(file, " x%" HIGHSINT_FORMAT " free", i);
       this->writeToFileLineend(file);
     }
   }
@@ -302,7 +302,7 @@ HighsStatus FilereaderLp::writeModelToFile(const HighsOptions& options,
       if (lp.integrality_[i] == HighsVarType::kInteger ||
           lp.integrality_[i] == HighsVarType::kSemiInteger) {
         if (lp.col_lower_[i] == 0.0 && lp.col_upper_[i] == 1.0) {
-          this->writeToFile(file, " x%" HIGHSINT_FORMAT, i + 1);
+          this->writeToFile(file, " x%" HIGHSINT_FORMAT, i);
           this->writeToFileLineend(file);
         }
       }

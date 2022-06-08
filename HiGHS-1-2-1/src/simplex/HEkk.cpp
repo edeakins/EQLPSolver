@@ -3348,6 +3348,7 @@ void HEkk::computeSimplexDualInfeasible() {
   num_dual_infeasibility = 0;
   max_dual_infeasibility = 0;
   sum_dual_infeasibility = 0;
+  // std::vector<HighsInt> infeas;
 
   for (HighsInt iCol = 0; iCol < lp_.num_col_ + lp_.num_row_; iCol++) {
     if (!basis_.nonbasicFlag_[iCol]) continue;
@@ -3367,6 +3368,7 @@ void HEkk::computeSimplexDualInfeasible() {
     if (dual_infeasibility > 0) {
       if (dual_infeasibility >= scaled_dual_feasibility_tolerance) {
         num_dual_infeasibility++;
+        // infeas.push_back(iCol);
       }
       max_dual_infeasibility =
           std::max(dual_infeasibility, max_dual_infeasibility);

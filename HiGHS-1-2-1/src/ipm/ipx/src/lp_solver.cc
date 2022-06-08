@@ -104,6 +104,7 @@ Int LpSolver::Solve() {
     control_.CloseLogfile();
     if (control_.reportBasisData())
       basis_->reportBasisData();
+      report_info_ = info_;
     return info_.status;
 }
 

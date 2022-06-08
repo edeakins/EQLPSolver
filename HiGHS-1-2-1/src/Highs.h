@@ -154,6 +154,14 @@ class Highs {
   HighsStatus checkSolutionFeasibility();
 
   /**
+   * @brief Write the times of interest to compare orbital crossover
+   * against other highs methods
+   * 
+   */
+  HighsStatus writeTimes(const std::string filename);
+  HighsStatus populateTimesInInfo();
+
+  /**
    * Methods for HiGHS option input/output
    */
 
@@ -1047,6 +1055,8 @@ class Highs {
 
   HighsStatus openWriteFile(const string filename, const string method_name,
                             FILE*& file, bool& html) const;
+  HighsStatus openTimeFile(const string filename, const string method_name, 
+                           FILE*& file, bool& html, bool& append) const;
 
   void reportModel();
   void newHighsBasis();
@@ -1195,6 +1205,7 @@ class Highs {
   void trimOrbitalCrossoverSolution();
   void trimOrbitalCrossoverBasis();
   void swapDependentColsOut(std::vector<HighsInt>& redundant_rows);
+  double measureChangeInPartitionSize(HighsLp& original_lp, OCPartition& old_partition);
   bool discrete = true;
   bool stop_highs_run_clock = true;
   bool running_orbital_crossover = false;

@@ -394,7 +394,7 @@ HighsInt HFactor::build(HighsTimerClock* factor_timer_clock_pointer) {
     // logical which replaces them
     buildHandleRankDeficiency();
     buildMarkSingC();
-    factor_timer.stop(FactorInvertDeficient, factor_timer_clock_pointer);
+   factor_timer.stop(FactorInvertDeficient, factor_timer_clock_pointer);
   }
   if (incomplete_basis) {
     // Completing the factorization is not relevant if the basis

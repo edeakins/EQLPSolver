@@ -21,6 +21,7 @@
 #include "util/HighsSort.h"
 
 using std::min;
+int num_degen = 0;
 
 HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
   // Initialise control data for a particular solve
@@ -235,6 +236,7 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
       info.primal_phase2_iteration_count +=
           (ekk_instance_.iteration_count_ - it0);
     } else if (solve_phase == kSolvePhaseOrbitalCrossover){
+      // residual_col = 0; // ekk_instance_.lp_.num_aggregate_cols_;
       residual_col = ekk_instance_.lp_.num_aggregate_cols_;
       orbitalCrossover();
       assert(solve_phase == kSolvePhaseOptimal || solve_phase == kSolvePhase1 ||
@@ -249,6 +251,53 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
              ekk_instance_.model_status_ == HighsModelStatus::kUnbounded);
       info.primal_phase2_iteration_count +=
           (ekk_instance_.iteration_count_ - it0);
+      // if (info.num_dual_infeasibilities){
+      //   highsLogDev(options.log_options, HighsLogType::kInfo,
+      //             "HEkkPrimal:: Using dual simplex to try to clean up num / "
+      //             "max / sum = %" HIGHSINT_FORMAT
+      //             " / %g / %g primal infeasibilities\n",
+      //             info.num_primal_infeasibilities, info.max_primal_infeasibility,
+      //             info.sum_primal_infeasibilities);
+      //   ekk_instance_.computePrimalObjectiveValue();
+      //   // Use dual to clean up. This almost always yields optimality,
+      //   // and shouldn't yield infeasiblilty - since the current point
+      //   // is dual feasible - but can yield
+      //   // unboundedness. Time/iteration limit return is, of course,
+      //   // possible, as are solver error
+      //   HighsStatus return_status = HighsStatus::kOk;
+      //   analysis->simplexTimerStart(SimplexDualPhase2Clock);
+      //   // Switch off any bound perturbation
+      //   double save_dual_simplex_cost_perturbation_multiplier =
+      //       info.dual_simplex_cost_perturbation_multiplier;
+      //   info.dual_simplex_cost_perturbation_multiplier = 0;
+      //   HighsInt simplex_strategy = info.simplex_strategy;
+      //   info.simplex_strategy = kSimplexStrategyDualPlain;
+      //   HEkkDual dual_solver(ekk_instance_);
+      //   HighsStatus call_status = dual_solver.solve(true);
+      //   // Restore any bound perturbation
+      //   info.dual_simplex_cost_perturbation_multiplier =
+      //       save_dual_simplex_cost_perturbation_multiplier;
+      //   info.simplex_strategy = simplex_strategy;
+      //   analysis->simplexTimerStop(SimplexDualPhase2Clock);
+      //   assert(ekk_instance_.called_return_from_solve_);
+      //   return_status = interpretCallStatus(options.log_options, call_status,
+      //                                       return_status, "HEkkDual::solve");
+      //   // Reset called_return_from_solve_ to be false, since it's
+      //   // called for this solve
+      //   ekk_instance_.called_return_from_solve_ = false;
+      //   if (return_status != HighsStatus::kOk)
+      //     return ekk_instance_.returnFromSolve(return_status);
+      //   if (ekk_instance_.model_status_ == HighsModelStatus::kOptimal &&
+      //       info.num_primal_infeasibilities + info.num_dual_infeasibilities)
+      //     highsLogDev(options.log_options, HighsLogType::kWarning,
+      //                 "HEkkPrimal:: Dual simplex clean up yields  optimality, but "
+      //                 "with %" HIGHSINT_FORMAT
+      //                 " (max %g) primal infeasibilities and " HIGHSINT_FORMAT
+      //                 " (max %g) dual infeasibilities\n",
+      //                 info.num_primal_infeasibilities,
+      //                 info.max_primal_infeasibility, info.num_dual_infeasibilities,
+      //                 info.max_dual_infeasibility);
+      // }
     } else {
       // Should only be kSolvePhase1 or kSolvePhase2
       ekk_instance_.model_status_ = HighsModelStatus::kSolveError;
@@ -1058,6 +1107,10 @@ void HEkkPrimal::iterate() {
       assert(rebuild_reason == kRebuildReasonPossiblySingularBasis);
     return;
   }
+  // else if (rebuild_reason == kRebuildReasonPossiblySingularBasis){
+  //   residual_col--;
+  //   return;
+  // }
   assert(!rebuild_reason);
 
   // Perform CHUZR
@@ -1074,6 +1127,23 @@ void HEkkPrimal::iterate() {
     chooseRow();
   }
   assert(!rebuild_reason);
+  // HighsInt basic_var_out = ekk_instance_.basis_.basicIndex_.at(row_out);
+  // if (variable_in >= ekk_instance_.lp_.num_aggregate_cols_ &&
+  //     variable_in < ekk_instance_.lp_.num_col_){
+  //   if (basic_var_out < ekk_instance_.lp_.num_col_ && 
+  //       ekk_instance_.lp_.col_lower_.at(basic_var_out) == 
+  //       ekk_instance_.lp_.col_upper_.at(basic_var_out)){
+  //     int offset = variable_in - ekk_instance_.lp_.num_aggregate_cols_;
+  //     int xPar = ekk_instance_.lp_.pairs.at(offset).first;
+  //     int xChi = ekk_instance_.lp_.pairs.at(offset).second;
+  //     if (basic_var_out != xChi &&
+  //         basic_var_out != xPar){
+  //           std::cout << "r: " << variable_in << std::endl;
+  //           std::cout << "x/s: " << basic_var_out << std::endl;
+  //           int ass = 3;
+  //         }
+  //   }
+  // }
 
   // Consider whether to perform a bound swap - either because it's
   // shorter than the pivoting step or, in the case of Phase 1,
@@ -1098,9 +1168,12 @@ void HEkkPrimal::iterate() {
     assessPivot();
     if (rebuild_reason) {
       assert(rebuild_reason == kRebuildReasonPossiblySingularBasis);
+      if (solve_phase == kSolvePhaseOrbitalCrossover)
+        residual_col--;
       return;
     }
   }
+  
 
   if (isBadBasisChange()) return;
 
@@ -1253,6 +1326,32 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
     }
   } else if (local_use_residual_chuzc){
     variable_in = num_col == residual_col ? -1 : residual_col++;
+    // residual_col++;
+    // if (residual_col + ekk_instance_.lp_.num_aggregate_cols_ < ekk_instance_.lp_.num_col_){
+    //   variable_in = ekk_instance_.lp_.residual_cols_.at(residual_col);
+    //   residual_col++;
+    // }
+    if (variable_in != -1){
+      ekk_instance_.info_.workLower_.at(variable_in) = -kHighsInf;
+      ekk_instance_.info_.workUpper_.at(variable_in) = +kHighsInf;
+    }
+    // if (residual_col > ekk_instance_.lp_.num_degenerate_cols_ - ekk_instance_.lp_.num_aggregate_cols_){
+    //   // std::cout << "num_degen: " << num_degen << std::endl;
+    //   // int fuck = 7;
+    //   std::ofstream f;
+    //   f.open("../../debugBuild/ex9GoodBasisAfterDegenPivots.txt");
+    //   for (int i = 0; i < ekk_instance_.basis_.basicIndex_.size(); ++i){
+    //     // if (ekk_instance_.basis_.basicIndex_.at(i) < ekk_instance_.lp_.num_col_ &&
+    //     //   ekk_instance_.lp_.degenerate_basic_residuals.at(ekk_instance_.basis_.basicIndex_.at(i)))
+    //     //   continue;
+    //     f << ekk_instance_.basis_.basicIndex_.at(i) << "\n";
+    //   }
+    //   f.close();
+    //   std::cout << "num_degen: " << num_degen << std::endl;
+    // }
+    // if (variable_in == num_col - 1){
+    //     std::cout << "variable_in: " << variable_in << std::endl;
+    // }
   } else {
     analysis->simplexTimerStart(ChuzcPrimalClock);
     // Choose any attractive nonbasic free column
@@ -1330,7 +1429,7 @@ bool HEkkPrimal::useVariableIn() {
   // so reduce the number of dual infeasiblilities. Otherwise an error
   // is identified in debugSimplex
   if (theta_dual_small) ekk_instance_.info_.num_dual_infeasibilities--;
-  if (solve_phase == kSolvePhaseOrbitalCrossover)
+  // if (solve_phase == kSolvePhaseOrbitalCrossover)
     return true;
   if (theta_dual_small || theta_dual_sign_error) {
     // The computed dual is small or has a sign error, so don't use it
@@ -1539,6 +1638,26 @@ void HEkkPrimal::chooseRow() {
       }
     }
   }
+  if (ekk_instance_.lp_.degenerate_basic_residuals.at(variable_in)){
+    // row_out = variable_in - ekk_instance_.lp_.num_aggregate_cols_ + ekk_instance_.lp_.num_aggregate_rows_;
+    // std::cout << "column_in: " << variable_in << std::endl;
+    // std::cout << "row_out: " << row_out << std::endl;
+    // std::cout << "column_out: " << ekk_instance_.basis_.basicIndex_.at(row_out) << std::endl;
+    // std::cout << "\n" << std::endl;
+    // if (ekk_instance_.basis_.basicIndex_.at(row_out) == 7712){
+    //   std::cin.get();
+    // }
+    // // int row_of_variable_in = variable_in - ekk_instance_.lp_.num_aggregate_cols_ + ekk_instance_.lp_.num_aggregate_rows_;
+    // // if (row_out != row_of_variable_in){
+    // // std::cout << "variable out: " << ekk_instance_.basis_.basicIndex_.at(row_out) << std::endl;
+    // // std::cout << "row of r variable in: " << row_of_variable_in << std::endl;
+    // // std::cout << "row out: " << row_out << std::endl;
+    // // std::cout << "\n" << std::endl;
+    // // }
+    // num_degen++;
+  }
+  // std::cout << "num_degen: " << num_degen << std::endl;
+  // std::cin.get();
   analysis->simplexTimerStop(Chuzr2Clock);
 }
 
@@ -2870,7 +2989,7 @@ void HEkkPrimal::updateVerify() {
                 ekk_instance_.iteration_count_, alpha_col,
                 alpha_row_source.c_str(), alpha_row, abs_alpha_diff,
                 numericalTrouble);
-  assert(numericalTrouble < 1e-3);
+  // assert(numericalTrouble < 1e-3);
   // Reinvert if the relative difference is large enough, and updates have been
   // performed
   //

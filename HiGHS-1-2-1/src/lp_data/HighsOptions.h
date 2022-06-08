@@ -255,6 +255,7 @@ const string kModelFileString = "model_file";
 const string kPresolveString = "presolve";
 const string kSolverString = "solver";
 const string kParallelString = "parallel";
+const string kTimeFileString = "report_time_file";
 const string kTimeLimitString = "time_limit";
 const string kOptionsFileString = "options_file";
 const string kRandomSeedString = "random_seed";
@@ -271,6 +272,7 @@ struct HighsOptionsStruct {
   std::string solver;
   std::string parallel;
   std::string ranging;
+  std::string time_file;
   double time_limit;
 
   // Options read from the file
@@ -438,6 +440,11 @@ class HighsOptions : public HighsOptionsStruct {
     record_string = new OptionRecordString(
         kParallelString, "Parallel option: \"off\", \"choose\" or \"on\"",
         advanced, &parallel, kHighsChooseString);
+    records.push_back(record_string);
+
+    record_string =
+        new OptionRecordString(kTimeFileString, "Time file", advanced,
+                               &time_file, kHighsFilenameDefault);
     records.push_back(record_string);
 
     record_double =

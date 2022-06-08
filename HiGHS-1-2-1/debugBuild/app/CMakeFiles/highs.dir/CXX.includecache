@@ -285,6 +285,10 @@ util/HighsMatrixSlice.h
 ../src/presolve/util/HighsMatrixSlice.h
 
 ../src/presolve/OCAggregate.h
+iostream
+-
+fstream
+-
 string
 -
 set
@@ -293,6 +297,8 @@ HighsLp.h
 ../src/presolve/HighsLp.h
 OCEquitable.h
 ../src/presolve/OCEquitable.h
+HFactor.h
+../src/presolve/HFactor.h
 
 ../src/presolve/OCEquitable.h
 map

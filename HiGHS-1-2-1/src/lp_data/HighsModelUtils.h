@@ -22,6 +22,7 @@
 #include "lp_data/HighsInfo.h"
 #include "lp_data/HighsLp.h"
 #include "lp_data/HighsOptions.h"
+#include "util/HighsTimer.h"
 
 // Analyse lower and upper bounds of a model
 void analyseModelBounds(const HighsLogOptions& log_options, const char* message,
@@ -40,6 +41,8 @@ void writeModelBoundSolution(
     const HighsVarType* integrality = NULL);
 void writeModelSolution(FILE* file, const HighsLp& lp,
                         const HighsSolution& solution, const HighsInfo& info);
+
+HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo& info, bool header);
 
 HighsInt maxNameLength(const HighsInt num_name,
                        const std::vector<std::string>& names);
