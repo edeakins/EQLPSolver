@@ -29,7 +29,9 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     gs_matrix.start_.reserve(numRow + numTotResiduals + numCol + 1);
     gs_matrix.index_.reserve(nnz + 3 * numTotResiduals + numCol);
     gs_matrix.value_.reserve(nnz + 3 * numTotResiduals + numCol);
-    
+    splitFrom.resize(numCol);
+    splitFromNonbasicCount.resize(numCol);
+    splitSize.resize(numCol);
 
     // Allocate col and row pointers
     col.assign(numCol, -1);
@@ -120,6 +122,7 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     prowCnt = rowCnt;
     buildColPointers();
     buildRowPointers();
+    trackAndCountSplits();
     markDegenerate();
     buildResidualLinks();
     resizeLpContainers();
@@ -910,12 +913,21 @@ void HighsOCAggregate::buildColBasis(){
         status = basis.col_status[pCol];
         if (mark_degenerate.at(iCol)){
             elpBasis.col_status.at(iCol) = basic;
+            splitFromNonbasicCount.at(pCol)++;
             continue;
         }
         if (mark_degenerate.at(pCol)){
             elpBasis.col_status.at(iCol) = nonbasic;
             continue;
         }
+        // if (mark_degenerate.at(pCol) && splitFromNonbasicCount.at(pCol) < splitSize.at(pCol) - 1){
+        //     elpBasis.col_status.at(iCol) = nonbasic;
+        //     continue;
+        // }
+        // if (mark_degenerate.at(pCol)){
+        //     elpBasis.col_status.at(iCol) = basic;
+        //     continue;
+        // }
         elpBasis.col_status[iCol] = status;
     }
     HighsInt col_index = colCnt;
@@ -1018,6 +1030,20 @@ void HighsOCAggregate::buildRowPointers(){
             rowrep[rowCnt] = i;
             row[i - numCol] = rowCnt++;
         }
+    }
+}
+
+void HighsOCAggregate::trackAndCountSplits(){
+    std::fill_n(splitFrom.begin(), numCol, -1);
+    std::fill_n(splitSize.begin(), numCol, 0);
+    std::fill_n(splitFromNonbasicCount.begin(), numCol, 0);
+    for (int i_col = 0; i_col < colCnt; ++i_col){
+        int crep = colrep[i_col];
+        int pf = epMinusOne.front[crep];
+        int p_col = pFrontCol[pf];
+        if (p_col != i_col)
+            splitFrom.at(i_col) = p_col;
+        splitSize.at(p_col)++;
     }
 }
 

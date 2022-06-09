@@ -53,6 +53,7 @@ public:
     // Build vectors containing the representative of an aggregate column/row
     void buildRowPointers();
     void buildColPointers();
+    void trackAndCountSplits();
     // Build Highs basis vectors for EALP
     void markDegenerate();
     void buildBasis(bool finish, bool extended);
@@ -123,6 +124,9 @@ public:
     std::vector<int> rowrep;
     std::vector<int> prow;
     std::vector<int> prowrep;
+    std::vector<int> splitFrom;
+    std::vector<int> splitFromNonbasicCount;
+    std::vector<int> splitSize;
     std::vector<double> columnX;
     std::vector<int> columnI;
     std::vector<int> columnF;

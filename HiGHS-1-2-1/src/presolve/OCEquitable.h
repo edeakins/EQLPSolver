@@ -79,6 +79,7 @@ public:
     bool discrete();
     /* clear out induce info at the end of a ep */
     void clear();
+    void countColAndRowSplits();
     /* //////////////////////////////////////////////////////////////
     BERKHOLZ INSPIRED 
     ///////////////////////////////////////////////////////////// */
