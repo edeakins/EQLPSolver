@@ -26,9 +26,6 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     elp.a_matrix_.start_.reserve(numCol + numTotResiduals +1);
     elp.a_matrix_.index_.reserve(nnz + 3 * numTotResiduals);
     elp.a_matrix_.value_.reserve(nnz + 3 * numTotResiduals);
-    gs_matrix.start_.reserve(numRow + numTotResiduals + numCol + 1);
-    gs_matrix.index_.reserve(nnz + 3 * numTotResiduals + numCol);
-    gs_matrix.value_.reserve(nnz + 3 * numTotResiduals + numCol);
     splitFrom.resize(numCol);
     splitFromNonbasicCount.resize(numCol);
     splitSize.resize(numCol);
@@ -42,6 +39,7 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     colFront.assign(numCol, -1);
     frontRow.assign(numRow + numCol, -1);
     rowFront.assign(numRow + numCol, -1);
+    frontMin.assign(numCol + numRow, -1);
     // Allocate temp column storage
     columnI.resize(nnz + numTotResiduals * 3);
     columnX.resize(numRow);
@@ -53,9 +51,6 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     childRow.resize(numCol);
     residualCol.resize(numCol);
     residualRow.resize(numCol);
-    delete_link.resize(numCol + numTotResiduals);
-    independent_row.resize(numRow + numTotResiduals);
-    gs_row_map.resize(numRow + numTotResiduals);
     mark_degenerate.resize(numCol);
     degenerate_basic_rows.resize(numRow + numTotResiduals);
     degenerate_basic_index.resize(numRow + numTotResiduals);
@@ -94,6 +89,7 @@ void HighsOCAggregate::resizeGramSchmidtMatrixContainers(){
 }
 
 void HighsOCAggregate::buildLp(){
+    findFrontMins();
     buildColPointers();
     buildRowPointers();
     resizeLpContainers();
@@ -108,7 +104,7 @@ void HighsOCAggregate::buildLp(){
 }
 
 void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
-                               HighsSolution& s){
+                               HighsSolution& s, std::vector<HighsInt>& basic_index){
     ep = partition;
     basis = b;
     solution = s;
@@ -120,6 +116,8 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     pcolCnt = colCnt;
     pFrontRow = frontRow;
     prowCnt = rowCnt;
+    basic_index_ = basic_index;
+    findFrontMins();
     buildColPointers();
     buildRowPointers();
     trackAndCountSplits();
@@ -131,30 +129,11 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     buildAmatrixExtended();
     buildRhsExtended();
     buildBndsExtended();
+    buildRowNames();
+    buildColNames();
     copyPartition();
-    // if (ep.level == 1){
-    //     HighsInt num_col = elp.num_col_;
-    //     HighsInt num_row = elp.num_row_;
-    //     HighsInt num_basic = 0;
-    //     std::ofstream f;
-    //     f.open("../../debugBuild/ex9BasisResidualsSwappedIn.txt");
-    //     for (int i = 0; i < num_col + num_row; ++i){
-    //         if (i < num_col && elpBasis.col_status.at(i) == HighsBasisStatus::kBasic){
-    //             f << i << "\n";
-    //             num_basic++;
-    //         }
-    //         else if (i >= num_col && elpBasis.row_status.at(i - num_col) == HighsBasisStatus::kBasic){
-    //             f << i << "\n";
-    //             num_basic++;
-    //         }
-    //     }
-    //     f.close();
-    // }
     agglp.level = level;
     elp.level = level; 
-    elp.degenerate_basic_rows = degenerate_basic_rows;
-    elp.degenerate_basic_index = degenerate_basic_index;
-    elp.degenerate_basic_residuals = degenerate_basic_residuals;
     presolvelp.level = level;
     elp.pairs = pairs;
     ++level;
@@ -392,55 +371,32 @@ void HighsOCAggregate::checkAMatrix(){
     }
 }
 
-void HighsOCAggregate::printAMatrixToMatlabFormat(){
+void HighsOCAggregate::printAMatrixToMatlabFormat(HighsSparseMatrix& matrix){
     // A Matrix
     std::vector<std::vector<double> > printMat;
-    for (int iCol = 0; iCol < elp.num_col_ + elp.num_row_; ++iCol){
-        std::vector<double> column(elp.num_row_, 0);
-        if (iCol < elp.num_col_){
-            for (int idx = elp.a_matrix_.start_[iCol]; idx < elp.a_matrix_.start_[iCol + 1]; ++idx){
-                int iRow = elp.a_matrix_.index_[idx];
-                int iRowValue = elp.a_matrix_.value_[idx];
+    for (int iCol = 0; iCol < matrix.num_col_; ++iCol){
+        std::vector<double> column(matrix.num_row_, 0);
+        if (iCol < matrix.num_col_){
+            for (int idx = matrix.start_[iCol]; idx < matrix.start_[iCol + 1]; ++idx){
+                int iRow = matrix.index_[idx];
+                int iRowValue = matrix.value_[idx];
                 column[iRow] = iRowValue;
             }
         }
         else{
-            int iRow = iCol - elp.num_col_;
+            int iRow = iCol - matrix.num_col_;
             column[iRow] = -1;
         }
         printMat.push_back(column);
     }
     std::cout << "Standard Form A Matrix" << std::endl;
     std::cout << "[ ";
-    for (int iCol = 0; iCol < elp.num_col_ + elp.num_row_; ++iCol){
-        for (int iRow = 0; iRow < elp.num_row_; ++iRow){
+    for (int iCol = 0; iCol < matrix.num_col_; ++iCol){
+        for (int iRow = 0; iRow < matrix.num_row_; ++iRow){
             std::cout << printMat[iCol][iRow] << " ";
         }
         std::cout << ";" << std::endl;
     }
-    std::cout << "]" << std::endl;
-    // b vector
-    std::cout << "Rhs" << std::endl;
-    std::cout << "[ "; 
-    for (int iRow = 0; iRow < elp.num_row_; ++iRow)
-        std::cout << std::min(std::fabs(elp.row_lower_[iRow]), std::fabs(elp.row_upper_[iRow])) << " ";
-    std::cout << "]" << std::endl;
-    // basis vectors
-    std::cout << "Basic Indices" << std::endl;
-    HighsBasisStatus basic = HighsBasisStatus::kBasic;
-    std::vector<int> baseIndex;
-    for (int iCol = 0; iCol < elp.num_col_; ++iCol)
-        if (elpBasis.col_status[iCol] == basic) baseIndex.push_back(iCol);
-    for (int iRow = 0; iRow < elp.num_row_; ++iRow)
-        if (elpBasis.row_status[iRow] == basic) baseIndex.push_back(iRow + elp.num_col_);
-    std::cout << "[ ";
-    for (int i = 0; i < baseIndex.size(); ++i)
-        std::cout << baseIndex[i] + 1 << " ";
-    std::cout << "]" << std::endl;
-    std::cout << "Objective Coefficients" << std::endl;
-    std::cout << "[ ";
-    for (int iCol = 0; iCol < elp.num_col_; ++iCol)
-        std::cout << elp.col_cost_[iCol] << " ";
     std::cout << "]" << std::endl;
 }
 
@@ -634,6 +590,19 @@ void HighsOCAggregate::buildRhsFromSolutionExtendedNoResiduals(){
     }
 }
 
+void HighsOCAggregate::buildRowNames(){
+    HighsInt min_rep, row_front, i_row;
+    std::stringstream name;
+    elp.row_names_.clear();
+    for (i_row = 0; i_row < rowCnt; ++i_row){
+        row_front = rowFront.at(i_row);
+        min_rep = frontMin.at(row_front);
+        name << "R" << min_rep;
+        elp.row_names_.push_back(name.str());
+        name.str(""); 
+    }
+}
+
 void HighsOCAggregate::buildBnds(){
     if (ep.level)
         buildBndsFromSolution();
@@ -772,6 +741,18 @@ void HighsOCAggregate::buildBndsFromSolutionExtendedNoResiduals(){
     }
 } 
 
+void HighsOCAggregate::buildColNames(){
+    HighsInt min_rep, col_front, i_col;
+    std::stringstream name;
+    elp.col_names_.clear();
+    for (i_col = 0; i_col < colCnt; ++i_col){
+        col_front = colFront.at(i_col);
+        min_rep = frontMin.at(col_front);
+        name << "C" << min_rep;
+        elp.col_names_.push_back(name.str());
+        name.str(""); 
+    }
+}
 void HighsOCAggregate::buildResiduals(){
     if (!ep.level) return;
     buildResidualLinks();
@@ -981,8 +962,19 @@ void HighsOCAggregate::buildResidualRowBasis(){
         elpBasis.row_status[i] = HighsBasisStatus::kLower;
 }
 
+void HighsOCAggregate::findFrontMins(){
+    HighsInt v_min, i_front, i_part;
+    for (i_front = 0; i_front < numTot; i_front += ep.len.at(i_front) + 1){
+        v_min = kHighsIInf;
+        for (i_part = i_front; i_part < i_front + ep.len.at(i_front) + 1; ++i_part){
+            if (ep.label.at(i_part) < v_min) v_min = ep.label.at(i_part);
+        }
+        frontMin.at(i_front) = v_min;
+    }
+}
+
 void HighsOCAggregate::buildColPointers(){
-    int i, j;
+    int i, j, min_rep;
     // front.clear();
     std::set<int> fronts;
     std::set<int> testCols;
@@ -1002,14 +994,15 @@ void HighsOCAggregate::buildColPointers(){
         if (newFront){
             frontCol[ep.front[i]] = colCnt;
             colFront[colCnt] = ep.front[i];
-            colrep[colCnt] = i;
+            min_rep = frontMin.at(ep.front.at(i));
+            colrep[colCnt] = min_rep;
             col[i] = colCnt++;
         }
     }
 }
 
 void HighsOCAggregate::buildRowPointers(){
-    int i, j;
+    int i, j, min_rep;
     std::set<int> fronts;
     std::set<int> testRows;
     std::vector<int> rowFreq(numRow, 0);
@@ -1027,10 +1020,89 @@ void HighsOCAggregate::buildRowPointers(){
         if (newFront){
             frontRow[ep.front[i]] = rowCnt;
             rowFront[rowCnt] = ep.front[i];
-            rowrep[rowCnt] = i;
+            min_rep = frontMin.at(ep.front.at(i));
+            rowrep[rowCnt] = min_rep;
             row[i - numCol] = rowCnt++;
         }
     }
+}
+
+void HighsOCAggregate::buildDegenerateAMatrix(){
+    int cnt = 0;
+    std::vector<HighsInt> deg_rows(numRow, 0);
+    for (int i_col = 0; i_col < colCnt; ++i_col){
+        if (mark_degenerate.at(i_col)){
+            for (int i_row = 0; i_row < basic_index_.size(); ++i_row){
+                if (basic_index_.at(i_row) == i_col){
+                    cnt++;
+                    deg_rows.at(i_row) = 1;
+                }
+            }
+        }
+    }
+    HighsInt i_vec, i_col, i_mat, i_row, crep, cf, clen, c,
+        ro, rf, r, rlen, nnz = 0, start = 0;
+    degenerate_col_map_.clear();
+    degenerate_matrix.clear();
+    // degenerate_matrix.start_.push_back(0);
+    std::set<HighsInt> degenerate_rows;
+    for (i_vec = 0; i_vec < basic_index_.size(); ++i_vec){
+        i_col = basic_index_.at(i_vec);
+        if (i_col >= numCol) continue;
+        if (!mark_degenerate.at(i_col)) continue;
+        degenerate_col_map_.push_back(i_col);
+        crep = colrep[i_col];
+        cf = colFront[i_col];
+        clen = ep.len[cf] + 1;
+        c = i_col;
+        int num = 0;
+        for (i_mat = olp.a_matrix_.start_[crep]; i_mat < olp.a_matrix_.start_[crep + 1]; ++i_mat){
+            ro = olp.a_matrix_.index_[i_mat];
+            rf = ep.front[ro + numCol];
+            r = frontRow[rf];
+            if (!deg_rows.at(r)) continue;
+            // if (basic_index_.at(r) != i_col) continue;
+            num++;
+            std::cout << "i_col: " << i_col << std::endl;
+            std::cout << "i_row_basic: " << r << std::endl;
+            std::cout << "num: " << num << std::endl;
+            rlen = ep.len[rf] + 1;
+            if (!columnF[r]++){ 
+                if (nnz >= columnI.size())
+                    std::cin.get();
+                columnI[nnz++] = r;
+                // nnzStan++;
+            }
+            columnX[r] += olp.a_matrix_.value_[i_mat] * clen;
+        }
+        if (num == 0){
+            std::cin.get();
+        }
+        for (i_mat = start; i_mat < nnz; ++i_mat){
+            degenerate_matrix.index_.push_back(columnI[i_mat]);
+            degenerate_rows.insert(columnI.at(i_mat));
+            // AdegenRIndex[j] = columnI[j];
+            degenerate_matrix.value_.push_back(columnX[columnI[i_mat]]);
+            // AdegenRValue[j] = columnX[columnI[j]];
+            columnF[columnI[i_mat]] = 0;
+            columnX[columnI[i_mat]] = 0;
+            columnI[i_mat] = 0;
+        }
+        degenerate_matrix.start_.push_back(nnz);
+        // AdegenRStart[xi + 1] = nnzStan;
+        start = nnz;
+    }
+    degenerate_matrix.num_col_ = degenerate_col_map_.size();
+    degenerate_matrix.num_row_ = degenerate_rows.size();
+}
+
+void HighsOCAggregate::buildDegenerateLU(){
+    if (!degenerate_col_map_.size()) return;
+    std::vector<HighsInt> basic_degenerates(degenerate_col_map_.size());
+    std::iota(basic_degenerates.begin(), basic_degenerates.end(), 0);
+    degenerate_factor.setup(degenerate_matrix, basic_degenerates);
+    HighsInt rank_deficiency = degenerate_factor.build();
+    std::cout << "build LU" << std::endl;
 }
 
 void HighsOCAggregate::trackAndCountSplits(){
@@ -1063,266 +1135,6 @@ void HighsOCAggregate::copyPartition(){
     epMinusOne.unlabel = ep.unlabel;
     epMinusOne.parent = ep.parent;
     epMinusOne.len = ep.len;
-}
-
-void HighsOCAggregate::checkForBadNonBasics(HighsInt i_col){
-    std::set<int> nonbasics;
-    HighsSparseMatrix o_mat = elp.a_matrix_;
-    HighsSparseMatrix mat = elp.a_matrix_;
-    elp.a_matrix_.createRowwise(mat);
-    for (int i_row = 0; i_row < elp.num_row_; ++ i_row){
-        for (int idx = elp.a_matrix_.start_[i_row]; idx < elp.a_matrix_.start_[i_row + 1]; ++idx){
-            if (elp.a_matrix_.index_.at(idx) == i_col){
-               for (int id = elp.a_matrix_.start_[i_row]; id < elp.a_matrix_.start_[i_row + 1]; ++id){
-                   if (elpBasis.col_status.at(elp.a_matrix_.index_.at(id)) == HighsBasisStatus::kBasic)
-                    continue;
-                    int iCol = elp.a_matrix_.index_.at(id);
-                    int crep = colrep[iCol];
-                    int pf = epMinusOne.front[crep];
-                    int pCol = pFrontCol[pf];
-                    HighsBasisStatus status = basis.col_status[pCol];
-                    if (status == HighsBasisStatus::kBasic)
-                        nonbasics.insert(pCol);
-               } 
-            }
-        }
-    }
-    elp.a_matrix_.createColwise(o_mat);
-}
-
-void HighsOCAggregate::gramSchmidt(){
-    clearDeleteLinker();
-    clearIndependentRow();
-    HighsSparseMatrix& matrix = gs_matrix;
-    column_vj.setup(matrix.num_col_);
-    column_qi.setup(matrix.num_col_);
-    column_temp.setup(matrix.num_col_);
-    HighsInt i_row_1 = 0, i_row_2 = 0, i_row, inner_count = 0;
-    for (i_row_1 = 0; i_row_1 < matrix.num_row_ - 1; ++i_row_1){
-        column_qi.clear();
-        matrix.collectAi(column_qi, i_row_1, 1);
-        if (!column_qi.count) continue;
-        double two_norm = std::sqrt(column_qi.norm2());
-        divideSparseVectorByScalar(column_qi, two_norm, column_qi);
-        for (i_row_2 = i_row_1 + 1; i_row_2 < matrix.num_row_; ++i_row_2){
-            column_vj.clear();
-            column_temp.clear();
-            matrix.collectAi(column_vj, i_row_2, 1);
-            if (!column_vj.count) continue;
-            double dot = sparseDotProduct(column_vj, column_qi);
-            double dot_recip = std::fabs(dot) < kHighsTiny ? 0 : (double)1/dot;
-            divideSparseVectorByScalar(column_qi, dot_recip, column_temp);
-            subtractSparseVector(column_vj, column_temp);
-            updateGramSchmidtMatrix(matrix, i_row_2, column_vj);
-        }
-    }
-    HighsInt num_independent_rows = 0;
-    for (i_row = 0; i_row < matrix.num_row_; ++i_row){
-        if (i_row >= rowCnt && !(matrix.start_[i_row + 1] - matrix.start_[i_row])){
-            HighsInt i_link = i_row - rowCnt + colCnt;
-            markLinkerDeleted(i_link);
-        }
-        if (matrix.start_[i_row + 1] - matrix.start_[i_row]){
-            num_independent_rows++;
-            markRowIndependent(i_row);
-        }
-    }
-    int ass = 1;
-}
-
-void HighsOCAggregate::buildGramSchmidtExtendedMatrix(){
-    HighsInt i_col, i, i_row;
-    gs_matrix.clear();
-    std::fill(gs_row_map.begin(), gs_row_map.end(), -1);
-    std::vector<HighsInt>& start = gs_matrix.start_;
-    std::vector<HighsInt>& index = gs_matrix.index_;
-    std::vector<double>& value = gs_matrix.value_;
-    HighsInt nonbasic_column_row_cnt = 0;
-    HighsInt nonbasic_row_cnt = 0;
-    // for (i_col = 0; i_col < colCnt; ++i_col){
-    //     if (elpBasis.col_status.at(i_col) != HighsBasisStatus::kBasic){
-    //         index.push_back(i_col);
-    //         value.push_back(1);
-    //         start.push_back(value.size());
-    //         nonbasic_column_row_cnt++;
-    //     }
-    // }
-    HighsSparseMatrix matrix = presolvelp.a_matrix_;
-    presolvelp.a_matrix_.createRowwise(matrix);
-    presolvelp.a_matrix_.format_ = MatrixFormat::kColwise;
-    matrix = presolvelp.a_matrix_;
-    for (i_row = 0; i_row < matrix.num_row_; ++i_row){
-        if (i_row < prowCnt && basis.row_status[i_row] == HighsBasisStatus::kBasic)
-            continue;
-        // if (elpBasis.row_status[i_row] == HighsBasisStatus::kBasic) 
-        //     continue;
-        gs_row_map.at(nonbasic_row_cnt++) = i_row;
-        for (i = matrix.start_[i_row]; i < matrix.start_[i_row + 1]; ++i){
-            index.push_back(matrix.index_[i]);
-            value.push_back(matrix.value_[i]);
-        }
-        start.push_back(value.size());
-    }
-    gs_matrix.format_ = MatrixFormat::kColwise;
-    gs_matrix.num_col_ = matrix.num_col_;
-    gs_matrix.num_row_ = nonbasic_row_cnt + nonbasic_column_row_cnt;
-    int ass = 1;
-}
-
-void HighsOCAggregate::updateGramSchmidtMatrix(HighsSparseMatrix& matrix, HighsInt i_row, HVector& column_v){
-    std::vector<HighsInt>& start = matrix.start_;
-    std::vector<HighsInt>& index = matrix.index_;
-    std::vector<double>& value = matrix.value_;
-    HighsInt i_row_start = start[i_row];
-    HighsInt i_row_end = start[i_row + 1];
-    HighsInt i_row_nz = i_row_end - i_row_start;
-    HighsInt num_new_nz = column_v.count - i_row_nz;
-    HighsInt new_num_nz = column_v.count;
-    HighsInt insert_start = i_row_start;
-    HighsInt i_count;
-    HighsInt i_col;
-    double col_value;
-    if (num_new_nz != 0)
-        while(i_row < matrix.num_row_)
-            start[++i_row] += num_new_nz;
-    if (num_new_nz < 0){
-        value.erase(value.begin() + i_row_end + num_new_nz, value.begin() + i_row_end);
-        index.erase(index.begin() + i_row_end + num_new_nz, index.begin() + i_row_end);
-    }
-    for (i_count = 0; i_count < new_num_nz; ++i_count){
-        i_col = column_v.index[i_count];
-        col_value = column_v.array[i_col];
-        if (i_count < i_row_nz){
-            index[insert_start] = i_col;
-            value[insert_start++] = col_value;
-        }
-        else{
-            index.insert(index.begin() + insert_start, i_col);
-            value.insert(value.begin() + insert_start++, col_value);
-        }
-    } 
-}
-
-void HighsOCAggregate::markLinkerDeleted(HighsInt i_link){
-    num_deleted_links++;
-    delete_link.at(i_link) = 1;
-}
-
-void HighsOCAggregate::markRowIndependent(HighsInt i_row){
-    HighsInt real_index = gs_row_map.at(i_row);
-    independent_row.at(real_index) = 1;
-}
-
-void HighsOCAggregate::clearDeleteLinker(){
-    std::fill(delete_link.begin(), delete_link.end(), 0);
-    num_deleted_links = 0;
-}
-
-void HighsOCAggregate::clearIndependentRow(){
-    std::fill(independent_row.begin(), independent_row.end(), 0);
-}
-
-void HighsOCAggregate::updateHVectorIndex(HVector& column_v, HighsInt insert, HighsInt idx){
-    HighsInt count = column_v.count;
-    std::vector<HighsInt>& index = column_v.index;
-    for (int i = column_v.count - 1; i >= insert; --i)
-        index.at(i + 1) = index.at(i);
-    index.at(insert) = idx;
-    column_v.count++;
-}
-
-void HighsOCAggregate::divideSparseVectorByScalar(HVector& column_q, double scalar, HVector& column_temp){
-    HighsInt i_cnt;
-    std::vector<HighsInt>& q_index = column_q.index;
-    std::vector<double>& q_value = column_q.array;
-    std::vector<HighsInt>& temp_index = column_temp.index;
-    std::vector<double>& temp_value = column_temp.array;
-    column_temp.count = column_q.count;
-    if (!scalar){
-        column_temp.count = 0;
-        return;
-    }
-    for (i_cnt = 0; i_cnt < column_q.count; ++i_cnt){
-        temp_index[i_cnt] = q_index[i_cnt];
-        temp_value[temp_index[i_cnt]] = (double)q_value[q_index[i_cnt]] / scalar;
-    }
- }
-
-double HighsOCAggregate::sparseDotProduct(HVector& column_v, HVector& column_q){
-    HighsInt column_q_count = column_q.count;
-    HighsInt column_v_count = column_v.count;
-    HighsInt entry, v_index, q_index;
-    double v_value, q_value, dot = 0;
-    if (column_v_count < column_q_count){
-        for (entry = 0; entry < column_v_count; ++entry){
-            v_index = column_v.index[entry];
-            v_value = column_v.array[v_index];
-            q_value = column_q.array[v_index];
-            dot += v_value * q_value;
-        }
-    }
-    else{
-        for (entry = 0; entry < column_q_count; ++entry){
-            q_index = column_q.index[entry];
-            v_value = column_v.array[q_index];
-            q_value = column_q.array[q_index];
-            dot += v_value * q_value;
-        }
-    }
-    return dot;
-}
-
-void HighsOCAggregate::subtractSparseVector(HVector& column_v, HVector& column_q){
-    HVector column_v_copy = column_v;
-    column_v.clear();
-    HighsInt column_q_count = column_q.count;
-    HighsInt entry;
-    HighsInt vector_index;
-    double vector_value;
-    HighsInt subtract_index;
-    double subtract_value;
-    double final_value;
-    std::set<HighsInt> indices_union;
-    std::set<HighsInt>::iterator index;
-    for (entry = 0; entry < column_v_copy.count; ++entry)
-        indices_union.insert(column_v_copy.index[entry]);
-    for (entry = 0; entry < column_q.count; ++entry)
-        indices_union.insert(column_q.index[entry]);
-    for (index = indices_union.begin(); index != indices_union.end(); ++index){
-        vector_value = column_v_copy.array.at(*index);
-        subtract_value = column_q.array.at(*index);
-        final_value = vector_value - subtract_value;
-        if (std::fabs(final_value) < 1e-10)
-            continue;
-        column_v.index.at(column_v.count++) = *index;
-        column_v.array.at(*index) = final_value;
-    }
-    int fuck = 1;
-    // for (entry = 0; entry < column_q_count; ++entry){
-    //     vector_index = column_q.index[entry];
-    //     vector_value = column_q.array[vector_index];
-    //     subtract_index = column_v_copy.index[entry];
-    //     subtract_value = column_v_copy.array[subtract_index];
-    //     double test_value_for_zero = column_v_copy.array[vector_index] - vector_value;
-    //     if (std::fabs(test_value_for_zero) > 1e-6){
-    //         column_v.array[vector_index] = column_v_copy.array[vector_index] - vector_value;
-    //         column_v.index[column_v.count++] = vector_index;
-    //     }
-    //     else 
-    //         column_v.array[vector_index] = 0;
-    // }
-    // for (entry = 0; entry < column_v_copy.count; ++entry){
-    //     vector_index = column_v_copy.index[entry];
-    //     subtract_value = column_q.array[vector_index];
-    //     if (std::fabs(subtract_value) < 1e-6){
-    //         if (column_v.count >= column_v.index.size() || column_v.count < 0)
-    //             int fuck_her = 1;
-    //         vector_value = column_v_copy.array[vector_index];
-    //         column_v.index[column_v.count++] = vector_index;
-    //         column_v.array[vector_index] = vector_value;
-    //         int fuck = 1;
-    //     }
-    // }
 }
 
 HighsLp HighsOCAggregate::getLp(){

@@ -5,7 +5,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <set>
+#include <numeric>
 #include "HighsLp.h"
 #include "OCEquitable.h"
 #include "HFactor.h"
@@ -18,7 +20,7 @@ public:
     void resizeGramSchmidtMatrixContainers();
     void buildLp();
     void buildLp(OCPartition& partition, HighsBasis& b,
-                HighsSolution& s);
+                HighsSolution& s, std::vector<HighsInt>& basic_index);
     // Build aggregate A matrices for ALP and EALP
     void buildAmatrix();
     void buildAmatrixExtended();
@@ -32,6 +34,7 @@ public:
     void buildRhsFromSolutionExtended();
     void buildRhsExtendedNoResiduals();
     void buildRhsFromSolutionExtendedNoResiduals();
+    void buildRowNames();
     // Build aggregate LB/UB vectors for ALP and EALP
     void buildBnds();
     void buildBndsFromScratch();
@@ -41,6 +44,7 @@ public:
     void buildBndsFromSolutionExtended();
     void buildBndsExtendedNoResiduals();
     void buildBndsFromSolutionExtendedNoResiduals();
+    void buildColNames();
     // Build aggregate c vectors for ALP and EALP
     void buildObj();
     void buildObjExtended();
@@ -51,6 +55,7 @@ public:
     void buildResidualCols();
     void buildResidualRows();
     // Build vectors containing the representative of an aggregate column/row
+    void findFrontMins();
     void buildRowPointers();
     void buildColPointers();
     void trackAndCountSplits();
@@ -62,10 +67,11 @@ public:
     void buildResidualColBasis();
     void buildResidualRowBasis();
     // Build LU initial factor check for good basis;
-    void buildLU();
+    void buildDegenerateLU();
+    void buildDegenerateAMatrix();
     // Sanity checking for A matrices
     void checkAMatrix();
-    void printAMatrixToMatlabFormat();
+    void printAMatrixToMatlabFormat(HighsSparseMatrix& matrix);
     // Copy partition from level k when going to level k + 1
     void copyPartition();
     // Perform dependent residuals test using gram-schmidt process to
@@ -100,7 +106,8 @@ public:
     HighsBasis basis;
     HighsBasis elpBasis;
     HighsSolution solution;
-    HFactor test_factor;
+    HFactor degenerate_factor;
+    HighsSparseMatrix degenerate_matrix;
     int level = 0;
     int numTot;
     int numCol; 
@@ -161,6 +168,7 @@ public:
     std::vector<int> frontRow;
     std::vector<int> rowFront;
     std::vector<int> pFrontRow;
+    std::vector<int> frontMin;
     std::set<int> colReps;
     std::set<int> newColReps;
     std::set<int> rowReps;
@@ -173,14 +181,10 @@ public:
     std::vector<int> r_to_child;
     std::vector<int> prev_r_to_parent;
     std::vector<int> prev_r_to_child;
-    // for gram schmidt
-    std::vector<HighsInt> delete_link;
-    std::vector<HighsInt> independent_row;
-    std::vector<HighsInt> gs_row_map;
-    HighsSparseMatrix gs_matrix;
-    HVector column_vi, column_vj, column_qi, column_temp;
-    // for LU basis construction
-    std::vector<HighsInt> base_index;
+    // for LU denerate matrix factorization analysis
+    std::vector<HighsInt> basic_index_;
+    std::vector<HighsInt> degenerate_col_map_;
+    std::vector<HighsInt> degenerate_row_map_;
     // For debugging
     std::vector<HighsInt> degenerate_basic_rows;
     std::vector<HighsInt> degenerate_basic_index;

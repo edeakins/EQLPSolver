@@ -1638,24 +1638,6 @@ void HEkkPrimal::chooseRow() {
       }
     }
   }
-  if (ekk_instance_.lp_.degenerate_basic_residuals.at(variable_in)){
-    // row_out = variable_in - ekk_instance_.lp_.num_aggregate_cols_ + ekk_instance_.lp_.num_aggregate_rows_;
-    // std::cout << "column_in: " << variable_in << std::endl;
-    // std::cout << "row_out: " << row_out << std::endl;
-    // std::cout << "column_out: " << ekk_instance_.basis_.basicIndex_.at(row_out) << std::endl;
-    // std::cout << "\n" << std::endl;
-    // if (ekk_instance_.basis_.basicIndex_.at(row_out) == 7712){
-    //   std::cin.get();
-    // }
-    // // int row_of_variable_in = variable_in - ekk_instance_.lp_.num_aggregate_cols_ + ekk_instance_.lp_.num_aggregate_rows_;
-    // // if (row_out != row_of_variable_in){
-    // // std::cout << "variable out: " << ekk_instance_.basis_.basicIndex_.at(row_out) << std::endl;
-    // // std::cout << "row of r variable in: " << row_of_variable_in << std::endl;
-    // // std::cout << "row out: " << row_out << std::endl;
-    // // std::cout << "\n" << std::endl;
-    // // }
-    // num_degen++;
-  }
   // std::cout << "num_degen: " << num_degen << std::endl;
   // std::cin.get();
   analysis->simplexTimerStop(Chuzr2Clock);

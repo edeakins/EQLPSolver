@@ -291,7 +291,11 @@ fstream
 -
 string
 -
+sstream
+-
 set
+-
+numeric
 -
 HighsLp.h
 ../src/presolve/HighsLp.h

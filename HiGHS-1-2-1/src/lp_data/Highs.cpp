@@ -844,7 +844,7 @@ HighsStatus Highs::run() {
         minor_iterations = info_.orbital_crossover_minor_iteration_count;
         passModel(ealp_);
         zeroIterationCounts();
-        // writeModel("../../debugBuild/testLpFiles/EALP_slacks_as_residuals.lp");
+        writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
         info_.orbital_crossover_major_iteration_count = major_iterations;
@@ -2383,7 +2383,7 @@ void Highs::buildALP(){
 }
 
 void Highs::buildEALP(){
-  aggregator_.buildLp(partition_, alpBasis_, alpSolution_);
+  aggregator_.buildLp(partition_, alpBasis_, alpSolution_, ekk_instance_.basis_.basicIndex_);
   // alp_ = aggregator_.getAggLp();
   ealp_ = aggregator_.getLp();
 }

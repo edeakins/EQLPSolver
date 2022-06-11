@@ -209,7 +209,11 @@ fstream
 -
 string
 -
+sstream
+-
 set
+-
+numeric
 -
 HighsLp.h
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/HighsLp.h
