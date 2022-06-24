@@ -1362,6 +1362,64 @@ void HEkk::deleteRows(const HighsIndexCollection& index_collection) {
   this->updateStatus(LpAction::kDelRows);
 }
 
+// OC methods to removed residual rows/columns once the r variable 
+// corresponding to that row/column has been pivoted into the basis.
+void HEkk::deletePivotedResiduals(const HighsInt col_start, const HighsInt row_start){
+  const HighsInt from_col = col_start;
+  const HighsInt to_col = this->lp_.num_col_ - 1;
+  const HighsInt from_row = row_start;
+  const HighsInt to_row = this->lp_.num_row_ - 1;
+  HighsBasis highs_basis = deleteResidualBasis(from_col, from_row);
+  deleteColsFromMatrix(from_col, to_col, to_col + 1);
+  deleteRowsFromMatrix(from_row, to_row, to_row + 1);
+  deleteColsFromVectors(from_col);
+  deleteRowsFromVectors(from_row);
+  clearNlaStatus();
+  invalidateBasisMatrix();
+  setBasis(highs_basis);
+}
+
+void HEkk::deleteColsFromVectors(const HighsInt to_col){
+  HighsLp& lp = this->lp_;
+  lp.col_cost_.resize(to_col);
+  lp.col_lower_.resize(to_col);
+  lp.col_upper_.resize(to_col);
+  lp.col_names_.resize(to_col);
+  lp.num_col_ = to_col;
+  lp.num_residual_cols_ = to_col - lp.num_aggregate_cols_;
+}
+
+void HEkk::deleteRowsFromVectors(const HighsInt to_row){
+  HighsLp& lp = this->lp_;
+  lp.row_lower_.resize(to_row);
+  lp.row_upper_.resize(to_row);
+  lp.row_names_.resize(to_row);
+  lp.num_row_ = to_row;
+  lp.num_residual_rows_ = to_row - lp.num_aggregate_rows_;
+}
+
+void HEkk::deleteColsFromMatrix(const HighsInt from_col, const HighsInt to_col, 
+                                  const HighsInt dimension){
+  HighsIndexCollection index_collection;
+  create(index_collection, from_col, to_col, dimension);
+  this->lp_.a_matrix_.deleteCols(index_collection);
+}
+
+void HEkk::deleteRowsFromMatrix(const HighsInt from_row, const HighsInt to_row, 
+                                  const HighsInt dimension){
+  HighsIndexCollection index_collection;
+  create(index_collection, from_row, to_row, dimension);
+  this->lp_.a_matrix_.deleteRows(index_collection);
+}
+
+HighsBasis HEkk::deleteResidualBasis(const HighsInt to_col ,const HighsInt to_row){
+  this->basis_.basicIndex_.resize(to_row);
+  HighsBasis highs_basis = getHighsBasis(this->lp_);
+  highs_basis.col_status.resize(to_col);
+  highs_basis.row_status.resize(to_row);
+  return highs_basis;
+}
+
 void HEkk::unscaleSimplex(const HighsLp& incumbent_lp) {
   if (!this->simplex_in_scaled_space_) return;
   assert(incumbent_lp.scale_.has_scaling);
@@ -1661,7 +1719,12 @@ void HEkk::initialiseForSolve() {
   const HighsStatus return_status = initialiseSimplexLpBasisAndFactor();
   assert(return_status == HighsStatus::kOk);
   assert(status_.has_basis);
-
+  // Ethan you added this for pivoted residual rows/cols
+  pivoted_residual_col.resize(this->lp_.num_col_);
+  pivoted_residual_row.resize(this->lp_.num_row_);
+  pivoted_residual_col.assign(this->lp_.num_col_, 0);
+  pivoted_residual_row.assign(this->lp_.num_row_, 0);
+  //
   updateSimplexOptions();
   initialiseSimplexLpRandomVectors();
   initialisePartitionedRowwiseMatrix();  // Timed

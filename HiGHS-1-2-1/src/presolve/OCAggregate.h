@@ -16,7 +16,8 @@
 class HighsOCAggregate{
 public:
     void passLpAndPartition(HighsLp& lp, OCPartition& partition);
-    void resizeLpContainers();
+    void resizeAlpContainers();
+    void resizeElpContainers();
     void resizeGramSchmidtMatrixContainers();
     void buildLp();
     void buildLp(OCPartition& partition, HighsBasis& b,
@@ -176,19 +177,6 @@ public:
     std::map<int, std::vector<int> > splitCells;
     // std::vector<std::pair<int, int> > splitCells;
     std::vector<int> zero_step_pivots;
-    std::vector<std::pair<int, int> > pairs;
-    std::vector<int> r_to_parent;
-    std::vector<int> r_to_child;
-    std::vector<int> prev_r_to_parent;
-    std::vector<int> prev_r_to_child;
-    // for LU denerate matrix factorization analysis
-    std::vector<HighsInt> basic_index_;
-    std::vector<HighsInt> degenerate_col_map_;
-    std::vector<HighsInt> degenerate_row_map_;
-    // For debugging
-    std::vector<HighsInt> degenerate_basic_rows;
-    std::vector<HighsInt> degenerate_basic_index;
-    std::vector<HighsInt> degenerate_basic_residuals;
 };
 
 #endif

@@ -236,8 +236,8 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
       info.primal_phase2_iteration_count +=
           (ekk_instance_.iteration_count_ - it0);
     } else if (solve_phase == kSolvePhaseOrbitalCrossover){
-      // residual_col = 0; // ekk_instance_.lp_.num_aggregate_cols_;
-      residual_col = ekk_instance_.lp_.num_aggregate_cols_;
+      // residual_col = 0;
+      residual_col = ekk_instance_.lp_.num_col_ - 1;
       orbitalCrossover();
       assert(solve_phase == kSolvePhaseOptimal || solve_phase == kSolvePhase1 ||
              solve_phase == kSolvePhase2 ||
@@ -949,6 +949,14 @@ void HEkkPrimal::rebuild() {
   HighsSimplexStatus& status = ekk_instance_.status_;
   // Clear taboo flag from any bad basis changes
   ekk_instance_.clearBadBasisChangeTabooFlag();
+  if (residual_col != (ekk_instance_.lp_.num_col_ - 1) 
+      && solve_phase == kSolvePhaseOrbitalCrossover
+      && variable_in != -1){
+    const HighsInt row_start = residual_col - ekk_instance_.lp_.num_aggregate_cols_
+                                + ekk_instance_.lp_.num_aggregate_rows_;
+    ekk_instance_.deletePivotedResiduals(residual_col + 1, row_start + 1);
+    ekk_instance_.initialiseForSolve();
+  }
 
   // Record whether the update objective value should be tested. If
   // the objective value is known, then the updated objective value
@@ -1266,6 +1274,7 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
   const vector<int8_t>& nonbasicMove = ekk_instance_.basis_.nonbasicMove_;
   const vector<double>& workDual = ekk_instance_.info_.workDual_;
   const HighsInt num_col = ekk_instance_.lp_.num_col_;
+  const HighsInt num_aggregate_col = ekk_instance_.lp_.num_aggregate_cols_;
   double best_measure = 0;
   variable_in = -1;
 
@@ -1325,13 +1334,17 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
       }
     }
   } else if (local_use_residual_chuzc){
-    variable_in = num_col == residual_col ? -1 : residual_col++;
+    variable_in = residual_col == num_aggregate_col - 1 ? -1 : residual_col--;
     // residual_col++;
-    // if (residual_col + ekk_instance_.lp_.num_aggregate_cols_ < ekk_instance_.lp_.num_col_){
+    // if (residual_col < ekk_instance_.lp_.num_residual_cols_){
     //   variable_in = ekk_instance_.lp_.residual_cols_.at(residual_col);
     //   residual_col++;
     // }
     if (variable_in != -1){
+      ekk_instance_.pivoted_residual_col.at(variable_in) = 1;
+      const HighsInt residual_row = variable_in - ekk_instance_.lp_.num_aggregate_cols_ 
+        + ekk_instance_.lp_.num_aggregate_rows_;
+      ekk_instance_.pivoted_residual_row.at(residual_row) = 1;
       ekk_instance_.info_.workLower_.at(variable_in) = -kHighsInf;
       ekk_instance_.info_.workUpper_.at(variable_in) = +kHighsInf;
     }
@@ -1584,6 +1597,13 @@ void HEkkPrimal::phase1ChooseRow() {
 }
 
 void HEkkPrimal::chooseRow() {
+  if (ekk_instance_.lp_.level && 
+      ekk_instance_.lp_.is_degenerate_residual.at(variable_in)){
+    HighsInt row_index = variable_in - ekk_instance_.lp_.num_aggregate_cols_ 
+      + ekk_instance_.lp_.num_aggregate_rows_;
+    row_out = row_index;
+    return;
+  }
   HighsSimplexInfo& info = ekk_instance_.info_;
   const vector<double>& baseLower = info.baseLower_;
   const vector<double>& baseUpper = info.baseUpper_;

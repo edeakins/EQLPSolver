@@ -21,6 +21,7 @@
 #include "util/HSet.h"
 #include "util/HighsHash.h"
 #include "util/HighsRandom.h"
+#include <numeric>
 
 class HighsLpSolverObject;
 
@@ -116,6 +117,14 @@ class HEkk {
   void appendRowsToVectors(const HighsInt num_new_row,
                            const vector<double>& rowLower,
                            const vector<double>& rowUpper);
+  void deleteColsFromVectors(const HighsInt to_col);
+  void deleteRowsFromVectors(const HighsInt to_row);
+  void deleteColsFromMatrix(const HighsInt from_col, const HighsInt to_col, const HighsInt dimension);
+  void deleteRowsFromMatrix(const HighsInt from_row, const HighsInt to_row, const HighsInt dimension);
+//   void deleteColsFromHighsBasis(const HighsInt to_col);
+//   void deleteRowsFromHighsBasis(const HighsInt to_row);
+  HighsBasis deleteResidualBasis(const HighsInt to_col, const HighsInt to_row);
+  void deletePivotedResiduals(const HighsInt col_start, const HighsInt row_start);
 
   // Make this private later
   void chooseSimplexStrategyThreads(const HighsOptions& options,
@@ -207,6 +216,10 @@ class HEkk {
   double debug_max_relative_dual_steepest_edge_weight_error = 0;
 
   std::vector<HighsSimplexBadBasisChangeRecord> bad_basis_change_;
+
+  // track pivoted residuals
+  std::vector<HighsInt> pivoted_residual_col;
+  std::vector<HighsInt> pivoted_residual_row;
 
  private:
   bool isUnconstrainedLp();

@@ -69,6 +69,8 @@ HighsStatus solveLpIpx(const HighsOptions& options, HighsTimer& timer,
 
 HighsStatus solveLpIpx(HighsLpSolverObject& solver_object);
 
+HighsBasis getHighsBasis();
+
 void reportSolveData(const HighsLogOptions& log_options,
                      const ipx::Info& ipx_info);
 #endif

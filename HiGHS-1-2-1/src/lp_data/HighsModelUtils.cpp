@@ -152,26 +152,26 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, instance_name.str().c_str());
       // Write the relevant times
       std::stringstream time;
-      time.precision(2);
-      time << info.equitable_partition_time << ",";
+      // time.precision(2);
+      time << std::fixed << std::setprecision(2) << info.equitable_partition_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.build_alp_time << ",";
+      time << std::fixed << std::setprecision(2) << info.build_alp_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.aggregate_solve_time << ",";
+      time << std::fixed << std::setprecision(2) << info.aggregate_solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.build_elp_iterative_time << ",";
+      time << std::fixed << std::setprecision(2) << info.build_elp_iterative_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.orbital_crossover_time << ",";
+      time << std::fixed << std::setprecision(2) << info.orbital_crossover_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.solve_time << ",";
+      time << std::fixed << std::setprecision(2) << info.solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.run_highs_time << "\n";
+      time << std::fixed << std::setprecision(2) << info.run_highs_time << "\n";
       fprintf(file, time.str().c_str());
     }
     else{
@@ -181,26 +181,26 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, instance_name.str().c_str());
       // Write the relevant times
       std::stringstream time;
-      time.precision(2);
-      time << info.equitable_partition_time << ",";
+      // time.precision(2);
+      time << std::fixed << std::setprecision(2) << info.equitable_partition_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.build_alp_time << ",";
+      time << std::fixed << std::setprecision(2) << info.build_alp_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.aggregate_solve_time << ",";
+      time << std::fixed << std::setprecision(2) << info.aggregate_solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.build_elp_iterative_time << ",";
+      time << std::fixed << std::setprecision(2) << info.build_elp_iterative_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.orbital_crossover_time << ",";
+      time << std::fixed << std::setprecision(2) << info.orbital_crossover_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.solve_time << ",";
+      time << std::fixed << std::setprecision(2) << info.solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.run_highs_time << "\n";
+      time << std::fixed << std::setprecision(2) << info.run_highs_time << "\n";
       fprintf(file, time.str().c_str());
     }
   }
@@ -218,17 +218,17 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, instance_name.str().c_str());
       // Write the relevant times
       std::stringstream time;
-      time.precision(2);
-      time << info.ipm_time << ",";
+      // time.precision(2);
+      time << std::fixed << std::setprecision(2) << info.ipm_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.crossover_time << ",";
+      time << std::fixed << std::setprecision(2) << info.crossover_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.solve_time << ",";
+      time << std::fixed << std::setprecision(2) << info.solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.run_highs_time << "\n";
+      time << std::fixed << std::setprecision(2) << info.run_highs_time << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
     }
@@ -239,17 +239,17 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, instance_name.str().c_str());
       // Write the relevant times
       std::stringstream time;
-      time.precision(2);
-      time << info.ipm_time << ",";
+      // time.precision(2);
+      time << std::fixed << std::setprecision(2) << info.ipm_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.crossover_time << ",";
+      time << std::fixed << std::setprecision(2) << info.crossover_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.solve_time << ",";
+      time << std::fixed << std::setprecision(2) << info.solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.run_highs_time << "\n";
+      time << std::fixed << std::setprecision(2) << info.run_highs_time << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
     }
@@ -266,11 +266,11 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, instance_name.str().c_str());
       // Write the relevant times
       std::stringstream time;
-      time.precision(2);
-      time << info.solve_time << ",";
+      // time.precision(2);
+      time << std::fixed << std::setprecision(2) << info.solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.run_highs_time << "\n";
+      time << std::fixed << std::setprecision(2) << info.run_highs_time << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
     }
@@ -281,11 +281,11 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, instance_name.str().c_str());
       // Write the relevant times
       std::stringstream time;
-      time.precision(2);
-      time << info.solve_time << ",";
+      // time.precision(2);
+      time << std::fixed << std::setprecision(2) << info.solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.run_highs_time << "\n";
+      time << std::fixed << std::setprecision(2) << info.run_highs_time << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
     }

@@ -1031,6 +1031,8 @@ util/HighsHash.h
 ../src/simplex/util/HighsHash.h
 util/HighsRandom.h
 ../src/simplex/util/HighsRandom.h
+numeric
+-
 
 ../src/simplex/HSimplexNla.h
 lp_data/HighsDebug.h

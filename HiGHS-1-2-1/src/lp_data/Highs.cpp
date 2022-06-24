@@ -772,7 +772,7 @@ HighsStatus Highs::run() {
   const bool ipx_no_crossover =
       options_.solver == kIpmString && !options_.run_crossover;
   // Call orbital crossover methods if user chooses to use it.
-  // options_.presolve = "off";
+  options_.presolve = "off";
   if (options_.solver == kOCString){
     running_orbital_crossover = true;
     scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
@@ -798,6 +798,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    // options_.solver = kIpmString;
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
@@ -813,6 +814,7 @@ HighsStatus Highs::run() {
     // lift the basis and solution, and perform orbital crossover
     // unitl the parition is discrete.
     else{
+      options_.solver = kOCString;
       int major_iterations = 0;
       int minor_iterations = 0;
       getOrbitalCrossoverBasis();
@@ -844,7 +846,7 @@ HighsStatus Highs::run() {
         minor_iterations = info_.orbital_crossover_minor_iteration_count;
         passModel(ealp_);
         zeroIterationCounts();
-        writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
         info_.orbital_crossover_major_iteration_count = major_iterations;
@@ -872,13 +874,13 @@ HighsStatus Highs::run() {
         //   alpSolution_ = crashSolution_;
         // }
         int numRBasic = 0;
-        for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
-          if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
-            numRBasic++;
-          else{
-            std::cout << "bad_col: " << i << std::endl;
-          }
-        }
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
         // std::cout << "counted" << std::endl;
       }
       stop_highs_run_clock = true;
@@ -2736,6 +2738,7 @@ HighsStatus Highs::callSolveLp(HighsLp& lp, const string message) {
 
   // Solve the LP
   return_status = solveLp(solver_object, message);
+  crashBasis_ = solver_object.basis_;
   // Extract the scaled/unscaled model status
   model_status_ = solver_object.unscaled_model_status_;
   scaled_model_status_ = solver_object.scaled_model_status_;

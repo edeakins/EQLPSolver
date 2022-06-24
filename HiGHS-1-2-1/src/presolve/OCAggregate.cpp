@@ -52,12 +52,10 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     residualCol.resize(numCol);
     residualRow.resize(numCol);
     mark_degenerate.resize(numCol);
-    degenerate_basic_rows.resize(numRow + numTotResiduals);
-    degenerate_basic_index.resize(numRow + numTotResiduals);
-    degenerate_basic_residuals.resize(numCol + numTotResiduals);
+    zero_step_pivots.resize(numCol + numTotResiduals);
 }
 
-void HighsOCAggregate::resizeLpContainers(){
+void HighsOCAggregate::resizeElpContainers(){
     // Resize Lp containers
     agglp.col_cost_.resize(colCnt);
     agglp.col_upper_.resize(colCnt);
@@ -92,7 +90,7 @@ void HighsOCAggregate::buildLp(){
     findFrontMins();
     buildColPointers();
     buildRowPointers();
-    resizeLpContainers();
+    resizeElpContainers();
     buildObj();
     buildAmatrix();
     buildRhs();
@@ -116,14 +114,13 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     pcolCnt = colCnt;
     pFrontRow = frontRow;
     prowCnt = rowCnt;
-    basic_index_ = basic_index;
     findFrontMins();
     buildColPointers();
     buildRowPointers();
     trackAndCountSplits();
     markDegenerate();
     buildResidualLinks();
-    resizeLpContainers();
+    resizeElpContainers();
     buildBasis(false, false);
     buildObjExtended();
     buildAmatrixExtended();
@@ -135,7 +132,7 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     agglp.level = level;
     elp.level = level; 
     presolvelp.level = level;
-    elp.pairs = pairs;
+    // elp.pairs = pairs;
     ++level;
 }
 
@@ -267,6 +264,7 @@ void HighsOCAggregate::buildAmatrixExtended(){
     // elp.num_residual_cols_ = 0;
     elp.num_residual_cols_ = numResiduals;
     elp.num_residual_rows_ = numResiduals;
+    elp.is_degenerate_residual = zero_step_pivots;
     // elp.residual_cols_ = residualCol;
 }
 
@@ -772,17 +770,18 @@ void HighsOCAggregate::buildResidualLinks(){
     std::fill(childRow.begin(), childRow.end(), 0);
     std::fill(residualRow.begin(), residualRow.end(), 0);
     std::fill(residualCol.begin(), residualCol.end(), 0);
-    std::fill(degenerate_basic_rows.begin(), degenerate_basic_rows.end(), 0);
-    std::fill(degenerate_basic_index.begin(), degenerate_basic_index.end(), 0);
-    std::fill(degenerate_basic_residuals.begin(), degenerate_basic_residuals.end(), 0);
+    // std::fill(degenerate_basic_rows.begin(), degenerate_basic_rows.end(), 0);
+    // std::fill(degenerate_basic_index.begin(), degenerate_basic_index.end(), 0);
+    // std::fill(degenerate_basic_residuals.begin(), degenerate_basic_residuals.end(), 0);
+    std::fill(zero_step_pivots.begin(), zero_step_pivots.end(), 0);
     std::vector<int> residual_cols_;
     std::vector<int> residual_to_old(numCol + numTotResiduals);
     int elpNumRow = rowCnt;
     int elpNumCol = colCnt;
     int numSkipped = 0;
-    pairs.clear();
+    // pairs.clear();
     elp.residual_cols_.clear();
-    elp.num_degenerate_cols_ = colCnt;
+    elp.num_degenerate_cols_ = 0;
     for (int iCol = pcolCnt; iCol < colCnt; ++iCol){
         xNew = iCol;
         rep = colrep[iCol];
@@ -791,7 +790,7 @@ void HighsOCAggregate::buildResidualLinks(){
         xOld = pFrontCol[pcf];
         oldRep = colrep[xOld];
         if (basis.col_status[xOld] != basic){ numSkipped++; continue; }
-        if (mark_degenerate.at(xOld)) { numSkipped++; continue; }
+        // if (mark_degenerate.at(xOld)) { numSkipped++; continue; }
         if (xOld < minParent) minParent = xOld;
         splitCells[xOld].push_back(xNew);
     }
@@ -803,9 +802,7 @@ void HighsOCAggregate::buildResidualLinks(){
         for (int idx = 0; idx < split.second.size(); ++idx){
             int iCol = split.second.at(idx);
             if (mark_degenerate.at(split.first)){
-                degenerate_basic_rows.at(elpNumRow) = 1;
-                degenerate_basic_index.at(elpNumRow) = iCol;
-                degenerate_basic_residuals.at(elpNumCol) = 1;
+                zero_step_pivots.at(elpNumCol) = 1;
                 elp.num_degenerate_cols_++;
             }
             isChild.at(iCol) = 1;
@@ -814,7 +811,7 @@ void HighsOCAggregate::buildResidualLinks(){
             residual_to_old.at(elpNumCol) = split.first;
             residualCol[numResiduals] = elpNumCol++;
             residualRow[numResiduals++] = elpNumRow++;
-            pairs.push_back(std::pair<int, int>(split.first, iCol));
+            // pairs.push_back(std::pair<int, int>(split.first, iCol));
         }
     }
     for (int iCol = 0; iCol < numResiduals; ++iCol){
@@ -1027,83 +1024,83 @@ void HighsOCAggregate::buildRowPointers(){
     }
 }
 
-void HighsOCAggregate::buildDegenerateAMatrix(){
-    int cnt = 0;
-    std::vector<HighsInt> deg_rows(numRow, 0);
-    for (int i_col = 0; i_col < colCnt; ++i_col){
-        if (mark_degenerate.at(i_col)){
-            for (int i_row = 0; i_row < basic_index_.size(); ++i_row){
-                if (basic_index_.at(i_row) == i_col){
-                    cnt++;
-                    deg_rows.at(i_row) = 1;
-                }
-            }
-        }
-    }
-    HighsInt i_vec, i_col, i_mat, i_row, crep, cf, clen, c,
-        ro, rf, r, rlen, nnz = 0, start = 0;
-    degenerate_col_map_.clear();
-    degenerate_matrix.clear();
-    // degenerate_matrix.start_.push_back(0);
-    std::set<HighsInt> degenerate_rows;
-    for (i_vec = 0; i_vec < basic_index_.size(); ++i_vec){
-        i_col = basic_index_.at(i_vec);
-        if (i_col >= numCol) continue;
-        if (!mark_degenerate.at(i_col)) continue;
-        degenerate_col_map_.push_back(i_col);
-        crep = colrep[i_col];
-        cf = colFront[i_col];
-        clen = ep.len[cf] + 1;
-        c = i_col;
-        int num = 0;
-        for (i_mat = olp.a_matrix_.start_[crep]; i_mat < olp.a_matrix_.start_[crep + 1]; ++i_mat){
-            ro = olp.a_matrix_.index_[i_mat];
-            rf = ep.front[ro + numCol];
-            r = frontRow[rf];
-            if (!deg_rows.at(r)) continue;
-            // if (basic_index_.at(r) != i_col) continue;
-            num++;
-            std::cout << "i_col: " << i_col << std::endl;
-            std::cout << "i_row_basic: " << r << std::endl;
-            std::cout << "num: " << num << std::endl;
-            rlen = ep.len[rf] + 1;
-            if (!columnF[r]++){ 
-                if (nnz >= columnI.size())
-                    std::cin.get();
-                columnI[nnz++] = r;
-                // nnzStan++;
-            }
-            columnX[r] += olp.a_matrix_.value_[i_mat] * clen;
-        }
-        if (num == 0){
-            std::cin.get();
-        }
-        for (i_mat = start; i_mat < nnz; ++i_mat){
-            degenerate_matrix.index_.push_back(columnI[i_mat]);
-            degenerate_rows.insert(columnI.at(i_mat));
-            // AdegenRIndex[j] = columnI[j];
-            degenerate_matrix.value_.push_back(columnX[columnI[i_mat]]);
-            // AdegenRValue[j] = columnX[columnI[j]];
-            columnF[columnI[i_mat]] = 0;
-            columnX[columnI[i_mat]] = 0;
-            columnI[i_mat] = 0;
-        }
-        degenerate_matrix.start_.push_back(nnz);
-        // AdegenRStart[xi + 1] = nnzStan;
-        start = nnz;
-    }
-    degenerate_matrix.num_col_ = degenerate_col_map_.size();
-    degenerate_matrix.num_row_ = degenerate_rows.size();
-}
+// void HighsOCAggregate::buildDegenerateAMatrix(){
+//     int cnt = 0;
+//     std::vector<HighsInt> deg_rows(numRow, 0);
+//     for (int i_col = 0; i_col < colCnt; ++i_col){
+//         if (mark_degenerate.at(i_col)){
+//             for (int i_row = 0; i_row < basic_index_.size(); ++i_row){
+//                 if (basic_index_.at(i_row) == i_col){
+//                     cnt++;
+//                     deg_rows.at(i_row) = 1;
+//                 }
+//             }
+//         }
+//     }
+//     HighsInt i_vec, i_col, i_mat, i_row, crep, cf, clen, c,
+//         ro, rf, r, rlen, nnz = 0, start = 0;
+//     degenerate_col_map_.clear();
+//     degenerate_matrix.clear();
+//     // degenerate_matrix.start_.push_back(0);
+//     std::set<HighsInt> degenerate_rows;
+//     for (i_vec = 0; i_vec < basic_index_.size(); ++i_vec){
+//         i_col = basic_index_.at(i_vec);
+//         if (i_col >= numCol) continue;
+//         if (!mark_degenerate.at(i_col)) continue;
+//         degenerate_col_map_.push_back(i_col);
+//         crep = colrep[i_col];
+//         cf = colFront[i_col];
+//         clen = ep.len[cf] + 1;
+//         c = i_col;
+//         int num = 0;
+//         for (i_mat = olp.a_matrix_.start_[crep]; i_mat < olp.a_matrix_.start_[crep + 1]; ++i_mat){
+//             ro = olp.a_matrix_.index_[i_mat];
+//             rf = ep.front[ro + numCol];
+//             r = frontRow[rf];
+//             if (!deg_rows.at(r)) continue;
+//             // if (basic_index_.at(r) != i_col) continue;
+//             num++;
+//             std::cout << "i_col: " << i_col << std::endl;
+//             std::cout << "i_row_basic: " << r << std::endl;
+//             std::cout << "num: " << num << std::endl;
+//             rlen = ep.len[rf] + 1;
+//             if (!columnF[r]++){ 
+//                 if (nnz >= columnI.size())
+//                     std::cin.get();
+//                 columnI[nnz++] = r;
+//                 // nnzStan++;
+//             }
+//             columnX[r] += olp.a_matrix_.value_[i_mat] * clen;
+//         }
+//         if (num == 0){
+//             std::cin.get();
+//         }
+//         for (i_mat = start; i_mat < nnz; ++i_mat){
+//             degenerate_matrix.index_.push_back(columnI[i_mat]);
+//             degenerate_rows.insert(columnI.at(i_mat));
+//             // AdegenRIndex[j] = columnI[j];
+//             degenerate_matrix.value_.push_back(columnX[columnI[i_mat]]);
+//             // AdegenRValue[j] = columnX[columnI[j]];
+//             columnF[columnI[i_mat]] = 0;
+//             columnX[columnI[i_mat]] = 0;
+//             columnI[i_mat] = 0;
+//         }
+//         degenerate_matrix.start_.push_back(nnz);
+//         // AdegenRStart[xi + 1] = nnzStan;
+//         start = nnz;
+//     }
+//     degenerate_matrix.num_col_ = degenerate_col_map_.size();
+//     degenerate_matrix.num_row_ = degenerate_rows.size();
+// }
 
-void HighsOCAggregate::buildDegenerateLU(){
-    if (!degenerate_col_map_.size()) return;
-    std::vector<HighsInt> basic_degenerates(degenerate_col_map_.size());
-    std::iota(basic_degenerates.begin(), basic_degenerates.end(), 0);
-    degenerate_factor.setup(degenerate_matrix, basic_degenerates);
-    HighsInt rank_deficiency = degenerate_factor.build();
-    std::cout << "build LU" << std::endl;
-}
+// void HighsOCAggregate::buildDegenerateLU(){
+//     if (!degenerate_col_map_.size()) return;
+//     std::vector<HighsInt> basic_degenerates(degenerate_col_map_.size());
+//     std::iota(basic_degenerates.begin(), basic_degenerates.end(), 0);
+//     degenerate_factor.setup(degenerate_matrix, basic_degenerates);
+//     HighsInt rank_deficiency = degenerate_factor.build();
+//     std::cout << "build LU" << std::endl;
+// }
 
 void HighsOCAggregate::trackAndCountSplits(){
     std::fill_n(splitFrom.begin(), numCol, -1);

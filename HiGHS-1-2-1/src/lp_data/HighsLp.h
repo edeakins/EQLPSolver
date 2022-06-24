@@ -34,7 +34,7 @@ class HighsLp {
   HighsInt num_aggregate_cols_;
   HighsInt num_aggregate_rows_;
   HighsInt level;
-  std::vector<std::pair<int, int> > pairs; // remove when done debugging
+  // std::vector<std::pair<int, int> > pairs; // remove when done debugging
   
   std::vector<double> col_cost_;
   std::vector<double> col_lower_;
@@ -42,6 +42,7 @@ class HighsLp {
   std::vector<double> row_lower_;
   std::vector<double> row_upper_;
   std::vector<int> residual_cols_; // remove when done debugging;
+  std::vector<int> is_degenerate_residual;
   std::vector<int> degenerate_basic_rows; // remove when done debugging;
   std::vector<int> degenerate_basic_index; // remove when done debugging;
   std::vector<int> degenerate_basic_residuals; // remove when done debugging;
