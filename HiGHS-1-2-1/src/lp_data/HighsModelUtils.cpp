@@ -147,9 +147,9 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, "Solve (Total),");
       fprintf(file, "Highs Run,");
       fprintf(file, "Original Columns (Reductions),");
-      fprintf(file, "Original Rows (Reductions),");
-      fprintf(file, "Columns Reduced (%),");
-      fprintf(file, "Rows Reduced (%)\n");
+      fprintf(file, "Original Rows (Reductions)\n");
+      // fprintf(file, "Columns Reduced (%),");
+      // fprintf(file, "Rows Reduced (%)\n");
       // Write instance name
       std::stringstream instance_name;
       instance_name << info.instance_name << ",";
@@ -181,15 +181,15 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.original_cols << " (-" << info.original_cols - info.reduced_cols << "),";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << "),";
+      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << ")\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.col_reduct_percent << ",";
-      fprintf(file, time.str().c_str());
-      time.str(std::string());
-      time << info.row_reduct_percent << "\n";
-      fprintf(file, time.str().c_str());
-      time.str(std::string());
+      // time << info.col_reduct_percent << ",";
+      // fprintf(file, time.str().c_str());
+      // time.str(std::string());
+      // time << info.row_reduct_percent << "\n";
+      // fprintf(file, time.str().c_str());
+      // time.str(std::string());
 
     }
     else{
@@ -224,15 +224,15 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.original_cols << " (-" << info.original_cols - info.reduced_cols << "),";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << "),";
+      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << ")\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.col_reduct_percent << ",";
-      fprintf(file, time.str().c_str());
-      time.str(std::string());
-      time << info.row_reduct_percent << "\n";
-      fprintf(file, time.str().c_str());
-      time.str(std::string());
+      // time << info.col_reduct_percent << ",";
+      // fprintf(file, time.str().c_str());
+      // time.str(std::string());
+      // time << info.row_reduct_percent << "\n";
+      // fprintf(file, time.str().c_str());
+      // time.str(std::string());
     }
   }
   else if (options.solver == kIpmString || options.solver == kIpmAggregateString){

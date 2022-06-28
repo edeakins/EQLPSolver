@@ -948,14 +948,18 @@ void HEkkPrimal::rebuild() {
   HighsSimplexInfo& info = ekk_instance_.info_;
   HighsSimplexStatus& status = ekk_instance_.status_;
   // Clear taboo flag from any bad basis changes
-  ekk_instance_.clearBadBasisChangeTabooFlag();
+  // ekk_instance_.clearBadBasisChangeTabooFlag();
   if (residual_col != (ekk_instance_.lp_.num_col_ - 1) 
       && solve_phase == kSolvePhaseOrbitalCrossover
       && variable_in != -1){
     const HighsInt row_start = residual_col - ekk_instance_.lp_.num_aggregate_cols_
                                 + ekk_instance_.lp_.num_aggregate_rows_;
+    // std::cout << "num_col: " << ekk_instance_.lp_.num_col_ << std::endl;
+    // std::cout << "num_row: " << ekk_instance_.lp_.num_row_ << std::endl;
     ekk_instance_.deletePivotedResiduals(residual_col + 1, row_start + 1);
     ekk_instance_.initialiseForSolve();
+    // std::cout << "num_col: " << ekk_instance_.lp_.num_col_ << std::endl;
+    // std::cout << "num_row: " << ekk_instance_.lp_.num_row_ << std::endl;
     rebuild_reason = kRebuildReasonNo;
     return;
   }
@@ -985,6 +989,7 @@ void HEkkPrimal::rebuild() {
   // Decide whether refactorization should be performed
   const bool refactor_basis_matrix =
       ekk_instance_.rebuildRefactor(rebuild_reason);
+  
 
   // bool refactor_basis_matrix = true;
   // Take a local copy of the rebuild reason and then reset the global value
@@ -1348,8 +1353,8 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
       const HighsInt residual_row = variable_in - ekk_instance_.lp_.num_aggregate_cols_ 
         + ekk_instance_.lp_.num_aggregate_rows_;
       ekk_instance_.pivoted_residual_row.at(residual_row) = 1;
-      // ekk_instance_.info_.workLower_.at(variable_in) = -kHighsInf;
-      // ekk_instance_.info_.workUpper_.at(variable_in) = +kHighsInf;
+      ekk_instance_.info_.workLower_.at(variable_in) = -kHighsInf;
+      ekk_instance_.info_.workUpper_.at(variable_in) = +kHighsInf;
     }
     // if (residual_col > ekk_instance_.lp_.num_degenerate_cols_ - ekk_instance_.lp_.num_aggregate_cols_){
     //   // std::cout << "num_degen: " << num_degen << std::endl;
@@ -1600,13 +1605,13 @@ void HEkkPrimal::phase1ChooseRow() {
 }
 
 void HEkkPrimal::chooseRow() {
-  if (ekk_instance_.lp_.level && 
-      ekk_instance_.lp_.is_degenerate_residual.at(variable_in)){
-    HighsInt row_index = variable_in - ekk_instance_.lp_.num_aggregate_cols_ 
-      + ekk_instance_.lp_.num_aggregate_rows_;
-    row_out = row_index;
-    return;
-  }
+  // if (ekk_instance_.lp_.level && 
+  //     ekk_instance_.lp_.is_degenerate_residual.at(variable_in)){
+  //   HighsInt row_index = variable_in - ekk_instance_.lp_.num_aggregate_cols_ 
+  //     + ekk_instance_.lp_.num_aggregate_rows_;
+  //   row_out = row_index;
+  //   return;
+  // }
   HighsSimplexInfo& info = ekk_instance_.info_;
   const vector<double>& baseLower = info.baseLower_;
   const vector<double>& baseUpper = info.baseUpper_;
@@ -1678,7 +1683,7 @@ void HEkkPrimal::considerBoundSwap() {
   // Compute the primal theta and see if we should have done a bound
   // flip instead
   if (row_out == kNoRowChosen) {
-    assert(solve_phase == kSolvePhase2);
+    assert(solve_phase == kSolvePhase2 || solve_phase == kSolvePhaseOrbitalCrossover);
     // No binding ratio in CHUZR, so flip or unbounded
     theta_primal = move_in * kHighsInf;
     move_out = 0;

@@ -275,7 +275,7 @@ void HighsOCAggregate::buildAmatrixExtended(){
             for (mIdx = parentRow[c]; mIdx < parentRow[c + 1]; ++mIdx){
                 elp.a_matrix_.index_.push_back(mIdx);
                 // AdegenRIndex[nnzStan] = j;
-                elp.a_matrix_.value_.push_back(-1);
+                elp.a_matrix_.value_.push_back(1);
                 ++nnz;
                 // AdegenRValue[nnzStan++] = 1;
             }
@@ -284,7 +284,7 @@ void HighsOCAggregate::buildAmatrixExtended(){
         if (isChild[c]){
             elp.a_matrix_.index_.push_back(childRow[c]);
             // AdegenRIndex[nnzStan] = childRow[xi];
-            elp.a_matrix_.value_.push_back(1);
+            elp.a_matrix_.value_.push_back(-1);
             // AdegenRValue[nnzStan++] = -1;
             ++nnz;
         }
@@ -296,7 +296,7 @@ void HighsOCAggregate::buildAmatrixExtended(){
     for (iCol = 0; iCol < numResiduals; ++iCol){
         elp.a_matrix_.index_.push_back(residualRow[iCol]);
         // AdegenRIndex[nnzStan] = residualRow[i];
-        elp.a_matrix_.value_.push_back(1);
+        elp.a_matrix_.value_.push_back(-1);
         // AdegenRValue[nnzStan++] = -1;
         elp.a_matrix_.start_.push_back(++nnz);
         // AdegenRStart[elp.num_col_ + i + 1] = nnzStan;
@@ -755,8 +755,8 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
         //     elp.col_upper_[iCol] = kHighsInf;
         //     continue;
         // }
-        elp.col_lower_[iCol] = -kHighsInf;
-        elp.col_upper_[iCol] = kHighsInf;
+        elp.col_lower_[iCol] = 0;
+        elp.col_upper_[iCol] = 0;
     }
 }  
 

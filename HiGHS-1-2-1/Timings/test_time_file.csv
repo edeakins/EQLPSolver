@@ -1,2 +1,0 @@
-Instance,Compute EP,Build ALP,Solve ALP,Build ELP,Orbital Crossover,Solve (Total),Highs Run,Original Columns (Reductions),Original Rows (Reductions),Columns Reduced (%),Rows Reduced (%)
-neos-476283,0.40,0.11,1.77,0.09,0.19,1.96,2.75,11915 (-85),10015 (-27),0.01,0.00

@@ -806,7 +806,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    // options_.solver = kIpmString;
+    options_.solver = kIpmString;
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
@@ -882,14 +882,25 @@ HighsStatus Highs::run() {
         //   alpSolution_ = crashSolution_;
         // }
         int numRBasic = 0;
-        for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
-          if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
-            numRBasic++;
-          else{
-            std::cout << "bad_col: " << i << std::endl;
-          }
-        }
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
       }
+      // alpBasis_.col_status.resize(original_lp.num_col_);
+      // alpBasis_.row_status.resize(original_lp.num_row_);
+      // passModel(original_lp);
+      // zeroIterationCounts();
+      // setBasis(alpBasis_);
+      // options_.solver = kHighsChooseString;
+      // options_.simplex_strategy = kSimplexStrategyChoose;
+      // timer_.start(timer_.orbital_crossover_clock);
+      // call_status =
+      //     callSolveLp(original_lp, "Verifying Basic Solution");
+      // timer_.stop(timer_.orbital_crossover_clock);
       stop_highs_run_clock = true;
       called_return_from_run = false;
       timer_.clock_time.at(timer_.solve_clock) = 
