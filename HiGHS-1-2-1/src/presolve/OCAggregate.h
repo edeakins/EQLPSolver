@@ -22,6 +22,9 @@ public:
     void buildLp();
     void buildLp(OCPartition& partition, HighsBasis& b,
                 HighsSolution& s, std::vector<HighsInt>& basic_index);
+    // Build solution for aggregate ipm solve to hand off to highs basic 
+    // crossover
+    HighsSolution buildSolution(OCPartition& partition, HighsSolution& s);
     // Build aggregate A matrices for ALP and EALP
     void buildAmatrix();
     void buildAmatrixExtended();
@@ -107,6 +110,7 @@ public:
     HighsBasis basis;
     HighsBasis elpBasis;
     HighsSolution solution;
+    HighsSolution lift_solution;
     HFactor degenerate_factor;
     HighsSparseMatrix degenerate_matrix;
     int level = 0;

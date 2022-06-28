@@ -136,6 +136,55 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     ++level;
 }
 
+HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolution& s){
+    ep = partition;
+    solution = s;
+    pcol = col;
+    pcolrep = colrep;
+    prow = row;
+    prowrep = rowrep;
+    pFrontCol = frontCol;
+    pcolCnt = colCnt;
+    pFrontRow = frontRow;
+    prowCnt = rowCnt;
+    findFrontMins();
+    buildColPointers();
+    buildRowPointers();
+    HighsInt iCol, iRow, rep, cf, pcf, pc,
+    rf, prf, pr, prlen; 
+    double pv, pd;
+    lift_solution.col_value.resize(numCol);
+    lift_solution.row_value.resize(numRow);
+    lift_solution.col_dual.resize(numCol);
+    lift_solution.row_dual.resize(numRow);
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        rep = colrep[iCol];
+        cf = ep.front[rep];
+        pcf = epMinusOne.front[rep];
+        pc = pFrontCol[pcf];
+        pv = solution.col_value[pc];
+        pd = solution.col_dual[pc];
+        lift_solution.col_value.at(rep) = 
+            pv;
+        lift_solution.col_dual.at(rep) = 
+            pd;
+    }
+    for (iRow = 0; iRow < rowCnt; ++iRow){
+        rep = rowrep[iRow];
+        rf = ep.front[rep];
+        prf = epMinusOne.front[rep];
+        prlen = epMinusOne.len[prf] + 1;
+        pr = pFrontRow[prf];
+        pv = solution.row_value.at(pr);
+        pd = solution.row_dual.at(pr);
+        lift_solution.row_value.at(rep - numCol) = 
+            (double)pv/prlen;
+        lift_solution.row_dual.at(rep - numCol) = 
+            pd;
+    }
+    return lift_solution;
+}
+
 // Build A matrix without linkers if they exist
 void HighsOCAggregate::buildAmatrix(){
     int iCol, cf, crep, clen, c;
@@ -226,7 +275,7 @@ void HighsOCAggregate::buildAmatrixExtended(){
             for (mIdx = parentRow[c]; mIdx < parentRow[c + 1]; ++mIdx){
                 elp.a_matrix_.index_.push_back(mIdx);
                 // AdegenRIndex[nnzStan] = j;
-                elp.a_matrix_.value_.push_back(1);
+                elp.a_matrix_.value_.push_back(-1);
                 ++nnz;
                 // AdegenRValue[nnzStan++] = 1;
             }
@@ -235,7 +284,7 @@ void HighsOCAggregate::buildAmatrixExtended(){
         if (isChild[c]){
             elp.a_matrix_.index_.push_back(childRow[c]);
             // AdegenRIndex[nnzStan] = childRow[xi];
-            elp.a_matrix_.value_.push_back(-1);
+            elp.a_matrix_.value_.push_back(1);
             // AdegenRValue[nnzStan++] = -1;
             ++nnz;
         }
@@ -247,7 +296,7 @@ void HighsOCAggregate::buildAmatrixExtended(){
     for (iCol = 0; iCol < numResiduals; ++iCol){
         elp.a_matrix_.index_.push_back(residualRow[iCol]);
         // AdegenRIndex[nnzStan] = residualRow[i];
-        elp.a_matrix_.value_.push_back(-1);
+        elp.a_matrix_.value_.push_back(1);
         // AdegenRValue[nnzStan++] = -1;
         elp.a_matrix_.start_.push_back(++nnz);
         // AdegenRStart[elp.num_col_ + i + 1] = nnzStan;
@@ -706,8 +755,8 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
         //     elp.col_upper_[iCol] = kHighsInf;
         //     continue;
         // }
-        elp.col_lower_[iCol] = 0;
-        elp.col_upper_[iCol] = 0;
+        elp.col_lower_[iCol] = -kHighsInf;
+        elp.col_upper_[iCol] = kHighsInf;
     }
 }  
 
@@ -875,6 +924,7 @@ void HighsOCAggregate::buildBasis(bool finish, bool extended){
     num_basic = 0;
     buildColBasis();
     buildRowBasis();
+    elpBasis.alien = false;
 }
 
 void HighsOCAggregate::buildColBasis(){
@@ -895,7 +945,7 @@ void HighsOCAggregate::buildColBasis(){
             continue;
         }
         if (mark_degenerate.at(pCol)){
-            elpBasis.col_status.at(iCol) = nonbasic;
+            elpBasis.col_status.at(iCol) = basic;
             continue;
         }
         // if (mark_degenerate.at(pCol) && splitFromNonbasicCount.at(pCol) < splitSize.at(pCol) - 1){
@@ -916,10 +966,10 @@ void HighsOCAggregate::buildColBasis(){
         // }
         elpBasis.col_status[iCol] = HighsBasisStatus::kLower;
     }
-    // for (iCol = 0; iCol < colCnt + numResiduals; ++iCol){
-    //     if (elpBasis.col_status.at(iCol) == HighsBasisStatus::kBasic)
-    //         num_basic++;
-    // }
+    for (iCol = 0; iCol < colCnt + numResiduals; ++iCol){
+        if (elpBasis.col_status.at(iCol) == HighsBasisStatus::kBasic)
+            num_basic++;
+    }
 }
 
 void HighsOCAggregate::buildRowBasis(){
@@ -941,10 +991,10 @@ void HighsOCAggregate::buildRowBasis(){
     for (iRow = rowCnt; iRow < rowCnt + numResiduals; ++iRow){
         elpBasis.row_status[iRow] = HighsBasisStatus::kLower;
     }
-    // for (iRow = 0; iRow < rowCnt + numResiduals; ++iRow){
-    //     if (elpBasis.row_status.at(iRow) == HighsBasisStatus::kBasic)
-    //         num_basic++;
-    // }
+    for (iRow = 0; iRow < rowCnt + numResiduals; ++iRow){
+        if (elpBasis.row_status.at(iRow) == HighsBasisStatus::kBasic)
+            num_basic++;
+    }
 }
 
 void HighsOCAggregate::buildResidualColBasis(){

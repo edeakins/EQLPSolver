@@ -164,6 +164,12 @@ struct HighsInfoStruct {
   double build_alp_time = 0;
   double build_elp_iterative_time = 0;
   double equitable_partition_time = 0;
+  HighsInt reduced_rows;
+  HighsInt reduced_cols;
+  HighsInt original_cols;
+  HighsInt original_rows;
+  double row_reduct_percent;
+  double col_reduct_percent;
   std::string instance_name;
 };
 

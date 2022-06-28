@@ -126,6 +126,8 @@ static void ProcessSingletons(const Control& control, const Model& model,
             if (!active[j])
                 continue;
             double a = std::abs(AT.value(p)) * weights[j];
+            if (j == 2916)
+                int fuck = 1;
             rowmax = std::max(rowmax, a);
             if (a > max_singleton && AI.end(j) == AI.begin(j)+1) {
                 max_singleton = a;

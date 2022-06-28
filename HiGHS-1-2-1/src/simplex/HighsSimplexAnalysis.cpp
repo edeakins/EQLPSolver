@@ -274,6 +274,7 @@ void HighsSimplexAnalysis::setup(const std::string lp_name, const HighsLp& lp,
 void HighsSimplexAnalysis::setupSimplexTime(const HighsOptions& options) {
   analyse_simplex_time =
       kHighsAnalysisLevelSolverTime & options.highs_analysis_level;
+  // analyse_simplex_time = true;
   if (analyse_simplex_time) {
     // Set up the thread clocks
     HighsInt max_threads = highs::parallel::num_threads();

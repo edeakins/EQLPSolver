@@ -956,6 +956,8 @@ void HEkkPrimal::rebuild() {
                                 + ekk_instance_.lp_.num_aggregate_rows_;
     ekk_instance_.deletePivotedResiduals(residual_col + 1, row_start + 1);
     ekk_instance_.initialiseForSolve();
+    rebuild_reason = kRebuildReasonNo;
+    return;
   }
 
   // Record whether the update objective value should be tested. If
@@ -984,6 +986,7 @@ void HEkkPrimal::rebuild() {
   const bool refactor_basis_matrix =
       ekk_instance_.rebuildRefactor(rebuild_reason);
 
+  // bool refactor_basis_matrix = true;
   // Take a local copy of the rebuild reason and then reset the global value
   const HighsInt local_rebuild_reason = rebuild_reason;
   rebuild_reason = kRebuildReasonNo;
@@ -1177,7 +1180,7 @@ void HEkkPrimal::iterate() {
     if (rebuild_reason) {
       assert(rebuild_reason == kRebuildReasonPossiblySingularBasis);
       if (solve_phase == kSolvePhaseOrbitalCrossover)
-        residual_col--;
+        residual_col++;
       return;
     }
   }
@@ -1206,7 +1209,7 @@ void HEkkPrimal::iterate() {
   if (!ekk_instance_.info_.num_primal_infeasibilities &&
       solve_phase == kSolvePhase1)
     rebuild_reason = kRebuildReasonPossiblyPhase1Feasible;
-
+  // rebuild_reason = kRebuildReasonSyntheticClockSaysInvert;
   const bool ok_rebuild_reason =
       rebuild_reason == kRebuildReasonNo ||
       rebuild_reason == kRebuildReasonPossiblyPhase1Feasible ||
@@ -1345,8 +1348,8 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
       const HighsInt residual_row = variable_in - ekk_instance_.lp_.num_aggregate_cols_ 
         + ekk_instance_.lp_.num_aggregate_rows_;
       ekk_instance_.pivoted_residual_row.at(residual_row) = 1;
-      ekk_instance_.info_.workLower_.at(variable_in) = -kHighsInf;
-      ekk_instance_.info_.workUpper_.at(variable_in) = +kHighsInf;
+      // ekk_instance_.info_.workLower_.at(variable_in) = -kHighsInf;
+      // ekk_instance_.info_.workUpper_.at(variable_in) = +kHighsInf;
     }
     // if (residual_col > ekk_instance_.lp_.num_degenerate_cols_ - ekk_instance_.lp_.num_aggregate_cols_){
     //   // std::cout << "num_degen: " << num_degen << std::endl;

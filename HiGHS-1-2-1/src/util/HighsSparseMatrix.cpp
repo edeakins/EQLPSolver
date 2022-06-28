@@ -1353,6 +1353,8 @@ void HighsSparseMatrix::update(const HighsInt var_in, const HighsInt var_out,
       HighsInt iFind = this->p_end_[iRow];
       HighsInt iSwap = this->p_end_[iRow]++;
       while (this->index_[iFind] != var_out) iFind++;
+      // assert(iFind >= 0 && iFind < int(this->index_.size()));
+      // assert(iSwap >= 0 && iSwap < int(this->value_.size()));
       swap(this->index_[iFind], this->index_[iSwap]);
       swap(this->value_[iFind], this->value_[iSwap]);
     }

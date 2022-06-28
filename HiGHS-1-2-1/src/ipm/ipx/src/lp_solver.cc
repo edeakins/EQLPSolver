@@ -199,6 +199,9 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
         Timer timer;
         Vector colweight(n+m);
         for (Int j = 0; j < n+m; j++) {
+            // if (j >= n){
+            //     int five = 5;
+            // }
             Int nz = AI.entries(j);
             if (lb[j] == ub[j])
                 colweight[j] = 0.0;

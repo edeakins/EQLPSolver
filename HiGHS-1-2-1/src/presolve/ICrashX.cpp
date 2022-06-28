@@ -67,6 +67,9 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
   for (int i = 0; i < num_col; i++) {
     for (int p = Ap[i]; p < Ap[i + 1]; ++p) slack[Ai[p]] -= Av[p] * x[i];
   }
+  for (int i = 0; i < num_row; ++i)
+    if (std::fabs(slack.at(i)) < 1e-10)
+      slack.at(i) = 0;
   for (int i = 0; i < num_row; i++) {
     switch (constraint_type[i]) {
       case '=':

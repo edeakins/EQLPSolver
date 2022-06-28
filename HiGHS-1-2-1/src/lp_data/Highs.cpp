@@ -793,6 +793,14 @@ HighsStatus Highs::run() {
     timer_.stop(timer_.build_alp_clock);
     // Grab and pass initial aggregate model and pass to highs
     buildALP();
+    info_.original_cols = original_lp.num_col_;
+    info_.original_rows = original_lp.num_row_;
+    info_.reduced_cols = alp_.num_col_;
+    info_.reduced_rows = alp_.num_row_;
+    info_.col_reduct_percent = (double)(original_lp.num_col_ - alp_.num_col_)/
+                                 original_lp.num_col_;
+    info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
+                                 original_lp.num_row_;
     returnFromRun(HighsStatus::kOk);
     passModel(original_lp);
     zeroIterationCounts();
@@ -830,7 +838,7 @@ HighsStatus Highs::run() {
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < .12 && !discrete) continue;
+        if (change < .05 && !discrete) continue;
         change = 0;
         // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
@@ -874,20 +882,58 @@ HighsStatus Highs::run() {
         //   alpSolution_ = crashSolution_;
         // }
         int numRBasic = 0;
-        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
-        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
-        //     numRBasic++;
-        //   else{
-        //     std::cout << "bad_col: " << i << std::endl;
-        //   }
-        // }
-        // std::cout << "counted" << std::endl;
+        for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+          if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+            numRBasic++;
+          else{
+            std::cout << "bad_col: " << i << std::endl;
+          }
+        }
       }
       stop_highs_run_clock = true;
       called_return_from_run = false;
       timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
     }
+  }
+  else if (options_.solver == kIpmAggregateString){
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    options_.run_crossover = false;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving ALP with IPX");
+    timer_.stop(timer_.aggregate_solve_clock);
+    setBasisValidity();
+    while(!discrete)
+      refinePartition();
+    HighsSolution interior_point = 
+      aggregator_.buildSolution(partition_, solution_);
+    crossover(interior_point, original_lp);
+    stop_highs_run_clock = true;
+    called_return_from_run = false;
   }
   else if (basis_.valid || options_.presolve == kHighsOffString) {
     // There is a valid basis for the problem or presolve is off

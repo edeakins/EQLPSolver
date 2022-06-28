@@ -3,6 +3,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <valarray>
+#include <iostream>
 #include "time.h"
 #include "utils.h"
 
