@@ -1,4 +1,5 @@
 #include "basis.h"
+#include <iostream>
 #include <algorithm>
 #include <cmath>
 #include <tuple>
@@ -149,6 +150,8 @@ Int Basis::Factorize() {
         break;
     }
     time_factorize_ += timer.Elapsed();
+    // std::cout << "factorization time: " << time_factorize_ << std::endl;
+    // std::cin.get();
     factorization_is_fresh_ = true;
     return err;
 }

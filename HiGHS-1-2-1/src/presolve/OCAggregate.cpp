@@ -55,6 +55,13 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     zero_step_pivots.resize(numCol + numTotResiduals);
 }
 
+void HighsOCAggregate::passNewPartitionBasisSolution(OCPartition& partition, HighsBasis& b,
+                                                        HighsSolution& s){
+    ep = partition;
+    basis = b;
+    solution = s;
+}
+
 void HighsOCAggregate::resizeElpContainers(){
     // Resize Lp containers
     agglp.col_cost_.resize(colCnt);
@@ -99,13 +106,6 @@ void HighsOCAggregate::buildLp(){
     copyPartition();
     agglp.level = level;
     ++level;
-}
-
-void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
-                               HighsSolution& s, std::vector<HighsInt>& basic_index){
-    ep = partition;
-    basis = b;
-    solution = s;
     pcol = col;
     pcolrep = colrep;
     prow = row;
@@ -114,12 +114,9 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     pcolCnt = colCnt;
     pFrontRow = frontRow;
     prowCnt = rowCnt;
-    findFrontMins();
-    buildColPointers();
-    buildRowPointers();
-    trackAndCountSplits();
-    markDegenerate();
-    buildResidualLinks();
+}
+
+void HighsOCAggregate::buildLpExtended(){
     resizeElpContainers();
     buildBasis(false, false);
     buildObjExtended();
@@ -134,6 +131,14 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     presolvelp.level = level;
     // elp.pairs = pairs;
     ++level;
+    pcol = col;
+    pcolrep = colrep;
+    prow = row;
+    prowrep = rowrep;
+    pFrontCol = frontCol;
+    pcolCnt = colCnt;
+    pFrontRow = frontRow;
+    prowCnt = rowCnt;
 }
 
 HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolution& s){
@@ -539,7 +544,7 @@ void HighsOCAggregate::buildRhsFromScratchExtended(){
 
 void HighsOCAggregate::buildRhsFromSolution(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
+    double pv, lb, ub, lbDiff, ubDiff, tol = kHighsTiny;
     agglp.row_upper_.resize(rowCnt);
     agglp.row_lower_.resize(rowCnt);
     for (iRow = 0; iRow < rowCnt; ++iRow){
@@ -571,7 +576,7 @@ void HighsOCAggregate::buildRhsFromSolution(){
 
 void HighsOCAggregate::buildRhsFromSolutionExtended(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
+    double pv, lb, ub, lbDiff, ubDiff, tol = kHighsTiny;
     for (iRow = 0; iRow < rowCnt; ++iRow){
         rep = rowrep[iRow];
         rf = ep.front[rep];
@@ -605,7 +610,7 @@ void HighsOCAggregate::buildRhsFromSolutionExtended(){
 
 void HighsOCAggregate::buildRhsFromSolutionExtendedNoResiduals(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
+    double pv, lb, ub, lbDiff, ubDiff, tol = kHighsTiny;
     for (iRow = 0; iRow < rowCnt; ++iRow){
         rep = rowrep[iRow];
         rf = ep.front[rep];
@@ -695,7 +700,7 @@ void HighsOCAggregate::buildBndsFromScratchExtended(){
 
 void HighsOCAggregate::buildBndsFromSolution(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
+    double pv, ubDiff, lbDiff, lb, ub, tol = kHighsTiny;
     agglp.col_lower_.resize(colCnt);
     agglp.col_upper_.resize(colCnt);
     for (iCol = 0; iCol < colCnt; ++iCol){
@@ -725,7 +730,7 @@ void HighsOCAggregate::buildBndsFromSolution(){
 
 void HighsOCAggregate::buildBndsFromSolutionExtended(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
+    double pv, ubDiff, lbDiff, lb, ub, tol = kHighsTiny;
     for (iCol = 0; iCol < colCnt; ++iCol){
         rep = colrep[iCol];
         cf = ep.front[rep];
@@ -762,7 +767,7 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
 
 void HighsOCAggregate::buildBndsFromSolutionExtendedNoResiduals(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
+    double pv, ubDiff, lbDiff, lb, ub, tol = kHighsTiny;
     for (iCol = 0; iCol < colCnt; ++iCol){
         rep = colrep[iCol];
         cf = ep.front[rep];
@@ -800,11 +805,13 @@ void HighsOCAggregate::buildColNames(){
         name.str(""); 
     }
 }
-void HighsOCAggregate::buildResiduals(){
-    if (!ep.level) return;
+int HighsOCAggregate::buildResiduals(){
+    findFrontMins();
+    buildColPointers();
+    buildRowPointers();
+    markDegenerate();
     buildResidualLinks();
-    buildResidualCols();
-    buildResidualRows();
+    return numResiduals;
 }
 
 void HighsOCAggregate::buildResidualLinks(){
@@ -850,10 +857,10 @@ void HighsOCAggregate::buildResidualLinks(){
         parentRow[split.first + 1] = elpNumRow + split.second.size();
         for (int idx = 0; idx < split.second.size(); ++idx){
             int iCol = split.second.at(idx);
-            if (mark_degenerate.at(split.first)){
-                zero_step_pivots.at(elpNumCol) = 1;
-                elp.num_degenerate_cols_++;
-            }
+            // if (mark_degenerate.at(split.first)){
+            //     zero_step_pivots.at(elpNumCol) = 1;
+            //     elp.num_degenerate_cols_++;
+            // }
             isChild.at(iCol) = 1;
             childRow[iCol] = elpNumRow;
             residual_cols_.push_back(elpNumCol);

@@ -832,13 +832,15 @@ HighsStatus Highs::run() {
       double change = 0;
       while (!discrete){
         options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // options_.simplex_update_limit = 500;
         // Refine partition 
-        OCPartition old_partition = equitablePartition_.getPartition();
+        // OCPartition old_partition = equitablePartition_.getPartition();
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < .05 && !discrete) continue;
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = countNewResiduals();
+        if (change < 75 && !discrete) continue;
         change = 0;
         // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
@@ -904,7 +906,8 @@ HighsStatus Highs::run() {
       stop_highs_run_clock = true;
       called_return_from_run = false;
       timer_.clock_time.at(timer_.solve_clock) = 
-        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+        timer_.clock_time.at(timer_.orbital_crossover_clock));
     }
   }
   else if (options_.solver == kIpmAggregateString){
@@ -942,9 +945,14 @@ HighsStatus Highs::run() {
       refinePartition();
     HighsSolution interior_point = 
       aggregator_.buildSolution(partition_, solution_);
+    timer_.start(timer_.crossover_from_start_point_clock);
     crossover(interior_point, original_lp);
+    timer_.stop(timer_.crossover_from_start_point_clock);
     stop_highs_run_clock = true;
     called_return_from_run = false;
+    timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+        timer_.clock_time.at(timer_.crossover_from_start_point_clock));
   }
   else if (basis_.valid || options_.presolve == kHighsOffString) {
     // There is a valid basis for the problem or presolve is off
@@ -2442,13 +2450,14 @@ void Highs::buildALP(){
 }
 
 void Highs::buildEALP(){
-  aggregator_.buildLp(partition_, alpBasis_, alpSolution_, ekk_instance_.basis_.basicIndex_);
+  aggregator_.buildLpExtended();
   // alp_ = aggregator_.getAggLp();
   ealp_ = aggregator_.getLp();
 }
 
-void Highs::buildPEALP(){
-  pealp_ = aggregator_.getLpNoResiduals();
+int Highs::countNewResiduals(){
+  aggregator_.passNewPartitionBasisSolution(partition_, alpBasis_, alpSolution_);
+  return aggregator_.buildResiduals();
 }
 
 void Highs::getCrashBasis(){
@@ -2519,6 +2528,7 @@ double Highs::measureChangeInPartitionSize(HighsLp& original_lp, OCPartition& ol
   HighsInt num_split_change = num_col_splits - old_num_col_splits;
   HighsInt num_original_col = original_lp.num_col_;
   double change = (double)num_split_change/(double)num_original_col;
+  change = num_split_change;
   return change;
 }
 
@@ -3497,7 +3507,7 @@ HighsStatus Highs::crossover(HighsSolution& solution) {
 #ifdef IPX_ON
   std::cout << "Loading crossover...\n";
   HighsBasis basis;
-  bool x_status = callCrossover(model_.lp_, options_, solution, basis);
+  bool x_status = callCrossover(model_.lp_, options_, solution, basis, info_);
   if (!x_status) return HighsStatus::kError;
 
   setBasis(basis);
@@ -3514,7 +3524,7 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp) {
 #ifdef IPX_ON
   std::cout << "Loading crossover...\n";
   HighsBasis basis;
-  bool x_status = callCrossover(lp, options_, solution, basis);
+  bool x_status = callCrossover(lp, options_, solution, basis, info_);
   if (!x_status) return HighsStatus::kError;
   info_.basis_validity = kBasisValidityValid;
 

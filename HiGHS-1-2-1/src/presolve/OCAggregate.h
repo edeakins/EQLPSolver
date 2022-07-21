@@ -16,12 +16,13 @@
 class HighsOCAggregate{
 public:
     void passLpAndPartition(HighsLp& lp, OCPartition& partition);
+    void passNewPartitionBasisSolution(OCPartition& partition, HighsBasis& b,
+                                        HighsSolution& s);
     void resizeAlpContainers();
     void resizeElpContainers();
     void resizeGramSchmidtMatrixContainers();
     void buildLp();
-    void buildLp(OCPartition& partition, HighsBasis& b,
-                HighsSolution& s, std::vector<HighsInt>& basic_index);
+    void buildLpExtended();
     // Build solution for aggregate ipm solve to hand off to highs basic 
     // crossover
     HighsSolution buildSolution(OCPartition& partition, HighsSolution& s);
@@ -54,7 +55,7 @@ public:
     void buildObjExtended();
     void buildObjExtendedNoResiduals();
     // Build and handle residual cols/rows for ALP and EALP
-    void buildResiduals();
+    int buildResiduals();
     void buildResidualLinks();
     void buildResidualCols();
     void buildResidualRows();

@@ -1196,7 +1196,8 @@ class Highs {
   void refinePartition();
   void buildALP();
   void buildEALP();
-  void buildPEALP();
+  // void buildPEALP();
+  int countNewResiduals();
   void getOrbitalCrossoverBasis();
   void getOrbitalCrossoverSolution();
   void getCrashBasis();

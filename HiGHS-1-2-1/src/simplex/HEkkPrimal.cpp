@@ -1119,8 +1119,11 @@ void HEkkPrimal::iterate() {
   // rebuild_reason = kRebuildReasonPossiblySingularBasis is set if
   // numerical trouble is detected
   if (!useVariableIn()) {
-    if (rebuild_reason)
+    if (rebuild_reason){
       assert(rebuild_reason == kRebuildReasonPossiblySingularBasis);
+      // std::cout << "bad var in" << std::endl;
+      // std::cin.get();
+    }
     return;
   }
   // else if (rebuild_reason == kRebuildReasonPossiblySingularBasis){

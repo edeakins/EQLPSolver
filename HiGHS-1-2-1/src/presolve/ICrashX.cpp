@@ -28,7 +28,8 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
 #include "ipm/IpxWrapper.h"
 
 bool callCrossover(const HighsLp& lp, const HighsOptions& options,
-                   HighsSolution& solution, HighsBasis& basis) {
+                   HighsSolution& solution, HighsBasis& basis,
+                   HighsInfo& highs_info) {
   std::cout << "Calling ipx crossover\n";
 
   ipx::Int num_col, num_row;
@@ -132,6 +133,8 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
       solution);
 
   if (status != HighsStatus::kOk) return false;
+  // highs_info.ipm_time = lps.report_info_.time_ipm1 + lps.report_info_.time_ipm2;
+  highs_info.crossover_time = lps.report_info_.time_crossover;
 
   std::cout << "Crossover basic solution >>>" << std::endl;
 
