@@ -1,5 +1,10 @@
 #include "OCAggregate.h"
 
+double buildColFinish = 0;
+double buildRowFinish = 0;
+double markFrontFinish = 0;
+double buildResidFinish = 0;
+double markDegenFinish = 0;
 void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     olp = lp;
     ep = partition;
@@ -31,6 +36,7 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     splitSize.resize(numCol);
 
     // Allocate col and row pointers
+    agg_col.assign(numCol, -1);
     col.assign(numCol, -1);
     colrep.assign(numCol, -1);
     row.assign(numRow, -1);
@@ -40,6 +46,7 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     frontRow.assign(numRow + numCol, -1);
     rowFront.assign(numRow + numCol, -1);
     frontMin.assign(numCol + numRow, -1);
+    repFront.assign(numCol + numRow, -1);
     // Allocate temp column storage
     columnI.resize(nnz + numTotResiduals * 3);
     columnX.resize(numRow);
@@ -117,6 +124,11 @@ void HighsOCAggregate::buildLp(){
 }
 
 void HighsOCAggregate::buildLpExtended(){
+    findFrontMins();
+    buildColPointers();
+    buildRowPointers();
+    markDegenerate();
+    buildResidualLinks();
     resizeElpContainers();
     buildBasis(false, false);
     buildObjExtended();
@@ -805,12 +817,26 @@ void HighsOCAggregate::buildColNames(){
         name.str(""); 
     }
 }
+
 int HighsOCAggregate::buildResiduals(){
-    findFrontMins();
-    buildColPointers();
-    buildRowPointers();
-    markDegenerate();
-    buildResidualLinks();
+    // timer_.resetHighsTimer();
+    // timer_.startRunHighsClock();
+    // double start = timer_.readRunHighsClock();
+    // findFrontMins();
+    // markFrontFinish += timer_.readRunHighsClock() - start;
+    // start = timer_.readRunHighsClock();
+    // buildColPointers();
+    // buildColFinish += timer_.readRunHighsClock() - start;
+    // start = timer_.readRunHighsClock();
+    // buildRowPointers();
+    // buildRowFinish += timer_.readRunHighsClock() - start;
+    // start = timer_.readRunHighsClock();
+    // markDegenerate();
+    // markDegenFinish += timer_.readRunHighsClock() - start;
+    // start = timer_.readRunHighsClock();
+    // buildResidualLinks();
+    // buildResidFinish += timer_.readRunHighsClock() - start;
+    HighsInt cnt = trackAndCountSplits();
     return numResiduals;
 }
 
@@ -826,12 +852,12 @@ void HighsOCAggregate::buildResidualLinks(){
     std::fill(childRow.begin(), childRow.end(), 0);
     std::fill(residualRow.begin(), residualRow.end(), 0);
     std::fill(residualCol.begin(), residualCol.end(), 0);
-    // std::fill(degenerate_basic_rows.begin(), degenerate_basic_rows.end(), 0);
-    // std::fill(degenerate_basic_index.begin(), degenerate_basic_index.end(), 0);
-    // std::fill(degenerate_basic_residuals.begin(), degenerate_basic_residuals.end(), 0);
-    std::fill(zero_step_pivots.begin(), zero_step_pivots.end(), 0);
-    std::vector<int> residual_cols_;
-    std::vector<int> residual_to_old(numCol + numTotResiduals);
+    // // std::fill(degenerate_basic_rows.begin(), degenerate_basic_rows.end(), 0);
+    // // std::fill(degenerate_basic_index.begin(), degenerate_basic_index.end(), 0);
+    // // std::fill(degenerate_basic_residuals.begin(), degenerate_basic_residuals.end(), 0);
+    // std::fill(zero_step_pivots.begin(), zero_step_pivots.end(), 0);
+    // std::vector<int> residual_cols_;
+    // std::vector<int> residual_to_old(numCol + numTotResiduals);
     int elpNumRow = rowCnt;
     int elpNumCol = colCnt;
     int numSkipped = 0;
@@ -863,25 +889,25 @@ void HighsOCAggregate::buildResidualLinks(){
             // }
             isChild.at(iCol) = 1;
             childRow[iCol] = elpNumRow;
-            residual_cols_.push_back(elpNumCol);
-            residual_to_old.at(elpNumCol) = split.first;
+            // residual_cols_.push_back(elpNumCol);
+            // residual_to_old.at(elpNumCol) = split.first;
             residualCol[numResiduals] = elpNumCol++;
             residualRow[numResiduals++] = elpNumRow++;
             // pairs.push_back(std::pair<int, int>(split.first, iCol));
         }
     }
-    for (int iCol = 0; iCol < numResiduals; ++iCol){
-        int r_col = residual_cols_.at(iCol);
-        int x_col = residual_to_old.at(r_col);
-        if (mark_degenerate.at(x_col))
-            elp.residual_cols_.push_back(r_col);
-    }
-    for (int iCol = 0; iCol < numResiduals; ++iCol){
-        int r_col = residual_cols_.at(iCol);
-        int x_col = residual_to_old.at(r_col);
-        if (!mark_degenerate.at(x_col))
-            elp.residual_cols_.push_back(r_col);
-    }
+    // for (int iCol = 0; iCol < numResiduals; ++iCol){
+    //     int r_col = residual_cols_.at(iCol);
+    //     int x_col = residual_to_old.at(r_col);
+    //     if (mark_degenerate.at(x_col))
+    //         elp.residual_cols_.push_back(r_col);
+    // }
+    // for (int iCol = 0; iCol < numResiduals; ++iCol){
+    //     int r_col = residual_cols_.at(iCol);
+    //     int x_col = residual_to_old.at(r_col);
+    //     if (!mark_degenerate.at(x_col))
+    //         elp.residual_cols_.push_back(r_col);
+    // }
     splitCells.clear();
 }
 
@@ -1027,30 +1053,98 @@ void HighsOCAggregate::findFrontMins(){
     }
 }
 
+// void HighsOCAggregate::buildColFrontsAndReps(){
+//     HighsInt i_front, j, min_rep;
+//     std::set<int> fronts;
+//     bool new_front;
+//     std::pair<std::set<int>::iterator,bool> new_rep;
+//     for (i_front = 0; i_front < numCol; i_front += ep.len.at(i_front) + 1){
+
+//     }
+// }
+
+// void HighsOCAggregate::buildColPointers(){
+//     int i, j, min_rep;
+//     // front.clear();
+//     std::set<int> fronts;
+//     std::set<int> testCols;
+//     bool newFront;
+//     bool duplicatedRep;
+//     std::pair<std::set<int>::iterator,bool> newRep;
+//     newColReps.clear();
+//     for (i = 0; i < numCol; ++i){
+//         // repFront.at(i) = ep.front.at(i);
+//         if (col[i] > -1){
+//             fronts.insert(ep.front[i]);
+//             frontCol[ep.front[i]] = col[i];
+//             colFront[col[i]] = ep.front[i];
+//             agg_col.at(i) = col.at(i);
+//             continue;
+//         }
+//         newFront = fronts.insert(ep.front[i]).second;
+//         if (newFront){
+//             frontCol[ep.front[i]] = colCnt;
+//             colFront[colCnt] = ep.front[i];
+//             // min_rep = frontMin.at(ep.front.at(i));
+//             colrep[colCnt] = i;
+//             col[i] = colCnt++;
+//             agg_col.at(i) = col.at(i);
+//         }
+//         else{
+//             agg_col.at(i) = col.at(frontCol.at(ep.front.at(i)));
+//         }
+//     }
+// }
+
+// void HighsOCAggregate::buildRowPointers(){
+//     int i, j, min_rep;
+//     std::set<int> fronts;
+//     std::set<int> testRows;
+//     bool newFront;
+//     std::pair<std::set<int>::iterator,bool> newRep;
+//     newRowReps.clear();
+//     for (i = numCol; i < numTot; ++i){
+//         if (row[i - numCol] > -1){
+//             fronts.insert(ep.front[i]);
+//             frontRow[ep.front[i]] = row[i - numCol];
+//             rowFront[row[i - numCol]] = ep.front[i];
+//             continue;
+//         }
+//         newFront = fronts.insert(ep.front[i]).second;
+//         if (newFront){
+//             frontRow[ep.front[i]] = rowCnt;
+//             rowFront[rowCnt] = ep.front[i];
+//             // min_rep = frontMin.at(ep.front.at(i));
+//             rowrep[rowCnt] = i;
+//             row[i - numCol] = rowCnt++;
+//         }
+//     }
+// }
+
 void HighsOCAggregate::buildColPointers(){
     int i, j, min_rep;
     // front.clear();
     std::set<int> fronts;
     std::set<int> testCols;
-    std::vector<int> colFreq(numCol, 0);
     bool newFront;
     bool duplicatedRep;
     std::pair<std::set<int>::iterator,bool> newRep;
     newColReps.clear();
     for (i = 0; i < numCol; ++i){
-        if (col[i] > -1){
-            fronts.insert(ep.front[i]);
-            frontCol[ep.front[i]] = col[i];
-            colFront[col[i]] = ep.front[i];
+        repFront.at(ep.label.at(i)) = ep.front.at(ep.label.at(i));
+        if (col[ep.label.at(i)] > -1){
+            fronts.insert(ep.front[ep.label.at(i)]);
+            frontCol[ep.front[ep.label.at(i)]] = col[ep.label.at(i)];
+            colFront[col[ep.label.at(i)]] = ep.front[ep.label.at(i)];
             continue;
         }
-        newFront = fronts.insert(ep.front[i]).second;
+        newFront = fronts.insert(ep.front[ep.label.at(i)]).second;
         if (newFront){
-            frontCol[ep.front[i]] = colCnt;
-            colFront[colCnt] = ep.front[i];
-            min_rep = frontMin.at(ep.front.at(i));
-            colrep[colCnt] = min_rep;
-            col[i] = colCnt++;
+            frontCol[ep.front[ep.label.at(i)]] = colCnt;
+            colFront[colCnt] = ep.front[ep.label.at(i)];
+            // min_rep = frontMin.at(ep.front.at(i));
+            colrep[colCnt] = ep.label.at(i);
+            col[ep.label.at(i)] = colCnt++;
         }
     }
 }
@@ -1059,24 +1153,23 @@ void HighsOCAggregate::buildRowPointers(){
     int i, j, min_rep;
     std::set<int> fronts;
     std::set<int> testRows;
-    std::vector<int> rowFreq(numRow, 0);
     bool newFront;
     std::pair<std::set<int>::iterator,bool> newRep;
     newRowReps.clear();
     for (i = numCol; i < numTot; ++i){
-        if (row[i - numCol] > -1){
-            fronts.insert(ep.front[i]);
-            frontRow[ep.front[i]] = row[i - numCol];
-            rowFront[row[i - numCol]] = ep.front[i];
+        if (row[ep.label.at(i) - numCol] > -1){
+            fronts.insert(ep.front[ep.label.at(i)]);
+            frontRow[ep.front[ep.label.at(i)]] = row[ep.label.at(i) - numCol];
+            rowFront[row[ep.label.at(i) - numCol]] = ep.front[ep.label.at(i)];
             continue;
         }
-        newFront = fronts.insert(ep.front[i]).second;
+        newFront = fronts.insert(ep.front[ep.label.at(i)]).second;
         if (newFront){
-            frontRow[ep.front[i]] = rowCnt;
-            rowFront[rowCnt] = ep.front[i];
-            min_rep = frontMin.at(ep.front.at(i));
-            rowrep[rowCnt] = min_rep;
-            row[i - numCol] = rowCnt++;
+            frontRow[ep.front[ep.label.at(i)]] = rowCnt;
+            rowFront[rowCnt] = ep.front[ep.label.at(i)];
+            // min_rep = frontMin.at(ep.front.at(i));
+            rowrep[rowCnt] = ep.label.at(i);
+            row[ep.label.at(i) - numCol] = rowCnt++;
         }
     }
 }
@@ -1159,18 +1252,21 @@ void HighsOCAggregate::buildRowPointers(){
 //     std::cout << "build LU" << std::endl;
 // }
 
-void HighsOCAggregate::trackAndCountSplits(){
-    std::fill_n(splitFrom.begin(), numCol, -1);
-    std::fill_n(splitSize.begin(), numCol, 0);
-    std::fill_n(splitFromNonbasicCount.begin(), numCol, 0);
-    for (int i_col = 0; i_col < colCnt; ++i_col){
-        int crep = colrep[i_col];
-        int pf = epMinusOne.front[crep];
-        int p_col = pFrontCol[pf];
-        if (p_col != i_col)
-            splitFrom.at(i_col) = p_col;
-        splitSize.at(p_col)++;
+HighsInt HighsOCAggregate::trackAndCountSplits(){
+    HighsInt i_front, rep, p_col_rep, p_front, p_col, residual_cnt = 0,
+    old_col_cnt = 0, front_cnt = 0;
+    HighsBasisStatus basic = HighsBasisStatus::kBasic;
+    // std::fill_n(splitFrom.begin(), numCol, -1);
+    // std::fill_n(splitSize.begin(), numCol, 0);
+    for (i_front = 0; i_front < numCol; i_front += ep.len.at(i_front) + 1){
+        rep = ep.label.at(i_front);
+        p_front = repFront.at(rep);
+        p_col = pFrontCol.at(p_front);
+        p_col_rep = colrep.at(p_col);
+        if (p_col_rep == rep) continue;
+        if (basis.col_status.at(p_col) == basic) residual_cnt++;
     }
+    return residual_cnt;
 }
 
 void HighsOCAggregate::copyPartition(){

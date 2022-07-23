@@ -62,8 +62,10 @@ public:
     // Build vectors containing the representative of an aggregate column/row
     void findFrontMins();
     void buildRowPointers();
+    void buildRowFrontsAndReps();
     void buildColPointers();
-    void trackAndCountSplits();
+    void buildColFrontsAndReps();
+    HighsInt trackAndCountSplits();
     // Build Highs basis vectors for EALP
     void markDegenerate();
     void buildBasis(bool finish, bool extended);
@@ -97,6 +99,7 @@ public:
     HighsLp getAggLp();
     HighsLp getLpNoResiduals();
     HighsBasis getBasis();
+    HighsTimer timer_;
 
     // dev test functions
     void checkForBadNonBasics(HighsInt col);
@@ -129,6 +132,7 @@ public:
     int prowCnt = 0;
     int num_basic;
     HighsInt num_deleted_links;
+    std::vector<int> agg_col;
     std::vector<int> col;
     std::vector<int> colrep;
     std::vector<int> pcol;
@@ -175,6 +179,7 @@ public:
     std::vector<int> rowFront;
     std::vector<int> pFrontRow;
     std::vector<int> frontMin;
+    std::vector<int> repFront;
     std::set<int> colReps;
     std::set<int> newColReps;
     std::set<int> rowReps;

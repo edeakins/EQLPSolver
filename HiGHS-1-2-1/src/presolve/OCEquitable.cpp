@@ -10,6 +10,7 @@ void HighsOCEquitablePartition::runToDiscrete(){
 }
 
 bool HighsOCEquitablePartition::isolate(){
+    // count_new_part = count_splits;
     // int i, targ;
     // for (i = 0; i < g->numTot_; i += len[i] + 1){
     //     if (len[i]){
@@ -298,6 +299,11 @@ bool HighsOCEquitablePartition::splitSinlgeCell(int cf){
 
 // Does the acutal splitting of a cell once new cell sizes are known
 bool HighsOCEquitablePartition::split(int cf, int ff){
+    // Track who split from who and from
+    if (count_new_part){
+        partition->split_from.at(cf)++;
+        partition->split_who.at(ff)++;
+    }
     // Track number of splits
     ++partition->nsplits;
     // if (partition->ncsplits >= g->numCol_){
@@ -352,6 +358,8 @@ bool HighsOCEquitablePartition::allocatePartition(){
     partition->label.resize(g->numTot_);
     partition->unlabel.resize(g->numTot_);
     partition->len.resize(g->numTot_);
+    partition->split_from.resize(g->numTot_);
+    partition->split_who.resize(g->numTot_);
     // partition->parent.resize(g->numTot_);
     // partition->set.resize(g->numTot_);
     // partition->setSize.resize(g->numTot_);
@@ -461,6 +469,8 @@ bool HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     partition->label.resize(g->numTot_);
     partition->unlabel.resize(g->numTot_);
     partition->len.resize(g->numTot_);
+    partition->split_from.resize(g->numTot_);
+    partition->split_who.resize(g->numTot_);
     // partition->parent.resize(g->numTot_);
     // partition->set.resize(g->numTot_);
     // partition->setSize.resize(g->numTot_);

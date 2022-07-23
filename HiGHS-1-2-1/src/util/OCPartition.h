@@ -13,4 +13,6 @@ class OCPartition{
         std::vector<int> unlabel;
         std::vector<int> parent;
         std::vector<int> len;
+        std::vector<int> split_from;
+        std::vector<int> split_who;
 };

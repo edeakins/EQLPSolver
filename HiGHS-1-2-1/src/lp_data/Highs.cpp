@@ -802,10 +802,10 @@ HighsStatus Highs::run() {
     info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
                                  original_lp.num_row_;
     returnFromRun(HighsStatus::kOk);
-    passModel(original_lp);
+    passModel(alp_);
     zeroIterationCounts();
     // Solve initial aggregate lp
-    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    writeModel("../../debugBuild/testLpFiles/ALP.lp");
     options_.solver = kIpmString;
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
@@ -829,19 +829,22 @@ HighsStatus Highs::run() {
       getOrbitalCrossoverSolution();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
-      double change = 0;
+      double partition_size_change = 0;
+      double num_residual_pivots = 0;
       while (!discrete){
         options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
         // options_.simplex_update_limit = 500;
         // Refine partition 
-        // OCPartition old_partition = equitablePartition_.getPartition();
+        OCPartition old_partition = equitablePartition_.getPartition();
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change += measureChangeInPartitionSize(original_lp, old_partition);
-        change = countNewResiduals();
-        if (change < 75 && !discrete) continue;
-        change = 0;
+        partition_size_change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (partition_size_change < 500 && !discrete) continue;
+        partition_size_change = 0;
+        num_residual_pivots = countNewResiduals();
+        if (num_residual_pivots < 500 && !discrete) continue;
+        num_residual_pivots = 0;
         // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
         buildEALP();
@@ -856,7 +859,7 @@ HighsStatus Highs::run() {
         minor_iterations = info_.orbital_crossover_minor_iteration_count;
         passModel(ealp_);
         zeroIterationCounts();
-        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        writeModel("../../debugBuild/testLpFiles/EALP2.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
         info_.orbital_crossover_major_iteration_count = major_iterations;
@@ -2457,7 +2460,7 @@ void Highs::buildEALP(){
 
 int Highs::countNewResiduals(){
   aggregator_.passNewPartitionBasisSolution(partition_, alpBasis_, alpSolution_);
-  return aggregator_.buildResiduals();
+  return aggregator_.trackAndCountSplits();
 }
 
 void Highs::getCrashBasis(){

@@ -100,6 +100,7 @@ public:
     /* Partition storage for the ep */
     OCPartition* partition;
     /* Refinement storage */
+    bool count_new_part = false;
     int numColSets = 0;
     int numRowSets = 0;
     int sListSize= 0; // Number of sets in setList
