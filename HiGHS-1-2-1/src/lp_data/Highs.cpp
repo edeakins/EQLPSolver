@@ -830,6 +830,10 @@ HighsStatus Highs::run() {
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
+      HighsTimer in_timer_;
+      double time_to_lift = 0;
+      in_timer_.startRunHighsClock();
+      double start = in_timer_.readRunHighsClock();
       while (!discrete){
         options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
         // Refine partition 
@@ -838,7 +842,10 @@ HighsStatus Highs::run() {
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < .05 && !discrete) continue;
+        if (change < .10 && !discrete) continue;
+        // time_to_lift += timer_.readRunHighsClock() - start;
+        // start = in_timer_.readRunHighsClock();
+        // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
         change = 0;
         // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
@@ -890,6 +897,8 @@ HighsStatus Highs::run() {
         //   }
         // }
       }
+      time_to_lift = in_timer_.readRunHighsClock() - start;
+      std::cout << "loop_time: " << time_to_lift << std::endl;
       // alpBasis_.col_status.resize(original_lp.num_col_);
       // alpBasis_.row_status.resize(original_lp.num_row_);
       // passModel(original_lp);
