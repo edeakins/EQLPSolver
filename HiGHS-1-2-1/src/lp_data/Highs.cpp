@@ -806,7 +806,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kIpmString;
+    // options_.solver = kIpmString;
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
@@ -830,10 +830,10 @@ HighsStatus Highs::run() {
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
-      HighsTimer in_timer_;
-      double time_to_lift = 0;
-      in_timer_.startRunHighsClock();
-      double start = in_timer_.readRunHighsClock();
+      // HighsTimer in_timer_;
+      // double time_to_lift = 0;
+      // in_timer_.startRunHighsClock();
+      // double start = in_timer_.readRunHighsClock();
       while (!discrete){
         options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
         // Refine partition 
@@ -842,7 +842,7 @@ HighsStatus Highs::run() {
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < .10 && !discrete) continue;
+        if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -897,8 +897,8 @@ HighsStatus Highs::run() {
         //   }
         // }
       }
-      time_to_lift = in_timer_.readRunHighsClock() - start;
-      std::cout << "loop_time: " << time_to_lift << std::endl;
+      // time_to_lift = in_timer_.readRunHighsClock() - start;
+      // std::cout << "loop_time: " << time_to_lift << std::endl;
       // alpBasis_.col_status.resize(original_lp.num_col_);
       // alpBasis_.row_status.resize(original_lp.num_row_);
       // passModel(original_lp);
@@ -2528,7 +2528,7 @@ double Highs::measureChangeInPartitionSize(HighsLp& original_lp, OCPartition& ol
   HighsInt num_split_change = num_col_splits - old_num_col_splits;
   HighsInt num_original_col = original_lp.num_col_;
   double change = (double)num_split_change/(double)num_original_col;
-  return change;
+  return num_split_change;
 }
 
 // Private methods

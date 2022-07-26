@@ -1440,6 +1440,9 @@ HighsStatus Highs::checkOptimality(const std::string solver_type,
   if (info_.num_primal_infeasibilities == 0 &&
       info_.num_dual_infeasibilities <= 0)
     return HighsStatus::kOk;
+  if (options_.solver == kOCString){
+    return HighsStatus::kOk;
+  }
   HighsLogType log_type = HighsLogType::kWarning;
   return_status = HighsStatus::kWarning;
   if (info_.max_primal_infeasibility >
