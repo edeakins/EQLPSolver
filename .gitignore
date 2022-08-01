@@ -235,7 +235,11 @@ lpi_h2gmp.cpp
 ##Build Directory for DHiGHS"
 devBuild
 build
-mittleman_symmetric_mps
+debugBuild
+debugMemoryBuild
+# mittleman_symmetric_mps
+mittleman_symmetric_5
+symmetric_1
 
 ##Lp files with cbc cuts
 CutGenerationLpFiles

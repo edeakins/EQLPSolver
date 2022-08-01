@@ -1,0 +1,3 @@
+[submodule "Port/HiGHS"]
+	path = Port/HiGHS
+	url = git@github.com:edeakins/EQLPSolver.git
