@@ -230,7 +230,13 @@ libhsol.a
 lpi_h2gmp.cpp
 
 ##Build Directory for DHiGHS"
-DevBuild
+devBuild
+build
+debugBuild
+debugMemoryBuild
+# mittleman_symmetric_mps
+mittleman_symmetric_5
+symmetric_1
 
 ##Lp files with cbc cuts
 CutGenerationLpFiles
