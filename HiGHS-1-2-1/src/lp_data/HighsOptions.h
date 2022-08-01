@@ -244,7 +244,8 @@ void reportOption(FILE* file, const OptionRecordString& option,
 
 const string kSimplexString = "simplex";
 const string kIpmString = "ipm";
-const string kOCString = "orbital_crossover";
+const string kOCDualString = "orbital_crossover_dual";
+const string kOCIPMString = "orbital_crossover_ipm";
 const string kIpmAggregateString = "ipm_aggregate";
 
 const HighsInt kKeepNRowsDeleteRows = -1;

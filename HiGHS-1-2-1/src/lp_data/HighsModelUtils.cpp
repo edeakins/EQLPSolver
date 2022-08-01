@@ -135,7 +135,7 @@ std::string typeToString(const HighsVarType type) {
 }
 
 HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo& info, bool header){
-  if (options.solver == kOCString){
+  if (options.solver == kOCDualString || options.solver == kOCIPMString){
     if (header){
       // Write the file header lines if the file is empty when opened
       fprintf(file, "Instance,");
