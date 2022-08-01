@@ -1,1 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Wno-unused-parameter -pedantic -D_GLIBCXX_DEBUG -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/highs.dir/RunHighs.cpp.o -o ../bin/highs  ../lib/libhighs.1.0.0.dylib 
