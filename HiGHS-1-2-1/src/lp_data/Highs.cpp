@@ -787,6 +787,23 @@ HighsStatus Highs::run() {
     timer_.start(timer_.equitable_partition_clock);
     initializeEquitablePartition(original_lp);
     timer_.stop(timer_.equitable_partition_clock);
+    // int numcol = original_lp.num_col_;
+    // int numrow = original_lp.num_row_;
+    // int numcol_part = partition_.ncsplits;
+    // int numrow_part = partition_.nrsplits;
+    // if (numcol - numcol_part > 0 && 
+    //     numrow - numrow_part > 0){
+    //   FILE* file;
+    //   bool html;
+    //   bool append;
+    //   std::string filename = "../../../temp/temp2017.txt";
+    //   return_status = interpretCallStatus(
+    //     options_.log_options, openTimeFile(filename, "writeTimes", file, html, append),
+    //     return_status, "openTimeFile");
+    //   std::string name = info_.instance_name + ".mps\n";
+
+    //   fprintf(file, name.c_str());
+    // }
     // Initial aggregation of LP
     timer_.start(timer_.build_alp_clock);
     initializeAggregator(original_lp);
@@ -1005,6 +1022,7 @@ HighsStatus Highs::run() {
         passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // std::cin.get();
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
         info_.orbital_crossover_major_iteration_count = major_iterations;
@@ -1083,7 +1101,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kIpmString;
+    // options_.solver = kIpmString;
     options_.run_crossover = false;
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
@@ -1094,9 +1112,14 @@ HighsStatus Highs::run() {
       refinePartition();
     HighsSolution interior_point = 
       aggregator_.buildSolution(partition_, solution_);
+    timer_.start(timer_.crossover_from_start_point_clock);
     crossover(interior_point, original_lp);
+    timer_.stop(timer_.crossover_from_start_point_clock);
     stop_highs_run_clock = true;
     called_return_from_run = false;
+    timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+        timer_.clock_time.at(timer_.crossover_from_start_point_clock));
   }
   else if (basis_.valid || options_.presolve == kHighsOffString) {
     // There is a valid basis for the problem or presolve is off
@@ -3649,7 +3672,7 @@ HighsStatus Highs::crossover(HighsSolution& solution) {
 #ifdef IPX_ON
   std::cout << "Loading crossover...\n";
   HighsBasis basis;
-  bool x_status = callCrossover(model_.lp_, options_, solution, basis);
+  bool x_status = callCrossover(model_.lp_, options_, solution, basis, info_);
   if (!x_status) return HighsStatus::kError;
 
   setBasis(basis);
@@ -3666,7 +3689,7 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp) {
 #ifdef IPX_ON
   std::cout << "Loading crossover...\n";
   HighsBasis basis;
-  bool x_status = callCrossover(lp, options_, solution, basis);
+  bool x_status = callCrossover(lp, options_, solution, basis, info_);
   if (!x_status) return HighsStatus::kError;
   info_.basis_validity = kBasisValidityValid;
 

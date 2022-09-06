@@ -51,7 +51,7 @@ HighsStatus solveLp(HighsLpSolverObject& solver_object, const string message) {
     if (return_status == HighsStatus::kError) return return_status;
     // Set the scaled model status for completeness
     solver_object.scaled_model_status_ = solver_object.unscaled_model_status_;
-  } else if (options.solver == kIpmString) {
+  } else if (options.solver == kIpmString || options.solver == kIpmAggregateString) {
     // Use IPM
 #ifdef IPX_ON
     bool imprecise_solution;
@@ -84,6 +84,37 @@ HighsStatus solveLp(HighsLpSolverObject& solver_object, const string message) {
               HighsModelStatus::kUnboundedOrInfeasible &&
           !options.allow_unbounded_or_infeasible)) &&
         options.run_crossover) {
+      // IPX has returned a model status that HiGHS would rather
+      // avoid, so perform simplex clean-up if crossover was allowed.
+      //
+      // This is an unusual situation, and the cost will usually be
+      // acceptable. Worst case is if crossover wasn't run, in which
+      // case there's no basis to start simplex
+      //
+      // ToDo: Check whether simplex can exploit the primal solution returned by
+      // IPX
+      highsLogUser(options.log_options, HighsLogType::kWarning,
+                   "Imprecise solution returned from IPX, so use simplex to "
+                   "clean up\n");
+      // Reset the return status since it will now be determined by
+      // the outcome of the simplex solve
+      return_status = HighsStatus::kOk;
+      call_status = solveLpSimplex(solver_object);
+      return_status = interpretCallStatus(options.log_options, call_status,
+                                          return_status, "solveLpSimplex");
+      if (return_status == HighsStatus::kError) return return_status;
+      if (!isSolutionRightSize(solver_object.lp_, solver_object.solution_)) {
+        highsLogUser(options.log_options, HighsLogType::kError,
+                     "Inconsistent solution returned from solver\n");
+        return HighsStatus::kError;
+      }
+    }
+    if ((solver_object.unscaled_model_status_ == HighsModelStatus::kUnknown ||
+         (solver_object.unscaled_model_status_ ==
+              HighsModelStatus::kUnboundedOrInfeasible &&
+          !options.allow_unbounded_or_infeasible)) &&
+        !options.run_crossover && 
+         options.solver == kIpmAggregateString) {
       // IPX has returned a model status that HiGHS would rather
       // avoid, so perform simplex clean-up if crossover was allowed.
       //

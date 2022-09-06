@@ -56,6 +56,7 @@ class HighsTimer {
     build_alp_clock = clock_def("Build Initial Aggregate", "BIA");
     build_elp_iterative_clock = clock_def("Build Iterative ELPs", "BIE");
     equitable_partition_clock = clock_def("Refine Equitable Partition", "REF");
+    crossover_from_start_point_clock = clock_def("Crossover From Starting Point", "CFS");
   }
 
   /**
@@ -122,6 +123,8 @@ class HighsTimer {
     this->build_alp_clock = clock_def("Build Initial Aggregate", "BIA");
     this->build_elp_iterative_clock = clock_def("Build Iterative ELPs", "BIE");
     this->equitable_partition_clock = clock_def("Refine Equitable Partition", "REF");
+    this->crossover_from_start_point_clock = clock_def("Crossover From Starting Point", "CFS");
+
   }
 
   /**
@@ -345,6 +348,7 @@ class HighsTimer {
   HighsInt build_alp_clock;
   HighsInt build_elp_iterative_clock;
   HighsInt equitable_partition_clock;
+  HighsInt crossover_from_start_point_clock;
 };
 
 #endif /* UTIL_HIGHSTIMER_H_ */

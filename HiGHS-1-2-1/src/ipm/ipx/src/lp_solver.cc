@@ -223,6 +223,7 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
     }
 
     RunCrossover();
+    report_info_ = info_;
     return 0;
 }
 
