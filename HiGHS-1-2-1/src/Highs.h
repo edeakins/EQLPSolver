@@ -24,6 +24,9 @@
 #include "model/HighsModel.h"
 #include "presolve/PresolveComponent.h"
 #include "presolve/OCAggregate.h"
+#include "presolve/OrbitAggregate.hpp"
+#include "presolve/HighsSymmetry.h"
+// #include "mip/HighsLpRelaxation.h"
 
 /**
  * @brief Class to set parameters and run HiGHS
@@ -121,6 +124,19 @@ class Highs {
    * @brief Read in a basis
    */
   HighsStatus readBasis(const std::string filename);
+
+  /**
+   * @brief Read in a orbit partition
+   */
+  HighsStatus readOrbits(const std::string filename);
+
+  void getSlackCoeff(std::vector<double>& b_inv, std::vector<HighsInt>& b_idx,
+                     HighsInt& s_i, double& s_v);
+
+  /**
+   * @brief Read in a basis
+   */
+  HighsStatus readOrbitLinkers(const std::string filename);
 
   /**
    * @brief Presolve the incumbent model
@@ -348,6 +364,7 @@ class Highs {
    * and negative entries are -(row_index+1).
    */
   HighsStatus getBasicVariables(HighsInt* basic_variables);
+  HighsStatus getNonbasicVariables(HighsInt* nonbasic_variables);
 
   /**
    * @brief Form a row of \f$B^{-1}\f$ for basis matrix \f$B\f$,
@@ -1019,6 +1036,9 @@ class Highs {
   HighsModel model_;
   HighsModel presolved_model_;
   HighsTimer timer_;
+  orbital_partition orbits_;
+  std::vector<HighsInt> parent_links_;
+  std::vector<HighsInt> child_links_;
 
   HighsOptions options_;
   HighsInfo info_;

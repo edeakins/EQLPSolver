@@ -4,7 +4,7 @@
 /* #undef FAST_BUILD */
 /* #undef SCIP_DEV */
 /* #undef HiGHSDEV */
-/* #undef OSI_FOUND */
+#define OSI_FOUND
 #define ZLIB_FOUND
 #define CMAKE_BUILD_TYPE "Debug"
 /* #undef HiGHSRELEASE */
@@ -15,7 +15,7 @@
 /* #undef HIGHS_HAVE_BITSCAN_REVERSE */
 
 #define HIGHS_GITHASH "n/a"
-#define HIGHS_COMPILATION_DATE "2022-08-02"
+#define HIGHS_COMPILATION_DATE "2022-09-28"
 #define HIGHS_VERSION_MAJOR 1
 #define HIGHS_VERSION_MINOR 2
 #define HIGHS_VERSION_PATCH 1

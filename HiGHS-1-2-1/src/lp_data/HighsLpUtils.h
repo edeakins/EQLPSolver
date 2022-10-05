@@ -23,6 +23,8 @@
 #include "lp_data/HighsLp.h"
 #include "lp_data/HighsStatus.h"
 #include "util/HighsUtils.h"
+#include "io/orbit_reader.hpp"
+#include "presolve/orbital_partition.hpp"
 
 // class HighsLp;
 struct SimplexScale;
@@ -38,6 +40,14 @@ HighsStatus readBasisFile(const HighsLogOptions& log_options, HighsBasis& basis,
                           const std::string filename);
 HighsStatus readBasisStream(const HighsLogOptions& log_options,
                             HighsBasis& basis, std::ifstream& in_file);
+HighsStatus readOrbitFile(const HighsLogOptions& log_options, orbital_partition& orbits,
+                          const std::string& filename);
+HighsStatus readOrbitStream(const HighsLogOptions& log_options, orbital_partition& orbits, 
+                            std::ifstream& in_file);
+HighsStatus readOrbitLinkFile(const HighsLogOptions& log_options, std::vector<HighsInt>& parent,
+                              std::vector<HighsInt>& child, const std::string& filename);
+HighsStatus readOrbitLinkStream(const HighsLogOptions& log_options, std::vector<HighsInt>& parent,
+                                std::vector<HighsInt>& child, std::ifstream& in_file);
 
 // Methods taking HighsLp as an argument
 HighsStatus assessLp(HighsLp& lp, const HighsOptions& options);

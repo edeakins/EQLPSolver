@@ -67,6 +67,13 @@
         "variant": "cpp",
         "complex": "cpp",
         "hash_map": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "any": "cpp",
+        "cfenv": "cpp",
+        "charconv": "cpp",
+        "csetjmp": "cpp",
+        "cuchar": "cpp",
+        "scoped_allocator": "cpp",
+        "typeindex": "cpp"
     }
 }

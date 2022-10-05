@@ -35,6 +35,7 @@
 #include "simplex/HSimplexDebug.h"
 #include "util/HighsMatrixPic.h"
 #include "util/HighsSort.h"
+#include "mip/HighsDomain.h"
 
 Highs::Highs() {}
 
@@ -558,6 +559,19 @@ HighsStatus Highs::readBasis(const std::string filename) {
   return HighsStatus::kOk;
 }
 
+HighsStatus Highs::readOrbits(const std::string filename) {
+  HighsStatus return_status = HighsStatus::kOk;
+  readOrbitFile(options_.log_options, orbits_, filename);
+  return return_status;
+}
+
+HighsStatus Highs::readOrbitLinkers(const std::string filename){
+  HighsStatus return_status = HighsStatus::kOk;
+  readOrbitLinkFile(options_.log_options, parent_links_,
+                    child_links_, filename);
+  return return_status;
+}
+
 HighsStatus Highs::writeModel(const std::string filename) {
   HighsStatus return_status = HighsStatus::kOk;
 
@@ -824,6 +838,7 @@ HighsStatus Highs::run() {
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
     // options_.solver = kIpmString;
+    // readOrbits("/home/edeakins/LP/MIPSymmetryCuts/sage_orbits.txt");
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
@@ -859,7 +874,7 @@ HighsStatus Highs::run() {
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        // if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -927,10 +942,58 @@ HighsStatus Highs::run() {
       // call_status =
       //     callSolveLp(original_lp, "Verifying Basic Solution");
       // timer_.stop(timer_.orbital_crossover_clock);
+      // writeBasis("../../debugBuild/testLpFiles/basis.txt");
       stop_highs_run_clock = true;
       called_return_from_run = false;
       timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+    }
+  }
+  else if (options_.solver == kOrbitalCutGenerationString){
+    /////////////////// May come back to HiGHS symmetry stuff if can figure out /////////////
+    /////////////////// how to tuse it to do what we want to do///////////////////////
+    // HighsSymmetries symmetries;
+    // HighsSymmetryDetection symm_detection;
+    // std::shared_ptr<const StabilizerOrbits> orbits;
+    // HighsDomain domain = HighsDomain(mipsolver);
+    // for (HighsInt i_col = 0; i_col < original_lp.num_col_; ++i_col){
+    //   original_lp.integrality_.push_back(HighsVarType::kInteger);
+    // }
+    // HighsMipSolver mipsolver(options_, original_lp, solution_);
+    // mipsolver.run();
+    // symm_detection.loadModelAsGraph(original_lp, options_.small_matrix_value);
+    // symm_detection.run(symmetries);
+    // orbits = symmetries.computeStabilizerOrbits(domain);
+    // std:: cout << symmetries.numGenerators << std::endl;
+    running_orbital_crossover = true;
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    OrbitAggregate orbit_aggregate(orbits_, original_lp,
+                                   parent_links_, child_links_);
+    orbit_aggregate.aggregate();
+    HighsLp agg_lp = orbit_aggregate.getAggLp();
+    HighsBasis temp_basis;
+    // temp_basis.col_status.assign(agg_lp.num_col_, HighsBasisStatus::kLower);
+    // temp_basis.row_status.assign(agg_lp.num_row_, HighsBasisStatus::kBasic);
+    if (!parent_links_.size()){
+      // options_.solver = kIpmString;
+      // returnFromRun(HighsStatus::kOk);
+      // passModel(agg_lp);
+      // zeroIterationCounts();
+      model_.lp_ = agg_lp;
+      call_status =
+        callSolveLp(agg_lp, "Solving LP with Orbital Crossover");
+      return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+
+      setBasisValidity();
+      // writeBasis("../../debugBuild/python_input_basis.txt");
+      // stop_highs_run_clock = true;
+      // called_return_from_run = false;
     }
   }
   else if (options_.solver == kOCIPMString){
@@ -1002,7 +1065,7 @@ HighsStatus Highs::run() {
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        // if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -1615,6 +1678,14 @@ HighsStatus Highs::getBasicVariables(HighsInt* basic_variables) {
     return HighsStatus::kError;
   }
   return getBasicVariablesInterface(basic_variables);
+}
+
+HighsStatus Highs::getNonbasicVariables(HighsInt* nonbasic_variables){
+  std::vector<int8_t>& nonbasicFlag = ekk_instance_.basis_.nonbasicFlag_;
+  HighsInt num_col = model_.lp_.num_col_;
+  for (HighsInt i_col = 0; i_col < nonbasicFlag.size(); ++i_col){
+    if (nonbasicFlag.at(i_col)) nonbasic_variables[i_col] = 1; 
+  }
 }
 
 HighsStatus Highs::getBasisInverseRow(const HighsInt row, double* row_vector,
@@ -2633,6 +2704,23 @@ void Highs::getCrashBasis(){
 void Highs::getOrbitalCrossoverBasis(){
   alpBasis_ = getBasisCopy();
   // alpBasis_.debug_origin_name = "Aggregate LP Basis";
+}
+
+void Highs::getSlackCoeff(std::vector<double>& b_inv, std::vector<HighsInt>& b_idx,
+                          HighsInt& s_i, double& s_v){
+  HighsInt s_coeff;
+  double lb = model_.lp_.row_lower_.at(s_i);
+  double ub = model_.lp_.row_upper_.at(s_i);
+  if (ub == kHighsInf) s_coeff = -1.0;
+  else s_coeff = 1.0;
+  double mult = 0;
+  for (HighsInt i_row = 0; i_row < b_idx.size(); ++i_row){
+    if (b_idx.at(i_row) == s_i){
+      mult = b_inv.at(b_idx.at(i_row));
+      break;
+    }
+  }
+  s_v = mult * s_coeff;
 }
 
 void Highs::trimOrbitalCrossoverBasis(){

@@ -6,6 +6,7 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o
  ../src/Highs.h
  ../src/io/HighsIO.h
  ../src/io/LoadOptions.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -25,11 +26,14 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -45,6 +49,7 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h

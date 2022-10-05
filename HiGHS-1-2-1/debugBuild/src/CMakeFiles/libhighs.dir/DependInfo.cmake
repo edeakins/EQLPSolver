@@ -14,6 +14,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/HMpsFF.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/io/HMpsFF.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/HighsIO.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/LoadOptions.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/io/LoadOptions.cpp.o"
+  "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/orbit_reader.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/io/orbit_reader.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/ipm/IpxWrapper.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/ipm/IpxWrapper.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/Highs.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsDebug.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/lp_data/HighsDebug.cpp.o"
@@ -68,6 +69,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/ICrashX.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/ICrashX.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OCAggregate.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OCEquitable.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o"
+  "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OrbitAggregate.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/Presolve.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveAnalysis.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/PresolveAnalysis.cpp.o"
   "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveComponent.cpp" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o"
@@ -119,6 +121,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/home/edeakins/miniconda3/include/coin"
   "."
   "../app"
   "../extern"

@@ -2238,6 +2238,44 @@ HighsStatus readBasisFile(const HighsLogOptions& log_options, HighsBasis& basis,
   return return_status;
 }
 
+HighsStatus readOrbitFile(const HighsLogOptions& log_options, orbital_partition& orbits,
+                          const std::string& filename){
+  // Opens a orbit file as an ifstream
+  HighsStatus return_status = HighsStatus::kOk;
+  std::ifstream in_file;
+  in_file.open(filename.c_str(), std::ios::in);
+  if (in_file.is_open()){
+    return_status = readOrbitStream(log_options, orbits, in_file);
+    in_file.close();
+  }
+  else{
+    highsLogUser(log_options, HighsLogType::kError,
+                 "readOrbitFile: Cannot open readable file \"%s\"\n",
+                 filename.c_str());
+    return_status = HighsStatus::kError;
+  }
+  return return_status;
+}
+
+HighsStatus readOrbitLinkFile(const HighsLogOptions& log_options, std::vector<HighsInt>& parent,
+                              std::vector<HighsInt>& child, const std::string& filename){
+  // Opens a orbit file as an ifstream
+  HighsStatus return_status = HighsStatus::kOk;
+  std::ifstream in_file;
+  in_file.open(filename.c_str(), std::ios::in);
+  if (in_file.is_open()){
+    return_status = readOrbitLinkStream(log_options, parent, child, in_file);
+    in_file.close();
+  }
+  else{
+    highsLogUser(log_options, HighsLogType::kError,
+                 "readOrbitLinkFile: Cannot open readable file \"%s\"\n",
+                 filename.c_str());
+    return_status = HighsStatus::kError;
+  }
+  return return_status;
+}
+
 HighsStatus readBasisStream(const HighsLogOptions& log_options,
                             HighsBasis& basis, std::ifstream& in_file) {
   // Reads a basis as an ifstream, returning an error if what's read is
@@ -2292,6 +2330,47 @@ HighsStatus readBasisStream(const HighsLogOptions& log_options,
                  "readBasisFile: Cannot read basis file for HiGHS %s\n",
                  string_version.c_str());
     return_status = HighsStatus::kError;
+  }
+  return return_status;
+}
+
+HighsStatus readOrbitLinkStream(const HighsLogOptions& log_options, std::vector<int>& parent,
+                                std::vector<int>& child, std::ifstream& in_file) {
+  // Reads a basis as an ifstream, returning an error if what's read is
+  // inconsistent with the sizes of the HighsBasis passed in
+  HighsStatus return_status = HighsStatus::kOk;
+  std::string string_parent, string_child; HighsInt num_parent; HighsInt num_children;
+  in_file >> string_parent >> num_parent;
+  HighsInt parent_col, child_col;
+  for (HighsInt iCol = 0; iCol < num_parent; iCol++) {
+    in_file >> parent_col;
+    parent.push_back(parent_col);
+  }
+  // Read in the children section
+  in_file >> string_child >> num_children;
+  for (HighsInt iCol = 0; iCol < num_children; iCol++) {
+    in_file >> child_col;
+    child.push_back(child_col);
+  }
+  return return_status;
+}
+
+HighsStatus readOrbitStream(const HighsLogOptions& log_options,
+                            orbital_partition& orbits, std::ifstream& in_file) {
+  // Reads a set of orbits as an ifstream
+  HighsStatus return_status = HighsStatus::kOk;
+  std::string file_line;
+  int num_orbits = 0;
+  orbits.orbit_start.push_back(0);
+  while (std::getline(in_file, file_line)){
+      std::istringstream iss(file_line);
+      int node;
+      while(iss >> node){
+          orbits.element.push_back(node);
+          orbits.orbit.push_back(num_orbits);
+      }
+      num_orbits++;
+      orbits.orbit_start.push_back(orbits.element.size());
   }
   return return_status;
 }

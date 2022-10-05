@@ -12,6 +12,7 @@ src/CMakeFiles/libhighs.dir/__/extern/filereaderlp/reader.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -30,11 +31,14 @@ src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/model/HighsMode
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/HAggregator.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/HighsPostsolveStack.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -50,6 +54,7 @@ src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HVectorBas
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsCDouble.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsComponent.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsDataStack.h
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsDisjointSets.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/util/HighsMatrixSlice.h
@@ -92,6 +97,7 @@ src/CMakeFiles/libhighs.dir/io/Filereader.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/io/FilereaderEms.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/lp_data/HighsInfo.h
@@ -101,6 +107,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/lp_data/HighsOptions.
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/model/HighsHessian.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/model/HighsModel.h
+src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/simplex/SimplexStruct.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o: ../src/util/HFactorConst.h
@@ -120,6 +127,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../extern/filereaderlp/reader
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/io/FilereaderLp.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/lp_data/HighsInfo.h
@@ -129,6 +137,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/model/HighsHessian.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/model/HighsModel.h
+src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/simplex/SimplexStruct.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o: ../src/util/HFactorConst.h
@@ -147,6 +156,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/FilereaderMps.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/HMPSIO.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/HMpsFF.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HighsInfo.h
@@ -157,6 +167,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HighsOptions.
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/model/HighsHessian.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/model/HighsModel.h
+src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/simplex/SimplexStruct.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o: ../src/util/HFactorConst.h
@@ -258,6 +269,10 @@ src/CMakeFiles/libhighs.dir/io/LoadOptions.cpp.o: ../src/util/stringutil.h
 src/CMakeFiles/libhighs.dir/io/LoadOptions.cpp.o: ../src/io/LoadOptions.cpp
 src/CMakeFiles/libhighs.dir/io/LoadOptions.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/io/orbit_reader.cpp.o: ../src/presolve/orbital_partition.hpp
+src/CMakeFiles/libhighs.dir/io/orbit_reader.cpp.o: ../src/io/orbit_reader.cpp
+src/CMakeFiles/libhighs.dir/io/orbit_reader.cpp.o: ../src/io/orbit_reader.hpp
+
 src/CMakeFiles/libhighs.dir/ipm/IpxWrapper.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/ipm/IpxWrapper.cpp.o: ../src/ipm/IpxSolution.h
 src/CMakeFiles/libhighs.dir/ipm/IpxWrapper.cpp.o: ../src/ipm/IpxWrapper.h
@@ -315,6 +330,7 @@ src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/io/LoadOptions.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -331,6 +347,8 @@ src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsSolution.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsSolutionDebug.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsSolve.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/mip/HighsDomain.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/mip/HighsDomainChange.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/mip/HighsMipSolver.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/model/HighsHessian.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/model/HighsHessianUtils.h
@@ -346,12 +364,15 @@ src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/parallel/HighsTaskExecut
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/HAggregator.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/HighsPostsolveStack.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/ICrashX.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/qpsolver/basis.hpp
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/qpsolver/eventhandler.hpp
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/qpsolver/factor.hpp
@@ -382,11 +403,13 @@ src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HVectorBase.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsCDouble.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsComponent.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsDataStack.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsDisjointSets.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsMatrixPic.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsMatrixSlice.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsRandom.h
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsRbTree.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsSort.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsSparseMatrix.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/util/HighsSparseVectorSum.h
@@ -408,6 +431,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsDebug.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -426,11 +450,14 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/model/HighsMod
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/HAggregator.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/HighsPostsolveStack.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -446,6 +473,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/util/HVectorBa
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/util/HighsCDouble.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/util/HighsComponent.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/util/HighsDataStack.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/util/HighsDisjointSets.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/util/HighsMatrixSlice.h
@@ -493,6 +521,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsInfoDebug.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -512,11 +541,14 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/model/HighsMode
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/HAggregator.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/HighsPostsolveStack.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/simplex/HSimplex.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/simplex/HSimplexNla.h
@@ -533,6 +565,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/util/HVectorBas
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/util/HighsCDouble.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/util/HighsComponent.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/util/HighsDataStack.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/util/HighsDisjointSets.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/util/HighsMatrixSlice.h
@@ -571,6 +604,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/io/HMPSIO.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -585,6 +619,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HighsSolu
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/model/HighsHessian.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/model/HighsModel.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -674,6 +709,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsRanging.cpp.o: ../src/lp_data/HighsRang
 src/CMakeFiles/libhighs.dir/lp_data/HighsRanging.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/ipm/IpxSolution.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/ipm/ipx/include/ipx_config.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/ipm/ipx/include/ipx_info.h
@@ -707,6 +743,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/lp_data/HighsSol
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/model/HighsHessian.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/model/HighsModel.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -765,6 +802,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolutionDebug.cpp.o: ../src/lp_data/Hig
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolutionDebug.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/ipm/IpxSolution.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/ipm/IpxWrapper.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/ipm/IpxWrapperEmpty.h
@@ -801,6 +839,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/lp_data/HighsSolve.
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/lp_data/HighsStatus.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/model/HighsHessian.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/model/HighsModel.h
+src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/simplex/HApp.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o: ../src/simplex/HSimplex.h
@@ -833,6 +872,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -882,9 +922,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/presolve/HighsPos
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -919,6 +961,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -941,11 +984,14 @@ src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/model/HighsModel
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/HAggregator.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/HighsPostsolveStack.h
+src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -961,6 +1007,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/util/HVectorBase
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/util/HighsCDouble.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/util/HighsComponent.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/util/HighsDataStack.h
+src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/util/HighsDisjointSets.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/util/HighsMatrixSlice.h
@@ -978,6 +1025,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1028,9 +1076,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/presolve/HighsP
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1066,6 +1116,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o: libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1114,9 +1165,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/presolve/HighsPostsol
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1152,6 +1205,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/io/FilereaderMps.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1200,9 +1254,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/presolve/HighsPostso
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1237,6 +1293,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1285,9 +1342,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/presolve/HighsPostsolv
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1334,6 +1393,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsGFkSolve.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1382,9 +1442,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/presolve/HighsPo
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1418,6 +1480,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1439,11 +1502,14 @@ src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/model/HighsModel
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/HAggregator.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/HighsPostsolveStack.h
+src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1459,6 +1525,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/util/HVectorBase
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/util/HighsCDouble.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/util/HighsComponent.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/util/HighsDataStack.h
+src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/util/HighsDisjointSets.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/util/HighsMatrixSlice.h
@@ -1474,6 +1541,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1522,9 +1590,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/presolve/HighsPo
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1558,6 +1628,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1608,9 +1679,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/HighsPosts
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1647,6 +1720,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1696,9 +1770,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/presolve/HighsP
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1735,6 +1811,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o: libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1788,9 +1865,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/presolve/HighsP
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1825,6 +1904,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1873,9 +1953,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/presolve/HighsPosts
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1911,6 +1993,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -1959,9 +2042,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/presolve/Hi
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -1996,6 +2081,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2048,9 +2134,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/presolve/HighsP
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2085,6 +2173,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2134,9 +2223,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/presolve/Hig
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2171,6 +2262,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2219,9 +2311,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/presolve/HighsPost
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2255,6 +2349,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2303,9 +2398,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/presolve/HighsP
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2339,6 +2436,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2388,9 +2486,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/presolve/HighsPostsolv
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2424,6 +2524,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2477,9 +2578,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/presolve/HighsPost
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2513,6 +2616,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2538,11 +2642,14 @@ src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/model/HighsModel.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/HAggregator.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/HighsPostsolveStack.h
+src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2558,6 +2665,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/util/HVectorBase.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/util/HighsCDouble.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/util/HighsComponent.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/util/HighsDataStack.h
+src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/util/HighsDisjointSets.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/util/HighsMatrixSlice.h
@@ -2575,6 +2683,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2627,9 +2736,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/presolve/Hig
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2663,6 +2774,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: libhighs_export.h
 
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2712,9 +2824,11 @@ src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/presolve/HighsP
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2840,6 +2954,7 @@ src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2889,9 +3004,11 @@ src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/presolve/HighsPosts
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -2958,6 +3075,7 @@ src/CMakeFiles/libhighs.dir/presolve/HighsPostsolveStack.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -2983,9 +3101,11 @@ src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/presolve/HighsP
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -3118,6 +3238,27 @@ src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: ../src/presolve/OCEquita
 src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: ../src/presolve/OCEquitable.h
 src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/lp_data/HConst.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/lp_data/HStruct.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/lp_data/HighsLp.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/lp_data/HighsOptions.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/simplex/SimplexConst.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/simplex/SimplexStruct.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/util/HFactorConst.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/util/HVector.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/util/HVectorBase.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/util/HighsCDouble.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/util/HighsInt.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/util/HighsSparseMatrix.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/util/HighsSparseVectorSum.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/util/HighsUtils.h
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/presolve/OrbitAggregate.cpp
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/presolve/OrbitAggregate.hpp
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: ../src/presolve/orbital_partition.hpp
+src/CMakeFiles/libhighs.dir/presolve/OrbitAggregate.cpp.o: HConfig.h
+
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o: ../src/lp_data/HStruct.h
@@ -3170,6 +3311,7 @@ src/CMakeFiles/libhighs.dir/presolve/PresolveAnalysis.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -3190,11 +3332,14 @@ src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/HA
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/HPresolve.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/HighsPostsolveStack.h
+src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -3210,6 +3355,7 @@ src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/util/HVecto
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/util/HighsCDouble.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/util/HighsComponent.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/util/HighsDataStack.h
+src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/util/HighsDisjointSets.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/util/HighsLinearSumBounds.h
@@ -3264,6 +3410,7 @@ src/CMakeFiles/libhighs.dir/qpsolver/basis.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -3282,11 +3429,14 @@ src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/model/HighsModel.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/HAggregator.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/HPreData.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/HighsPostsolveStack.h
+src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/HighsSymmetry.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/OCAggregate.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/OCEquitable.h
+src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/OrbitAggregate.hpp
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/Presolve.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/PresolveAnalysis.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/PresolveComponent.h
+src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -3302,6 +3452,7 @@ src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/util/HVectorBase.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/util/HighsCDouble.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/util/HighsComponent.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/util/HighsDataStack.h
+src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/util/HighsDisjointSets.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/util/HighsMatrixSlice.h
@@ -3352,6 +3503,7 @@ src/CMakeFiles/libhighs.dir/qpsolver/ratiotest.cpp.o: ../src/qpsolver/vector.hpp
 src/CMakeFiles/libhighs.dir/qpsolver/ratiotest.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -3375,6 +3527,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/parallel/HighsSpinMutex.h
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/parallel/HighsSplitDeque.h
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/parallel/HighsTask.h
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/parallel/HighsTaskExecutor.h
+src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/simplex/HEkkDual.h
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o: ../src/simplex/HEkkDualRHS.h
@@ -3468,6 +3621,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkDebug.cpp.o: ../src/simplex/HEkkDebug.cp
 src/CMakeFiles/libhighs.dir/simplex/HEkkDebug.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -3485,6 +3639,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/parallel/HighsSpinMut
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/parallel/HighsSplitDeque.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/parallel/HighsTask.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/parallel/HighsTaskExecutor.h
+src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/simplex/HEkkDualRHS.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o: ../src/simplex/HEkkDualRow.h
@@ -3626,6 +3781,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkDualRow.cpp.o: ../src/simplex/HEkkDualRo
 src/CMakeFiles/libhighs.dir/simplex/HEkkDualRow.cpp.o: HConfig.h
 
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/io/orbit_reader.hpp
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -3635,6 +3791,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/lp_data/HighsLp.
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/lp_data/HighsLpUtils.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/lp_data/HighsOptions.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/presolve/orbital_partition.hpp
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/simplex/HEkk.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/simplex/HSimplexNla.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o: ../src/simplex/HighsSimplexAnalysis.h

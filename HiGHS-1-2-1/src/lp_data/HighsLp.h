@@ -40,7 +40,9 @@ class HighsLp {
   std::vector<double> col_lower_;
   std::vector<double> col_upper_;
   std::vector<double> row_lower_;
+  std::vector<double> cut_lower_;
   std::vector<double> row_upper_;
+  std::vector<double> cut_upper_;
   std::vector<int> residual_cols_; // remove when done debugging;
   std::vector<int> is_degenerate_residual;
   std::vector<int> degenerate_basic_rows; // remove when done debugging;
@@ -48,6 +50,7 @@ class HighsLp {
   std::vector<int> degenerate_basic_residuals; // remove when done debugging;
 
   HighsSparseMatrix a_matrix_;
+  HighsSparseMatrix cut_matrix_;
 
   ObjSense sense_;
   double offset_;

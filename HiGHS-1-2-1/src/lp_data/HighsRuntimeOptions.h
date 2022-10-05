@@ -20,7 +20,8 @@
 #include "util/stringutil.h"
 
 bool loadOptions(const HighsLogOptions& report_log_options, int argc,
-                 char** argv, HighsOptions& options, std::string& model_file) {
+                 char** argv, HighsOptions& options, std::string& model_file,
+                 std::string& orbit_file, std::string& basis_file, std::string& orbit_link_file) {
   try {
     cxxopts::Options cxx_options(argv[0], "HiGHS options");
     cxx_options.positional_help("[file]").show_positional_help();
@@ -84,8 +85,12 @@ bool loadOptions(const HighsLogOptions& report_log_options, int argc,
           }
         }
         if (nonEmpty > 1) {
-          std::cout << "Multiple files not implemented.\n";
-          return false;
+          std::cout << "Multiple files now implemented for orbit and basis files.\n";
+          model_file = v[0];
+          orbit_file = v[1];
+          basis_file = v[2];
+          orbit_link_file = v[3];
+          // return false;
         }
       } else {
         model_file = v[0];

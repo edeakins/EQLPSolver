@@ -24,6 +24,7 @@
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/test.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/package_source.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/capi_unit_tests.dir
+/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/osi_unit_tests.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/edit_cache.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/NightlyMemCheck.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/NightlyTest.dir
@@ -56,7 +57,6 @@
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/ContinuousTest.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/ContinuousSubmit.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/NightlyUpdate.dir
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/install/strip.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/install/local.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/edit_cache.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/test.dir
@@ -64,6 +64,8 @@
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/list_install_components.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/rebuild_cache.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/package.dir
+/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/install/strip.dir
+/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/OsiHighs.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/package_source.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libhighs.dir
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/CMakeFiles/libipx.dir

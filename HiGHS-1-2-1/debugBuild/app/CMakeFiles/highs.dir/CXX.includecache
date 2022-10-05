@@ -51,6 +51,10 @@ presolve/PresolveComponent.h
 ../src/presolve/PresolveComponent.h
 presolve/OCAggregate.h
 ../src/presolve/OCAggregate.h
+presolve/OrbitAggregate.hpp
+../src/presolve/OrbitAggregate.hpp
+presolve/HighsSymmetry.h
+../src/presolve/HighsSymmetry.h
 
 ../src/io/HighsIO.h
 array
@@ -63,6 +67,20 @@ util/HighsInt.h
 ../src/io/LoadOptions.h
 lp_data/HighsOptions.h
 ../src/io/lp_data/HighsOptions.h
+
+../src/io/orbit_reader.hpp
+fstream
+-
+ostream
+-
+iostream
+-
+sstream
+-
+string
+-
+presolve/orbital_partition.hpp
+../src/io/presolve/orbital_partition.hpp
 
 ../src/lp_data/HConst.h
 cmath
@@ -141,6 +159,10 @@ lp_data/HighsStatus.h
 ../src/lp_data/lp_data/HighsStatus.h
 util/HighsUtils.h
 ../src/lp_data/util/HighsUtils.h
+io/orbit_reader.hpp
+../src/lp_data/io/orbit_reader.hpp
+presolve/orbital_partition.hpp
+../src/lp_data/presolve/orbital_partition.hpp
 
 ../src/lp_data/HighsOptions.h
 cstring
@@ -284,6 +306,22 @@ util/HighsDataStack.h
 util/HighsMatrixSlice.h
 ../src/presolve/util/HighsMatrixSlice.h
 
+../src/presolve/HighsSymmetry.h
+algorithm
+-
+map
+-
+vector
+-
+lp_data/HighsLp.h
+../src/presolve/lp_data/HighsLp.h
+util/HighsDisjointSets.h
+../src/presolve/util/HighsDisjointSets.h
+util/HighsHash.h
+../src/presolve/util/HighsHash.h
+util/HighsInt.h
+../src/presolve/util/HighsInt.h
+
 ../src/presolve/OCAggregate.h
 iostream
 -
@@ -331,6 +369,18 @@ OCPartition.h
 ../src/presolve/OCPartition.h
 OCGraph.h
 ../src/presolve/OCGraph.h
+
+../src/presolve/OrbitAggregate.hpp
+orbital_partition.hpp
+../src/presolve/orbital_partition.hpp
+lp_data/HighsLp.h
+../src/presolve/lp_data/HighsLp.h
+set
+-
+map
+-
+limits
+-
 
 ../src/presolve/Presolve.h
 list
@@ -383,6 +433,10 @@ presolve/Presolve.h
 ../src/presolve/presolve/Presolve.h
 util/HighsComponent.h
 ../src/presolve/util/HighsComponent.h
+
+../src/presolve/orbital_partition.hpp
+vector
+-
 
 ../src/simplex/HEkk.h
 simplex/HSimplexNla.h
@@ -542,6 +596,36 @@ vector
 util/HighsInt.h
 ../src/util/util/HighsInt.h
 
+../src/util/HighsDisjointSets.h
+array
+-
+cassert
+-
+cmath
+-
+cstddef
+-
+cstdint
+-
+cstring
+-
+functional
+-
+iterator
+-
+memory
+-
+numeric
+-
+type_traits
+-
+utility
+-
+vector
+-
+util/HighsInt.h
+../src/util/util/HighsInt.h
+
 ../src/util/HighsHash.h
 array
 -
@@ -669,6 +753,14 @@ string
 -
 
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/app/RunHighs.cpp
+bits/stdc++.h
+-
+iostream
+-
+sys/stat.h
+-
+sys/types.h
+-
 Highs.h
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/app/Highs.h
 lp_data/HighsRuntimeOptions.h

@@ -247,6 +247,7 @@ const string kIpmString = "ipm";
 const string kOCDualString = "orbital_crossover_dual";
 const string kOCIPMString = "orbital_crossover_ipm";
 const string kIpmAggregateString = "ipm_aggregate";
+const string kOrbitalCutGenerationString = "orbital_cut_generation";
 
 const HighsInt kKeepNRowsDeleteRows = -1;
 const HighsInt kKeepNRowsDeleteEntries = 0;

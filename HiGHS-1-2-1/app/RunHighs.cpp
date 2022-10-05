@@ -33,13 +33,17 @@ int main(int argc, char** argv) {
 
   // Load user options
   std::string model_file;
+  std::string orbit_file;
+  std::string basis_file;
+  std::string orbit_link_file;
   HighsOptions loaded_options;
   // Set "HiGHS.log" as the default log_file for the app so that
   // log_file has this value if it isn't set in the file
   loaded_options.log_file = "HiGHS.log";
   // When loading the options file, any messages are reported using
   // the default HighsLogOptions
-  if (!loadOptions(log_options, argc, argv, loaded_options, model_file))
+  if (!loadOptions(log_options, argc, argv, loaded_options, model_file,
+                   orbit_file, basis_file, orbit_link_file))
     return (int)HighsStatus::kError;
   // Open the app log file - unless output_flag is false, to avoid
   // creating an empty file. It does nothing if its name is "".
@@ -55,6 +59,12 @@ int main(int argc, char** argv) {
 
   // Load the model from model_file
   HighsStatus read_status = highs.readModel(model_file);
+  // Load the orbit from the orbit_file
+  read_status = highs.readOrbits(orbit_file);
+  // // Load the basis from basis_file
+  // read_status = highs.readBasis(basis_file);
+  // Load in the orbital partition linkers or orbital crossover
+  read_status = highs.readOrbitLinkers(orbit_link_file);
   reportModelStatsOrError(log_options, read_status, highs.getModel());
   if (read_status == HighsStatus::kError) return (int)read_status;
 
@@ -68,6 +78,92 @@ int main(int argc, char** argv) {
     highs.writeTimes(report_time_file.str().c_str());
   }
   if (run_status == HighsStatus::kError) return (int)run_status;
+  if (loaded_options.solver == kOrbitalCutGenerationString){
+    // Write the basis to be used in python for setting next lp basis
+    highs.writeBasis("../../debugBuild/python_input_basis.txt");
+    // Grab the nonbasic variables for gomory cut generation
+    HighsLp lp = highs.getLp();
+    HighsInt lp_num_col = lp.num_col_;
+    HighsInt lp_num_row = lp.num_row_;
+    HighsInt lp_nz = lp.a_matrix_.start_.at(lp_num_col);
+    std::vector<HighsInt> nonbasic_cols; nonbasic_cols.resize(lp_num_col + lp_num_row);
+    std::vector<HighsInt> basic_cols; basic_cols.resize(lp_num_row);
+    std::vector<double> col_solution = highs.getSolution().col_value;
+    std::vector<double> rhs;
+    highs.getNonbasicVariables(nonbasic_cols.data());
+    highs.getBasicVariables(basic_cols.data());
+    // Grab the submatrix Ar_sub from Ar matrix pertaining to fractional
+    // rhs's after solve
+    HighsInt num_row_get = 0; 
+    std::vector<HighsInt> row_set;
+    HighsInt num_row_got; 
+    std::vector<double> lower(lp_num_row);      
+    std::vector<double> upper(lp_num_row);      
+    HighsInt num_row_got_nz;
+    std::vector<HighsInt> frac_row_start(lp_num_row + 1);
+    std::vector<HighsInt> frac_row_index(lp_nz);
+    std::vector<double> frac_row_value(lp_nz);
+    for (HighsInt i_row = 0; i_row < lp_num_row; ++i_row){
+      HighsInt frac_col = basic_cols.at(i_row);
+      double frac_val = col_solution.at(frac_col);
+      if (std::abs(std::round(frac_val) - frac_val) > kHighsTiny){
+        num_row_get++;
+        row_set.push_back(i_row);
+        double lb = lp.row_lower_.at(i_row);
+        double ub = lp.row_upper_.at(i_row);
+        if (lb == -kHighsInf) rhs.push_back(ub);
+        else rhs.push_back(lb);
+      }
+    }
+    highs.getRows(num_row_get, row_set.data(), num_row_got, lower.data(),
+                  upper.data(), num_row_got_nz, frac_row_start.data(), frac_row_index.data(),
+                  frac_row_value.data());
+    // Grab reduced rows
+    for (auto i_row : row_set){
+      std::string gomory_sense = ">=";
+      HighsInt basic_col = basic_cols.at(i_row);
+      double b_value = col_solution.at(basic_col);
+      std::vector<double> cut(lp_num_col + lp_num_row, 0);
+      HighsInt num_row_nz;
+      std::vector<double> row_vals; row_vals.resize(lp.num_col_);
+      std::vector<HighsInt> row_inds; row_inds.resize(lp.num_row_);
+      highs.getReducedRow(0, row_vals.data(), &num_row_nz, row_inds.data());
+      for (HighsInt j = 0; j < num_row_nz; ++j){
+        HighsInt i_col = row_inds.at(j);
+        if (nonbasic_cols.at(i_col)) cut.at(i_col) = (row_vals.at(i_col) - 
+                                                      std::floor(row_vals.at(i_col)));
+      }
+      HighsInt i_col = i_row + lp_num_col;
+      double lb = lp.row_lower_.at(i_row);
+      double ub = lp.row_upper_.at(i_row);
+      double slack_coeff;
+      if (lb == -kHighsInf) slack_coeff = 1.0;
+      else slack_coeff = -1.0;
+      if (nonbasic_cols.at(i_col)){ 
+        cut.at(i_col) = slack_coeff;
+        std::vector<double> inv_row_vals; inv_row_vals.resize(lp.num_col_);
+        std::vector<HighsInt> inv_row_inds; inv_row_inds.resize(lp.num_row_);
+        HighsInt inv_num_row_nz;
+        highs.getBasisInverseRow(i_row, inv_row_vals.data(), &inv_num_row_nz, inv_row_inds.data());
+        highs.getSlackCoeff(inv_row_vals, inv_row_inds, i_row, cut.at(i_col));
+        cut.at(i_col) -= std::floor(cut.at(i_col));
+      }
+      b_value -= std::floor(b_value);
+      // Now we need to substitute in variables from non standard form lp to get rid of slack vars
+      // if they exist
+      std::cout << "test" << std::endl;
+    }
+    // // Grab the reduced inverse row and multiply times slack column to obtain reduced
+    // // slack column
+    // std::vector<double> inv_row_vals; inv_row_vals.resize(lp.num_col_);
+    // std::vector<HighsInt> inv_row_inds; inv_row_inds.resize(lp.num_row_);
+    // HighsInt inv_num_row_nz;
+    // HighsInt slack_idx = 0;
+    // double slack_coeff;
+    // highs.getBasisInverseRow(0, inv_row_vals.data(), &inv_num_row_nz, inv_row_inds.data());
+    // highs.getSlackCoeff(inv_row_vals, inv_row_inds, slack_idx, slack_coeff);
+    // std::cout << "we shall see" << std::endl;
+  }
 
   // Possibly compute the ranging information
   if (options.ranging == kHighsOnString) highs.getRanging();

@@ -5,6 +5,7 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../app/cxxopts.hpp
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/Highs.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/io/HighsIO.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/io/LoadOptions.h
+app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/io/orbit_reader.hpp
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HConst.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HStruct.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/lp_data/HighsAnalysis.h
@@ -24,11 +25,14 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/model/HighsModel.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/HAggregator.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/HPreData.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/HighsPostsolveStack.h
+app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/HighsSymmetry.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/OCAggregate.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/OCEquitable.h
+app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/OrbitAggregate.hpp
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/Presolve.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/PresolveAnalysis.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/PresolveComponent.h
+app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/presolve/orbital_partition.hpp
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/simplex/HEkk.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/simplex/HSimplexNla.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
@@ -44,6 +48,7 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/util/HVectorBase.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/util/HighsCDouble.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/util/HighsComponent.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/util/HighsDataStack.h
+app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/util/HighsDisjointSets.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/util/HighsHash.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/util/HighsInt.h
 app/CMakeFiles/highs.dir/RunHighs.cpp.o: ../src/util/HighsMatrixSlice.h

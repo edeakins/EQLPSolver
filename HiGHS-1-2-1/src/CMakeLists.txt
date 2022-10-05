@@ -86,6 +86,7 @@ set(sources
     io/HMPSIO.cpp
     io/HMpsFF.cpp
     io/LoadOptions.cpp
+    io/orbit_reader.cpp
     lp_data/Highs.cpp
     lp_data/HighsDebug.cpp
     lp_data/HighsInfo.cpp
@@ -143,6 +144,7 @@ set(sources
     presolve/PresolveUtils.cpp
     presolve/OCEquitable.cpp
     presolve/OCAggregate.cpp
+    presolve/OrbitAggregate.cpp
     qpsolver/basis.cpp
     qpsolver/quass.cpp
     qpsolver/ratiotest.cpp
@@ -194,6 +196,7 @@ set(headers
     io/HMPSIO.h
     io/HighsIO.h
     io/LoadOptions.h
+    io/orbit_reader.hpp
     lp_data/HConst.h
     lp_data/HStruct.h
     lp_data/HighsAnalysis.h
@@ -278,6 +281,8 @@ set(headers
     presolve/PresolveUtils.h
     presolve/OCEquitable.h
     presolve/OCAggregate.h
+    presolve/orbital_partition.hpp
+    presolve/OrbitAggregate.hpp
     test/DevKkt.h
     test/KktCh2.h
     util/FactorTimer.h

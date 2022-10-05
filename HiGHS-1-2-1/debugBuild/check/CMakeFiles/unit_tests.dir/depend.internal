@@ -10,6 +10,7 @@ check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -28,11 +29,14 @@ check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -48,6 +52,7 @@ check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -64,6 +69,7 @@ check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -82,11 +88,14 @@ check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -102,6 +111,7 @@ check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -118,6 +128,7 @@ check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -136,11 +147,14 @@ check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -156,6 +170,7 @@ check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -172,6 +187,7 @@ check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -190,11 +206,14 @@ check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -210,6 +229,7 @@ check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -227,6 +247,7 @@ check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -245,11 +266,14 @@ check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -265,6 +289,7 @@ check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -281,6 +306,7 @@ check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -299,11 +325,14 @@ check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -319,6 +348,7 @@ check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -336,6 +366,7 @@ check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -354,11 +385,14 @@ check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -374,6 +408,7 @@ check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -394,6 +429,7 @@ check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o
  ../src/io/HMPSIO.h
  ../src/io/HMpsFF.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -412,11 +448,14 @@ check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -432,6 +471,7 @@ check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -449,6 +489,7 @@ check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -467,11 +508,14 @@ check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -487,6 +531,7 @@ check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -544,6 +589,7 @@ check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -562,11 +608,14 @@ check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -582,6 +631,7 @@ check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -624,6 +674,7 @@ check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -642,11 +693,14 @@ check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -662,6 +716,7 @@ check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -678,6 +733,7 @@ check/CMakeFiles/unit_tests.dir/TestIO.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -696,11 +752,14 @@ check/CMakeFiles/unit_tests.dir/TestIO.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -716,6 +775,7 @@ check/CMakeFiles/unit_tests.dir/TestIO.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -735,6 +795,7 @@ check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o
  ../src/io/FilereaderEms.h
  ../src/io/HMPSIO.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -753,11 +814,14 @@ check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -773,6 +837,7 @@ check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -826,6 +891,7 @@ check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -844,11 +910,14 @@ check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -864,6 +933,7 @@ check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -880,6 +950,7 @@ check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -898,11 +969,14 @@ check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -918,6 +992,7 @@ check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -935,6 +1010,7 @@ check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -953,11 +1029,14 @@ check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -973,6 +1052,7 @@ check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -990,6 +1070,7 @@ check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -1008,11 +1089,14 @@ check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -1028,6 +1112,7 @@ check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -1044,6 +1129,7 @@ check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -1062,11 +1148,14 @@ check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -1082,6 +1171,7 @@ check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -1102,6 +1192,7 @@ check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -1120,11 +1211,14 @@ check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -1140,6 +1234,7 @@ check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -1160,6 +1255,7 @@ check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o
  ../src/io/HMPSIO.h
  ../src/io/HighsIO.h
  ../src/io/LoadOptions.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -1178,11 +1274,14 @@ check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -1198,6 +1297,7 @@ check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -1216,6 +1316,7 @@ check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o
  ../src/io/Filereader.h
  ../src/io/FilereaderLp.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -1234,11 +1335,14 @@ check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -1254,6 +1358,7 @@ check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -1270,6 +1375,7 @@ check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -1288,11 +1394,14 @@ check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -1308,6 +1417,7 @@ check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -1325,6 +1435,7 @@ check/CMakeFiles/unit_tests.dir/TestRays.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -1343,11 +1454,14 @@ check/CMakeFiles/unit_tests.dir/TestRays.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -1363,6 +1477,7 @@ check/CMakeFiles/unit_tests.dir/TestRays.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -1380,6 +1495,7 @@ check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -1398,11 +1514,14 @@ check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -1418,6 +1537,7 @@ check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
@@ -1463,6 +1583,7 @@ check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o
  ../extern/catch.hpp
  ../src/Highs.h
  ../src/io/HighsIO.h
+ ../src/io/orbit_reader.hpp
  ../src/lp_data/HConst.h
  ../src/lp_data/HStruct.h
  ../src/lp_data/HighsAnalysis.h
@@ -1481,11 +1602,14 @@ check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o
  ../src/presolve/HAggregator.h
  ../src/presolve/HPreData.h
  ../src/presolve/HighsPostsolveStack.h
+ ../src/presolve/HighsSymmetry.h
  ../src/presolve/OCAggregate.h
  ../src/presolve/OCEquitable.h
+ ../src/presolve/OrbitAggregate.hpp
  ../src/presolve/Presolve.h
  ../src/presolve/PresolveAnalysis.h
  ../src/presolve/PresolveComponent.h
+ ../src/presolve/orbital_partition.hpp
  ../src/simplex/HEkk.h
  ../src/simplex/HSimplexNla.h
  ../src/simplex/HighsSimplexAnalysis.h
@@ -1501,6 +1625,7 @@ check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsComponent.h
  ../src/util/HighsDataStack.h
+ ../src/util/HighsDisjointSets.h
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
