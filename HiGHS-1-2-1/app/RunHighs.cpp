@@ -15,6 +15,7 @@
  */
 #include <bits/stdc++.h>
 #include <iostream>
+#include <fstream>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "Highs.h"
@@ -59,6 +60,10 @@ int main(int argc, char** argv) {
 
   // Load the model from model_file
   HighsStatus read_status = highs.readModel(model_file);
+  HighsInt original_num_col;
+  if (loaded_options.solver == kOrbitalCutGenerationString)
+    original_num_col = highs.getLp().num_col_;
+
   // Load the orbit from the orbit_file
   read_status = highs.readOrbits(orbit_file);
   // // Load the basis from basis_file
@@ -118,7 +123,9 @@ int main(int argc, char** argv) {
     highs.getRows(num_row_get, row_set.data(), num_row_got, lower.data(),
                   upper.data(), num_row_got_nz, frac_row_start.data(), frac_row_index.data(),
                   frac_row_value.data());
-    // Grab reduced rows
+    // Grab reduced rows, generate cuts, lift cuts, write cuts
+    std::ofstream cut_file("~/LP/MIPSymmetryCuts/cuts.txt");
+    HighsInt frac_matrix_map = 0;
     for (auto i_row : row_set){
       std::string gomory_sense = ">=";
       HighsInt basic_col = basic_cols.at(i_row);
@@ -134,12 +141,13 @@ int main(int argc, char** argv) {
                                                       std::floor(row_vals.at(i_col)));
       }
       HighsInt i_col = i_row + lp_num_col;
+      HighsInt nonbasic_slack = nonbasic_cols.at(i_col);
       double lb = lp.row_lower_.at(i_row);
       double ub = lp.row_upper_.at(i_row);
       double slack_coeff;
       if (lb == -kHighsInf) slack_coeff = 1.0;
       else slack_coeff = -1.0;
-      if (nonbasic_cols.at(i_col)){ 
+      if (nonbasic_slack){ 
         cut.at(i_col) = slack_coeff;
         std::vector<double> inv_row_vals; inv_row_vals.resize(lp.num_col_);
         std::vector<HighsInt> inv_row_inds; inv_row_inds.resize(lp.num_row_);
@@ -149,9 +157,37 @@ int main(int argc, char** argv) {
         cut.at(i_col) -= std::floor(cut.at(i_col));
       }
       b_value -= std::floor(b_value);
-      // Now we need to substitute in variables from non standard form lp to get rid of slack vars
-      // if they exist
-      std::cout << "test" << std::endl;
+      // Now we need to substitute in variables from non standard form lp 
+      // to get rid of nonbasic slack vars if they exist
+      if (nonbasic_slack){
+        HighsInt row_start = frac_row_start.at(frac_matrix_map);
+        HighsInt row_end = frac_row_start.at(frac_matrix_map + 1);
+        std::vector<HighsInt> sub_ind(frac_row_index.begin() + row_start, 
+                                      frac_row_index.begin() + row_end);
+        std::vector<double> sub_val(frac_row_value.begin() + row_start, 
+                                    frac_row_value.begin() + row_end);
+        for (auto& val : sub_val){
+          double move_to_rhs = slack_coeff * (0.0 - val);
+          val = move_to_rhs;
+        }     
+        rhs.at(frac_matrix_map) *= slack_coeff;
+        HighsInt sub_map = 0;
+        for (auto& j_col : sub_ind){
+          cut.at(j_col) += cut.at(i_col) * sub_val.at(sub_map);
+          sub_map++;
+        }
+        b_value += -1.0 * cut.at(i_col) * rhs.at(frac_matrix_map);
+        cut.at(i_col) = 0.0;
+      }
+      // Lift the cut and write it
+      std::vector<HighsInt> lift_cut_ind;
+      std::vector<double> lift_cut_val;
+      std::vector<double> lift_cut(original_num_col);
+      highs.getLiftedCut(cut, b_value, lp_num_col, lift_cut_ind,  lift_cut_val, lift_cut);
+      for (HighsInt i_col = 0; i_col < original_num_col; ++i_col)
+        cut_file << lift_cut.at(i_col) << ",";
+      cut_file << ">=" << "," << b_value << "\n";
+      frac_matrix_map++;
     }
     // // Grab the reduced inverse row and multiply times slack column to obtain reduced
     // // slack column

@@ -10,10 +10,6 @@ add_test(unit-test-build "/usr/bin/cmake" "--build" "/home/edeakins/LP/EQLPSolve
 set_tests_properties(unit-test-build PROPERTIES  RESOURCE_LOCK "unittestbin" _BACKTRACE_TRIPLES "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;102;add_test;/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;0;")
 add_test(unit_tests_all "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/bin/unit_tests" "--success")
 set_tests_properties(unit_tests_all PROPERTIES  DEPENDS "unit-test-build" _BACKTRACE_TRIPLES "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;116;add_test;/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;0;")
-add_test(osi-unit-test-build "/usr/bin/cmake" "--build" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild" "--target" "osi_unit_tests" "--config" "Debug")
-set_tests_properties(osi-unit-test-build PROPERTIES  RESOURCE_LOCK "osiunittestbin" _BACKTRACE_TRIPLES "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;123;add_test;/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;0;")
-add_test(osi_unit_tests_all "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/bin/osi_unit_tests")
-set_tests_properties(osi_unit_tests_all PROPERTIES  DEPENDS "osi-unit-test-build" _BACKTRACE_TRIPLES "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;148;add_test;/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;0;")
 add_test(25fv47--presolve=off "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/bin/highs" "--presolve=off" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/instances/25fv47.mps")
 set_tests_properties(25fv47--presolve=off PROPERTIES  DEPENDS "unit_tests_all" PASS_REGULAR_EXPRESSION "Simplex   iterations: 3149
 Objective value     :  5.5018458883" _BACKTRACE_TRIPLES "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;253;add_test;/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;278;add_instancetests;/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/CMakeLists.txt;0;")

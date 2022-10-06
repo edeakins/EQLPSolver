@@ -2723,6 +2723,36 @@ void Highs::getSlackCoeff(std::vector<double>& b_inv, std::vector<HighsInt>& b_i
   s_v = mult * s_coeff;
 }
 
+void Highs::getLiftedCut(std::vector<double>& cut, double& cut_rhs, HighsInt& num_agg_col, 
+                          std::vector<HighsInt>& write_cut_ind, std::vector<double>& write_cut_val,
+                          std::vector<double>& write_cut){
+  // Record cut to add back in highs for resolve if we choose
+  HighsInt i_col;
+  for (i_col = 0; i_col < num_agg_col; ++i_col){
+    double coeff = cut.at(i_col);
+    HighsInt orbit = i_col;
+    HighsInt start = orbits_.orbit_start.at(orbit);
+    HighsInt end = orbits_.orbit_start.at(orbit + 1);
+    std::vector<HighsInt> temp_ind(orbits_.element.begin() + start, orbits_.element.begin() + end);
+    std::vector<double> temp_val(temp_ind.size(), coeff);
+    write_cut_ind.insert(write_cut_ind.end(), temp_ind.begin(), temp_ind.end());
+    write_cut_val.insert(write_cut_val.end(), temp_val.begin(), temp_val.end());
+  }
+  // Put cut in expanded form for easy to write to file
+  HighsInt num_nz = write_cut_ind.size();
+  for (int i = 0; i < num_nz; ++i){
+      HighsInt i_col = write_cut_ind.at(i);
+      double val = write_cut_val.at(i_col);
+      write_cut.at(i_col) = val;
+  }
+}
+
+// void Highs::getLiftedCut(std::vector<HighsInt>& row_ind, std::vector<double>& row_vals,
+//                           std::vector<double>& cut, double& cut_rhs, 
+//                           std::vector<HighsInt>& write_cut_ind, std::vector<double>& write_cut_val){
+
+// }
+
 void Highs::trimOrbitalCrossoverBasis(){
   HighsInt numAggregateCol = alp_.num_col_;
   HighsInt numAggregateRow = alp_.num_row_;

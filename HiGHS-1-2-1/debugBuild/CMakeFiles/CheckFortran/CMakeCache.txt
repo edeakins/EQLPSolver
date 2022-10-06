@@ -49,22 +49,30 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=OFF
 
 //Fortran compiler
-CMAKE_Fortran_COMPILER:FILEPATH=CMAKE_Fortran_COMPILER-NOTFOUND
+CMAKE_Fortran_COMPILER:FILEPATH=/usr/bin/f95
+
+//A wrapper around 'ar' adding the appropriate '--plugin' option
+// for the GCC compiler
+CMAKE_Fortran_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-9
+
+//A wrapper around 'ranlib' adding the appropriate '--plugin' option
+// for the GCC compiler
+CMAKE_Fortran_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-9
 
 //Flags used by the Fortran compiler during all build types.
 CMAKE_Fortran_FLAGS:STRING=
 
 //Flags used by the Fortran compiler during DEBUG builds.
-CMAKE_Fortran_FLAGS_DEBUG:STRING=
+CMAKE_Fortran_FLAGS_DEBUG:STRING=-g
 
 //Flags used by the Fortran compiler during MINSIZEREL builds.
-CMAKE_Fortran_FLAGS_MINSIZEREL:STRING=
+CMAKE_Fortran_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG -Os
 
 //Flags used by the Fortran compiler during RELEASE builds.
-CMAKE_Fortran_FLAGS_RELEASE:STRING=
+CMAKE_Fortran_FLAGS_RELEASE:STRING=-O3 -DNDEBUG -O3
 
 //Flags used by the Fortran compiler during RELWITHDEBINFO builds.
-CMAKE_Fortran_FLAGS_RELWITHDEBINFO:STRING=
+CMAKE_Fortran_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 //Install path prefix, prepended onto install directories.
 CMAKE_INSTALL_PREFIX:PATH=/usr/local
@@ -209,7 +217,7 @@ CMAKE_CTEST_COMMAND:INTERNAL=/usr/bin/ctest
 //ADVANCED property for variable: CMAKE_DLLTOOL
 CMAKE_DLLTOOL-ADVANCED:INTERNAL=1
 //Executable file format
-CMAKE_EXECUTABLE_FORMAT:INTERNAL=Unknown
+CMAKE_EXECUTABLE_FORMAT:INTERNAL=ELF
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS
 CMAKE_EXE_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_DEBUG
@@ -226,6 +234,10 @@ CMAKE_EXPORT_COMPILE_COMMANDS-ADVANCED:INTERNAL=1
 CMAKE_EXTRA_GENERATOR:INTERNAL=
 //ADVANCED property for variable: CMAKE_Fortran_COMPILER
 CMAKE_Fortran_COMPILER-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_Fortran_COMPILER_AR
+CMAKE_Fortran_COMPILER_AR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_Fortran_COMPILER_RANLIB
+CMAKE_Fortran_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_Fortran_FLAGS
 CMAKE_Fortran_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_Fortran_FLAGS_DEBUG

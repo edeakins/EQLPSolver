@@ -10,7 +10,6 @@ set(CMAKE_C_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
-  "/home/edeakins/miniconda3/include/coin"
   "."
   "../app"
   "../extern"
@@ -37,4 +36,4 @@ set(CMAKE_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.
-set(CMAKE_Fortran_TARGET_MODULE_DIR "")
+set(CMAKE_Fortran_TARGET_MODULE_DIR "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/modules")

@@ -132,6 +132,12 @@ class Highs {
 
   void getSlackCoeff(std::vector<double>& b_inv, std::vector<HighsInt>& b_idx,
                      HighsInt& s_i, double& s_v);
+  void getLiftedCut(std::vector<double>& cut, double& cut_rhs, HighsInt& num_agg_col, 
+                      std::vector<HighsInt>& write_cut_ind, std::vector<double>& write_cut_val,
+                      std::vector<double>& write_cut);
+  // void getLiftedCut(std::vector<HighsInt>& row_ind, std::vector<double>& row_vals,
+  //                     std::vector<double>& cut, double& cut_rhs, 
+  //                     std::vector<HighsInt>& write_cut_ind, std::vector<double>& write_cut_val);
 
   /**
    * @brief Read in a basis

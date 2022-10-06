@@ -736,6 +736,10 @@ ipx_internal.h
 model.h
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/ipm/ipx/src/model.h
 
+/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/ipm/ipx/src/timer.cc
+timer.h
+/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/ipm/ipx/src/timer.h
+
 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/ipm/ipx/src/timer.h
 chrono
 -
