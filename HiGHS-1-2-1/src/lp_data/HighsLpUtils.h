@@ -40,10 +40,10 @@ HighsStatus readBasisFile(const HighsLogOptions& log_options, HighsBasis& basis,
                           const std::string filename);
 HighsStatus readBasisStream(const HighsLogOptions& log_options,
                             HighsBasis& basis, std::ifstream& in_file);
-HighsStatus readOrbitFile(const HighsLogOptions& log_options, orbital_partition& orbits,
-                          const std::string& filename);
-HighsStatus readOrbitStream(const HighsLogOptions& log_options, orbital_partition& orbits, 
-                            std::ifstream& in_file);
+HighsStatus readOrbitFile(const HighsLogOptions& log_options, HighsInt num_nodes,
+                            orbital_partition& orbits, const std::string& filename);
+HighsStatus readOrbitStream(const HighsLogOptions& log_options, HighsInt num_nodes, 
+                            orbital_partition& orbits, std::ifstream& in_file);
 HighsStatus readOrbitLinkFile(const HighsLogOptions& log_options, std::vector<HighsInt>& parent,
                               std::vector<HighsInt>& child, const std::string& filename);
 HighsStatus readOrbitLinkStream(const HighsLogOptions& log_options, std::vector<HighsInt>& parent,

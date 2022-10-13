@@ -2238,14 +2238,14 @@ HighsStatus readBasisFile(const HighsLogOptions& log_options, HighsBasis& basis,
   return return_status;
 }
 
-HighsStatus readOrbitFile(const HighsLogOptions& log_options, orbital_partition& orbits,
-                          const std::string& filename){
+HighsStatus readOrbitFile(const HighsLogOptions& log_options, HighsInt num_nodes, 
+                          orbital_partition& orbits, const std::string& filename){
   // Opens a orbit file as an ifstream
   HighsStatus return_status = HighsStatus::kOk;
   std::ifstream in_file;
   in_file.open(filename.c_str(), std::ios::in);
   if (in_file.is_open()){
-    return_status = readOrbitStream(log_options, orbits, in_file);
+    return_status = readOrbitStream(log_options, num_nodes, orbits, in_file);
     in_file.close();
   }
   else{
@@ -2355,19 +2355,20 @@ HighsStatus readOrbitLinkStream(const HighsLogOptions& log_options, std::vector<
   return return_status;
 }
 
-HighsStatus readOrbitStream(const HighsLogOptions& log_options,
+HighsStatus readOrbitStream(const HighsLogOptions& log_options, HighsInt num_nodes,
                             orbital_partition& orbits, std::ifstream& in_file) {
   // Reads a set of orbits as an ifstream
   HighsStatus return_status = HighsStatus::kOk;
   std::string file_line;
   int num_orbits = 0;
   orbits.orbit_start.push_back(0);
+  orbits.orbit.resize(num_nodes);
   while (std::getline(in_file, file_line)){
       std::istringstream iss(file_line);
       int node;
       while(iss >> node){
           orbits.element.push_back(node);
-          orbits.orbit.push_back(num_orbits);
+          orbits.orbit.at(node) = num_orbits;
       }
       num_orbits++;
       orbits.orbit_start.push_back(orbits.element.size());

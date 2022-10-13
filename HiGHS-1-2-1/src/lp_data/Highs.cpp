@@ -561,7 +561,8 @@ HighsStatus Highs::readBasis(const std::string filename) {
 
 HighsStatus Highs::readOrbits(const std::string filename) {
   HighsStatus return_status = HighsStatus::kOk;
-  readOrbitFile(options_.log_options, orbits_, filename);
+  readOrbitFile(options_.log_options, model_.lp_.num_col_ + model_.lp_.num_row_,
+                orbits_, filename);
   return return_status;
 }
 
@@ -972,21 +973,14 @@ HighsStatus Highs::run() {
     // Initial refinement of LP to an equitable partition of columns
     // and rows
     options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
-    OrbitAggregate orbit_aggregate(orbits_, original_lp,
-                                   parent_links_, child_links_);
-    orbit_aggregate.aggregate();
-    HighsLp agg_lp = orbit_aggregate.getAggLp();
-    HighsBasis temp_basis;
-    // temp_basis.col_status.assign(agg_lp.num_col_, HighsBasisStatus::kLower);
-    // temp_basis.row_status.assign(agg_lp.num_row_, HighsBasisStatus::kBasic);
     if (!parent_links_.size()){
       // options_.solver = kIpmString;
       // returnFromRun(HighsStatus::kOk);
       // passModel(agg_lp);
       // zeroIterationCounts();
-      model_.lp_ = agg_lp;
+      // model_.lp_ = agg_lp;
       call_status =
-        callSolveLp(agg_lp, "Solving LP with Orbital Crossover");
+        callSolveLp(alp_orb_, "Solving LP with Orbital Crossover");
       return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
 
@@ -994,6 +988,16 @@ HighsStatus Highs::run() {
       // writeBasis("../../debugBuild/python_input_basis.txt");
       // stop_highs_run_clock = true;
       // called_return_from_run = false;
+    }
+    else{
+      options_.solver = kOCIPMString;
+      options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+      call_status =
+        callSolveLp(alp_orb_, "Solving LP with Orbital Crossover");
+      return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+
+      setBasisValidity();
     }
   }
   else if (options_.solver == kOCIPMString){
@@ -1686,6 +1690,7 @@ HighsStatus Highs::getNonbasicVariables(HighsInt* nonbasic_variables){
   for (HighsInt i_col = 0; i_col < nonbasicFlag.size(); ++i_col){
     if (nonbasicFlag.at(i_col)) nonbasic_variables[i_col] = 1; 
   }
+  return HighsStatus::kOk;
 }
 
 HighsStatus Highs::getBasisInverseRow(const HighsInt row, double* row_vector,
@@ -1844,6 +1849,67 @@ HighsStatus Highs::getReducedRow(const HighsInt row, double* row_vector,
          el < lp.a_matrix_.start_[col + 1]; el++) {
       HighsInt row = lp.a_matrix_.index_[el];
       value += lp.a_matrix_.value_[el] * basis_inverse_row_vector[row];
+    }
+    row_vector[col] = 0;
+    if (fabs(value) > kHighsTiny) {
+      if (return_indices) row_indices[(*row_num_nz)++] = col;
+      row_vector[col] = value;
+    }
+  }
+  return HighsStatus::kOk;
+}
+
+HighsStatus Highs::getReducedRowFull(const HighsInt row, const std::vector<std::string>& sense, 
+                                      double* row_vector, HighsInt* row_num_nz, HighsInt* row_indices,
+                                 const double* pass_basis_inverse_row_vector) {
+  HighsStatus return_status = HighsStatus::kOk;
+  HighsLp& lp = model_.lp_;
+  // Ensure that the LP is column-wise
+  lp.ensureColwise();
+  if (row_vector == NULL) {
+    highsLogUser(options_.log_options, HighsLogType::kError,
+                 "getReducedRow: row_vector is NULL\n");
+    return HighsStatus::kError;
+  }
+  // row_indices can be NULL - it's the trigger that determines
+  // whether they are identified or not pass_basis_inverse_row_vector
+  // NULL - it's the trigger to determine whether it's computed or not
+  if (row < 0 || row >= lp.num_row_) {
+    highsLogUser(options_.log_options, HighsLogType::kError,
+                 "Row index %" HIGHSINT_FORMAT
+                 " out of range [0, %" HIGHSINT_FORMAT "] in getReducedRow\n",
+                 row, lp.num_row_ - 1);
+    return HighsStatus::kError;
+  }
+  if (!ekk_instance_.status_.has_invert)
+    return invertRequirementError("getReducedRow");
+  HighsInt num_row = lp.num_row_;
+  vector<double> basis_inverse_row;
+  double* basis_inverse_row_vector = (double*)pass_basis_inverse_row_vector;
+  if (basis_inverse_row_vector == NULL) {
+    vector<double> rhs;
+    vector<HighsInt> col_indices;
+    rhs.assign(num_row, 0);
+    rhs[row] = 1;
+    basis_inverse_row.resize(num_row, 0);
+    // Form B^{-T}e_{row}
+    basisSolveInterface(rhs, &basis_inverse_row[0], NULL, NULL, true);
+    basis_inverse_row_vector = &basis_inverse_row[0];
+  }
+  bool return_indices = row_num_nz != NULL;
+  if (return_indices) *row_num_nz = 0;
+  for (HighsInt col = 0; col < lp.num_col_ + lp.num_row_; col++) {
+    double value = 0;
+    if (col < lp.num_col_){
+      for (HighsInt el = lp.a_matrix_.start_[col];
+          el < lp.a_matrix_.start_[col + 1]; el++) {
+        HighsInt row = lp.a_matrix_.index_[el];
+        value += lp.a_matrix_.value_[el] * basis_inverse_row_vector[row];
+      }
+    }
+    else{
+      HighsInt row = col - lp.num_col_;
+      value += -basis_inverse_row_vector[row];
     }
     row_vector[col] = 0;
     if (fabs(value) > kHighsTiny) {
@@ -2697,6 +2763,14 @@ void Highs::buildPEALP(){
   pealp_ = aggregator_.getLpNoResiduals();
 }
 
+HighsStatus Highs::buildAggLpFromOrbits(){
+  orbit_aggregator_.setup(orbits_, model_.lp_,
+                                   parent_links_, child_links_);
+  orbit_aggregator_.aggregate();
+  alp_orb_ = orbit_aggregator_.getAggLp();
+  return HighsStatus::kOk;
+}
+
 void Highs::getCrashBasis(){
   crashBasis_ = getBasisCopy();
 }
@@ -2707,20 +2781,9 @@ void Highs::getOrbitalCrossoverBasis(){
 }
 
 void Highs::getSlackCoeff(std::vector<double>& b_inv, std::vector<HighsInt>& b_idx,
-                          HighsInt& s_i, double& s_v){
-  HighsInt s_coeff;
-  double lb = model_.lp_.row_lower_.at(s_i);
-  double ub = model_.lp_.row_upper_.at(s_i);
-  if (ub == kHighsInf) s_coeff = -1.0;
-  else s_coeff = 1.0;
-  double mult = 0;
-  for (HighsInt i_row = 0; i_row < b_idx.size(); ++i_row){
-    if (b_idx.at(i_row) == s_i){
-      mult = b_inv.at(b_idx.at(i_row));
-      break;
-    }
-  }
-  s_v = mult * s_coeff;
+                          HighsInt s_i, double& s_v){
+  double mult = b_inv.at(s_i);
+  s_v *= mult;
 }
 
 void Highs::getLiftedCut(std::vector<double>& cut, double& cut_rhs, HighsInt& num_agg_col, 
@@ -2742,7 +2805,7 @@ void Highs::getLiftedCut(std::vector<double>& cut, double& cut_rhs, HighsInt& nu
   HighsInt num_nz = write_cut_ind.size();
   for (int i = 0; i < num_nz; ++i){
       HighsInt i_col = write_cut_ind.at(i);
-      double val = write_cut_val.at(i_col);
+      double val = write_cut_val.at(i);
       write_cut.at(i_col) = val;
   }
 }

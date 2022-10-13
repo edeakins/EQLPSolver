@@ -131,7 +131,7 @@ class Highs {
   HighsStatus readOrbits(const std::string filename);
 
   void getSlackCoeff(std::vector<double>& b_inv, std::vector<HighsInt>& b_idx,
-                     HighsInt& s_i, double& s_v);
+                     HighsInt s_i, double& s_v);
   void getLiftedCut(std::vector<double>& cut, double& cut_rhs, HighsInt& num_agg_col, 
                       std::vector<HighsInt>& write_cut_ind, std::vector<double>& write_cut_val,
                       std::vector<double>& write_cut);
@@ -247,6 +247,7 @@ class Highs {
    * @brief Reset the options to the default values
    */
   HighsStatus resetOptions();
+  void resetHighsTimer() {timer_.resetHighsTimer();}
 
   /**
    * @brief Write (deviations from default values of) the options to a
@@ -415,6 +416,10 @@ class Highs {
    */
   HighsStatus getReducedRow(
       const HighsInt row, double* row_vector, HighsInt* row_num_nz = nullptr,
+      HighsInt* row_indices = nullptr,
+      const double* pass_basis_inverse_row_vector = nullptr);
+  HighsStatus getReducedRowFull(
+      const HighsInt row, const std::vector<std::string>& sense, double* row_vector, HighsInt* row_num_nz = nullptr,
       HighsInt* row_indices = nullptr,
       const double* pass_basis_inverse_row_vector = nullptr);
 
@@ -929,7 +934,9 @@ class Highs {
   OCPartition partition_;
   HighsOCEquitablePartition equitablePartition_;
   HighsOCAggregate aggregator_;
+  OrbitAggregate orbit_aggregator_;
   HighsLp alp_; 
+  HighsLp alp_orb_;
   HighsLp ealp_;
   HighsLp pealp_;
   HighsBasis alpBasis_;
@@ -940,6 +947,8 @@ class Highs {
   std::vector<HighsInt> initialBasicIndex_;
   HighsSolution getSolutionCopy() { return solution_; }
   HighsBasis getBasisCopy() { return basis_; }
+  HighsStatus buildAggLpFromOrbits();
+  HighsLp& getOrbitAggregateLp(){ return alp_orb_; }
 
   // Start of deprecated methods
 

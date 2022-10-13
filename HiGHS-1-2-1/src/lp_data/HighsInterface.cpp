@@ -492,10 +492,10 @@ void Highs::getRowsInterface(const HighsIndexCollection& index_collection,
     }
   }
   row_matrix_start[0] = 0;
-  if (get_num_row == 1){
-    row_matrix_start[1] = 
-      row_matrix_start[0] + row_matrix_length[0];
-  }
+  // if (get_num_row == 1){
+  //   row_matrix_start[1] = 
+  //     row_matrix_start[0] + row_matrix_length[0];
+  // }
   for (HighsInt iRow = 0; iRow < get_num_row - 1; iRow++) {
     row_matrix_start[iRow + 1] =
         row_matrix_start[iRow] + row_matrix_length[iRow];

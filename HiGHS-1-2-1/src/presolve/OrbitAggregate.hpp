@@ -9,7 +9,7 @@
 
 class OrbitAggregate{
 public:
-    OrbitAggregate(orbital_partition& orbits, HighsLp& lp, 
+    void setup(orbital_partition& orbits, HighsLp& lp, 
                    std::vector<HighsInt>& parent_links, std::vector<HighsInt>& child_links);
     void updateMasterLpAndEp(orbital_partition& op, int _nC, int _nR,
                             int _nnz, std::vector<int>& As, std::vector<int>& Ai,
@@ -53,6 +53,7 @@ public:
     std::vector<HighsInt> child_row_;
     std::vector<HighsInt> is_parent_;
     std::vector<HighsInt> is_child_;
+    std::vector<HighsInt> parent_scale_;
     std::vector<HighsInt> residual_row_;
     // Basis container
     HighsBasis opt_basis_;
