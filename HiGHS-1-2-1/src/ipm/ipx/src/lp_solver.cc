@@ -59,8 +59,10 @@ Int LpSolver::Solve() {
         if ((info_.status_ipm == IPX_STATUS_optimal ||
              info_.status_ipm == IPX_STATUS_imprecise) && control_.crossover()) {
             control_.Log() << "Crossover\n";
+            Timer timer_for_oc;
             BuildCrossoverStartingPoint();
             RunCrossover();
+            info_.time_crossover_for_oc += timer_for_oc.Elapsed();
         }
         if (basis_) {
             info_.ftran_sparse = basis_->frac_ftran_sparse();
@@ -174,6 +176,8 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
     y_crossover_.resize(m);
     z_crossover_.resize(n+m);
     crossover_weights_.resize(0);
+    Timer timer_for_oc;
+    
     model_.PresolveStartingPoint(x_start, slack_start, y_start, z_start,
                                  x_crossover_, y_crossover_, z_crossover_);
 
@@ -221,8 +225,9 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
             return 0;
         }
     }
-
+    
     RunCrossover();
+    info_.time_crossover_for_oc += timer_for_oc.Elapsed();
     report_info_ = info_;
     return 0;
 }

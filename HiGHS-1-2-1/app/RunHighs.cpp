@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
     highs.populateTimesInInfo();
     mkdir("./Timings", 0777);
     std::stringstream report_time_file;
-    report_time_file << "./Timings/" << loaded_options.time_file << ".csv";
+    report_time_file << "/home/edeakins/LP/EQLPSolver/TimeFiles/" << loaded_options.time_file << ".csv";
     highs.writeTimes(report_time_file.str().c_str());
   }
   if (run_status == HighsStatus::kError) return (int)run_status;

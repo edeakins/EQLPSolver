@@ -799,7 +799,7 @@ HighsStatus solveLpIpx(const HighsOptions& options, HighsTimer& timer,
   }
   highs_info.basis_validity = highs_basis.valid ? kBasisValidityValid : kBasisValidityInvalid;
   highs_info.ipm_time = lps.report_info_.time_ipm1 + lps.report_info_.time_ipm2;
-  highs_info.crossover_time = lps.report_info_.time_crossover;
+  highs_info.crossover_time = lps.report_info_.time_crossover_for_oc;
   HighsStatus return_status;
   if (imprecise_solution) {
     model_status = HighsModelStatus::kUnknown;
