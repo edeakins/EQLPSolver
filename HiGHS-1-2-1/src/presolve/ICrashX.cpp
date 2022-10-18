@@ -134,7 +134,7 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
       solution);
 
   if (status != HighsStatus::kOk) return false;
-  highs_info.crossover_time = lps.report_info_.time_crossover;
+  highs_info.crossover_time = lps.report_info_.time_crossover_for_oc;
 
   std::cout << "Crossover basic solution >>>" << std::endl;
 
