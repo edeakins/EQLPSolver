@@ -22,7 +22,7 @@ void reportSimplexPhaseIterations(const HighsLogOptions& log_options,
                                   const HighsInt iteration_count,
                                   const HighsSimplexInfo& info,
                                   const bool initialise) {
-  if (info.run_quiet) return;
+  // if (info.run_quiet) return;
   static HighsInt iteration_count0 = 0;
   static HighsInt dual_phase1_iteration_count0 = 0;
   static HighsInt dual_phase2_iteration_count0 = 0;

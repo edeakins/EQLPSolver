@@ -41,6 +41,7 @@ struct ipx_parameters {
 
     /* Crossover */
     ipxint crossover;
+    ipxint crossover_aggregate = 0;
     double crossover_start;
     double pfeasibility_tol;
     double dfeasibility_tol;

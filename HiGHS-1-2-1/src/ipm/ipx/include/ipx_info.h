@@ -66,6 +66,7 @@ struct ipx_info {
     double time_ipm2;           /* IPM after switch (without starting basis) */
     double time_starting_basis; /* constructing starting basis */
     double time_crossover;      /* crossover */
+    double time_full_crossover;
 
     /* profiling linear solver */
     double time_kkt_factorize;  /* factorize/build precond for KKT matrix */

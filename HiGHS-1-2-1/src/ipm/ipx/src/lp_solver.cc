@@ -3,6 +3,7 @@
 #include <cassert>
 #include <vector>
 #include <utility>
+#include <iostream>
 #include "crossover.h"
 #include "info.h"
 #include "kkt_solver_basis.h"
@@ -59,8 +60,10 @@ Int LpSolver::Solve() {
         if ((info_.status_ipm == IPX_STATUS_optimal ||
              info_.status_ipm == IPX_STATUS_imprecise) && control_.crossover()) {
             control_.Log() << "Crossover\n";
+            Timer timer_cross;
             BuildCrossoverStartingPoint();
             RunCrossover();
+            info_.time_full_crossover += timer_cross.Elapsed();
         }
         if (basis_) {
             info_.ftran_sparse = basis_->frac_ftran_sparse();
@@ -104,7 +107,7 @@ Int LpSolver::Solve() {
     control_.CloseLogfile();
     if (control_.reportBasisData())
       basis_->reportBasisData();
-      report_info_ = info_;
+    report_info_ = info_;
     return info_.status;
 }
 
@@ -174,6 +177,7 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
     y_crossover_.resize(m);
     z_crossover_.resize(n+m);
     crossover_weights_.resize(0);
+    Timer timer_cross;
     model_.PresolveStartingPoint(x_start, slack_start, y_start, z_start,
                                  x_crossover_, y_crossover_, z_crossover_);
 
@@ -223,6 +227,11 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
     }
 
     RunCrossover();
+    info_.time_full_crossover += timer_cross.Elapsed();
+    // std::cout << "full crossover time info: " << info_.time_full_crossover << std::endl;
+    // std::cout << "full crossover time timer: " << timer_cross.Elapsed() << std::endl;
+    // std::cin.get();
+    report_info_ = info_;
     return 0;
 }
 
@@ -344,6 +353,8 @@ void LpSolver::InteriorPointSolve() {
     iterate_->feasibility_tol(control_.ipm_feasibility_tol());
     iterate_->optimality_tol(control_.ipm_optimality_tol());
     if (control_.crossover())
+        iterate_->crossover_start(control_.crossover_start());
+    if (control_.crossover_aggregate())
         iterate_->crossover_start(control_.crossover_start());
 
     RunIPM();

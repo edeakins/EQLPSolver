@@ -668,11 +668,19 @@ cstring
 string
 -
 
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/app/RunHighs.cpp
+/home/edeakins/EQLPSolver/HiGHS-1-2-1/app/RunHighs.cpp
+bits/stdc++.h
+-
+iostream
+-
+sys/stat.h
+-
+sys/types.h
+-
 Highs.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/app/Highs.h
+/home/edeakins/EQLPSolver/HiGHS-1-2-1/app/Highs.h
 lp_data/HighsRuntimeOptions.h
-/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/app/lp_data/HighsRuntimeOptions.h
+/home/edeakins/EQLPSolver/HiGHS-1-2-1/app/lp_data/HighsRuntimeOptions.h
 
 HConfig.h
 

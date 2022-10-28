@@ -140,6 +140,8 @@ class HEkk {
   bool debugNlaScalingOk(const HighsLp& lp) const;
 
   // Data members
+  HighsInt num_zero_pivots = 0;
+  HighsInt num_nonzero_pivots = 0;
   HighsOptions* options_;
   HighsTimer* timer_;
   HighsSimplexAnalysis analysis_;

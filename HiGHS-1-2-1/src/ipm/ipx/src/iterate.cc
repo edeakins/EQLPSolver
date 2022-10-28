@@ -235,8 +235,8 @@ bool Iterate::optimal() const {
 
 bool Iterate::term_crit_reached() const {
     if (feasible() && optimal()) {
-        if (crossover_start_ <= 0.0)
-            return true;
+        // if (crossover_start_ <= 0.0)
+        //     return true;
         double pres, dres;
         ResidualsFromDropping(&pres, &dres);
         if (pres <= crossover_start_ * (1.0+model_.norm_bounds()) &&

@@ -22,6 +22,12 @@ public:
     void buildLp();
     void buildLp(OCPartition& partition, HighsBasis& b,
                 HighsSolution& s, std::vector<HighsInt>& basic_index);
+    void buildLpForIPM(OCPartition& partition, HighsBasis& b,
+                HighsSolution& s, std::vector<HighsInt>& basic_index);
+    void buildElp();
+    int countResiduals(OCPartition& partition, HighsBasis& b,
+                HighsSolution& s, std::vector<HighsInt>& basic_index);
+    void resetPreviousContainers();
     // Build solution for aggregate ipm solve to hand off to highs basic 
     // crossover
     HighsSolution buildSolution(OCPartition& partition, HighsSolution& s);
@@ -108,8 +114,10 @@ public:
     OCPartition ep;
     OCPartition epMinusOne;
     HighsBasis basis;
+    HighsBasis temp_basis;
     HighsBasis elpBasis;
     HighsSolution solution;
+    HighsSolution temp_solution;
     HighsSolution lift_solution;
     HFactor degenerate_factor;
     HighsSparseMatrix degenerate_matrix;
@@ -124,18 +132,24 @@ public:
     int degenCnt = 0;
     int colCnt = 0;
     int pcolCnt = 0;
+    int temp_pcolCnt = 0;
     int rowCnt = 0;
     int prowCnt = 0;
+    int temp_prowCnt = 0;
     int num_basic;
     HighsInt num_deleted_links;
     std::vector<int> col;
     std::vector<int> colrep;
     std::vector<int> pcol;
+    std::vector<int> temp_pcol;
     std::vector<int> pcolrep;
+    std::vector<int> temp_pcolrep;
     std::vector<int> row;
     std::vector<int> rowrep;
     std::vector<int> prow;
+    std::vector<int> temp_prow;
     std::vector<int> prowrep;
+    std::vector<int> temp_prowrep;
     std::vector<int> splitFrom;
     std::vector<int> splitFromNonbasicCount;
     std::vector<int> splitSize;
@@ -169,10 +183,12 @@ public:
     std::vector<int> frontCol;
     std::vector<int> colFront;
     std::vector<int> pFrontCol;
+    std::vector<int> temp_pFrontCol;
     std::vector<int> pColFront;
     std::vector<int> frontRow;
     std::vector<int> rowFront;
     std::vector<int> pFrontRow;
+    std::vector<int> temp_pFrontRow;
     std::vector<int> frontMin;
     std::set<int> colReps;
     std::set<int> newColReps;

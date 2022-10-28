@@ -3616,7 +3616,7 @@ HighsStatus HEkk::returnFromSolve(const HighsStatus return_status) {
   assert(exit_algorithm_ != SimplexAlgorithm::kNone);
   switch (model_status_) {
     case HighsModelStatus::kOptimal: {
-      if (info_.num_primal_infeasibilities) {
+      if (info_.num_primal_infeasibilities && !info_.simplex_strategy == kSimplexStrategyOrbitalCrossover) {
         // Optimal - but not to desired primal feasibilit tolerance
         return_primal_solution_status_ = kSolutionStatusInfeasible;
       } else {

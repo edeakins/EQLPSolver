@@ -4,11 +4,11 @@
 src/CMakeFiles/libhighs.dir/__/extern/filereaderlp/reader.cpp.o
  ../extern/zstr/strict_fstream.hpp
  ../extern/zstr/zstr.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/builder.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/def.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/model.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/reader.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/reader.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/builder.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/def.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/model.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/reader.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/extern/filereaderlp/reader.hpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o
  ../src/Highs.h
@@ -61,8 +61,8 @@ src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/interfaces/highs_c_api.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/interfaces/highs_c_api.h
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/interfaces/highs_c_api.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/interfaces/highs_c_api.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/Filereader.cpp.o
  ../src/io/Filereader.h
@@ -87,7 +87,7 @@ src/CMakeFiles/libhighs.dir/io/Filereader.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/Filereader.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/io/Filereader.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o
  ../src/io/Filereader.h
@@ -113,7 +113,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderEms.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/FilereaderEms.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/io/FilereaderEms.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o
  ../extern/filereaderlp/model.hpp
@@ -140,7 +140,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderLp.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/FilereaderLp.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/io/FilereaderLp.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o
  ../src/io/Filereader.h
@@ -170,7 +170,7 @@ src/CMakeFiles/libhighs.dir/io/FilereaderMps.cpp.o
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/FilereaderMps.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/io/FilereaderMps.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o
  ../extern/zstr/strict_fstream.hpp
@@ -199,7 +199,7 @@ src/CMakeFiles/libhighs.dir/io/HMPSIO.cpp.o
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/HMPSIO.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/io/HMPSIO.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/HMpsFF.cpp.o
  ../extern/zstr/strict_fstream.hpp
@@ -224,7 +224,7 @@ src/CMakeFiles/libhighs.dir/io/HMpsFF.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
  ../src/util/stringutil.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/HMpsFF.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/io/HMpsFF.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.o
  ../src/io/HighsIO.h
@@ -243,8 +243,8 @@ src/CMakeFiles/libhighs.dir/io/HighsIO.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/HighsIO.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/HighsIO.h
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/io/HighsIO.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/io/HighsIO.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/io/LoadOptions.cpp.o
  ../src/io/HighsIO.h
@@ -256,7 +256,7 @@ src/CMakeFiles/libhighs.dir/io/LoadOptions.cpp.o
  ../src/util/HFactorConst.h
  ../src/util/HighsInt.h
  ../src/util/stringutil.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/io/LoadOptions.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/io/LoadOptions.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/ipm/IpxWrapper.cpp.o
  ../src/io/HighsIO.h
@@ -309,7 +309,7 @@ src/CMakeFiles/libhighs.dir/ipm/IpxWrapper.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/ipm/IpxWrapper.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/ipm/IpxWrapper.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o
  ../src/Highs.h
@@ -395,7 +395,7 @@ src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/Highs.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/Highs.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDebug.cpp.o
@@ -404,7 +404,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsDebug.cpp.o
  ../src/lp_data/HighsDebug.h
  ../src/lp_data/HighsStatus.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsDebug.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsDebug.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o
  ../src/Highs.h
@@ -457,7 +457,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsDeprecated.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsDeprecated.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o
  ../src/io/HighsIO.h
@@ -468,7 +468,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsInfo.cpp.o
  ../src/simplex/SimplexConst.h
  ../src/util/HFactorConst.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsInfo.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsInfo.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInfoDebug.cpp.o
  ../src/io/HighsIO.h
@@ -489,7 +489,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsInfoDebug.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsInfoDebug.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsInfoDebug.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o
  ../src/Highs.h
@@ -546,7 +546,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsInterface.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsInterface.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o
  ../src/io/HighsIO.h
@@ -566,7 +566,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLp.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsLp.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsLp.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o
  ../src/io/Filereader.h
@@ -606,7 +606,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsLpUtils.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsLpUtils.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsLpUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o
  ../src/io/HighsIO.h
@@ -628,7 +628,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsModelUtils.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsModelUtils.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsModelUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o
  ../src/io/HighsIO.h
@@ -638,7 +638,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsOptions.cpp.o
  ../src/simplex/SimplexConst.h
  ../src/util/HFactorConst.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsOptions.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsOptions.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsRanging.cpp.o
  ../src/io/HighsIO.h
@@ -671,7 +671,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsRanging.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsRanging.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsRanging.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o
  ../src/io/HighsIO.h
@@ -726,7 +726,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolution.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsSolution.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsSolution.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolutionDebug.cpp.o
  ../src/io/HighsIO.h
@@ -762,7 +762,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolutionDebug.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsSolutionDebug.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsSolutionDebug.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o
  ../src/io/HighsIO.h
@@ -822,13 +822,13 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsSolve.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsSolve.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsSolve.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsStatus.cpp.o
  ../src/io/HighsIO.h
  ../src/lp_data/HighsStatus.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsStatus.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/lp_data/HighsStatus.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -914,7 +914,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsCliqueTable.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsCliqueTable.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o
@@ -973,7 +973,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsConflictPool.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsConflictPool.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -1060,7 +1060,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsCutGeneration.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsCutGeneration.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsCutGeneration.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o
@@ -1145,7 +1145,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsCutPool.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsCutPool.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o
@@ -1231,7 +1231,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsDebugSol.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsDebugSol.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o
@@ -1316,20 +1316,20 @@ src/CMakeFiles/libhighs.dir/mip/HighsDomain.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsDomain.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsDomain.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsDynamicRowMatrix.cpp.o
  ../src/mip/HighsDynamicRowMatrix.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsDynamicRowMatrix.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsDynamicRowMatrix.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsGFkSolve.cpp.o
  ../src/lp_data/HConst.h
  ../src/mip/HighsGFkSolve.h
  ../src/util/HighsInt.h
  ../src/util/HighsSplay.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsGFkSolve.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsGFkSolve.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -1413,7 +1413,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsImplications.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsImplications.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o
@@ -1470,7 +1470,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsLpAggregator.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsLpAggregator.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o
  ../src/Highs.h
@@ -1553,7 +1553,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsLpRelaxation.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsLpRelaxation.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o
@@ -1641,7 +1641,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsMipSolver.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsMipSolver.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o
@@ -1729,7 +1729,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsMipSolverData.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsMipSolverData.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsMipSolverData.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o
@@ -1820,7 +1820,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsModkSeparator.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsModkSeparator.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o
@@ -1905,7 +1905,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsNodeQueue.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsNodeQueue.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o
@@ -1991,7 +1991,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsObjectiveFunction.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsObjectiveFunction.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o
@@ -2079,7 +2079,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsPathSeparator.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsPathSeparator.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o
@@ -2166,7 +2166,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsPrimalHeuristics.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsPrimalHeuristics.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o
@@ -2250,7 +2250,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsPseudocost.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsPseudocost.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o
@@ -2334,7 +2334,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsRedcostFixing.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsRedcostFixing.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o
@@ -2419,7 +2419,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsSearch.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsSearch.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o
@@ -2508,7 +2508,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsSeparation.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsSeparation.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o
@@ -2570,7 +2570,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsSeparator.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsSeparator.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -2658,7 +2658,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsTableauSeparator.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsTableauSeparator.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o
@@ -2743,14 +2743,14 @@ src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/mip/HighsTransformedLp.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/mip/HighsTransformedLp.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/model/HighsHessian.cpp.o
  ../src/lp_data/HConst.h
  ../src/model/HighsHessian.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/model/HighsHessian.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/model/HighsHessian.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/model/HighsHessianUtils.cpp.o
  ../src/io/HighsIO.h
@@ -2776,7 +2776,7 @@ src/CMakeFiles/libhighs.dir/model/HighsHessianUtils.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/model/HighsHessianUtils.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/model/HighsHessianUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/model/HighsModel.cpp.o
  ../src/io/HighsIO.h
@@ -2797,7 +2797,7 @@ src/CMakeFiles/libhighs.dir/model/HighsModel.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/model/HighsModel.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/model/HighsModel.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/parallel/HighsTaskExecutor.cpp.o
  ../src/parallel/HighsBinarySemaphore.h
@@ -2809,7 +2809,7 @@ src/CMakeFiles/libhighs.dir/parallel/HighsTaskExecutor.cpp.o
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsRandom.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/parallel/HighsTaskExecutor.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/parallel/HighsTaskExecutor.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/presolve/HAggregator.cpp.o
@@ -2821,7 +2821,7 @@ src/CMakeFiles/libhighs.dir/presolve/HAggregator.cpp.o
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsSplay.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/HAggregator.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/HAggregator.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o
  ../src/io/HighsIO.h
@@ -2835,7 +2835,7 @@ src/CMakeFiles/libhighs.dir/presolve/HPreData.cpp.o
  ../src/util/HFactorConst.h
  ../src/util/HighsInt.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/HPreData.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/HPreData.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -2923,7 +2923,7 @@ src/CMakeFiles/libhighs.dir/presolve/HPresolve.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/HPresolve.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/HPresolve.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/presolve/HighsLpPropagator.cpp.o
@@ -2938,7 +2938,7 @@ src/CMakeFiles/libhighs.dir/presolve/HighsLpPropagator.cpp.o
  ../src/util/HighsCDouble.h
  ../src/util/HighsInt.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/HighsLpPropagator.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/HighsLpPropagator.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/HighsPostsolveStack.cpp.o
  ../src/io/HighsIO.h
@@ -2953,7 +2953,7 @@ src/CMakeFiles/libhighs.dir/presolve/HighsPostsolveStack.cpp.o
  ../src/util/HighsDataStack.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixSlice.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/HighsPostsolveStack.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/HighsPostsolveStack.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -3014,7 +3014,7 @@ src/CMakeFiles/libhighs.dir/presolve/HighsSymmetry.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/HighsSymmetry.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/HighsSymmetry.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/ICrashX.cpp.o
  ../src/io/HighsIO.h
@@ -3068,7 +3068,7 @@ src/CMakeFiles/libhighs.dir/presolve/ICrashX.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/ICrashX.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/ICrashX.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o
  ../src/io/HighsIO.h
@@ -3092,9 +3092,9 @@ src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OCAggregate.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OCAggregate.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OCEquitable.h
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/OCAggregate.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/OCAggregate.h
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/OCEquitable.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o
  ../src/io/HighsIO.h
@@ -3115,8 +3115,8 @@ src/CMakeFiles/libhighs.dir/presolve/OCEquitable.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OCEquitable.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/OCEquitable.h
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/OCEquitable.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/OCEquitable.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o
  ../src/io/HighsIO.h
@@ -3159,14 +3159,14 @@ src/CMakeFiles/libhighs.dir/presolve/Presolve.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/Presolve.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/Presolve.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveAnalysis.cpp.o
  ../src/lp_data/HConst.h
  ../src/presolve/PresolveAnalysis.h
  ../src/util/HighsInt.h
  ../src/util/HighsTimer.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveAnalysis.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveAnalysis.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o
  ../src/Highs.h
@@ -3222,13 +3222,13 @@ src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveComponent.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveComponent.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveUtils.cpp.o
  ../src/lp_data/HConst.h
  ../src/presolve/PresolveUtils.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveUtils.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/presolve/PresolveUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/qpsolver/basis.cpp.o
  ../src/io/HighsIO.h
@@ -3249,18 +3249,18 @@ src/CMakeFiles/libhighs.dir/qpsolver/basis.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/basis.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/basis.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/eventhandler.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/instance.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/matrix.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/pricing.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/qpconst.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/runtime.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/settings.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/snippets.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/statistics.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/vector.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/basis.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/basis.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/eventhandler.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/instance.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/matrix.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/pricing.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/qpconst.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/runtime.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/settings.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/snippets.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/statistics.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/vector.hpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o
  ../src/Highs.h
@@ -3313,43 +3313,43 @@ src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o
  ../src/util/HighsUtils.h
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/basis.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/dantzigpricing.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/devexharrispricing.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/devexpricing.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/eventhandler.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/factor.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/feasibility.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/feasibility_highs.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/gradient.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/instance.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/matrix.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/pricing.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/qpconst.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/quass.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/quass.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/ratiotest.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/reducedcosts.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/reducedgradient.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/runtime.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/settings.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/snippets.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/statistics.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/steepestedgepricing.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/vector.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/basis.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/dantzigpricing.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/devexharrispricing.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/devexpricing.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/eventhandler.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/factor.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/feasibility.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/feasibility_highs.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/gradient.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/instance.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/matrix.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/pricing.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/qpconst.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/quass.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/quass.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/ratiotest.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/reducedcosts.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/reducedgradient.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/runtime.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/settings.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/snippets.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/statistics.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/steepestedgepricing.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/vector.hpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/qpsolver/ratiotest.cpp.o
  ../src/util/HighsInt.h
  ../src/util/HighsTimer.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/eventhandler.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/instance.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/matrix.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/ratiotest.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/ratiotest.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/runtime.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/settings.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/statistics.hpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/qpsolver/vector.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/eventhandler.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/instance.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/matrix.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/ratiotest.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/ratiotest.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/runtime.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/settings.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/statistics.hpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/qpsolver/vector.hpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o
  ../src/io/HighsIO.h
@@ -3402,7 +3402,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkk.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkk.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkk.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkControl.cpp.o
@@ -3432,7 +3432,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkControl.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkControl.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkControl.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDebug.cpp.o
  ../src/io/HighsIO.h
@@ -3465,7 +3465,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkDebug.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDebug.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDebug.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o
  ../src/io/HighsIO.h
@@ -3509,8 +3509,8 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkDual.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDual.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDual.h
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDual.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDual.h
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDualMulti.cpp.o
@@ -3554,7 +3554,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkDualMulti.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDualMulti.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDualMulti.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDualRHS.cpp.o
@@ -3586,8 +3586,8 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkDualRHS.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDualRHS.cpp
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDualRHS.h
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDualRHS.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDualRHS.h
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkDualRow.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -3623,7 +3623,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkDualRow.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDualRow.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkDualRow.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o
  ../src/io/HighsIO.h
@@ -3654,7 +3654,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkInterface.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkInterface.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkInterface.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HEkkPrimal.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -3692,7 +3692,7 @@ src/CMakeFiles/libhighs.dir/simplex/HEkkPrimal.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkPrimal.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HEkkPrimal.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o
  ../src/io/HighsIO.h
@@ -3713,7 +3713,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplex.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplex.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplex.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplexDebug.cpp.o
  ../src/io/HighsIO.h
@@ -3745,7 +3745,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplexDebug.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexDebug.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexDebug.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplexNla.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -3783,7 +3783,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplexNla.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexNla.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexNla.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplexNlaDebug.cpp.o
@@ -3811,7 +3811,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplexNlaDebug.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexNlaDebug.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexNlaDebug.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplexNlaFreeze.cpp.o
  ../src/io/HighsIO.h
@@ -3836,7 +3836,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplexNlaFreeze.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexNlaFreeze.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexNlaFreeze.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplexNlaProductForm.cpp.o
  ../src/io/HighsIO.h
@@ -3861,7 +3861,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplexNlaProductForm.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexNlaProductForm.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexNlaProductForm.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HSimplexReport.cpp.o
  ../src/io/HighsIO.h
@@ -3882,7 +3882,7 @@ src/CMakeFiles/libhighs.dir/simplex/HSimplexReport.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexReport.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HSimplexReport.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o
  ../src/io/HighsIO.h
@@ -3917,7 +3917,7 @@ src/CMakeFiles/libhighs.dir/simplex/HighsSimplexAnalysis.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/simplex/HighsSimplexAnalysis.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/simplex/HighsSimplexAnalysis.cpp
  HConfig.h
  libhighs_export.h
 src/CMakeFiles/libhighs.dir/test/DevKkt.cpp.o
@@ -3926,14 +3926,14 @@ src/CMakeFiles/libhighs.dir/test/DevKkt.cpp.o
  ../src/test/DevKkt.h
  ../src/util/HighsCDouble.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/test/DevKkt.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/test/DevKkt.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/test/KktCh2.cpp.o
  ../src/lp_data/HConst.h
  ../src/test/DevKkt.h
  ../src/test/KktCh2.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/test/KktCh2.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/test/KktCh2.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HFactor.cpp.o
  ../extern/pdqsort/pdqsort.h
@@ -3957,7 +3957,7 @@ src/CMakeFiles/libhighs.dir/util/HFactor.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HFactor.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HFactor.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HFactorDebug.cpp.o
  ../src/io/HighsIO.h
@@ -3973,7 +3973,7 @@ src/CMakeFiles/libhighs.dir/util/HFactorDebug.cpp.o
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
  ../src/util/HighsRandom.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HFactorDebug.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HFactorDebug.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HFactorExtend.cpp.o
  ../src/io/HighsIO.h
@@ -3994,7 +3994,7 @@ src/CMakeFiles/libhighs.dir/util/HFactorExtend.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HFactorExtend.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HFactorExtend.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HFactorRefactor.cpp.o
  ../src/io/HighsIO.h
@@ -4015,7 +4015,7 @@ src/CMakeFiles/libhighs.dir/util/HFactorRefactor.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HFactorRefactor.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HFactorRefactor.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HFactorUtils.cpp.o
  ../src/io/HighsIO.h
@@ -4036,31 +4036,31 @@ src/CMakeFiles/libhighs.dir/util/HFactorUtils.cpp.o
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsTimer.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HFactorUtils.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HFactorUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HSet.cpp.o
  ../src/util/HSet.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HSet.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HSet.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HVectorBase.cpp.o
  ../src/lp_data/HConst.h
  ../src/util/HVectorBase.h
  ../src/util/HighsCDouble.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HVectorBase.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HVectorBase.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HighsHash.cpp.o
  ../src/util/HighsHash.h
  ../src/util/HighsInt.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HighsHash.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HighsHash.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HighsLinearSumBounds.cpp.o
  ../src/lp_data/HConst.h
  ../src/util/HighsCDouble.h
  ../src/util/HighsInt.h
  ../src/util/HighsLinearSumBounds.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HighsLinearSumBounds.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HighsLinearSumBounds.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HighsMatrixPic.cpp.o
  ../src/io/HighsIO.h
@@ -4080,7 +4080,7 @@ src/CMakeFiles/libhighs.dir/util/HighsMatrixPic.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HighsMatrixPic.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HighsMatrixPic.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HighsMatrixUtils.cpp.o
  ../src/io/HighsIO.h
@@ -4091,13 +4091,13 @@ src/CMakeFiles/libhighs.dir/util/HighsMatrixUtils.cpp.o
  ../src/util/HFactorConst.h
  ../src/util/HighsInt.h
  ../src/util/HighsMatrixUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HighsMatrixUtils.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HighsMatrixUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HighsSort.cpp.o
  ../src/lp_data/HConst.h
  ../src/util/HighsInt.h
  ../src/util/HighsSort.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HighsSort.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HighsSort.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HighsSparseMatrix.cpp.o
  ../src/io/HighsIO.h
@@ -4117,7 +4117,7 @@ src/CMakeFiles/libhighs.dir/util/HighsSparseMatrix.cpp.o
  ../src/util/HighsSparseMatrix.h
  ../src/util/HighsSparseVectorSum.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HighsSparseMatrix.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HighsSparseMatrix.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o
  ../src/io/HighsIO.h
@@ -4129,8 +4129,8 @@ src/CMakeFiles/libhighs.dir/util/HighsUtils.cpp.o
  ../src/util/HighsInt.h
  ../src/util/HighsSort.h
  ../src/util/HighsUtils.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/HighsUtils.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/HighsUtils.cpp
  HConfig.h
 src/CMakeFiles/libhighs.dir/util/stringutil.cpp.o
  ../src/util/stringutil.h
- /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/src/util/stringutil.cpp
+ /home/edeakins/EQLPSolver/HiGHS-1-2-1/src/util/stringutil.cpp

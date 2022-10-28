@@ -97,6 +97,14 @@ void HighsOCAggregate::buildLp(){
     buildBnds();
     // buildResiduals();
     copyPartition();
+    // pcol = col;
+    // pcolrep = colrep;
+    // prow = row;
+    // prowrep = rowrep;
+    // pFrontCol = frontCol;
+    // pcolCnt = colCnt;
+    // pFrontRow = frontRow;
+    // prowCnt = rowCnt;
     agglp.level = level;
     ++level;
 }
@@ -117,9 +125,11 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     findFrontMins();
     buildColPointers();
     buildRowPointers();
-    trackAndCountSplits();
+    // trackAndCountSplits();
     markDegenerate();
     buildResidualLinks();
+    // countResiduals();
+    // if (numResiduals < 1000)
     resizeElpContainers();
     buildBasis(false, false);
     buildObjExtended();
@@ -136,8 +146,11 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     ++level;
 }
 
-HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolution& s){
+
+void HighsOCAggregate::buildLpForIPM(OCPartition& partition, HighsBasis& b,
+                               HighsSolution& s, std::vector<HighsInt>& basic_index){
     ep = partition;
+    basis = b;
     solution = s;
     pcol = col;
     pcolrep = colrep;
@@ -150,6 +163,122 @@ HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolut
     findFrontMins();
     buildColPointers();
     buildRowPointers();
+    // trackAndCountSplits();
+    // markDegenerate();
+    // buildResidualLinks();
+    // countResiduals();
+    // if (numResiduals < 1000)
+    resizeElpContainers();
+    // buildBasis(false, false);
+    buildObj();
+    buildAmatrix();
+    buildRhs();
+    buildBnds();
+    buildRowNames();
+    buildColNames();
+    // copyPartition();
+    // agglp.level = level;
+    // elp.level = level; 
+    // presolvelp.level = level;
+    // // elp.pairs = pairs;
+    // ++level;
+}
+
+void HighsOCAggregate::buildElp(){
+    // ep = partition;
+    // basis = b;
+    // solution = s;
+    // pcol = col;
+    // pcolrep = colrep;
+    // prow = row;
+    // prowrep = rowrep;
+    // pFrontCol = frontCol;
+    // pcolCnt = colCnt;
+    // pFrontRow = frontRow;
+    // prowCnt = rowCnt;
+    // findFrontMins();
+    // buildColPointers();
+    // buildRowPointers();
+    // trackAndCountSplits();
+    // markDegenerate();
+    // buildResidualLinks();
+    // // countResiduals();
+    // // if (numResiduals < 1000)
+    resizeElpContainers();
+    buildBasis(false, false);
+    buildObjExtended();
+    buildAmatrixExtended();
+    buildRhsExtended();
+    buildBndsExtended();
+    buildRowNames();
+    buildColNames();
+    copyPartition();
+    pcol = col;
+    pcolrep = colrep;
+    prow = row;
+    prowrep = rowrep;
+    pFrontCol = frontCol;
+    pcolCnt = colCnt;
+    pFrontRow = frontRow;
+    prowCnt = rowCnt;
+    agglp.level = level;
+    elp.level = level; 
+    presolvelp.level = level;
+    // elp.pairs = pairs;
+    ++level;
+}
+
+int HighsOCAggregate::countResiduals(OCPartition& partition, HighsBasis& b,
+                               HighsSolution& s, std::vector<HighsInt>& basic_index){
+    // temp_basis = basis;
+    // temp_solution = solution;
+    // temp_pcol = pcol;
+    // temp_pcolrep = pcolrep;
+    // temp_prow = prow;
+    // temp_prowrep = prowrep;
+    // temp_pFrontCol = pFrontCol;
+    // temp_pFrontRow = pFrontRow;
+    // temp_pcolCnt = pcolCnt;
+    // temp_prowCnt = prowCnt;
+    ep = partition;
+    basis = b;
+    solution = s;
+    findFrontMins();
+    buildColPointers();
+    buildRowPointers();
+    // trackAndCountSplits();
+    markDegenerate();
+    buildResidualLinks();
+    return numResiduals;
+}
+
+void HighsOCAggregate::resetPreviousContainers(){
+    basis = temp_basis;
+    solution = temp_solution;
+    pcol = temp_pcol;
+    pcolrep = temp_pcolrep;
+    prow = temp_prow;
+    prowrep = temp_prowrep;
+    pFrontCol = temp_pFrontCol;
+    pFrontRow = temp_pFrontRow;
+    pcolCnt = temp_pcolCnt;
+    prowCnt = temp_prowCnt;
+}
+
+HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolution& s){
+    // ep = partition;
+    // solution = s;
+    // pcol = col;
+    // pcolrep = colrep;
+    // prow = row;
+    // prowrep = rowrep;
+    // pFrontCol = frontCol;
+    // pcolCnt = colCnt;
+    // pFrontRow = frontRow;
+    // prowCnt = rowCnt;
+    // findFrontMins();
+    // buildColPointers();
+    // buildRowPointers();
     HighsInt iCol, iRow, rep, cf, pcf, pc,
     rf, prf, pr, prlen; 
     double pv, pd;
@@ -164,9 +293,9 @@ HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolut
         pc = pFrontCol[pcf];
         pv = solution.col_value[pc];
         pd = solution.col_dual[pc];
-        lift_solution.col_value.at(rep) = 
+        lift_solution.col_value.at(iCol) = 
             pv;
-        lift_solution.col_dual.at(rep) = 
+        lift_solution.col_dual.at(iCol) = 
             pd;
     }
     for (iRow = 0; iRow < rowCnt; ++iRow){
@@ -177,11 +306,17 @@ HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolut
         pr = pFrontRow[prf];
         pv = solution.row_value.at(pr);
         pd = solution.row_dual.at(pr);
-        lift_solution.row_value.at(rep - numCol) = 
+        lift_solution.row_value.at(iRow) = 
             (double)pv/prlen;
-        lift_solution.row_dual.at(rep - numCol) = 
+        lift_solution.row_dual.at(iRow) = 
             pd;
     }
+    copyPartition();
+    agglp.level = level;
+    elp.level = level; 
+    presolvelp.level = level;
+    // elp.pairs = pairs;
+    ++level;
     return lift_solution;
 }
 
@@ -252,6 +387,8 @@ void HighsOCAggregate::buildAmatrixExtended(){
         c = iCol;
         for (mIdx = olp.a_matrix_.start_[crep]; mIdx < olp.a_matrix_.start_[crep + 1]; ++mIdx){
             ro = olp.a_matrix_.index_[mIdx];
+            xv = olp.a_matrix_.value_[mIdx];
+            // if (std::fabs(xv) < 1e-9) continue;
             rf = ep.front[ro + numCol];
             r = frontRow[rf];
             rlen = ep.len[rf] + 1;
@@ -259,9 +396,11 @@ void HighsOCAggregate::buildAmatrixExtended(){
                 columnI[nnz++] = r;
                 // nnzStan++;
             }
-            columnX[r] += olp.a_matrix_.value_[mIdx] * clen;
+            columnX[r] += xv * clen;
         }
-        for (mIdx = start; mIdx < nnz; ++mIdx){
+        // int new_nnz = start;
+        for (mIdx = start; mIdx < nnz; mIdx++){
+            // if (std::fabs(columnX[columnI[mIdx]]) < 1e-9)
             elp.a_matrix_.index_.push_back(columnI[mIdx]);
             // AdegenRIndex[j] = columnI[j];
             elp.a_matrix_.value_.push_back(columnX[columnI[mIdx]]);

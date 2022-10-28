@@ -272,6 +272,7 @@ struct HighsOptionsStruct {
   // Run-time options read from the command line
   std::string presolve;
   std::string solver;
+  std::string main_strategy;
   std::string parallel;
   std::string ranging;
   std::string time_file;

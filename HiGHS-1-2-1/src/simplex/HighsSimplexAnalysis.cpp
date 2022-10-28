@@ -1275,6 +1275,7 @@ void HighsSimplexAnalysis::iterationReport(const bool header) {
   }
   reportAlgorithmPhase(header);
   reportIterationObjective(header);
+  analyse_simplex_runtime_data = true;
   if (analyse_simplex_runtime_data) {
     reportDensity(header);
     reportIterationData(header);

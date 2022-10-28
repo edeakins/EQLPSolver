@@ -160,6 +160,7 @@ class Highs {
    */
   HighsStatus writeTimes(const std::string filename);
   HighsStatus populateTimesInInfo();
+  HighsStatus impreciseTimesInfo();
 
   /**
    * Methods for HiGHS option input/output
@@ -1195,6 +1196,9 @@ class Highs {
   void initializeAggregator(HighsLp& original_lp);
   void refinePartition();
   void buildALP();
+  void buildALPforIPM();
+  int countResiduals();
+  void resetAggregator();
   void buildEALP();
   void buildPEALP();
   void getOrbitalCrossoverBasis();

@@ -146,8 +146,9 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, "Orbital Crossover,");
       fprintf(file, "Solve (Total),");
       fprintf(file, "Highs Run,");
-      fprintf(file, "Original Columns (Reductions),");
-      fprintf(file, "Original Rows (Reductions)\n");
+      fprintf(file, "Major Iterations,");
+      fprintf(file, "Non Trivial Pivots,");
+      fprintf(file, "Total Pivots\n");
       // fprintf(file, "Columns Reduced (%),");
       // fprintf(file, "Rows Reduced (%)\n");
       // Write instance name
@@ -178,10 +179,13 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << std::fixed << std::setprecision(5) << info.run_highs_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.original_cols << " (-" << info.original_cols - info.reduced_cols << "),";
+      time << info.orbital_crossover_major_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << ")\n";
+      time << info.orbital_crossover_non_trival_count << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.orbital_crossover_minor_iteration_count << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
       // time << info.col_reduct_percent << ",";
@@ -221,10 +225,13 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << std::fixed << std::setprecision(5) << info.run_highs_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.original_cols << " (-" << info.original_cols - info.reduced_cols << "),";
+      time << info.orbital_crossover_major_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << ")\n";
+      time << info.orbital_crossover_non_trival_count << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.orbital_crossover_minor_iteration_count << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
       // time << info.col_reduct_percent << ",";

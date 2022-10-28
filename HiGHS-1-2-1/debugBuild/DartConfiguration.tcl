@@ -4,14 +4,14 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1
-BuildDirectory: /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild
+SourceDirectory: /home/edeakins/EQLPSolver/HiGHS-1-2-1
+BuildDirectory: /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild
 
 # Where to place the cost data store
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: DESKTOP-4C0F2LI
+Site: DESKTOP-HDOUCLP
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
 BuildName: Linux-c++
@@ -26,7 +26,7 @@ SubmitURL: http://
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/bin/cmake" "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1"
+ConfigureCommand: "/usr/bin/cmake" "/home/edeakins/EQLPSolver/HiGHS-1-2-1"
 MakeCommand: /usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 DefaultCTestConfigurationType: Release
 
@@ -63,7 +63,7 @@ UpdateType:
 
 # Compiler info
 Compiler: /usr/bin/c++
-CompilerVersion: 9.3.0
+CompilerVersion: 9.4.0
 
 # Dynamic analysis (MemCheck)
 PurifyCommand: 
@@ -71,7 +71,7 @@ ValgrindCommand:
 ValgrindCommandOptions: 
 MemoryCheckType: 
 MemoryCheckSanitizerOptions: 
-MemoryCheckCommand: /usr/bin/valgrind
+MemoryCheckCommand: MEMORYCHECK_COMMAND-NOTFOUND
 MemoryCheckCommandOptions: 
 MemoryCheckSuppressionFile: 
 

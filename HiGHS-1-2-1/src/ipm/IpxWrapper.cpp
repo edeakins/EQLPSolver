@@ -581,7 +581,11 @@ HighsStatus solveLpIpx(const HighsOptions& options, HighsTimer& timer,
   parameters.ipm_maxiter = options.ipm_iteration_limit - highs_info.ipm_iteration_count;
   // Determine if crossover is to be run or not
   parameters.crossover = options.run_crossover;
-  if (!parameters.crossover) {
+  if (!parameters.crossover && options.main_strategy == kIpmAggregateString){
+    parameters.crossover_start = 1e-8;
+    parameters.crossover_aggregate = 1;
+  }
+  if (!parameters.crossover && options.main_strategy != kIpmAggregateString) {
     // If crossover is not run, then set crossover_start to -1 so that
     // IPX can terminate according to its feasibility and optimality
     // tolerances
@@ -799,7 +803,7 @@ HighsStatus solveLpIpx(const HighsOptions& options, HighsTimer& timer,
   }
   highs_info.basis_validity = highs_basis.valid ? kBasisValidityValid : kBasisValidityInvalid;
   highs_info.ipm_time = lps.report_info_.time_ipm1 + lps.report_info_.time_ipm2;
-  highs_info.crossover_time = lps.report_info_.time_crossover;
+  highs_info.crossover_time = lps.report_info_.time_full_crossover;
   HighsStatus return_status;
   if (imprecise_solution) {
     model_status = HighsModelStatus::kUnknown;

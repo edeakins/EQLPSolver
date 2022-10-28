@@ -354,6 +354,12 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
   if (solve_phase == kSolvePhaseOrbitalCrossover)
     ekk_instance_.model_status_ = HighsModelStatus::kHasVertexButNoBasis;
 
+  if (solve_phase == kSolvePhaseOptimalCleanup &&
+      info.simplex_strategy == kSimplexStrategyOrbitalCrossover){
+      ekk_instance_.model_status_ = HighsModelStatus::kOptimal;
+      solve_phase = kSolvePhaseOptimal;
+  }
+
   if (solve_phase == kSolvePhaseOptimalCleanup) {
     highsLogDev(options.log_options, HighsLogType::kInfo,
                 "HEkkPrimal:: Using dual simplex to try to clean up num / "
@@ -1769,6 +1775,10 @@ void HEkkPrimal::assessPivot() {
 void HEkkPrimal::update() {
   // Perform update operations that are independent of phase
   HighsSimplexInfo& info = ekk_instance_.info_;
+  if (std::fabs(theta_primal) > kHighsTiny && solve_phase == kSolvePhaseOrbitalCrossover) 
+    ekk_instance_.num_nonzero_pivots++;
+  else if (std::fabs(theta_primal) < kHighsTiny && solve_phase == kSolvePhaseOrbitalCrossover)
+    ekk_instance_.num_zero_pivots++;
   assert(!rebuild_reason);
   bool flipped = row_out < 0;
   if (flipped) {
