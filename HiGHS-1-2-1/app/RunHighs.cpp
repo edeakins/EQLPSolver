@@ -228,7 +228,7 @@ int main(int argc, char** argv) {
           sub_map++;
         }
         b_value += -1.0 * cut.at(slack_col) * slack_coeff * rhs.at(slack_col - lp_num_col);
-        std::cout << "test" << std::endl;
+        // std::cout << "test" << std::endl;
       }
       cut.resize(lp_num_agg_col);
       // Lift the cut and write it
