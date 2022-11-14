@@ -61,8 +61,8 @@ set_target_properties(highs PROPERTIES
 add_library(libhighs SHARED IMPORTED)
 
 set_target_properties(libhighs PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "/usr/include;${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "libipx;/usr/lib/x86_64-linux-gnu/libz.so;Threads::Threads"
+  INTERFACE_INCLUDE_DIRECTORIES "/home/edeakins/miniconda3/include;${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "libipx;/home/edeakins/miniconda3/lib/libz.so;Threads::Threads"
 )
 
 # Create imported target libipx

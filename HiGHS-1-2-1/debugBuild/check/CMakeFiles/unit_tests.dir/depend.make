@@ -7,6 +7,7 @@ check/CMakeFiles/unit_tests.dir/Avgas.cpp.o: ../check/Avgas.h
 check/CMakeFiles/unit_tests.dir/Avgas.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o: ../src/lp_data/HConst.h
@@ -61,6 +62,7 @@ check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o: ../check/TestAlienBasis.cp
 check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o: ../src/lp_data/HConst.h
@@ -115,6 +117,7 @@ check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o: ../check/TestBasis.cpp
 check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../src/lp_data/HConst.h
@@ -169,6 +172,7 @@ check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../check/TestBasisSolves.
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o: ../src/lp_data/HConst.h
@@ -224,6 +228,7 @@ check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o: ../check/TestCheckSolut
 check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o: ../src/lp_data/HConst.h
@@ -278,6 +283,7 @@ check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o: ../check/TestDualise.cpp
 check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o: ../src/lp_data/HConst.h
@@ -333,6 +339,7 @@ check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o: ../check/TestEkk.cpp
 check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o: ../src/lp_data/HConst.h
@@ -387,6 +394,7 @@ check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o: ../check/TestFactor.cpp
 check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/io/Filereader.h
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../src/io/FilereaderEms.h
@@ -446,6 +454,7 @@ check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../check/TestFilereader.cp
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o: ../src/lp_data/HConst.h
@@ -541,6 +550,7 @@ check/CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.o: ../check/TestHighsInteg
 check/CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o: ../src/lp_data/HConst.h
@@ -621,6 +631,7 @@ check/CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.o: ../check/TestHighsRbTree.
 check/CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o: ../src/lp_data/HConst.h
@@ -675,6 +686,7 @@ check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o: ../check/TestHotStart.cpp
 check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: ../src/lp_data/HConst.h
@@ -729,6 +741,7 @@ check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: ../check/TestIO.cpp
 check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/io/Filereader.h
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../src/io/FilereaderEms.h
@@ -823,6 +836,7 @@ check/CMakeFiles/unit_tests.dir/TestIpx.cpp.o: ../check/TestIpx.cpp
 check/CMakeFiles/unit_tests.dir/TestIpx.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o: ../src/lp_data/HConst.h
@@ -877,6 +891,7 @@ check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o: ../check/TestLogging.cpp
 check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../src/lp_data/HConst.h
@@ -932,6 +947,7 @@ check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../check/TestLpModific
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o: ../src/lp_data/HConst.h
@@ -987,6 +1003,7 @@ check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o: ../check/TestLpOrientat
 check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o: ../src/lp_data/HConst.h
@@ -1041,6 +1058,7 @@ check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o: ../check/TestLpSolvers.cpp
 check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../src/lp_data/HConst.h
@@ -1099,6 +1117,7 @@ check/CMakeFiles/unit_tests.dir/TestMain.cpp.o: ../extern/catch.hpp
 check/CMakeFiles/unit_tests.dir/TestMain.cpp.o: ../check/TestMain.cpp
 
 check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o: ../src/lp_data/HConst.h
@@ -1154,6 +1173,7 @@ check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o: ../check/TestMipSolver.cpp
 check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/io/Filereader.h
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../src/io/HMPSIO.h
@@ -1211,6 +1231,7 @@ check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../check/TestOptions.cpp
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o: ../src/io/Filereader.h
 check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o: ../src/io/FilereaderLp.h
@@ -1267,6 +1288,7 @@ check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o: ../check/TestQpSolver.cpp
 check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o: ../src/lp_data/HConst.h
@@ -1322,6 +1344,7 @@ check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o: ../check/TestRanging.cpp
 check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestRays.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestRays.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestRays.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestRays.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestRays.cpp.o: ../src/lp_data/HConst.h
@@ -1377,6 +1400,7 @@ check/CMakeFiles/unit_tests.dir/TestRays.cpp.o: ../check/TestRays.cpp
 check/CMakeFiles/unit_tests.dir/TestRays.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o: ../src/lp_data/HConst.h
@@ -1460,6 +1484,7 @@ check/CMakeFiles/unit_tests.dir/TestSort.cpp.o: ../check/TestSort.cpp
 check/CMakeFiles/unit_tests.dir/TestSort.cpp.o: HConfig.h
 
 check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o: ../extern/catch.hpp
+check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o: ../extern/pdqsort/pdqsort.h
 check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o: ../src/Highs.h
 check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o: ../src/io/HighsIO.h
 check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o: ../src/lp_data/HConst.h

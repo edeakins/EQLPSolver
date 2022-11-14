@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1
+CMAKE_SOURCE_DIR = /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild
+CMAKE_BINARY_DIR = /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild
 
 # Utility rule file for ExperimentalConfigure.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild
 include check/CMakeFiles/ExperimentalConfigure.dir/progress.make
 
 check/CMakeFiles/ExperimentalConfigure:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/ctest -D ExperimentalConfigure
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/ctest -D ExperimentalConfigure
 
 ExperimentalConfigure: check/CMakeFiles/ExperimentalConfigure
 ExperimentalConfigure: check/CMakeFiles/ExperimentalConfigure.dir/build.make
@@ -67,10 +67,10 @@ check/CMakeFiles/ExperimentalConfigure.dir/build: ExperimentalConfigure
 .PHONY : check/CMakeFiles/ExperimentalConfigure.dir/build
 
 check/CMakeFiles/ExperimentalConfigure.dir/clean:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ExperimentalConfigure.dir/cmake_clean.cmake
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ExperimentalConfigure.dir/cmake_clean.cmake
 .PHONY : check/CMakeFiles/ExperimentalConfigure.dir/clean
 
 check/CMakeFiles/ExperimentalConfigure.dir/depend:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/EQLPSolver/HiGHS-1-2-1 /home/edeakins/EQLPSolver/HiGHS-1-2-1/check /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/ExperimentalConfigure.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/ExperimentalConfigure.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : check/CMakeFiles/ExperimentalConfigure.dir/depend
 

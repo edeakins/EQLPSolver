@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1
+CMAKE_SOURCE_DIR = /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild
+CMAKE_BINARY_DIR = /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild
 
 # Utility rule file for ContinuousMemCheck.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild
 include check/CMakeFiles/ContinuousMemCheck.dir/progress.make
 
 check/CMakeFiles/ContinuousMemCheck:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/ctest -D ContinuousMemCheck
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/ctest -D ContinuousMemCheck
 
 ContinuousMemCheck: check/CMakeFiles/ContinuousMemCheck
 ContinuousMemCheck: check/CMakeFiles/ContinuousMemCheck.dir/build.make
@@ -67,10 +67,10 @@ check/CMakeFiles/ContinuousMemCheck.dir/build: ContinuousMemCheck
 .PHONY : check/CMakeFiles/ContinuousMemCheck.dir/build
 
 check/CMakeFiles/ContinuousMemCheck.dir/clean:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ContinuousMemCheck.dir/cmake_clean.cmake
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ContinuousMemCheck.dir/cmake_clean.cmake
 .PHONY : check/CMakeFiles/ContinuousMemCheck.dir/clean
 
 check/CMakeFiles/ContinuousMemCheck.dir/depend:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/EQLPSolver/HiGHS-1-2-1 /home/edeakins/EQLPSolver/HiGHS-1-2-1/check /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/ContinuousMemCheck.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/ContinuousMemCheck.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : check/CMakeFiles/ContinuousMemCheck.dir/depend
 

@@ -1422,7 +1422,7 @@ void HFactor::zeroCol(const HighsInt jCol) {
     // count
     assert(mr_count[iRow] == original_row_count - 1);
     rlinkAdd(iRow, mr_count[iRow]);
-    assert(abs_value < pivot_tolerance);
+    // assert(abs_value < pivot_tolerance);
   }
   // Remove the column from the linked list of columns containing it
   clinkDel(jCol);

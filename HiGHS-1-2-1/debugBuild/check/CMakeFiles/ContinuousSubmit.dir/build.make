@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1
+CMAKE_SOURCE_DIR = /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild
+CMAKE_BINARY_DIR = /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild
 
 # Utility rule file for ContinuousSubmit.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild
 include check/CMakeFiles/ContinuousSubmit.dir/progress.make
 
 check/CMakeFiles/ContinuousSubmit:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/ctest -D ContinuousSubmit
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/ctest -D ContinuousSubmit
 
 ContinuousSubmit: check/CMakeFiles/ContinuousSubmit
 ContinuousSubmit: check/CMakeFiles/ContinuousSubmit.dir/build.make
@@ -67,10 +67,10 @@ check/CMakeFiles/ContinuousSubmit.dir/build: ContinuousSubmit
 .PHONY : check/CMakeFiles/ContinuousSubmit.dir/build
 
 check/CMakeFiles/ContinuousSubmit.dir/clean:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ContinuousSubmit.dir/cmake_clean.cmake
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/ContinuousSubmit.dir/cmake_clean.cmake
 .PHONY : check/CMakeFiles/ContinuousSubmit.dir/clean
 
 check/CMakeFiles/ContinuousSubmit.dir/depend:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/EQLPSolver/HiGHS-1-2-1 /home/edeakins/EQLPSolver/HiGHS-1-2-1/check /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/ContinuousSubmit.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/ContinuousSubmit.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : check/CMakeFiles/ContinuousSubmit.dir/depend
 

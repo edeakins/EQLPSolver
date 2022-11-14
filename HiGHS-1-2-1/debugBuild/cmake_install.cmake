@@ -1,4 +1,4 @@
-# Install script for directory: /home/edeakins/EQLPSolver/HiGHS-1-2-1
+# Install script for directory: /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,17 +39,17 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/app/cmake_install.cmake")
+  include("/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/app/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check/cmake_install.cmake")
+  include("/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/src/cmake_install.cmake")
+  include("/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/src/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -60,5 +60,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

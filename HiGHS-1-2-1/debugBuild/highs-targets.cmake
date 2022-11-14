@@ -45,8 +45,8 @@ unset(_expectedTargets)
 add_library(libhighs SHARED IMPORTED)
 
 set_target_properties(libhighs PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "/usr/include"
-  INTERFACE_LINK_LIBRARIES "libipx;/usr/lib/x86_64-linux-gnu/libz.so;Threads::Threads"
+  INTERFACE_INCLUDE_DIRECTORIES "/home/edeakins/miniconda3/include"
+  INTERFACE_LINK_LIBRARIES "libipx;/home/edeakins/miniconda3/lib/libz.so;Threads::Threads"
 )
 
 # Create imported target libipx
@@ -62,21 +62,21 @@ add_library(libbasiclu SHARED IMPORTED)
 # Import target "libhighs" for configuration "Debug"
 set_property(TARGET libhighs APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(libhighs PROPERTIES
-  IMPORTED_LOCATION_DEBUG "/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/lib/libhighs.so.1.2.1"
+  IMPORTED_LOCATION_DEBUG "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/lib/libhighs.so.1.2.1"
   IMPORTED_SONAME_DEBUG "libhighs.so.1.2"
   )
 
 # Import target "libipx" for configuration "Debug"
 set_property(TARGET libipx APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(libipx PROPERTIES
-  IMPORTED_LOCATION_DEBUG "/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/lib/libipx.so"
+  IMPORTED_LOCATION_DEBUG "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/lib/libipx.so"
   IMPORTED_SONAME_DEBUG "libipx.so"
   )
 
 # Import target "libbasiclu" for configuration "Debug"
 set_property(TARGET libbasiclu APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(libbasiclu PROPERTIES
-  IMPORTED_LOCATION_DEBUG "/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/lib/libbasiclu.so"
+  IMPORTED_LOCATION_DEBUG "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/lib/libbasiclu.so"
   IMPORTED_SONAME_DEBUG "libbasiclu.so"
   )
 

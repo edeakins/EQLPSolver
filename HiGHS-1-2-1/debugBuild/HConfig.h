@@ -15,10 +15,10 @@
 /* #undef HIGHS_HAVE_BITSCAN_REVERSE */
 
 #define HIGHS_GITHASH "n/a"
-#define HIGHS_COMPILATION_DATE "2022-10-18"
+#define HIGHS_COMPILATION_DATE "2022-11-08"
 #define HIGHS_VERSION_MAJOR 1
 #define HIGHS_VERSION_MINOR 2
 #define HIGHS_VERSION_PATCH 1
-#define HIGHS_DIR "/home/edeakins/EQLPSolver/HiGHS-1-2-1"
+#define HIGHS_DIR "/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1"
 
 #endif /* HCONFIG_H_ */

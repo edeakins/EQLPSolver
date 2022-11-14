@@ -90,6 +90,13 @@ HighsInt HighsSparseMatrix::numNz() const {
   }
 }
 
+HighsInt HighsSparseMatrix::numColNz(HighsInt i_col){
+  if (i_col < this->num_col_)
+    return (this->start_.at(i_col + 1) - this->start_.at(i_col)); 
+  else
+    return 1;
+}
+
 void HighsSparseMatrix::range(double& min_value, double& max_value) const {
   assert(this->formatOk());
   for (HighsInt iEl = 0; iEl < this->start_[this->num_col_]; iEl++) {

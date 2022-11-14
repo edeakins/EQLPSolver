@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1
+CMAKE_SOURCE_DIR = /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild
+CMAKE_BINARY_DIR = /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild
 
 # Include any dependencies generated for this target.
 include check/CMakeFiles/unit_tests.dir/depend.make
@@ -59,497 +59,497 @@ include check/CMakeFiles/unit_tests.dir/flags.make
 
 check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o: ../check/TestAlienBasis.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestAlienBasis.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestAlienBasis.cpp
 
 check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestAlienBasis.cpp > CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestAlienBasis.cpp > CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestAlienBasis.cpp -o CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestAlienBasis.cpp -o CMakeFiles/unit_tests.dir/TestAlienBasis.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o: ../check/TestDualise.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestDualise.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestDualise.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object check/CMakeFiles/unit_tests.dir/TestDualise.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestDualise.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestDualise.cpp
 
 check/CMakeFiles/unit_tests.dir/TestDualise.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestDualise.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestDualise.cpp > CMakeFiles/unit_tests.dir/TestDualise.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestDualise.cpp > CMakeFiles/unit_tests.dir/TestDualise.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestDualise.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestDualise.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestDualise.cpp -o CMakeFiles/unit_tests.dir/TestDualise.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestDualise.cpp -o CMakeFiles/unit_tests.dir/TestDualise.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o: ../check/TestCheckSolution.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestCheckSolution.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestCheckSolution.cpp
 
 check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestCheckSolution.cpp > CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestCheckSolution.cpp > CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestCheckSolution.cpp -o CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestCheckSolution.cpp -o CMakeFiles/unit_tests.dir/TestCheckSolution.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o: ../check/TestEkk.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestEkk.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestEkk.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object check/CMakeFiles/unit_tests.dir/TestEkk.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestEkk.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestEkk.cpp
 
 check/CMakeFiles/unit_tests.dir/TestEkk.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestEkk.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestEkk.cpp > CMakeFiles/unit_tests.dir/TestEkk.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestEkk.cpp > CMakeFiles/unit_tests.dir/TestEkk.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestEkk.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestEkk.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestEkk.cpp -o CMakeFiles/unit_tests.dir/TestEkk.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestEkk.cpp -o CMakeFiles/unit_tests.dir/TestEkk.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o: ../check/TestFactor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestFactor.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestFactor.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object check/CMakeFiles/unit_tests.dir/TestFactor.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestFactor.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestFactor.cpp
 
 check/CMakeFiles/unit_tests.dir/TestFactor.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestFactor.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestFactor.cpp > CMakeFiles/unit_tests.dir/TestFactor.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestFactor.cpp > CMakeFiles/unit_tests.dir/TestFactor.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestFactor.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestFactor.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestFactor.cpp -o CMakeFiles/unit_tests.dir/TestFactor.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestFactor.cpp -o CMakeFiles/unit_tests.dir/TestFactor.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o: ../check/TestFreezeBasis.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestFreezeBasis.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestFreezeBasis.cpp
 
 check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestFreezeBasis.cpp > CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestFreezeBasis.cpp > CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestFreezeBasis.cpp -o CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestFreezeBasis.cpp -o CMakeFiles/unit_tests.dir/TestFreezeBasis.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o: ../check/TestHotStart.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHotStart.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHotStart.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHotStart.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHotStart.cpp
 
 check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestHotStart.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHotStart.cpp > CMakeFiles/unit_tests.dir/TestHotStart.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHotStart.cpp > CMakeFiles/unit_tests.dir/TestHotStart.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestHotStart.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestHotStart.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHotStart.cpp -o CMakeFiles/unit_tests.dir/TestHotStart.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHotStart.cpp -o CMakeFiles/unit_tests.dir/TestHotStart.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestMain.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestMain.cpp.o: ../check/TestMain.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object check/CMakeFiles/unit_tests.dir/TestMain.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestMain.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestMain.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object check/CMakeFiles/unit_tests.dir/TestMain.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestMain.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestMain.cpp
 
 check/CMakeFiles/unit_tests.dir/TestMain.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestMain.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestMain.cpp > CMakeFiles/unit_tests.dir/TestMain.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestMain.cpp > CMakeFiles/unit_tests.dir/TestMain.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestMain.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestMain.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestMain.cpp -o CMakeFiles/unit_tests.dir/TestMain.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestMain.cpp -o CMakeFiles/unit_tests.dir/TestMain.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o: ../check/TestOptions.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestOptions.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestOptions.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object check/CMakeFiles/unit_tests.dir/TestOptions.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestOptions.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestOptions.cpp
 
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestOptions.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestOptions.cpp > CMakeFiles/unit_tests.dir/TestOptions.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestOptions.cpp > CMakeFiles/unit_tests.dir/TestOptions.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestOptions.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestOptions.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestOptions.cpp -o CMakeFiles/unit_tests.dir/TestOptions.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestOptions.cpp -o CMakeFiles/unit_tests.dir/TestOptions.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestIO.cpp.o: ../check/TestIO.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object check/CMakeFiles/unit_tests.dir/TestIO.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestIO.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestIO.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object check/CMakeFiles/unit_tests.dir/TestIO.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestIO.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestIO.cpp
 
 check/CMakeFiles/unit_tests.dir/TestIO.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestIO.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestIO.cpp > CMakeFiles/unit_tests.dir/TestIO.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestIO.cpp > CMakeFiles/unit_tests.dir/TestIO.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestIO.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestIO.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestIO.cpp -o CMakeFiles/unit_tests.dir/TestIO.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestIO.cpp -o CMakeFiles/unit_tests.dir/TestIO.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestSort.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestSort.cpp.o: ../check/TestSort.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object check/CMakeFiles/unit_tests.dir/TestSort.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestSort.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSort.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object check/CMakeFiles/unit_tests.dir/TestSort.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestSort.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSort.cpp
 
 check/CMakeFiles/unit_tests.dir/TestSort.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestSort.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSort.cpp > CMakeFiles/unit_tests.dir/TestSort.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSort.cpp > CMakeFiles/unit_tests.dir/TestSort.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestSort.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestSort.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSort.cpp -o CMakeFiles/unit_tests.dir/TestSort.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSort.cpp -o CMakeFiles/unit_tests.dir/TestSort.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestSetup.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestSetup.cpp.o: ../check/TestSetup.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object check/CMakeFiles/unit_tests.dir/TestSetup.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestSetup.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSetup.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object check/CMakeFiles/unit_tests.dir/TestSetup.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestSetup.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSetup.cpp
 
 check/CMakeFiles/unit_tests.dir/TestSetup.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestSetup.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSetup.cpp > CMakeFiles/unit_tests.dir/TestSetup.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSetup.cpp > CMakeFiles/unit_tests.dir/TestSetup.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestSetup.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestSetup.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSetup.cpp -o CMakeFiles/unit_tests.dir/TestSetup.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSetup.cpp -o CMakeFiles/unit_tests.dir/TestSetup.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o: ../check/TestFilereader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestFilereader.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestFilereader.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestFilereader.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestFilereader.cpp
 
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestFilereader.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestFilereader.cpp > CMakeFiles/unit_tests.dir/TestFilereader.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestFilereader.cpp > CMakeFiles/unit_tests.dir/TestFilereader.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestFilereader.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestFilereader.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestFilereader.cpp -o CMakeFiles/unit_tests.dir/TestFilereader.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestFilereader.cpp -o CMakeFiles/unit_tests.dir/TestFilereader.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.o: ../check/TestHighsGFkSolve.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsGFkSolve.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsGFkSolve.cpp
 
 check/CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsGFkSolve.cpp > CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsGFkSolve.cpp > CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsGFkSolve.cpp -o CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsGFkSolve.cpp -o CMakeFiles/unit_tests.dir/TestHighsGFkSolve.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o: ../check/TestInfo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestInfo.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestInfo.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object check/CMakeFiles/unit_tests.dir/TestInfo.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestInfo.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestInfo.cpp
 
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestInfo.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestInfo.cpp > CMakeFiles/unit_tests.dir/TestInfo.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestInfo.cpp > CMakeFiles/unit_tests.dir/TestInfo.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestInfo.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestInfo.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestInfo.cpp -o CMakeFiles/unit_tests.dir/TestInfo.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestInfo.cpp -o CMakeFiles/unit_tests.dir/TestInfo.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o: ../check/TestBasis.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestBasis.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestBasis.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object check/CMakeFiles/unit_tests.dir/TestBasis.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestBasis.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestBasis.cpp
 
 check/CMakeFiles/unit_tests.dir/TestBasis.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestBasis.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestBasis.cpp > CMakeFiles/unit_tests.dir/TestBasis.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestBasis.cpp > CMakeFiles/unit_tests.dir/TestBasis.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestBasis.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestBasis.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestBasis.cpp -o CMakeFiles/unit_tests.dir/TestBasis.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestBasis.cpp -o CMakeFiles/unit_tests.dir/TestBasis.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o: ../check/TestBasisSolves.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestBasisSolves.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestBasisSolves.cpp
 
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestBasisSolves.cpp > CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestBasisSolves.cpp > CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestBasisSolves.cpp -o CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestBasisSolves.cpp -o CMakeFiles/unit_tests.dir/TestBasisSolves.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestHighsHash.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestHighsHash.cpp.o: ../check/TestHighsHash.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsHash.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsHash.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsHash.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsHash.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsHash.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsHash.cpp
 
 check/CMakeFiles/unit_tests.dir/TestHighsHash.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestHighsHash.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsHash.cpp > CMakeFiles/unit_tests.dir/TestHighsHash.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsHash.cpp > CMakeFiles/unit_tests.dir/TestHighsHash.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestHighsHash.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestHighsHash.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsHash.cpp -o CMakeFiles/unit_tests.dir/TestHighsHash.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsHash.cpp -o CMakeFiles/unit_tests.dir/TestHighsHash.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.o: ../check/TestHighsIntegers.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsIntegers.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsIntegers.cpp
 
 check/CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsIntegers.cpp > CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsIntegers.cpp > CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsIntegers.cpp -o CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsIntegers.cpp -o CMakeFiles/unit_tests.dir/TestHighsIntegers.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.o: ../check/TestHighsParallel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsParallel.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsParallel.cpp
 
 check/CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsParallel.cpp > CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsParallel.cpp > CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsParallel.cpp -o CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsParallel.cpp -o CMakeFiles/unit_tests.dir/TestHighsParallel.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.o: ../check/TestHighsRbTree.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsRbTree.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsRbTree.cpp
 
 check/CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsRbTree.cpp > CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsRbTree.cpp > CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsRbTree.cpp -o CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsRbTree.cpp -o CMakeFiles/unit_tests.dir/TestHighsRbTree.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.o: ../check/TestHighsHessian.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsHessian.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsHessian.cpp
 
 check/CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsHessian.cpp > CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsHessian.cpp > CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsHessian.cpp -o CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsHessian.cpp -o CMakeFiles/unit_tests.dir/TestHighsHessian.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o: ../check/TestHighsModel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsModel.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHighsModel.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsModel.cpp
 
 check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestHighsModel.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsModel.cpp > CMakeFiles/unit_tests.dir/TestHighsModel.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsModel.cpp > CMakeFiles/unit_tests.dir/TestHighsModel.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestHighsModel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestHighsModel.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHighsModel.cpp -o CMakeFiles/unit_tests.dir/TestHighsModel.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHighsModel.cpp -o CMakeFiles/unit_tests.dir/TestHighsModel.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestHSet.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestHSet.cpp.o: ../check/TestHSet.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHSet.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHSet.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHSet.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object check/CMakeFiles/unit_tests.dir/TestHSet.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestHSet.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHSet.cpp
 
 check/CMakeFiles/unit_tests.dir/TestHSet.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestHSet.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHSet.cpp > CMakeFiles/unit_tests.dir/TestHSet.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHSet.cpp > CMakeFiles/unit_tests.dir/TestHSet.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestHSet.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestHSet.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestHSet.cpp -o CMakeFiles/unit_tests.dir/TestHSet.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestHSet.cpp -o CMakeFiles/unit_tests.dir/TestHSet.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o: ../check/TestLogging.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLogging.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLogging.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLogging.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLogging.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLogging.cpp
 
 check/CMakeFiles/unit_tests.dir/TestLogging.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestLogging.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLogging.cpp > CMakeFiles/unit_tests.dir/TestLogging.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLogging.cpp > CMakeFiles/unit_tests.dir/TestLogging.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestLogging.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestLogging.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLogging.cpp -o CMakeFiles/unit_tests.dir/TestLogging.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLogging.cpp -o CMakeFiles/unit_tests.dir/TestLogging.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o: ../check/TestLpValidation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpValidation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLpValidation.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpValidation.cpp
 
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestLpValidation.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpValidation.cpp > CMakeFiles/unit_tests.dir/TestLpValidation.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpValidation.cpp > CMakeFiles/unit_tests.dir/TestLpValidation.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestLpValidation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestLpValidation.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpValidation.cpp -o CMakeFiles/unit_tests.dir/TestLpValidation.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpValidation.cpp -o CMakeFiles/unit_tests.dir/TestLpValidation.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o: ../check/TestLpModification.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLpModification.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpModification.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLpModification.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpModification.cpp
 
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestLpModification.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpModification.cpp > CMakeFiles/unit_tests.dir/TestLpModification.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpModification.cpp > CMakeFiles/unit_tests.dir/TestLpModification.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestLpModification.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestLpModification.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpModification.cpp -o CMakeFiles/unit_tests.dir/TestLpModification.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpModification.cpp -o CMakeFiles/unit_tests.dir/TestLpModification.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o: ../check/TestLpOrientation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpOrientation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpOrientation.cpp
 
 check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpOrientation.cpp > CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpOrientation.cpp > CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpOrientation.cpp -o CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpOrientation.cpp -o CMakeFiles/unit_tests.dir/TestLpOrientation.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o: ../check/TestQpSolver.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestQpSolver.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestQpSolver.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestQpSolver.cpp
 
 check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestQpSolver.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestQpSolver.cpp > CMakeFiles/unit_tests.dir/TestQpSolver.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestQpSolver.cpp > CMakeFiles/unit_tests.dir/TestQpSolver.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestQpSolver.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestQpSolver.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestQpSolver.cpp -o CMakeFiles/unit_tests.dir/TestQpSolver.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestQpSolver.cpp -o CMakeFiles/unit_tests.dir/TestQpSolver.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestRays.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestRays.cpp.o: ../check/TestRays.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object check/CMakeFiles/unit_tests.dir/TestRays.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestRays.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestRays.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object check/CMakeFiles/unit_tests.dir/TestRays.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestRays.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestRays.cpp
 
 check/CMakeFiles/unit_tests.dir/TestRays.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestRays.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestRays.cpp > CMakeFiles/unit_tests.dir/TestRays.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestRays.cpp > CMakeFiles/unit_tests.dir/TestRays.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestRays.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestRays.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestRays.cpp -o CMakeFiles/unit_tests.dir/TestRays.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestRays.cpp -o CMakeFiles/unit_tests.dir/TestRays.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o: ../check/TestRanging.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestRanging.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestRanging.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object check/CMakeFiles/unit_tests.dir/TestRanging.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestRanging.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestRanging.cpp
 
 check/CMakeFiles/unit_tests.dir/TestRanging.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestRanging.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestRanging.cpp > CMakeFiles/unit_tests.dir/TestRanging.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestRanging.cpp > CMakeFiles/unit_tests.dir/TestRanging.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestRanging.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestRanging.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestRanging.cpp -o CMakeFiles/unit_tests.dir/TestRanging.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestRanging.cpp -o CMakeFiles/unit_tests.dir/TestRanging.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o: ../check/TestSemiVariables.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSemiVariables.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSemiVariables.cpp
 
 check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSemiVariables.cpp > CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSemiVariables.cpp > CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSemiVariables.cpp -o CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSemiVariables.cpp -o CMakeFiles/unit_tests.dir/TestSemiVariables.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestThrow.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestThrow.cpp.o: ../check/TestThrow.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object check/CMakeFiles/unit_tests.dir/TestThrow.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestThrow.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestThrow.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object check/CMakeFiles/unit_tests.dir/TestThrow.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestThrow.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestThrow.cpp
 
 check/CMakeFiles/unit_tests.dir/TestThrow.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestThrow.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestThrow.cpp > CMakeFiles/unit_tests.dir/TestThrow.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestThrow.cpp > CMakeFiles/unit_tests.dir/TestThrow.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestThrow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestThrow.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestThrow.cpp -o CMakeFiles/unit_tests.dir/TestThrow.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestThrow.cpp -o CMakeFiles/unit_tests.dir/TestThrow.cpp.s
 
 check/CMakeFiles/unit_tests.dir/Avgas.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/Avgas.cpp.o: ../check/Avgas.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object check/CMakeFiles/unit_tests.dir/Avgas.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/Avgas.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/Avgas.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object check/CMakeFiles/unit_tests.dir/Avgas.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/Avgas.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/Avgas.cpp
 
 check/CMakeFiles/unit_tests.dir/Avgas.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/Avgas.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/Avgas.cpp > CMakeFiles/unit_tests.dir/Avgas.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/Avgas.cpp > CMakeFiles/unit_tests.dir/Avgas.cpp.i
 
 check/CMakeFiles/unit_tests.dir/Avgas.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/Avgas.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/Avgas.cpp -o CMakeFiles/unit_tests.dir/Avgas.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/Avgas.cpp -o CMakeFiles/unit_tests.dir/Avgas.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o: ../check/TestSpecialLps.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSpecialLps.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSpecialLps.cpp
 
 check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSpecialLps.cpp > CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSpecialLps.cpp > CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestSpecialLps.cpp -o CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestSpecialLps.cpp -o CMakeFiles/unit_tests.dir/TestSpecialLps.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o: ../check/TestLpSolvers.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpSolvers.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpSolvers.cpp
 
 check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpSolvers.cpp > CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpSolvers.cpp > CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestLpSolvers.cpp -o CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestLpSolvers.cpp -o CMakeFiles/unit_tests.dir/TestLpSolvers.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o: ../check/TestMipSolver.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestMipSolver.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestMipSolver.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestMipSolver.cpp
 
 check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestMipSolver.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestMipSolver.cpp > CMakeFiles/unit_tests.dir/TestMipSolver.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestMipSolver.cpp > CMakeFiles/unit_tests.dir/TestMipSolver.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestMipSolver.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestMipSolver.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestMipSolver.cpp -o CMakeFiles/unit_tests.dir/TestMipSolver.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestMipSolver.cpp -o CMakeFiles/unit_tests.dir/TestMipSolver.cpp.s
 
 check/CMakeFiles/unit_tests.dir/TestIpx.cpp.o: check/CMakeFiles/unit_tests.dir/flags.make
 check/CMakeFiles/unit_tests.dir/TestIpx.cpp.o: ../check/TestIpx.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object check/CMakeFiles/unit_tests.dir/TestIpx.cpp.o"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestIpx.cpp.o -c /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestIpx.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object check/CMakeFiles/unit_tests.dir/TestIpx.cpp.o"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unit_tests.dir/TestIpx.cpp.o -c /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestIpx.cpp
 
 check/CMakeFiles/unit_tests.dir/TestIpx.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unit_tests.dir/TestIpx.cpp.i"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestIpx.cpp > CMakeFiles/unit_tests.dir/TestIpx.cpp.i
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestIpx.cpp > CMakeFiles/unit_tests.dir/TestIpx.cpp.i
 
 check/CMakeFiles/unit_tests.dir/TestIpx.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unit_tests.dir/TestIpx.cpp.s"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/EQLPSolver/HiGHS-1-2-1/check/TestIpx.cpp -o CMakeFiles/unit_tests.dir/TestIpx.cpp.s
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && /home/edeakins/miniconda3/bin/x86_64-conda-linux-gnu-c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check/TestIpx.cpp -o CMakeFiles/unit_tests.dir/TestIpx.cpp.s
 
 # Object files for target unit_tests
 unit_tests_OBJECTS = \
@@ -637,10 +637,10 @@ bin/unit_tests: check/CMakeFiles/unit_tests.dir/build.make
 bin/unit_tests: lib/libhighs.so.1.2.1
 bin/unit_tests: lib/libipx.so
 bin/unit_tests: lib/libbasiclu.so
-bin/unit_tests: /usr/lib/x86_64-linux-gnu/libz.so
+bin/unit_tests: /home/edeakins/miniconda3/lib/libz.so
 bin/unit_tests: check/CMakeFiles/unit_tests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Linking CXX executable ../bin/unit_tests"
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/unit_tests.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Linking CXX executable ../bin/unit_tests"
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/unit_tests.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 check/CMakeFiles/unit_tests.dir/build: bin/unit_tests
@@ -648,10 +648,10 @@ check/CMakeFiles/unit_tests.dir/build: bin/unit_tests
 .PHONY : check/CMakeFiles/unit_tests.dir/build
 
 check/CMakeFiles/unit_tests.dir/clean:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/unit_tests.dir/cmake_clean.cmake
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check && $(CMAKE_COMMAND) -P CMakeFiles/unit_tests.dir/cmake_clean.cmake
 .PHONY : check/CMakeFiles/unit_tests.dir/clean
 
 check/CMakeFiles/unit_tests.dir/depend:
-	cd /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/EQLPSolver/HiGHS-1-2-1 /home/edeakins/EQLPSolver/HiGHS-1-2-1/check /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check /home/edeakins/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/unit_tests.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1 /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/debugBuild/check/CMakeFiles/unit_tests.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : check/CMakeFiles/unit_tests.dir/depend
 

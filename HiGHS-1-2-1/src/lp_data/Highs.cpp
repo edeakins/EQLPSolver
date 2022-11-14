@@ -787,6 +787,8 @@ HighsStatus Highs::run() {
       options_.solver == kIpmString && !options_.run_crossover;
   // Call orbital crossover methods if user chooses to use it.
   options_.presolve = "off";
+  options_.primal_feasibility_tolerance = 1e-6;
+  options_.dual_feasibility_tolerance = 1e-6;
   if (options_.solver == kOCDualString){
     options_.main_strategy = kOCDualString;
     running_orbital_crossover = true;
@@ -860,7 +862,7 @@ HighsStatus Highs::run() {
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        if (change < kHighsInf && !discrete) continue;
         // if (!discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -1017,7 +1019,7 @@ HighsStatus Highs::run() {
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        if (change < kHighsInf && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;

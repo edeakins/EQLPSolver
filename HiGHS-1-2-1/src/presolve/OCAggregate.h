@@ -11,6 +11,7 @@
 #include "HighsLp.h"
 #include "OCEquitable.h"
 #include "HFactor.h"
+#include "pdqsort/pdqsort.h"
 
 /* Aggregator class for LPs based off a equitable partition */
 class HighsOCAggregate{
@@ -18,12 +19,14 @@ public:
     void passLpAndPartition(HighsLp& lp, OCPartition& partition);
     void resizeAlpContainers();
     void resizeElpContainers();
+    void resizeBasisTestContainers();
     void resizeGramSchmidtMatrixContainers();
     void buildLp();
     void buildLp(OCPartition& partition, HighsBasis& b,
                 HighsSolution& s, std::vector<HighsInt>& basic_index);
     void buildLpForIPM(OCPartition& partition, HighsBasis& b,
                 HighsSolution& s, std::vector<HighsInt>& basic_index);
+    void buildLpForTestFactor();
     void buildElp();
     int countResiduals(OCPartition& partition, HighsBasis& b,
                 HighsSolution& s, std::vector<HighsInt>& basic_index);
@@ -31,6 +34,7 @@ public:
     // Build solution for aggregate ipm solve to hand off to highs basic 
     // crossover
     HighsSolution buildSolution(OCPartition& partition, HighsSolution& s);
+    void buildSolution();
     // Build aggregate A matrices for ALP and EALP
     void buildAmatrix();
     void buildAmatrixExtended();
@@ -71,11 +75,18 @@ public:
     void trackAndCountSplits();
     // Build Highs basis vectors for EALP
     void markDegenerate();
+    void markDependentColumns();
     void buildBasis(bool finish, bool extended);
+    void changeBasis();
     void buildColBasis();
     void buildRowBasis();
     void buildResidualColBasis();
     void buildResidualRowBasis();
+    void buildTestBasisLU();
+    void buildTestBasicIndex();
+    std::vector<HighsInt> sortColWeights(std::vector<double>& weights);
+    void fillTestBasicStart();
+    void fillTestBasicFinish();
     // Build LU initial factor check for good basis;
     void buildDegenerateLU();
     void buildDegenerateAMatrix();
@@ -121,6 +132,7 @@ public:
     HighsSolution lift_solution;
     HFactor degenerate_factor;
     HighsSparseMatrix degenerate_matrix;
+    HFactor test_factor;
     int level = 0;
     int numTot;
     int numCol; 
@@ -138,6 +150,7 @@ public:
     int temp_prowCnt = 0;
     int num_basic;
     HighsInt num_deleted_links;
+    HighsInt test_rank_deficiency;
     std::vector<int> col;
     std::vector<int> colrep;
     std::vector<int> pcol;
@@ -197,6 +210,11 @@ public:
     std::map<int, std::vector<int> > splitCells;
     // std::vector<std::pair<int, int> > splitCells;
     std::vector<int> zero_step_pivots;
+    std::vector<double> col_weights;
+    std::vector<HighsInt> test_basic_index;
+    std::vector<HighsInt> test_basic_start;
+    std::vector<HighsInt> test_basic_finish;
+    std::vector<HighsInt> col_needs_res_pivot;
 };
 
 #endif

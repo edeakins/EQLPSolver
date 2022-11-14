@@ -10,6 +10,7 @@ src/CMakeFiles/libhighs.dir/__/extern/filereaderlp/reader.cpp.o: ../extern/filer
 src/CMakeFiles/libhighs.dir/__/extern/filereaderlp/reader.cpp.o: ../extern/filereaderlp/reader.hpp
 src/CMakeFiles/libhighs.dir/__/extern/filereaderlp/reader.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/interfaces/highs_c_api.cpp.o: ../src/lp_data/HConst.h
@@ -311,6 +312,7 @@ src/CMakeFiles/libhighs.dir/ipm/IpxWrapper.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/ipm/IpxWrapper.cpp.o: ../src/ipm/IpxWrapper.cpp
 src/CMakeFiles/libhighs.dir/ipm/IpxWrapper.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/lp_data/Highs.cpp.o: ../src/io/HighsIO.h
@@ -406,6 +408,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsDebug.cpp.o: ../src/util/HighsInt.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDebug.cpp.o: ../src/lp_data/HighsDebug.cpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsDebug.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsDeprecated.cpp.o: ../src/lp_data/HConst.h
@@ -491,6 +494,7 @@ src/CMakeFiles/libhighs.dir/lp_data/HighsInfoDebug.cpp.o: ../src/util/HighsUtils
 src/CMakeFiles/libhighs.dir/lp_data/HighsInfoDebug.cpp.o: ../src/lp_data/HighsInfoDebug.cpp
 src/CMakeFiles/libhighs.dir/lp_data/HighsInfoDebug.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/lp_data/HighsInterface.cpp.o: ../src/lp_data/HConst.h
@@ -917,6 +921,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: ../src/mip/HighsCliqueTa
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsCliqueTable.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsConflictPool.cpp.o: ../src/lp_data/HConst.h
@@ -1148,6 +1153,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: ../src/mip/HighsCutPool.cpp
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsCutPool.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/io/Filereader.h
 src/CMakeFiles/libhighs.dir/mip/HighsDebugSol.cpp.o: ../src/io/FilereaderMps.h
@@ -1416,6 +1422,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: ../src/mip/HighsImplica
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsImplications.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/lp_data/HConst.h
@@ -1472,6 +1479,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/util/OCPartition
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: ../src/mip/HighsLpAggregator.cpp
 src/CMakeFiles/libhighs.dir/mip/HighsLpAggregator.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/lp_data/HConst.h
@@ -1556,6 +1564,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: ../src/mip/HighsLpRelax
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsLpRelaxation.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsMipSolver.cpp.o: ../src/lp_data/HConst.h
@@ -1823,6 +1832,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: ../src/mip/HighsModkSe
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsModkSeparator.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsNodeQueue.cpp.o: ../src/lp_data/HConst.h
@@ -1994,6 +2004,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: ../src/mip/HighsOb
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsObjectiveFunction.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsPathSeparator.cpp.o: ../src/lp_data/HConst.h
@@ -2169,6 +2180,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: ../src/mip/HighsPri
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsPrimalHeuristics.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/lp_data/HConst.h
@@ -2253,6 +2265,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: ../src/mip/HighsPseudocos
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsPseudocost.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/lp_data/HConst.h
@@ -2337,6 +2350,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: ../src/mip/HighsRedcos
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsRedcostFixing.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/lp_data/HConst.h
@@ -2422,6 +2436,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: ../src/mip/HighsSearch.cpp
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsSearch.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/lp_data/HConst.h
@@ -2511,6 +2526,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: ../src/mip/HighsSeparatio
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparation.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsSeparator.cpp.o: ../src/lp_data/HConst.h
@@ -2661,6 +2677,7 @@ src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: ../src/mip/HighsTab
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: HConfig.h
 src/CMakeFiles/libhighs.dir/mip/HighsTableauSeparator.cpp.o: libhighs_export.h
 
+src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/mip/HighsTransformedLp.cpp.o: ../src/lp_data/HConst.h
@@ -3070,21 +3087,53 @@ src/CMakeFiles/libhighs.dir/presolve/ICrashX.cpp.o: ../src/util/HighsUtils.h
 src/CMakeFiles/libhighs.dir/presolve/ICrashX.cpp.o: ../src/presolve/ICrashX.cpp
 src/CMakeFiles/libhighs.dir/presolve/ICrashX.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/io/HighsIO.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/IpxSolution.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/IpxWrapper.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/include/ipx_config.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/include/ipx_info.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/include/ipx_parameters.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/include/ipx_status.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/basis.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/control.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/indexed_vector.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/ipm.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/ipx_internal.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/iterate.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/kkt_solver.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/lp_solver.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/lu_update.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/model.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/multistream.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/sparse_matrix.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/ipm/ipx/src/timer.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HConst.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HStruct.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HighsAnalysis.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HighsDebug.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HighsInfo.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HighsLp.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HighsLpSolverObject.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HighsOptions.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HighsSolution.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/lp_data/HighsStatus.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/model/HighsHessian.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/model/HighsModel.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/simplex/HEkk.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/simplex/HSimplexNla.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/simplex/HighsSimplexAnalysis.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/simplex/SimplexConst.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/simplex/SimplexStruct.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HFactor.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HFactorConst.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HSet.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HVector.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HVectorBase.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HighsCDouble.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HighsHash.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HighsInt.h
+src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HighsRandom.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HighsSparseMatrix.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HighsSparseVectorSum.h
 src/CMakeFiles/libhighs.dir/presolve/OCAggregate.cpp.o: ../src/util/HighsTimer.h
@@ -3168,6 +3217,7 @@ src/CMakeFiles/libhighs.dir/presolve/PresolveAnalysis.cpp.o: ../src/util/HighsTi
 src/CMakeFiles/libhighs.dir/presolve/PresolveAnalysis.cpp.o: ../src/presolve/PresolveAnalysis.cpp
 src/CMakeFiles/libhighs.dir/presolve/PresolveAnalysis.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/presolve/PresolveComponent.cpp.o: ../src/lp_data/HConst.h
@@ -3262,6 +3312,7 @@ src/CMakeFiles/libhighs.dir/qpsolver/basis.cpp.o: ../src/qpsolver/statistics.hpp
 src/CMakeFiles/libhighs.dir/qpsolver/basis.cpp.o: ../src/qpsolver/vector.hpp
 src/CMakeFiles/libhighs.dir/qpsolver/basis.cpp.o: HConfig.h
 
+src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../extern/pdqsort/pdqsort.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/Highs.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/io/HighsIO.h
 src/CMakeFiles/libhighs.dir/qpsolver/quass.cpp.o: ../src/lp_data/HConst.h

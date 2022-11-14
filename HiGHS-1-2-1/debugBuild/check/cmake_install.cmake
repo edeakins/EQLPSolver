@@ -1,4 +1,4 @@
-# Install script for directory: /home/edeakins/EQLPSolver/HiGHS-1-2-1/check
+# Install script for directory: /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/check
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

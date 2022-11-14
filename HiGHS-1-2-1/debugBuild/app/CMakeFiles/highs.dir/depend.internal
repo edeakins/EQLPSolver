@@ -3,6 +3,7 @@
 
 app/CMakeFiles/highs.dir/RunHighs.cpp.o
  ../app/cxxopts.hpp
+ ../extern/pdqsort/pdqsort.h
  ../src/Highs.h
  ../src/io/HighsIO.h
  ../src/io/LoadOptions.h
@@ -56,5 +57,5 @@ app/CMakeFiles/highs.dir/RunHighs.cpp.o
  ../src/util/OCGraph.h
  ../src/util/OCPartition.h
  ../src/util/stringutil.h
- /home/edeakins/EQLPSolver/HiGHS-1-2-1/app/RunHighs.cpp
+ /home/edeakins/LP/EQLPSolver/HiGHS-1-2-1/app/RunHighs.cpp
  HConfig.h
