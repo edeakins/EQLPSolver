@@ -862,7 +862,7 @@ HighsStatus Highs::run() {
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < kHighsInf && !discrete) continue;
+        if (change < 1000 && !discrete) continue;
         // if (!discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -878,6 +878,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.build_elp_iterative_clock);
         buildEALP();
         timer_.stop(timer_.build_elp_iterative_clock);
+        if (ealp_.num_residual_cols_ == 0) continue;
         // if (!ealp_.num_residual_cols_ && !discrete) continue;
         // buildALP();
         // buildPEALP();
@@ -941,6 +942,7 @@ HighsStatus Highs::run() {
       info_.orbital_crossover_non_trival_count = ekk_instance_.num_nonzero_pivots;
       stop_highs_run_clock = true;
       called_return_from_run = false;
+      timer_.clock_time.at(timer_.orbital_crossover_clock) += aggregator_.build_test_factor_time;
       timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
          timer_.clock_time.at(timer_.orbital_crossover_clock));
@@ -1097,6 +1099,7 @@ HighsStatus Highs::run() {
       info_.orbital_crossover_non_trival_count = ekk_instance_.num_nonzero_pivots;
       stop_highs_run_clock = true;
       called_return_from_run = false;
+      timer_.clock_time.at(timer_.orbital_crossover_clock) += aggregator_.build_test_factor_time;
       timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
          timer_.clock_time.at(timer_.orbital_crossover_clock));

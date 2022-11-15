@@ -133,6 +133,8 @@ public:
     HFactor degenerate_factor;
     HighsSparseMatrix degenerate_matrix;
     HFactor test_factor;
+    HighsTimer timer;
+    double build_test_factor_time = 0;
     int level = 0;
     int numTot;
     int numCol; 

@@ -155,9 +155,14 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     resizeBasisTestContainers();
     // printAMatrixToMatlabFormat(agglp.a_matrix_);
     buildSolution();
+    timer.startRunHighsClock();
+    double init_time = timer.readRunHighsClock();
     buildTestBasicIndex();
     // fillTestBasicStart();
     buildTestBasisLU();
+    double final_time = timer.readRunHighsClock();
+    build_test_factor_time = final_time - init_time;
+    std::cout << "\n factor test time: " << build_test_factor_time << "\n" << std::endl;
     // fillTestBasicFinish();
     // markDependentColumns();
     buildResidualLinks();
@@ -1422,10 +1427,6 @@ void HighsOCAggregate::changeBasis(){
             num_basic++;
         }
     }
-    std::cout << "num_bas: " << num_bas << std::endl;
-    std::cout << "num_set_bas: " << num_set_bas << std::endl;
-    std::cout << "num_sbas: " << num_sbas << std::endl;
-    std::cout << "num_set_sbas: " << num_set_sbas << std::endl;
 }
 
 void HighsOCAggregate::buildColBasis(){
