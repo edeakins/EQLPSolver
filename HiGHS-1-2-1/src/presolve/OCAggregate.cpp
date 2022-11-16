@@ -121,6 +121,10 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     markDegenerate();
     buildResidualLinks();
     resizeElpContainers();
+    buildObj();
+    buildAmatrix();
+    buildRhs();
+    buildBnds();
     buildBasis(false, false);
     buildObjExtended();
     buildAmatrixExtended();

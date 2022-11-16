@@ -1150,6 +1150,7 @@ HighsStatus HEkk::solve(const bool force_phase2) {
     }
     HEkkDual dual_solver(*this);
     call_status = dual_solver.solve(force_phase2);
+    // call_status = dual_solver.solve(true);
     assert(called_return_from_solve_);
     return_status = interpretCallStatus(options_->log_options, call_status,
                                         return_status, "HEkkDual::solve");
@@ -3371,6 +3372,9 @@ void HEkk::computeSimplexPrimalInfeasible() {
         max_primal_infeasibility =
             std::max(primal_infeasibility, max_primal_infeasibility);
         sum_primal_infeasibility += primal_infeasibility;
+        // std::cout << "\n" << std::endl;
+        // std::cout << "lb, val, ub" << std::endl;
+        // std::cout << lower << ", " << value << ", " << upper << std::endl; 
       }
     }
   }
@@ -3392,6 +3396,9 @@ void HEkk::computeSimplexPrimalInfeasible() {
       max_primal_infeasibility =
           std::max(primal_infeasibility, max_primal_infeasibility);
       sum_primal_infeasibility += primal_infeasibility;
+      // std::cout << "\n" << std::endl;
+      //   std::cout << "lb, val, ub" << std::endl;
+      //   std::cout << lower << ", " << value << ", " << upper << std::endl;
     }
   }
   analysis_.simplexTimerStop(ComputePrIfsClock);

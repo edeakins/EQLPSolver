@@ -888,7 +888,7 @@ HighsStatus Highs::run() {
         //   alpBasis_ = crashBasis_;
         //   alpSolution_ = crashSolution_;
         // }
-        int numRBasic = 0;
+        // int numRBasic = 0;
         // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
         //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
         //     numRBasic++;
@@ -896,20 +896,48 @@ HighsStatus Highs::run() {
         //     std::cout << "bad_col: " << i << std::endl;
         //   }
         // }
+        //   for (int i = 0; i < ealp_.num_row_; ++i){
+        //   std::cout << "basic in row: " << i << " is col: " << ekk_instance_.basis_.basicIndex_.at(i) << std::endl;
+        // }
       }
+      // for (int i = 0; i < ealp_.num_aggregate_cols_; ++i){
+      //   double lb = ealp_.col_lower_.at(i);
+      //   double ub = ealp_.col_upper_.at(i);
+      //   double val = solution_.col_value.at(i);
+      //   double infeas = 0;
+      //   if (val < lb) infeas = lb - val;
+      //   if (val > ub) infeas = val - ub;
+      //   if (infeas > 1e-6){
+      //     std::cout << "i: " << i << std::endl;
+      //     std::cout << lb << "," << val << "," << ub << std::endl;
+      //   } 
+      // }
+      HighsLp test_lp = aggregator_.agglp;
       // time_to_lift = in_timer_.readRunHighsClock() - start;
       // std::cout << "loop_time: " << time_to_lift << std::endl;
-      // alpBasis_.col_status.resize(original_lp.num_col_);
-      // alpBasis_.row_status.resize(original_lp.num_row_);
-      // passModel(original_lp);
-      // zeroIterationCounts();
-      // setBasis(alpBasis_);
-      // options_.solver = kHighsChooseString;
-      // options_.simplex_strategy = kSimplexStrategyChoose;
-      // timer_.start(timer_.orbital_crossover_clock);
-      // call_status =
-      //     callSolveLp(original_lp, "Verifying Basic Solution");
-      // timer_.stop(timer_.orbital_crossover_clock);
+      alpBasis_.col_status.resize(original_lp.num_col_);
+      alpBasis_.row_status.resize(original_lp.num_row_);
+      alpBasis_.alien = true;
+      HighsBasis original_basis_map;
+      original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      //   if (alpBasis_.col_status.at(i) != HighsBasisStatus::kBasic)
+      //     alpBasis_.col_status.at(i) = HighsBasisStatus::kLower;
+      // }
+      // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      //   if (alpBasis_.row_status.at(i) != HighsBasisStatus::kBasic)
+      //     alpBasis_.row_status.at(i) = HighsBasisStatus::kLower;
+      // }
+      passModel(test_lp);
+      zeroIterationCounts();
+      setBasis(alpBasis_);
+      options_.solver = kHighsChooseString;
+      options_.simplex_strategy = kSimplexStrategyDual;
+      timer_.start(timer_.orbital_crossover_clock);
+      call_status =
+          callSolveLp(test_lp, "Verifying Basic Solution");
+      timer_.stop(timer_.orbital_crossover_clock);
       stop_highs_run_clock = true;
       called_return_from_run = false;
       timer_.clock_time.at(timer_.solve_clock) = 
@@ -1044,9 +1072,20 @@ HighsStatus Highs::run() {
       // std::cout << "loop_time: " << time_to_lift << std::endl;
       // alpBasis_.col_status.resize(original_lp.num_col_);
       // alpBasis_.row_status.resize(original_lp.num_row_);
+      // HighsBasis original_basis_map;
+      // original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      // original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      //   int rep = aggregator_.colrep.at(i);
+      //   original_basis_map.col_status.at(rep) = alpBasis_.col_status.at(i);
+      // }
+      // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      //   int rep = aggregator_.rowrep.at(i) - aggregator_.numCol;
+      //   original_basis_map.row_status.at(rep) = alpBasis_.row_status.at(i);
+      // }
       // passModel(original_lp);
       // zeroIterationCounts();
-      // setBasis(alpBasis_);
+      // setBasis(original_basis_map);
       // options_.solver = kHighsChooseString;
       // options_.simplex_strategy = kSimplexStrategyChoose;
       // timer_.start(timer_.orbital_crossover_clock);
