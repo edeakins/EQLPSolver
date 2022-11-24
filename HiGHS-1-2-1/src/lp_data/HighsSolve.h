@@ -18,6 +18,7 @@
 
 #include "lp_data/HighsModelUtils.h"
 HighsStatus solveLp(HighsLpSolverObject& solver_object, const string message);
+HighsStatus solveLpOC(HighsLpSolverObject& solver_object, const string message);
 HighsStatus solveUnconstrainedLp(HighsLpSolverObject& solver_object);
 HighsStatus solveUnconstrainedLp(const HighsOptions& options, const HighsLp& lp,
                                  HighsModelStatus& model_status,

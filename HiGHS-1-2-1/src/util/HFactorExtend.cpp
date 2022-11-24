@@ -47,10 +47,10 @@ void HFactor::addRows(const HighsSparseMatrix* ar_matrix) {
     HighsInt iVar = basic_index[iRow];
     if (iVar < num_col) in_basis[iVar] = iRow;
   }
-  for (HighsInt iRow = num_row; iRow < new_num_row; iRow++) {
-    HighsInt iVar = basic_index[iRow];
-    assert(iVar >= num_col);
-  }
+  // for (HighsInt iRow = num_row; iRow < new_num_row; iRow++) {
+  //   HighsInt iVar = basic_index[iRow];
+  //   assert(iVar >= num_col);
+  // }
   //  reportLu(kReportLuBoth, true);
   //  reportLu(kReportLuJustL);
 

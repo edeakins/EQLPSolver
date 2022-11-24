@@ -237,7 +237,7 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
           (ekk_instance_.iteration_count_ - it0);
     } else if (solve_phase == kSolvePhaseOrbitalCrossover){
       // residual_col = 0;
-      residual_col = ekk_instance_.lp_.num_col_ - 1;
+      residual_col_idx = ekk_instance_.lp_.residual_cols_.size();
       orbitalCrossover();
       assert(solve_phase == kSolvePhaseOptimal || solve_phase == kSolvePhase1 ||
              solve_phase == kSolvePhase2 ||
@@ -771,7 +771,9 @@ void HEkkPrimal::orbitalCrossover(){
       //   ekk_instance_.info_.ready_for_crash_basis_construction = 1;
       //   break;
       // }
+      std::cout << "iterate started" << std::endl;
       iterate();
+      std::cout << "iterate finished" << std::endl;
       if (ekk_instance_.bailoutOnTimeIterations()) return;
       if (solve_phase == kSolvePhaseError) return;
       assert(solve_phase == kSolvePhaseOrbitalCrossover);
@@ -955,20 +957,20 @@ void HEkkPrimal::rebuild() {
   HighsSimplexStatus& status = ekk_instance_.status_;
   // Clear taboo flag from any bad basis changes
   // ekk_instance_.clearBadBasisChangeTabooFlag();
-  if (residual_col != (ekk_instance_.lp_.num_col_ - 1) 
-      && solve_phase == kSolvePhaseOrbitalCrossover
-      && variable_in != -1){
-    const HighsInt row_start = residual_col - ekk_instance_.lp_.num_aggregate_cols_
-                                + ekk_instance_.lp_.num_aggregate_rows_;
-    // std::cout << "num_col: " << ekk_instance_.lp_.num_col_ << std::endl;
-    // std::cout << "num_row: " << ekk_instance_.lp_.num_row_ << std::endl;
-    ekk_instance_.deletePivotedResiduals(residual_col + 1, row_start + 1);
-    ekk_instance_.initialiseForSolve();
-    // std::cout << "num_col: " << ekk_instance_.lp_.num_col_ << std::endl;
-    // std::cout << "num_row: " << ekk_instance_.lp_.num_row_ << std::endl;
-    rebuild_reason = kRebuildReasonNo;
-    return;
-  }
+  // if (residual_col != (ekk_instance_.lp_.num_col_ - 1) 
+  //     && solve_phase == kSolvePhaseOrbitalCrossover
+  //     && variable_in != -1){
+  //   const HighsInt row_start = residual_col - ekk_instance_.lp_.num_aggregate_cols_
+  //                               + ekk_instance_.lp_.num_aggregate_rows_;
+  //   // std::cout << "num_col: " << ekk_instance_.lp_.num_col_ << std::endl;
+  //   // std::cout << "num_row: " << ekk_instance_.lp_.num_row_ << std::endl;
+  //   ekk_instance_.deletePivotedResiduals(residual_col + 1, row_start + 1);
+  //   ekk_instance_.initialiseForSolve();
+  //   // std::cout << "num_col: " << ekk_instance_.lp_.num_col_ << std::endl;
+  //   // std::cout << "num_row: " << ekk_instance_.lp_.num_row_ << std::endl;
+  //   rebuild_reason = kRebuildReasonNo;
+  //   return;
+  // }
 
   // Record whether the update objective value should be tested. If
   // the objective value is known, then the updated objective value
@@ -1191,7 +1193,7 @@ void HEkkPrimal::iterate() {
     if (rebuild_reason) {
       assert(rebuild_reason == kRebuildReasonPossiblySingularBasis);
       if (solve_phase == kSolvePhaseOrbitalCrossover)
-        residual_col++;
+        residual_col_idx++;
       return;
     }
   }
@@ -1348,7 +1350,7 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
       }
     }
   } else if (local_use_residual_chuzc){
-    variable_in = residual_col == num_aggregate_col - 1 ? -1 : residual_col--;
+    variable_in = --residual_col_idx < 0 ? -1 : ekk_instance_.lp_.residual_cols_.at(residual_col_idx);
     // residual_col++;
     // if (residual_col < ekk_instance_.lp_.num_residual_cols_){
     //   variable_in = ekk_instance_.lp_.residual_cols_.at(residual_col);

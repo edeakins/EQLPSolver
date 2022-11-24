@@ -134,6 +134,130 @@ HighsStatus solveLp(HighsLpSolverObject& solver_object, const string message) {
   return return_status;
 }
 
+HighsStatus solveLpOC(HighsLpSolverObject& solver_object, const string message) {
+  HighsStatus return_status = HighsStatus::kOk;
+  HighsStatus call_status;
+  HighsOptions& options = solver_object.options_;
+  // Reset unscaled model status and solution params - except for
+  // iteration counts
+  // resetModelStatusAndHighsInfo(solver_object);
+  highsLogUser(options.log_options, HighsLogType::kInfo,
+               (message + "\n").c_str());
+  if (options.highs_debug_level > kHighsDebugLevelMin) {
+    // Shouldn't have to check validity of the LP since this is done when it is
+    // loaded or modified
+    call_status = assessLp(solver_object.lp_, options);
+    // If any errors have been found or normalisation carried out,
+    // call_status will be ERROR or WARNING, so only valid return is OK.
+    assert(call_status == HighsStatus::kOk);
+    return_status = interpretCallStatus(options.log_options, call_status,
+                                        return_status, "assessLp");
+    if (return_status == HighsStatus::kError) return return_status;
+  }
+  if (!solver_object.lp_.num_row_) {
+    // Unconstrained LP so solve directly
+    call_status = solveUnconstrainedLp(solver_object);
+    return_status = interpretCallStatus(options.log_options, call_status,
+                                        return_status, "solveUnconstrainedLp");
+    if (return_status == HighsStatus::kError) return return_status;
+    // Set the scaled model status for completeness
+    solver_object.scaled_model_status_ = solver_object.unscaled_model_status_;
+  } else if (options.solver == kIpmString) {
+    // Use IPM
+#ifdef IPX_ON
+    bool imprecise_solution;
+    // Use IPX to solve the LP
+    try {
+      call_status = solveLpIpx(solver_object);
+    } catch (const std::exception& exception) {
+      highsLogDev(options.log_options, HighsLogType::kError,
+                  "Exception %s in solveLpIpx\n", exception.what());
+      call_status = HighsStatus::kError;
+    }
+    // Non-error return requires a primal solution
+    assert(solver_object.solution_.value_valid);
+    // Set the return_status, model status and, for completeness, scaled
+    // model status
+    return_status = interpretCallStatus(options.log_options, call_status,
+                                        return_status, "solveLpIpx");
+    if (return_status == HighsStatus::kError) return return_status;
+    // model status has been set in solveLpIpx
+    solver_object.scaled_model_status_ = solver_object.unscaled_model_status_;
+    // Get the objective and any KKT failures
+    solver_object.highs_info_.objective_function_value =
+        solver_object.lp_.objectiveValue(solver_object.solution_.col_value);
+    getLpKktFailures(options, solver_object.lp_, solver_object.solution_,
+                     solver_object.basis_, solver_object.highs_info_);
+    // Seting the IPM-specific values of (highs_)info_ has been done in
+    // solveLpIpx
+    if ((solver_object.unscaled_model_status_ == HighsModelStatus::kUnknown ||
+         (solver_object.unscaled_model_status_ ==
+              HighsModelStatus::kUnboundedOrInfeasible &&
+          !options.allow_unbounded_or_infeasible)) &&
+        (options.run_crossover || options.main_strategy == kIpmAggregateString)) {
+          // return HighsStatus::kError;
+      // IPX has returned a model status that HiGHS would rather
+      // avoid, so perform simplex clean-up if crossover was allowed.
+      //
+      // This is an unusual situation, and the cost will usually be
+      // acceptable. Worst case is if crossover wasn't run, in which
+      // case there's no basis to start simplex
+      //
+      // ToDo: Check whether simplex can exploit the primal solution returned by
+      // IPX
+      highsLogUser(options.log_options, HighsLogType::kWarning,
+                   "Imprecise solution returned from IPX, so use simplex to "
+                   "clean up\n");
+      // Reset the return status since it will now be determined by
+      // the outcome of the simplex solve
+      return_status = HighsStatus::kOk;
+      call_status = solveLpSimplex(solver_object);
+      return_status = interpretCallStatus(options.log_options, call_status,
+                                          return_status, "solveLpSimplex");
+      if (return_status == HighsStatus::kError) return return_status;
+      if (!isSolutionRightSize(solver_object.lp_, solver_object.solution_)) {
+        highsLogUser(options.log_options, HighsLogType::kError,
+                     "Inconsistent solution returned from solver\n");
+        return HighsStatus::kError;
+      }
+    }
+#else
+    highsLogUser(options.log_options, HighsLogType::kError
+                 "Model cannot be solved with IPM\n");
+    return HighsStatus::kError;
+#endif
+  } 
+  else if (options.solver == kOCDualString || options.solver == kOCIPMString){
+    // Use Simplex OC
+    call_status = solveLpSimplexOC(solver_object);
+    return_status = interpretCallStatus(options.log_options, call_status,
+                                        return_status, "solveLpSimplex");
+    if (return_status == HighsStatus::kError) return return_status;
+    if (!isSolutionRightSize(solver_object.lp_, solver_object.solution_)) {
+      highsLogUser(options.log_options, HighsLogType::kError,
+                   "Inconsistent solution returned from solver\n");
+      return HighsStatus::kError;
+    }
+  } 
+  else {
+    // Use Simplex
+    call_status = solveLpSimplex(solver_object);
+    return_status = interpretCallStatus(options.log_options, call_status,
+                                        return_status, "solveLpSimplex");
+    if (return_status == HighsStatus::kError) return return_status;
+    if (!isSolutionRightSize(solver_object.lp_, solver_object.solution_)) {
+      highsLogUser(options.log_options, HighsLogType::kError,
+                   "Inconsistent solution returned from solver\n");
+      return HighsStatus::kError;
+    }
+  }
+  // Analyse the HiGHS (basic) solution
+  if (debugHighsLpSolution(message, solver_object) ==
+      HighsDebugStatus::kLogicalError)
+    return_status = HighsStatus::kError;
+  return return_status;
+}
+
 // Solves an unconstrained LP without scaling, setting HighsBasis, HighsSolution
 // and HighsInfo
 HighsStatus solveUnconstrainedLp(HighsLpSolverObject& solver_object) {

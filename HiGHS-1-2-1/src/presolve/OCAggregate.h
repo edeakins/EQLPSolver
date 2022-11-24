@@ -7,23 +7,28 @@
 #include <string>
 #include <sstream>
 #include <set>
+#include <map>
 #include <numeric>
 #include "HighsLp.h"
 #include "OCEquitable.h"
 #include "HFactor.h"
+#include "HighsLpSolverObject.h"
 #include "pdqsort/pdqsort.h"
+#include "HEkk.h"
+#include "HighsSolution.h"
 
 /* Aggregator class for LPs based off a equitable partition */
 class HighsOCAggregate{
 public:
-    void passLpAndPartition(HighsLp& lp, OCPartition& partition);
+    void passLpAndPartition(HighsLp& lp, OCPartition& partition, HighsOptions& options, HighsInfo& info);
     void resizeAlpContainers();
     void resizeElpContainers();
     void resizeBasisTestContainers();
     void resizeGramSchmidtMatrixContainers();
     void buildLp();
     void buildLp(OCPartition& partition, HighsBasis& b,
-                HighsSolution& s, std::vector<HighsInt>& basic_index);
+                HighsSolution& s, std::vector<HighsInt>& basic_index, HEkk& ekk_instance,
+                HighsOptions& options, HighsInfo& info, HighsTimer& timer);
     void buildLpForIPM(OCPartition& partition, HighsBasis& b,
                 HighsSolution& s, std::vector<HighsInt>& basic_index);
     void buildLpForTestFactor();
@@ -66,6 +71,7 @@ public:
     // Build and handle residual cols/rows for ALP and EALP
     void buildResiduals();
     void buildResidualLinks();
+    void buildResidualSubMatrix();
     void buildResidualCols();
     void buildResidualRows();
     // Build vectors containing the representative of an aggregate column/row
@@ -79,14 +85,17 @@ public:
     void buildBasis(bool finish, bool extended);
     void changeBasis();
     void buildColBasis();
+    void buildTestColBasis();
     void buildRowBasis();
+    void buildTestRowBasis();
     void buildResidualColBasis();
     void buildResidualRowBasis();
-    void buildTestBasisLU();
+    void buildTestBasisLU(HighsLpSolverObject& solver_object);
     void buildTestBasicIndex();
     std::vector<HighsInt> sortColWeights(std::vector<double>& weights);
     void fillTestBasicStart();
     void fillTestBasicFinish();
+    void updateTestBasisLU();
     // Build LU initial factor check for good basis;
     void buildDegenerateLU();
     void buildDegenerateAMatrix();
@@ -113,6 +122,10 @@ public:
     HighsLp getAggLp();
     HighsLp getLpNoResiduals();
     HighsBasis getBasis();
+    HEkk& getEkkInstance();
+    HighsSolution& getElpSolution();
+    HighsInfo& getElpInfo();
+    HighsOptions& getElpOptions();
 
     // dev test functions
     void checkForBadNonBasics(HighsInt col);
@@ -130,9 +143,14 @@ public:
     HighsSolution solution;
     HighsSolution temp_solution;
     HighsSolution lift_solution;
-    HFactor degenerate_factor;
-    HighsSparseMatrix degenerate_matrix;
+    // Basis testing
+    HEkk test_ekk;
+    HighsInfo test_info;
+    HighsOptions test_options;
+    HighsTimer test_timer;
     HFactor test_factor;
+    HighsSparseMatrix residual_ar;
+    //
     HighsTimer timer;
     double build_test_factor_time = 0;
     int level = 0;
@@ -141,6 +159,8 @@ public:
     int numRow; 
     int nnz;
     int numResiduals = 0;
+    HighsInt numParent = 0;
+    HighsInt numChild = 0;
     int prev_num_residuals = 0;
     int numTotResiduals;
     int degenCnt = 0;
@@ -174,11 +194,13 @@ public:
     std::vector<int> rowF;
     std::vector<int> rowNonbasic;
     std::vector<int> parent;
+    std::map<HighsInt, std::vector<HighsInt> >  parent_to_child;
     std::vector<int> isParent;
     std::vector<int> parentStart;
     std::vector<int> parentFreq;
     std::vector<int> parentRow;
     std::vector<int> child;
+    std::vector<int> child_to_res;
     std::vector<int> isChild;
     std::vector<int> childRow;
     std::vector<int> residualCol;

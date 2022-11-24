@@ -194,6 +194,7 @@ class HEkkPrimal {
 
   const HighsInt check_iter = 9999999;
   const HighsInt check_column = -2133;
+  HighsInt residual_col_idx;
   HighsInt residual_col;
 };
 

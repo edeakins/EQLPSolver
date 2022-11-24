@@ -1749,6 +1749,41 @@ void HEkk::initialiseForSolve() {
     model_status_ = HighsModelStatus::kOptimal;
 }
 
+HighsInt HEkk::initialiseForAggregator(){
+  const HighsStatus return_status = initialiseSimplexLpBasisAndFactor();
+  assert(return_status == HighsStatus::kOk);
+  assert(status_.has_basis);
+  // Ethan you added this for pivoted residual rows/cols
+  pivoted_residual_col.resize(this->lp_.num_col_);
+  pivoted_residual_row.resize(this->lp_.num_row_);
+  pivoted_residual_col.assign(this->lp_.num_col_, 0);
+  pivoted_residual_row.assign(this->lp_.num_row_, 0);
+  //
+  updateSimplexOptions();
+  initialiseSimplexLpRandomVectors();
+  initialisePartitionedRowwiseMatrix();  // Timed
+  allocateWorkAndBaseArrays();
+  initialiseCost(SimplexAlgorithm::kPrimal, kSolvePhaseUnknown, false);
+  initialiseBound(SimplexAlgorithm::kPrimal, kSolvePhaseUnknown, false);
+  initialiseNonbasicValueAndMove();
+  computePrimal();                // Timed
+  computeDual();                  // Timed
+  computeSimplexInfeasible();     // Timed
+  computeDualObjectiveValue();    // Timed
+  computePrimalObjectiveValue();  // Timed
+  status_.initialised_for_solve = true;
+
+  bool primal_feasible = info_.num_primal_infeasibilities == 0;
+  bool dual_feasible = info_.num_dual_infeasibilities == 0;
+  bool solve_strategy = options_->simplex_strategy == kSimplexStrategyOrbitalCrossover;
+  visited_basis_.clear();
+  visited_basis_.insert(basis_.hash);
+  model_status_ = HighsModelStatus::kNotset;
+  if (primal_feasible && dual_feasible && !solve_strategy)
+    model_status_ = HighsModelStatus::kOptimal;
+  return this->simplex_nla_.factor_.rank_deficiency;
+}
+
 void HEkk::setSimplexOptions() {
   // Copy values of HighsOptions for the simplex solver
   // Currently most of these options are straight copies, but they
@@ -2004,6 +2039,101 @@ bool HEkk::getNonsingularInverse(const HighsInt solve_phase) {
   return true;
 }
 
+bool HEkk::getNonsingularInverseForAggregator(const HighsInt solve_phase) {
+  assert(status_.has_basis);
+  const vector<HighsInt>& basicIndex = basis_.basicIndex_;
+  // Take a copy of basicIndex from before INVERT to be used as the
+  // saved ordering of basic variables - so reinvert will run
+  // identically.
+  const vector<HighsInt> basicIndex_before_compute_factor = basicIndex;
+  // Save the number of updates performed in case it has to be used to determine
+  // a limit
+  const HighsInt simplex_update_count = info_.update_count;
+  // Dual simplex edge weights are identified with rows, so must be
+  // permuted according to INVERT. Scatter the edge weights so that,
+  // after INVERT, they can be gathered according to the new
+  // permutation of basicIndex
+  analysis_.simplexTimerStart(PermWtClock);
+  for (HighsInt i = 0; i < lp_.num_row_; i++)
+    scattered_dual_edge_weight_[basicIndex[i]] = dual_edge_weight_[i];
+  analysis_.simplexTimerStop(PermWtClock);
+
+  // Call computeFactor to perform INVERT
+  HighsInt rank_deficiency = computeFactor();
+  if (rank_deficiency)
+    highsLogDev(
+        options_->log_options, HighsLogType::kInfo,
+        "HEkk::getNonsingularInverse Rank_deficiency: solve %d (Iteration "
+        "%d)\n",
+        (int)debug_solve_call_num_, (int)iteration_count_);
+
+  const bool artificial_rank_deficiency = false;  //  true;//
+  if (artificial_rank_deficiency) {
+    if (!info_.phase1_backtracking_test_done && solve_phase == kSolvePhase1) {
+      // Claim rank deficiency to test backtracking
+      // printf("Phase1 (Iter %" HIGHSINT_FORMAT
+      //        ") Claiming rank deficiency to test backtracking\n",
+      //        iteration_count_);
+      rank_deficiency = 1;
+      info_.phase1_backtracking_test_done = true;
+    } else if (!info_.phase2_backtracking_test_done &&
+               solve_phase == kSolvePhase2) {
+      // Claim rank deficiency to test backtracking
+      // printf("Phase2 (Iter %" HIGHSINT_FORMAT
+      //        ") Claiming rank deficiency to test backtracking\n",
+      //        iteration_count_);
+      rank_deficiency = 1;
+      info_.phase2_backtracking_test_done = true;
+    }
+  }
+  if (rank_deficiency) {
+    // Rank deficient basis, so backtrack to last full rank basis
+    //
+    // Get the last nonsingular basis - so long as there is one
+    uint64_t deficient_hash = basis_.hash;
+    if (!getBacktrackingBasis()) return false;
+    // Record that backtracking is taking place
+    info_.backtracking_ = true;
+    visited_basis_.clear();
+    visited_basis_.insert(basis_.hash);
+    visited_basis_.insert(deficient_hash);
+    this->updateStatus(LpAction::kBacktracking);
+    HighsInt backtrack_rank_deficiency = computeFactor();
+    // This basis has previously been inverted successfully, so it shouldn't be
+    // singular
+    if (backtrack_rank_deficiency) return false;
+    // simplex update limit will be half of the number of updates
+    // performed, so make sure that at least one update was performed
+    if (simplex_update_count <= 1) return false;
+    HighsInt use_simplex_update_limit = info_.update_limit;
+    HighsInt new_simplex_update_limit = simplex_update_count / 2;
+    info_.update_limit = new_simplex_update_limit;
+    highsLogDev(options_->log_options, HighsLogType::kWarning,
+                "Rank deficiency of %" HIGHSINT_FORMAT
+                " after %" HIGHSINT_FORMAT
+                " simplex updates, so "
+                "backtracking: max updates reduced from %" HIGHSINT_FORMAT
+                " to %" HIGHSINT_FORMAT "\n",
+                rank_deficiency, simplex_update_count, use_simplex_update_limit,
+                new_simplex_update_limit);
+  } else {
+    // Current basis is full rank so save it
+    putBacktrackingBasis(basicIndex_before_compute_factor);
+    // Indicate that backtracking is not taking place
+    info_.backtracking_ = false;
+    // Reset the update limit in case this is the first successful
+    // inversion after backtracking
+    info_.update_limit = options_->simplex_update_limit;
+  }
+  // Gather the edge weights according to the permutation of
+  // basicIndex after INVERT
+  analysis_.simplexTimerStart(PermWtClock);
+  for (HighsInt i = 0; i < lp_.num_row_; i++)
+    dual_edge_weight_[i] = scattered_dual_edge_weight_[basicIndex[i]];
+  analysis_.simplexTimerStop(PermWtClock);
+  return true;
+}
+
 bool HEkk::getBacktrackingBasis() {
   if (!info_.valid_backtracking_basis_) return false;
   basis_ = info_.backtracking_basis_;
@@ -2108,24 +2238,27 @@ bool HEkk::rebuildRefactor(HighsInt rebuild_reason) {
         rebuild_reason == kRebuildReasonPossiblyPhase1Feasible ||
         rebuild_reason == kRebuildReasonPossiblyPrimalUnbounded ||
         rebuild_reason == kRebuildReasonPossiblyDualUnbounded ||
-        rebuild_reason == kRebuildReasonPrimalInfeasibleInPrimalSimplex) {
+        rebuild_reason == kRebuildReasonPrimalInfeasibleInPrimalSimplex ||
+        rebuild_reason == kRebuildReasonSyntheticClockSaysInvert) { // Ethan you added last or condition
       // By default, don't refactor!
       refactor = false;
       // Possibly revise the decision based on accuracy when solving a
       // test system
       const double error_tolerance =
           options_->rebuild_refactor_solution_error_tolerance;
+      std::cout << "factor error start" << std::endl;
       if (error_tolerance > 0) {
         solution_error = factorSolveError();
         refactor = solution_error > error_tolerance;
       }
+      std::cout << "factor error end" << std::endl;
     }
   }
-  const bool report_refactorization = false;
+  const bool report_refactorization = true; // Ethan you did this originally false
   if (report_refactorization) {
     const std::string logic = refactor ? "   " : "no   ";
-    if (info_.update_count &&
-        rebuild_reason != kRebuildReasonSyntheticClockSaysInvert)
+    if (info_.update_count) //&&
+        // rebuild_reason != kRebuildReasonSyntheticClockSaysInvert)
       printf(
           "%srefactorization after %4d updates and solution error = %11.4g for "
           "rebuild reason = %s\n",
@@ -2892,7 +3025,45 @@ void HEkk::pivotColumnFtran(const HighsInt iCol, HVector& col_aq) {
   analysis_.simplexTimerStop(FtranClock);
 }
 
+void HEkk::pivotColumnFtranForAggregator(const HighsInt iCol, HVector& col_aq) {
+  analysis_.simplexTimerStart(FtranClock);
+  col_aq.clear();
+  col_aq.packFlag = true;
+  lp_.a_matrix_.collectAj(col_aq, iCol, 1);
+  if (analysis_.analyse_simplex_summary_data)
+    analysis_.operationRecordBefore(kSimplexNlaFtran, col_aq,
+                                    info_.col_aq_density);
+  simplex_nla_.ftran(col_aq, info_.col_aq_density,
+                     analysis_.pointer_serial_factor_clocks);
+  if (analysis_.analyse_simplex_summary_data)
+    analysis_.operationRecordAfter(kSimplexNlaFtran, col_aq);
+  HighsInt num_row = lp_.num_row_;
+  const double local_col_aq_density = (double)col_aq.count / num_row;
+  updateOperationResultDensity(local_col_aq_density, info_.col_aq_density);
+  analysis_.simplexTimerStop(FtranClock);
+}
+
 void HEkk::unitBtran(const HighsInt iRow, HVector& row_ep) {
+  analysis_.simplexTimerStart(BtranClock);
+  row_ep.clear();
+  row_ep.count = 1;
+  row_ep.index[0] = iRow;
+  row_ep.array[iRow] = 1;
+  row_ep.packFlag = true;
+  if (analysis_.analyse_simplex_summary_data)
+    analysis_.operationRecordBefore(kSimplexNlaBtranEp, row_ep,
+                                    info_.row_ep_density);
+  simplex_nla_.btran(row_ep, info_.row_ep_density,
+                     analysis_.pointer_serial_factor_clocks);
+  if (analysis_.analyse_simplex_summary_data)
+    analysis_.operationRecordAfter(kSimplexNlaBtranEp, row_ep);
+  HighsInt num_row = lp_.num_row_;
+  const double local_row_ep_density = (double)row_ep.count / num_row;
+  updateOperationResultDensity(local_row_ep_density, info_.row_ep_density);
+  analysis_.simplexTimerStop(BtranClock);
+}
+
+void HEkk::unitBtranForAggregator(const HighsInt iRow, HVector& row_ep) {
   analysis_.simplexTimerStart(BtranClock);
   row_ep.clear();
   row_ep.count = 1;
@@ -3054,6 +3225,43 @@ void HEkk::computePrimal() {
   analysis_.simplexTimerStop(ComputePrimalClock);
 }
 
+void HEkk::computePrimalForAggregator() {
+  analysis_.simplexTimerStart(ComputePrimalClock);
+  const HighsInt num_row = lp_.num_row_;
+  const HighsInt num_col = lp_.num_col_;
+  // Setup a local buffer for the values of basic variables
+  HVector primal_col;
+  primal_col.setup(num_row);
+  primal_col.clear();
+  for (HighsInt i = 0; i < num_col + num_row; i++) {
+    if (basis_.nonbasicFlag_[i] && info_.workValue_[i] != 0) {
+      lp_.a_matrix_.collectAj(primal_col, i, info_.workValue_[i]);
+    }
+  }
+  // It's possible that the buffer has no nonzeros, so performing
+  // FTRAN is unnecessary. Not much of a saving, but the zero density
+  // looks odd in the analysis!
+  if (primal_col.count) {
+    simplex_nla_.ftran(primal_col, info_.primal_col_density,
+                       analysis_.pointer_serial_factor_clocks);
+    const double local_primal_col_density = (double)primal_col.count / num_row;
+    updateOperationResultDensity(local_primal_col_density,
+                                 info_.primal_col_density);
+  }
+  for (HighsInt i = 0; i < num_row; i++) {
+    HighsInt iCol = basis_.basicIndex_[i];
+    info_.baseValue_[i] = -primal_col.array[i];
+    info_.baseLower_[i] = info_.workLower_[iCol];
+    info_.baseUpper_[i] = info_.workUpper_[iCol];
+  }
+  // Indicate that the primal infeasiblility information isn't known
+  info_.num_primal_infeasibilities = kHighsIllegalInfeasibilityCount;
+  info_.max_primal_infeasibility = kHighsIllegalInfeasibilityMeasure;
+  info_.sum_primal_infeasibilities = kHighsIllegalInfeasibilityMeasure;
+
+  analysis_.simplexTimerStop(ComputePrimalClock);
+}
+
 void HEkk::computeDual() {
   analysis_.simplexTimerStart(ComputeDualClock);
   // Create a local buffer for the pi vector
@@ -3169,6 +3377,11 @@ void HEkk::transformForUpdate(HVector* column, HVector* row_ep,
   simplex_nla_.transformForUpdate(column, row_ep, variable_in, *row_out);
 }
 
+void HEkk::transformForUpdateForAggregator(HVector* column, HVector* row_ep,
+                              const HighsInt variable_in, HighsInt* row_out) {
+  simplex_nla_.transformForUpdate(column, row_ep, variable_in, *row_out);
+}
+
 void HEkk::flipBound(const HighsInt iCol) {
   const int8_t move = basis_.nonbasicMove_[iCol] = -basis_.nonbasicMove_[iCol];
   info_.workValue_[iCol] =
@@ -3205,7 +3418,84 @@ void HEkk::updateFactor(HVector* column, HVector* row_ep, HighsInt* iRow,
   }
 }
 
+void HEkk::updateFactorForAggregator(HVector* column, HVector* row_ep, HighsInt* iRow,
+                        HighsInt* hint) {
+  analysis_.simplexTimerStart(UpdateFactorClock);
+  simplex_nla_.update(column, row_ep, iRow, hint);
+  // Now have a representation of B^{-1}, but it is not fresh
+  status_.has_invert = true;
+  if (info_.update_count >= info_.update_limit)
+    *hint = kRebuildReasonUpdateLimitReached;
+
+  // Determine whether to reinvert based on the synthetic clock
+  bool reinvert_syntheticClock =
+      this->total_synthetic_tick_ >= this->build_synthetic_tick_;
+  const bool performed_min_updates =
+      info_.update_count >= kSyntheticTickReinversionMinUpdateCount;
+  if (reinvert_syntheticClock && performed_min_updates)
+    *hint = kRebuildReasonSyntheticClockSaysInvert;
+  analysis_.simplexTimerStop(UpdateFactorClock);
+  // Use the next level down for the debug level, since the cost of
+  // checking the INVERT every iteration is an order more expensive
+  // than checking after factorization.
+  HighsInt alt_debug_level = options_->highs_debug_level - 1;
+  // Forced expensive debug for development work
+  //  if (debug_solve_report_) alt_debug_level = kHighsDebugLevelExpensive;
+  HighsDebugStatus debug_status =
+      debugNlaCheckInvert("HEkk::updateFactor", alt_debug_level);
+  if (debug_status == HighsDebugStatus::kError) {
+    *hint = kRebuildReasonPossiblySingularBasis;
+  }
+}
+
 void HEkk::updatePivots(const HighsInt variable_in, const HighsInt row_out,
+                        const HighsInt move_out) {
+  analysis_.simplexTimerStart(UpdatePivotsClock);
+  HighsInt variable_out = basis_.basicIndex_[row_out];
+
+  // update hash value of basis
+  HighsHashHelpers::sparse_inverse_combine(basis_.hash, variable_out);
+  HighsHashHelpers::sparse_combine(basis_.hash, variable_in);
+  visited_basis_.insert(basis_.hash);
+
+  // Incoming variable
+  basis_.basicIndex_[row_out] = variable_in;
+  basis_.nonbasicFlag_[variable_in] = 0;
+  basis_.nonbasicMove_[variable_in] = 0;
+  info_.baseLower_[row_out] = info_.workLower_[variable_in];
+  info_.baseUpper_[row_out] = info_.workUpper_[variable_in];
+
+  // Outgoing variable
+  basis_.nonbasicFlag_[variable_out] = 1;
+  if (info_.workLower_[variable_out] == info_.workUpper_[variable_out]) {
+    info_.workValue_[variable_out] = info_.workLower_[variable_out];
+    basis_.nonbasicMove_[variable_out] = 0;
+  } else if (move_out == -1) {
+    info_.workValue_[variable_out] = info_.workLower_[variable_out];
+    basis_.nonbasicMove_[variable_out] = 1;
+  } else {
+    info_.workValue_[variable_out] = info_.workUpper_[variable_out];
+    basis_.nonbasicMove_[variable_out] = -1;
+  }
+  // Update the dual objective value
+  double nwValue = info_.workValue_[variable_out];
+  double vrDual = info_.workDual_[variable_out];
+  double dl_dual_objective_value = nwValue * vrDual;
+  info_.updated_dual_objective_value += dl_dual_objective_value;
+  info_.update_count++;
+  // Update the number of basic logicals
+  if (variable_out < lp_.num_col_) info_.num_basic_logicals++;
+  if (variable_in < lp_.num_col_) info_.num_basic_logicals--;
+  // No longer have a representation of B^{-1}, and certainly not
+  // fresh!
+  status_.has_invert = false;
+  status_.has_fresh_invert = false;
+  // Data are no longer fresh from rebuild
+  status_.has_fresh_rebuild = false;
+  analysis_.simplexTimerStop(UpdatePivotsClock);
+}
+
+void HEkk::updatePivotsForAggregator(const HighsInt variable_in, const HighsInt row_out,
                         const HighsInt move_out) {
   analysis_.simplexTimerStart(UpdatePivotsClock);
   HighsInt variable_out = basis_.basicIndex_[row_out];
@@ -3314,6 +3604,14 @@ void HEkk::updateMatrix(const HighsInt variable_in,
   analysis_.simplexTimerStop(UpdateMatrixClock);
 }
 
+void HEkk::updateMatrixForAggregator(const HighsInt variable_in,
+                        const HighsInt variable_out) {
+  analysis_.simplexTimerStart(UpdateMatrixClock);
+  ar_matrix_.update(variable_in, variable_out, lp_.a_matrix_);
+  //  assert(ar_matrix_.debugPartitionOk(&basis_.nonbasicFlag_[0]));
+  analysis_.simplexTimerStop(UpdateMatrixClock);
+}
+
 void HEkk::computeInfeasibilitiesForReporting(const SimplexAlgorithm algorithm,
                                               const HighsInt solve_phase) {
   if (algorithm == SimplexAlgorithm::kPrimal) {
@@ -3338,6 +3636,66 @@ void HEkk::computeSimplexInfeasible() {
 }
 
 void HEkk::computeSimplexPrimalInfeasible() {
+  // Computes num/max/sum of primal infeasibliities according to the
+  // simplex bounds. This is used to determine optimality in dual
+  // phase 1 and dual phase 2, albeit using different bounds in
+  // workLower/Upper.
+  analysis_.simplexTimerStart(ComputePrIfsClock);
+  const double scaled_primal_feasibility_tolerance =
+      options_->primal_feasibility_tolerance;
+  HighsInt& num_primal_infeasibility = info_.num_primal_infeasibilities;
+  double& max_primal_infeasibility = info_.max_primal_infeasibility;
+  double& sum_primal_infeasibility = info_.sum_primal_infeasibilities;
+  num_primal_infeasibility = 0;
+  max_primal_infeasibility = 0;
+  sum_primal_infeasibility = 0;
+
+  for (HighsInt i = 0; i < lp_.num_col_ + lp_.num_row_; i++) {
+    if (basis_.nonbasicFlag_[i]) {
+      // Nonbasic column
+      double value = info_.workValue_[i];
+      double lower = info_.workLower_[i];
+      double upper = info_.workUpper_[i];
+      // @primal_infeasibility calculation
+      double primal_infeasibility = 0;
+      if (value < lower - scaled_primal_feasibility_tolerance) {
+        primal_infeasibility = lower - value;
+      } else if (value > upper + scaled_primal_feasibility_tolerance) {
+        primal_infeasibility = value - upper;
+      }
+      if (primal_infeasibility > 0) {
+        if (primal_infeasibility > scaled_primal_feasibility_tolerance)
+          num_primal_infeasibility++;
+        max_primal_infeasibility =
+            std::max(primal_infeasibility, max_primal_infeasibility);
+        sum_primal_infeasibility += primal_infeasibility;
+      }
+    }
+  }
+  for (HighsInt i = 0; i < lp_.num_row_; i++) {
+    // Basic variable
+    double value = info_.baseValue_[i];
+    double lower = info_.baseLower_[i];
+    double upper = info_.baseUpper_[i];
+    // @primal_infeasibility calculation
+    double primal_infeasibility = 0;
+    if (value < lower - scaled_primal_feasibility_tolerance) {
+      primal_infeasibility = lower - value;
+    } else if (value > upper + scaled_primal_feasibility_tolerance) {
+      primal_infeasibility = value - upper;
+    }
+    if (primal_infeasibility > 0) {
+      if (primal_infeasibility > scaled_primal_feasibility_tolerance)
+        num_primal_infeasibility++;
+      max_primal_infeasibility =
+          std::max(primal_infeasibility, max_primal_infeasibility);
+      sum_primal_infeasibility += primal_infeasibility;
+    }
+  }
+  analysis_.simplexTimerStop(ComputePrIfsClock);
+}
+
+void HEkk::computeSimplexPrimalInfeasibleForAggregator() {
   // Computes num/max/sum of primal infeasibliities according to the
   // simplex bounds. This is used to determine optimality in dual
   // phase 1 and dual phase 2, albeit using different bounds in

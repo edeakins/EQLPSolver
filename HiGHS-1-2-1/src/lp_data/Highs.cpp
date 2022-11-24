@@ -789,6 +789,10 @@ HighsStatus Highs::run() {
   options_.presolve = "off";
   options_.primal_feasibility_tolerance = 1e-6;
   options_.dual_feasibility_tolerance = 1e-6;
+  // options_.factor_pivot_tolerance = 1e-9;
+  // options_.solver = kOCDualString;
+  // options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+  // options_.presolve = "off";
   if (options_.solver == kOCDualString){
     options_.main_strategy = kOCDualString;
     running_orbital_crossover = true;
@@ -856,13 +860,16 @@ HighsStatus Highs::run() {
       // int non_trivial_minors = 0;
       while (!discrete){
         options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        options_.factor_pivot_tolerance = 1e-6;
+        options_.rebuild_refactor_solution_error_tolerance = 1e-06;
+        options_.solver = kOCDualString;
         // Refine partition 
         OCPartition old_partition = equitablePartition_.getPartition();
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        if (!discrete) continue;
         // if (!discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -887,7 +894,7 @@ HighsStatus Highs::run() {
         getLiftedBasis();
         major_iterations = info_.orbital_crossover_major_iteration_count;
         minor_iterations = info_.orbital_crossover_minor_iteration_count;
-        passModel(ealp_);
+        // passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
@@ -896,12 +903,20 @@ HighsStatus Highs::run() {
         info_.orbital_crossover_minor_iteration_count = minor_iterations;
         // Pass the lifted initial ealp basis to highs to build a simplex
         // basis for the lp.
-        setBasis(ealpBasis_);
+        // setBasis(ealpBasis_);
         // writeBasis("../../debugBuild/beforeBasis.txt");
         // Do orbital crossvoer
         timer_.start(timer_.orbital_crossover_clock);
-        call_status =
-            callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        // call_status =
+        //     callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        HighsLpSolverObject solver_object(ekk_instance_.lp_, ealpBasis_, solution_, info_, ekk_instance_,
+                                    options_, timer_);
+        // ekk_instance_.options_->factor_pivot_tolerance = 1e-9;
+        // ekk_instance_.options_->solver = kOCDualString;
+        // ekk_instance_.options_->simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // ekk_instance_.options_->presolve = "off";
+        solveLpOC(solver_object, "Solving With Orbital Crossover");
+        basis_ = solver_object.basis_;
         timer_.stop(timer_.orbital_crossover_clock);
         // non_trivial_minors += ekk_instance_.num_nonzero_pivots;
         // writeBasis("../../debugBuild/afterBasis.txt");
@@ -2657,11 +2672,11 @@ void Highs::refinePartition(){
 }
 
 void Highs::initializeAggregator(HighsLp& original_lp){
-  aggregator_.passLpAndPartition(original_lp, partition_);
-  aggregator_.buildLp();
+  aggregator_.passLpAndPartition(original_lp, partition_, options_, info_);
 }
 
 void Highs::buildALP(){
+  aggregator_.buildLp();
   alp_ = aggregator_.getAggLp();
 }
 
@@ -2676,7 +2691,8 @@ void Highs::resetAggregator(){
 }
 
 void Highs::buildEALP(){
-  aggregator_.buildLp(partition_, alpBasis_, alpSolution_, ekk_instance_.basis_.basicIndex_);
+  aggregator_.buildLp(partition_, alpBasis_, alpSolution_, ekk_instance_.basis_.basicIndex_, ekk_instance_,
+                      options_, info_, timer_);
   // aggregator_.buildElp();
   // alp_ = aggregator_.getAggLp();
   ealp_ = aggregator_.getLp();

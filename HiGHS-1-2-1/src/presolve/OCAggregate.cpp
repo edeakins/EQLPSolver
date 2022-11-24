@@ -7,10 +7,13 @@ ipx::Control ipx_control_;
 ipx::Info ipx_info_;
 ipx::Model ipx_model_;
 std::unique_ptr<ipx::Basis> ipx_basis_;
+std::vector<int> compare_index;
 
-void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
+void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition, HighsOptions& options, HighsInfo& info){
     olp = lp;
     ep = partition;
+    test_options = options;
+    test_info = info;
     numCol = olp.num_col_;
     numRow = olp.num_row_;
     numTot = numCol + numRow;
@@ -56,6 +59,7 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     isParent.resize(numCol);
     parentRow.resize(numCol + 1);
     isChild.resize(numCol);
+    parent.resize(numCol);
     childRow.resize(numCol);
     residualCol.resize(numCol);
     residualRow.resize(numCol);
@@ -87,10 +91,10 @@ void HighsOCAggregate::resizeElpContainers(){
 }
 
 void HighsOCAggregate::resizeBasisTestContainers(){
-    test_basic_start.resize(agglp.a_matrix_.num_col_ + agglp.a_matrix_.num_row_);
-    test_basic_finish.resize(agglp.a_matrix_.num_col_ + agglp.a_matrix_.num_row_);
+    test_basic_start.assign(colCnt + rowCnt + 2 * numResiduals, 0);
+    test_basic_finish.assign(colCnt + rowCnt + 2 * numResiduals, 0);
     test_basic_index.resize(0);
-    col_needs_res_pivot.resize(agglp.num_col_ + agglp.num_row_);
+    col_needs_res_pivot.resize(colCnt + rowCnt);
     std::fill(col_needs_res_pivot.begin(), col_needs_res_pivot.end(), 0);
 }
 
@@ -129,10 +133,13 @@ void HighsOCAggregate::buildLp(){
 }
 
 void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
-                               HighsSolution& s, std::vector<HighsInt>& basic_index){
+                               HighsSolution& s, std::vector<HighsInt>& basic_index, HEkk& ekk_instance,
+                               HighsOptions& options, HighsInfo& info, HighsTimer& timer){
     ep = partition;
     basis = b;
     solution = s;
+    test_options = options;
+    test_info = info;
     pcol = col;
     pcolrep = colrep;
     prow = row;
@@ -146,34 +153,45 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     buildRowPointers();
     // trackAndCountSplits();
     markDegenerate();
-    // buildResidualLinks();
+    buildResidualLinks();
     // countResiduals();
     // if (numResiduals < 1000)
-    resizeAlpContainers();
+    // resizeAlpContainers();
+    // resizeBasisTestContainers();
     buildBasis(false, false);
-    buildLpForTestFactor();
-    resizeBasisTestContainers();
+    // buildLpForTestFactor();
     // printAMatrixToMatlabFormat(agglp.a_matrix_);
-    buildSolution();
-    timer.startRunHighsClock();
-    double init_time = timer.readRunHighsClock();
-    buildTestBasicIndex();
-    // fillTestBasicStart();
-    buildTestBasisLU();
-    double final_time = timer.readRunHighsClock();
-    build_test_factor_time = final_time - init_time;
-    std::cout << "\n factor test time: " << build_test_factor_time << "\n" << std::endl;
+    // buildSolution();
+    // timer.resetHighsTimer();
+    // timer.startRunHighsClock();
+    // double init_time = timer.readRunHighsClock();
+    // // buildTestBasicIndex();
+    // // fillTestBasicStart();
+    // buildTestBasisLU();
+    // double final_time = timer.readRunHighsClock();
+    // build_test_factor_time = final_time - init_time;
+    // std::cout << "\n factor test time: " << build_test_factor_time << "\n" << std::endl;
     // fillTestBasicFinish();
     // markDependentColumns();
-    buildResidualLinks();
+    // buildResidualLinks();
+    // buildResidualSubMatrix();
     resizeElpContainers();
-    changeBasis();
+    // changeBasis();
     buildObjExtended();
     buildAmatrixExtended();
     buildRhsExtended();
     buildBndsExtended();
     buildRowNames();
     buildColNames();
+    resizeBasisTestContainers();
+    // buildTestBasicIndex();
+    ekk_instance.clear();
+    elp.is_moved_ = false;
+    elp.is_scaled_ = false;
+    HighsLpSolverObject solver_object(elp, elpBasis,
+                            lift_solution, info, ekk_instance, options, timer);
+    buildTestBasisLU(solver_object);
+    // updateTestBasisLU();
     copyPartition();
     agglp.level = level;
     elp.level = level; 
@@ -221,9 +239,6 @@ void HighsOCAggregate::buildLpForIPM(OCPartition& partition, HighsBasis& b,
 }
 
 void HighsOCAggregate::buildLpForTestFactor(){
-    buildColPointers();
-    buildRowPointers();
-    resizeElpContainers();
     buildObj();
     buildAmatrix();
     buildRhs();
@@ -990,11 +1005,11 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
         }
     }
     for (iCol = colCnt; iCol < elp.num_col_; ++iCol){
-        // if (degenerate_basic_residuals.at(iCol)){
-        //     elp.col_lower_[iCol] = -kHighsInf;
-        //     elp.col_upper_[iCol] = kHighsInf;
-        //     continue;
-        // }
+        if (elpBasis.col_status.at(iCol) == HighsBasisStatus::kBasic){
+            elp.col_lower_[iCol] = -kHighsInf;
+            elp.col_upper_[iCol] = kHighsInf;
+            continue;
+        }
         elp.col_lower_[iCol] = 0;
         elp.col_upper_[iCol] = 0;
     }
@@ -1053,11 +1068,18 @@ void HighsOCAggregate::buildResidualLinks(){
     HighsBasisStatus basic = HighsBasisStatus::kBasic;
     std::pair<std::set<std::pair<int, int> >::iterator, bool> ret;
     numResiduals = 0;
+    numParent = 0;
+    numChild = 0;
     std::vector<HighsInt> temp_piv_need(col_needs_res_pivot.begin(), col_needs_res_pivot.end());
     std::fill(isParent.begin(), isParent.end(), 0);
     std::fill(parentRow.begin(), parentRow.end(), 0);
     std::fill(isChild.begin(), isChild.end(), 0);
+    std::fill(parent.begin(), parent.end(), 0);
     std::fill(childRow.begin(), childRow.end(), 0);
+    child.resize(0);
+    parent_to_child.clear();
+    child_to_res.assign(colCnt, -1);
+    // res_to_child.assign(2 * colCnt - 1, -1);
     std::fill(residualRow.begin(), residualRow.end(), 0);
     std::fill(residualCol.begin(), residualCol.end(), 0);
     // std::fill(degenerate_basic_rows.begin(), degenerate_basic_rows.end(), 0);
@@ -1080,8 +1102,8 @@ void HighsOCAggregate::buildResidualLinks(){
         xOld = pFrontCol[pcf];
         oldRep = colrep[xOld];
         if (basis.col_status[xOld] != basic){ numSkipped++; continue; }
-        if (!temp_piv_need.at(xNew) && !temp_piv_need.at(xOld)){ numSkipped++; continue;}
-        if (!temp_piv_need.at(xNew) && temp_piv_need.at(xOld)) temp_piv_need.at(xOld) = 0;
+        // if (!temp_piv_need.at(xNew) && !temp_piv_need.at(xOld)){ numSkipped++; continue;}
+        // if (!temp_piv_need.at(xNew) && temp_piv_need.at(xOld)) temp_piv_need.at(xOld) = 0;
         // if (mark_degenerate.at(xOld)) { numSkipped++; continue; }
         if (xOld < minParent) minParent = xOld;
         splitCells[xOld].push_back(xNew);
@@ -1089,18 +1111,25 @@ void HighsOCAggregate::buildResidualLinks(){
     elpNumCol = colCnt;
     for (const auto split : splitCells){
         isParent.at(split.first) = 1;
+        numParent++;
         parentRow[split.first] = elpNumRow;
         parentRow[split.first + 1] = elpNumRow + split.second.size();
         for (int idx = 0; idx < split.second.size(); ++idx){
             int iCol = split.second.at(idx);
-            if (mark_degenerate.at(split.first)){
-                zero_step_pivots.at(elpNumCol) = 1;
-                elp.num_degenerate_cols_++;
-            }
+            // if (mark_degenerate.at(split.first)){
+            //     zero_step_pivots.at(elpNumCol) = 1;
+            //     elp.num_degenerate_cols_++;
+            // }
+            parent.at(iCol) = split.first;
+            parent_to_child[split.first].push_back(iCol);
             isChild.at(iCol) = 1;
+            numChild++;
+            child.push_back(iCol);
             childRow[iCol] = elpNumRow;
             residual_cols_.push_back(elpNumCol);
             residual_to_old.at(elpNumCol) = split.first;
+            child_to_res.at(iCol) = elpNumCol;
+            // res_to_child.at(elpNumCol) = iCol;
             residualCol[numResiduals] = elpNumCol++;
             residualRow[numResiduals++] = elpNumRow++;
             // pairs.push_back(std::pair<int, int>(split.first, iCol));
@@ -1108,17 +1137,36 @@ void HighsOCAggregate::buildResidualLinks(){
     }
     for (int iCol = 0; iCol < numResiduals; ++iCol){
         int r_col = residual_cols_.at(iCol);
-        int x_col = residual_to_old.at(r_col);
-        if (mark_degenerate.at(x_col))
-            elp.residual_cols_.push_back(r_col);
+        // int x_col = residual_to_old.at(r_col);
+        // if (mark_degenerate.at(x_col))
+        elp.residual_cols_.push_back(r_col);
     }
-    for (int iCol = 0; iCol < numResiduals; ++iCol){
-        int r_col = residual_cols_.at(iCol);
-        int x_col = residual_to_old.at(r_col);
-        if (!mark_degenerate.at(x_col))
-            elp.residual_cols_.push_back(r_col);
-    }
+    // for (int iCol = 0; iCol < numResiduals; ++iCol){
+    //     int r_col = residual_cols_.at(iCol);
+    //     int x_col = residual_to_old.at(r_col);
+    //     if (!mark_degenerate.at(x_col))
+    //         elp.residual_cols_.push_back(r_col);
+    // }
     splitCells.clear();
+}
+
+void HighsOCAggregate::buildResidualSubMatrix(){
+    for (HighsInt i_row = 0; i_row < numResiduals; ++i_row){
+        HighsInt i_child = child.at(i_row);
+        test_basic_index.push_back(i_child);
+        HighsInt i_parent = parent.at(i_child);
+        HighsInt i_residual = residualCol.at(i_row);
+        residual_ar.index_.push_back(i_parent);
+        residual_ar.index_.push_back(i_child);
+        residual_ar.index_.push_back(i_residual);
+        residual_ar.value_.push_back(1);
+        residual_ar.value_.push_back(-1);
+        residual_ar.value_.push_back(-1);
+        residual_ar.start_.push_back(residual_ar.index_.size());
+    }
+    residual_ar.num_col_ = numParent + numChild + numResiduals;
+    residual_ar.num_row_ = numResiduals;
+    residual_ar.format_ = MatrixFormat::kRowwise;
 }
 
 void HighsOCAggregate::buildResidualCols(){
@@ -1163,154 +1211,152 @@ void HighsOCAggregate::markDegenerate(){
     }
 }
 
-void HighsOCAggregate::buildTestBasisLU(){
-    ////// Highs LU ///////
-    // test_factor.setup(agglp.a_matrix_, test_basic_index);
-    // test_rank_deficiency = test_factor.build();
-    // Fill the ipx lp data
-    ipx::Int num_col, num_row;
-    std::vector<ipx::Int> Ap, Ai;
-    std::vector<double> objective, col_lb, col_ub, Av, rhs;
-    std::vector<char> constraint_type;
-    fillInIpxData(agglp, num_col, num_row, objective, col_lb, col_ub, Ap, Ai, Av,
-                    rhs, constraint_type);
-    // Fill in ipx model info 
-    ipx_model_.Load(ipx_control_, num_row, num_col, &Ap[0], &Ai[0], &Av[0],
-                &rhs[0], &constraint_type[0], &objective[0], &col_lb[0], &col_ub[0]);
-    // Reset and fill crash basis
-    ipx_basis_.reset(new ipx::Basis(ipx_control_, ipx_model_));
-    ipx_basis_->ConstructBasisFromWeights(&col_weights[0], &ipx_info_);
-    // Fill the container to desginage if a residual row/col is needed
-    HighsInt num_pivots_req = 0;
-    for (HighsInt i_col = 0; i_col < num_col; ++i_col){
-        double primal_val = lift_solution.col_value.at(i_col);
-        double lb = agglp.col_lower_.at(i_col);
-        double ub = agglp.col_upper_.at(i_col);
-        if (ipx_basis_->IsNonbasic(i_col) && 
-            (std::abs(primal_val - lb) > 1e-6 ||
-            std::abs(primal_val - ub) > 1e-6)){
-            // std::cout << "super or nonbasic col: " << i_col << std::endl;
-            col_needs_res_pivot.at(i_col) = 1;
-            num_pivots_req++;
-        }
+void HighsOCAggregate::buildTestBasisLU(HighsLpSolverObject& solver_object){
+    //// Highs LU ///////
+    // test_options.factor_pivot_tolerance = 1e-9;
+    // HighsLpSolverObject solver_object(elp, elpBasis, lift_solution, test_info, 
+    //                                 test_ekk, test_options, test_timer);
+    HighsLp& so_lp = solver_object.lp_;
+    HighsBasis& so_basis = solver_object.basis_;
+    HighsOptions& so_options = solver_object.options_;
+    HEkk& ekk_instance = solver_object.ekk_instance_;
+    HighsLp& ekk_lp = ekk_instance.lp_;
+    HighsSimplexStatus& ekk_status = ekk_instance.status_;
+    ekk_instance.moveLp(solver_object);
+    ekk_lp.residual_cols_.resize(0);
+    ekk_instance.setBasis(elpBasis);
+    ekk_instance.dual_edge_weight_.assign(elp.num_row_, 1.0);
+    ekk_instance.scattered_dual_edge_weight_.resize(elp.num_col_ + elp.num_row_);
+    ekk_instance.info_.backtracking_basis_edge_weight_.resize(elp.num_col_ + elp.num_row_);
+    std::vector<HighsInt>& ekk_basic_index_start = ekk_instance.basis_.basicIndex_;
+    std::vector<HighsInt> ekk_col_basic_row(colCnt + rowCnt + 2 * numResiduals);
+    for (HighsInt i_basic_idx = 0; i_basic_idx < elp.num_row_; ++i_basic_idx){
+        HighsInt i_var = ekk_basic_index_start.at(i_basic_idx);
+        test_basic_start.at(i_var) = 1;
     }
-    // std::cout << "num pivots required: " << num_pivots_req << std::endl;
+    HighsInt rank_deficiency = ekk_instance.initialiseForAggregator();
+    for (HighsInt i_basic_idx = 0; i_basic_idx < elp.num_row_; ++i_basic_idx){
+        HighsInt i_var = ekk_basic_index_start.at(i_basic_idx);
+        ekk_col_basic_row.at(i_var) = i_basic_idx;
+    }
+    std::vector<HighsInt> res_nonbasic(colCnt + numResiduals, -1);
+    if (rank_deficiency){
+        HVector col_aq;
+        HVector row_ep;
+        HighsInt rebuild = RebuildReason::kRebuildReasonNo;
+        col_aq.setup(elp.num_row_);
+        row_ep.setup(elp.num_row_);
+        for (HighsInt i_basic_idx = 0; i_basic_idx < elp.num_row_; ++i_basic_idx){
+            HighsInt i_var = ekk_basic_index_start.at(i_basic_idx);
+            test_basic_finish.at(i_var) = 1;
+        }
+        for (HighsInt i_var = 0; i_var < elp.num_col_ + elp.num_row_; ++i_var){
+            HighsInt was_basic = test_basic_start.at(i_var);
+            HighsInt is_basic = test_basic_finish.at(i_var);
+            if (was_basic && !is_basic){
+                HighsInt i_residual;
+                HighsInt i_parent;
+                HighsInt i_child;
+                HighsInt i_basic_row;
+                HighsInt i_basic_slack;
+                HighsInt i_pivot;
+                HighsInt is_par = isParent.at(i_var);
+                if (is_par){
+                    continue;
+                    // i_parent = i_var;
+                    // std::vector<HighsInt>& children = parent_to_child.at(i_parent);
+                    // for (auto chi : children){
+                    //     i_residual = child_to_res.at(chi);
+                    //     i_child = chi;
+                    //     i_basic_row = ekk_col_basic_row.at(i_child);
+                    //     i_basic_slack = i_basic_row + colCnt + numResiduals;
+                    //     // Swap in slack var to basis so x child of x parent can become basic in residual row
+                    //     ekk_instance.pivotColumnFtranForAggregator(i_basic_slack, col_aq); 
+                    //     ekk_instance.unitBtranForAggregator(i_basic_row, row_ep);
+                    //     ekk_instance.transformForUpdateForAggregator(&col_aq, &row_ep, i_basic_slack, &i_basic_row);
+                    //     ekk_instance.updatePivotsForAggregator(i_basic_slack, i_basic_row, 1);
+                    //     ekk_instance.updateFactorForAggregator(&col_aq, &row_ep, &i_basic_row, &rebuild);
+                    //     ekk_instance.updateMatrixForAggregator(i_basic_slack, i_child);
+                    //     test_basic_finish.at(i_child) = 1;
+                    //     // Swap in x that we just removed to residual rows and take out corresponding r's
+                    //     i_basic_row = residualRow.at(i_residual - colCnt);
+                    //     ekk_instance.pivotColumnFtranForAggregator(i_child, col_aq); 
+                    //     ekk_instance.unitBtranForAggregator(i_basic_row, row_ep);
+                    //     ekk_instance.transformForUpdateForAggregator(&col_aq, &row_ep, i_child, &i_basic_row);
+                    //     ekk_instance.updatePivotsForAggregator(i_child, i_basic_row, 1);
+                    //     ekk_instance.updateFactorForAggregator(&col_aq, &row_ep, &i_basic_row, &rebuild);
+                    //     ekk_instance.updateMatrixForAggregator(i_child, i_residual);
+                    //     ekk_lp.residual_cols_.push_back(i_residual);
+                    //     elpBasis.col_status.at(i_residual) = HighsBasisStatus::kLower;
+                    //     ekk_lp.col_lower_.at(i_residual) = 0;
+                    //     ekk_lp.col_upper_.at(i_residual) = 0;
+                    //     res_nonbasic.at(i_residual) = 1;
+                    // }
+                }
+                else{
+                    i_child = i_var;
+                    i_residual = child_to_res.at(i_child);
+                    HighsInt i_row = residualRow.at(i_residual - colCnt);
+                    ekk_instance.pivotColumnFtranForAggregator(i_child, col_aq); 
+                    ekk_instance.unitBtranForAggregator(i_row, row_ep);
+                    ekk_instance.transformForUpdateForAggregator(&col_aq, &row_ep, i_child, &i_row);
+                    ekk_instance.updatePivotsForAggregator(i_child, i_row, 1);
+                    ekk_instance.updateFactorForAggregator(&col_aq, &row_ep, &i_row, &rebuild);
+                    ekk_instance.updateMatrixForAggregator(i_child, i_residual);
+                    ekk_lp.residual_cols_.push_back(i_residual);
+                    elpBasis.col_status.at(i_residual) = HighsBasisStatus::kLower;
+                    ekk_lp.col_lower_.at(i_residual) = 0;
+                    ekk_lp.col_upper_.at(i_residual) = 0;
+                    res_nonbasic.at(i_residual) = 1;
+                }
+            }
+        }
+        ekk_instance.status_.has_invert = true;
+        ekk_instance.status_.has_fresh_invert = true;
+        bool is_now_full_rank = ekk_instance.getNonsingularInverseForAggregator();
+        ekk_instance.computePrimalForAggregator();
+        ekk_instance.computeSimplexPrimalInfeasibleForAggregator();
+        std::cout << "is now full rank: " << is_now_full_rank << std::endl;
+    }
+    for (HighsInt i_res = colCnt; i_res < colCnt + numResiduals; ++i_res){
+        if (elpBasis.col_status.at(i_res) != HighsBasisStatus::kBasic &&
+            res_nonbasic.at(i_res) != 1)
+            ekk_lp.residual_cols_.push_back(i_res);
+    }
+}
+
+void HighsOCAggregate::updateTestBasisLU(){
+    test_factor.addCols(numResiduals);
+    test_factor.addRows(&residual_ar);
+    test_factor.setup(elp.a_matrix_, test_basic_index);
+    test_factor.build();
 }
 
 void HighsOCAggregate::buildTestBasicIndex(){
-    int num_required = agglp.a_matrix_.num_row_;
-    int num_col = agglp.a_matrix_.num_col_;
-    int num_row = agglp.a_matrix_.num_row_;
-    HighsBasisStatus stat, basic = HighsBasisStatus::kBasic;
-    int num_so_far = 0;
-    // Set Highs IPM columns weights
-    col_weights.resize(num_col + num_row);
-    std::fill(col_weights.begin(), col_weights.end(), 0);
-    for (HighsInt i_col = 0; i_col < num_col; ++i_col){
-        HighsInt rep = colrep.at(i_col);
-        HighsInt num_nz = agglp.a_matrix_.numColNz(i_col);
-        double primal_val = lift_solution.col_value.at(i_col);
-        double lb = olp.col_lower_.at(rep);
-        double ub = olp.col_upper_.at(rep);
-        HighsInt possible_parent = i_col < pcolCnt ? 1 : 0;
-        if (ub == lb){
-            col_weights.at(i_col) = 0;
+    HighsInt num_required = elp.num_row_;
+    HighsInt num_have = 0;
+    test_basic_index.resize(0);
+    for (HighsInt i_col = 0; i_col < elp.num_col_; ++i_col){
+        if (num_have == num_required) break;
+        if (i_col < colCnt && elpBasis.col_status.at(i_col) == HighsBasisStatus::kBasic){
+            test_basic_index.push_back(i_col);
+            test_basic_start.at(i_col) = 1;
+            num_have++;
         }
-        else if (std::abs(primal_val - lb) < 1e-6 || std::abs(primal_val - ub) < 1e-6){
-            col_weights.at(i_col) = 0;
-        }
-        else if (lb == -kHighsInf && ub == kHighsInf){
-            col_weights.at(i_col) = kHighsInf;
-        }
-        else if (primal_val != lb && primal_val != ub){
-            col_weights.at(i_col) = num_row + (num_row - num_nz + 1);
-        }
-        else{
-            col_weights.at(i_col) = num_row - num_nz + 1;
+        else if (i_col >= colCnt){
+            test_basic_index.push_back(i_col);
+            test_basic_start.at(i_col) = 1;
+            num_have++;
         }
     }
-    // Get Slack values
-    std::vector<double> slack_vals(num_row);
-    for (HighsInt i_slack = num_col; i_slack < num_col + num_row; ++i_slack){
-        HighsInt i_row = i_slack - num_col;
-        HighsInt rep = rowrep.at(i_row) - numCol;
-        HighsInt num_nz = agglp.a_matrix_.numColNz(i_slack);
-        double row_val = lift_solution.row_value.at(i_row);
-        double lb = olp.row_lower_.at(rep);
-        double ub = olp.row_upper_.at(rep);
-        double slack_val;
-        if (lb == -kHighsInf && ub < kHighsInf){
-            slack_vals.at(i_row) = ub - row_val;
-        }
-        else if (lb > -kHighsInf && ub == kHighsInf){
-            slack_vals.at(i_row) = lb - row_val;
-        }
-        else{
-            slack_vals.at(i_row) = 0;
+    for (HighsInt i_row = 0; i_row < prowCnt; ++i_row){
+        if (num_have == num_required) break;
+        if (elpBasis.row_status.at(i_row) == HighsBasisStatus::kBasic){
+            test_basic_index.push_back(i_row + elp.num_col_);
+            test_basic_start.at(i_row + elp.num_col_) = 1;
+            num_have++;
         }
     }
-    // Set slack col weights for initial basis test
-    for (HighsInt i_slack = num_col; i_slack < num_col + num_row; ++i_slack){
-        HighsInt i_row = i_slack - num_col;
-        HighsInt rep = rowrep.at(i_row) - numCol;
-        HighsInt num_nz = agglp.a_matrix_.numColNz(i_slack);
-        double lb = agglp.row_lower_.at(i_row);
-        double ub = agglp.row_upper_.at(i_row);
-        double slack_val = slack_vals.at(i_row);
-        if (lb == ub){
-            col_weights.at(i_slack) = 0;
-        }
-        else if (lb == -kHighsInf && ub == kHighsInf){
-            col_weights.at(i_slack) = kHighsInf;
-        }
-        else if (slack_val != lb && slack_val != ub){
-            col_weights.at(i_slack) = num_row + (num_row - num_nz + 1);
-        }
-        else{
-            col_weights.at(i_slack) = num_row - num_nz + 1;
-        }
-    }
-    // // Fill basis with columns based on weights
-    // std::vector<HighsInt> col_perm = sortColWeights(col_weights);
-    // std::vector<HighsInt> un_perm(num_col + num_row);
-    // // for (HighsInt i_perm = 0; i_perm < num_col + num_row; ++i_perm){
-    // //     HighsInt i_col = col_perm.at(i_perm);
-    // //     un_perm.at(i_col) = i_perm;
-    // // }
-    // // for (HighsInt i_col = 0; i_col < num_col; ++i_col){
-    // //     stat = elpBasis.col_status.at(i_col);
-    // //     if (num_so_far == num_required) break;
-    // //     if (stat == basic){
-    // //         test_basic_index.push_back(i_col);
-    // //         num_so_far++;
-    // //     }
-    // // }
-    // // for (HighsInt i_row = 0; i_row < num_row; ++i_row){
-    // //     if (num_so_far == num_required) break;
-    // //     stat = elpBasis.row_status.at(i_row);
-    // //     if (stat == basic){set 
-    // //         test_basic_index.push_back(i_row + num_col);
-    // //         num_so_far++;
-    // //     }
-    // // }
-    // // std::vector<HighsInt> swapped_in(numCol, 0);
-    // for (HighsInt i_perm = 0; i_perm < num_col + num_row; ++i_perm){
-    //     if (num_so_far == num_required) break;
-    //     HighsInt i_col = col_perm.at(i_perm);
-    //     // if (i_col < numCol){
-    //     //     HighsInt rep = colrep[i_col];
-    //     //     HighsInt pcf = epMinusOne.front[rep];
-    //     //     HighsInt x_old = pFrontCol[pcf];
-    //     //     double x_old_weight = col_weights.at(x_old);
-    //     //     double i_col_weight = col_weights.at(i_col);
-    //     //     HighsInt 
-    //     //     i_col = (x_old_weight >= i_col_weight && 
-    //     //             !swapped_in.at(x_old)++ &&
-    //     //             !t ? x_old : i_col);
-    //     // }
-    //     test_basic_index.push_back(i_col);
-    //     num_so_far++;
-    // }
 }
 
 std::vector<HighsInt> HighsOCAggregate::sortColWeights(std::vector<double>& weights){
@@ -1329,50 +1375,58 @@ void HighsOCAggregate::fillTestBasicStart(){
         HighsInt i_col = test_basic_index.at(idx);
         test_basic_start.at(i_col) = true;
     }
-    std::vector<HighsInt> swapped_in(agglp.a_matrix_.num_col_, 0);
-    for (HighsInt idx = 0; idx < test_basic_index.size(); ++idx){
-        HighsInt i_col = test_basic_index.at(idx);
-        if (i_col >= agglp.a_matrix_.num_col_) continue;
-        HighsInt rep = colrep.at(i_col);
-        HighsInt pcf = epMinusOne.front.at(rep);
-        HighsInt i_old = pFrontCol.at(pcf);
-        if (i_col == i_old) continue;
-        if (!test_basic_start.at(i_old) && !swapped_in.at(i_old)++){
-            test_basic_start.at(i_old) = 1;
-            test_basic_start.at(i_col) = 0;
-            test_basic_index.at(idx) = i_old;
-        }
-    }
+    // std::vector<HighsInt> swapped_in(agglp.a_matrix_.num_col_, 0);
+    // for (HighsInt idx = 0; idx < test_basic_index.size(); ++idx){
+    //     HighsInt i_col = test_basic_index.at(idx);
+    //     if (i_col >= agglp.a_matrix_.num_col_) continue;
+    //     HighsInt rep = colrep.at(i_col);
+    //     HighsInt pcf = epMinusOne.front.at(rep);
+    //     HighsInt i_old = pFrontCol.at(pcf);
+    //     if (i_col == i_old) continue;
+    //     if (!test_basic_start.at(i_old) && !swapped_in.at(i_old)++){
+    //         test_basic_start.at(i_old) = 1;
+    //         test_basic_start.at(i_col) = 0;
+    //         test_basic_index.at(idx) = i_old;
+    //     }
+    // }
 }
 
 void HighsOCAggregate::fillTestBasicFinish(){
     for (HighsInt idx = 0; idx < test_basic_index.size(); ++idx){
         HighsInt i_col = test_basic_index.at(idx);
-        test_basic_finish.at(i_col) = true;
+        if (i_col < colCnt + rowCnt)
+            test_basic_finish.at(i_col) = true;
     }
 }
 
 void HighsOCAggregate::markDependentColumns(){
-    for (HighsInt i_col = 0; i_col < agglp.a_matrix_.num_col_; ++i_col){
+    for (HighsInt i_col = 0; i_col < colCnt; ++i_col){
         HighsInt start = test_basic_start.at(i_col);
         HighsInt finish = test_basic_finish.at(i_col);
         HighsInt rep = colrep.at(i_col);
         double lb = olp.col_lower_.at(rep);
         double ub = olp.col_upper_.at(rep);
         double primal_val = lift_solution.col_value.at(i_col);
-        if (start != finish){
+        HighsInt lb_test = std::abs(primal_val - lb) < 1e-6;
+        HighsInt ub_test = std::abs(primal_val - ub) < 1e-6;
+        HighsInt bounded = lb_test || ub_test;
+        if (start == 1 && finish != 1){
             col_needs_res_pivot.at(i_col) = 1;
+            continue;
         }
-        else if (!start && primal_val != lb && primal_val != ub){
+        if (!start && !bounded){
             col_needs_res_pivot.at(i_col) = 1;
+            continue;
         }
     }
 }
 
 void HighsOCAggregate::buildBasis(bool finish, bool extended){
     num_basic = 0;
-    buildColBasis();
-    buildRowBasis();
+    // buildRowBasis();
+    // buildColBasis();
+    buildTestColBasis();
+    buildTestRowBasis();
     elpBasis.alien = false;
 }
 
@@ -1406,25 +1460,50 @@ void HighsOCAggregate::changeBasis(){
     //         num_basic++;
     //     }
     // }
-    int num_bas = 0;
-    int num_set_bas = 0;
-    int num_sbas = 0;
-    int num_set_sbas = 0;
-    for (HighsInt i_col = 0; i_col < agglp.num_col_ + agglp.num_row_; ++i_col){
-        bool basic = ipx_basis_->IsBasic(i_col);
-        if (basic && i_col < agglp.num_col_) ++num_bas;
-        else if (basic) ++num_sbas;
-        HighsInt super_basic = col_needs_res_pivot.at(i_col);
-        if ((basic || super_basic) && i_col < agglp.num_col_){
+    // int num_bas = 0;
+    // int num_set_bas = 0;
+    // int num_sbas = 0;
+    // int num_set_sbas = 0;
+    // for (HighsInt i_col = 0; i_col < agglp.num_col_ + agglp.num_row_; ++i_col){
+    //     bool basic = ipx_basis_->IsBasic(i_col);
+    //     if (basic && i_col < agglp.num_col_) ++num_bas;
+    //     else if (basic) ++num_sbas;
+    //     HighsInt super_basic = col_needs_res_pivot.at(i_col);
+    //     if ((basic || super_basic) && i_col < agglp.num_col_){
+    //         elpBasis.col_status.at(i_col) = HighsBasisStatus::kBasic;
+    //         num_set_bas++;
+    //         num_basic++;
+    //     }
+    //     else if (basic){
+    //         HighsInt i_row = i_col - agglp.num_col_;
+    //         elpBasis.row_status.at(i_row) = HighsBasisStatus::kBasic;
+    //         num_set_sbas++;
+    //         num_basic++;
+    //     }
+    // }
+    for (HighsInt i_base = 0; i_base < test_basic_index.size(); ++i_base){
+        HighsInt i_col = test_basic_index.at(i_base);
+        if (i_col < colCnt)
             elpBasis.col_status.at(i_col) = HighsBasisStatus::kBasic;
-            num_set_bas++;
+        else
+            elpBasis.row_status.at(i_col - colCnt) = HighsBasisStatus::kBasic;
+        num_basic++;
+    }
+    for (HighsInt i_col = 0; i_col < colCnt; ++i_col){
+        HighsInt needs_pivot = col_needs_res_pivot.at(i_col);
+        if (needs_pivot){
+            elpBasis.col_status.at(i_col) = HighsBasisStatus::kBasic;
             num_basic++;
         }
-        else if (basic){
-            HighsInt i_row = i_col - agglp.num_col_;
-            elpBasis.row_status.at(i_row) = HighsBasisStatus::kBasic;
-            num_set_sbas++;
-            num_basic++;
+    }
+    test_basic_index.resize(0);
+    for (HighsInt i_col = 0; i_col < colCnt; ++i_col){
+        if (elpBasis.col_status.at(i_col) == HighsBasisStatus::kBasic)
+            test_basic_index.push_back(i_col);
+    }
+    for (HighsInt i_row = 0; i_row < rowCnt; ++i_row){
+        if (elpBasis.row_status.at(i_row) == HighsBasisStatus::kBasic){
+            test_basic_index.push_back(i_row + colCnt + numResiduals);
         }
     }
 }
@@ -1441,15 +1520,15 @@ void HighsOCAggregate::buildColBasis(){
         pf = epMinusOne.front[crep];
         pCol = pFrontCol[pf];
         status = basis.col_status[pCol];
-        if (mark_degenerate.at(iCol)){
-            elpBasis.col_status.at(iCol) = basic;
-            splitFromNonbasicCount.at(pCol)++;
-            continue;
-        }
-        if (mark_degenerate.at(pCol)){
-            elpBasis.col_status.at(iCol) = basic;
-            continue;
-        }
+        // if (mark_degenerate.at(iCol)){
+        //     elpBasis.col_status.at(iCol) = basic;
+        //     splitFromNonbasicCount.at(pCol)++;
+        //     continue;
+        // }
+        // if (mark_degenerate.at(pCol)){
+        //     elpBasis.col_status.at(iCol) = basic;
+        //     continue;
+        // }
         // if (mark_degenerate.at(pCol) && splitFromNonbasicCount.at(pCol) < splitSize.at(pCol) - 1){
         //     elpBasis.col_status.at(iCol) = nonbasic;
         //     continue;
@@ -1459,6 +1538,11 @@ void HighsOCAggregate::buildColBasis(){
         //     continue;
         // }
         elpBasis.col_status[iCol] = status;
+        // if (status == basic and num_basic < rowCnt){ 
+        //     test_basic_index.push_back(iCol);
+        //     test_basic_start.at(iCol) = 1;
+        //     num_basic++;
+        // }
     }
     HighsInt col_index = colCnt;
     for (iCol = colCnt; iCol < colCnt + numResiduals; ++iCol){
@@ -1468,16 +1552,41 @@ void HighsOCAggregate::buildColBasis(){
         // }
         elpBasis.col_status[iCol] = HighsBasisStatus::kLower;
     }
-    for (iCol = 0; iCol < colCnt + numResiduals; ++iCol){
-        if (elpBasis.col_status.at(iCol) == HighsBasisStatus::kBasic)
+    // for (iCol = 0; iCol < colCnt + numResiduals; ++iCol){
+    //     if (elpBasis.col_status.at(iCol) == HighsBasisStatus::kBasic)
+    //         num_basic++;
+    // }
+}
+
+void HighsOCAggregate::buildTestColBasis(){
+    elpBasis.col_status.resize(colCnt + numResiduals);
+    std::fill_n(elpBasis.col_status.begin(), elpBasis.col_status.size(), HighsBasisStatus::kLower);
+    for (HighsInt i_col = 0; i_col < colCnt; ++i_col){
+        if (num_basic == rowCnt + numResiduals) return;
+        HighsInt rep = colrep.at(i_col);
+        HighsInt pf = epMinusOne.front.at(rep);
+        HighsInt p_col = pFrontCol.at(pf);
+        HighsBasisStatus status = basis.col_status.at(p_col);
+        if (status == HighsBasisStatus::kBasic){
+            elpBasis.col_status.at(i_col) = status;
             num_basic++;
+        }
+    }
+    for (HighsInt i_col = colCnt; i_col < colCnt + numResiduals; ++i_col){
+        if (num_basic == rowCnt + numResiduals) return;
+        // HighsInt i_child = res_to_child.at(i_col);
+        // if (elpBasis.col_status.at(i_child) == HighsBasisStatus::kBasic) continue;
+        elpBasis.col_status.at(i_col) = HighsBasisStatus::kBasic;
+        // elp.col_lower_.at(i_col) = -kHighsInf;
+        // elp.col_upper_.at(i_col) = kHighsInf;
+        num_basic++;
     }
 }
 
 void HighsOCAggregate::buildRowBasis(){
     int iRow, r, pr, pf, rrep, rlen;
     int of, nf;
-    HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
+    HighsBasisStatus status, basic = HighsBasisStatus::kBasic;
     // std::fill(elpBasis.row_status.begin(), elpBasis.row_status.end(), basic);
     elpBasis.row_status.resize(rowCnt + numResiduals);
     std::fill_n(elpBasis.row_status.begin(), elpBasis.row_status.size(), basic);
@@ -1488,14 +1597,32 @@ void HighsOCAggregate::buildRowBasis(){
     int numNonBasicSplits = 0;
     int numNonBasic = 0;
     for (iRow = 0; iRow < prowCnt; ++iRow){
-        elpBasis.row_status[iRow] = basis.row_status[iRow];
+        status = basis.row_status[iRow];
+        elpBasis.row_status[iRow] = status;
+        // if (status == basic && num_basic < rowCnt){ 
+        //     test_basic_index.push_back(iRow + colCnt);
+        //     test_basic_start.at(iRow + colCnt) = 1;
+        // }
     }
     for (iRow = rowCnt; iRow < rowCnt + numResiduals; ++iRow){
         elpBasis.row_status[iRow] = HighsBasisStatus::kLower;
     }
-    for (iRow = 0; iRow < rowCnt + numResiduals; ++iRow){
-        if (elpBasis.row_status.at(iRow) == HighsBasisStatus::kBasic)
+    // for (iRow = 0; iRow < rowCnt + numResiduals; ++iRow){
+    //     if (elpBasis.row_status.at(iRow) == HighsBasisStatus::kBasic)
+    //         num_basic++;
+    // }
+}
+
+void HighsOCAggregate::buildTestRowBasis(){
+    elpBasis.row_status.resize(rowCnt + numResiduals);
+    std::fill_n(elpBasis.row_status.begin(), elpBasis.row_status.size(), HighsBasisStatus::kLower);
+    if (num_basic == rowCnt + numResiduals) return;
+    for (HighsInt p_row = 0; p_row < prowCnt; ++p_row){
+        if (num_basic == rowCnt + numResiduals) return;
+        if (basis.row_status.at(p_row) == HighsBasisStatus::kBasic){
+            elpBasis.row_status.at(p_row) = HighsBasisStatus::kBasic;
             num_basic++;
+        }
     }
 }
 
@@ -1702,4 +1829,20 @@ HighsBasis HighsOCAggregate::getBasis(){
     // elpBasis.alien = false;
     // elpBasis.was_alien = false;
     return elpBasis;
+}
+
+HEkk& HighsOCAggregate::getEkkInstance(){
+    return test_ekk;
+}
+
+HighsSolution& HighsOCAggregate::getElpSolution(){
+    return lift_solution;
+}
+
+HighsOptions& HighsOCAggregate::getElpOptions(){
+    return test_options;
+}
+
+HighsInfo& HighsOCAggregate::getElpInfo(){
+    return test_info;
 }

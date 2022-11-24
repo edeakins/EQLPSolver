@@ -222,10 +222,25 @@ class HEkk {
   // track pivoted residuals
   std::vector<HighsInt> pivoted_residual_col;
   std::vector<HighsInt> pivoted_residual_row;
+  HighsInt computeFactor();
+  void initialiseForSolve();
+  HighsInt initialiseForAggregator();
+  void pivotColumnFtranForAggregator(const HighsInt iCol, HVector& col_aq);
+  void unitBtranForAggregator(const HighsInt iRow, HVector& row_ep);
+  void transformForUpdateForAggregator(HVector* column, HVector* row_ep,
+                          const HighsInt variable_in, HighsInt* row_out);
+  void updatePivotsForAggregator(const HighsInt variable_in, const HighsInt row_out,
+                    const HighsInt move_out);
+  void updateFactorForAggregator(HVector* column, HVector* row_ep, HighsInt* iRow,
+                    HighsInt* hint);
+  void updateMatrixForAggregator(const HighsInt variable_in, const HighsInt variable_out);
+  bool getNonsingularInverseForAggregator(const HighsInt solve_phase = 0);
+  void computePrimalForAggregator();
+  void computeSimplexPrimalInfeasibleForAggregator();
 
  private:
   bool isUnconstrainedLp();
-  void initialiseForSolve();
+//   void initialiseForSolve(); \\ Ethan you made this public to use in aggregator code.
   void setSimplexOptions();
   void updateSimplexOptions();
   void initialiseSimplexLpRandomVectors();
@@ -238,7 +253,7 @@ class HEkk {
   void computePrimalObjectiveValue();
   void computeDualObjectiveValue(const HighsInt phase = 2);
   bool rebuildRefactor(HighsInt rebuild_reason);
-  HighsInt computeFactor();
+//   HighsInt computeFactor(); // Ethan you made this public to use in aggregator code.
   void computeDualSteepestEdgeWeights(const bool initial = false);
   double computeDualSteepestEdgeWeight(const HighsInt iRow, HVector& row_ep);
   void updateDualSteepestEdgeWeights(const HighsInt row_out,
