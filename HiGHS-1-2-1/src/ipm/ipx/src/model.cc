@@ -948,6 +948,22 @@ void Model::ScalePoint(Vector& x, Vector& slack, Vector& y, Vector& z) const {
         x[j] *= -1.0;
         z[j] *= -1.0;
     }
+    for (double& val : x){
+        if (std::fabs(val - 0) < 1e-6)
+            val = 0;
+    }
+    for (double& val : slack){
+        if (std::fabs(val - 0) < 1e-6)
+            val = 0;
+    }
+    for (double& val : y){
+        if (std::fabs(val - 0) < 1e-6)
+            val = 0;
+    }
+    for (double& val : z){
+        if (std::fabs(val - 0) < 1e-6)
+            val = 0;
+    }
 }
 
 void Model::ScalePoint(Vector& x, Vector& xl, Vector& xu, Vector& slack,

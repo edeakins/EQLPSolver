@@ -41,6 +41,7 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
   // if (res != IpxStatus::OK) return false;
 
   ipx::Parameters parameters;
+  // parameters.dualize = false;
   parameters.crossover = true;
   parameters.crash_basis = 1;  // 0 = slack basis; 1 = crash basis
 
@@ -83,7 +84,7 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
         break;
     }
   }
-  solution.dual_valid = false;
+  // solution.dual_valid = false;
   if (solution.dual_valid && solution.col_dual.size() == num_col &&
       solution.row_dual.size() == num_row) {
     std::cout << "Calling ipx crossover with dual values" << std::endl;

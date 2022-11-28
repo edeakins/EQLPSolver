@@ -166,6 +166,7 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
     const Vector& lb = model_.lb();
     const Vector& ub = model_.ub();
     const SparseMatrix& AI = model_.AI();
+    // model_.dualized_ = false;
 
     ClearSolution();
     control_.Log() << "Crossover from starting point\n";
