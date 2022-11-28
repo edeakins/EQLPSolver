@@ -2246,15 +2246,16 @@ bool HEkk::rebuildRefactor(HighsInt rebuild_reason) {
       // test system
       const double error_tolerance =
           options_->rebuild_refactor_solution_error_tolerance;
-      std::cout << "factor error start" << std::endl;
+      // std::cout << "factor error start" << std::endl;
       if (error_tolerance > 0) {
         solution_error = factorSolveError();
         refactor = solution_error > error_tolerance;
       }
-      std::cout << "factor error end" << std::endl;
+      // std::cout << "factor error end" << std::endl;
     }
   }
-  const bool report_refactorization = true; // Ethan you did this originally false
+  // const bool report_refactorization = true; // Ethan you did this originally false
+  const bool report_refactorization = false;
   if (report_refactorization) {
     const std::string logic = refactor ? "   " : "no   ";
     if (info_.update_count) //&&

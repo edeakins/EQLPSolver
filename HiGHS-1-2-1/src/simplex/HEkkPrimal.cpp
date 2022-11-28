@@ -771,9 +771,9 @@ void HEkkPrimal::orbitalCrossover(){
       //   ekk_instance_.info_.ready_for_crash_basis_construction = 1;
       //   break;
       // }
-      std::cout << "iterate started" << std::endl;
+      // std::cout << "iterate started" << std::endl;
       iterate();
-      std::cout << "iterate finished" << std::endl;
+      // std::cout << "iterate finished" << std::endl;
       if (ekk_instance_.bailoutOnTimeIterations()) return;
       if (solve_phase == kSolvePhaseError) return;
       assert(solve_phase == kSolvePhaseOrbitalCrossover);
@@ -1116,6 +1116,7 @@ void HEkkPrimal::iterate() {
   // Perform CHUZC
   //
   chuzc();
+  std::cout << "variable in: " << variable_in << std::endl;
   if (variable_in == -1) {
     rebuild_reason = kRebuildReasonPossiblyOptimal;
     return;

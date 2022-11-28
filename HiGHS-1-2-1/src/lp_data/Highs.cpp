@@ -869,7 +869,7 @@ HighsStatus Highs::run() {
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
         change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (!discrete) continue;
+        if (change < 1000 && !discrete) continue;
         // if (!discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
