@@ -3796,7 +3796,7 @@ HighsStatus Highs::crossover(HighsSolution& solution) {
 #ifdef IPX_ON
   std::cout << "Loading crossover...\n";
   HighsBasis basis;
-  bool x_status = callCrossover(model_.lp_, options_, solution, basis);
+  bool x_status = callCrossover(model_.lp_, options_, solution, basis, info_);
   if (!x_status) return HighsStatus::kError;
 
   setBasis(basis);
@@ -3814,7 +3814,7 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp) {
   std::cout << "Loading crossover...\n";
   HighsBasis basis;
   solution.dual_valid = true;
-  bool x_status = callCrossover(lp, options_, solution, basis);
+  bool x_status = callCrossover(lp, options_, solution, basis, info_);
   if (!x_status) return HighsStatus::kError;
   info_.basis_validity = kBasisValidityValid;
 

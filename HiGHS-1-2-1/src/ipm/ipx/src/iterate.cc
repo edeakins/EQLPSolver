@@ -235,12 +235,12 @@ bool Iterate::optimal() const {
 
 bool Iterate::term_crit_reached() const {
     if (feasible() && optimal()) {
-        if (crossover_start_ <= 0.0)
-            return true;
+        // if (crossover_start_ <= 0.0)
+        //     return true;
         double pres, dres;
         ResidualsFromDropping(&pres, &dres);
-        if (pres <= crossover_start_ * (1.0+model_.norm_bounds()) &&
-            dres <= crossover_start_ * (1.0+model_.norm_c()))
+        if (pres <= 1e-10 * (1.0+model_.norm_bounds()) &&
+            dres <= 1e-10 * (1.0+model_.norm_c()))
             return true;
     }
     return false;
