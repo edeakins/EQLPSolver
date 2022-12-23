@@ -44,6 +44,7 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
   // parameters.dualize = false;
   parameters.crossover = true;
   parameters.crash_basis = 1;  // 0 = slack basis; 1 = crash basis
+  parameters.time_limit = options.time_limit;
 
   ipx::LpSolver lps;
   lps.SetParameters(parameters);

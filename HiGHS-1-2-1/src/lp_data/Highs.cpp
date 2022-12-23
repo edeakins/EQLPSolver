@@ -811,6 +811,24 @@ HighsStatus Highs::run() {
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
     timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
     setBasisValidity();
     // If partition is discrete, we are done and don't need
     // to do any orbital crossover pivots
@@ -875,6 +893,24 @@ HighsStatus Highs::run() {
         call_status =
             callSolveLp(ealp_, "Solving LP with Orbital Crossover");
         timer_.stop(timer_.orbital_crossover_clock);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                            return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
@@ -982,6 +1018,24 @@ HighsStatus Highs::run() {
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
     timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
     setBasisValidity();
     // If partition is discrete, we are done and don't need
     // to do any orbital crossover pivots
@@ -1046,6 +1100,24 @@ HighsStatus Highs::run() {
         call_status =
             callSolveLp(ealp_, "Solving LP with Orbital Crossover");
         timer_.stop(timer_.orbital_crossover_clock);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                            return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
@@ -1128,12 +1200,48 @@ HighsStatus Highs::run() {
     call_status =
         callSolveLp(alp_, "Solving ALP with IPX");
     timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
     setBasisValidity();
     while(!discrete)
       refinePartition();
     HighsSolution interior_point = 
       aggregator_.buildSolution(partition_, solution_);
-    crossover(interior_point, original_lp);
+    call_status = crossover(interior_point, original_lp);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
     stop_highs_run_clock = true;
     called_return_from_run = false;
   }

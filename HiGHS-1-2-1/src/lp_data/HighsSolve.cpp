@@ -94,20 +94,23 @@ HighsStatus solveLp(HighsLpSolverObject& solver_object, const string message) {
       // ToDo: Check whether simplex can exploit the primal solution returned by
       // IPX
       highsLogUser(options.log_options, HighsLogType::kWarning,
-                   "Imprecise solution returned from IPX, so use simplex to "
-                   "clean up\n");
-      // Reset the return status since it will now be determined by
-      // the outcome of the simplex solve
-      return_status = HighsStatus::kOk;
-      call_status = solveLpSimplex(solver_object);
-      return_status = interpretCallStatus(options.log_options, call_status,
-                                          return_status, "solveLpSimplex");
-      if (return_status == HighsStatus::kError) return return_status;
-      if (!isSolutionRightSize(solver_object.lp_, solver_object.solution_)) {
-        highsLogUser(options.log_options, HighsLogType::kError,
-                     "Inconsistent solution returned from solver\n");
-        return HighsStatus::kError;
-      }
+                   "Imprecise solution returned from IPX, exit from solver \n");
+      return HighsStatus::kWarning;
+      // highsLogUser(options.log_options, HighsLogType::kWarning,
+      //              "Imprecise solution returned from IPX, so use simplex to "
+      //              "clean up\n");
+      // // Reset the return status since it will now be determined by
+      // // the outcome of the simplex solve
+      // return_status = HighsStatus::kOk;
+      // call_status = solveLpSimplex(solver_object);
+      // return_status = interpretCallStatus(options.log_options, call_status,
+      //                                     return_status, "solveLpSimplex");
+      // if (return_status == HighsStatus::kError) return return_status;
+      // if (!isSolutionRightSize(solver_object.lp_, solver_object.solution_)) {
+      //   highsLogUser(options.log_options, HighsLogType::kError,
+      //                "Inconsistent solution returned from solver\n");
+      //   return HighsStatus::kError;
+      // }
     }
 #else
     highsLogUser(options.log_options, HighsLogType::kError
