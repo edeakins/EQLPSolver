@@ -1244,6 +1244,9 @@ HighsStatus Highs::run() {
     }
     stop_highs_run_clock = true;
     called_return_from_run = false;
+    timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         info_.crossover_time);
   }
   else if (basis_.valid || options_.presolve == kHighsOffString) {
     // There is a valid basis for the problem or presolve is off
