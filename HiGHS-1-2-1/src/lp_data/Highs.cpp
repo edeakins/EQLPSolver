@@ -1164,6 +1164,17 @@ HighsStatus Highs::run() {
     HighsSolution interior_point = 
       aggregator_.buildSolution(partition_, solution_);
     timer_.stop(timer_.lift_ipm_solution_clock);
+    // This is for producing interior point solution files for SCIP crossover testing
+    solution_ = interior_point;
+    solution_.value_valid = true;
+    solution_.dual_valid = true;
+    basis_.valid = false;
+    model_.lp_ = alp_;
+    std::string out_f = "interior_point_solutions_MIPLIB/" + original_lp.model_name_ + ".sol";
+    writeSolution(out_f.c_str(), kSolutionStylePretty);
+    called_return_from_run = false;
+    return returnFromRun(return_status);
+    //
     timer_.start(timer_.crossover_clock);
     crossover(interior_point, alp_);
     timer_.stop(timer_.crossover_clock);

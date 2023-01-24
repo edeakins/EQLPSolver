@@ -1116,7 +1116,7 @@ void HEkkPrimal::iterate() {
   // Perform CHUZC
   //
   chuzc();
-  std::cout << "variable in: " << variable_in << std::endl;
+  // std::cout << "variable in: " << variable_in << std::endl;
   if (variable_in == -1) {
     rebuild_reason = kRebuildReasonPossiblyOptimal;
     return;
