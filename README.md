@@ -38,4 +38,5 @@ To benchmark and compare orbital crossover to other methods in HiGHS, we include
 * "run_benchmarks_ipmagg_miplib_2017.sh": Run HiGHS with ipm and HiGHS crossover to solve initial aggregate LP, lift the solution to the original LP, and use HiGHS crossover to achieve a vertex solution on all instances in MIPLIB-2017.
 * "run_benchmarks_d_miplib_2017.sh": Run HiGHS with dual simplex on all instances in MIPLIB-2017.
 * "run_benchmarks_ipm_miplib_2017.sh": Run HiGHS with ipm and HiGHS crossover on all instances in MIPLIB-2017.
+
 All output files from any of these shell scripts will be placed in a directory named "Timings" inside whichever directory the shell script is called from.  For consistency, we recommend calling the shell scripts from the "EQLPSolver/TestSripts/" directory so that the output files will be contained in the "EQLPSolver/TestScripts/Timings/" directory.  Each output file is stored as ".csv" file and can be opened via Microsoft excel for easy viewing.  
