@@ -976,6 +976,9 @@ HighsStatus Highs::run() {
       // timer_.stop(timer_.orbital_crossover_clock);
       stop_highs_run_clock = true;
       called_return_from_run = false;
+      // countDegeneratePivots();
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
     }
@@ -1166,6 +1169,8 @@ HighsStatus Highs::run() {
       // timer_.stop(timer_.orbital_crossover_clock);
       stop_highs_run_clock = true;
       called_return_from_run = false;
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
     }
@@ -2786,6 +2791,18 @@ void Highs::trimOrbitalCrossoverSolution(){
   trimSolution.col_dual.resize(numAggregateCol);
   trimSolution.row_value.resize(numAggregateRow);
   trimSolution.row_dual.resize(numAggregateRow);
+}
+
+void Highs::countDegeneratePivots(){
+  HighsInt num_non_r_col = ealp_.num_aggregate_cols_;
+  HighsInt num_total_col = ealp_.a_matrix_.num_col_;
+  HighsInt i_r_col = 0;
+  for (i_r_col = num_non_r_col; i_r_col < num_total_col; i_r_col++){
+    double r_val = alpSolution_.col_value.at(i_r_col);
+    if (std::fabs(r_val - 0) < 1e-6)
+      info_.num_degen_pivots++;
+    info_.num_total_pivots++;
+  }
 }
 
 void Highs::getLiftedBasis(){

@@ -34,6 +34,8 @@ class HighsLp {
   HighsInt num_aggregate_cols_;
   HighsInt num_aggregate_rows_;
   HighsInt level;
+  HighsInt num_total_pivot = 0;
+  HighsInt num_degen_pivot = 0;
   // std::vector<std::pair<int, int> > pairs; // remove when done debugging
   
   std::vector<double> col_cost_;

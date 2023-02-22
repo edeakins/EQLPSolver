@@ -1204,6 +1204,7 @@ class Highs {
   void getLiftedBasis();
   void trimOrbitalCrossoverSolution();
   void trimOrbitalCrossoverBasis();
+  void countDegeneratePivots();
   void swapDependentColsOut(std::vector<HighsInt>& redundant_rows);
   double measureChangeInPartitionSize(HighsLp& original_lp, OCPartition& old_partition);
   bool discrete = true;

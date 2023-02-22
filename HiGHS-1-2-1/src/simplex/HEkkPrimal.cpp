@@ -1358,7 +1358,6 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
     }
     // if (residual_col > ekk_instance_.lp_.num_degenerate_cols_ - ekk_instance_.lp_.num_aggregate_cols_){
     //   // std::cout << "num_degen: " << num_degen << std::endl;
-    //   // int fuck = 7;
     //   std::ofstream f;
     //   f.open("../../debugBuild/ex9GoodBasisAfterDegenPivots.txt");
     //   for (int i = 0; i < ekk_instance_.basis_.basicIndex_.size(); ++i){
@@ -1666,6 +1665,9 @@ void HEkkPrimal::chooseRow() {
       }
     }
   }
+  if (std::fabs(relaxTheta - 0) < 1e-6)
+    ekk_instance_.lp_.num_degen_pivot++;
+  ekk_instance_.lp_.num_total_pivot++; 
   // std::cout << "num_degen: " << num_degen << std::endl;
   // std::cin.get();
   analysis->simplexTimerStop(Chuzr2Clock);

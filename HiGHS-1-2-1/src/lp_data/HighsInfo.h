@@ -168,6 +168,8 @@ struct HighsInfoStruct {
   HighsInt reduced_cols;
   HighsInt original_cols;
   HighsInt original_rows;
+  HighsInt num_degen_pivots = 0;
+  HighsInt num_total_pivots = 0;
   double row_reduct_percent;
   double col_reduct_percent;
   std::string instance_name;

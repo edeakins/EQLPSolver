@@ -147,7 +147,9 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, "Solve (Total),");
       fprintf(file, "Highs Run,");
       fprintf(file, "Original Columns (Reductions),");
-      fprintf(file, "Original Rows (Reductions)\n");
+      fprintf(file, "Original Rows (Reductions),");
+      fprintf(file, "Degenerate Crossover Pivots,");
+      fprintf(file, "Total Crossover Pivots\n");
       // fprintf(file, "Columns Reduced (%),");
       // fprintf(file, "Rows Reduced (%)\n");
       // Write instance name
@@ -181,7 +183,13 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.original_cols << " (-" << info.original_cols - info.reduced_cols << "),";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << ")\n";
+      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << "),";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.num_degen_pivots << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.num_total_pivots << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
       // time << info.col_reduct_percent << ",";
@@ -224,7 +232,13 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.original_cols << " (-" << info.original_cols - info.reduced_cols << "),";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << ")\n";
+      time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << "),";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.num_degen_pivots << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.num_total_pivots << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
       // time << info.col_reduct_percent << ",";
