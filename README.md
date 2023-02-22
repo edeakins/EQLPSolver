@@ -26,6 +26,9 @@ The executable "./highs" can be given five different solver options via the comm
 * "./highs filename --solver=dual": Run HiGHS using dual simplex solver to solve the LP.
 * "./highs filename --solver=ipm": Run HiGHS using ipm and crossover to solve the LP.
 
+# Benchmark instances
+Benchmark instances are stored in the directory "EQLPSolver/MIPLIB-2017" and "EQLPSolver/HS-COV-COD".  Initially, when you clone the repo, all instances are in a ".gz" file format.  You will need gunzip to decompress the files before passing them to the HiGHS executable.
+
 # Running benchmarks
 To benchmark and compare orbital crossover to other methods in HiGHS, we include shell scripts in the directory "EQLPSolver/TestScripts/" to be executed via a terminal.  In total, there are eleven scripts.  One of these scripts, "run_benchmarks.sh" will run HiGHS with all solver options for all instances in both the HS-COV-COD instance suite and the MIPLIB-2017 instance suite.  The other ten scripts will run an individual benchmark for a HiGHS solver option on one of the instance suites.  We list these below.
 * "run_benchmarks_ocd_hs_cov_cod.sh": Run HiGHS with orbital crossover with dual simplex to solve initial aggregate LP on all instances in HS-COV-COD.
