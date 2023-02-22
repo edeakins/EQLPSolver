@@ -26,3 +26,7 @@ The executable "./highs" can be given five different solver options via the comm
 * "./highs filename --solver=dual": Run HiGHS using dual simplex solver to solve the LP.
 * "./highs filename --solver=ipm": Run HiGHS using ipm and crossover to solve the LP.
 
+# Running benchmarks
+To benchmark and compare orbital crossover to other methods in HiGHS, we include shell scripts to be executed via a terminal.  In total, there are eleven scripts.
+One of these scripts will run HiGHS with all solver options for all instances in both the HS-COV-COD instance suite and the MIPLIB-2017 instance suite.  The other ten scripts will run an individual benchmark for a HiGHS solver option on one of the instance suites.  For example, if the user wants to test Orbital Crossover with dual simplex to solve the initial aggregate LP, the 
+
