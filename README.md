@@ -11,7 +11,7 @@ Orbtial Crossover is implemented in HiGHS version 1.2.  With that, HiGHS require
 * Change the branch to the "stable" branch.  The default branch is "master".
 * Change directory into "HiGHS-1-2-1".
 * Make a directory named "build" and change directory into it.
-* * Note: The "build" directory needs to be with a lower case "b" for the benchmarks scripts.
+ * Note: The "build" directory needs to be with a lower case "b" for the benchmarks scripts.
 * Run the command "cmake .." within the "build" directory.
 * Once this command completes, run the command "make" within the "build" directory. 
 * Once this command completes, the "highs" executable is located within "build/bin".
