@@ -5,7 +5,7 @@ EQLPSolver is the GitHub directory containing HiGHS 1-2-1 with Orbital Crossover
 Orbital Crossover is a method of obtaining a vertex solution to a Linear Programming instance from an interior point solution using symmetry information from the problem.
 
 # Installation
-Orbtial Crossover is implemented in HiGHS version 1.2.  With that, HiGHS requires cmake (version 3 mininum) for installation.  EQLPSolver requires a unix operating system.  Once you have cmake installed the following steps will install HiGHS version 1.2 with orbital crossover capabilities on your machine.
+EQLPSolver requires a unix operating system.  Orbtial Crossover is implemented in HiGHS version 1.2.  With that, HiGHS requires cmake (version 3 mininum) for installation.  Once you have cmake installed the following steps will install HiGHS version 1.2 with orbital crossover capabilities on your machine.
 * Clone the repository into a directory of your choice.
 * cd into the EQLPSolver directory.
 * Change the branch to the "stable" branch.  The default branch is "master".
