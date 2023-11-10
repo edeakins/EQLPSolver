@@ -117,6 +117,10 @@ public:
                                    const double* slack_start,
                                    const double* y_start,
                                    const double* z_start);
+    Int PrimalCrossoverFromStartingPoint(const double* x_start,
+                                   const double* slack_start,
+                                   const double* y_start,
+                                   const double* z_start);
 
     // -------------------------------------------------------------------------
     // The remaining methods are for debugging.
@@ -171,6 +175,7 @@ private:
     void RunMainIPM(IPM& ipm);
     void BuildCrossoverStartingPoint();
     void RunCrossover();
+    void RunPrimalCrossover();
     void PrintSummary();
 
     Control control_;

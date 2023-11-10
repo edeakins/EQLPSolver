@@ -1253,6 +1253,174 @@ HighsStatus Highs::run() {
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
          info_.crossover_time);
   }
+  else if (options_.solver == kDualAggregateHighsCrossoverString){
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kSimplexString;
+    options_.run_crossover = false;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving ALP with Dual Simplex");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    while(!discrete)
+      refinePartition();
+    HighsSolution interior_point = 
+      aggregator_.buildSolution(partition_, solution_);
+    call_status = crossover(interior_point, original_lp);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    stop_highs_run_clock = true;
+    called_return_from_run = false;
+    timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         info_.crossover_time);
+  }
+  else if (options_.solver == kDualAggregateHighsPrimalCrossoverString){
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kSimplexString;
+    options_.run_crossover = false;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving ALP with Dual Simplex");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    while(!discrete)
+      refinePartition();
+    HighsSolution interior_point = 
+      aggregator_.buildSolution(partition_, solution_);
+    call_status = primalCrossover(interior_point, original_lp);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    stop_highs_run_clock = true;
+    called_return_from_run = false;
+    timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         info_.crossover_time);
+  }
+  else if (options_.solver == kIpmCrossHighsCrossoverString){
+
+  }
+  else if (options_.solver == kIpmCrossHighsPrimalCrossoverString){
+
+  }
+  else if (options_.solver == kIpmHighsCrossoverString){
+
+  }
+  else if (options_.solver == kIpmHighsPrimalCrossoverString){
+
+  }
   else if (basis_.valid || options_.presolve == kHighsOffString) {
     // There is a valid basis for the problem or presolve is off
     ekk_instance_.lp_name_ = "LP without presolve or with basis";
@@ -3835,6 +4003,38 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp) {
   HighsBasis basis;
   solution.dual_valid = true;
   bool x_status = callCrossover(lp, options_, solution, basis, info_);
+  if (!x_status) return HighsStatus::kError;
+  info_.basis_validity = kBasisValidityValid;
+
+  setBasis(basis);
+  getCrashBasis();
+  getCrashSolution();
+  double obj = 0;
+  HighsInt numCol = alp_.num_col_;
+  std::vector<double>& colCost = alp_.col_cost_;
+  std::vector<double>& colValue = crashSolution_.col_value;
+  for (int iCol = 0; iCol < numCol; ++iCol)
+    obj += colCost[iCol] * colValue[iCol];
+  info_.objective_function_value = obj;
+  scaled_model_status_ = HighsModelStatus::kOptimal;
+  model_status_ = HighsModelStatus::kOptimal;
+  
+
+#else
+  // No IPX available so end here at approximate solve.
+  std::cout << "No ipx code available. Error." << std::endl;
+  return HighsStatus::kError;
+#endif
+
+  return HighsStatus::kOk;
+}
+
+HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp) {
+#ifdef IPX_ON
+  std::cout << "Loading primal crossover only...\n";
+  HighsBasis basis;
+  solution.dual_valid = true;
+  bool x_status = callPrimalCrossover(lp, options_, solution, basis, info_);
   if (!x_status) return HighsStatus::kError;
   info_.basis_validity = kBasisValidityValid;
 

@@ -58,6 +58,8 @@ public:
     //
     void PushAll(Basis* basis, Vector& x, Vector& y, Vector& z,
                  const double* weights, Info* info);
+    void PushPrimalOnly(Basis* basis, Vector& x, Vector& y, Vector& z,
+                 const double* weights, Info* info);
 
     // Pushes a set of primal variables to one of their bounds.
     //

@@ -21,5 +21,7 @@
 
 bool callCrossover(const HighsLp& lp, const HighsOptions& options,
                    HighsSolution& solution, HighsBasis& highs_basis, HighsInfo& highs_info);
+bool callPrimalCrossover(const HighsLp& lp, const HighsOptions& options,
+                   HighsSolution& solution, HighsBasis& highs_basis, HighsInfo& highs_info);            
 
 #endif

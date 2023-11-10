@@ -70,7 +70,11 @@ bool commandLineSolverOk(const HighsLogOptions& report_log_options,
                          const string& value) {
   if (value == kSimplexString || value == kHighsChooseString ||
       value == kIpmString || value == kOCDualString || value == kOCIPMString
-      || value == kIpmAggregateString)
+      || value == kIpmAggregateString || value == kDualAggregateHighsCrossoverString ||
+      value == kDualAggregateHighsPrimalCrossoverString || 
+      value == kIpmCrossHighsCrossoverString || value == kIpmCrossHighsPrimalCrossoverString 
+      || value == kIpmCrossHighsPrimalCrossoverString || value == kIpmHighsCrossoverString ||
+      value == kIpmHighsPrimalCrossoverString)
     return true;
   highsLogUser(report_log_options, HighsLogType::kWarning,
                "Value \"%s\" is not one of \"%s\", \"%s\" or \"%s\"\n",

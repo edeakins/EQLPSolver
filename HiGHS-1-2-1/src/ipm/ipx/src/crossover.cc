@@ -66,6 +66,54 @@ void Crossover::PushAll(Basis* basis, Vector& x, Vector& y, Vector& z,
     info->status_crossover = IPX_STATUS_optimal;
 }
 
+void Crossover::PushPrimalOnly(Basis* basis, Vector& x, Vector& y, Vector& z,
+                        const double* weights, Info* info) {
+    const Model& model = basis->model();
+    const Int m = model.rows();
+    const Int n = model.cols();
+    const Vector& lb = model.lb();
+    const Vector& ub = model.ub();
+    std::vector<Int> perm = Sortperm(n+m, weights, false);
+
+    control_.Log()
+        << Textline("Primal residual before push phase:")
+        << sci2(PrimalResidual(model, x)) << '\n';
+
+    // Run primal push phase. Because z[j]==0 for all basic variables, none of
+    // the primal variables is fixed at its bound.
+    // Run dual push phase.
+    std::vector<Int> dual_superbasics;
+    for (Int p = 0; p < perm.size(); p++) {
+        Int j = perm[p];
+        if (basis->IsBasic(j) && z[j] != 0.0)
+            dual_superbasics.push_back(j);
+    }
+    std::vector<Int> primal_superbasics;
+    for (Int p = perm.size()-1; p >= 0; p--) {
+        Int j = perm[p];
+        if (basis->IsNonbasic(j) && x[j] != lb[j] && x[j] != ub[j] &&
+            !(std::isinf(lb[j]) && std::isinf(ub[j]) && x[j] == 0.0))
+            primal_superbasics.push_back(j);
+    }
+    control_.Log()
+        << Textline("Number of primal pushes required:")
+        << primal_superbasics.size() << '\n';
+    control_.Log() 
+        << Textline("Number of dual pushes not done:")
+        << dual_superbasics.size() << '\n';
+    PushPrimal(basis, x, primal_superbasics, nullptr, info);
+    assert(PrimalInfeasibility(model, x) == 0.0);
+    if (info->status_crossover != IPX_STATUS_optimal)
+        return;
+
+    control_.Debug()
+        << Textline("Primal residual after push phase:")
+        << sci2(PrimalResidual(model, x)) << '\n'
+        << Textline("Dual residual after push phase:")
+        << sci2(DualResidual(model, y, z)) << '\n';
+    info->status_crossover = IPX_STATUS_optimal;
+}
+
 void Crossover::PushPrimal(Basis* basis, Vector& x,
                            const std::vector<Int>& variables,
                            const bool* fixed_at_bound, Info* info) {

@@ -247,6 +247,12 @@ const string kIpmString = "ipm";
 const string kOCDualString = "orbital_crossover_dual";
 const string kOCIPMString = "orbital_crossover_ipm";
 const string kIpmAggregateString = "ipm_aggregate";
+const string kDualAggregateHighsCrossoverString = "dual_alp_standard_crossover";
+const string kDualAggregateHighsPrimalCrossoverString = "dual_alp_primal_crossover";
+const string kIpmCrossHighsCrossoverString = "ipmcross_alp_standard_crossover";
+const string kIpmCrossHighsPrimalCrossoverString = "impcross_alp_primal_crossover";
+const string kIpmHighsCrossoverString = "ipm_alp_standard_crossover";
+const string kIpmHighsPrimalCrossoverString = "ipm_alp_primal_crossover";
 
 const HighsInt kKeepNRowsDeleteRows = -1;
 const HighsInt kKeepNRowsDeleteEntries = 0;
@@ -272,6 +278,7 @@ struct HighsOptionsStruct {
   // Run-time options read from the command line
   std::string presolve;
   std::string solver;
+  std::string iterative;
   std::string parallel;
   std::string ranging;
   std::string time_file;

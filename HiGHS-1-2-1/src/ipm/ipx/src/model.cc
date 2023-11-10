@@ -26,14 +26,14 @@ Int Model::Load(const Control& control, Int num_constr, Int num_var,
     PrintCoefficientRange(control);
     ScaleModel(control);
 
-    // Make an automatic decision for dualization if not specified by user.
-    Int dualize = control.dualize();
-    if (dualize < 0)
-        dualize = num_constr > 2*num_var;
-    if (dualize)
-        LoadDual();
-    else
-        LoadPrimal();
+    // // Make an automatic decision for dualization if not specified by user.
+    // Int dualize = control.dualize();
+    // if (dualize < 0)
+    //     dualize = num_constr > 2*num_var;
+    // if (dualize)
+    //     LoadDual();
+    // else
+    LoadPrimal();
 
     A_.clear();
     AIt_ = Transpose(AI_);
