@@ -140,6 +140,44 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     ++level;
 }
 
+void HighsOCAggregate::buildLp(OCPartition& partition, HighsSolution& s){
+    ep = partition;
+    // basis = b;
+    solution = s;
+    pcol = col;
+    pcolrep = colrep;
+    prow = row;
+    prowrep = rowrep;
+    pFrontCol = frontCol;
+    pcolCnt = colCnt;
+    pFrontRow = frontRow;
+    prowCnt = rowCnt;
+    findFrontMins();
+    buildColPointers();
+    buildRowPointers();
+    // trackAndCountSplits();
+    // markDegenerate();
+    // buildResidualLinks();
+    resizeElpContainers();
+    buildObj();
+    buildAmatrix();
+    buildRhs();
+    buildBnds();
+    // buildBasis(false, false);
+    // buildObjExtended();
+    // buildAmatrixExtended();
+    // buildRhsExtended();
+    // buildBndsExtended();
+    // buildRowNames();
+    // buildColNames();
+    // copyPartition();
+    agglp.level = level;
+    elp.level = level; 
+    presolvelp.level = level;
+    // elp.pairs = pairs;
+    ++level;
+}
+
 HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolution& s){
     ep = partition;
     solution = s;
@@ -168,9 +206,9 @@ HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolut
         pc = pFrontCol[pcf];
         pv = solution.col_value[pc];
         pd = solution.col_dual[pc];
-        lift_solution.col_value.at(rep) = 
+        lift_solution.col_value.at(iCol) = 
             pv;
-        lift_solution.col_dual.at(rep) = 
+        lift_solution.col_dual.at(iCol) = 
             pd;
     }
     for (iRow = 0; iRow < rowCnt; ++iRow){
@@ -181,11 +219,62 @@ HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolut
         pr = pFrontRow[prf];
         pv = solution.row_value.at(pr);
         pd = solution.row_dual.at(pr);
-        lift_solution.row_value.at(rep - numCol) = 
+        lift_solution.row_value.at(iRow) = 
             (double)pv/prlen;
-        lift_solution.row_dual.at(rep - numCol) = 
+        lift_solution.row_dual.at(iRow) = 
             pd;
     }
+    copyPartition();
+    return lift_solution;
+}
+
+HighsSolution HighsOCAggregate::buildSolutionPEALP(OCPartition& partition, HighsSolution& s){
+    // ep = partition;
+    // solution = s;
+    // pcol = col;
+    // pcolrep = colrep;
+    // prow = row;
+    // prowrep = rowrep;
+    // pFrontCol = frontCol;
+    // pcolCnt = colCnt;
+    // pFrontRow = frontRow;
+    // prowCnt = rowCnt;
+    // findFrontMins();
+    // buildColPointers();
+    // buildRowPointers();
+    HighsInt iCol, iRow, rep, cf, pcf, pc,
+    rf, prf, pr, prlen; 
+    double pv, pd;
+    lift_solution.col_value.resize(numCol);
+    lift_solution.row_value.resize(numRow);
+    lift_solution.col_dual.resize(numCol);
+    lift_solution.row_dual.resize(numRow);
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        rep = colrep[iCol];
+        cf = ep.front[rep];
+        pcf = epMinusOne.front[rep];
+        pc = pFrontCol[pcf];
+        pv = solution.col_value[pc];
+        pd = solution.col_dual[pc];
+        lift_solution.col_value.at(iCol) = 
+            pv;
+        lift_solution.col_dual.at(iCol) = 
+            pd;
+    }
+    for (iRow = 0; iRow < rowCnt; ++iRow){
+        rep = rowrep[iRow];
+        rf = ep.front[rep];
+        prf = epMinusOne.front[rep];
+        prlen = epMinusOne.len[prf] + 1;
+        pr = pFrontRow[prf];
+        pv = solution.row_value.at(pr);
+        pd = solution.row_dual.at(pr);
+        lift_solution.row_value.at(iRow) = 
+            (double)pv/prlen;
+        lift_solution.row_dual.at(iRow) = 
+            pd;
+    }
+    copyPartition();
     return lift_solution;
 }
 
@@ -1197,7 +1286,7 @@ HighsLp HighsOCAggregate::getAggLp(){
 }
 
 HighsLp HighsOCAggregate::getLpNoResiduals(){
-    return presolvelp;
+    return agglp;
 }
 
 HighsBasis HighsOCAggregate::getBasis(){

@@ -1410,16 +1410,1908 @@ HighsStatus Highs::run() {
          info_.crossover_time);
   }
   else if (options_.solver == kIpmCrossHighsCrossoverString){
-
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    // options_.run_crossover = false;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving ALP with IPX");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    while(!discrete)
+      refinePartition();
+    HighsSolution interior_point = 
+      aggregator_.buildSolution(partition_, solution_);
+    call_status = crossover(interior_point, original_lp);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    stop_highs_run_clock = true;
+    called_return_from_run = false;
+    timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         info_.crossover_time);
   }
   else if (options_.solver == kIpmCrossHighsPrimalCrossoverString){
-
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    // options_.run_crossover = false;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving ALP with IPX");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    while(!discrete)
+      refinePartition();
+    HighsSolution interior_point = 
+      aggregator_.buildSolution(partition_, solution_);
+    call_status = primalCrossover(interior_point, original_lp);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    stop_highs_run_clock = true;
+    called_return_from_run = false;
+    timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         info_.crossover_time);
   }
   else if (options_.solver == kIpmHighsCrossoverString){
-
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    options_.run_crossover = false;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving ALP with IPX");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    while(!discrete)
+      refinePartition();
+    HighsSolution interior_point = 
+      aggregator_.buildSolution(partition_, solution_);
+    call_status = crossover(interior_point, original_lp);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    stop_highs_run_clock = true;
+    called_return_from_run = false;
+    timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         info_.crossover_time);
   }
   else if (options_.solver == kIpmHighsPrimalCrossoverString){
-
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    options_.run_crossover = false;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving ALP with IPX");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    while(!discrete)
+      refinePartition();
+    HighsSolution interior_point = 
+      aggregator_.buildSolution(partition_, solution_);
+    call_status = primalCrossover(interior_point, original_lp);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    stop_highs_run_clock = true;
+    called_return_from_run = false;
+    timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         info_.crossover_time);
+  }
+  else if (options_.solver == kOCDualNoIterString){
+    running_orbital_crossover = true;
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    info_.original_cols = original_lp.num_col_;
+    info_.original_rows = original_lp.num_row_;
+    info_.reduced_cols = alp_.num_col_;
+    info_.reduced_rows = alp_.num_row_;
+    info_.col_reduct_percent = (double)(original_lp.num_col_ - alp_.num_col_)/
+                                 original_lp.num_col_;
+    info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
+                                 original_lp.num_row_;
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    // options_.solver = kIpmString;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    // If partition is discrete, we are done and don't need
+    // to do any orbital crossover pivots
+    if (discrete) {
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+    }
+    // If partition is not discrete, then we iteratively refine,
+    // lift the basis and solution, and perform orbital crossover
+    // unitl the parition is discrete.
+    else{
+      options_.solver = kOCDualString;
+      int major_iterations = 0;
+      int minor_iterations = 0;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      // HighsLp& original_lp = presolve_.getReducedProblem();
+      // original_lp.setMatrixDimensions();
+      double change = 0;
+      // HighsTimer in_timer_;
+      // double time_to_lift = 0;
+      // in_timer_.startRunHighsClock();
+      // double start = in_timer_.readRunHighsClock();
+      while (!discrete){
+        options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // Refine partition 
+        OCPartition old_partition = equitablePartition_.getPartition();
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+        change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (!discrete) continue;
+        // time_to_lift += timer_.readRunHighsClock() - start;
+        // start = in_timer_.readRunHighsClock();
+        // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
+        change = 0;
+        // Build the extended aggregate lp for the current partition
+        timer_.start(timer_.build_elp_iterative_clock);
+        buildEALP();
+        timer_.stop(timer_.build_elp_iterative_clock);
+        // if (!ealp_.num_residual_cols_ && !discrete) continue;
+        // buildALP();
+        // buildPEALP();
+        // Grab the lifted basis and store the major and minor orbital
+        // crossover iterations before the get cleared by passModel()
+        getLiftedBasis();
+        major_iterations = info_.orbital_crossover_major_iteration_count;
+        minor_iterations = info_.orbital_crossover_minor_iteration_count;
+        passModel(ealp_);
+        zeroIterationCounts();
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // Update the major and minor orbital crossover iterations
+        // to the info_ class after it was cleared by passModel()
+        info_.orbital_crossover_major_iteration_count = major_iterations;
+        info_.orbital_crossover_minor_iteration_count = minor_iterations;
+        // Pass the lifted initial ealp basis to highs to build a simplex
+        // basis for the lp.
+        setBasis(ealpBasis_);
+        // writeBasis("../../debugBuild/beforeBasis.txt");
+        // Do orbital crossvoer
+        timer_.start(timer_.orbital_crossover_clock);
+        call_status =
+            callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        timer_.stop(timer_.orbital_crossover_clock);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                            return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
+        // writeBasis("../../debugBuild/afterBasis.txt");
+        // Grab the solution and lp basis from orbital crossover completion
+        setBasisValidity();
+        getOrbitalCrossoverBasis();
+        getOrbitalCrossoverSolution();
+        // if (info_.ready_for_crash_basis_construction){
+        //   trimOrbitalCrossoverSolution();
+        //   passModel(alp_);
+        //   solution_ = alpSolution_;
+        //   crossover(solution_, alp_);
+        //   alpBasis_ = crashBasis_;
+        //   alpSolution_ = crashSolution_;
+        // }
+        // int numRBasic = 0;
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
+        //   for (int i = 0; i < ealp_.num_row_; ++i){
+        //   std::cout << "basic in row: " << i << " is col: " << ekk_instance_.basis_.basicIndex_.at(i) << std::endl;
+        // }
+      }
+      // for (int i = 0; i < ealp_.num_aggregate_cols_; ++i){
+      //   double lb = ealp_.col_lower_.at(i);
+      //   double ub = ealp_.col_upper_.at(i);
+      //   double val = solution_.col_value.at(i);
+      //   double infeas = 0;
+      //   if (val < lb) infeas = lb - val;
+      //   if (val > ub) infeas = val - ub;
+      //   if (infeas > 1e-6){
+      //     std::cout << "i: " << i << std::endl;
+      //     std::cout << lb << "," << val << "," << ub << std::endl;
+      //   } 
+      // }
+      // HighsLp test_lp = aggregator_.agglp;
+      // // time_to_lift = in_timer_.readRunHighsClock() - start;
+      // // std::cout << "loop_time: " << time_to_lift << std::endl;
+      // alpBasis_.col_status.resize(original_lp.num_col_);
+      // alpBasis_.row_status.resize(original_lp.num_row_);
+      // alpBasis_.alien = true;
+      // HighsBasis original_basis_map;
+      // original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      // original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      // //   if (alpBasis_.col_status.at(i) != HighsBasisStatus::kBasic)
+      // //     alpBasis_.col_status.at(i) = HighsBasisStatus::kLower;
+      // // }
+      // // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      // //   if (alpBasis_.row_status.at(i) != HighsBasisStatus::kBasic)
+      // //     alpBasis_.row_status.at(i) = HighsBasisStatus::kLower;
+      // // }
+      // passModel(test_lp);
+      // zeroIterationCounts();
+      // setBasis(alpBasis_);
+      // options_.solver = kHighsChooseString;
+      // options_.simplex_strategy = kSimplexStrategyDual;
+      // timer_.start(timer_.orbital_crossover_clock);
+      // call_status =
+      //     callSolveLp(test_lp, "Verifying Basic Solution");
+      // timer_.stop(timer_.orbital_crossover_clock);
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      // countDegeneratePivots();
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
+      timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+    }
+  }
+  else if (options_.solver == kOCIPMNoIterString){
+    running_orbital_crossover = true;
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    info_.original_cols = original_lp.num_col_;
+    info_.original_rows = original_lp.num_row_;
+    info_.reduced_cols = alp_.num_col_;
+    info_.reduced_rows = alp_.num_row_;
+    info_.col_reduct_percent = (double)(original_lp.num_col_ - alp_.num_col_)/
+                                 original_lp.num_col_;
+    info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
+                                 original_lp.num_row_;
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    // If partition is discrete, we are done and don't need
+    // to do any orbital crossover pivots
+    if (discrete) {
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+    }
+    // If partition is not discrete, then we iteratively refine,
+    // lift the basis and solution, and perform orbital crossover
+    // unitl the parition is discrete.
+    else{
+      options_.solver = kOCIPMString;
+      int major_iterations = 0;
+      int minor_iterations = 0;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      // HighsLp& original_lp = presolve_.getReducedProblem();
+      // original_lp.setMatrixDimensions();
+      double change = 0;
+      // HighsTimer in_timer_;
+      // double time_to_lift = 0;
+      // in_timer_.startRunHighsClock();
+      // double start = in_timer_.readRunHighsClock();
+      while (!discrete){
+        options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // Refine partition 
+        OCPartition old_partition = equitablePartition_.getPartition();
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+        change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (!discrete) continue;
+        // time_to_lift += timer_.readRunHighsClock() - start;
+        // start = in_timer_.readRunHighsClock();
+        // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
+        change = 0;
+        // Build the extended aggregate lp for the current partition
+        timer_.start(timer_.build_elp_iterative_clock);
+        buildEALP();
+        timer_.stop(timer_.build_elp_iterative_clock);
+        // if (!ealp_.num_residual_cols_ && !discrete) continue;
+        // buildALP();
+        // buildPEALP();
+        // Grab the lifted basis and store the major and minor orbital
+        // crossover iterations before the get cleared by passModel()
+        getLiftedBasis();
+        major_iterations = info_.orbital_crossover_major_iteration_count;
+        minor_iterations = info_.orbital_crossover_minor_iteration_count;
+        passModel(ealp_);
+        zeroIterationCounts();
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // Update the major and minor orbital crossover iterations
+        // to the info_ class after it was cleared by passModel()
+        info_.orbital_crossover_major_iteration_count = major_iterations;
+        info_.orbital_crossover_minor_iteration_count = minor_iterations;
+        // Pass the lifted initial ealp basis to highs to build a simplex
+        // basis for the lp.
+        setBasis(ealpBasis_);
+        // writeBasis("../../debugBuild/beforeBasis.txt");
+        // Do orbital crossvoer
+        timer_.start(timer_.orbital_crossover_clock);
+        call_status =
+            callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        timer_.stop(timer_.orbital_crossover_clock);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                            return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
+        // writeBasis("../../debugBuild/afterBasis.txt");
+        // Grab the solution and lp basis from orbital crossover completion
+        setBasisValidity();
+        getOrbitalCrossoverBasis();
+        getOrbitalCrossoverSolution();
+        // if (info_.ready_for_crash_basis_construction){
+        //   trimOrbitalCrossoverSolution();
+        //   passModel(alp_);
+        //   solution_ = alpSolution_;
+        //   crossover(solution_, alp_);
+        //   alpBasis_ = crashBasis_;
+        //   alpSolution_ = crashSolution_;
+        // }
+        int numRBasic = 0;
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
+      }
+      // time_to_lift = in_timer_.readRunHighsClock() - start;
+      // std::cout << "loop_time: " << time_to_lift << std::endl;
+      // alpBasis_.col_status.resize(original_lp.num_col_);
+      // alpBasis_.row_status.resize(original_lp.num_row_);
+      // HighsBasis original_basis_map;
+      // original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      // original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      //   int rep = aggregator_.colrep.at(i);
+      //   original_basis_map.col_status.at(rep) = alpBasis_.col_status.at(i);
+      // }
+      // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      //   int rep = aggregator_.rowrep.at(i) - aggregator_.numCol;
+      //   original_basis_map.row_status.at(rep) = alpBasis_.row_status.at(i);
+      // }
+      // passModel(original_lp);
+      // zeroIterationCounts();
+      // setBasis(original_basis_map);
+      // options_.solver = kHighsChooseString;
+      // options_.simplex_strategy = kSimplexStrategyChoose;
+      // timer_.start(timer_.orbital_crossover_clock);
+      // call_status =
+      //     callSolveLp(original_lp, "Verifying Basic Solution");
+      // timer_.stop(timer_.orbital_crossover_clock);
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
+      timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+    }
+  }
+  else if (options_.solver == kDualAggregateHighsCrossoverIterString){
+    running_orbital_crossover = true;
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    info_.original_cols = original_lp.num_col_;
+    info_.original_rows = original_lp.num_row_;
+    info_.reduced_cols = alp_.num_col_;
+    info_.reduced_rows = alp_.num_row_;
+    info_.col_reduct_percent = (double)(original_lp.num_col_ - alp_.num_col_)/
+                                 original_lp.num_col_;
+    info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
+                                 original_lp.num_row_;
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kSimplexString;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving LP with Aggregation, Dual Simplex, and Highs Crossover");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    // If partition is discrete, we are done and don't need
+    // to do any orbital crossover pivots
+    if (discrete) {
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+    }
+    // If partition is not discrete, then we iteratively refine,
+    // lift the basis and solution, and perform orbital crossover
+    // unitl the parition is discrete.
+    else{
+      options_.solver = kIpmString;
+      int major_iterations = 0;
+      int minor_iterations = 0;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      // HighsLp& original_lp = presolve_.getReducedProblem();
+      // original_lp.setMatrixDimensions();
+      double change = 0;
+      // HighsTimer in_timer_;
+      // double time_to_lift = 0;
+      // in_timer_.startRunHighsClock();
+      // double start = in_timer_.readRunHighsClock();
+      while (!discrete){
+        options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // Refine partition 
+        OCPartition old_partition = equitablePartition_.getPartition();
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+        change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 1000 && !discrete) continue;
+        // time_to_lift += timer_.readRunHighsClock() - start;
+        // start = in_timer_.readRunHighsClock();
+        // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
+        change = 0;
+        // Build the extended aggregate lp for the current partition
+        timer_.start(timer_.build_elp_iterative_clock);
+        // buildEALP();
+        buildPEALP();
+        timer_.stop(timer_.build_elp_iterative_clock);
+        // if (!ealp_.num_residual_cols_ && !discrete) continue;
+        // buildALP();
+        // buildPEALP();
+        // Grab the lifted basis and store the major and minor orbital
+        // crossover iterations before the get cleared by passModel()
+        // getLiftedBasis();
+        major_iterations = info_.orbital_crossover_major_iteration_count;
+        minor_iterations = info_.orbital_crossover_minor_iteration_count;
+        passModel(pealp_);
+        zeroIterationCounts();
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // Update the major and minor orbital crossover iterations
+        // to the info_ class after it was cleared by passModel()
+        info_.orbital_crossover_major_iteration_count = major_iterations;
+        info_.orbital_crossover_minor_iteration_count = minor_iterations;
+        HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+        call_status = crossover(interior_point, pealp_);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+        // Pass the lifted initial ealp basis to highs to build a simplex
+        // basis for the lp.
+        // setBasis(ealpBasis_);
+        // writeBasis("../../debugBuild/beforeBasis.txt");
+        // Do orbital crossvoer
+        // timer_.start(timer_.orbital_crossover_clock);
+        // call_status =
+        //     callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        // timer_.stop(timer_.orbital_crossover_clock);
+        // return_status = interpretCallStatus(options_.log_options, call_status,
+        //                                     return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
+        // writeBasis("../../debugBuild/afterBasis.txt");
+        // Grab the solution and lp basis from orbital crossover completion
+        // setBasisValidity();
+        // getOrbitalCrossoverBasis();
+        // getOrbitalCrossoverSolution();
+        // if (info_.ready_for_crash_basis_construction){
+        //   trimOrbitalCrossoverSolution();
+        //   passModel(alp_);
+        //   solution_ = alpSolution_;
+        //   crossover(solution_, alp_);
+        //   alpBasis_ = crashBasis_;
+        //   alpSolution_ = crashSolution_;
+        // }
+        int numRBasic = 0;
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
+      }
+      // time_to_lift = in_timer_.readRunHighsClock() - start;
+      // std::cout << "loop_time: " << time_to_lift << std::endl;
+      // alpBasis_.col_status.resize(original_lp.num_col_);
+      // alpBasis_.row_status.resize(original_lp.num_row_);
+      // HighsBasis original_basis_map;
+      // original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      // original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      //   int rep = aggregator_.colrep.at(i);
+      //   original_basis_map.col_status.at(rep) = alpBasis_.col_status.at(i);
+      // }
+      // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      //   int rep = aggregator_.rowrep.at(i) - aggregator_.numCol;
+      //   original_basis_map.row_status.at(rep) = alpBasis_.row_status.at(i);
+      // }
+      // passModel(original_lp);
+      // zeroIterationCounts();
+      // setBasis(original_basis_map);
+      // options_.solver = kHighsChooseString;
+      // options_.simplex_strategy = kSimplexStrategyChoose;
+      // timer_.start(timer_.orbital_crossover_clock);
+      // call_status =
+      //     callSolveLp(original_lp, "Verifying Basic Solution");
+      // timer_.stop(timer_.orbital_crossover_clock);
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
+      timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+    }
+  }
+  else if (options_.solver == kDualAggregateHighsPrimalCrossoverIterString){
+    running_orbital_crossover = true;
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    info_.original_cols = original_lp.num_col_;
+    info_.original_rows = original_lp.num_row_;
+    info_.reduced_cols = alp_.num_col_;
+    info_.reduced_rows = alp_.num_row_;
+    info_.col_reduct_percent = (double)(original_lp.num_col_ - alp_.num_col_)/
+                                 original_lp.num_col_;
+    info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
+                                 original_lp.num_row_;
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kSimplexString;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving LP with Aggregation, Dual Simplex, and Highs Crossover");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    // If partition is discrete, we are done and don't need
+    // to do any orbital crossover pivots
+    if (discrete) {
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+    }
+    // If partition is not discrete, then we iteratively refine,
+    // lift the basis and solution, and perform orbital crossover
+    // unitl the parition is discrete.
+    else{
+      options_.solver = kIpmString;
+      int major_iterations = 0;
+      int minor_iterations = 0;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      // HighsLp& original_lp = presolve_.getReducedProblem();
+      // original_lp.setMatrixDimensions();
+      double change = 0;
+      // HighsTimer in_timer_;
+      // double time_to_lift = 0;
+      // in_timer_.startRunHighsClock();
+      // double start = in_timer_.readRunHighsClock();
+      while (!discrete){
+        options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // Refine partition 
+        OCPartition old_partition = equitablePartition_.getPartition();
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+        change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 1000 && !discrete) continue;
+        // time_to_lift += timer_.readRunHighsClock() - start;
+        // start = in_timer_.readRunHighsClock();
+        // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
+        change = 0;
+        // Build the extended aggregate lp for the current partition
+        timer_.start(timer_.build_elp_iterative_clock);
+        // buildEALP();
+        buildPEALP();
+        timer_.stop(timer_.build_elp_iterative_clock);
+        // if (!ealp_.num_residual_cols_ && !discrete) continue;
+        // buildALP();
+        // buildPEALP();
+        // Grab the lifted basis and store the major and minor orbital
+        // crossover iterations before the get cleared by passModel()
+        // getLiftedBasis();
+        major_iterations = info_.orbital_crossover_major_iteration_count;
+        minor_iterations = info_.orbital_crossover_minor_iteration_count;
+        passModel(pealp_);
+        zeroIterationCounts();
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // Update the major and minor orbital crossover iterations
+        // to the info_ class after it was cleared by passModel()
+        info_.orbital_crossover_major_iteration_count = major_iterations;
+        info_.orbital_crossover_minor_iteration_count = minor_iterations;
+        HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+        call_status = primalCrossover(interior_point, pealp_);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+        // Pass the lifted initial ealp basis to highs to build a simplex
+        // basis for the lp.
+        // setBasis(ealpBasis_);
+        // writeBasis("../../debugBuild/beforeBasis.txt");
+        // Do orbital crossvoer
+        // timer_.start(timer_.orbital_crossover_clock);
+        // call_status =
+        //     callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        // timer_.stop(timer_.orbital_crossover_clock);
+        // return_status = interpretCallStatus(options_.log_options, call_status,
+        //                                     return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
+        // writeBasis("../../debugBuild/afterBasis.txt");
+        // Grab the solution and lp basis from orbital crossover completion
+        // setBasisValidity();
+        // getOrbitalCrossoverBasis();
+        // getOrbitalCrossoverSolution();
+        // if (info_.ready_for_crash_basis_construction){
+        //   trimOrbitalCrossoverSolution();
+        //   passModel(alp_);
+        //   solution_ = alpSolution_;
+        //   crossover(solution_, alp_);
+        //   alpBasis_ = crashBasis_;
+        //   alpSolution_ = crashSolution_;
+        // }
+        int numRBasic = 0;
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
+      }
+      // time_to_lift = in_timer_.readRunHighsClock() - start;
+      // std::cout << "loop_time: " << time_to_lift << std::endl;
+      // alpBasis_.col_status.resize(original_lp.num_col_);
+      // alpBasis_.row_status.resize(original_lp.num_row_);
+      // HighsBasis original_basis_map;
+      // original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      // original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      //   int rep = aggregator_.colrep.at(i);
+      //   original_basis_map.col_status.at(rep) = alpBasis_.col_status.at(i);
+      // }
+      // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      //   int rep = aggregator_.rowrep.at(i) - aggregator_.numCol;
+      //   original_basis_map.row_status.at(rep) = alpBasis_.row_status.at(i);
+      // }
+      // passModel(original_lp);
+      // zeroIterationCounts();
+      // setBasis(original_basis_map);
+      // options_.solver = kHighsChooseString;
+      // options_.simplex_strategy = kSimplexStrategyChoose;
+      // timer_.start(timer_.orbital_crossover_clock);
+      // call_status =
+      //     callSolveLp(original_lp, "Verifying Basic Solution");
+      // timer_.stop(timer_.orbital_crossover_clock);
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
+      timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+    }
+  }
+  else if (options_.solver == kIpmCrossHighsCrossoverIterString){
+    running_orbital_crossover = true;
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    info_.original_cols = original_lp.num_col_;
+    info_.original_rows = original_lp.num_row_;
+    info_.reduced_cols = alp_.num_col_;
+    info_.reduced_rows = alp_.num_row_;
+    info_.col_reduct_percent = (double)(original_lp.num_col_ - alp_.num_col_)/
+                                 original_lp.num_col_;
+    info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
+                                 original_lp.num_row_;
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving LP with Aggregation, Highs IPM, and Highs Crossover");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    // If partition is discrete, we are done and don't need
+    // to do any orbital crossover pivots
+    if (discrete) {
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+    }
+    // If partition is not discrete, then we iteratively refine,
+    // lift the basis and solution, and perform orbital crossover
+    // unitl the parition is discrete.
+    else{
+      options_.solver = kIpmString;
+      int major_iterations = 0;
+      int minor_iterations = 0;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      // HighsLp& original_lp = presolve_.getReducedProblem();
+      // original_lp.setMatrixDimensions();
+      double change = 0;
+      // HighsTimer in_timer_;
+      // double time_to_lift = 0;
+      // in_timer_.startRunHighsClock();
+      // double start = in_timer_.readRunHighsClock();
+      while (!discrete){
+        options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // Refine partition 
+        OCPartition old_partition = equitablePartition_.getPartition();
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+        change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 1000 && !discrete) continue;
+        // time_to_lift += timer_.readRunHighsClock() - start;
+        // start = in_timer_.readRunHighsClock();
+        // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
+        change = 0;
+        // Build the extended aggregate lp for the current partition
+        timer_.start(timer_.build_elp_iterative_clock);
+        // buildEALP();
+        buildPEALP();
+        timer_.stop(timer_.build_elp_iterative_clock);
+        // if (!ealp_.num_residual_cols_ && !discrete) continue;
+        // buildALP();
+        // buildPEALP();
+        // Grab the lifted basis and store the major and minor orbital
+        // crossover iterations before the get cleared by passModel()
+        // getLiftedBasis();
+        major_iterations = info_.orbital_crossover_major_iteration_count;
+        minor_iterations = info_.orbital_crossover_minor_iteration_count;
+        passModel(pealp_);
+        zeroIterationCounts();
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // Update the major and minor orbital crossover iterations
+        // to the info_ class after it was cleared by passModel()
+        info_.orbital_crossover_major_iteration_count = major_iterations;
+        info_.orbital_crossover_minor_iteration_count = minor_iterations;
+        HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+        call_status = crossover(interior_point, pealp_);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+        // Pass the lifted initial ealp basis to highs to build a simplex
+        // basis for the lp.
+        // setBasis(ealpBasis_);
+        // writeBasis("../../debugBuild/beforeBasis.txt");
+        // Do orbital crossvoer
+        // timer_.start(timer_.orbital_crossover_clock);
+        // call_status =
+        //     callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        // timer_.stop(timer_.orbital_crossover_clock);
+        // return_status = interpretCallStatus(options_.log_options, call_status,
+        //                                     return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
+        // writeBasis("../../debugBuild/afterBasis.txt");
+        // Grab the solution and lp basis from orbital crossover completion
+        // setBasisValidity();
+        // getOrbitalCrossoverBasis();
+        // getOrbitalCrossoverSolution();
+        // if (info_.ready_for_crash_basis_construction){
+        //   trimOrbitalCrossoverSolution();
+        //   passModel(alp_);
+        //   solution_ = alpSolution_;
+        //   crossover(solution_, alp_);
+        //   alpBasis_ = crashBasis_;
+        //   alpSolution_ = crashSolution_;
+        // }
+        int numRBasic = 0;
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
+      }
+      // time_to_lift = in_timer_.readRunHighsClock() - start;
+      // std::cout << "loop_time: " << time_to_lift << std::endl;
+      // alpBasis_.col_status.resize(original_lp.num_col_);
+      // alpBasis_.row_status.resize(original_lp.num_row_);
+      // HighsBasis original_basis_map;
+      // original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      // original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      //   int rep = aggregator_.colrep.at(i);
+      //   original_basis_map.col_status.at(rep) = alpBasis_.col_status.at(i);
+      // }
+      // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      //   int rep = aggregator_.rowrep.at(i) - aggregator_.numCol;
+      //   original_basis_map.row_status.at(rep) = alpBasis_.row_status.at(i);
+      // }
+      // passModel(original_lp);
+      // zeroIterationCounts();
+      // setBasis(original_basis_map);
+      // options_.solver = kHighsChooseString;
+      // options_.simplex_strategy = kSimplexStrategyChoose;
+      // timer_.start(timer_.orbital_crossover_clock);
+      // call_status =
+      //     callSolveLp(original_lp, "Verifying Basic Solution");
+      // timer_.stop(timer_.orbital_crossover_clock);
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
+      timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+    }
+  }
+  else if (options_.solver == kIpmHighsCrossoverIterString){
+    running_orbital_crossover = true;
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    info_.original_cols = original_lp.num_col_;
+    info_.original_rows = original_lp.num_row_;
+    info_.reduced_cols = alp_.num_col_;
+    info_.reduced_rows = alp_.num_row_;
+    info_.col_reduct_percent = (double)(original_lp.num_col_ - alp_.num_col_)/
+                                 original_lp.num_col_;
+    info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
+                                 original_lp.num_row_;
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    options_.run_crossover = false;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving LP with Aggregation, Highs IPM, and Highs Crossover");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    // If partition is discrete, we are done and don't need
+    // to do any orbital crossover pivots
+    if (discrete) {
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+    }
+    // If partition is not discrete, then we iteratively refine,
+    // lift the basis and solution, and perform orbital crossover
+    // unitl the parition is discrete.
+    else{
+      options_.solver = kIpmString;
+      int major_iterations = 0;
+      int minor_iterations = 0;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      // HighsLp& original_lp = presolve_.getReducedProblem();
+      // original_lp.setMatrixDimensions();
+      double change = 0;
+      // HighsTimer in_timer_;
+      // double time_to_lift = 0;
+      // in_timer_.startRunHighsClock();
+      // double start = in_timer_.readRunHighsClock();
+      while (!discrete){
+        options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // Refine partition 
+        OCPartition old_partition = equitablePartition_.getPartition();
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+        change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 1000 && !discrete) continue;
+        // time_to_lift += timer_.readRunHighsClock() - start;
+        // start = in_timer_.readRunHighsClock();
+        // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
+        change = 0;
+        // Build the extended aggregate lp for the current partition
+        timer_.start(timer_.build_elp_iterative_clock);
+        // buildEALP();
+        buildPEALP();
+        timer_.stop(timer_.build_elp_iterative_clock);
+        // if (!ealp_.num_residual_cols_ && !discrete) continue;
+        // buildALP();
+        // buildPEALP();
+        // Grab the lifted basis and store the major and minor orbital
+        // crossover iterations before the get cleared by passModel()
+        // getLiftedBasis();
+        major_iterations = info_.orbital_crossover_major_iteration_count;
+        minor_iterations = info_.orbital_crossover_minor_iteration_count;
+        passModel(pealp_);
+        zeroIterationCounts();
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // Update the major and minor orbital crossover iterations
+        // to the info_ class after it was cleared by passModel()
+        info_.orbital_crossover_major_iteration_count = major_iterations;
+        info_.orbital_crossover_minor_iteration_count = minor_iterations;
+        HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+        call_status = crossover(interior_point, pealp_);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+        // Pass the lifted initial ealp basis to highs to build a simplex
+        // basis for the lp.
+        // setBasis(ealpBasis_);
+        // writeBasis("../../debugBuild/beforeBasis.txt");
+        // Do orbital crossvoer
+        // timer_.start(timer_.orbital_crossover_clock);
+        // call_status =
+        //     callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        // timer_.stop(timer_.orbital_crossover_clock);
+        // return_status = interpretCallStatus(options_.log_options, call_status,
+        //                                     return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
+        // writeBasis("../../debugBuild/afterBasis.txt");
+        // Grab the solution and lp basis from orbital crossover completion
+        // setBasisValidity();
+        // getOrbitalCrossoverBasis();
+        // getOrbitalCrossoverSolution();
+        // if (info_.ready_for_crash_basis_construction){
+        //   trimOrbitalCrossoverSolution();
+        //   passModel(alp_);
+        //   solution_ = alpSolution_;
+        //   crossover(solution_, alp_);
+        //   alpBasis_ = crashBasis_;
+        //   alpSolution_ = crashSolution_;
+        // }
+        int numRBasic = 0;
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
+      }
+      // time_to_lift = in_timer_.readRunHighsClock() - start;
+      // std::cout << "loop_time: " << time_to_lift << std::endl;
+      // alpBasis_.col_status.resize(original_lp.num_col_);
+      // alpBasis_.row_status.resize(original_lp.num_row_);
+      // HighsBasis original_basis_map;
+      // original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      // original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      //   int rep = aggregator_.colrep.at(i);
+      //   original_basis_map.col_status.at(rep) = alpBasis_.col_status.at(i);
+      // }
+      // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      //   int rep = aggregator_.rowrep.at(i) - aggregator_.numCol;
+      //   original_basis_map.row_status.at(rep) = alpBasis_.row_status.at(i);
+      // }
+      // passModel(original_lp);
+      // zeroIterationCounts();
+      // setBasis(original_basis_map);
+      // options_.solver = kHighsChooseString;
+      // options_.simplex_strategy = kSimplexStrategyChoose;
+      // timer_.start(timer_.orbital_crossover_clock);
+      // call_status =
+      //     callSolveLp(original_lp, "Verifying Basic Solution");
+      // timer_.stop(timer_.orbital_crossover_clock);
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
+      timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+    }
+  }
+  else if (options_.solver == kIpmHighsPrimalCrossoverIterString){
+    running_orbital_crossover = true;
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    info_.original_cols = original_lp.num_col_;
+    info_.original_rows = original_lp.num_row_;
+    info_.reduced_cols = alp_.num_col_;
+    info_.reduced_rows = alp_.num_row_;
+    info_.col_reduct_percent = (double)(original_lp.num_col_ - alp_.num_col_)/
+                                 original_lp.num_col_;
+    info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
+                                 original_lp.num_row_;
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    options_.run_crossover = false;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving LP with Aggregation, Highs IPM, and Highs Crossover");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    // If partition is discrete, we are done and don't need
+    // to do any orbital crossover pivots
+    if (discrete) {
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+    }
+    // If partition is not discrete, then we iteratively refine,
+    // lift the basis and solution, and perform orbital crossover
+    // unitl the parition is discrete.
+    else{
+      options_.solver = kIpmString;
+      int major_iterations = 0;
+      int minor_iterations = 0;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      // HighsLp& original_lp = presolve_.getReducedProblem();
+      // original_lp.setMatrixDimensions();
+      double change = 0;
+      // HighsTimer in_timer_;
+      // double time_to_lift = 0;
+      // in_timer_.startRunHighsClock();
+      // double start = in_timer_.readRunHighsClock();
+      while (!discrete){
+        options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // Refine partition 
+        OCPartition old_partition = equitablePartition_.getPartition();
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+        change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 1000 && !discrete) continue;
+        // time_to_lift += timer_.readRunHighsClock() - start;
+        // start = in_timer_.readRunHighsClock();
+        // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
+        change = 0;
+        // Build the extended aggregate lp for the current partition
+        timer_.start(timer_.build_elp_iterative_clock);
+        // buildEALP();
+        buildPEALP();
+        timer_.stop(timer_.build_elp_iterative_clock);
+        // if (!ealp_.num_residual_cols_ && !discrete) continue;
+        // buildALP();
+        // buildPEALP();
+        // Grab the lifted basis and store the major and minor orbital
+        // crossover iterations before the get cleared by passModel()
+        // getLiftedBasis();
+        major_iterations = info_.orbital_crossover_major_iteration_count;
+        minor_iterations = info_.orbital_crossover_minor_iteration_count;
+        passModel(pealp_);
+        zeroIterationCounts();
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // Update the major and minor orbital crossover iterations
+        // to the info_ class after it was cleared by passModel()
+        info_.orbital_crossover_major_iteration_count = major_iterations;
+        info_.orbital_crossover_minor_iteration_count = minor_iterations;
+        HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+        call_status = primalCrossover(interior_point, pealp_);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+        // Pass the lifted initial ealp basis to highs to build a simplex
+        // basis for the lp.
+        // setBasis(ealpBasis_);
+        // writeBasis("../../debugBuild/beforeBasis.txt");
+        // Do orbital crossvoer
+        // timer_.start(timer_.orbital_crossover_clock);
+        // call_status =
+        //     callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        // timer_.stop(timer_.orbital_crossover_clock);
+        // return_status = interpretCallStatus(options_.log_options, call_status,
+        //                                     return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
+        // writeBasis("../../debugBuild/afterBasis.txt");
+        // Grab the solution and lp basis from orbital crossover completion
+        // setBasisValidity();
+        // getOrbitalCrossoverBasis();
+        // getOrbitalCrossoverSolution();
+        // if (info_.ready_for_crash_basis_construction){
+        //   trimOrbitalCrossoverSolution();
+        //   passModel(alp_);
+        //   solution_ = alpSolution_;
+        //   crossover(solution_, alp_);
+        //   alpBasis_ = crashBasis_;
+        //   alpSolution_ = crashSolution_;
+        // }
+        int numRBasic = 0;
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
+      }
+      // time_to_lift = in_timer_.readRunHighsClock() - start;
+      // std::cout << "loop_time: " << time_to_lift << std::endl;
+      // alpBasis_.col_status.resize(original_lp.num_col_);
+      // alpBasis_.row_status.resize(original_lp.num_row_);
+      // HighsBasis original_basis_map;
+      // original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      // original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      //   int rep = aggregator_.colrep.at(i);
+      //   original_basis_map.col_status.at(rep) = alpBasis_.col_status.at(i);
+      // }
+      // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      //   int rep = aggregator_.rowrep.at(i) - aggregator_.numCol;
+      //   original_basis_map.row_status.at(rep) = alpBasis_.row_status.at(i);
+      // }
+      // passModel(original_lp);
+      // zeroIterationCounts();
+      // setBasis(original_basis_map);
+      // options_.solver = kHighsChooseString;
+      // options_.simplex_strategy = kSimplexStrategyChoose;
+      // timer_.start(timer_.orbital_crossover_clock);
+      // call_status =
+      //     callSolveLp(original_lp, "Verifying Basic Solution");
+      // timer_.stop(timer_.orbital_crossover_clock);
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
+      timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+    }
+  }
+  else if (options_.solver == kIpmCrossHighsPrimalCrossoverIterString){
+    running_orbital_crossover = true;
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    stop_highs_run_clock = false;
+    // Initial refinement of LP to an equitable partition of columns
+    // and rows
+    options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
+    // model_presolve_status_ = runPresolve();
+    // original_lp = presolve_.getReducedProblem();
+    // original_lp.setMatrixDimensions();
+    timer_.start(timer_.equitable_partition_clock);
+    initializeEquitablePartition(original_lp);
+    timer_.stop(timer_.equitable_partition_clock);
+    // Initial aggregation of LP
+    timer_.start(timer_.build_alp_clock);
+    initializeAggregator(original_lp);
+    timer_.stop(timer_.build_alp_clock);
+    // Grab and pass initial aggregate model and pass to highs
+    buildALP();
+    info_.original_cols = original_lp.num_col_;
+    info_.original_rows = original_lp.num_row_;
+    info_.reduced_cols = alp_.num_col_;
+    info_.reduced_rows = alp_.num_row_;
+    info_.col_reduct_percent = (double)(original_lp.num_col_ - alp_.num_col_)/
+                                 original_lp.num_col_;
+    info_.row_reduct_percent = (double)(original_lp.num_row_ - alp_.num_row_)/
+                                 original_lp.num_row_;
+    returnFromRun(HighsStatus::kOk);
+    passModel(original_lp);
+    zeroIterationCounts();
+    // Solve initial aggregate lp
+    // writeModel("../../debugBuild/testLpFiles/presolve.mps");
+    options_.solver = kIpmString;
+    timer_.start(timer_.aggregate_solve_clock);
+    call_status =
+        callSolveLp(alp_, "Solving LP with Aggregation, Highs IPM, and Highs Crossover");
+    timer_.stop(timer_.aggregate_solve_clock);
+    return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+    if (return_status == HighsStatus::kError){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      scaled_model_status_ = HighsModelStatus::kModelError;
+      model_status_ = HighsModelStatus::kModelError;
+      return returnFromRun(return_status);
+    }
+    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      setHighsModelStatusAndClearSolutionAndBasis(
+          HighsModelStatus::kTimeLimit);
+      highsLogDev(log_options, HighsLogType::kError,
+                  "ALP solve reached timeout\n");
+      return returnFromRun(HighsStatus::kWarning);
+    }
+    setBasisValidity();
+    // If partition is discrete, we are done and don't need
+    // to do any orbital crossover pivots
+    if (discrete) {
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+    }
+    // If partition is not discrete, then we iteratively refine,
+    // lift the basis and solution, and perform orbital crossover
+    // unitl the parition is discrete.
+    else{
+      options_.solver = kIpmString;
+      int major_iterations = 0;
+      int minor_iterations = 0;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      // HighsLp& original_lp = presolve_.getReducedProblem();
+      // original_lp.setMatrixDimensions();
+      double change = 0;
+      // HighsTimer in_timer_;
+      // double time_to_lift = 0;
+      // in_timer_.startRunHighsClock();
+      // double start = in_timer_.readRunHighsClock();
+      while (!discrete){
+        options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+        // Refine partition 
+        OCPartition old_partition = equitablePartition_.getPartition();
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+        change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 1000 && !discrete) continue;
+        // time_to_lift += timer_.readRunHighsClock() - start;
+        // start = in_timer_.readRunHighsClock();
+        // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
+        change = 0;
+        // Build the extended aggregate lp for the current partition
+        timer_.start(timer_.build_elp_iterative_clock);
+        // buildEALP();
+        buildPEALP();
+        timer_.stop(timer_.build_elp_iterative_clock);
+        // if (!ealp_.num_residual_cols_ && !discrete) continue;
+        // buildALP();
+        // buildPEALP();
+        // Grab the lifted basis and store the major and minor orbital
+        // crossover iterations before the get cleared by passModel()
+        // getLiftedBasis();
+        major_iterations = info_.orbital_crossover_major_iteration_count;
+        minor_iterations = info_.orbital_crossover_minor_iteration_count;
+        passModel(pealp_);
+        zeroIterationCounts();
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // Update the major and minor orbital crossover iterations
+        // to the info_ class after it was cleared by passModel()
+        info_.orbital_crossover_major_iteration_count = major_iterations;
+        info_.orbital_crossover_minor_iteration_count = minor_iterations;
+        HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+        call_status = primalCrossover(interior_point, pealp_);
+        return_status = interpretCallStatus(options_.log_options, call_status,
+                                        return_status, "callSolveLp");
+        // Pass the lifted initial ealp basis to highs to build a simplex
+        // basis for the lp.
+        // setBasis(ealpBasis_);
+        // writeBasis("../../debugBuild/beforeBasis.txt");
+        // Do orbital crossvoer
+        // timer_.start(timer_.orbital_crossover_clock);
+        // call_status =
+        //     callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        // timer_.stop(timer_.orbital_crossover_clock);
+        // return_status = interpretCallStatus(options_.log_options, call_status,
+        //                                     return_status, "callSolveLp");
+        if (return_status == HighsStatus::kError){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          scaled_model_status_ = HighsModelStatus::kModelError;
+          model_status_ = HighsModelStatus::kModelError;
+          return returnFromRun(return_status);
+        }
+        if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+          stop_highs_run_clock = true;
+          called_return_from_run = false;
+          setHighsModelStatusAndClearSolutionAndBasis(
+              HighsModelStatus::kTimeLimit);
+          highsLogDev(log_options, HighsLogType::kError,
+                      "ALP solve reached timeout\n");
+          return returnFromRun(HighsStatus::kWarning);
+        }
+        // writeBasis("../../debugBuild/afterBasis.txt");
+        // Grab the solution and lp basis from orbital crossover completion
+        // setBasisValidity();
+        // getOrbitalCrossoverBasis();
+        // getOrbitalCrossoverSolution();
+        // if (info_.ready_for_crash_basis_construction){
+        //   trimOrbitalCrossoverSolution();
+        //   passModel(alp_);
+        //   solution_ = alpSolution_;
+        //   crossover(solution_, alp_);
+        //   alpBasis_ = crashBasis_;
+        //   alpSolution_ = crashSolution_;
+        // }
+        int numRBasic = 0;
+        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
+        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
+        //     numRBasic++;
+        //   else{
+        //     std::cout << "bad_col: " << i << std::endl;
+        //   }
+        // }
+      }
+      // time_to_lift = in_timer_.readRunHighsClock() - start;
+      // std::cout << "loop_time: " << time_to_lift << std::endl;
+      // alpBasis_.col_status.resize(original_lp.num_col_);
+      // alpBasis_.row_status.resize(original_lp.num_row_);
+      // HighsBasis original_basis_map;
+      // original_basis_map.col_status.resize(alpBasis_.col_status.size());
+      // original_basis_map.row_status.resize(alpBasis_.row_status.size());
+      // for (int i = 0; i < alpBasis_.col_status.size(); ++i){  
+      //   int rep = aggregator_.colrep.at(i);
+      //   original_basis_map.col_status.at(rep) = alpBasis_.col_status.at(i);
+      // }
+      // for (int i = 0; i < alpBasis_.row_status.size(); ++i){
+      //   int rep = aggregator_.rowrep.at(i) - aggregator_.numCol;
+      //   original_basis_map.row_status.at(rep) = alpBasis_.row_status.at(i);
+      // }
+      // passModel(original_lp);
+      // zeroIterationCounts();
+      // setBasis(original_basis_map);
+      // options_.solver = kHighsChooseString;
+      // options_.simplex_strategy = kSimplexStrategyChoose;
+      // timer_.start(timer_.orbital_crossover_clock);
+      // call_status =
+      //     callSolveLp(original_lp, "Verifying Basic Solution");
+      // timer_.stop(timer_.orbital_crossover_clock);
+      stop_highs_run_clock = true;
+      called_return_from_run = false;
+      info_.num_degen_pivots = ealp_.num_degen_pivot;
+      info_.num_total_pivots = ealp_.num_total_pivot;
+      timer_.clock_time.at(timer_.solve_clock) = 
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+    }
   }
   else if (basis_.valid || options_.presolve == kHighsOffString) {
     // There is a valid basis for the problem or presolve is off
@@ -2923,6 +4815,7 @@ void Highs::buildEALP(){
 }
 
 void Highs::buildPEALP(){
+  aggregator_.buildLp(partition_, alpSolution_);
   pealp_ = aggregator_.getLpNoResiduals();
 }
 
@@ -4010,14 +5903,15 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp) {
   getCrashBasis();
   getCrashSolution();
   double obj = 0;
-  HighsInt numCol = alp_.num_col_;
-  std::vector<double>& colCost = alp_.col_cost_;
-  std::vector<double>& colValue = crashSolution_.col_value;
+  HighsInt numCol = lp.num_col_;
+  std::vector<double>& colCost = lp.col_cost_;
+  std::vector<double>& colValue = solution.col_value;
   for (int iCol = 0; iCol < numCol; ++iCol)
     obj += colCost[iCol] * colValue[iCol];
   info_.objective_function_value = obj;
   scaled_model_status_ = HighsModelStatus::kOptimal;
   model_status_ = HighsModelStatus::kOptimal;
+  alpSolution_ = solution;
   
 
 #else
@@ -4042,14 +5936,15 @@ HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp) {
   getCrashBasis();
   getCrashSolution();
   double obj = 0;
-  HighsInt numCol = alp_.num_col_;
-  std::vector<double>& colCost = alp_.col_cost_;
-  std::vector<double>& colValue = crashSolution_.col_value;
+  HighsInt numCol = lp.num_col_;
+  std::vector<double>& colCost = lp.col_cost_;
+  std::vector<double>& colValue = solution.col_value;
   for (int iCol = 0; iCol < numCol; ++iCol)
     obj += colCost[iCol] * colValue[iCol];
   info_.objective_function_value = obj;
   scaled_model_status_ = HighsModelStatus::kOptimal;
   model_status_ = HighsModelStatus::kOptimal;
+  alpSolution_ = solution;
   
 
 #else

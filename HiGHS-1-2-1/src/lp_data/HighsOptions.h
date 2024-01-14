@@ -253,6 +253,14 @@ const string kIpmCrossHighsCrossoverString = "ipmcross_alp_standard_crossover";
 const string kIpmCrossHighsPrimalCrossoverString = "impcross_alp_primal_crossover";
 const string kIpmHighsCrossoverString = "ipm_alp_standard_crossover";
 const string kIpmHighsPrimalCrossoverString = "ipm_alp_primal_crossover";
+const string kOCDualNoIterString = "orbital_crossover_dual_no_iter";
+const string kOCIPMNoIterString = "orbital_crossover_ipm_no_iter";
+const string kDualAggregateHighsCrossoverIterString = "dual_alp_standard_crossover_iter";
+const string kDualAggregateHighsPrimalCrossoverIterString = "dual_alp_primal_crossover_iter";
+const string kIpmCrossHighsCrossoverIterString = "ipmcross_alp_standard_crossover_iter";
+const string kIpmCrossHighsPrimalCrossoverIterString = "ipmcross_alp_primal_crossover_iter";
+const string kIpmHighsCrossoverIterString = "ipm_alp_standard_crossover_iter";
+const string kIpmHighsPrimalCrossoverIterString = "ipm_alp_primal_crossover_iter";
 
 const HighsInt kKeepNRowsDeleteRows = -1;
 const HighsInt kKeepNRowsDeleteEntries = 0;
