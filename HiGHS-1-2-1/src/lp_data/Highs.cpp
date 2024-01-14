@@ -1226,9 +1226,15 @@ HighsStatus Highs::run() {
     setBasisValidity();
     while(!discrete)
       refinePartition();
+    alpSolution_ = solution_;
+    timer_.start(timer_.build_elp_iterative_clock);
+    buildPEALP();
+    timer_.stop(timer_.build_elp_iterative_clock);
+    passModel(pealp_);
+    // zeroIterationCounts();
     HighsSolution interior_point = 
       aggregator_.buildSolution(partition_, solution_);
-    call_status = crossover(interior_point, original_lp);
+    call_status = crossover(interior_point, pealp_);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
     if (return_status == HighsStatus::kError){
@@ -1460,9 +1466,15 @@ HighsStatus Highs::run() {
     setBasisValidity();
     while(!discrete)
       refinePartition();
+    alpSolution_ = solution_;
+    timer_.start(timer_.build_elp_iterative_clock);
+    buildPEALP();
+    timer_.stop(timer_.build_elp_iterative_clock);
+    passModel(pealp_);
+    // zeroIterationCounts();
     HighsSolution interior_point = 
       aggregator_.buildSolution(partition_, solution_);
-    call_status = crossover(interior_point, original_lp);
+    call_status = crossover(interior_point, pealp_);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
     if (return_status == HighsStatus::kError){
@@ -1538,9 +1550,15 @@ HighsStatus Highs::run() {
     setBasisValidity();
     while(!discrete)
       refinePartition();
+    alpSolution_ = solution_;
+    timer_.start(timer_.build_elp_iterative_clock);
+    buildPEALP();
+    timer_.stop(timer_.build_elp_iterative_clock);
+    passModel(pealp_);
+    // zeroIterationCounts();
     HighsSolution interior_point = 
       aggregator_.buildSolution(partition_, solution_);
-    call_status = primalCrossover(interior_point, original_lp);
+    call_status = primalCrossover(interior_point, pealp_);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
     if (return_status == HighsStatus::kError){
@@ -1616,9 +1634,15 @@ HighsStatus Highs::run() {
     setBasisValidity();
     while(!discrete)
       refinePartition();
+    alpSolution_ = solution_;
+    timer_.start(timer_.build_elp_iterative_clock);
+    buildPEALP();
+    timer_.stop(timer_.build_elp_iterative_clock);
+    passModel(pealp_);
+    // zeroIterationCounts();
     HighsSolution interior_point = 
       aggregator_.buildSolution(partition_, solution_);
-    call_status = crossover(interior_point, original_lp);
+    call_status = crossover(interior_point, pealp_);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
     if (return_status == HighsStatus::kError){
@@ -1694,9 +1718,15 @@ HighsStatus Highs::run() {
     setBasisValidity();
     while(!discrete)
       refinePartition();
+    alpSolution_ = solution_;
+    timer_.start(timer_.build_elp_iterative_clock);
+    buildPEALP();
+    timer_.stop(timer_.build_elp_iterative_clock);
+    passModel(pealp_);
+    // zeroIterationCounts();
     HighsSolution interior_point = 
       aggregator_.buildSolution(partition_, solution_);
-    call_status = primalCrossover(interior_point, original_lp);
+    call_status = primalCrossover(interior_point, pealp_);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
     if (return_status == HighsStatus::kError){

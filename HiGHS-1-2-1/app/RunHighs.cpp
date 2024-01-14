@@ -13,7 +13,7 @@
 /**@file ../app/RunHighs.cpp
  * @brief HiGHS main
  */
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 #include <iostream>
 #include <sys/stat.h>
 #include <sys/types.h>
