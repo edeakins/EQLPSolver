@@ -640,6 +640,12 @@ void LpSolver::RunPrimalCrossover() {
         crossover.time_primal() + crossover.time_dual();
     info_.updates_crossover =
         crossover.primal_pivots() + crossover.dual_pivots();
+    info_.total_pushes = 
+        crossover.primal_pushes() + crossover.dual_pushes();
+    info_.primal_pushes = 
+        crossover.primal_pushes();
+    info_.dual_pushes = 
+        crossover.dual_pushes();
     if (info_.status_crossover != IPX_STATUS_optimal) {
         // Crossover failed. Discard solution.
         x_crossover_.resize(0);
@@ -685,6 +691,7 @@ void LpSolver::RunPrimalCrossover() {
 }
 
 void LpSolver::RunCrossover() {
+    Timer full_crossover_timer;
     assert(basis_);
     const Int m = model_.rows();
     const Int n = model_.cols();
@@ -705,6 +712,12 @@ void LpSolver::RunCrossover() {
         crossover.time_primal() + crossover.time_dual();
     info_.updates_crossover =
         crossover.primal_pivots() + crossover.dual_pivots();
+    info_.total_pushes = 
+        crossover.primal_pushes() + crossover.dual_pushes();
+    info_.primal_pushes = 
+        crossover.primal_pushes();
+    info_.dual_pushes = 
+        crossover.dual_pushes();
     if (info_.status_crossover != IPX_STATUS_optimal) {
         // Crossover failed. Discard solution.
         x_crossover_.resize(0);
@@ -747,6 +760,7 @@ void LpSolver::RunCrossover() {
     if (info_.primal_infeas > control_.pfeasibility_tol() ||
         info_.dual_infeas > control_.dfeasibility_tol())
         info_.status_crossover = IPX_STATUS_imprecise;
+    info_.time_crossover_and_basic_solution = full_crossover_timer.Elapsed();
 }
 
 void LpSolver::PrintSummary() {

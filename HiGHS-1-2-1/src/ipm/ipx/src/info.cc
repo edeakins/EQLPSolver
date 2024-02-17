@@ -57,6 +57,9 @@ std::ostream& operator<<(std::ostream& os, const Info& info) {
     dump(os, "updates_start", info.updates_start);
     dump(os, "updates_ipm", info.updates_ipm);
     dump(os, "updates_crossover", info.updates_crossover);
+    dump(os, "total_pushes", info.total_pushes);
+    dump(os, "primal_pushes", info.primal_pushes);
+    dump(os, "dual_pushes", info.dual_pushes);
 
     dump(os, "time_total", fix2(info.time_total));
     dump(os, "time_ipm1", fix2(info.time_ipm1));

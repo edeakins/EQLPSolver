@@ -47,15 +47,16 @@ class HighsTimer {
     HighsInt i_clock = clock_def("Run HiGHS", "RnH");
     assert(i_clock == 0);
     run_highs_clock = i_clock;
-
     presolve_clock = clock_def("Presolve", "Pre");
     solve_clock = clock_def("Solve", "Slv");
     postsolve_clock = clock_def("Postsolve", "Pst");
+    crossover_clock = clock_def("Crossover", "Crs");
     orbital_crossover_clock = clock_def("Orbtial Crossover", "Obc");
     aggregate_solve_clock = clock_def("Initial Aggregate Solve", "Ias");
     build_alp_clock = clock_def("Build Initial Aggregate", "BIA");
     build_elp_iterative_clock = clock_def("Build Iterative ELPs", "BIE");
     equitable_partition_clock = clock_def("Refine Equitable Partition", "REF");
+    lift_ipm_solution_clock = clock_def("Lift Ipm Solution", "LIS");
   }
 
   /**
@@ -117,11 +118,13 @@ class HighsTimer {
     this->presolve_clock = clock_def("Presolve", "Pre");
     this->solve_clock = clock_def("Solve", "Slv");
     this->postsolve_clock = clock_def("Postsolve", "Pst");
+    this->crossover_clock = clock_def("Crossover", "Coc");
     this->orbital_crossover_clock = clock_def("Orbtial Crossover", "ObC");
     this->aggregate_solve_clock = clock_def("Initial Aggregate Solve", "IAS");
     this->build_alp_clock = clock_def("Build Initial Aggregate", "BIA");
     this->build_elp_iterative_clock = clock_def("Build Iterative ELPs", "BIE");
     this->equitable_partition_clock = clock_def("Refine Equitable Partition", "REF");
+    this->lift_ipm_solution_clock = clock_def("Lift Ipm Solution", "LIS");
   }
 
   /**
@@ -340,11 +343,13 @@ class HighsTimer {
   HighsInt presolve_clock;
   HighsInt solve_clock;
   HighsInt postsolve_clock;
+  HighsInt crossover_clock;
   HighsInt orbital_crossover_clock;
   HighsInt aggregate_solve_clock;
   HighsInt build_alp_clock;
   HighsInt build_elp_iterative_clock;
   HighsInt equitable_partition_clock;
+  HighsInt lift_ipm_solution_clock;
 };
 
 #endif /* UTIL_HIGHSTIMER_H_ */

@@ -619,8 +619,7 @@ HighsStatus solveLpIpx(const HighsOptions& options, HighsTimer& timer,
   // Struct ipx_info defined in ipx/include/ipx_info.h
   const ipx::Info ipx_info = lps.GetInfo();
   if (report_solve_data) reportSolveData(options.log_options, ipx_info);
-  highs_info.ipm_iteration_count += (HighsInt)ipx_info.iter;
-  highs_info.crossover_iteration_count += (HighsInt)ipx_info.updates_crossover;
+  
   // highs_info.crossover_iteration_count += (int)ipx_info.pushes_crossover;
 
   // If not solved...
@@ -798,8 +797,12 @@ HighsStatus solveLpIpx(const HighsOptions& options, HighsTimer& timer,
     assert(!highs_basis.valid);
   }
   highs_info.basis_validity = highs_basis.valid ? kBasisValidityValid : kBasisValidityInvalid;
+  highs_info.ipm_iteration_count += (HighsInt)ipx_info.iter;
+  highs_info.crossover_iteration_count += (HighsInt)ipx_info.total_pushes;
+  highs_info.primal_crossover_iteration_count += (HighsInt)ipx_info.primal_pushes;
+  highs_info.dual_crossover_iteration_count += (HighsInt)ipx_info.dual_pushes;
   highs_info.ipm_time = lps.report_info_.time_ipm1 + lps.report_info_.time_ipm2;
-  highs_info.crossover_time = lps.report_info_.time_crossover;
+  highs_info.crossover_time = ipx_info.time_crossover_and_basic_solution;
   HighsStatus return_status;
   if (imprecise_solution) {
     model_status = HighsModelStatus::kUnknown;

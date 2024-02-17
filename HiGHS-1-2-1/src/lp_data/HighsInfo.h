@@ -130,13 +130,15 @@ void reportInfo(FILE* file, const InfoRecordDouble& info,
 struct HighsInfoStruct {
   bool valid;
   int64_t mip_node_count;
-  HighsInt orbital_crossover_major_iteration_count;
+  HighsInt major_iteration_count;
   HighsInt orbital_crossover_minor_iteration_count;
   HighsInt ready_for_crash_basis_construction = 0;
-  HighsInt simplex_iteration_count;
-  HighsInt ipm_iteration_count;
-  HighsInt qp_iteration_count;
-  HighsInt crossover_iteration_count;
+  HighsInt simplex_iteration_count = 0;
+  HighsInt ipm_iteration_count = 0;
+  HighsInt qp_iteration_count = 0;
+  HighsInt crossover_iteration_count = 0;
+  HighsInt primal_crossover_iteration_count = 0;
+  HighsInt dual_crossover_iteration_count = 0;
   HighsInt primal_solution_status;
   HighsInt dual_solution_status;
   HighsInt basis_validity;
@@ -227,7 +229,7 @@ class HighsInfo : public HighsInfoStruct {
                                    "Flag telling HiGHS to develop crash basis from a given solution from Orbital Crossover",
                                    advanced, &simplex_iteration_count, 0);
 
-    record_int = new InfoRecordInt("orbital_crossover_major_iteration_count",
+    record_int = new InfoRecordInt("major_iteration_count",
                                    "Iteration count for orbital crossover major iterations (Lifting)",
                                    advanced, &simplex_iteration_count, 0);
     records.push_back(record_int);

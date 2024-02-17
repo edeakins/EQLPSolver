@@ -1312,18 +1312,18 @@ HighsStatus Highs::setHotStartInterface(const HotStart& hot_start) {
 }
 
 void Highs::zeroIterationCounts() {
-  if (options_.simplex_strategy == kSimplexStrategyOrbitalCrossover){
-    info_.simplex_iteration_count = 0;
-    info_.ipm_iteration_count = 0;
-    info_.crossover_iteration_count = 0;
+  if (options_.main_strategy == kMainStratCross ||
+      options_.main_strategy == kMainStratOC){
     info_.qp_iteration_count = 0;
     return;
   }
   info_.orbital_crossover_minor_iteration_count = 0;
-  info_.orbital_crossover_major_iteration_count = 0;
+  info_.major_iteration_count = 0;
   info_.simplex_iteration_count = 0;
   info_.ipm_iteration_count = 0;
   info_.crossover_iteration_count = 0;
+  info_.primal_crossover_iteration_count = 0;
+  info_.dual_crossover_iteration_count = 0;
   info_.qp_iteration_count = 0;
 }
 

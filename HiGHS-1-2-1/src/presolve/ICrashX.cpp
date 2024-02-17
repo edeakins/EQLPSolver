@@ -140,6 +140,10 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
 
   if (status != HighsStatus::kOk) return false;
 
+  highs_info.primal_crossover_iteration_count += (HighsInt)info.primal_pushes;
+  highs_info.dual_crossover_iteration_count += (HighsInt)info.dual_pushes;
+  highs_info.crossover_iteration_count += (HighsInt)info.total_pushes;
+
   std::cout << "Crossover basic solution >>>" << std::endl;
 
   return true;
@@ -253,6 +257,10 @@ bool callPrimalCrossover(const HighsLp& lp, const HighsOptions& options,
       solution);
 
   if (status != HighsStatus::kOk) return false;
+
+  highs_info.primal_crossover_iteration_count += (HighsInt)info.primal_pushes;
+  highs_info.dual_crossover_iteration_count += (HighsInt)info.dual_pushes;
+  highs_info.crossover_iteration_count += (HighsInt)info.total_pushes;
 
   std::cout << "Primal crossover solution >>>" << std::endl;
 

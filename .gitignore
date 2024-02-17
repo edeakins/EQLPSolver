@@ -232,6 +232,7 @@ lpi_h2gmp.cpp
 ##Build Directory for DHiGHS"
 devBuild
 build
+build_debug
 debugBuild
 debugMemoryBuild
 # mittleman_symmetric_mps

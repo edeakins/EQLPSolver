@@ -1883,6 +1883,7 @@ void HEkkPrimal::update() {
 
   // Update the iteration count
   ekk_instance_.iteration_count_++;
+  if (solve_phase == kSolvePhaseOrbitalCrossover) ekk_instance_.oc_iteration_count_++;
 
   // Reset the devex when there are too many errors
   if (edge_weight_mode == EdgeWeightMode::kDevex &&

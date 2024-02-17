@@ -59,6 +59,9 @@ struct ipx_info {
     ipxint updates_start;       /* # basis updates for starting basis */
     ipxint updates_ipm;         /* # basis updates in IPM */
     ipxint updates_crossover;   /* # basis updates in crossover */
+    ipxint primal_pushes;
+    ipxint dual_pushes;
+    ipxint total_pushes;
 
     /* major computation times */
     double time_total;          /* total runtime (wallclock) */
@@ -66,6 +69,7 @@ struct ipx_info {
     double time_ipm2;           /* IPM after switch (without starting basis) */
     double time_starting_basis; /* constructing starting basis */
     double time_crossover;      /* crossover */
+    double time_crossover_and_basic_solution;
 
     /* profiling linear solver */
     double time_kkt_factorize;  /* factorize/build precond for KKT matrix */

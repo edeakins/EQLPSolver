@@ -242,6 +242,7 @@ void reportOption(FILE* file, const OptionRecordDouble& option,
 void reportOption(FILE* file, const OptionRecordString& option,
                   const bool report_only_deviations, const bool html);
 
+// Solve method strings
 const string kSimplexString = "simplex";
 const string kIpmString = "ipm";
 const string kOCDualString = "orbital_crossover_dual";
@@ -261,6 +262,14 @@ const string kIpmCrossHighsCrossoverIterString = "ipmcross_alp_standard_crossove
 const string kIpmCrossHighsPrimalCrossoverIterString = "ipmcross_alp_primal_crossover_iter";
 const string kIpmHighsCrossoverIterString = "ipm_alp_standard_crossover_iter";
 const string kIpmHighsPrimalCrossoverIterString = "ipm_alp_primal_crossover_iter";
+
+// Main strategy methods (Pure Highs Dual, OC, Highs Cross)
+// const string kMainStratDual = "main_dual";
+const string kMainStratOC = "main_oc";
+const string kMainStratOCIter = "main_oc_iter";
+const string kMainStratCross = "main_cross";
+const string kMainStratCrossIter = "main_cross_iter";
+const string kMainStratHighs = "main_highs";
 
 const HighsInt kKeepNRowsDeleteRows = -1;
 const HighsInt kKeepNRowsDeleteEntries = 0;
@@ -286,7 +295,8 @@ struct HighsOptionsStruct {
   // Run-time options read from the command line
   std::string presolve;
   std::string solver;
-  std::string iterative;
+  std::string main_strategy;
+  std::string iterative_lift;
   std::string parallel;
   std::string ranging;
   std::string time_file;

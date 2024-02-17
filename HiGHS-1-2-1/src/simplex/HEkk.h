@@ -165,6 +165,7 @@ class HEkk {
   double cost_perturbation_base_;
   double cost_perturbation_max_abs_cost_;
   HighsInt iteration_count_ = 0;
+  HighsInt oc_iteration_count_ = 0;
   HighsInt dual_simplex_cleanup_level_ = 0;
   HighsInt dual_simplex_phase1_cleanup_level_ = 0;
 
