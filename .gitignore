@@ -242,9 +242,9 @@ symmetric_1
 ##Lp files with cbc cuts
 CutGenerationLpFiles
 
-# Instance files
-HS-COV-COD
-MIPLIB-2017
+# # Instance files
+# HS-COV-COD
+# MIPLIB-2017
 
 # Results from benchmarks
 benchmark_timings
