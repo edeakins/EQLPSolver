@@ -1341,8 +1341,8 @@ HighsStatus Highs::run() {
       refinePartition();
       timer_.stop(timer_.equitable_partition_clock);
     }
-    std::cout << "refined" << std::endl;
-    std::cin.get();
+    // std::cout << "refined" << std::endl;
+    // std::cin.get();
     alpSolution_ = solution_;
     timer_.start(timer_.build_elp_iterative_clock);
     buildPEALP();
@@ -1977,15 +1977,15 @@ HighsStatus Highs::run() {
         // Grab the lifted basis and store the major and minor orbital
         // crossover iterations before the get cleared by passModel()
         getLiftedBasis();
-        major_iter = info_.major_iteration_count;
-        minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // major_iter = info_.major_iteration_count;
+        // minor_iter = info_.orbital_crossover_minor_iteration_count;
         passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
-        info_.major_iteration_count = major_iter;
-        info_.orbital_crossover_minor_iteration_count = minor_iter;
+        // info_.major_iteration_count = major_iter;
+        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         // Pass the lifted initial ealp basis to highs to build a simplex
         // basis for the lp.
         setBasis(ealpBasis_);
@@ -2190,15 +2190,15 @@ HighsStatus Highs::run() {
         // Grab the lifted basis and store the major and minor orbital
         // crossover iterations before the get cleared by passModel()
         getLiftedBasis();
-        major_iter = info_.major_iteration_count;
-        minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // major_iter = info_.major_iteration_count;
+        // minor_iter = info_.orbital_crossover_minor_iteration_count;
         passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
-        info_.major_iteration_count = major_iter;
-        info_.orbital_crossover_minor_iteration_count = minor_iter;
+        // info_.major_iteration_count = major_iter;
+        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         // Pass the lifted initial ealp basis to highs to build a simplex
         // basis for the lp.
         setBasis(ealpBasis_);
@@ -2385,15 +2385,15 @@ HighsStatus Highs::run() {
         // Grab the lifted basis and store the major and minor orbital
         // crossover iterations before the get cleared by passModel()
         // getLiftedBasis();
-        major_iter = info_.major_iteration_count;
-        minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // major_iter = info_.major_iteration_count;
+        // minor_iter = info_.orbital_crossover_minor_iteration_count;
         passModel(pealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
-        info_.major_iteration_count = major_iter;
-        info_.orbital_crossover_minor_iteration_count = minor_iter;
+        // info_.major_iteration_count = major_iter;
+        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolutionPEALP(partition_, alpSolution_);
         timer_.start(timer_.crossover_clock);
@@ -2588,15 +2588,15 @@ HighsStatus Highs::run() {
         // Grab the lifted basis and store the major and minor orbital
         // crossover iterations before the get cleared by passModel()
         // getLiftedBasis();
-        major_iter = info_.major_iteration_count;
-        minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // major_iter = info_.major_iteration_count;
+        // minor_iter = info_.orbital_crossover_minor_iteration_count;
         passModel(pealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
-        info_.major_iteration_count = major_iter;
-        info_.orbital_crossover_minor_iteration_count = minor_iter;
+        // info_.major_iteration_count = major_iter;
+        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolutionPEALP(partition_, alpSolution_);
         timer_.start(timer_.crossover_clock);
@@ -2791,15 +2791,15 @@ HighsStatus Highs::run() {
         // Grab the lifted basis and store the major and minor orbital
         // crossover iterations before the get cleared by passModel()
         // getLiftedBasis();
-        major_iter = info_.major_iteration_count;
-        minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // major_iter = info_.major_iteration_count;
+        // minor_iter = info_.orbital_crossover_minor_iteration_count;
         passModel(pealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
-        info_.major_iteration_count = major_iter;
-        info_.orbital_crossover_minor_iteration_count = minor_iter;
+        // info_.major_iteration_count = major_iter;
+        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolutionPEALP(partition_, alpSolution_);
         timer_.start(timer_.crossover_clock);
@@ -2994,15 +2994,15 @@ HighsStatus Highs::run() {
         // Grab the lifted basis and store the major and minor orbital
         // crossover iterations before the get cleared by passModel()
         // getLiftedBasis();
-        major_iter = info_.major_iteration_count;
-        minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // major_iter = info_.major_iteration_count;
+        // minor_iter = info_.orbital_crossover_minor_iteration_count;
         passModel(pealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
-        info_.major_iteration_count = major_iter;
-        info_.orbital_crossover_minor_iteration_count = minor_iter;
+        // info_.major_iteration_count = major_iter;
+        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolutionPEALP(partition_, alpSolution_);
         timer_.start(timer_.crossover_clock);
@@ -3198,15 +3198,15 @@ HighsStatus Highs::run() {
         // Grab the lifted basis and store the major and minor orbital
         // crossover iterations before the get cleared by passModel()
         // getLiftedBasis();
-        major_iter = info_.major_iteration_count;
-        minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // major_iter = info_.major_iteration_count;
+        // minor_iter = info_.orbital_crossover_minor_iteration_count;
         passModel(pealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
-        info_.major_iteration_count = major_iter;
-        info_.orbital_crossover_minor_iteration_count = minor_iter;
+        // info_.major_iteration_count = major_iter;
+        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolutionPEALP(partition_, alpSolution_);
         timer_.start(timer_.crossover_clock);
@@ -3402,15 +3402,15 @@ HighsStatus Highs::run() {
         // Grab the lifted basis and store the major and minor orbital
         // crossover iterations before the get cleared by passModel()
         // getLiftedBasis();
-        major_iter = info_.major_iteration_count;
-        minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // major_iter = info_.major_iteration_count;
+        // minor_iter = info_.orbital_crossover_minor_iteration_count;
         passModel(pealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
-        info_.major_iteration_count = major_iter;
-        info_.orbital_crossover_minor_iteration_count = minor_iter;
+        // info_.major_iteration_count = major_iter;
+        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolutionPEALP(partition_, alpSolution_);
         timer_.start(timer_.crossover_clock);

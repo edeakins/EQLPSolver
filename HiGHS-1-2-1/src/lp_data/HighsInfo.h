@@ -132,6 +132,7 @@ struct HighsInfoStruct {
   int64_t mip_node_count;
   HighsInt major_iteration_count;
   HighsInt orbital_crossover_minor_iteration_count;
+  HighsInt orbital_crossover_degenerate_iteration_count;
   HighsInt ready_for_crash_basis_construction = 0;
   HighsInt simplex_iteration_count = 0;
   HighsInt ipm_iteration_count = 0;

@@ -1313,11 +1313,14 @@ HighsStatus Highs::setHotStartInterface(const HotStart& hot_start) {
 
 void Highs::zeroIterationCounts() {
   if (options_.main_strategy == kMainStratCross ||
-      options_.main_strategy == kMainStratOC){
+      options_.main_strategy == kMainStratOC ||
+      options_.main_strategy == kMainStratCrossIter ||
+      options_.main_strategy == kMainStratOCIter){
     info_.qp_iteration_count = 0;
     return;
   }
   info_.orbital_crossover_minor_iteration_count = 0;
+  info_.orbital_crossover_degenerate_iteration_count = 0;
   info_.major_iteration_count = 0;
   info_.simplex_iteration_count = 0;
   info_.ipm_iteration_count = 0;

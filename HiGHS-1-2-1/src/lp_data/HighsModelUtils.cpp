@@ -148,6 +148,7 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, "Highs Run,");
       fprintf(file, "Original Columns (Reductions),");
       fprintf(file, "Original Rows (Reductions),");
+      fprintf(file, "Major Iterations,");
       fprintf(file, "Degenerate Crossover Pivots,");
       fprintf(file, "Total Crossover Pivots\n");
       // fprintf(file, "Columns Reduced (%),");
@@ -186,10 +187,13 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << "),";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.num_degen_pivots << ",";
+      time << info.major_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.num_total_pivots << "\n";
+      time << info.orbital_crossover_degenerate_iteration_count << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.orbital_crossover_minor_iteration_count << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
       // time << info.col_reduct_percent << ",";
@@ -235,10 +239,13 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << "),";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.num_degen_pivots << ",";
+      time << info.major_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.num_total_pivots << "\n";
+      time << info.orbital_crossover_degenerate_iteration_count << ",";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.orbital_crossover_minor_iteration_count << "\n";
       fprintf(file, time.str().c_str());
       time.str(std::string());
       // time << info.col_reduct_percent << ",";
@@ -262,6 +269,7 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, "Highs Run,");
       fprintf(file, "Original Columns (Reductions),");
       fprintf(file, "Original Rows (Reductions),");
+      fprintf(file, "Major Iterations,");
       fprintf(file, "Primal Crossover Pivots,");
       fprintf(file, "Dual Crossover Pivots\n");
       // Write instance name
@@ -296,6 +304,9 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, time.str().c_str());
       time.str(std::string());
       time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << "),";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.major_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
       time << info.primal_crossover_iteration_count << ",";
@@ -334,6 +345,9 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, time.str().c_str());
       time.str(std::string());
       time << info.original_rows << " (-" << info.original_rows - info.reduced_rows << "),";
+      fprintf(file, time.str().c_str());
+      time.str(std::string());
+      time << info.major_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
       time << info.primal_crossover_iteration_count << ",";

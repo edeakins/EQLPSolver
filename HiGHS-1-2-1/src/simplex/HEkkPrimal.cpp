@@ -354,6 +354,21 @@ HighsStatus HEkkPrimal::solve(const bool pass_force_phase2) {
   if (solve_phase == kSolvePhaseOrbitalCrossover)
     ekk_instance_.model_status_ = HighsModelStatus::kHasVertexButNoBasis;
 
+  // if (solve_phase == kSolvePhaseOptimalCleanup 
+  //     && info.simplex_strategy == kSimplexStrategyOrbitalCrossover){
+  //   getBasicPrimalInfeasibility();
+  //   if (info.num_primal_infeasibilities > 0) {
+  //     // Primal infeasibilities so should be in phase 1
+  //     solve_phase = kSolvePhase1;
+  //   }
+  //   phase1ComputeDual();
+  //   solvePhase1();
+  //   getBasicPrimalInfeasibility();
+  //   if (info.num_primal_infeasibilities == 0){
+  //     solve_phase = kSolvePhaseOptimal;
+  //   }
+  // }
+
   if (solve_phase == kSolvePhaseOptimalCleanup) {
     highsLogDev(options.log_options, HighsLogType::kInfo,
                 "HEkkPrimal:: Using dual simplex to try to clean up num / "
@@ -948,10 +963,10 @@ void HEkkPrimal::rebuild() {
   HighsSimplexInfo& info = ekk_instance_.info_;
   HighsSimplexStatus& status = ekk_instance_.status_;
   // Clear taboo flag from any bad basis changes
-  // ekk_instance_.clearBadBasisChangeTabooFlag();
+  ekk_instance_.clearBadBasisChangeTabooFlag();
   if (residual_col != (ekk_instance_.lp_.num_col_ - 1) 
-      && solve_phase == kSolvePhaseOrbitalCrossover
-      && variable_in != -1){
+      && solve_phase == kSolvePhaseOrbitalCrossover){
+      // && variable_in != -1){
     const HighsInt row_start = residual_col - ekk_instance_.lp_.num_aggregate_cols_
                                 + ekk_instance_.lp_.num_aggregate_rows_;
     // std::cout << "num_col: " << ekk_instance_.lp_.num_col_ << std::endl;
@@ -961,6 +976,7 @@ void HEkkPrimal::rebuild() {
     // std::cout << "num_col: " << ekk_instance_.lp_.num_col_ << std::endl;
     // std::cout << "num_row: " << ekk_instance_.lp_.num_row_ << std::endl;
     rebuild_reason = kRebuildReasonNo;
+    reportRebuild(rebuild_reason);
     return;
   }
 
@@ -1024,14 +1040,18 @@ void HEkkPrimal::rebuild() {
   }
 
   ekk_instance_.computePrimal();
-  if (solve_phase == kSolvePhase2) {
+  if (solve_phase == kSolvePhase2){
+      // || solve_phase == kSolvePhaseOrbitalCrossover) {
     bool correct_primal_ok = correctPrimal();
     assert(correct_primal_ok);
   }
   getBasicPrimalInfeasibility();
   if (info.num_primal_infeasibilities > 0) {
     // Primal infeasibilities so should be in phase 1
-    if (solve_phase == kSolvePhase2) {
+    if (solve_phase == kSolvePhase2 || 
+        (solve_phase == kSolvePhaseOrbitalCrossover && 
+        residual_col != (ekk_instance_.lp_.num_col_ - 1)) ||
+        ekk_instance_.lp_.num_residual_cols_ == 0) {
       highsLogDev(
           ekk_instance_.options_->log_options, HighsLogType::kWarning,
           "HEkkPrimal::rebuild switching back to phase 1 from phase 2\n");
@@ -1665,9 +1685,10 @@ void HEkkPrimal::chooseRow() {
       }
     }
   }
-  if (std::fabs(relaxTheta - 0) < 1e-6)
-    ekk_instance_.lp_.num_degen_pivot++;
-  ekk_instance_.lp_.num_total_pivot++; 
+  if (std::fabs(relaxTheta - 0) < 1e-7 &&
+      solve_phase == kSolvePhaseOrbitalCrossover)
+    ekk_instance_.oc_degenerate_iteration_count_++;
+  // ekk_instance_.lp_.num_total_pivot++; 
   // std::cout << "num_degen: " << num_degen << std::endl;
   // std::cin.get();
   analysis->simplexTimerStop(Chuzr2Clock);
@@ -2511,7 +2532,8 @@ bool HEkkPrimal::correctPrimal(const bool initialise) {
     max_max_primal_correction = 0;
     return true;
   }
-  assert(solve_phase == kSolvePhase2);
+  assert(solve_phase == kSolvePhase2
+         || solve_phase == kSolvePhaseOrbitalCrossover);
   HighsSimplexInfo& info = ekk_instance_.info_;
   HighsInt num_primal_correction = 0;
   double max_primal_correction = 0;
@@ -3221,11 +3243,17 @@ void HEkkPrimal::getBasicPrimalInfeasibility() {
       primal_infeasibility = value - upper;
     }
     if (primal_infeasibility > 0) {
-      if (primal_infeasibility > primal_feasibility_tolerance)
+      if (primal_infeasibility > primal_feasibility_tolerance){
         num_primal_infeasibility++;
+        std::cout << "value: " << value << std::endl;
+        std::cout << "lower: " << lower << std::endl;
+        std::cout << "upper: " << upper << std::endl;
+        // std::cin.get();
+      }
       max_primal_infeasibility =
           std::max(primal_infeasibility, max_primal_infeasibility);
       sum_primal_infeasibility += primal_infeasibility;
+      
     }
   }
   if (updated_num_primal_infeasibility >= 0) {
