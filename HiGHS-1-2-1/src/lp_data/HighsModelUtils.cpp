@@ -317,6 +317,10 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time.str(std::string());
     }
     else{
+      // Write instance name
+      std::stringstream instance_name;
+      instance_name << info.instance_name << ",";
+      fprintf(file, instance_name.str().c_str());
       // Write the relevant times
       std::stringstream time;
       // time.precision(2);

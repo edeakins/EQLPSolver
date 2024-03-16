@@ -1294,3 +1294,7 @@ HighsBasis HighsOCAggregate::getBasis(){
     // elpBasis.was_alien = false;
     return elpBasis;
 }
+
+std::vector<int>& HighsOCAggregate::getFrontCol(){
+    return frontCol;
+}

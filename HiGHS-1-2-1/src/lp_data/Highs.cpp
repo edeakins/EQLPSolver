@@ -805,6 +805,8 @@ HighsStatus Highs::run() {
     timer_.stop(timer_.build_alp_clock);
     // Grab and pass initial aggregate model and pass to highs
     buildALP();
+    std::vector<int>& front_col = aggregator_.getFrontCol();
+    equitablePartition_.intakeFrontCol(front_col);
     info_.original_cols = original_lp.num_col_;
     info_.original_rows = original_lp.num_row_;
     info_.reduced_cols = alp_.num_col_;
@@ -855,6 +857,8 @@ HighsStatus Highs::run() {
       options_.solver = kOCDualString;
       getOrbitalCrossoverBasis();
       getOrbitalCrossoverSolution();
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      // equitablePartition_.intakeHighsBasis(alpBasis_);
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -869,7 +873,8 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        // change = equitablePartition_.getNumBasicParts();
+        change = equitablePartition_.getNumBasicParts();
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -879,6 +884,8 @@ HighsStatus Highs::run() {
         timer_.start(timer_.build_elp_iterative_clock);
         buildEALP();
         timer_.stop(timer_.build_elp_iterative_clock);
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
         // if (!ealp_.num_residual_cols_ && !discrete) continue;
         // buildALP();
         // buildPEALP();
@@ -927,6 +934,7 @@ HighsStatus Highs::run() {
         setBasisValidity();
         getOrbitalCrossoverBasis();
         getOrbitalCrossoverSolution();
+        equitablePartition_.intakeHighsBasis(alpBasis_);
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -1083,7 +1091,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -1336,44 +1344,55 @@ HighsStatus Highs::run() {
       return returnFromRun(HighsStatus::kWarning);
     }
     setBasisValidity();
-    while (!discrete){
-      timer_.start(timer_.equitable_partition_clock);
-      refinePartition();
-      timer_.stop(timer_.equitable_partition_clock);
-    }
-    // std::cout << "refined" << std::endl;
-    // std::cin.get();
-    alpSolution_ = solution_;
-    timer_.start(timer_.build_elp_iterative_clock);
-    buildPEALP();
-    timer_.stop(timer_.build_elp_iterative_clock);
-    passModel(pealp_);
-    // zeroIterationCounts();
-    HighsSolution interior_point = 
-      aggregator_.buildSolution(partition_, solution_);
-    timer_.start(timer_.crossover_clock);
-    call_status = crossover(interior_point, pealp_);
-    timer_.start(timer_.crossover_clock);
-    return_status = interpretCallStatus(options_.log_options, call_status,
-                                        return_status, "callSolveLp");
-    if (return_status == HighsStatus::kError){
+    if (discrete) {
       stop_highs_run_clock = true;
       called_return_from_run = false;
-      scaled_model_status_ = HighsModelStatus::kModelError;
-      model_status_ = HighsModelStatus::kModelError;
-      return returnFromRun(return_status);
     }
-    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
-      stop_highs_run_clock = true;
-      called_return_from_run = false;
-      setHighsModelStatusAndClearSolutionAndBasis(
-          HighsModelStatus::kTimeLimit);
-      highsLogDev(log_options, HighsLogType::kError,
-                  "ALP solve reached timeout\n");
-      return returnFromRun(HighsStatus::kWarning);
+    else{
+      options_.solver = kIpmString;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      while (!discrete){
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+      }
+      // std::cout << "refined" << std::endl;
+      // std::cin.get();
+      // alpSolution_ = solution_;
+      timer_.start(timer_.build_elp_iterative_clock);
+      buildPEALP();
+      timer_.stop(timer_.build_elp_iterative_clock);
+      passModel(pealp_);
+      // zeroIterationCounts();
+      HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+      timer_.start(timer_.crossover_clock);
+      call_status = crossover(interior_point, pealp_);
+      timer_.stop(timer_.crossover_clock);
+      return_status = interpretCallStatus(options_.log_options, call_status,
+                                      return_status, "callSolveLp");
+      if (return_status == HighsStatus::kError){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        scaled_model_status_ = HighsModelStatus::kModelError;
+        model_status_ = HighsModelStatus::kModelError;
+        return returnFromRun(return_status);
+      }
+      if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        setHighsModelStatusAndClearSolutionAndBasis(
+            HighsModelStatus::kTimeLimit);
+        highsLogDev(log_options, HighsLogType::kError,
+                    "ALP solve reached timeout\n");
+        return returnFromRun(HighsStatus::kWarning);
+      }
     }
     stop_highs_run_clock = true;
     called_return_from_run = false;
+    info_.num_degen_pivots = ealp_.num_degen_pivot;
+    info_.num_total_pivots = ealp_.num_total_pivot;
     timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
          timer_.clock_time.at(timer_.crossover_clock));
@@ -1437,42 +1456,55 @@ HighsStatus Highs::run() {
       return returnFromRun(HighsStatus::kWarning);
     }
     setBasisValidity();
-    while (!discrete){
-      timer_.start(timer_.equitable_partition_clock);
-      refinePartition();
-      timer_.stop(timer_.equitable_partition_clock);
-    }
-    alpSolution_ = solution_;
-    timer_.start(timer_.build_elp_iterative_clock);
-    buildPEALP();
-    timer_.stop(timer_.build_elp_iterative_clock);
-    passModel(pealp_);
-    // zeroIterationCounts();
-    HighsSolution interior_point = 
-      aggregator_.buildSolution(partition_, solution_);
-    timer_.start(timer_.crossover_clock);
-    call_status = crossover(interior_point, pealp_);
-    timer_.start(timer_.crossover_clock);
-    return_status = interpretCallStatus(options_.log_options, call_status,
-                                        return_status, "callSolveLp");
-    if (return_status == HighsStatus::kError){
+    if (discrete) {
       stop_highs_run_clock = true;
       called_return_from_run = false;
-      scaled_model_status_ = HighsModelStatus::kModelError;
-      model_status_ = HighsModelStatus::kModelError;
-      return returnFromRun(return_status);
     }
-    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
-      stop_highs_run_clock = true;
-      called_return_from_run = false;
-      setHighsModelStatusAndClearSolutionAndBasis(
-          HighsModelStatus::kTimeLimit);
-      highsLogDev(log_options, HighsLogType::kError,
-                  "ALP solve reached timeout\n");
-      return returnFromRun(HighsStatus::kWarning);
+    else{
+      options_.solver = kIpmString;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      while (!discrete){
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+      }
+      // std::cout << "refined" << std::endl;
+      // std::cin.get();
+      // alpSolution_ = solution_;
+      timer_.start(timer_.build_elp_iterative_clock);
+      buildPEALP();
+      timer_.stop(timer_.build_elp_iterative_clock);
+      passModel(pealp_);
+      // zeroIterationCounts();
+      HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+      timer_.start(timer_.crossover_clock);
+      call_status = primalCrossover(interior_point, pealp_);
+      timer_.stop(timer_.crossover_clock);
+      return_status = interpretCallStatus(options_.log_options, call_status,
+                                      return_status, "callSolveLp");
+      if (return_status == HighsStatus::kError){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        scaled_model_status_ = HighsModelStatus::kModelError;
+        model_status_ = HighsModelStatus::kModelError;
+        return returnFromRun(return_status);
+      }
+      if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        setHighsModelStatusAndClearSolutionAndBasis(
+            HighsModelStatus::kTimeLimit);
+        highsLogDev(log_options, HighsLogType::kError,
+                    "ALP solve reached timeout\n");
+        return returnFromRun(HighsStatus::kWarning);
+      }
     }
     stop_highs_run_clock = true;
     called_return_from_run = false;
+    info_.num_degen_pivots = ealp_.num_degen_pivot;
+    info_.num_total_pivots = ealp_.num_total_pivot;
     timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
          timer_.clock_time.at(timer_.crossover_clock));
@@ -1536,42 +1568,55 @@ HighsStatus Highs::run() {
       return returnFromRun(HighsStatus::kWarning);
     }
     setBasisValidity();
-    while (!discrete){
-      timer_.start(timer_.equitable_partition_clock);
-      refinePartition();
-      timer_.stop(timer_.equitable_partition_clock);
-    }
-    alpSolution_ = solution_;
-    timer_.start(timer_.build_elp_iterative_clock);
-    buildPEALP();
-    timer_.stop(timer_.build_elp_iterative_clock);
-    passModel(pealp_);
-    // zeroIterationCounts();
-    HighsSolution interior_point = 
-      aggregator_.buildSolution(partition_, solution_);
-    timer_.start(timer_.crossover_clock);
-    call_status = crossover(interior_point, pealp_);
-    timer_.start(timer_.crossover_clock);
-    return_status = interpretCallStatus(options_.log_options, call_status,
-                                        return_status, "callSolveLp");
-    if (return_status == HighsStatus::kError){
+    if (discrete) {
       stop_highs_run_clock = true;
       called_return_from_run = false;
-      scaled_model_status_ = HighsModelStatus::kModelError;
-      model_status_ = HighsModelStatus::kModelError;
-      return returnFromRun(return_status);
     }
-    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
-      stop_highs_run_clock = true;
-      called_return_from_run = false;
-      setHighsModelStatusAndClearSolutionAndBasis(
-          HighsModelStatus::kTimeLimit);
-      highsLogDev(log_options, HighsLogType::kError,
-                  "ALP solve reached timeout\n");
-      return returnFromRun(HighsStatus::kWarning);
+    else{
+      options_.solver = kIpmString;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      while (!discrete){
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+      }
+      // std::cout << "refined" << std::endl;
+      // std::cin.get();
+      // alpSolution_ = solution_;
+      timer_.start(timer_.build_elp_iterative_clock);
+      buildPEALP();
+      timer_.stop(timer_.build_elp_iterative_clock);
+      passModel(pealp_);
+      // zeroIterationCounts();
+      HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+      timer_.start(timer_.crossover_clock);
+      call_status = crossover(interior_point, pealp_);
+      timer_.stop(timer_.crossover_clock);
+      return_status = interpretCallStatus(options_.log_options, call_status,
+                                      return_status, "callSolveLp");
+      if (return_status == HighsStatus::kError){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        scaled_model_status_ = HighsModelStatus::kModelError;
+        model_status_ = HighsModelStatus::kModelError;
+        return returnFromRun(return_status);
+      }
+      if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        setHighsModelStatusAndClearSolutionAndBasis(
+            HighsModelStatus::kTimeLimit);
+        highsLogDev(log_options, HighsLogType::kError,
+                    "ALP solve reached timeout\n");
+        return returnFromRun(HighsStatus::kWarning);
+      }
     }
     stop_highs_run_clock = true;
     called_return_from_run = false;
+    info_.num_degen_pivots = ealp_.num_degen_pivot;
+    info_.num_total_pivots = ealp_.num_total_pivot;
     timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
          timer_.clock_time.at(timer_.crossover_clock));
@@ -1635,42 +1680,55 @@ HighsStatus Highs::run() {
       return returnFromRun(HighsStatus::kWarning);
     }
     setBasisValidity();
-    while (!discrete){
-      timer_.start(timer_.equitable_partition_clock);
-      refinePartition();
-      timer_.stop(timer_.equitable_partition_clock);
-    }
-    alpSolution_ = solution_;
-    timer_.start(timer_.build_elp_iterative_clock);
-    buildPEALP();
-    timer_.stop(timer_.build_elp_iterative_clock);
-    passModel(pealp_);
-    // zeroIterationCounts();
-    HighsSolution interior_point = 
-      aggregator_.buildSolution(partition_, solution_);
-    timer_.start(timer_.crossover_clock);
-    call_status = primalCrossover(interior_point, pealp_);
-    timer_.stop(timer_.crossover_clock);
-    return_status = interpretCallStatus(options_.log_options, call_status,
-                                        return_status, "callSolveLp");
-    if (return_status == HighsStatus::kError){
+    if (discrete) {
       stop_highs_run_clock = true;
       called_return_from_run = false;
-      scaled_model_status_ = HighsModelStatus::kModelError;
-      model_status_ = HighsModelStatus::kModelError;
-      return returnFromRun(return_status);
     }
-    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
-      stop_highs_run_clock = true;
-      called_return_from_run = false;
-      setHighsModelStatusAndClearSolutionAndBasis(
-          HighsModelStatus::kTimeLimit);
-      highsLogDev(log_options, HighsLogType::kError,
-                  "ALP solve reached timeout\n");
-      return returnFromRun(HighsStatus::kWarning);
+    else{
+      options_.solver = kIpmString;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      while (!discrete){
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+      }
+      // std::cout << "refined" << std::endl;
+      // std::cin.get();
+      // alpSolution_ = solution_;
+      timer_.start(timer_.build_elp_iterative_clock);
+      buildPEALP();
+      timer_.stop(timer_.build_elp_iterative_clock);
+      passModel(pealp_);
+      // zeroIterationCounts();
+      HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+      timer_.start(timer_.crossover_clock);
+      call_status = primalCrossover(interior_point, pealp_);
+      timer_.stop(timer_.crossover_clock);
+      return_status = interpretCallStatus(options_.log_options, call_status,
+                                      return_status, "callSolveLp");
+      if (return_status == HighsStatus::kError){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        scaled_model_status_ = HighsModelStatus::kModelError;
+        model_status_ = HighsModelStatus::kModelError;
+        return returnFromRun(return_status);
+      }
+      if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        setHighsModelStatusAndClearSolutionAndBasis(
+            HighsModelStatus::kTimeLimit);
+        highsLogDev(log_options, HighsLogType::kError,
+                    "ALP solve reached timeout\n");
+        return returnFromRun(HighsStatus::kWarning);
+      }
     }
     stop_highs_run_clock = true;
     called_return_from_run = false;
+    info_.num_degen_pivots = ealp_.num_degen_pivot;
+    info_.num_total_pivots = ealp_.num_total_pivot;
     timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
          timer_.clock_time.at(timer_.crossover_clock));
@@ -1734,42 +1792,55 @@ HighsStatus Highs::run() {
       return returnFromRun(HighsStatus::kWarning);
     }
     setBasisValidity();
-    while (!discrete){
-      timer_.start(timer_.equitable_partition_clock);
-      refinePartition();
-      timer_.stop(timer_.equitable_partition_clock);
-    }
-    alpSolution_ = solution_;
-    timer_.start(timer_.build_elp_iterative_clock);
-    buildPEALP();
-    timer_.stop(timer_.build_elp_iterative_clock);
-    passModel(pealp_);
-    // zeroIterationCounts();
-    HighsSolution interior_point = 
-      aggregator_.buildSolution(partition_, solution_);
-    timer_.start(timer_.crossover_clock);
-    call_status = crossover(interior_point, pealp_);
-    timer_.stop(timer_.crossover_clock);
-    return_status = interpretCallStatus(options_.log_options, call_status,
-                                        return_status, "callSolveLp");
-    if (return_status == HighsStatus::kError){
+    if (discrete) {
       stop_highs_run_clock = true;
       called_return_from_run = false;
-      scaled_model_status_ = HighsModelStatus::kModelError;
-      model_status_ = HighsModelStatus::kModelError;
-      return returnFromRun(return_status);
     }
-    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
-      stop_highs_run_clock = true;
-      called_return_from_run = false;
-      setHighsModelStatusAndClearSolutionAndBasis(
-          HighsModelStatus::kTimeLimit);
-      highsLogDev(log_options, HighsLogType::kError,
-                  "ALP solve reached timeout\n");
-      return returnFromRun(HighsStatus::kWarning);
+    else{
+      options_.solver = kIpmString;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      while (!discrete){
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+      }
+      // std::cout << "refined" << std::endl;
+      // std::cin.get();
+      // alpSolution_ = solution_;
+      timer_.start(timer_.build_elp_iterative_clock);
+      buildPEALP();
+      timer_.stop(timer_.build_elp_iterative_clock);
+      passModel(pealp_);
+      // zeroIterationCounts();
+      HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+      timer_.start(timer_.crossover_clock);
+      call_status = crossover(interior_point, pealp_);
+      timer_.stop(timer_.crossover_clock);
+      return_status = interpretCallStatus(options_.log_options, call_status,
+                                      return_status, "callSolveLp");
+      if (return_status == HighsStatus::kError){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        scaled_model_status_ = HighsModelStatus::kModelError;
+        model_status_ = HighsModelStatus::kModelError;
+        return returnFromRun(return_status);
+      }
+      if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        setHighsModelStatusAndClearSolutionAndBasis(
+            HighsModelStatus::kTimeLimit);
+        highsLogDev(log_options, HighsLogType::kError,
+                    "ALP solve reached timeout\n");
+        return returnFromRun(HighsStatus::kWarning);
+      }
     }
     stop_highs_run_clock = true;
     called_return_from_run = false;
+    info_.num_degen_pivots = ealp_.num_degen_pivot;
+    info_.num_total_pivots = ealp_.num_total_pivot;
     timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
          timer_.clock_time.at(timer_.crossover_clock));
@@ -1833,42 +1904,55 @@ HighsStatus Highs::run() {
       return returnFromRun(HighsStatus::kWarning);
     }
     setBasisValidity();
-    while (!discrete){
-      timer_.start(timer_.equitable_partition_clock);
-      refinePartition();
-      timer_.stop(timer_.equitable_partition_clock);
-    }
-    alpSolution_ = solution_;
-    timer_.start(timer_.build_elp_iterative_clock);
-    buildPEALP();
-    timer_.stop(timer_.build_elp_iterative_clock);
-    passModel(pealp_);
-    // zeroIterationCounts();
-    HighsSolution interior_point = 
-      aggregator_.buildSolution(partition_, solution_);
-    timer_.start(timer_.crossover_clock);
-    call_status = primalCrossover(interior_point, pealp_);
-    timer_.stop(timer_.crossover_clock);
-    return_status = interpretCallStatus(options_.log_options, call_status,
-                                        return_status, "callSolveLp");
-    if (return_status == HighsStatus::kError){
+    if (discrete) {
       stop_highs_run_clock = true;
       called_return_from_run = false;
-      scaled_model_status_ = HighsModelStatus::kModelError;
-      model_status_ = HighsModelStatus::kModelError;
-      return returnFromRun(return_status);
     }
-    if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
-      stop_highs_run_clock = true;
-      called_return_from_run = false;
-      setHighsModelStatusAndClearSolutionAndBasis(
-          HighsModelStatus::kTimeLimit);
-      highsLogDev(log_options, HighsLogType::kError,
-                  "ALP solve reached timeout\n");
-      return returnFromRun(HighsStatus::kWarning);
+    else{
+      options_.solver = kIpmString;
+      getOrbitalCrossoverBasis();
+      getOrbitalCrossoverSolution();
+      while (!discrete){
+        timer_.start(timer_.equitable_partition_clock);
+        refinePartition();
+        timer_.stop(timer_.equitable_partition_clock);
+      }
+      // std::cout << "refined" << std::endl;
+      // std::cin.get();
+      // alpSolution_ = solution_;
+      timer_.start(timer_.build_elp_iterative_clock);
+      buildPEALP();
+      timer_.stop(timer_.build_elp_iterative_clock);
+      passModel(pealp_);
+      // zeroIterationCounts();
+      HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+      timer_.start(timer_.crossover_clock);
+      call_status = primalCrossover(interior_point, pealp_);
+      timer_.stop(timer_.crossover_clock);
+      return_status = interpretCallStatus(options_.log_options, call_status,
+                                      return_status, "callSolveLp");
+      if (return_status == HighsStatus::kError){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        scaled_model_status_ = HighsModelStatus::kModelError;
+        model_status_ = HighsModelStatus::kModelError;
+        return returnFromRun(return_status);
+      }
+      if (scaled_model_status_ == HighsModelStatus::kTimeLimit){
+        stop_highs_run_clock = true;
+        called_return_from_run = false;
+        setHighsModelStatusAndClearSolutionAndBasis(
+            HighsModelStatus::kTimeLimit);
+        highsLogDev(log_options, HighsLogType::kError,
+                    "ALP solve reached timeout\n");
+        return returnFromRun(HighsStatus::kWarning);
+      }
     }
     stop_highs_run_clock = true;
     called_return_from_run = false;
+    info_.num_degen_pivots = ealp_.num_degen_pivot;
+    info_.num_total_pivots = ealp_.num_total_pivot;
     timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
          timer_.clock_time.at(timer_.crossover_clock));
@@ -1961,7 +2045,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
         if (!discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -2174,7 +2258,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
         if (!discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -2368,7 +2452,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -2571,7 +2655,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -2774,7 +2858,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -2977,7 +3061,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -3181,7 +3265,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -3385,7 +3469,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();

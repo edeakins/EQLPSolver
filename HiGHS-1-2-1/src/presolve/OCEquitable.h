@@ -34,6 +34,13 @@ public:
     void runToDiscrete();
     /* Calls isolation of nonsingleton class and new refinement round */
     bool isolate();
+    /* Count new parts of the partition that are represented by nonzero
+    variable */
+    void intakeHighsBasis(HighsBasis& basis);
+    void intakeFrontCol(std::vector<int>& fCol);
+    void mapToLpCols();
+    void countBasicParts();
+    int getNumBasicParts();
     /* Refinement algorithm Berkholz 2017 */
     bool refine();
     /* Refine cell */
@@ -99,6 +106,8 @@ public:
     OCGraph* g;
     /* Partition storage for the ep */
     OCPartition* partition;
+    // OCPartition old_partition;
+    
     /* Refinement storage */
     int numColSets = 0;
     int numRowSets = 0;
@@ -131,6 +140,8 @@ public:
     int maxDeg;
     int adjCellCnt;
     int numCDeg;
+    int old_num_basic = 0;
+    int num_basic = 0;
     // int maxCDeg;
     std::vector<int> cDeg;
     std::vector<int> cDegFreq;
@@ -151,6 +162,8 @@ public:
     std::vector<int> count;
     std::vector<int> refSize;
     std::vector<int> nodeAdj;
+    std::vector<int> frontCol;
+    std::vector<int> oldFront;
     // std::vector<bool> cDegB;
     // std::vector<int> cAdj;
     // std::vector<bool> cAdjB;

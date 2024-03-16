@@ -17,6 +17,7 @@ bool HighsOCEquitablePartition::isolate(){
     //         break;
     //     }
     // }
+    oldFront = partition->front;
     partition->level++;
     int targ = nextNon[-1];
     int min = targ;
@@ -34,10 +35,64 @@ bool HighsOCEquitablePartition::isolate(){
     split(targ, back);
     refine();
     countColAndRowSplits();
+    countBasicParts();
     // for (int i = 0; i < g->numTot_; i += partition->len[i] + 1)
     //     sort(partition->label.begin() + i, partition->label.begin() + i + partition->len[i] + 1);
     if (discrete()) return true;
     else return false;
+}
+
+/* Pass in most recent ELP solution so we can count how many splits are of variables
+that are basic */
+void HighsOCEquitablePartition::intakeHighsBasis(HighsBasis& basis){
+    HighsInt num_col = basis.col_status.size();
+    int front;
+    int col;
+    HighsBasisStatus status;
+    old_num_basic = 0;
+    HighsBasisStatus basic = HighsBasisStatus::kBasic;
+    for (int i = 0; i < g->numCol_; i += partition->len[i] + 1){
+        front = partition->front.at(i);
+        col = frontCol.at(front);
+        status = basis.col_status.at(col);
+        if (status == basic){ 
+            partition->basic.at(front) = 1;
+            old_num_basic += 1;
+        }
+        else partition->basic.at(front) = 0;
+    }
+}
+
+/* Take in the most recent front cols to map back to the partition and then
+we know how columns translate to fronts, and thus, how which fronts are "basic". */
+void HighsOCEquitablePartition::intakeFrontCol(std::vector<int>& fCols){
+    frontCol = fCols;
+}
+
+// /* Map to LP cols*/
+// void HighsOCEquitablePartition::mapToLpCols(){
+    
+// }
+
+/* Count new basic parts after a refinement */
+void HighsOCEquitablePartition::countBasicParts(){
+    std::vector<int> old_basic = partition->basic;
+    std::vector<int>& basic = partition->basic;
+    // old_num_basic = num_basic;
+    int num_col_part = partition->ncsplits;
+    int front, prevFront, status;
+    num_basic = 0;
+    for (int i = 0; i < g->numCol_; i += partition->len[i] + 1){
+        front = partition->front.at(i);
+        prevFront = oldFront.at(i);
+        status = old_basic.at(prevFront);
+        basic.at(front) = status;
+        num_basic += status;
+    }
+}
+
+int HighsOCEquitablePartition::getNumBasicParts(){
+    return num_basic - old_num_basic;
 }
 
 bool HighsOCEquitablePartition::refine(){
@@ -352,6 +407,17 @@ bool HighsOCEquitablePartition::allocatePartition(){
     partition->label.resize(g->numTot_);
     partition->unlabel.resize(g->numTot_);
     partition->len.resize(g->numTot_);
+    // Allocate partition storage
+    // old_partition = (OCPartition*)calloc(1, sizeof(OCPartition));
+    // old_partition->target = -1;
+    // old_partition->level = 0;
+    // old_partition->nsplits = 0;
+    // old_partition->ncsplits = 0;
+    // old_partition->nrsplits = 0;
+    // old_partition->front.resize(g->numTot_);
+    // old_partition->label.resize(g->numTot_);
+    // old_partition->unlabel.resize(g->numTot_);
+    // old_partition->len.resize(g->numTot_);
     // partition->parent.resize(g->numTot_);
     // partition->set.resize(g->numTot_);
     // partition->setSize.resize(g->numTot_);
@@ -461,6 +527,7 @@ bool HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     partition->label.resize(g->numTot_);
     partition->unlabel.resize(g->numTot_);
     partition->len.resize(g->numTot_);
+    partition->basic.resize(g->numCol_);
     // partition->parent.resize(g->numTot_);
     // partition->set.resize(g->numTot_);
     // partition->setSize.resize(g->numTot_);
@@ -486,6 +553,7 @@ bool HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     sInd.assign(g->numTot_, 0);
     nextNon = allocInts(g->numTot_ + 1) + 1;
     prevNon = allocInts(g->numTot_ + 1);
+    frontCol.resize(g->numCol_);
     // // Additions hopefully can further improve
     // cDeg.assign(g->numTot_, 0);
     // cDegFreq.assign(maxDeg + 1, 0);

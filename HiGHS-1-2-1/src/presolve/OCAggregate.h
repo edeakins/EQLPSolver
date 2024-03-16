@@ -98,6 +98,7 @@ public:
     HighsLp getAggLp();
     HighsLp getLpNoResiduals();
     HighsBasis getBasis();
+    std::vector<int>& getFrontCol();
 
     // dev test functions
     void checkForBadNonBasics(HighsInt col);
