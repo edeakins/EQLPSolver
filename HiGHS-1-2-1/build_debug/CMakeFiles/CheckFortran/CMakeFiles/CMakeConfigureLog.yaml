@@ -1,0 +1,252 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineSystem.cmake:211 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Darwin - 22.6.0 - arm64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineFortranCompiler.cmake:179 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the Fortran compiler identification source file "CMakeFortranCompilerId.F" failed.
+      Compiler: /opt/homebrew/bin/gfortran 
+      Build flags: 
+      Id flags: -v 
+      
+      The output was:
+      1
+      Driving: /opt/homebrew/bin/gfortran -v CMakeFortranCompilerId.F -mmacosx-version-min=13.0.0 -asm_macosx_version_min=13.0 -nodefaultexport -l gfortran
+      Using built-in specs.
+      COLLECT_GCC=/opt/homebrew/bin/gfortran
+      COLLECT_LTO_WRAPPER=/opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/aarch64-apple-darwin22/13/lto-wrapper
+      Target: aarch64-apple-darwin22
+      Configured with: ../configure --prefix=/opt/homebrew/opt/gcc --libdir=/opt/homebrew/opt/gcc/lib/gcc/current --disable-nls --enable-checking=release --with-gcc-major-version-only --enable-languages=c,c++,objc,obj-c++,fortran --program-suffix=-13 --with-gmp=/opt/homebrew/opt/gmp --with-mpfr=/opt/homebrew/opt/mpfr --with-mpc=/opt/homebrew/opt/libmpc --with-isl=/opt/homebrew/opt/isl --with-zstd=/opt/homebrew/opt/zstd --with-pkgversion='Homebrew GCC 13.2.0' --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --with-system-zlib --build=aarch64-apple-darwin22 --with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk
+      Thread model: posix
+      Supported LTO compression algorithms: zlib zstd
+      gcc version 13.2.0 (Homebrew GCC 13.2.0) 
+      COLLECT_GCC_OPTIONS='-v' '-mmacosx-version-min=13.0.0' '-asm_macosx_version_min=13.0' '-nodefaultexport' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'a-'
+       /opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/aarch64-apple-darwin22/13/f951 CMakeFortranCompilerId.F -ffixed-form -cpp=/var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//ccQZbMS6.f90 -quiet -v -iprefix /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/ -D__DYNAMIC__ CMakeFortranCompilerId.F -fPIC -quiet -dumpdir a- -dumpbase CMakeFortranCompilerId.F -dumpbase-ext .F -mmacosx-version-min=13.0.0 -mlittle-endian -mabi=lp64 -version -fintrinsic-modules-path /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/finclude -o /var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//ccFflI1p.s
+      GNU Fortran (Homebrew GCC 13.2.0) version 13.2.0 (aarch64-apple-darwin22)
+      	compiled by GNU C version 13.2.0, GMP version 6.2.1, MPFR version 4.2.0-p12, MPC version 1.3.1, isl version isl-0.26-GMP
+      
+      warning: GMP header version 6.2.1 differs from library version 6.3.0.
+      warning: MPFR header version 4.2.0-p12 differs from library version 4.2.1.
+      GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+      ignoring nonexistent directory "/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../../../../../aarch64-apple-darwin22/include"
+      ignoring duplicate directory "/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/aarch64-apple-darwin22/13/include"
+      ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/local/include"
+      ignoring duplicate directory "/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/aarch64-apple-darwin22/13/include-fixed"
+      ignoring nonexistent directory "/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../../../../../aarch64-apple-darwin22/include"
+      #include "..." search starts here:
+      #include <...> search starts here:
+       /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/finclude
+       /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/include
+       /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/include-fixed
+       /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include
+      End of search list.
+      COLLECT_GCC_OPTIONS='-v' '-mmacosx-version-min=13.0.0'  '-nodefaultexport' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'a-'
+       as -arch arm64 -v -mmacosx-version-min=13.0 -o /var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//ccUZ2ZH9.o /var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//ccFflI1p.s
+      Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+      Target: arm64-apple-darwin22.6.0
+      Thread model: posix
+      InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+       "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1as -triple arm64-apple-macosx13.0.0 -filetype obj -main-file-name ccFflI1p.s -target-cpu apple-m1 -target-feature +v8.5a -target-feature +crc -target-feature +lse -target-feature +rdm -target-feature +crypto -target-feature +dotprod -target-feature +fp-armv8 -target-feature +neon -target-feature +fp16fml -target-feature +ras -target-feature +rcpc -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-feature +sm4 -target-feature +sha3 -target-feature +sha2 -target-feature +aes -fdebug-compilation-dir=/Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/3.27.7/CompilerIdFortran -dwarf-debug-producer "Apple clang version 14.0.3 (clang-1403.0.22.14.1)" -dwarf-version=4 -mrelocation-model pic --mrelax-relocations -mllvm -disable-aligned-alloc-awareness=1 -o /var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//ccUZ2ZH9.o /var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//ccFflI1p.s
+      Reading specs from /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../../libgfortran.spec
+      rename spec lib to liborig
+      COLLECT_GCC_OPTIONS='-v' '-mmacosx-version-min=13.0.0'  '-nodefaultexport' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'a-'
+      COMPILER_PATH=/opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/aarch64-apple-darwin22/13/:/opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/
+      LIBRARY_PATH=/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/:/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/:/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../../
+      COLLECT_GCC_OPTIONS='-v' '-mmacosx-version-min=13.0.0'  '-nodefaultexport' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'a.'
+       /opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/aarch64-apple-darwin22/13/collect2 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/ -dynamic -arch arm64 -platform_version macos 13.0.0 0.0 -o a.out -L/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13 -L/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc -L/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../.. /var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//ccUZ2ZH9.o -lgfortran -lemutls_w -lgcc -lquadmath -lemutls_w -lgcc -lSystem -lgcc -no_compact_unwind -rpath @loader_path -rpath /opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current/gcc/aarch64-apple-darwin22/13 -rpath /opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current/gcc -rpath /opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current
+      ld: unsupported tapi file type '!tapi-tbd' in YAML file '/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib/libSystem.tbd' for architecture arm64
+      collect2: error: ld returned 1 exit status
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineFortranCompiler.cmake:179 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the Fortran compiler identification source file "CMakeFortranCompilerId.F" failed.
+      Compiler: /opt/homebrew/bin/gfortran 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      1
+      ld: unsupported tapi file type '!tapi-tbd' in YAML file '/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib/libSystem.tbd' for architecture arm64
+      collect2: error: ld returned 1 exit status
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineFortranCompiler.cmake:179 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the Fortran compiler identification source file "CMakeFortranCompilerId.F" succeeded.
+      Compiler: /opt/homebrew/bin/gfortran 
+      Build flags: 
+      Id flags: -c 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the Fortran compiler identification source "CMakeFortranCompilerId.F" produced "CMakeFortranCompilerId.o"
+      
+      The Fortran compiler identification is GNU, found in:
+        /Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/3.27.7/CompilerIdFortran/CMakeFortranCompilerId.o
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeTestFortranCompiler.cmake:20 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting Fortran compiler ABI info"
+    directories:
+      source: "/Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/CMakeScratch/TryCompile-gM5hkV"
+      binary: "/Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/CMakeScratch/TryCompile-gM5hkV"
+    cmakeVariables:
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_Fortran_FLAGS: ""
+      CMAKE_Fortran_FLAGS_DEBUG: "-g"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk"
+    buildResult:
+      variable: "CMAKE_Fortran_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/CMakeScratch/TryCompile-gM5hkV'
+        
+        Run Build Command(s): /opt/homebrew/Cellar/cmake/3.27.7/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_dd00f/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_dd00f.dir/build.make CMakeFiles/cmTC_dd00f.dir/build
+        Building Fortran object CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o
+        /opt/homebrew/bin/gfortran   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk   -v -Wl,-v -c /opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeFortranCompilerABI.F90 -o CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o
+        Using built-in specs.
+        COLLECT_GCC=/opt/homebrew/bin/gfortran
+        Target: aarch64-apple-darwin22
+        Configured with: ../configure --prefix=/opt/homebrew/opt/gcc --libdir=/opt/homebrew/opt/gcc/lib/gcc/current --disable-nls --enable-checking=release --with-gcc-major-version-only --enable-languages=c,c++,objc,obj-c++,fortran --program-suffix=-13 --with-gmp=/opt/homebrew/opt/gmp --with-mpfr=/opt/homebrew/opt/mpfr --with-mpc=/opt/homebrew/opt/libmpc --with-isl=/opt/homebrew/opt/isl --with-zstd=/opt/homebrew/opt/zstd --with-pkgversion='Homebrew GCC 13.2.0' --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --with-system-zlib --build=aarch64-apple-darwin22 --with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 13.2.0 (Homebrew GCC 13.2.0) 
+        COLLECT_GCC_OPTIONS='-isysroot' '/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk' '-v' '-c' '-o' 'CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o' '-mmacosx-version-min=13.0.0' '-asm_macosx_version_min=13.0' '-nodefaultexport' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_dd00f.dir/'
+         /opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/aarch64-apple-darwin22/13/f951 /opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeFortranCompilerABI.F90 -cpp=/var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//cczSE8Fm.f90 -quiet -v -iprefix /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/ -D__DYNAMIC__ -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk /opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeFortranCompilerABI.F90 -fPIC -quiet -dumpdir CMakeFiles/cmTC_dd00f.dir/ -dumpbase CMakeFortranCompilerABI.F90.F90 -dumpbase-ext .F90 -mmacosx-version-min=13.0.0 -mlittle-endian -mabi=lp64 -version -fintrinsic-modules-path /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/finclude -o /var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//cc8zoCbd.s
+        GNU Fortran (Homebrew GCC 13.2.0) version 13.2.0 (aarch64-apple-darwin22)
+        	compiled by GNU C version 13.2.0, GMP version 6.2.1, MPFR version 4.2.0-p12, MPC version 1.3.1, isl version isl-0.26-GMP
+        
+        warning: GMP header version 6.2.1 differs from library version 6.3.0.
+        warning: MPFR header version 4.2.0-p12 differs from library version 4.2.1.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../../../../../aarch64-apple-darwin22/include"
+        ignoring duplicate directory "/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/aarch64-apple-darwin22/13/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/local/include"
+        ignoring duplicate directory "/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/aarch64-apple-darwin22/13/include-fixed"
+        ignoring nonexistent directory "/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../../../../../aarch64-apple-darwin22/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/finclude
+         /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/include
+         /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/include-fixed
+         /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include
+        End of search list.
+        COLLECT_GCC_OPTIONS='-isysroot' '/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk' '-v' '-c' '-o' 'CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o' '-mmacosx-version-min=13.0.0'  '-nodefaultexport' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_dd00f.dir/'
+         as -arch arm64 -v -mmacosx-version-min=13.0 -o CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o /var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//cc8zoCbd.s
+        Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+        Target: arm64-apple-darwin22.6.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1as -triple arm64-apple-macosx13.0.0 -filetype obj -main-file-name cc8zoCbd.s -target-cpu apple-m1 -target-feature +v8.5a -target-feature +crc -target-feature +lse -target-feature +rdm -target-feature +crypto -target-feature +dotprod -target-feature +fp-armv8 -target-feature +neon -target-feature +fp16fml -target-feature +ras -target-feature +rcpc -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-feature +sm4 -target-feature +sha3 -target-feature +sha2 -target-feature +aes -fdebug-compilation-dir=/Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/CMakeScratch/TryCompile-gM5hkV -dwarf-debug-producer "Apple clang version 14.0.3 (clang-1403.0.22.14.1)" -dwarf-version=4 -mrelocation-model pic --mrelax-relocations -mllvm -disable-aligned-alloc-awareness=1 -o CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o /var/folders/qz/v8ynxry12f37s65qjqsn1hjr0000gn/T//cc8zoCbd.s
+        COMPILER_PATH=/opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/aarch64-apple-darwin22/13/:/opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/
+        LIBRARY_PATH=/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/:/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/:/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../../
+        COLLECT_GCC_OPTIONS='-isysroot' '/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk' '-v' '-c' '-o' 'CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o' '-mmacosx-version-min=13.0.0'  '-nodefaultexport' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.'
+        Linking Fortran executable cmTC_dd00f
+        /opt/homebrew/Cellar/cmake/3.27.7/bin/cmake -E cmake_link_script CMakeFiles/cmTC_dd00f.dir/link.txt --verbose=1
+        /opt/homebrew/bin/gfortran  -v -Wl,-v  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o -o cmTC_dd00f 
+        Driving: /opt/homebrew/bin/gfortran -v -Wl,-v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o -o cmTC_dd00f -mmacosx-version-min=13.0.0 -asm_macosx_version_min=13.0 -nodefaultexport -l gfortran
+        Using built-in specs.
+        COLLECT_GCC=/opt/homebrew/bin/gfortran
+        COLLECT_LTO_WRAPPER=/opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/aarch64-apple-darwin22/13/lto-wrapper
+        Target: aarch64-apple-darwin22
+        Configured with: ../configure --prefix=/opt/homebrew/opt/gcc --libdir=/opt/homebrew/opt/gcc/lib/gcc/current --disable-nls --enable-checking=release --with-gcc-major-version-only --enable-languages=c,c++,objc,obj-c++,fortran --program-suffix=-13 --with-gmp=/opt/homebrew/opt/gmp --with-mpfr=/opt/homebrew/opt/mpfr --with-mpc=/opt/homebrew/opt/libmpc --with-isl=/opt/homebrew/opt/isl --with-zstd=/opt/homebrew/opt/zstd --with-pkgversion='Homebrew GCC 13.2.0' --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --with-system-zlib --build=aarch64-apple-darwin22 --with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 13.2.0 (Homebrew GCC 13.2.0) 
+        Reading specs from /opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../../libgfortran.spec
+        rename spec lib to liborig
+        COLLECT_GCC_OPTIONS='-v' '-isysroot' '/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk' '-o' 'cmTC_dd00f' '-mmacosx-version-min=13.0.0' '-asm_macosx_version_min=13.0' '-nodefaultexport' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'cmTC_dd00f-'
+        COMPILER_PATH=/opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/aarch64-apple-darwin22/13/:/opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/
+        LIBRARY_PATH=/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/:/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/:/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../../
+        COLLECT_GCC_OPTIONS='-v' '-isysroot' '/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk' '-o' 'cmTC_dd00f' '-mmacosx-version-min=13.0.0' '-asm_macosx_version_min=13.0' '-nodefaultexport' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'cmTC_dd00f.'
+         /opt/homebrew/Cellar/gcc/13.2.0/bin/../libexec/gcc/aarch64-apple-darwin22/13/collect2 -dynamic -arch arm64 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -platform_version macos 13.0.0 0.0 -o cmTC_dd00f -L/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13 -L/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc -L/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../.. -v CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o -lgfortran -lemutls_w -lgcc -lquadmath -lemutls_w -lgcc -lSystem -lgcc -no_compact_unwind -rpath @loader_path -rpath /opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current/gcc/aarch64-apple-darwin22/13 -rpath /opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current/gcc -rpath /opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current
+        collect2 version 13.2.0
+        /Users/ethandeakins/anaconda3/bin/ld -dynamic -arch arm64 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -platform_version macos 13.0.0 0.0 -o cmTC_dd00f -L/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13 -L/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc -L/opt/homebrew/Cellar/gcc/13.2.0/bin/../lib/gcc/current/gcc/aarch64-apple-darwin22/13/../../.. -v CMakeFiles/cmTC_dd00f.dir/CMakeFortranCompilerABI.F90.o -lgfortran -lemutls_w -lgcc -lquadmath -lemutls_w -lgcc -lSystem -lgcc -no_compact_unwind -rpath @loader_path -rpath /opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current/gcc/aarch64-apple-darwin22/13 -rpath /opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current/gcc -rpath /opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current
+        @(#)PROGRAM:ld  PROJECT:ld64-530
+        BUILD 07:42:29 Sep  7 2022
+        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em (tvOS)
+        Library search paths:
+        	/opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current/gcc/aarch64-apple-darwin22/13
+        	/opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current/gcc
+        	/opt/homebrew/Cellar/gcc/13.2.0/lib/gcc/current
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/lib
+        Framework search paths:
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/
+        ld: unsupported tapi file type '!tapi-tbd' in YAML file '/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/lib/libSystem.tbd' for architecture arm64
+        collect2: error: ld returned 1 exit status
+        make[1]: *** [cmTC_dd00f] Error 1
+        make: *** [cmTC_dd00f/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/Cellar/cmake/3.27.7/share/cmake/Modules/CMakeTestFortranCompiler.cmake:49 (try_compile)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Check for working Fortran compiler: /opt/homebrew/bin/gfortran"
+    directories:
+      source: "/Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/CMakeScratch/TryCompile-A0Qpy2"
+      binary: "/Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/CMakeScratch/TryCompile-A0Qpy2"
+    cmakeVariables:
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_Fortran_FLAGS: ""
+      CMAKE_Fortran_FLAGS_DEBUG: "-g"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk"
+    buildResult:
+      variable: "CMAKE_Fortran_COMPILER_WORKS"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/CMakeScratch/TryCompile-A0Qpy2'
+        
+        Run Build Command(s): /opt/homebrew/Cellar/cmake/3.27.7/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_efe38/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_efe38.dir/build.make CMakeFiles/cmTC_efe38.dir/build
+        Building Fortran object CMakeFiles/cmTC_efe38.dir/testFortranCompiler.f.o
+        /opt/homebrew/bin/gfortran   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -c /Users/ethandeakins/Work/OC/EQLPSolver/HiGHS-1-2-1/build_debug/CMakeFiles/CheckFortran/CMakeFiles/CMakeScratch/TryCompile-A0Qpy2/testFortranCompiler.f -o CMakeFiles/cmTC_efe38.dir/testFortranCompiler.f.o
+        Linking Fortran executable cmTC_efe38
+        /opt/homebrew/Cellar/cmake/3.27.7/bin/cmake -E cmake_link_script CMakeFiles/cmTC_efe38.dir/link.txt --verbose=1
+        /opt/homebrew/bin/gfortran  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk CMakeFiles/cmTC_efe38.dir/testFortranCompiler.f.o -o cmTC_efe38 
+        ld: unsupported tapi file type '!tapi-tbd' in YAML file '/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/lib/libSystem.tbd' for architecture arm64
+        collect2: error: ld returned 1 exit status
+        make[1]: *** [cmTC_efe38] Error 1
+        make: *** [cmTC_efe38/fast] Error 2
+        
+      exitCode: 2
+...

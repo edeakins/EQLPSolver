@@ -543,7 +543,7 @@ void HighsOCAggregate::buildRhsFromScratchExtended(){
 
 void HighsOCAggregate::buildRhsFromSolution(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
+    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-7;
     agglp.row_upper_.resize(rowCnt);
     agglp.row_lower_.resize(rowCnt);
     for (iRow = 0; iRow < rowCnt; ++iRow){
@@ -575,7 +575,7 @@ void HighsOCAggregate::buildRhsFromSolution(){
 
 void HighsOCAggregate::buildRhsFromSolutionExtended(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
+    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-7;
     for (iRow = 0; iRow < rowCnt; ++iRow){
         rep = rowrep[iRow];
         rf = ep.front[rep];
@@ -609,7 +609,7 @@ void HighsOCAggregate::buildRhsFromSolutionExtended(){
 
 void HighsOCAggregate::buildRhsFromSolutionExtendedNoResiduals(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-6;
+    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-7;
     for (iRow = 0; iRow < rowCnt; ++iRow){
         rep = rowrep[iRow];
         rf = ep.front[rep];
@@ -699,7 +699,7 @@ void HighsOCAggregate::buildBndsFromScratchExtended(){
 
 void HighsOCAggregate::buildBndsFromSolution(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
+    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-7;
     agglp.col_lower_.resize(colCnt);
     agglp.col_upper_.resize(colCnt);
     for (iCol = 0; iCol < colCnt; ++iCol){
@@ -729,7 +729,7 @@ void HighsOCAggregate::buildBndsFromSolution(){
 
 void HighsOCAggregate::buildBndsFromSolutionExtended(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
+    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-7;
     for (iCol = 0; iCol < colCnt; ++iCol){
         rep = colrep[iCol];
         cf = ep.front[rep];
@@ -766,7 +766,7 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
 
 void HighsOCAggregate::buildBndsFromSolutionExtendedNoResiduals(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-6;
+    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-7;
     for (iCol = 0; iCol < colCnt; ++iCol){
         rep = colrep[iCol];
         cf = ep.front[rep];
