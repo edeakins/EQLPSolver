@@ -1091,7 +1091,8 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change = equitablePartition_.getNumBasicParts();
+        // change = equitablePartition_.getNumBasicParts();
+        change += measureChangeInPartitionSize(original_lp, old_partition);
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -2452,7 +2453,8 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change = equitablePartition_.getNumBasicParts();
+        // change = equitablePartition_.getNumBasicParts();
+        change += measureChangeInPartitionSize(original_lp, old_partition);
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -2655,7 +2657,8 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change = equitablePartition_.getNumBasicParts();
+        // change = equitablePartition_.getNumBasicParts();
+        change += measureChangeInPartitionSize(original_lp, old_partition);
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -2858,7 +2861,8 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change = equitablePartition_.getNumBasicParts();
+        // change = equitablePartition_.getNumBasicParts();
+        change += measureChangeInPartitionSize(original_lp, old_partition);
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -3061,7 +3065,8 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change = equitablePartition_.getNumBasicParts();
+        // change = equitablePartition_.getNumBasicParts();
+        change += measureChangeInPartitionSize(original_lp, old_partition);
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -3265,7 +3270,8 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change = equitablePartition_.getNumBasicParts();
+        // change = equitablePartition_.getNumBasicParts();
+        change += measureChangeInPartitionSize(original_lp, old_partition);
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
@@ -3469,7 +3475,8 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        change = equitablePartition_.getNumBasicParts();
+        // change = equitablePartition_.getNumBasicParts();
+        change += measureChangeInPartitionSize(original_lp, old_partition);
         if (change < 1000 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
