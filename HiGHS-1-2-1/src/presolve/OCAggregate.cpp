@@ -35,6 +35,7 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     colrep.assign(numCol, -1);
     row.assign(numRow, -1);
     rowrep.assign(numRow, -1);
+    frontLen.assign(numCol, -1);
     frontCol.assign(numCol, -1);
     colFront.assign(numCol, -1);
     frontRow.assign(numRow + numCol, -1);
@@ -110,7 +111,9 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     pcolrep = colrep;
     prow = row;
     prowrep = rowrep;
+    pFrontLen = frontLen;
     pFrontCol = frontCol;
+    pColFront = colFront;
     pcolCnt = colCnt;
     pFrontRow = frontRow;
     prowCnt = rowCnt;
@@ -119,6 +122,7 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     buildRowPointers();
     trackAndCountSplits();
     markDegenerate();
+    findLargestDegeneratePart();
     buildResidualLinks();
     resizeElpContainers();
     buildObj();
@@ -938,6 +942,8 @@ void HighsOCAggregate::buildResidualLinks(){
     }
     elpNumCol = colCnt;
     for (const auto split : splitCells){
+        // This is for if we are trying to do basic degenerate schema
+        if (split.first == max_front_len_pCol) continue;
         isParent.at(split.first) = 1;
         parentRow[split.first] = elpNumRow;
         parentRow[split.first + 1] = elpNumRow + split.second.size();
@@ -950,23 +956,11 @@ void HighsOCAggregate::buildResidualLinks(){
             isChild.at(iCol) = 1;
             childRow[iCol] = elpNumRow;
             residual_cols_.push_back(elpNumCol);
+            elp.residual_cols_.push_back(elpNumCol);
             residual_to_old.at(elpNumCol) = split.first;
             residualCol[numResiduals] = elpNumCol++;
             residualRow[numResiduals++] = elpNumRow++;
-            // pairs.push_back(std::pair<int, int>(split.first, iCol));
         }
-    }
-    for (int iCol = 0; iCol < numResiduals; ++iCol){
-        int r_col = residual_cols_.at(iCol);
-        int x_col = residual_to_old.at(r_col);
-        if (mark_degenerate.at(x_col))
-            elp.residual_cols_.push_back(r_col);
-    }
-    for (int iCol = 0; iCol < numResiduals; ++iCol){
-        int r_col = residual_cols_.at(iCol);
-        int x_col = residual_to_old.at(r_col);
-        if (!mark_degenerate.at(x_col))
-            elp.residual_cols_.push_back(r_col);
     }
     splitCells.clear();
 }
@@ -993,6 +987,7 @@ void HighsOCAggregate::buildResidualRows(){
 
 void HighsOCAggregate::markDegenerate(){
     std::fill_n(mark_degenerate.begin(), mark_degenerate.size(), 0);
+    degenerate_cols.clear();
     HighsInt i_col;
     // elp.num_degenerate_cols_ = elp.num_aggregate_cols_;
     for (i_col = 0; i_col < pcolCnt; ++i_col){
@@ -1006,11 +1001,29 @@ void HighsOCAggregate::markDegenerate(){
         HighsInt basis_test = basis.col_status.at(i_col) == HighsBasisStatus::kBasic ? 1 : 0;
         if ((ub_test || lb_test) && basis_test){
             mark_degenerate.at(i_col) = 1;
+            degenerate_cols.push_back(i_col);
             // elp.num_degenerate_cols_++;
         }
         // if ((ub_test) && basis_test)
         //     mark_degenerate.at(i_col) = 1;
     }
+}
+
+void HighsOCAggregate::findLargestDegeneratePart(){
+    // Loop over the degenerate columns from last round of OC to push the one with the biggest part into the nonbasis
+    max_front_len = -1;
+    max_front_len_pCol = -1;
+    for (auto& iCol : degenerate_cols){
+        auto& cf = pColFront.at(iCol);
+        auto& flen = pFrontLen.at(cf);
+        if (flen > max_front_len){
+            max_front_len = flen;
+            max_front_len_pCol = iCol;
+        }
+    }
+    std::cout << "Max front col: " << max_front_len_pCol << std::endl;
+    std::cout << "Max front col size: " << max_front_len << std::endl;
+    std::cin.get();
 }
 
 void HighsOCAggregate::buildBasis(bool finish, bool extended){
@@ -1032,36 +1045,15 @@ void HighsOCAggregate::buildColBasis(){
         pf = epMinusOne.front[crep];
         pCol = pFrontCol[pf];
         status = basis.col_status[pCol];
-        if (mark_degenerate.at(iCol)){
-            elpBasis.col_status.at(iCol) = basic;
-            splitFromNonbasicCount.at(pCol)++;
-            continue;
+        if (pCol == max_front_len_pCol && pCol != iCol){
+            elpBasis.col_status.at(iCol) = nonbasic;
+            continue;            
         }
-        if (mark_degenerate.at(pCol)){
-            elpBasis.col_status.at(iCol) = basic;
-            continue;
-        }
-        // if (mark_degenerate.at(pCol) && splitFromNonbasicCount.at(pCol) < splitSize.at(pCol) - 1){
-        //     elpBasis.col_status.at(iCol) = nonbasic;
-        //     continue;
-        // }
-        // if (mark_degenerate.at(pCol)){
-        //     elpBasis.col_status.at(iCol) = basic;
-        //     continue;
-        // }
         elpBasis.col_status[iCol] = status;
     }
     HighsInt col_index = colCnt;
     for (iCol = colCnt; iCol < colCnt + numResiduals; ++iCol){
-        // if (degenerate_basic_residuals.at(iCol)){
-        //     elpBasis.col_status.at(iCol) = HighsBasisStatus::kBasic;
-        //     continue;
-        // }
         elpBasis.col_status[iCol] = HighsBasisStatus::kLower;
-    }
-    for (iCol = 0; iCol < colCnt + numResiduals; ++iCol){
-        if (elpBasis.col_status.at(iCol) == HighsBasisStatus::kBasic)
-            num_basic++;
     }
 }
 
@@ -1126,12 +1118,14 @@ void HighsOCAggregate::buildColPointers(){
     for (i = 0; i < numCol; ++i){
         if (col[i] > -1){
             fronts.insert(ep.front[i]);
+            frontLen[ep.front[i]] = ep.len[ep.front[i]];
             frontCol[ep.front[i]] = col[i];
             colFront[col[i]] = ep.front[i];
             continue;
         }
         newFront = fronts.insert(ep.front[i]).second;
         if (newFront){
+            frontLen[ep.front[i]] = ep.len[ep.front[i]];
             frontCol[ep.front[i]] = colCnt;
             colFront[colCnt] = ep.front[i];
             min_rep = frontMin.at(ep.front.at(i));

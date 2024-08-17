@@ -67,6 +67,7 @@ public:
     void trackAndCountSplits();
     // Build Highs basis vectors for EALP
     void markDegenerate();
+    void findLargestDegeneratePart();
     void buildBasis(bool finish, bool extended);
     void buildColBasis();
     void buildRowBasis();
@@ -130,6 +131,8 @@ public:
     int rowCnt = 0;
     int prowCnt = 0;
     int num_basic;
+    int max_front_len = -1;
+    int max_front_len_pCol = -1;
     HighsInt num_deleted_links;
     std::vector<int> col;
     std::vector<int> colrep;
@@ -160,6 +163,7 @@ public:
     std::vector<int> degenSlack;
     std::vector<bool> degenRow;
     std::vector<HighsInt> mark_degenerate;
+    std::vector<HighsInt> degenerate_cols;
     std::vector<bool> finalRowRep;
     // For computing B^-1 * A_r submat
     std::vector<int> basicIndex;
@@ -169,8 +173,10 @@ public:
     std::vector<int> rowUnperm;
     std::vector<int> colPerm;
     std::vector<int> colUnperm;
+    std::vector<int> frontLen;
     std::vector<int> frontCol;
     std::vector<int> colFront;
+    std::vector<int> pFrontLen;
     std::vector<int> pFrontCol;
     std::vector<int> pColFront;
     std::vector<int> frontRow;
