@@ -1157,7 +1157,7 @@ HighsStatus Highs::run() {
         //   alpBasis_ = crashBasis_;
         //   alpSolution_ = crashSolution_;
         // }
-        int numRBasic = 0;
+        // int numRBasic = 0;
         // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
         //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
         //     numRBasic++;

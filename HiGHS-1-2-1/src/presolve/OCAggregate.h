@@ -64,6 +64,7 @@ public:
     void findFrontMins();
     void buildRowPointers();
     void buildColPointers();
+    void checkDiscrete();
     void trackAndCountSplits();
     // Build Highs basis vectors for EALP
     void markDegenerate();
@@ -103,8 +104,6 @@ public:
 
     // dev test functions
     void checkForBadNonBasics(HighsInt col);
-    
-
     HighsLp elp; 
     HighsLp olp;
     HighsLp agglp;
@@ -117,6 +116,7 @@ public:
     HighsSolution lift_solution;
     HFactor degenerate_factor;
     HighsSparseMatrix degenerate_matrix;
+    int discrete = 0;
     int level = 0;
     int numTot;
     int numCol; 
@@ -190,6 +190,7 @@ public:
     std::map<int, std::vector<int> > splitCells;
     // std::vector<std::pair<int, int> > splitCells;
     std::vector<int> zero_step_pivots;
+    std::vector<HighsInt> max_front_len_pCol_check;
 };
 
 #endif

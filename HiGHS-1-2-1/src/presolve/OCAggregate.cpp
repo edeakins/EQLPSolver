@@ -54,6 +54,7 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     residualRow.resize(numCol);
     mark_degenerate.resize(numCol);
     zero_step_pivots.resize(numCol + numTotResiduals);
+    max_front_len_pCol_check.resize(numCol);
 }
 
 void HighsOCAggregate::resizeElpContainers(){
@@ -91,6 +92,7 @@ void HighsOCAggregate::buildLp(){
     findFrontMins();
     buildColPointers();
     buildRowPointers();
+    checkDiscrete();
     resizeElpContainers();
     buildObj();
     buildAmatrix();
@@ -120,6 +122,7 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     findFrontMins();
     buildColPointers();
     buildRowPointers();
+    checkDiscrete();
     trackAndCountSplits();
     markDegenerate();
     findLargestDegeneratePart();
@@ -944,6 +947,7 @@ void HighsOCAggregate::buildResidualLinks(){
     for (const auto split : splitCells){
         // This is for if we are trying to do basic degenerate schema
         if (split.first == max_front_len_pCol) continue;
+        if (discrete && mark_degenerate.at(split.first)) continue;
         isParent.at(split.first) = 1;
         parentRow[split.first] = elpNumRow;
         parentRow[split.first + 1] = elpNumRow + split.second.size();
@@ -1007,6 +1011,12 @@ void HighsOCAggregate::markDegenerate(){
         // if ((ub_test) && basis_test)
         //     mark_degenerate.at(i_col) = 1;
     }
+    // if (discrete){
+    //     for (auto col: degenerate_cols){
+    //         std::cout << "degenerate index: " << col << std::endl;
+    //     }
+    //     std::cin.get();
+    // }
 }
 
 void HighsOCAggregate::findLargestDegeneratePart(){
@@ -1021,9 +1031,20 @@ void HighsOCAggregate::findLargestDegeneratePart(){
             max_front_len_pCol = iCol;
         }
     }
-    std::cout << "Max front col: " << max_front_len_pCol << std::endl;
-    std::cout << "Max front col size: " << max_front_len << std::endl;
-    std::cin.get();
+    // if (discrete){
+    //     for (auto& iCol : degenerate_cols){
+    //         auto& cf = pColFront.at(iCol);
+    //         auto& flen = pFrontLen.at(cf);
+    //         if (flen){
+    //             std::cout << "has to split: " << iCol << std::endl;
+    //             std::cout << "flen: " << flen << std::endl;
+    //         }
+    //     }
+    //     std::cin.get();
+    // }
+    // std::cout << "Max front col: " << max_front_len_pCol << std::endl;
+    // std::cout << "Max front col size: " << max_front_len << std::endl;
+    // std::cin.get();
 }
 
 void HighsOCAggregate::buildBasis(bool finish, bool extended){
@@ -1045,6 +1066,10 @@ void HighsOCAggregate::buildColBasis(){
         pf = epMinusOne.front[crep];
         pCol = pFrontCol[pf];
         status = basis.col_status[pCol];
+        if (discrete && mark_degenerate.at(pCol) && pCol != iCol){
+            elpBasis.col_status.at(iCol) = nonbasic;
+            continue;
+        }
         if (pCol == max_front_len_pCol && pCol != iCol){
             elpBasis.col_status.at(iCol) = nonbasic;
             continue;            
@@ -1159,6 +1184,13 @@ void HighsOCAggregate::buildRowPointers(){
             row[i - numCol] = rowCnt++;
         }
     }
+}
+
+void HighsOCAggregate::checkDiscrete(){
+    int colsDiscrete = colCnt == numCol;
+    int rowsDiscrete = rowCnt == numRow;
+    if (colsDiscrete && rowsDiscrete) discrete = 1;
+    // std::cout << "discrete: " << discrete << std::endl;
 }
 
 // void HighsOCAggregate::buildDegenerateAMatrix(){
