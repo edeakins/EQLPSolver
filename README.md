@@ -32,19 +32,19 @@ To benchmark and compare orbital crossover to other methods in HiGHS, we include
 * Method 2 (command line -> --solver=ipm): Solve the given LP using HiGHS interior point method (IPM) with HiGHS crossover
 * Method 3 (command line -> --solver=orbital_crossover_dual): Solve the given LP using orbital crossover with iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
 * Method 4 (command line -> --solver=orbital_crossover_ipm): Solve the given LP using orbtial crossover with iterative lifting; HiGHS IPM with HiGHS crossover is used to solve the initial aggregate LP
-* Method 5 (command line -> --solver=dual_alp_standard_crossover): Solve the given LP using HiGHS crossover with iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
-* Method 6 (command line -> --solver=dual_alp_primal_crossover): Solve the given LP using HiGHS primal crossover only with iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
-* Method 7 (command line -> --solver=ipmcross_alp_standard_crossover): Solve the given LP using HiGHS crossover with iterative lifting; HiGHS IPM and HiGHS crossover is used to solve the initial aggregate LP
-* Method 8 (command line -> --solver=impcross_alp_primal_crossover): Solve the given LP using HiGHS primal crossover only with iterative lifting; HiGHS IPM and HiGHS crossover is used to solve the initial aggregate LP
-* Method 9 (command line -> --solver=ipm_alp_standard_crossover): Solve the given LP using HiGHS crossover with iterative lifting; HiGHS IPM is used to solve the initial aggregate LP
-* Method 10 (command line -> --solver=ipm_alp_primal_crossover): Solve the given LP using HiGHS primal crossover only with iterative lifting; HiGHS IPM is used to solve the initial aggregate LP
+* Method 5 (command line -> --solver=dual_alp_standard_crossover): Solve the given LP using HiGHS crossover without iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
+* Method 6 (command line -> --solver=dual_alp_primal_crossover): Solve the given LP using HiGHS primal crossover only without iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
+* Method 7 (command line -> --solver=ipmcross_alp_standard_crossover): Solve the given LP using HiGHS crossover without iterative lifting; HiGHS IPM and HiGHS crossover is used to solve the initial aggregate LP
+* Method 8 (command line -> --solver=impcross_alp_primal_crossover): Solve the given LP using HiGHS primal crossover only without iterative lifting; HiGHS IPM and HiGHS crossover is used to solve the initial aggregate LP
+* Method 9 (command line -> --solver=ipm_alp_standard_crossover): Solve the given LP using HiGHS crossover without iterative lifting; HiGHS IPM is used to solve the initial aggregate LP
+* Method 10 (command line -> --solver=ipm_alp_primal_crossover): Solve the given LP using HiGHS primal crossover only without iterative lifting; HiGHS IPM is used to solve the initial aggregate LP
 * Method 11 (command line -> --solver=orbital_crossover_dual_no_iter): Solve the given LP using orbital crossover without iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
 * Method 12 (command line -> --solver=orbital_crossover_ipm_no_iter): Solve the given LP using orbital crossover without iterative lifting; HiGHS IPM is used to solve the initial aggregate LP
-* Method 13 (command line -> --solver=dual_alp_standard_crossover_iter): Solve the given LP using HiGHS crossover without iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
-* Method 14 (command line -> --solver=dual_alp_primal_crossover_iter): Solve the given LP using HiGHS primal crossover only without iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
-* Method 15 (command line -> --solver=ipmcross_alp_standard_crossover_iter): Solve the given LP using HiGHS crossover without iterative lifting; HiGHS IPM and HiGHS crossover is used to solve the initial aggregate LP
-* Method 16 (command line -> --solver=ipmcross_alp_primal_crossover_iter): Solve the given LP using HiGHS primal crossover only without iterative lifting; HiGHS IPM and HiGHS crossover is used to solve the initial aggregate LP
-* Method 17 (command line -> --solver=ipm_alp_standard_crossover_iter): Solve the given LP using HiGHS crossover without iterative lifting; HiGHS IPM is used to solve the initial aggregate LP
-* Method 18 (command line -> --solver=ipm_alp_primal_crossover_iter): Solve the given LP using HiGHS primal crossover only without iterative lifting; HiGHS IPM is used to solve the initial aggregate LP
+* Method 13 (command line -> --solver=dual_alp_standard_crossover_iter): Solve the given LP using HiGHS crossover with iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
+* Method 14 (command line -> --solver=dual_alp_primal_crossover_iter): Solve the given LP using HiGHS primal crossover only with iterative lifting; HiGHS dual simplex is used to solve the initial aggregate LP
+* Method 15 (command line -> --solver=ipmcross_alp_standard_crossover_iter): Solve the given LP using HiGHS crossover with iterative lifting; HiGHS IPM and HiGHS crossover is used to solve the initial aggregate LP
+* Method 16 (command line -> --solver=ipmcross_alp_primal_crossover_iter): Solve the given LP using HiGHS primal crossover only with iterative lifting; HiGHS IPM and HiGHS crossover is used to solve the initial aggregate LP
+* Method 17 (command line -> --solver=ipm_alp_standard_crossover_iter): Solve the given LP using HiGHS crossover with iterative lifting; HiGHS IPM is used to solve the initial aggregate LP
+* Method 18 (command line -> --solver=ipm_alp_primal_crossover_iter): Solve the given LP using HiGHS primal crossover only with iterative lifting; HiGHS IPM is used to solve the initial aggregate LP
 
 
