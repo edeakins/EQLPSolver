@@ -1080,6 +1080,7 @@ HighsStatus Highs::run() {
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
+      double percentChange = 0;
       // HighsTimer in_timer_;
       // double time_to_lift = 0;
       // in_timer_.startRunHighsClock();
@@ -1093,11 +1094,16 @@ HighsStatus Highs::run() {
         timer_.stop(timer_.equitable_partition_clock);
         // change = equitablePartition_.getNumBasicParts();
         change += measureChangeInPartitionSize(original_lp, old_partition);
+        percentChange += measurePercentChangeInPartitionSize(original_lp, old_partition);
         if (change < 1000 && !discrete) continue;
+        // std::cout << "Change: " << change << std::endl;
+        // std::cout << "Percent change: " << percentChange << std::endl;
+        // std::cin.get();
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
         change = 0;
+        percentChange = 0;
         // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
         buildEALP();
@@ -5180,6 +5186,15 @@ double Highs::measureChangeInPartitionSize(HighsLp& original_lp, OCPartition& ol
   HighsInt num_original_col = original_lp.num_col_;
   double change = (double)num_split_change/(double)num_original_col;
   return num_split_change;
+}
+
+double Highs::measurePercentChangeInPartitionSize(HighsLp& original_lp, OCPartition& old_partition){
+  HighsInt old_num_col_splits = old_partition.ncsplits;
+  HighsInt num_col_splits = partition_.ncsplits;
+  HighsInt num_split_change = num_col_splits - old_num_col_splits;
+  HighsInt num_original_col = original_lp.num_col_;
+  double change = (double)num_split_change/(double)num_original_col;
+  return change;
 }
 
 // Private methods

@@ -1208,6 +1208,7 @@ class Highs {
   void countDegeneratePivots();
   void swapDependentColsOut(std::vector<HighsInt>& redundant_rows);
   double measureChangeInPartitionSize(HighsLp& original_lp, OCPartition& old_partition);
+  double measurePercentChangeInPartitionSize(HighsLp& original_lp, OCPartition& old_partition);
   bool discrete = true;
   bool stop_highs_run_clock = true;
   bool running_orbital_crossover = false;
