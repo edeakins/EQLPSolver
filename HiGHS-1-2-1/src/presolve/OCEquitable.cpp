@@ -35,7 +35,7 @@ bool HighsOCEquitablePartition::isolate(){
     split(targ, back);
     refine();
     countColAndRowSplits();
-    countBasicParts();
+    // countBasicParts();
     // for (int i = 0; i < g->numTot_; i += partition->len[i] + 1)
     //     sort(partition->label.begin() + i, partition->label.begin() + i + partition->len[i] + 1);
     if (discrete()) return true;
