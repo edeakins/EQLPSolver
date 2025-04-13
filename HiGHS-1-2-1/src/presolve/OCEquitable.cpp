@@ -17,7 +17,6 @@ bool HighsOCEquitablePartition::isolate(){
     //         break;
     //     }
     // }
-    oldFront = partition->front;
     partition->level++;
     int targ = nextNon[-1];
     int min = targ;
@@ -35,25 +34,36 @@ bool HighsOCEquitablePartition::isolate(){
     split(targ, back);
     refine();
     countColAndRowSplits();
-    // countBasicParts();
+    countBasicParts();
     // for (int i = 0; i < g->numTot_; i += partition->len[i] + 1)
     //     sort(partition->label.begin() + i, partition->label.begin() + i + partition->len[i] + 1);
     if (discrete()) return true;
     else return false;
 }
 
+/* Store the fronts that were used to aggregate the columns for the most recent solve of ELP/ALP */
+void HighsOCEquitablePartition::storeCurrentFronts(){
+    oldFront = partition->front;
+}
+
+/* Take in frontCol from the most recently solved ALP/ELP so we know how columns translate to fronts, 
+and thus, which fronts are "basic". */
+void HighsOCEquitablePartition::intakeFrontCol(std::vector<int>& fCols){
+    oldFrontCol = fCols;
+}
+
 /* Pass in most recent ELP solution so we can count how many splits are of variables
 that are basic */
 void HighsOCEquitablePartition::intakeHighsBasis(HighsBasis& basis){
-    HighsInt num_col = basis.col_status.size();
-    int front;
-    int col;
-    HighsBasisStatus status;
     old_num_basic = 0;
+    HighsInt front;
+    HighsInt col;
+    HighsInt num_col = basis.col_status.size();
+    HighsBasisStatus status;
     HighsBasisStatus basic = HighsBasisStatus::kBasic;
     for (int i = 0; i < g->numCol_; i += partition->len[i] + 1){
         front = partition->front.at(i);
-        col = frontCol.at(front);
+        col = oldFrontCol.at(front);
         status = basis.col_status.at(col);
         if (status == basic){ 
             partition->basic.at(front) = 1;
@@ -63,12 +73,6 @@ void HighsOCEquitablePartition::intakeHighsBasis(HighsBasis& basis){
     }
 }
 
-/* Take in the most recent front cols to map back to the partition and then
-we know how columns translate to fronts, and thus, how which fronts are "basic". */
-void HighsOCEquitablePartition::intakeFrontCol(std::vector<int>& fCols){
-    frontCol = fCols;
-}
-
 // /* Map to LP cols*/
 // void HighsOCEquitablePartition::mapToLpCols(){
     
@@ -76,9 +80,7 @@ void HighsOCEquitablePartition::intakeFrontCol(std::vector<int>& fCols){
 
 /* Count new basic parts after a refinement */
 void HighsOCEquitablePartition::countBasicParts(){
-    std::vector<int> old_basic = partition->basic;
-    std::vector<int>& basic = partition->basic;
-    // old_num_basic = num_basic;
+    std::vector<int>& old_basic = partition->basic;
     int num_col_part = partition->ncsplits;
     int front, prevFront, status;
     num_basic = 0;
@@ -86,9 +88,11 @@ void HighsOCEquitablePartition::countBasicParts(){
         front = partition->front.at(i);
         prevFront = oldFront.at(i);
         status = old_basic.at(prevFront);
-        basic.at(front) = status;
         num_basic += status;
     }
+    // std::cout << "Old num basic: " << old_num_basic << std::endl;
+    // std::cout << "New num basic: " << num_basic << std::endl;
+    // std::cin.get();
 }
 
 int HighsOCEquitablePartition::getNumBasicParts(){
@@ -553,7 +557,7 @@ bool HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     sInd.assign(g->numTot_, 0);
     nextNon = allocInts(g->numTot_ + 1) + 1;
     prevNon = allocInts(g->numTot_ + 1);
-    frontCol.resize(g->numCol_);
+    oldFrontCol.resize(g->numCol_);
     // // Additions hopefully can further improve
     // cDeg.assign(g->numTot_, 0);
     // cDegFreq.assign(maxDeg + 1, 0);
@@ -615,17 +619,17 @@ bool HighsOCEquitablePartition::allocatePartition(HighsLp* lp){
     // label.assign(partition->label.begin(), partition->label.end());
     // front.assign(partition->front.begin(), partition->front.end());
     // len.assign(partition->len.begin(), partition->len.end());
-    for (int i = 0; i < g->numTot_; ++i){
-        if (i < g->numCol_){
-            if (partition->front.at(i) >= g->numCol_)
-                std::cout << "bad col: " << i << std::endl;
-        }
-        else{
-            if (partition->front.at(i) < g->numCol_){
-                std::cout << "bad row: " << i - g->numCol_ << std::endl;
-            }
-        }
-    }
+    // for (int i = 0; i < g->numTot_; ++i){
+    //     if (i < g->numCol_){
+    //         if (partition->front.at(i) >= g->numCol_)
+    //             std::cout << "bad col: " << i << std::endl;
+    //     }
+    //     else{
+    //         if (partition->front.at(i) < g->numCol_){
+    //             std::cout << "bad row: " << i - g->numCol_ << std::endl;
+    //         }
+    //     }
+    // }
     refine();
     countColAndRowSplits();
     // for (int i = 0; i < g->numTot_; i += partition->len[i] + 1)

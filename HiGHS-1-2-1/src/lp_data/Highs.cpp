@@ -805,8 +805,6 @@ HighsStatus Highs::run() {
     timer_.stop(timer_.build_alp_clock);
     // Grab and pass initial aggregate model and pass to highs
     buildALP();
-    std::vector<int>& front_col = aggregator_.getFrontCol();
-    equitablePartition_.intakeFrontCol(front_col);
     info_.original_cols = original_lp.num_col_;
     info_.original_rows = original_lp.num_row_;
     info_.reduced_cols = alp_.num_col_;
@@ -857,7 +855,10 @@ HighsStatus Highs::run() {
       options_.solver = kOCDualString;
       getOrbitalCrossoverBasis();
       getOrbitalCrossoverSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
       equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // equitablePartition_.intakeHighsBasis(alpBasis_);
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
@@ -873,9 +874,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -884,8 +885,6 @@ HighsStatus Highs::run() {
         timer_.start(timer_.build_elp_iterative_clock);
         buildEALP();
         timer_.stop(timer_.build_elp_iterative_clock);
-        std::vector<int>& front_col = aggregator_.getFrontCol();
-        equitablePartition_.intakeFrontCol(front_col);
         // if (!ealp_.num_residual_cols_ && !discrete) continue;
         // buildALP();
         // buildPEALP();
@@ -934,7 +933,10 @@ HighsStatus Highs::run() {
         setBasisValidity();
         getOrbitalCrossoverBasis();
         getOrbitalCrossoverSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
         equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -1077,10 +1079,14 @@ HighsStatus Highs::run() {
       int minor_iter = 0;
       getOrbitalCrossoverBasis();
       getOrbitalCrossoverSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
+      // equitablePartition_.intakeHighsBasis(alpBasis_);
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
-      double percentChange = 0;
       // HighsTimer in_timer_;
       // double time_to_lift = 0;
       // in_timer_.startRunHighsClock();
@@ -1092,18 +1098,13 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        percentChange += measurePercentChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
-        // std::cout << "Change: " << change << std::endl;
-        // std::cout << "Percent change: " << percentChange << std::endl;
-        // std::cin.get();
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
         change = 0;
-        percentChange = 0;
         // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
         buildEALP();
@@ -1116,11 +1117,12 @@ HighsStatus Highs::run() {
         getLiftedBasis();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
+
         passModel(ealp_);
         // zeroIterationCounts();
-        // // writeModel("../../debugBuild/testLpFiles/EALP.lp");
-        // // Update the major and minor orbital crossover iterations
-        // // to the info_ class after it was cleared by passModel()
+        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // Update the major and minor orbital crossover iterations
+        // to the info_ class after it was cleared by passModel()
         // info_.major_iteration_count = major_iter;
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         // Pass the lifted initial ealp basis to highs to build a simplex
@@ -1155,6 +1157,10 @@ HighsStatus Highs::run() {
         setBasisValidity();
         getOrbitalCrossoverBasis();
         getOrbitalCrossoverSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
