@@ -1198,8 +1198,8 @@ class Highs {
   void buildALP();
   void buildEALP();
   void buildPEALP();
-  void getOrbitalCrossoverBasis();
-  void getOrbitalCrossoverSolution();
+  void getAggregateBasis();
+  void getAggregateSolution();
   void getCrashBasis();
   void getCrashSolution();
   void getLiftedBasis();
