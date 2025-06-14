@@ -70,8 +70,11 @@ public:
     void markDegenerate();
     void findLargestDegeneratePart();
     void buildBasis(bool finish, bool extended);
+    void buildBasisNoResiduals();
     void buildColBasis();
+    void buildColBasisNoResiduals();
     void buildRowBasis();
+    void buildRowBasisNoResiduals();
     void buildResidualColBasis();
     void buildResidualRowBasis();
     // Build LU initial factor check for good basis;
@@ -112,6 +115,7 @@ public:
     OCPartition epMinusOne;
     HighsBasis basis;
     HighsBasis elpBasis;
+    HighsBasis lpBasis;
     HighsSolution solution;
     HighsSolution lift_solution;
     HFactor degenerate_factor;

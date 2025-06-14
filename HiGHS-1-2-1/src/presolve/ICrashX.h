@@ -23,5 +23,9 @@ bool callCrossover(const HighsLp& lp, const HighsOptions& options,
                    HighsSolution& solution, HighsBasis& highs_basis, HighsInfo& highs_info);
 bool callPrimalCrossover(const HighsLp& lp, const HighsOptions& options,
                    HighsSolution& solution, HighsBasis& highs_basis, HighsInfo& highs_info);            
+bool callCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
+                   HighsSolution& solution, HighsBasis& init_basis, HighsBasis& final_basis, HighsInfo& highs_info);
+bool callPrimalCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
+                   HighsSolution& solution, HighsBasis& init_basis, HighsBasis& final_basis, HighsInfo& highs_info); 
 
 #endif

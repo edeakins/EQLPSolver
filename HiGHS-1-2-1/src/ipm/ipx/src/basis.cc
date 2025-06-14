@@ -351,6 +351,22 @@ void Basis::ComputeBasicSolution(Vector& x, Vector& y, Vector& z) const {
     }
 }
 
+void Basis::ConstructBasisFromOrbits(std::vector<int>& basic_cols, Info* info){
+    const Int m = model_.rows();
+    const Int n = model_.cols();
+    // assert(colscale);
+    info->errflag = 0;
+    info->dependent_rows = 0;
+    info->dependent_cols = 0;
+    if (control_.orbital_basis()){
+        OrbitalBasis(basic_cols);
+        double sigma = MinSingularValue();
+        control_.Debug()
+            << Textline("Minimum singular value of crash basis:") << sci2(sigma)
+            << '\n';
+    }
+}
+
 void Basis::ConstructBasisFromWeights(const double* colscale, Info* info) {
     const Int m = model_.rows();
     const Int n = model_.cols();
@@ -503,6 +519,21 @@ bool Basis::TightenLuPivotTol() {
     control_.Log()
         << " LU pivot tolerance tightened to " << lu_->pivottol() << '\n';
     return true;
+}
+
+void Basis::OrbitalBasis(std::vector<int>& cols_guessed){
+    std::fill(basis_.begin(), basis_.end(), -1);
+    std::fill(map2basis_.begin(), map2basis_.end(), -1);
+    for (Int k = 0; k < cols_guessed.size(); k++) {
+        basis_[k] = cols_guessed[k];
+        assert(map2basis_[basis_[k]] == -1); // must not have duplicates
+        map2basis_[basis_[k]] = k;
+    }
+    Int num_dropped = 0;
+    CrashFactorize(&num_dropped);
+    control_.Debug()
+        << Textline("Number of columns dropped from guessed basis:")
+        << num_dropped << '\n';
 }
 
 void Basis::CrashBasis(const double* colweights) {

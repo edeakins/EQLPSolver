@@ -1054,6 +1054,13 @@ void HighsOCAggregate::buildBasis(bool finish, bool extended){
     elpBasis.alien = false;
 }
 
+void HighsOCAggregate::buildBasisNoResiduals(){
+    num_basic = 0;
+    buildColBasisNoResiduals();
+    buildRowBasisNoResiduals();
+    elpBasis.alien = false;
+}
+
 void HighsOCAggregate::buildColBasis(){
     int iCol, pCol, pf, pc, crep, pcrep;
     HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
@@ -1104,6 +1111,51 @@ void HighsOCAggregate::buildRowBasis(){
     for (iRow = 0; iRow < rowCnt + numResiduals; ++iRow){
         if (elpBasis.row_status.at(iRow) == HighsBasisStatus::kBasic)
             num_basic++;
+    }
+}
+
+void HighsOCAggregate::buildColBasisNoResiduals(){
+    int iCol, pCol, pf, pc, crep, pcrep;
+    HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
+    HighsBasisStatus nonbasic = HighsBasisStatus::kNonbasic;
+    lpBasis.col_status.resize(colCnt);
+    // elpBasis.col_status.resize(colCnt);
+    std::fill_n(lpBasis.col_status.begin(), lpBasis.col_status.size(), basic);
+    for (iCol = 0; iCol < colCnt; ++iCol){
+        crep = colrep[iCol];
+        pf = epMinusOne.front[crep];
+        pCol = pFrontCol[pf];
+        status = basis.col_status[pCol];
+        if (discrete && mark_degenerate.at(pCol) && pCol != iCol){
+            lpBasis.col_status.at(iCol) = nonbasic;
+            continue;
+        }
+        if (pCol == max_front_len_pCol && pCol != iCol){
+            lpBasis.col_status.at(iCol) = nonbasic;
+            continue;            
+        }
+        lpBasis.col_status[iCol] = status;
+    }
+}
+
+void HighsOCAggregate::buildRowBasisNoResiduals(){
+    int iRow, r, pr, pf, rrep, rlen;
+    int of, nf;
+    HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
+    // std::fill(lpBasis.row_status.begin(), lpBasis.row_status.end(), basic);
+    lpBasis.row_status.resize(rowCnt);
+    std::fill_n(lpBasis.row_status.begin(), lpBasis.row_status.size(), basic);
+    int numNewBasic = 0;
+    int numBasicToSplit = 0;
+    int numBasicSplits = 0;
+    int numNonBasicToSplit = 0;
+    int numNonBasicSplits = 0;
+    int numNonBasic = 0;
+    for (iRow = 0; iRow < prowCnt; ++iRow){
+        lpBasis.row_status[iRow] = basis.row_status[iRow];
+    }
+    for (iRow = rowCnt; iRow < rowCnt + numResiduals; ++iRow){
+        lpBasis.row_status[iRow] = HighsBasisStatus::kLower;
     }
 }
 

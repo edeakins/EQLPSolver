@@ -297,6 +297,148 @@ Int LpSolver::CrossoverFromStartingPoint(const double* x_start,
     return 0;
 }
 
+Int LpSolver::PrimalCrossoverFromPartialOrbitalBasis(const double* x_start,
+                                         const double* slack_start,
+                                         const double* y_start,
+                                         const double* z_start,
+                                         std::vector<int>& basic_cols) {
+    const Int m = model_.rows();
+    const Int n = model_.cols();
+    const Vector& lb = model_.lb();
+    const Vector& ub = model_.ub();
+    const SparseMatrix& AI = model_.AI();
+    // model_.dualized_ = false;
+
+    ClearSolution();
+    control_.Log() << "Crossover from starting point\n";
+
+    x_crossover_.resize(n+m);
+    y_crossover_.resize(m);
+    z_crossover_.resize(n+m);
+    crossover_weights_.resize(0);
+    model_.PresolveStartingPoint(x_start, slack_start, y_start, z_start,
+                                 x_crossover_, y_crossover_, z_crossover_);
+
+    // Check that starting point is complementary and satisfies bound and sign
+    // conditions.
+    for (Int j = 0; j < n+m; j++) {
+        if (x_crossover_[j] < lb[j] || x_crossover_[j] > ub[j])
+            return IPX_ERROR_invalid_vector;
+        if (x_crossover_[j] != lb[j] && z_crossover_[j] > 0.0)
+            return IPX_ERROR_invalid_vector;
+        if (x_crossover_[j] != ub[j] && z_crossover_[j] < 0.0)
+            return IPX_ERROR_invalid_vector;
+    }
+
+    // Construct starting basis.
+    basis_.reset(new Basis(control_, model_));
+    if (control_.crash_basis()) {
+        // Take columns in the following order of priority:
+        // - free columns
+        // - columns between their bounds, in increasing number of nonzeros
+        // - columns with zero dual, in increasing number of nonzeros
+        // - Fixed columns and those with nonzero dual
+        Timer timer;
+        Vector colweight(n+m);
+        for (Int j = 0; j < n+m; j++) {
+            // if (j >= n){
+            //     int five = 5;
+            // }
+            Int nz = AI.entries(j);
+            if (lb[j] == ub[j])
+                colweight[j] = 0.0;
+            else if (std::isinf(lb[j]) && std::isinf(ub[j]))
+                colweight[j] = INFINITY;
+            else if (z_crossover_[j] != 0.0)
+                colweight[j] = 0.0;
+            else if (x_crossover_[j] != lb[j] && x_crossover_[j] != ub[j])
+                colweight[j] = m + (m-nz+1);
+            else
+                colweight[j] = m-nz+1;
+        }
+        basis_->ConstructBasisFromWeights(&colweight[0], &info_);
+        info_.time_starting_basis += timer.Elapsed();
+        if (info_.errflag) {
+            ClearSolution();
+            return 0;
+        }
+    }
+
+    RunPrimalCrossover();
+    return 0;
+}
+
+Int LpSolver::CrossoverFromPartialOrbitalBasis(const double* x_start,
+                                         const double* slack_start,
+                                         const double* y_start,
+                                         const double* z_start,
+                                         std::vector<int>& basic_cols) {
+    const Int m = model_.rows();
+    const Int n = model_.cols();
+    const Vector& lb = model_.lb();
+    const Vector& ub = model_.ub();
+    const SparseMatrix& AI = model_.AI();
+    // model_.dualized_ = false;
+
+    ClearSolution();
+    control_.Log() << "Crossover from starting point\n";
+
+    x_crossover_.resize(n+m);
+    y_crossover_.resize(m);
+    z_crossover_.resize(n+m);
+    crossover_weights_.resize(0);
+    model_.PresolveStartingPoint(x_start, slack_start, y_start, z_start,
+                                 x_crossover_, y_crossover_, z_crossover_);
+
+    // Check that starting point is complementary and satisfies bound and sign
+    // conditions.
+    for (Int j = 0; j < n+m; j++) {
+        if (x_crossover_[j] < lb[j] || x_crossover_[j] > ub[j])
+            return IPX_ERROR_invalid_vector;
+        if (x_crossover_[j] != lb[j] && z_crossover_[j] > 0.0)
+            return IPX_ERROR_invalid_vector;
+        if (x_crossover_[j] != ub[j] && z_crossover_[j] < 0.0)
+            return IPX_ERROR_invalid_vector;
+    }
+
+    // Construct starting basis.
+    basis_.reset(new Basis(control_, model_));
+    if (control_.crash_basis()) {
+        // Take columns in the following order of priority:
+        // - free columns
+        // - columns between their bounds, in increasing number of nonzeros
+        // - columns with zero dual, in increasing number of nonzeros
+        // - Fixed columns and those with nonzero dual
+        Timer timer;
+        Vector colweight(n+m);
+        for (Int j = 0; j < n+m; j++) {
+            // if (j >= n){
+            //     int five = 5;
+            // }
+            Int nz = AI.entries(j);
+            if (lb[j] == ub[j])
+                colweight[j] = 0.0;
+            else if (std::isinf(lb[j]) && std::isinf(ub[j]))
+                colweight[j] = INFINITY;
+            else if (z_crossover_[j] != 0.0)
+                colweight[j] = 0.0;
+            else if (x_crossover_[j] != lb[j] && x_crossover_[j] != ub[j])
+                colweight[j] = m + (m-nz+1);
+            else
+                colweight[j] = m-nz+1;
+        }
+        basis_->ConstructBasisFromWeights(&colweight[0], &info_);
+        info_.time_starting_basis += timer.Elapsed();
+        if (info_.errflag) {
+            ClearSolution();
+            return 0;
+        }
+    }
+
+    RunCrossover();
+    return 0;
+}
+
 Int LpSolver::GetIterate(double* x, double* y, double* zl, double* zu,
                          double* xl, double* xu) {
     if (!iterate_)

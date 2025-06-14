@@ -66,6 +66,7 @@ public:
     double ipm_drop_dual() const { return parameters_.ipm_drop_dual; }
     double kkt_tol() const { return parameters_.kkt_tol; }
     ipxint crash_basis() const { return parameters_.crash_basis; }
+    ipxint orbital_basis() const {return parameters_.orbital_basis; }
     double dependency_tol() const { return parameters_.dependency_tol; }
     double volume_tol() const { return parameters_.volume_tol; }
     ipxint rows_per_slice() const { return parameters_.rows_per_slice; }

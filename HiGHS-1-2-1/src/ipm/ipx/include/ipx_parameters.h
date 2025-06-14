@@ -30,6 +30,7 @@ struct ipx_parameters {
 
     /* Basis construction in IPM */
     ipxint crash_basis;
+    ipxint orbital_basis;
     double dependency_tol;
     double volume_tol;
     ipxint rows_per_slice;

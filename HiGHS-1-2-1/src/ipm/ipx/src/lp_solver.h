@@ -121,6 +121,16 @@ public:
                                    const double* slack_start,
                                    const double* y_start,
                                    const double* z_start);
+    Int CrossoverFromPartialOrbitalBasis(const double* x_start,
+                                   const double* slack_start,
+                                   const double* y_start,
+                                   const double* z_start,
+                                   std::vector<int>& basic_cols);
+    Int PrimalCrossoverFromPartialOrbitalBasis(const double* x_start,
+                                   const double* slack_start,
+                                   const double* y_start,
+                                   const double* z_start,
+                                   std::vector<int>& basic_cols);
 
     // -------------------------------------------------------------------------
     // The remaining methods are for debugging.

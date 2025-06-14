@@ -2057,37 +2057,65 @@ HighsStatus Highs::run() {
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
+        // change = 0;
+        // // Build the extended aggregate lp for the current partition
+        // timer_.start(timer_.build_elp_iterative_clock);
+        // buildEALP();
+        // timer_.stop(timer_.build_elp_iterative_clock);
+        // // if (!ealp_.num_residual_cols_ && !discrete) continue;
+        // // buildALP();
+        // // buildPEALP();
+        // // Grab the lifted basis and store the major and minor orbital
+        // // crossover iterations before the get cleared by passModel()
+        // getLiftedBasis();
+        // // major_iter = info_.major_iteration_count;
+        // // minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // passModel(ealp_);
+        // zeroIterationCounts();
+        // // writeModel("../../debugBuild/testLpFiles/EALP.lp");
+        // // Update the major and minor orbital crossover iterations
+        // // to the info_ class after it was cleared by passModel()
+        // // info_.major_iteration_count = major_iter;
+        // // info_.orbital_crossover_minor_iteration_count = minor_iter;
+        // // Pass the lifted initial ealp basis to highs to build a simplex
+        // // basis for the lp.
+        // setBasis(ealpBasis_);
+        // // writeBasis("../../debugBuild/beforeBasis.txt");
+        // // Do orbital crossvoer
+        // timer_.start(timer_.orbital_crossover_clock);
+        // call_status =
+        //     callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        // timer_.stop(timer_.orbital_crossover_clock);
+        // return_status = interpretCallStatus(options_.log_options, call_status,
+        //                                     return_status, "callSolveLp");
         change = 0;
         // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
-        buildEALP();
+        // buildEALP();
+        buildPEALP();
         timer_.stop(timer_.build_elp_iterative_clock);
         // if (!ealp_.num_residual_cols_ && !discrete) continue;
         // buildALP();
         // buildPEALP();
         // Grab the lifted basis and store the major and minor orbital
         // crossover iterations before the get cleared by passModel()
-        getLiftedBasis();
+        // getLiftedBasis();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
-        passModel(ealp_);
+        passModel(pealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
         // to the info_ class after it was cleared by passModel()
         // info_.major_iteration_count = major_iter;
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
-        // Pass the lifted initial ealp basis to highs to build a simplex
-        // basis for the lp.
-        setBasis(ealpBasis_);
-        // writeBasis("../../debugBuild/beforeBasis.txt");
-        // Do orbital crossvoer
-        timer_.start(timer_.orbital_crossover_clock);
-        call_status =
-            callSolveLp(ealp_, "Solving LP with Orbital Crossover");
-        timer_.stop(timer_.orbital_crossover_clock);
+        HighsSolution interior_point = 
+        aggregator_.buildSolutionPEALP(partition_, alpSolution_);
+        timer_.start(timer_.crossover_clock);
+        call_status = Crossover(interior_point, pealp_);
+        timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
-                                            return_status, "callSolveLp");
+                                        return_status, "callSolveLp");
         if (return_status == HighsStatus::kError){
           stop_highs_run_clock = true;
           called_return_from_run = false;
@@ -6260,6 +6288,72 @@ HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp) {
   HighsBasis basis;
   solution.dual_valid = true;
   bool x_status = callPrimalCrossover(lp, options_, solution, basis, info_);
+  if (!x_status) return HighsStatus::kError;
+  info_.basis_validity = kBasisValidityValid;
+
+  setBasis(basis);
+  getCrashBasis();
+  getCrashSolution();
+  double obj = 0;
+  HighsInt numCol = lp.num_col_;
+  std::vector<double>& colCost = lp.col_cost_;
+  std::vector<double>& colValue = solution.col_value;
+  for (int iCol = 0; iCol < numCol; ++iCol)
+    obj += colCost[iCol] * colValue[iCol];
+  info_.objective_function_value = obj;
+  scaled_model_status_ = HighsModelStatus::kOptimal;
+  model_status_ = HighsModelStatus::kOptimal;
+  alpSolution_ = solution;
+  
+
+#else
+  // No IPX available so end here at approximate solve.
+  std::cout << "No ipx code available. Error." << std::endl;
+  return HighsStatus::kError;
+#endif
+
+  return HighsStatus::kOk;
+}
+
+HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, HighsBasis& orbital_basis) {
+#ifdef IPX_ON
+  std::cout << "Loading crossover...\n";
+  HighsBasis basis;
+  solution.dual_valid = true;
+  bool x_status = callCrossoverForOrbital(lp, options_, solution, orbital_basis, basis, info_);
+  if (!x_status) return HighsStatus::kError;
+  info_.basis_validity = kBasisValidityValid;
+
+  setBasis(basis);
+  getCrashBasis();
+  getCrashSolution();
+  double obj = 0;
+  HighsInt numCol = lp.num_col_;
+  std::vector<double>& colCost = lp.col_cost_;
+  std::vector<double>& colValue = solution.col_value;
+  for (int iCol = 0; iCol < numCol; ++iCol)
+    obj += colCost[iCol] * colValue[iCol];
+  info_.objective_function_value = obj;
+  scaled_model_status_ = HighsModelStatus::kOptimal;
+  model_status_ = HighsModelStatus::kOptimal;
+  alpSolution_ = solution;
+  
+
+#else
+  // No IPX available so end here at approximate solve.
+  std::cout << "No ipx code available. Error." << std::endl;
+  return HighsStatus::kError;
+#endif
+
+  return HighsStatus::kOk;
+}
+
+HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp, HighsBasis& orbital_basis) {
+#ifdef IPX_ON
+  std::cout << "Loading primal crossover only...\n";
+  HighsBasis basis;
+  solution.dual_valid = true;
+  bool x_status = callPrimalCrossoverForOrbital(lp, options_, solution, orbital_basis, basis, info_);
   if (!x_status) return HighsStatus::kError;
   info_.basis_validity = kBasisValidityValid;
 

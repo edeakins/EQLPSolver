@@ -877,6 +877,8 @@ class Highs {
   HighsStatus crossover(HighsSolution& solution);
   HighsStatus crossover(HighsSolution& solution, HighsLp& lp);
   HighsStatus primalCrossover(HighsSolution& solution, HighsLp& lp);
+  HighsStatus crossover(HighsSolution& solution, HighsLp& lp, HighsBasis& orbital_basis);
+  HighsStatus primalCrossover(HighsSolution& solution, HighsLp& lp, HighsBasis& orbital_basis);
 
   /**
    * @brief Open a named log file

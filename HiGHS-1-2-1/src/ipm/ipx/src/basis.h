@@ -196,6 +196,10 @@ public:
     // @colweights: vector of length n+m with nonnegative entries
     void ConstructBasisFromWeights(const double* colweights, Info* info);
 
+    // Construct a basis using symmetry information when using orbital crossover
+    // to solve the model
+    void ConstructBasisFromOrbits(std::vector<int>& basic_cols, Info* info);
+
     // Estimates the smallest singular value of the basis matrix.
     double MinSingularValue() const;
 
@@ -246,6 +250,10 @@ private:
     // in exact arithmetic. The condition number of the basis matrix can be
     // unacceptably high, however.
     void CrashBasis(const double* colweights);
+
+    // Creates an initial basis based on symmetry information obtained during
+    // orbital crossover iterative lifting
+    void OrbitalBasis(std::vector<int>& basic_cols);
 
     // Repairs singularities in the basis matrix by replacing basic columns by
     // slack columns. The status of slack variables that enter the basis becomes
