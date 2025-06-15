@@ -246,7 +246,15 @@ void reportOption(FILE* file, const OptionRecordString& option,
 const string kSimplexString = "simplex";
 const string kIpmString = "ipm";
 const string kOCDualString = "orbital_crossover_dual";
+const string kOCDualHighsCrossoverString = "orbital_crossover_dual_hc";
+const string kOCDualHighsCrossoverNoIterString = "orbital_crossover_dual_hc_no_iter";
+const string kOCDualHighsPrimalCrossoverString = "orbital_crossover_dual_hpc";
+const string kOCDualHighsPrimalCrossoverNoIterString = "orbital_crossover_dual_hpc_no_iter";
 const string kOCIPMString = "orbital_crossover_ipm";
+const string kOCIPMHighsCrossoverString = "orbital_crossover_ipm_hc";
+const string kOCIPMHighsCrossoverNoIterString = "orbital_crossover_ipm_hc_no_iter";
+const string kOCIPMHighsPrimalCrossoverString = "orbital_crossover_ipm_hpc";
+const string kOCIPMHighsPrimalCrossoverNoIterString = "orbital_crossover_ipm_hpc_no_iter";
 const string kIpmAggregateString = "ipm_aggregate";
 const string kDualAggregateHighsCrossoverString = "dual_alp_standard_crossover";
 const string kDualAggregateHighsPrimalCrossoverString = "dual_alp_primal_crossover";

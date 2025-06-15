@@ -877,8 +877,8 @@ class Highs {
   HighsStatus crossover(HighsSolution& solution);
   HighsStatus crossover(HighsSolution& solution, HighsLp& lp);
   HighsStatus primalCrossover(HighsSolution& solution, HighsLp& lp);
-  HighsStatus crossover(HighsSolution& solution, HighsLp& lp, HighsBasis& orbital_basis);
-  HighsStatus primalCrossover(HighsSolution& solution, HighsLp& lp, HighsBasis& orbital_basis);
+  HighsStatus crossover(HighsSolution& solution, HighsLp& lp, std::vector<int>& colweights);
+  HighsStatus primalCrossover(HighsSolution& solution, HighsLp& lp, std::vector<int>& colweights);
 
   /**
    * @brief Open a named log file
@@ -913,6 +913,7 @@ class Highs {
   HighsLp ealp_;
   HighsLp pealp_;
   HighsBasis alpBasis_;
+  std::vector<int> alpColweights_;
   HighsBasis crashBasis_;
   HighsSolution crashSolution_;
   HighsSolution alpSolution_;
@@ -1197,6 +1198,7 @@ class Highs {
   void initializeEquitablePartition(HighsLp& original_lp);
   void initializeAggregator(HighsLp& original_lp);
   void refinePartition();
+  void buildOCALP();
   void buildALP();
   void buildEALP();
   void buildPEALP();
@@ -1205,6 +1207,8 @@ class Highs {
   void getCrashBasis();
   void getCrashSolution();
   void getLiftedBasis();
+  void getLiftedBasis(HighsInt hc);
+  void getColweights();
   void trimOrbitalCrossoverSolution();
   void trimOrbitalCrossoverBasis();
   void countDegeneratePivots();

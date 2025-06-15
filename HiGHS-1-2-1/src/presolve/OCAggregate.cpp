@@ -52,12 +52,12 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     childRow.resize(numCol);
     residualCol.resize(numCol);
     residualRow.resize(numCol);
-    mark_degenerate.resize(numCol);
+    mark_degenerate.resize(numCol + numRow);
     zero_step_pivots.resize(numCol + numTotResiduals);
     max_front_len_pCol_check.resize(numCol);
 }
 
-void HighsOCAggregate::resizeElpContainers(){
+void HighsOCAggregate::resizeLpContainers(){
     // Resize Lp containers
     agglp.col_cost_.resize(colCnt);
     agglp.col_upper_.resize(colCnt);
@@ -93,7 +93,7 @@ void HighsOCAggregate::buildLp(){
     buildColPointers();
     buildRowPointers();
     checkDiscrete();
-    resizeElpContainers();
+    resizeLpContainers();
     buildObj();
     buildAmatrix();
     buildRhs();
@@ -127,7 +127,7 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     markDegenerate();
     findLargestDegeneratePart();
     buildResidualLinks();
-    resizeElpContainers();
+    resizeLpContainers();
     buildObj();
     buildAmatrix();
     buildRhs();
@@ -140,6 +140,49 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     buildRowNames();
     buildColNames();
     copyPartition();
+    agglp.level = level;
+    elp.level = level; 
+    presolvelp.level = level;
+    // elp.pairs = pairs;
+    ++level;
+}
+
+void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
+                               HighsSolution& s, std::vector<HighsInt>& basic_index, HighsInt hc){
+    ep = partition;
+    basis = b;
+    solution = s;
+    pcol = col;
+    pcolrep = colrep;
+    prow = row;
+    prowrep = rowrep;
+    pFrontLen = frontLen;
+    pFrontCol = frontCol;
+    pColFront = colFront;
+    pcolCnt = colCnt;
+    pFrontRow = frontRow;
+    prowCnt = rowCnt;
+    findFrontMins();
+    buildColPointers();
+    buildRowPointers();
+    checkDiscrete();
+    trackAndCountSplits();
+    markDegenerate();
+    findLargestDegeneratePart();
+    buildResidualLinks();
+    resizeLpContainers();
+    buildObj();
+    buildAmatrix();
+    buildRhs();
+    buildBnds();
+    buildBasisNoResiduals();
+    // buildObjExtended();
+    // buildAmatrixExtended();
+    // buildRhsExtended();
+    // buildBndsExtended();
+    // buildRowNames();
+    // buildColNames();
+    // copyPartition();
     agglp.level = level;
     elp.level = level; 
     presolvelp.level = level;
@@ -165,7 +208,7 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsSolution& s){
     // trackAndCountSplits();
     // markDegenerate();
     // buildResidualLinks();
-    resizeElpContainers();
+    resizeLpContainers();
     buildObj();
     buildAmatrix();
     buildRhs();
@@ -186,19 +229,19 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsSolution& s){
 }
 
 HighsSolution HighsOCAggregate::buildSolution(OCPartition& partition, HighsSolution& s){
-    ep = partition;
-    solution = s;
-    pcol = col;
-    pcolrep = colrep;
-    prow = row;
-    prowrep = rowrep;
-    pFrontCol = frontCol;
-    pcolCnt = colCnt;
-    pFrontRow = frontRow;
-    prowCnt = rowCnt;
-    findFrontMins();
-    buildColPointers();
-    buildRowPointers();
+    // ep = partition;
+    // solution = s;
+    // pcol = col;
+    // pcolrep = colrep;
+    // prow = row;
+    // prowrep = rowrep;
+    // pFrontCol = frontCol;
+    // pcolCnt = colCnt;
+    // pFrontRow = frontRow;
+    // prowCnt = rowCnt;
+    // findFrontMins();
+    // buildColPointers();
+    // buildRowPointers();
     HighsInt iCol, iRow, rep, cf, pcf, pc,
     rf, prf, pr, prlen; 
     double pv, pd;
@@ -992,7 +1035,7 @@ void HighsOCAggregate::buildResidualRows(){
 void HighsOCAggregate::markDegenerate(){
     std::fill_n(mark_degenerate.begin(), mark_degenerate.size(), 0);
     degenerate_cols.clear();
-    HighsInt i_col;
+    HighsInt i_col, i_row;
     // elp.num_degenerate_cols_ = elp.num_aggregate_cols_;
     for (i_col = 0; i_col < pcolCnt; ++i_col){
         HighsInt crep = colrep.at(i_col);
@@ -1006,6 +1049,22 @@ void HighsOCAggregate::markDegenerate(){
         if ((ub_test || lb_test) && basis_test){
             mark_degenerate.at(i_col) = 1;
             degenerate_cols.push_back(i_col);
+            // elp.num_degenerate_cols_++;
+        }
+        // if ((ub_test) && basis_test)
+        //     mark_degenerate.at(i_col) = 1;
+    }
+    for (i_row = 0; i_row < prowCnt; ++i_row){
+        HighsInt rrep = rowrep.at(i_row) - numCol;
+        double lb = olp.row_lower_.at(rrep);
+        double ub = olp.row_upper_.at(rrep);
+        double dual_value = solution.row_dual.at(i_row);
+        // std::cout << std::fabs(value) << std::endl;
+        HighsInt slack_zero = std::fabs(dual_value) < kHighsTiny ? 1 : 0;
+        HighsInt basis_test = basis.row_status.at(i_row) == HighsBasisStatus::kBasic ? 1 : 0;
+        if (slack_zero && basis_test){
+            mark_degenerate.at(pcolCnt + i_row) = 1;
+            degenerate_slacks.push_back(i_col);
             // elp.num_degenerate_cols_++;
         }
         // if ((ub_test) && basis_test)
@@ -1056,6 +1115,7 @@ void HighsOCAggregate::buildBasis(bool finish, bool extended){
 
 void HighsOCAggregate::buildBasisNoResiduals(){
     num_basic = 0;
+    colweights.resize(colCnt + rowCnt);
     buildColBasisNoResiduals();
     buildRowBasisNoResiduals();
     elpBasis.alien = false;
@@ -1115,9 +1175,11 @@ void HighsOCAggregate::buildRowBasis(){
 }
 
 void HighsOCAggregate::buildColBasisNoResiduals(){
-    int iCol, pCol, pf, pc, crep, pcrep;
+    int iCol, pCol, pf, pc, crep, pcrep, degen, isPCol;
     HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
     HighsBasisStatus nonbasic = HighsBasisStatus::kNonbasic;
+    HighsBasisStatus upper = HighsBasisStatus::kLower;
+    HighsBasisStatus lower = HighsBasisStatus::kUpper;
     lpBasis.col_status.resize(colCnt);
     // elpBasis.col_status.resize(colCnt);
     std::fill_n(lpBasis.col_status.begin(), lpBasis.col_status.size(), basic);
@@ -1126,22 +1188,43 @@ void HighsOCAggregate::buildColBasisNoResiduals(){
         pf = epMinusOne.front[crep];
         pCol = pFrontCol[pf];
         status = basis.col_status[pCol];
-        if (discrete && mark_degenerate.at(pCol) && pCol != iCol){
+        degen = mark_degenerate.at(iCol);
+        isPCol = pCol == iCol;
+        // Nobasic gets lowest weight
+        if (status == nonbasic || status == lower || status == upper){
+            colweights.at(iCol) = 1;
+        }
+        // Degenerate representatives get weight 3
+        else if (status == basic && isPCol && degen){
+            colweights.at(iCol) = 3;
+        }
+        // Degenerate non-reps get weight 4
+        else if (status == basic && !isPCol && degen){
+            colweights.at(iCol) = 2;
+        }
+        // Non-degenerate reps get weight 5
+        else if (status == basic && isPCol){
+            colweights.at(iCol) = 5;
+        }
+        // Non-degenerate non-reps get weight 4
+        else{
+            colweights.at(iCol) = 4;
+        }
+        if (mark_degenerate.at(pCol) && pCol != iCol){
             lpBasis.col_status.at(iCol) = nonbasic;
             continue;
-        }
-        if (pCol == max_front_len_pCol && pCol != iCol){
-            lpBasis.col_status.at(iCol) = nonbasic;
-            continue;            
         }
         lpBasis.col_status[iCol] = status;
     }
 }
 
 void HighsOCAggregate::buildRowBasisNoResiduals(){
-    int iRow, r, pr, pf, rrep, rlen;
+    int iRow, r, pr, pf, rrep, rlen, pRow, isPRow, degen;
     int of, nf;
     HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
+    HighsBasisStatus nonbasic = HighsBasisStatus::kNonbasic;
+    HighsBasisStatus upper = HighsBasisStatus::kLower;
+    HighsBasisStatus lower = HighsBasisStatus::kUpper;
     // std::fill(lpBasis.row_status.begin(), lpBasis.row_status.end(), basic);
     lpBasis.row_status.resize(rowCnt);
     std::fill_n(lpBasis.row_status.begin(), lpBasis.row_status.size(), basic);
@@ -1151,11 +1234,34 @@ void HighsOCAggregate::buildRowBasisNoResiduals(){
     int numNonBasicToSplit = 0;
     int numNonBasicSplits = 0;
     int numNonBasic = 0;
-    for (iRow = 0; iRow < prowCnt; ++iRow){
+    for (iRow = 0; iRow < rowCnt; ++iRow){
+        rrep = rowrep[iRow];
+        pf = epMinusOne.front[rrep];
+        pRow = pFrontCol[pf];
+        status = basis.row_status[pRow];
+        degen = mark_degenerate.at(pRow + pcolCnt);
+        isPRow = pRow == iRow;
+        // Nobasic gets lowest weight
+        if (status == nonbasic || status == lower || status == upper){
+            colweights.at(iRow + colCnt) = 1;
+        }
+        // Degenerate representatives get weight 3
+        else if (status == basic && isPRow && degen){
+            colweights.at(iRow + colCnt) = 3;
+        }
+        // Degenerate non-reps get weight 4
+        else if (status == basic && !isPRow && degen){
+            colweights.at(iRow + colCnt) = 2;
+        }
+        // Non-degenerate reps get weight 5
+        else if (status == basic && isPRow){
+            colweights.at(iRow + colCnt) = 5;
+        }
+        // Non-degenerate non-reps get weight 4
+        else{
+            colweights.at(iRow + colCnt) = 4;
+        }
         lpBasis.row_status[iRow] = basis.row_status[iRow];
-    }
-    for (iRow = rowCnt; iRow < rowCnt + numResiduals; ++iRow){
-        lpBasis.row_status[iRow] = HighsBasisStatus::kLower;
     }
 }
 
@@ -1371,6 +1477,16 @@ HighsBasis HighsOCAggregate::getBasis(){
     // elpBasis.alien = false;
     // elpBasis.was_alien = false;
     return elpBasis;
+}
+
+HighsBasis HighsOCAggregate::getBasis(HighsInt hc){
+    // elpBasis.alien = false;
+    // elpBasis.was_alien = false;
+    return lpBasis;
+}
+
+std::vector<int> HighsOCAggregate::getColweights(){
+    return colweights;
 }
 
 std::vector<int>& HighsOCAggregate::getFrontCol(){

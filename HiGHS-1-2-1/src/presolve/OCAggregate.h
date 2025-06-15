@@ -17,11 +17,13 @@ class HighsOCAggregate{
 public:
     void passLpAndPartition(HighsLp& lp, OCPartition& partition);
     void resizeAlpContainers();
-    void resizeElpContainers();
+    void resizeLpContainers();
     void resizeGramSchmidtMatrixContainers();
     void buildLp();
     void buildLp(OCPartition& partition, HighsBasis& b,
                 HighsSolution& s, std::vector<HighsInt>& basic_index);
+    void buildLp(OCPartition& partition, HighsBasis& b,
+                HighsSolution& s, std::vector<HighsInt>& basic_index, HighsInt hc);
     void buildLp(OCPartition& partition, HighsSolution& s);
     // Build solution for aggregate ipm solve to hand off to highs basic 
     // crossover
@@ -103,6 +105,8 @@ public:
     HighsLp getAggLp();
     HighsLp getLpNoResiduals();
     HighsBasis getBasis();
+    HighsBasis getBasis(HighsInt hc);
+    std::vector<int> getColweights();
     std::vector<int>& getFrontCol();
 
     // dev test functions
@@ -166,8 +170,10 @@ public:
     std::vector<int> residualRow;
     std::vector<int> degenSlack;
     std::vector<bool> degenRow;
+    std::vector<int> colweights;
     std::vector<HighsInt> mark_degenerate;
     std::vector<HighsInt> degenerate_cols;
+    std::vector<HighsInt> degenerate_slacks;
     std::vector<bool> finalRowRep;
     // For computing B^-1 * A_r submat
     std::vector<int> basicIndex;

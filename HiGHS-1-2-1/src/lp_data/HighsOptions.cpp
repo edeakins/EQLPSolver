@@ -77,7 +77,11 @@ bool commandLineSolverOk(const HighsLogOptions& report_log_options,
       value == kIpmHighsPrimalCrossoverString || value == kOCDualNoIterString || value == kOCIPMNoIterString
       || value == kDualAggregateHighsCrossoverIterString || value == kDualAggregateHighsPrimalCrossoverIterString
       || value == kIpmCrossHighsCrossoverIterString || value == kIpmCrossHighsPrimalCrossoverIterString 
-      || value == kIpmHighsCrossoverIterString || value == kIpmHighsPrimalCrossoverIterString)
+      || value == kIpmHighsCrossoverIterString || value == kIpmHighsPrimalCrossoverIterString
+      || value == kOCDualHighsCrossoverNoIterString || value == kOCDualHighsCrossoverString
+      || value == kOCIPMHighsCrossoverNoIterString || value == kOCIPMHighsCrossoverString
+      || value == kOCDualHighsPrimalCrossoverNoIterString || value == kOCDualHighsPrimalCrossoverString
+      || value == kOCIPMHighsPrimalCrossoverNoIterString || value == kOCIPMHighsPrimalCrossoverString)
     return true;
   highsLogUser(report_log_options, HighsLogType::kWarning,
                "Value \"%s\" is not one of \"%s\", \"%s\" or \"%s\"\n",

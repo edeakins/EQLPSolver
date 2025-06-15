@@ -268,7 +268,7 @@ bool callPrimalCrossover(const HighsLp& lp, const HighsOptions& options,
 }
 
 bool callCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
-                   HighsSolution& solution, HighsBasis& basis, HighsInfo& highs_info) {
+                   HighsSolution& solution, std::vector<int>& colweights, HighsBasis& final_basis, HighsInfo& highs_info) {
   std::cout << "Calling ipx crossover\n";
 
   ipx::Int num_col, num_row;
@@ -330,11 +330,11 @@ bool callCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
   if (solution.dual_valid && solution.col_dual.size() == num_col &&
       solution.row_dual.size() == num_row) {
     std::cout << "Calling ipx crossover with dual values" << std::endl;
-    errflag = lps.CrossoverFromStartingPoint(
-        &x[0], &slack[0], &solution.row_dual[0], &solution.col_dual[0]);
+    errflag = lps.CrossoverFromPartialOrbitalBasis(
+        &x[0], &slack[0], &solution.row_dual[0], &solution.col_dual[0], colweights);
   } else {
     std::cout << "Calling ipx crossover" << std::endl;
-    errflag = lps.CrossoverFromStartingPoint(&x[0], &slack[0], NULL, NULL);
+    errflag = lps.CrossoverFromPartialOrbitalBasis(&x[0], &slack[0], NULL, NULL, colweights);
   }
 
   if (errflag != 0) {
@@ -372,7 +372,7 @@ bool callCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
 
   // Convert the IPX basic solution to a HiGHS basic solution
   HighsStatus status = ipxBasicSolutionToHighsBasicSolution(
-      options.log_options, lp, rhs, constraint_type, ipx_solution, basis,
+      options.log_options, lp, rhs, constraint_type, ipx_solution, final_basis,
       solution);
 
   if (status != HighsStatus::kOk) return false;
@@ -387,7 +387,7 @@ bool callCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
 }
 
 bool callPrimalCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
-                   HighsSolution& solution, HighsBasis& basis, HighsInfo& highs_info) {
+                   HighsSolution& solution, std::vector<int>& colweights, HighsBasis& final_basis, HighsInfo& highs_info) {
   std::cout << "Calling ipx primal crossover\n";
 
   ipx::Int num_col, num_row;
@@ -449,11 +449,11 @@ bool callPrimalCrossoverForOrbital(const HighsLp& lp, const HighsOptions& option
   if (solution.dual_valid && solution.col_dual.size() == num_col &&
       solution.row_dual.size() == num_row) {
     std::cout << "Calling ipx crossover with dual values" << std::endl;
-    errflag = lps.PrimalCrossoverFromStartingPoint(
-        &x[0], &slack[0], &solution.row_dual[0], &solution.col_dual[0]);
+    errflag = lps.PrimalCrossoverFromPartialOrbitalBasis(
+        &x[0], &slack[0], &solution.row_dual[0], &solution.col_dual[0], colweights);
   } else {
     std::cout << "Calling ipx crossover" << std::endl;
-    errflag = lps.PrimalCrossoverFromStartingPoint(&x[0], &slack[0], NULL, NULL);
+    errflag = lps.PrimalCrossoverFromPartialOrbitalBasis(&x[0], &slack[0], NULL, NULL, colweights);
   }
 
   if (errflag != 0) {
@@ -491,7 +491,7 @@ bool callPrimalCrossoverForOrbital(const HighsLp& lp, const HighsOptions& option
 
   // Convert the IPX basic solution to a HiGHS basic solution
   HighsStatus status = ipxBasicSolutionToHighsBasicSolution(
-      options.log_options, lp, rhs, constraint_type, ipx_solution, basis,
+      options.log_options, lp, rhs, constraint_type, ipx_solution, final_basis,
       solution);
 
   if (status != HighsStatus::kOk) return false;

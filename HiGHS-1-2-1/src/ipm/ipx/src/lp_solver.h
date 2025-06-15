@@ -32,6 +32,11 @@ public:
                   const Int* Ai, const double* Ax, const double* rhs,
                   const char* constr_type);
 
+    Int LoadModel(Int num_var, const double* obj, const double* lb,
+                  const double* ub, Int num_constr, const Int* Ap,
+                  const Int* Ai, const double* Ax, const double* rhs,
+                  const char* constr_type, std::vector<int>& orbital_colweights);
+
     // Loads a primal-dual point as starting point for the IPM.
     // @x: size num_var array
     // @xl: size num_var array, must satisfy xl[j] >= 0 for all j and
@@ -125,12 +130,12 @@ public:
                                    const double* slack_start,
                                    const double* y_start,
                                    const double* z_start,
-                                   std::vector<int>& basic_cols);
+                                   std::vector<int>& orbital_colweights);
     Int PrimalCrossoverFromPartialOrbitalBasis(const double* x_start,
                                    const double* slack_start,
                                    const double* y_start,
                                    const double* z_start,
-                                   std::vector<int>& basic_cols);
+                                   std::vector<int>& orbital_colweights);
 
     // -------------------------------------------------------------------------
     // The remaining methods are for debugging.
@@ -193,6 +198,7 @@ private:
     Model model_;
     std::unique_ptr<Iterate> iterate_;
     std::unique_ptr<Basis> basis_;
+    // std::vector<int> orbital_colweights_;
 
     // Basic solution computed by crossover and basic status of each variable
     // (one of IPX_nonbasic_lb, IPX_nonbasic_ub, IPX_basic, IPX_superbasic).

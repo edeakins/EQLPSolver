@@ -301,7 +301,7 @@ Int LpSolver::PrimalCrossoverFromPartialOrbitalBasis(const double* x_start,
                                          const double* slack_start,
                                          const double* y_start,
                                          const double* z_start,
-                                         std::vector<int>& basic_cols) {
+                                         std::vector<int>& orbital_colweights) {
     const Int m = model_.rows();
     const Int n = model_.cols();
     const Vector& lb = model_.lb();
@@ -363,7 +363,39 @@ Int LpSolver::PrimalCrossoverFromPartialOrbitalBasis(const double* x_start,
             return 0;
         }
     }
-
+    if (control_.orbital_basis()){
+        // Take columns in the following order of priority:
+        // - free columns
+        // - columns between their bounds, in increasing number of nonzeros
+        // - columns with zero dual, in increasing number of nonzeros
+        // - Fixed columns and those with nonzero dual
+        Timer timer;
+        Vector colweight(n+m);
+        for (Int j = 0; j < n+m; j++) {
+            // if (j >= n){
+            //     int five = 5;
+            // }
+            // Int nz = AI.entries(j);
+            // if (lb[j] == ub[j])
+            //     colweight[j] = 0.0;
+            // else if (std::isinf(lb[j]) && std::isinf(ub[j]))
+            //     colweight[j] = INFINITY;
+            // else if (z_crossover_[j] != 0.0)
+            //     colweight[j] = 0.0;
+            // else if (x_crossover_[j] != lb[j] && x_crossover_[j] != ub[j])
+            //     colweight[j] = m + (m-nz+1);
+            // else
+            //     colweight[j] = m-nz+1;
+            Int orbital_weight = orbital_colweights.at(j);
+            colweight[j] = orbital_weight;
+        }
+        basis_->ConstructBasisFromWeights(&colweight[0], &info_);
+        info_.time_starting_basis += timer.Elapsed();
+        if (info_.errflag) {
+            ClearSolution();
+            return 0;
+        }
+    }
     RunPrimalCrossover();
     return 0;
 }
@@ -372,7 +404,7 @@ Int LpSolver::CrossoverFromPartialOrbitalBasis(const double* x_start,
                                          const double* slack_start,
                                          const double* y_start,
                                          const double* z_start,
-                                         std::vector<int>& basic_cols) {
+                                         std::vector<int>& orbital_colweights) {
     const Int m = model_.rows();
     const Int n = model_.cols();
     const Vector& lb = model_.lb();
@@ -426,6 +458,39 @@ Int LpSolver::CrossoverFromPartialOrbitalBasis(const double* x_start,
                 colweight[j] = m + (m-nz+1);
             else
                 colweight[j] = m-nz+1;
+        }
+        basis_->ConstructBasisFromWeights(&colweight[0], &info_);
+        info_.time_starting_basis += timer.Elapsed();
+        if (info_.errflag) {
+            ClearSolution();
+            return 0;
+        }
+    }
+    if (control_.orbital_basis()){
+        // Take columns in the following order of priority:
+        // - free columns
+        // - columns between their bounds, in increasing number of nonzeros
+        // - columns with zero dual, in increasing number of nonzeros
+        // - Fixed columns and those with nonzero dual
+        Timer timer;
+        Vector colweight(n+m);
+        for (Int j = 0; j < n+m; j++) {
+            // if (j >= n){
+            //     int five = 5;
+            // }
+            // Int nz = AI.entries(j);
+            // if (lb[j] == ub[j])
+            //     colweight[j] = 0.0;
+            // else if (std::isinf(lb[j]) && std::isinf(ub[j]))
+            //     colweight[j] = INFINITY;
+            // else if (z_crossover_[j] != 0.0)
+            //     colweight[j] = 0.0;
+            // else if (x_crossover_[j] != lb[j] && x_crossover_[j] != ub[j])
+            //     colweight[j] = m + (m-nz+1);
+            // else
+            //     colweight[j] = m-nz+1;
+            Int orbital_weight = orbital_colweights.at(j);
+            colweight[j] = orbital_weight;
         }
         basis_->ConstructBasisFromWeights(&colweight[0], &info_);
         info_.time_starting_basis += timer.Elapsed();
