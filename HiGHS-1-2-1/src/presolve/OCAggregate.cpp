@@ -1192,7 +1192,7 @@ void HighsOCAggregate::buildColBasisNoResiduals(){
         isPCol = pCol == iCol;
         // Nobasic gets lowest weight
         if (status == nonbasic || status == lower || status == upper){
-            colweights.at(iCol) = 1;
+            colweights.at(iCol) = 0;
         }
         // Degenerate representatives get weight 3
         else if (status == basic && isPCol && degen){
@@ -1243,7 +1243,7 @@ void HighsOCAggregate::buildRowBasisNoResiduals(){
         isPRow = pRow == iRow;
         // Nobasic gets lowest weight
         if (status == nonbasic || status == lower || status == upper){
-            colweights.at(iRow + colCnt) = 1;
+            colweights.at(iRow + colCnt) = 0;
         }
         // Degenerate representatives get weight 3
         else if (status == basic && isPRow && degen){

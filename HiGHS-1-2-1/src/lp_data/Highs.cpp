@@ -7900,6 +7900,7 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp) {
   scaled_model_status_ = HighsModelStatus::kOptimal;
   model_status_ = HighsModelStatus::kOptimal;
   alpSolution_ = solution;
+  solution_ = solution;
   
 
 #else
@@ -7933,6 +7934,7 @@ HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp) {
   scaled_model_status_ = HighsModelStatus::kOptimal;
   model_status_ = HighsModelStatus::kOptimal;
   alpSolution_ = solution;
+  solution_ = solution;
   
 
 #else
@@ -7966,6 +7968,7 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, std::vector<i
   scaled_model_status_ = HighsModelStatus::kOptimal;
   model_status_ = HighsModelStatus::kOptimal;
   alpSolution_ = solution;
+  solution_ = solution;
   
 
 #else
@@ -7999,6 +8002,7 @@ HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp, std::ve
   scaled_model_status_ = HighsModelStatus::kOptimal;
   model_status_ = HighsModelStatus::kOptimal;
   alpSolution_ = solution;
+  solution_ = solution;
   
 
 #else
