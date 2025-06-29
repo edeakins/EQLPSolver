@@ -805,7 +805,7 @@ HighsStatus Highs::run() {
     timer_.stop(timer_.build_alp_clock);
     // Grab and pass initial aggregate model and pass to highs
     buildALP();
-    std::vector<int>& front_col = aggregator_.getFrontCol();
+    // std::vector<int>& front_col = aggregator_.getFrontCol();
     // equitablePartition_.intakeFrontCol(front_col);
     info_.original_cols = original_lp.num_col_;
     info_.original_rows = original_lp.num_row_;
@@ -855,10 +855,12 @@ HighsStatus Highs::run() {
     // unitl the parition is discrete.
     else{
       options_.solver = kOCDualString;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
-      // equitablePartition_.intakeHighsBasis(alpBasis_);
-      // equitablePartition_.intakeHighsBasis(alpBasis_);
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -873,9 +875,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -884,7 +886,7 @@ HighsStatus Highs::run() {
         timer_.start(timer_.build_elp_iterative_clock);
         buildEALP();
         timer_.stop(timer_.build_elp_iterative_clock);
-        std::vector<int>& front_col = aggregator_.getFrontCol();
+        // std::vector<int>& front_col = aggregator_.getFrontCol();
         // equitablePartition_.intakeFrontCol(front_col);
         // if (!ealp_.num_residual_cols_ && !discrete) continue;
         // buildALP();
@@ -932,9 +934,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
-        // equitablePartition_.intakeHighsBasis(alpBasis_);
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -1075,8 +1080,12 @@ HighsStatus Highs::run() {
       options_.solver = kOCIPMString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -1092,10 +1101,10 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
         percentChange += measurePercentChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        if (change < 500 && !discrete) continue;
         // std::cout << "Change: " << change << std::endl;
         // std::cout << "Percent change: " << percentChange << std::endl;
         // std::cin.get();
@@ -1153,8 +1162,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -1276,8 +1289,12 @@ HighsStatus Highs::run() {
       options_.solver = kOCDualString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -1345,8 +1362,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -1437,7 +1458,7 @@ HighsStatus Highs::run() {
     timer_.stop(timer_.build_alp_clock);
     // Grab and pass initial aggregate model and pass to highs
     buildALP();
-    std::vector<int>& front_col = aggregator_.getFrontCol();
+    // std::vector<int>& front_col = aggregator_.getFrontCol();
     // equitablePartition_.intakeFrontCol(front_col);
     info_.original_cols = original_lp.num_col_;
     info_.original_rows = original_lp.num_row_;
@@ -1487,10 +1508,12 @@ HighsStatus Highs::run() {
     // unitl the parition is discrete.
     else{
       options_.solver = kOCDualString;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
-      // equitablePartition_.intakeHighsBasis(alpBasis_);
-      // equitablePartition_.intakeHighsBasis(alpBasis_);
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -1505,9 +1528,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -1559,9 +1582,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
-        // equitablePartition_.intakeHighsBasis(alpBasis_);
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -1703,8 +1729,12 @@ HighsStatus Highs::run() {
       options_.solver = kOCIPMString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -1772,8 +1802,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -1896,8 +1930,12 @@ HighsStatus Highs::run() {
       options_.solver = kOCIPMString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -1913,10 +1951,10 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
         percentChange += measurePercentChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        if (change < 500 && !discrete) continue;
         // std::cout << "Change: " << change << std::endl;
         // std::cout << "Percent change: " << percentChange << std::endl;
         // std::cin.get();
@@ -1972,8 +2010,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -2096,8 +2138,12 @@ HighsStatus Highs::run() {
       options_.solver = kOCDualString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -2165,8 +2211,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -2257,7 +2307,7 @@ HighsStatus Highs::run() {
     timer_.stop(timer_.build_alp_clock);
     // Grab and pass initial aggregate model and pass to highs
     buildALP();
-    std::vector<int>& front_col = aggregator_.getFrontCol();
+    // std::vector<int>& front_col = aggregator_.getFrontCol();
     // equitablePartition_.intakeFrontCol(front_col);
     info_.original_cols = original_lp.num_col_;
     info_.original_rows = original_lp.num_row_;
@@ -2307,8 +2357,12 @@ HighsStatus Highs::run() {
     // unitl the parition is discrete.
     else{
       options_.solver = kOCDualString;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // equitablePartition_.intakeHighsBasis(alpBasis_);
       // equitablePartition_.intakeHighsBasis(alpBasis_);
       // HighsLp& original_lp = presolve_.getReducedProblem();
@@ -2325,9 +2379,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -2379,8 +2433,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // equitablePartition_.intakeHighsBasis(alpBasis_);
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
@@ -2523,8 +2581,12 @@ HighsStatus Highs::run() {
       options_.solver = kOCIPMString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -2592,8 +2654,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -2716,8 +2782,12 @@ HighsStatus Highs::run() {
       options_.solver = kOCIPMString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -2733,10 +2803,10 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
         percentChange += measurePercentChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        if (change < 500 && !discrete) continue;
         // std::cout << "Change: " << change << std::endl;
         // std::cout << "Percent change: " << percentChange << std::endl;
         // std::cin.get();
@@ -2792,8 +2862,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -2997,8 +3071,12 @@ HighsStatus Highs::run() {
     }
     else{
       options_.solver = kIpmString;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       while (!discrete){
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
@@ -3109,8 +3187,12 @@ HighsStatus Highs::run() {
     }
     else{
       options_.solver = kIpmString;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       while (!discrete){
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
@@ -3221,8 +3303,12 @@ HighsStatus Highs::run() {
     }
     else{
       options_.solver = kIpmString;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       while (!discrete){
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
@@ -3333,8 +3419,12 @@ HighsStatus Highs::run() {
     }
     else{
       options_.solver = kIpmString;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       while (!discrete){
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
@@ -3445,8 +3535,12 @@ HighsStatus Highs::run() {
     }
     else{
       options_.solver = kIpmString;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       while (!discrete){
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
@@ -3557,8 +3651,12 @@ HighsStatus Highs::run() {
     }
     else{
       options_.solver = kIpmString;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       while (!discrete){
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
@@ -3676,8 +3774,12 @@ HighsStatus Highs::run() {
       options_.solver = kOCDualString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -3755,8 +3857,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -3897,8 +4003,12 @@ HighsStatus Highs::run() {
       options_.solver = kOCIPMString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -3968,8 +4078,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         setBasisValidity();
-        getOrbitalCrossoverBasis();
-        getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -4091,8 +4205,12 @@ HighsStatus Highs::run() {
       options_.solver = kIpmString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -4107,9 +4225,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -4171,8 +4289,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         // setBasisValidity();
-        // getOrbitalCrossoverBasis();
-        // getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -4295,8 +4417,12 @@ HighsStatus Highs::run() {
       options_.solver = kIpmString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -4311,9 +4437,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -4375,8 +4501,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         // setBasisValidity();
-        // getOrbitalCrossoverBasis();
-        // getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -4499,8 +4629,12 @@ HighsStatus Highs::run() {
       options_.solver = kIpmString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -4515,9 +4649,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -4579,8 +4713,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         // setBasisValidity();
-        // getOrbitalCrossoverBasis();
-        // getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -4703,8 +4841,12 @@ HighsStatus Highs::run() {
       options_.solver = kIpmString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -4719,9 +4861,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -4783,8 +4925,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         // setBasisValidity();
-        // getOrbitalCrossoverBasis();
-        // getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -4908,8 +5054,12 @@ HighsStatus Highs::run() {
       options_.solver = kIpmString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -4924,9 +5074,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -4988,8 +5138,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         // setBasisValidity();
-        // getOrbitalCrossoverBasis();
-        // getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -5113,8 +5267,12 @@ HighsStatus Highs::run() {
       options_.solver = kIpmString;
       int major_iter = 0;
       int minor_iter = 0;
-      getOrbitalCrossoverBasis();
-      getOrbitalCrossoverSolution();
+      getAggregateBasis();
+      getAggregateSolution();
+      std::vector<int>& front_col = aggregator_.getFrontCol();
+      equitablePartition_.intakeFrontCol(front_col);
+      equitablePartition_.intakeHighsBasis(alpBasis_);
+      equitablePartition_.storeCurrentFronts();
       // HighsLp& original_lp = presolve_.getReducedProblem();
       // original_lp.setMatrixDimensions();
       double change = 0;
@@ -5129,9 +5287,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 1000 && !discrete) continue;
+        change = equitablePartition_.getNumBasicParts();
+        // change += measureChangeInPartitionSize(original_lp, old_partition);
+        if (change < 500 && !discrete) continue;
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -5193,8 +5351,12 @@ HighsStatus Highs::run() {
         // writeBasis("../../debugBuild/afterBasis.txt");
         // Grab the solution and lp basis from orbital crossover completion
         // setBasisValidity();
-        // getOrbitalCrossoverBasis();
-        // getOrbitalCrossoverSolution();
+        getAggregateBasis();
+        getAggregateSolution();
+        std::vector<int>& front_col = aggregator_.getFrontCol();
+        equitablePartition_.intakeFrontCol(front_col);
+        equitablePartition_.intakeHighsBasis(alpBasis_);
+        equitablePartition_.storeCurrentFronts();
         // if (info_.ready_for_crash_basis_construction){
         //   trimOrbitalCrossoverSolution();
         //   passModel(alp_);
@@ -6763,7 +6925,7 @@ void Highs::getCrashBasis(){
   crashBasis_ = getBasisCopy();
 }
 
-void Highs::getOrbitalCrossoverBasis(){
+void Highs::getAggregateBasis(){
   alpBasis_ = getBasisCopy();
   // alpBasis_.debug_origin_name = "Aggregate LP Basis";
 }
@@ -6780,7 +6942,7 @@ void Highs::getCrashSolution(){
   crashSolution_ = getSolutionCopy();
 }
 
-void Highs::getOrbitalCrossoverSolution(){
+void Highs::getAggregateSolution(){
   alpSolution_ = getSolutionCopy();
 } 
 

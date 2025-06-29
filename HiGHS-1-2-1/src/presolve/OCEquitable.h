@@ -36,8 +36,9 @@ public:
     bool isolate();
     /* Count new parts of the partition that are represented by nonzero
     variable */
-    void intakeHighsBasis(HighsBasis& basis);
+    void storeCurrentFronts();
     void intakeFrontCol(std::vector<int>& fCol);
+    void intakeHighsBasis(HighsBasis& basis);
     void mapToLpCols();
     void countBasicParts();
     int getNumBasicParts();
@@ -162,7 +163,7 @@ public:
     std::vector<int> count;
     std::vector<int> refSize;
     std::vector<int> nodeAdj;
-    std::vector<int> frontCol;
+    std::vector<int> oldFrontCol;
     std::vector<int> oldFront;
     // std::vector<bool> cDegB;
     // std::vector<int> cAdj;
