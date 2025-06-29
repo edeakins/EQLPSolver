@@ -430,8 +430,8 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
     if (header){
       // Write the file header lines if the file is empty when opened
       fprintf(file, "Instance,");
-      fprintf(file, "Solve,");
-      fprintf(file, "Highs run\n");
+      fprintf(file, "Solve (Total),");
+      fprintf(file, "Highs Run\n");
       // Write instance name
       std::stringstream instance_name;
       instance_name << info.instance_name << ",";

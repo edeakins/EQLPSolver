@@ -179,3 +179,83 @@ done
 for f in ../MIPLIB-2017/*; do
    ../HiGHS-1-2-1/build/bin/highs "$f" --solver=ipm_alp_primal_crossover_iter --time_limit=3600 --report_time_file=run_method_18_MLIB;
 done
+
+# HS-COV-COD Instances
+for f in ../HS-COV-COD/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_dual_hc --time_limit=3600 --report_time_file=run_method_19_HCC;
+done
+
+# MIPLIB Instances
+for f in ../MIPLIB-2017/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_dual_hc --time_limit=3600 --report_time_file=run_method_19_MLIB;
+done
+
+# HS-COV-COD Instances
+for f in ../HS-COV-COD/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_dual_hc_no_iter --time_limit=3600 --report_time_file=run_method_20_HCC;
+done
+
+# MIPLIB Instances
+for f in ../MIPLIB-2017/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_dual_hc_no_iter --time_limit=3600 --report_time_file=run_method_20_MLIB;
+done
+
+# HS-COV-COD Instances
+for f in ../HS-COV-COD/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_dual_hpc --time_limit=3600 --report_time_file=run_method_21_HCC;
+done
+
+# MIPLIB Instances
+for f in ../MIPLIB-2017/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_dual_hpc --time_limit=3600 --report_time_file=run_method_21_MLIB;
+done
+
+# HS-COV-COD Instances
+for f in ../HS-COV-COD/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_dual_hpc_no_iter --time_limit=3600 --report_time_file=run_method_22_HCC;
+done
+
+# MIPLIB Instances
+for f in ../MIPLIB-2017/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_dual_hpc_no_iter --time_limit=3600 --report_time_file=run_method_22_MLIB;
+done
+
+# HS-COV-COD Instances
+for f in ../HS-COV-COD/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_ipm_hc --time_limit=3600 --report_time_file=run_method_23_HCC;
+done
+
+# MIPLIB Instances
+for f in ../MIPLIB-2017/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_ipm_hc --time_limit=3600 --report_time_file=run_method_23_MLIB;
+done
+
+# HS-COV-COD Instances
+for f in ../HS-COV-COD/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_ipm_hc_no_iter --time_limit=3600 --report_time_file=run_method_24_HCC;
+done
+
+# MIPLIB Instances
+for f in ../MIPLIB-2017/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_ipm_hc_no_iter --time_limit=3600 --report_time_file=run_method_24_MLIB;
+done
+
+# HS-COV-COD Instances
+for f in ../HS-COV-COD/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_ipm_hpc --time_limit=3600 --report_time_file=run_method_25_HCC;
+done
+
+# MIPLIB Instances
+for f in ../MIPLIB-2017/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_ipm_hpc --time_limit=3600 --report_time_file=run_method_25_MLIB;
+done
+
+# HS-COV-COD Instances
+for f in ../HS-COV-COD/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_ipm_hpc_no_iter --time_limit=3600 --report_time_file=run_method_26_HCC;
+done
+
+# MIPLIB Instances
+for f in ../MIPLIB-2017/*; do
+   ../HiGHS-1-2-1/build/bin/highs "$f" --solver=orbital_crossover_ipm_hpc_no_iter --time_limit=3600 --report_time_file=run_method_26_MLIB;
+done

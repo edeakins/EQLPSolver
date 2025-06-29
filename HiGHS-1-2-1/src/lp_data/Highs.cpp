@@ -1211,7 +1211,7 @@ HighsStatus Highs::run() {
     stop_highs_run_clock = false;
     // Initial refinement of LP to an equitable partition of columns
     // and rows
-    options_.main_strategy = kMainStratOC;
+    options_.main_strategy = kMainStratCross;
     options_.iterative_lift = false;
     options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
     // model_presolve_status_ = runPresolve();
@@ -1412,7 +1412,7 @@ HighsStatus Highs::run() {
       info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
-        timer_.clock_time.at(timer_.orbital_crossover_clock));
+         timer_.clock_time.at(timer_.crossover_clock));
     }
   }
   else if (options_.solver == kOCDualHighsCrossoverString){
@@ -1422,7 +1422,7 @@ HighsStatus Highs::run() {
     stop_highs_run_clock = false;
     // Initial refinement of LP to an equitable partition of columns
     // and rows
-    options_.main_strategy = kMainStratOCIter;
+    options_.main_strategy = kMainStratCrossIter;
     options_.iterative_lift = true;
     options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
     // model_presolve_status_ = runPresolve();
@@ -1627,7 +1627,8 @@ HighsStatus Highs::run() {
       info_.num_degen_pivots = ealp_.num_degen_pivot;
       info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
-        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         timer_.clock_time.at(timer_.crossover_clock));
     }
   }
   else if (options_.solver == kOCIPMHighsCrossoverNoIterString){
@@ -1637,7 +1638,7 @@ HighsStatus Highs::run() {
     stop_highs_run_clock = false;
     // Initial refinement of LP to an equitable partition of columns
     // and rows
-    options_.main_strategy = kMainStratOC;
+    options_.main_strategy = kMainStratCrossIter;
     options_.iterative_lift = false;
     options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
     // model_presolve_status_ = runPresolve();
@@ -1819,7 +1820,8 @@ HighsStatus Highs::run() {
       info_.num_degen_pivots = ealp_.num_degen_pivot;
       info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
-        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         timer_.clock_time.at(timer_.crossover_clock));
     }
   }
   else if (options_.solver == kOCIPMHighsCrossoverString){
@@ -1829,7 +1831,7 @@ HighsStatus Highs::run() {
     stop_highs_run_clock = false;
     // Initial refinement of LP to an equitable partition of columns
     // and rows
-    options_.main_strategy = kMainStratOCIter;
+    options_.main_strategy = kMainStratCrossIter;
     options_.iterative_lift = true;
     options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
     // model_presolve_status_ = runPresolve();
@@ -2018,7 +2020,8 @@ HighsStatus Highs::run() {
       info_.num_degen_pivots = ealp_.num_degen_pivot;
       info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
-        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         timer_.clock_time.at(timer_.crossover_clock));
     }
   }
   else if (options_.solver == kOCDualHighsPrimalCrossoverNoIterString){
@@ -2028,7 +2031,7 @@ HighsStatus Highs::run() {
     stop_highs_run_clock = false;
     // Initial refinement of LP to an equitable partition of columns
     // and rows
-    options_.main_strategy = kMainStratOC;
+    options_.main_strategy = kMainStratCross;
     options_.iterative_lift = false;
     options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
     // model_presolve_status_ = runPresolve();
@@ -2229,7 +2232,7 @@ HighsStatus Highs::run() {
       info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
         (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
-        timer_.clock_time.at(timer_.orbital_crossover_clock));
+         timer_.clock_time.at(timer_.crossover_clock));
     }
   }
   else if (options_.solver == kOCDualHighsPrimalCrossoverString){
@@ -2239,7 +2242,7 @@ HighsStatus Highs::run() {
     stop_highs_run_clock = false;
     // Initial refinement of LP to an equitable partition of columns
     // and rows
-    options_.main_strategy = kMainStratOCIter;
+    options_.main_strategy = kMainStratCrossIter;
     options_.iterative_lift = true;
     options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
     // model_presolve_status_ = runPresolve();
@@ -2444,7 +2447,8 @@ HighsStatus Highs::run() {
       info_.num_degen_pivots = ealp_.num_degen_pivot;
       info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
-        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         timer_.clock_time.at(timer_.crossover_clock));
     }
   }
   else if (options_.solver == kOCIPMHighsPrimalCrossoverNoIterString){
@@ -2454,7 +2458,7 @@ HighsStatus Highs::run() {
     stop_highs_run_clock = false;
     // Initial refinement of LP to an equitable partition of columns
     // and rows
-    options_.main_strategy = kMainStratOC;
+    options_.main_strategy = kMainStratCross;
     options_.iterative_lift = false;
     options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
     // model_presolve_status_ = runPresolve();
@@ -2636,7 +2640,8 @@ HighsStatus Highs::run() {
       info_.num_degen_pivots = ealp_.num_degen_pivot;
       info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
-        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         timer_.clock_time.at(timer_.crossover_clock));
     }
   }
   else if (options_.solver == kOCIPMHighsPrimalCrossoverString){
@@ -2646,7 +2651,7 @@ HighsStatus Highs::run() {
     stop_highs_run_clock = false;
     // Initial refinement of LP to an equitable partition of columns
     // and rows
-    options_.main_strategy = kMainStratOCIter;
+    options_.main_strategy = kMainStratCrossIter;
     options_.iterative_lift = true;
     options_.simplex_scale_strategy = kSimplexScaleStrategyOff;
     // model_presolve_status_ = runPresolve();
@@ -2835,7 +2840,8 @@ HighsStatus Highs::run() {
       info_.num_degen_pivots = ealp_.num_degen_pivot;
       info_.num_total_pivots = ealp_.num_total_pivot;
       timer_.clock_time.at(timer_.solve_clock) = 
-        (timer_.clock_time.at(timer_.aggregate_solve_clock) + timer_.clock_time.at(timer_.orbital_crossover_clock));
+        (timer_.clock_time.at(timer_.aggregate_solve_clock) + 
+         timer_.clock_time.at(timer_.crossover_clock));
     }
   }
   // else if (options_.solver == kIpmAggregateString){

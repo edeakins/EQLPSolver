@@ -175,7 +175,7 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     buildAmatrix();
     buildRhs();
     buildBnds();
-    buildBasisNoResiduals();
+    buildCrashBasisWeights();
     // buildObjExtended();
     // buildAmatrixExtended();
     // buildRhsExtended();
@@ -1113,11 +1113,11 @@ void HighsOCAggregate::buildBasis(bool finish, bool extended){
     elpBasis.alien = false;
 }
 
-void HighsOCAggregate::buildBasisNoResiduals(){
+void HighsOCAggregate::buildCrashBasisWeights(){
     num_basic = 0;
     colweights.resize(colCnt + rowCnt);
-    buildColBasisNoResiduals();
-    buildRowBasisNoResiduals();
+    buildColCrashBasisWeights();
+    buildRowCrashBasisWeights();
     elpBasis.alien = false;
 }
 
@@ -1174,7 +1174,7 @@ void HighsOCAggregate::buildRowBasis(){
     }
 }
 
-void HighsOCAggregate::buildColBasisNoResiduals(){
+void HighsOCAggregate::buildColCrashBasisWeights(){
     int iCol, pCol, pf, pc, crep, pcrep, degen, isPCol;
     HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
     HighsBasisStatus nonbasic = HighsBasisStatus::kNonbasic;
@@ -1190,6 +1190,7 @@ void HighsOCAggregate::buildColBasisNoResiduals(){
         status = basis.col_status[pCol];
         degen = mark_degenerate.at(iCol);
         isPCol = pCol == iCol;
+        nnz = colNnz(iCol);
         // Nobasic gets lowest weight
         if (status == nonbasic || status == lower || status == upper){
             colweights.at(iCol) = 0;
@@ -1218,7 +1219,7 @@ void HighsOCAggregate::buildColBasisNoResiduals(){
     }
 }
 
-void HighsOCAggregate::buildRowBasisNoResiduals(){
+void HighsOCAggregate::buildRowCrashBasisWeights(){
     int iRow, r, pr, pf, rrep, rlen, pRow, isPRow, degen;
     int of, nf;
     HighsBasisStatus basic = HighsBasisStatus::kBasic, status;
@@ -1237,7 +1238,7 @@ void HighsOCAggregate::buildRowBasisNoResiduals(){
     for (iRow = 0; iRow < rowCnt; ++iRow){
         rrep = rowrep[iRow];
         pf = epMinusOne.front[rrep];
-        pRow = pFrontCol[pf];
+        pRow = pFrontRow[pf];
         status = basis.row_status[pRow];
         degen = mark_degenerate.at(pRow + pcolCnt);
         isPRow = pRow == iRow;
@@ -1491,4 +1492,10 @@ std::vector<int> HighsOCAggregate::getColweights(){
 
 std::vector<int>& HighsOCAggregate::getFrontCol(){
     return frontCol;
+}
+
+HighsInt HighsOCAggregate::colNnz(int colIdx){
+    if (colIdx >= colCnt)
+        return 1;
+    return agglp.a_matrix_.start_.at(colIdx + 1) - agglp.a_matrix_.start_.at(colIdx);
 }

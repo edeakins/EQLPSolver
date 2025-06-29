@@ -72,11 +72,11 @@ public:
     void markDegenerate();
     void findLargestDegeneratePart();
     void buildBasis(bool finish, bool extended);
-    void buildBasisNoResiduals();
+    void buildCrashBasisWeights();
     void buildColBasis();
-    void buildColBasisNoResiduals();
+    void buildColCrashBasisWeights();
     void buildRowBasis();
-    void buildRowBasisNoResiduals();
+    void buildRowCrashBasisWeights();
     void buildResidualColBasis();
     void buildResidualRowBasis();
     // Build LU initial factor check for good basis;
@@ -108,7 +108,7 @@ public:
     HighsBasis getBasis(HighsInt hc);
     std::vector<int> getColweights();
     std::vector<int>& getFrontCol();
-
+    HighsInt colNnz(int colIdx);
     // dev test functions
     void checkForBadNonBasics(HighsInt col);
     HighsLp elp; 
