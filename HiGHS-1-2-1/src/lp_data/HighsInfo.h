@@ -143,6 +143,7 @@ struct HighsInfoStruct {
   HighsInt primal_solution_status;
   HighsInt dual_solution_status;
   HighsInt basis_validity;
+  std::string model_status;
   double objective_function_value;
   double mip_dual_bound;
   double mip_gap;

@@ -203,6 +203,7 @@ HighsStatus Highs::populateTimesInInfo(){
   info_.build_elp_iterative_time = timer_.clock_time.at(timer_.build_elp_iterative_clock);
   info_.orbital_crossover_time = timer_.clock_time.at(timer_.orbital_crossover_clock);
   info_.equitable_partition_time = timer_.clock_time.at(timer_.equitable_partition_clock);
+  info_.model_status = modelStatusToString(model_status_);
   if (options_.main_strategy == kMainStratCross ||
       options_.main_strategy == kMainStratCrossIter)
     info_.crossover_time = timer_.clock_time.at(timer_.crossover_clock);

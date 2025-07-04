@@ -150,7 +150,8 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, "Original Rows (Reductions),");
       fprintf(file, "Major Iterations,");
       fprintf(file, "Degenerate Crossover Pivots,");
-      fprintf(file, "Total Crossover Pivots\n");
+      fprintf(file, "Total Crossover Pivots,");
+      fprintf(file, "Model Status\n");
       // fprintf(file, "Columns Reduced (%),");
       // fprintf(file, "Rows Reduced (%)\n");
       // Write instance name
@@ -193,8 +194,12 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.orbital_crossover_degenerate_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.orbital_crossover_minor_iteration_count << "\n";
+      time << info.orbital_crossover_minor_iteration_count << ",";
       fprintf(file, time.str().c_str());
+      time.str(std::string());
+      std::stringstream status; 
+      status << info.model_status << "\n";
+      fprintf(file, status.str().c_str());
       time.str(std::string());
       // time << info.col_reduct_percent << ",";
       // fprintf(file, time.str().c_str());
@@ -245,8 +250,12 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.orbital_crossover_degenerate_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.orbital_crossover_minor_iteration_count << "\n";
+      time << info.orbital_crossover_minor_iteration_count << ",";
       fprintf(file, time.str().c_str());
+      time.str(std::string());
+      std::stringstream status; 
+      status << info.model_status << "\n";
+      fprintf(file, status.str().c_str());
       time.str(std::string());
       // time << info.col_reduct_percent << ",";
       // fprintf(file, time.str().c_str());
@@ -271,7 +280,8 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, "Original Rows (Reductions),");
       fprintf(file, "Major Iterations,");
       fprintf(file, "Primal Crossover Pivots,");
-      fprintf(file, "Dual Crossover Pivots\n");
+      fprintf(file, "Dual Crossover Pivots,");
+      fprintf(file, "Model Status\n");
       // Write instance name
       std::stringstream instance_name;
       instance_name << info.instance_name << ",";
@@ -312,8 +322,12 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.primal_crossover_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.dual_crossover_iteration_count << "\n";
+      time << info.dual_crossover_iteration_count << ",";
       fprintf(file, time.str().c_str());
+      time.str(std::string());
+      std::stringstream status; 
+      status << info.model_status << "\n";
+      fprintf(file, status.str().c_str());
       time.str(std::string());
     }
     else{
@@ -357,8 +371,12 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.primal_crossover_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.dual_crossover_iteration_count << "\n";
+      time << info.dual_crossover_iteration_count << ",";
       fprintf(file, time.str().c_str());
+      time.str(std::string());
+      std::stringstream status; 
+      status << info.model_status << "\n";
+      fprintf(file, status.str().c_str());
       time.str(std::string());
     }
   }
@@ -371,7 +389,8 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       fprintf(file, "Solve (Total),");
       fprintf(file, "Highs Run,");
       fprintf(file, "Primal Crossover Pivots,");
-      fprintf(file, "Dual Crossover Pivots\n");
+      fprintf(file, "Dual Crossover Pivots,");
+      fprintf(file, "Model Status\n");
       // Write instance name
       std::stringstream instance_name;
       instance_name << info.instance_name << ",";
@@ -394,8 +413,12 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.primal_crossover_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.dual_crossover_iteration_count << "\n";
+      time << info.dual_crossover_iteration_count << ",";
       fprintf(file, time.str().c_str());
+      time.str(std::string());
+      std::stringstream status; 
+      status << info.model_status << "\n";
+      fprintf(file, status.str().c_str());
       time.str(std::string());
     }
     else{
@@ -421,8 +444,12 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << info.primal_crossover_iteration_count << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << info.dual_crossover_iteration_count << "\n";
+      time << info.dual_crossover_iteration_count << ",";
       fprintf(file, time.str().c_str());
+      time.str(std::string());
+      std::stringstream status; 
+      status << info.model_status << "\n";
+      fprintf(file, status.str().c_str());
       time.str(std::string());
     }
   }
@@ -431,7 +458,8 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       // Write the file header lines if the file is empty when opened
       fprintf(file, "Instance,");
       fprintf(file, "Solve (Total),");
-      fprintf(file, "Highs Run\n");
+      fprintf(file, "Highs Run,");
+      fprintf(file, "Model Status\n");
       // Write instance name
       std::stringstream instance_name;
       instance_name << info.instance_name << ",";
@@ -442,8 +470,12 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << std::fixed << std::setprecision(5) << info.solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << std::fixed << std::setprecision(5) << info.run_highs_time << "\n";
+      time << std::fixed << std::setprecision(5) << info.run_highs_time << ",";
       fprintf(file, time.str().c_str());
+      time.str(std::string());
+      std::stringstream status; 
+      status << info.model_status << "\n";
+      fprintf(file, status.str().c_str());
       time.str(std::string());
     }
     else{
@@ -457,8 +489,12 @@ HighsStatus writeTimesToFile(FILE* file, HighsOptions& options, const HighsInfo&
       time << std::fixed << std::setprecision(5) << info.solve_time << ",";
       fprintf(file, time.str().c_str());
       time.str(std::string());
-      time << std::fixed << std::setprecision(5) << info.run_highs_time << "\n";
+      time << std::fixed << std::setprecision(5) << info.run_highs_time << ",";
       fprintf(file, time.str().c_str());
+      time.str(std::string());
+      std::stringstream status; 
+      status << info.model_status << "\n";
+      fprintf(file, status.str().c_str());
       time.str(std::string());
     }
   }
