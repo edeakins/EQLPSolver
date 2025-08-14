@@ -3831,14 +3831,6 @@ HighsStatus Highs::run() {
         timer_.stop(timer_.orbital_crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                             return_status, "callSolveLp");
-        /* ORIGINAL CODE FOR THIS METHOD NEED TO CREATE A NEW METHOD FOR THE CODE BELOW */
-        HighsSolution interior_point = 
-        aggregator_.buildSolution(partition_, alpSolution_);
-        timer_.start(timer_.crossover_clock);
-        call_status = crossover(interior_point, alp_, alpColweights_);
-        timer_.stop(timer_.crossover_clock);
-        return_status = interpretCallStatus(options_.log_options, call_status,
-                                        return_status, "callSolveLp");
         if (return_status == HighsStatus::kError){
           stop_highs_run_clock = true;
           called_return_from_run = false;
