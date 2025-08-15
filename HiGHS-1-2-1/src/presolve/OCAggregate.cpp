@@ -682,7 +682,7 @@ void HighsOCAggregate::buildRhsFromScratchExtended(){
 
 void HighsOCAggregate::buildRhsFromSolution(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-7;
+    double pv, lb, ub, lbDiff, ubDiff, tol = kHighsTiny;
     agglp.row_upper_.resize(rowCnt);
     agglp.row_lower_.resize(rowCnt);
     for (iRow = 0; iRow < rowCnt; ++iRow){
@@ -714,7 +714,7 @@ void HighsOCAggregate::buildRhsFromSolution(){
 
 void HighsOCAggregate::buildRhsFromSolutionExtended(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-7;
+    double pv, lb, ub, lbDiff, ubDiff, tol = kHighsTiny;
     for (iRow = 0; iRow < rowCnt; ++iRow){
         rep = rowrep[iRow];
         rf = ep.front[rep];
@@ -748,7 +748,7 @@ void HighsOCAggregate::buildRhsFromSolutionExtended(){
 
 void HighsOCAggregate::buildRhsFromSolutionExtendedNoResiduals(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-7;
+    double pv, lb, ub, lbDiff, ubDiff, tol = kHighsTiny;
     for (iRow = 0; iRow < rowCnt; ++iRow){
         rep = rowrep[iRow];
         rf = ep.front[rep];
@@ -838,7 +838,7 @@ void HighsOCAggregate::buildBndsFromScratchExtended(){
 
 void HighsOCAggregate::buildBndsFromSolution(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-7;
+    double pv, ubDiff, lbDiff, lb, ub, tol = kHighsTiny;
     agglp.col_lower_.resize(colCnt);
     agglp.col_upper_.resize(colCnt);
     for (iCol = 0; iCol < colCnt; ++iCol){
@@ -868,7 +868,7 @@ void HighsOCAggregate::buildBndsFromSolution(){
 
 void HighsOCAggregate::buildBndsFromSolutionExtended(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-7;
+    double pv, ubDiff, lbDiff, lb, ub, tol = kHighsTiny;
     for (iCol = 0; iCol < colCnt; ++iCol){
         rep = colrep[iCol];
         cf = ep.front[rep];
@@ -905,7 +905,7 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
 
 void HighsOCAggregate::buildBndsFromSolutionExtendedNoResiduals(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-7;
+    double pv, ubDiff, lbDiff, lb, ub, tol = kHighsTiny;
     for (iCol = 0; iCol < colCnt; ++iCol){
         rep = colrep[iCol];
         cf = ep.front[rep];
@@ -1147,6 +1147,13 @@ void HighsOCAggregate::buildColBasis(){
     for (iCol = colCnt; iCol < colCnt + numResiduals; ++iCol){
         elpBasis.col_status[iCol] = HighsBasisStatus::kLower;
     }
+    // int basic_cnt = 0;
+    // for (iCol = 0; iCol < elpBasis.col_status.size(); ++iCol){
+    //     if (elpBasis.col_status.at(iCol) == basic){
+    //         basic_cnt++;
+    //     }
+    // }
+    // std::cout << basic_cnt << std::endl;
 }
 
 void HighsOCAggregate::buildRowBasis(){
@@ -1172,6 +1179,13 @@ void HighsOCAggregate::buildRowBasis(){
         if (elpBasis.row_status.at(iRow) == HighsBasisStatus::kBasic)
             num_basic++;
     }
+    // int basic_cnt = 0;
+    // for (iRow = 0; iRow < elpBasis.row_status.size(); ++iRow){
+    //     if (elpBasis.row_status.at(iRow) == basic){
+    //         basic_cnt++;
+    //     }
+    // }
+    // std::cout << basic_cnt << std::endl;
 }
 
 void HighsOCAggregate::buildColCrashBasisWeights(){
