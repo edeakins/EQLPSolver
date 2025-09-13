@@ -682,7 +682,7 @@ void HighsOCAggregate::buildRhsFromScratchExtended(){
 
 void HighsOCAggregate::buildRhsFromSolution(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = kHighsTiny;
+    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-7;
     agglp.row_upper_.resize(rowCnt);
     agglp.row_lower_.resize(rowCnt);
     for (iRow = 0; iRow < rowCnt; ++iRow){
@@ -714,7 +714,7 @@ void HighsOCAggregate::buildRhsFromSolution(){
 
 void HighsOCAggregate::buildRhsFromSolutionExtended(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = kHighsTiny;
+    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-7;
     for (iRow = 0; iRow < rowCnt; ++iRow){
         rep = rowrep[iRow];
         rf = ep.front[rep];
@@ -748,7 +748,7 @@ void HighsOCAggregate::buildRhsFromSolutionExtended(){
 
 void HighsOCAggregate::buildRhsFromSolutionExtendedNoResiduals(){
     int iRow, pr, rf, rpf, rlen, prlen, rep;
-    double pv, lb, ub, lbDiff, ubDiff, tol = kHighsTiny;
+    double pv, lb, ub, lbDiff, ubDiff, tol = 1e-7;
     for (iRow = 0; iRow < rowCnt; ++iRow){
         rep = rowrep[iRow];
         rf = ep.front[rep];
@@ -838,7 +838,7 @@ void HighsOCAggregate::buildBndsFromScratchExtended(){
 
 void HighsOCAggregate::buildBndsFromSolution(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = kHighsTiny;
+    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-7;
     agglp.col_lower_.resize(colCnt);
     agglp.col_upper_.resize(colCnt);
     for (iCol = 0; iCol < colCnt; ++iCol){
@@ -868,7 +868,7 @@ void HighsOCAggregate::buildBndsFromSolution(){
 
 void HighsOCAggregate::buildBndsFromSolutionExtended(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = kHighsTiny;
+    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-7;
     for (iCol = 0; iCol < colCnt; ++iCol){
         rep = colrep[iCol];
         cf = ep.front[rep];
@@ -905,7 +905,7 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
 
 void HighsOCAggregate::buildBndsFromSolutionExtendedNoResiduals(){
     int iCol, pc, cf, pcf, rep;
-    double pv, ubDiff, lbDiff, lb, ub, tol = kHighsTiny;
+    double pv, ubDiff, lbDiff, lb, ub, tol = 1e-7;
     for (iCol = 0; iCol < colCnt; ++iCol){
         rep = colrep[iCol];
         cf = ep.front[rep];
@@ -1042,8 +1042,10 @@ void HighsOCAggregate::markDegenerate(){
         double lb = olp.col_lower_.at(crep);
         double ub = olp.col_upper_.at(crep);
         double value = solution.col_value.at(i_col);
-        HighsInt ub_test = std::fabs(value - ub) < kHighsTiny ? 1 : 0;
-        HighsInt lb_test = std::fabs(value - lb) < kHighsTiny ? 1 : 0;
+        // HighsInt ub_test = std::fabs(value - ub) < 1e-7 ? 1 : 0;
+        // HighsInt lb_test = std::fabs(value - lb) < 1e-7 ? 1 : 0;
+        HighsInt ub_test = std::fabs(value - ub) < 1e-7 ? 1 : 0;
+        HighsInt lb_test = std::fabs(value - lb) < 1e-7 ? 1 : 0;
         // std::cout << std::fabs(value) << std::endl;
         HighsInt basis_test = basis.col_status.at(i_col) == HighsBasisStatus::kBasic ? 1 : 0;
         if ((ub_test || lb_test) && basis_test){
@@ -1060,7 +1062,7 @@ void HighsOCAggregate::markDegenerate(){
         double ub = olp.row_upper_.at(rrep);
         double dual_value = solution.row_dual.at(i_row);
         // std::cout << std::fabs(value) << std::endl;
-        HighsInt slack_zero = std::fabs(dual_value) < kHighsTiny ? 1 : 0;
+        HighsInt slack_zero = std::fabs(dual_value) < 1e-7 ? 1 : 0;
         HighsInt basis_test = basis.row_status.at(i_row) == HighsBasisStatus::kBasic ? 1 : 0;
         if (slack_zero && basis_test){
             mark_degenerate.at(pcolCnt + i_row) = 1;
@@ -1090,6 +1092,8 @@ void HighsOCAggregate::findLargestDegeneratePart(){
             max_front_len_pCol = iCol;
         }
     }
+    max_front_len = -1;
+    max_front_len_pCol = -1;
     // if (discrete){
     //     for (auto& iCol : degenerate_cols){
     //         auto& cf = pColFront.at(iCol);

@@ -1671,6 +1671,7 @@ void HEkkPrimal::chooseRow() {
   // std::cout << "num_degen: " << num_degen << std::endl;
   // std::cin.get();
   analysis->simplexTimerStop(Chuzr2Clock);
+  // std::cout << "row_out: " << row_out << std::endl;
 }
 
 void HEkkPrimal::considerBoundSwap() {
