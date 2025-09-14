@@ -1034,50 +1034,50 @@ void HighsOCAggregate::buildResidualRows(){
 
 void HighsOCAggregate::markDegenerate(){
     std::fill_n(mark_degenerate.begin(), mark_degenerate.size(), 0);
-    degenerate_cols.clear();
-    HighsInt i_col, i_row;
-    // elp.num_degenerate_cols_ = elp.num_aggregate_cols_;
-    for (i_col = 0; i_col < pcolCnt; ++i_col){
-        HighsInt crep = colrep.at(i_col);
-        double lb = olp.col_lower_.at(crep);
-        double ub = olp.col_upper_.at(crep);
-        double value = solution.col_value.at(i_col);
-        // HighsInt ub_test = std::fabs(value - ub) < 1e-7 ? 1 : 0;
-        // HighsInt lb_test = std::fabs(value - lb) < 1e-7 ? 1 : 0;
-        HighsInt ub_test = std::fabs(value - ub) < 1e-7 ? 1 : 0;
-        HighsInt lb_test = std::fabs(value - lb) < 1e-7 ? 1 : 0;
-        // std::cout << std::fabs(value) << std::endl;
-        HighsInt basis_test = basis.col_status.at(i_col) == HighsBasisStatus::kBasic ? 1 : 0;
-        if ((ub_test || lb_test) && basis_test){
-            mark_degenerate.at(i_col) = 1;
-            degenerate_cols.push_back(i_col);
-            // elp.num_degenerate_cols_++;
-        }
-        // if ((ub_test) && basis_test)
-        //     mark_degenerate.at(i_col) = 1;
-    }
-    for (i_row = 0; i_row < prowCnt; ++i_row){
-        HighsInt rrep = rowrep.at(i_row) - numCol;
-        double lb = olp.row_lower_.at(rrep);
-        double ub = olp.row_upper_.at(rrep);
-        double dual_value = solution.row_dual.at(i_row);
-        // std::cout << std::fabs(value) << std::endl;
-        HighsInt slack_zero = std::fabs(dual_value) < 1e-7 ? 1 : 0;
-        HighsInt basis_test = basis.row_status.at(i_row) == HighsBasisStatus::kBasic ? 1 : 0;
-        if (slack_zero && basis_test){
-            mark_degenerate.at(pcolCnt + i_row) = 1;
-            degenerate_slacks.push_back(i_col);
-            // elp.num_degenerate_cols_++;
-        }
-        // if ((ub_test) && basis_test)
-        //     mark_degenerate.at(i_col) = 1;
-    }
-    // if (discrete){
-    //     for (auto col: degenerate_cols){
-    //         std::cout << "degenerate index: " << col << std::endl;
+    // degenerate_cols.clear();
+    // HighsInt i_col, i_row;
+    // // elp.num_degenerate_cols_ = elp.num_aggregate_cols_;
+    // for (i_col = 0; i_col < pcolCnt; ++i_col){
+    //     HighsInt crep = colrep.at(i_col);
+    //     double lb = olp.col_lower_.at(crep);
+    //     double ub = olp.col_upper_.at(crep);
+    //     double value = solution.col_value.at(i_col);
+    //     // HighsInt ub_test = std::fabs(value - ub) < 1e-7 ? 1 : 0;
+    //     // HighsInt lb_test = std::fabs(value - lb) < 1e-7 ? 1 : 0;
+    //     HighsInt ub_test = std::fabs(value - ub) < 1e-7 ? 1 : 0;
+    //     HighsInt lb_test = std::fabs(value - lb) < 1e-7 ? 1 : 0;
+    //     // std::cout << std::fabs(value) << std::endl;
+    //     HighsInt basis_test = basis.col_status.at(i_col) == HighsBasisStatus::kBasic ? 1 : 0;
+    //     if ((ub_test || lb_test) && basis_test){
+    //         mark_degenerate.at(i_col) = 1;
+    //         degenerate_cols.push_back(i_col);
+    //         // elp.num_degenerate_cols_++;
     //     }
-    //     std::cin.get();
+    //     // if ((ub_test) && basis_test)
+    //     //     mark_degenerate.at(i_col) = 1;
     // }
+    // for (i_row = 0; i_row < prowCnt; ++i_row){
+    //     HighsInt rrep = rowrep.at(i_row) - numCol;
+    //     double lb = olp.row_lower_.at(rrep);
+    //     double ub = olp.row_upper_.at(rrep);
+    //     double dual_value = solution.row_dual.at(i_row);
+    //     // std::cout << std::fabs(value) << std::endl;
+    //     HighsInt slack_zero = std::fabs(dual_value) < 1e-7 ? 1 : 0;
+    //     HighsInt basis_test = basis.row_status.at(i_row) == HighsBasisStatus::kBasic ? 1 : 0;
+    //     if (slack_zero && basis_test){
+    //         mark_degenerate.at(pcolCnt + i_row) = 1;
+    //         degenerate_slacks.push_back(i_col);
+    //         // elp.num_degenerate_cols_++;
+    //     }
+    //     // if ((ub_test) && basis_test)
+    //     //     mark_degenerate.at(i_col) = 1;
+    // }
+    // // if (discrete){
+    // //     for (auto col: degenerate_cols){
+    // //         std::cout << "degenerate index: " << col << std::endl;
+    // //     }
+    // //     std::cin.get();
+    // // }
 }
 
 void HighsOCAggregate::findLargestDegeneratePart(){
