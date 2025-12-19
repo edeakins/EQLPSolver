@@ -822,9 +822,11 @@ HighsStatus Highs::run() {
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
     options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -910,9 +912,11 @@ HighsStatus Highs::run() {
         setBasis(ealpBasis_);
         // writeBasis("../../debugBuild/beforeBasis.txt");
         // Do orbital crossvoer
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.orbital_crossover_clock);
         call_status =
             callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.orbital_crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                             return_status, "callSolveLp");
@@ -1044,10 +1048,12 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kIpmString;
+    options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -1138,9 +1144,11 @@ HighsStatus Highs::run() {
         setBasis(ealpBasis_);
         // writeBasis("../../debugBuild/beforeBasis.txt");
         // Do orbital crossvoer
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.orbital_crossover_clock);
         call_status =
             callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.orbital_crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                             return_status, "callSolveLp");
@@ -1254,9 +1262,11 @@ HighsStatus Highs::run() {
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
     options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -1339,8 +1349,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = crossover(interior_point, alp_, alpColweights_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -1475,9 +1487,11 @@ HighsStatus Highs::run() {
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
     options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -1559,8 +1573,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = crossover(interior_point, alp_, alpColweights_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -1693,10 +1709,12 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kIpmString;
+    options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -1779,8 +1797,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = crossover(interior_point, alp_, alpColweights_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -1894,10 +1914,12 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kIpmString;
+    options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -1987,8 +2009,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = crossover(interior_point, alp_, alpColweights_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -2103,9 +2127,11 @@ HighsStatus Highs::run() {
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
     options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -2188,8 +2214,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = primalCrossover(interior_point, alp_, alpColweights_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -2324,9 +2352,11 @@ HighsStatus Highs::run() {
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
     options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -2410,8 +2440,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = primalCrossover(interior_point, alp_, alpColweights_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -2545,10 +2577,12 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kIpmString;
+    options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -2631,8 +2665,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = primalCrossover(interior_point, alp_, alpColweights_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -2746,10 +2782,12 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kIpmString;
+    options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -2839,8 +2877,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = primalCrossover(interior_point, alp_, alpColweights_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -3093,8 +3133,10 @@ HighsStatus Highs::run() {
       // zeroIterationCounts();
       HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+      timer_.start(timer_.solve_clock);
       timer_.start(timer_.crossover_clock);
       call_status = crossover(interior_point, pealp_);
+      timer_.stop(timer_.solve_clock);
       timer_.stop(timer_.crossover_clock);
       return_status = interpretCallStatus(options_.log_options, call_status,
                                       return_status, "callSolveLp");
@@ -3209,8 +3251,10 @@ HighsStatus Highs::run() {
       // zeroIterationCounts();
       HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+      timer_.start(timer_.solve_clock);
       timer_.start(timer_.crossover_clock);
       call_status = primalCrossover(interior_point, pealp_);
+      timer_.stop(timer_.solve_clock);
       timer_.stop(timer_.crossover_clock);
       return_status = interpretCallStatus(options_.log_options, call_status,
                                       return_status, "callSolveLp");
@@ -3325,8 +3369,10 @@ HighsStatus Highs::run() {
       // zeroIterationCounts();
       HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+      timer_.start(timer_.solve_clock);
       timer_.start(timer_.crossover_clock);
       call_status = crossover(interior_point, pealp_);
+      timer_.stop(timer_.solve_clock);
       timer_.stop(timer_.crossover_clock);
       return_status = interpretCallStatus(options_.log_options, call_status,
                                       return_status, "callSolveLp");
@@ -3441,8 +3487,10 @@ HighsStatus Highs::run() {
       // zeroIterationCounts();
       HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+      timer_.start(timer_.solve_clock);
       timer_.start(timer_.crossover_clock);
       call_status = primalCrossover(interior_point, pealp_);
+      timer_.stop(timer_.solve_clock);
       timer_.stop(timer_.crossover_clock);
       return_status = interpretCallStatus(options_.log_options, call_status,
                                       return_status, "callSolveLp");
@@ -3557,8 +3605,10 @@ HighsStatus Highs::run() {
       // zeroIterationCounts();
       HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+      timer_.start(timer_.solve_clock);
       timer_.start(timer_.crossover_clock);
       call_status = crossover(interior_point, pealp_);
+      timer_.stop(timer_.solve_clock);
       timer_.stop(timer_.crossover_clock);
       return_status = interpretCallStatus(options_.log_options, call_status,
                                       return_status, "callSolveLp");
@@ -3673,8 +3723,10 @@ HighsStatus Highs::run() {
       // zeroIterationCounts();
       HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+      timer_.start(timer_.solve_clock);
       timer_.start(timer_.crossover_clock);
       call_status = primalCrossover(interior_point, pealp_);
+      timer_.stop(timer_.solve_clock);
       timer_.stop(timer_.crossover_clock);
       return_status = interpretCallStatus(options_.log_options, call_status,
                                       return_status, "callSolveLp");
@@ -3739,9 +3791,11 @@ HighsStatus Highs::run() {
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
     options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -3825,9 +3879,11 @@ HighsStatus Highs::run() {
         setBasis(ealpBasis_);
         // writeBasis("../../debugBuild/beforeBasis.txt");
         // Do orbital crossvoer
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.orbital_crossover_clock);
         call_status =
             callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.orbital_crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                             return_status, "callSolveLp");
@@ -3959,10 +4015,12 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kIpmString;
+    options_.solver = kSimplexString;
+    timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
         callSolveLp(alp_, "Solving LP with Orbital Crossover");
+    timer_.stop(timer_.solve_clock);
     timer_.stop(timer_.aggregate_solve_clock);
     return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -4046,9 +4104,11 @@ HighsStatus Highs::run() {
         setBasis(ealpBasis_);
         // writeBasis("../../debugBuild/beforeBasis.txt");
         // Do orbital crossvoer
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.orbital_crossover_clock);
         call_status =
             callSolveLp(ealp_, "Solving LP with Orbital Crossover");
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.orbital_crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                             return_status, "callSolveLp");
@@ -4247,8 +4307,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = crossover(interior_point, pealp_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -4459,8 +4521,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = primalCrossover(interior_point, pealp_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -4671,8 +4735,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = crossover(interior_point, pealp_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -4883,8 +4949,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = primalCrossover(interior_point, pealp_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -5096,8 +5164,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = crossover(interior_point, pealp_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
@@ -5309,8 +5379,10 @@ HighsStatus Highs::run() {
         // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
+        timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
         call_status = primalCrossover(interior_point, pealp_);
+        timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
