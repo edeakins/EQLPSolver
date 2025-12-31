@@ -1048,7 +1048,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kSimplexString;
+    options_.solver = kIpmString;
     timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
@@ -1709,7 +1709,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kSimplexString;
+    options_.solver = kIpmString;
     timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
@@ -1914,7 +1914,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kSimplexString;
+    options_.solver = kIpmString;
     timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
@@ -2577,7 +2577,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kSimplexString;
+    options_.solver = kIpmString;
     timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
@@ -2782,7 +2782,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kSimplexString;
+    options_.solver = kIpmString;
     timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
@@ -4027,7 +4027,7 @@ HighsStatus Highs::run() {
     zeroIterationCounts();
     // Solve initial aggregate lp
     // writeModel("../../debugBuild/testLpFiles/presolve.mps");
-    options_.solver = kSimplexString;
+    options_.solver = kIpmString;
     timer_.start(timer_.solve_clock);
     timer_.start(timer_.aggregate_solve_clock);
     call_status =
