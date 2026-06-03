@@ -8223,11 +8223,17 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, std::vector<d
   for (int iCol = 0; iCol < numCol; ++iCol)
     obj += colCost[iCol] * colValue[iCol];
   info_.objective_function_value = obj;
-  scaled_model_status_ = HighsModelStatus::kOptimal;
-  model_status_ = HighsModelStatus::kOptimal;
   alpSolution_ = solution;
   solution_ = solution;
-  
+
+  // Pivot any remaining nonbasic r-variables into the basis using the
+  // specialized orbital crossover simplex, which only considers r-variables
+  // as entering columns.
+  scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+  model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+  options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+  HighsStatus orbital_status = callSolveLp(lp, "Orbital crossover: pivot NB r-variables into basis");
+  if (orbital_status != HighsStatus::kOk) return orbital_status;
 
 #else
   // No IPX available so end here at approximate solve.
@@ -8257,11 +8263,16 @@ HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp, std::ve
   for (int iCol = 0; iCol < numCol; ++iCol)
     obj += colCost[iCol] * colValue[iCol];
   info_.objective_function_value = obj;
-  scaled_model_status_ = HighsModelStatus::kOptimal;
-  model_status_ = HighsModelStatus::kOptimal;
   alpSolution_ = solution;
   solution_ = solution;
-  
+
+  // Pivot any remaining nonbasic r-variables into the basis using the
+  // specialized orbital crossover simplex.
+  scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+  model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+  options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+  HighsStatus orbital_status = callSolveLp(lp, "Orbital crossover: pivot NB r-variables into basis");
+  if (orbital_status != HighsStatus::kOk) return orbital_status;
 
 #else
   // No IPX available so end here at approximate solve.
