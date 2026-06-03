@@ -5165,7 +5165,7 @@ HighsStatus Highs::run() {
         timer_.stop(timer_.equitable_partition_clock);
         change = equitablePartition_.getNumBasicParts();
         // change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 500 && !discrete) continue;
+        // TODO (MIPLIB): add change < N threshold when stabilizers produce small orbit changes
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -5382,7 +5382,7 @@ HighsStatus Highs::run() {
         timer_.stop(timer_.equitable_partition_clock);
         change = equitablePartition_.getNumBasicParts();
         // change += measureChangeInPartitionSize(original_lp, old_partition);
-        if (change < 500 && !discrete) continue;
+        // TODO (MIPLIB): add change < N threshold when stabilizers produce small orbit changes
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;

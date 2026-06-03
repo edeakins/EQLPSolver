@@ -1,6 +1,7 @@
 #include "lp_solver.h"
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 #include <vector>
 #include <utility>
 #include "crossover.h"
@@ -494,6 +495,33 @@ Int LpSolver::CrossoverFromPartialOrbitalBasis(const double* x_start,
         info_.time_starting_basis += timer.Elapsed();
         if (info_.errflag) {
             ClearSolution();
+            return 0;
+        }
+
+        // Count superbasics after crash to judge IPX crossover cost.
+        // Dual superbasics: basic variables with nonzero dual (z[j] != 0).
+        // Primal superbasics: nonbasic variables strictly between bounds.
+        Int dual_sup = 0, primal_sup = 0;
+        for (Int j = 0; j < n+m; j++) {
+            if (basis_->IsBasic(j) && z_crossover_[j] != 0.0)
+                dual_sup++;
+            else if (basis_->IsNonbasic(j) &&
+                     x_crossover_[j] != lb[j] && x_crossover_[j] != ub[j])
+                primal_sup++;
+        }
+        info_.crash_dual_superbasics  = dual_sup;
+        info_.crash_primal_superbasics = primal_sup;
+        std::cout << "Crash superbasics: dual=" << dual_sup
+                  << " primal=" << primal_sup
+                  << " (rows=" << m << ")\n";
+
+        // If crash quality is poor (too many superbasics relative to problem
+        // size), skip the IPX push phases and let the orbital simplex handle
+        // the cleanup via degenerate pivots on r-variables.
+        const double kBadCrashFraction = 0.10;
+        if ((double)(dual_sup + primal_sup) > kBadCrashFraction * m) {
+            std::cout << "Crash too poor for IPX crossover -- skipping to orbital simplex\n";
+            info_.status_crossover = IPX_STATUS_optimal; // signal clean exit
             return 0;
         }
     }
