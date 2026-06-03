@@ -176,13 +176,10 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     buildRhs();
     buildBnds();
     buildCrashBasisWeights();
-    // buildObjExtended();
-    // buildAmatrixExtended();
-    // buildRhsExtended();
-    // buildBndsExtended();
-    // buildRowNames();
-    // buildColNames();
-    // copyPartition();
+    buildObjExtended();
+    buildAmatrixExtended();
+    buildRhsExtended();
+    buildBndsExtended();
     agglp.level = level;
     elp.level = level; 
     presolvelp.level = level;

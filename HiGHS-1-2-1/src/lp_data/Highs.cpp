@@ -5170,20 +5170,19 @@ HighsStatus Highs::run() {
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
         change = 0;
-        // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
-        // buildEALP();
-        buildPEALP();
+        buildOCALP();
         timer_.stop(timer_.build_elp_iterative_clock);
-        // TODO: getLiftedBasis() would warm-start crossover but lpBasis not
-        // updated in this path (buildPEALP doesn't call buildCrashBasisWeights)
-        passModel(pealp_);
+        getLiftedBasis(1);
+        getColweights();
+        passModel(ealp_);
+        setBasis(alpBasis_);
         zeroIterationCounts();
-        HighsSolution interior_point = 
+        HighsSolution interior_point =
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = crossover(interior_point, pealp_);
+        call_status = crossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -5376,31 +5375,19 @@ HighsStatus Highs::run() {
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
         change = 0;
-        // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
-        // buildEALP();
-         buildPEALP();
-         timer_.stop(timer_.build_elp_iterative_clock);
-         // Lift basis from previous aggregated LP -- critical at discrete
-         // so IPX crossover starts warm rather than cold.
-         getLiftedBasis(1);
-         passModel(pealp_);
-         setBasis(alpBasis_);
-         zeroIterationCounts();
-        // Build the extended aggregate lp for the current partition
-        timer_.start(timer_.build_elp_iterative_clock);
-        // buildEALP();
-        buildPEALP();
+        buildOCALP();
         timer_.stop(timer_.build_elp_iterative_clock);
-        // TODO: getLiftedBasis() would warm-start crossover but lpBasis not
-        // updated in this path (buildPEALP doesn't call buildCrashBasisWeights)
-        passModel(pealp_);
+        getLiftedBasis(1);
+        getColweights();
+        passModel(ealp_);
+        setBasis(alpBasis_);
         zeroIterationCounts();
-        HighsSolution interior_point = 
+        HighsSolution interior_point =
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = primalCrossover(interior_point, pealp_);
+        call_status = primalCrossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -8223,11 +8210,15 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, std::vector<d
 
   // Pivot any remaining nonbasic r-variables into the basis using the
   // specialized orbital crossover simplex, which only considers r-variables
-  // as entering columns.
+  // as entering columns.  Force simplex solver so callSolveLp doesn't
+  // re-invoke IPX (options_.solver may still be kIpmString from the caller).
   scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
   model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+  const std::string saved_solver = options_.solver;
+  options_.solver = kSimplexString;
   options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
   HighsStatus orbital_status = callSolveLp(lp, "Orbital crossover: pivot NB r-variables into basis");
+  options_.solver = saved_solver;
   if (orbital_status != HighsStatus::kOk) return orbital_status;
 
 #else
