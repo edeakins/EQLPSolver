@@ -5175,21 +5175,10 @@ HighsStatus Highs::run() {
         // buildEALP();
         buildPEALP();
         timer_.stop(timer_.build_elp_iterative_clock);
-        // if (!ealp_.num_residual_cols_ && !discrete) continue;
-        // buildALP();
-        // buildPEALP();
-        // Grab the lifted basis and store the major and minor orbital
-        // crossover iterations before the get cleared by passModel()
-        // getLiftedBasis();
-        // major_iter = info_.major_iteration_count;
-        // minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // TODO: getLiftedBasis() would warm-start crossover but lpBasis not
+        // updated in this path (buildPEALP doesn't call buildCrashBasisWeights)
         passModel(pealp_);
         zeroIterationCounts();
-        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
-        // Update the major and minor orbital crossover iterations
-        // to the info_ class after it was cleared by passModel()
-        // info_.major_iteration_count = major_iter;
-        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
@@ -5390,23 +5379,23 @@ HighsStatus Highs::run() {
         // Build the extended aggregate lp for the current partition
         timer_.start(timer_.build_elp_iterative_clock);
         // buildEALP();
+         buildPEALP();
+         timer_.stop(timer_.build_elp_iterative_clock);
+         // Lift basis from previous aggregated LP -- critical at discrete
+         // so IPX crossover starts warm rather than cold.
+         getLiftedBasis(1);
+         passModel(pealp_);
+         setBasis(alpBasis_);
+         zeroIterationCounts();
+        // Build the extended aggregate lp for the current partition
+        timer_.start(timer_.build_elp_iterative_clock);
+        // buildEALP();
         buildPEALP();
         timer_.stop(timer_.build_elp_iterative_clock);
-        // if (!ealp_.num_residual_cols_ && !discrete) continue;
-        // buildALP();
-        // buildPEALP();
-        // Grab the lifted basis and store the major and minor orbital
-        // crossover iterations before the get cleared by passModel()
-        // getLiftedBasis();
-        // major_iter = info_.major_iteration_count;
-        // minor_iter = info_.orbital_crossover_minor_iteration_count;
+        // TODO: getLiftedBasis() would warm-start crossover but lpBasis not
+        // updated in this path (buildPEALP doesn't call buildCrashBasisWeights)
         passModel(pealp_);
         zeroIterationCounts();
-        // writeModel("../../debugBuild/testLpFiles/EALP.lp");
-        // Update the major and minor orbital crossover iterations
-        // to the info_ class after it was cleared by passModel()
-        // info_.major_iteration_count = major_iter;
-        // info_.orbital_crossover_minor_iteration_count = minor_iter;
         HighsSolution interior_point = 
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
