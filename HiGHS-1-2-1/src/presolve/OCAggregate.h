@@ -75,8 +75,10 @@ public:
     void buildCrashBasisWeights();
     void buildColBasis();
     void buildColCrashBasisWeights();
+    void buildResidualCrashBasisWeights();
     void buildRowBasis();
     void buildRowCrashBasisWeights();
+    void buildResidualRowCrashBasisWeights();
     void buildResidualColBasis();
     void buildResidualRowBasis();
     // Build LU initial factor check for good basis;
@@ -106,7 +108,7 @@ public:
     HighsLp getLpNoResiduals();
     HighsBasis getBasis();
     HighsBasis getBasis(HighsInt hc);
-    std::vector<int> getColweights();
+    std::vector<double> getColweights();
     std::vector<int>& getFrontCol();
     HighsInt colNnz(int colIdx);
     // dev test functions
@@ -170,7 +172,7 @@ public:
     std::vector<int> residualRow;
     std::vector<int> degenSlack;
     std::vector<bool> degenRow;
-    std::vector<int> colweights;
+    std::vector<double> colweights;
     std::vector<HighsInt> mark_degenerate;
     std::vector<HighsInt> degenerate_cols;
     std::vector<HighsInt> degenerate_slacks;

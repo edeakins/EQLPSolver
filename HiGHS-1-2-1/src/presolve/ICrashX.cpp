@@ -268,7 +268,7 @@ bool callPrimalCrossover(const HighsLp& lp, const HighsOptions& options,
 }
 
 bool callCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
-                   HighsSolution& solution, std::vector<int>& colweights, HighsBasis& final_basis, HighsInfo& highs_info) {
+                   HighsSolution& solution, std::vector<double>& colweights, HighsBasis& final_basis, HighsInfo& highs_info) {
   std::cout << "Calling ipx crossover\n";
 
   ipx::Int num_col, num_row;
@@ -387,7 +387,7 @@ bool callCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
 }
 
 bool callPrimalCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
-                   HighsSolution& solution, std::vector<int>& colweights, HighsBasis& final_basis, HighsInfo& highs_info) {
+                   HighsSolution& solution, std::vector<double>& colweights, HighsBasis& final_basis, HighsInfo& highs_info) {
   std::cout << "Calling ipx primal crossover\n";
 
   ipx::Int num_col, num_row;

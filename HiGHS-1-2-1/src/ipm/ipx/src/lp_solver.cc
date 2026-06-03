@@ -301,7 +301,7 @@ Int LpSolver::PrimalCrossoverFromPartialOrbitalBasis(const double* x_start,
                                          const double* slack_start,
                                          const double* y_start,
                                          const double* z_start,
-                                         std::vector<int>& orbital_colweights) {
+                                         std::vector<double>& orbital_colweights) {
     const Int m = model_.rows();
     const Int n = model_.cols();
     const Vector& lb = model_.lb();
@@ -386,8 +386,7 @@ Int LpSolver::PrimalCrossoverFromPartialOrbitalBasis(const double* x_start,
             //     colweight[j] = m + (m-nz+1);
             // else
             //     colweight[j] = m-nz+1;
-            Int orbital_weight = orbital_colweights.at(j);
-            colweight[j] = orbital_weight;
+            colweight[j] = orbital_colweights.at(j);
         }
         basis_->ConstructBasisFromWeights(&colweight[0], &info_);
         info_.time_starting_basis += timer.Elapsed();
@@ -404,7 +403,7 @@ Int LpSolver::CrossoverFromPartialOrbitalBasis(const double* x_start,
                                          const double* slack_start,
                                          const double* y_start,
                                          const double* z_start,
-                                         std::vector<int>& orbital_colweights) {
+                                         std::vector<double>& orbital_colweights) {
     const Int m = model_.rows();
     const Int n = model_.cols();
     const Vector& lb = model_.lb();
@@ -489,8 +488,7 @@ Int LpSolver::CrossoverFromPartialOrbitalBasis(const double* x_start,
             //     colweight[j] = m + (m-nz+1);
             // else
             //     colweight[j] = m-nz+1;
-            Int orbital_weight = orbital_colweights.at(j);
-            colweight[j] = orbital_weight;
+            colweight[j] = orbital_colweights.at(j);
         }
         basis_->ConstructBasisFromWeights(&colweight[0], &info_);
         info_.time_starting_basis += timer.Elapsed();

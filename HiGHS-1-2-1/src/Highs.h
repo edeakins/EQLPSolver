@@ -877,8 +877,8 @@ class Highs {
   HighsStatus crossover(HighsSolution& solution);
   HighsStatus crossover(HighsSolution& solution, HighsLp& lp);
   HighsStatus primalCrossover(HighsSolution& solution, HighsLp& lp);
-  HighsStatus crossover(HighsSolution& solution, HighsLp& lp, std::vector<int>& colweights);
-  HighsStatus primalCrossover(HighsSolution& solution, HighsLp& lp, std::vector<int>& colweights);
+  HighsStatus crossover(HighsSolution& solution, HighsLp& lp, std::vector<double>& colweights);
+  HighsStatus primalCrossover(HighsSolution& solution, HighsLp& lp, std::vector<double>& colweights);
 
   /**
    * @brief Open a named log file
@@ -913,7 +913,7 @@ class Highs {
   HighsLp ealp_;
   HighsLp pealp_;
   HighsBasis alpBasis_;
-  std::vector<int> alpColweights_;
+  std::vector<double> alpColweights_;
   HighsBasis crashBasis_;
   HighsSolution crashSolution_;
   HighsSolution alpSolution_;

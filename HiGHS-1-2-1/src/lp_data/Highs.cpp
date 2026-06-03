@@ -1340,7 +1340,7 @@ HighsStatus Highs::run() {
         getColweights();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
-        passModel(alp_);
+        passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
@@ -1351,7 +1351,7 @@ HighsStatus Highs::run() {
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = crossover(interior_point, alp_, alpColweights_);
+        call_status = crossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -1564,7 +1564,7 @@ HighsStatus Highs::run() {
         getColweights();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
-        passModel(alp_);
+        passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
@@ -1575,7 +1575,7 @@ HighsStatus Highs::run() {
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = crossover(interior_point, alp_, alpColweights_);
+        call_status = crossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -1788,7 +1788,7 @@ HighsStatus Highs::run() {
         getColweights();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
-        passModel(alp_);
+        passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
@@ -1799,7 +1799,7 @@ HighsStatus Highs::run() {
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = crossover(interior_point, alp_, alpColweights_);
+        call_status = crossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -2000,7 +2000,7 @@ HighsStatus Highs::run() {
         getColweights();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
-        passModel(alp_);
+        passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
@@ -2011,7 +2011,7 @@ HighsStatus Highs::run() {
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = crossover(interior_point, alp_, alpColweights_);
+        call_status = crossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -2205,7 +2205,7 @@ HighsStatus Highs::run() {
         getColweights();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
-        passModel(alp_);
+        passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
@@ -2216,7 +2216,7 @@ HighsStatus Highs::run() {
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = primalCrossover(interior_point, alp_, alpColweights_);
+        call_status = primalCrossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -2431,7 +2431,7 @@ HighsStatus Highs::run() {
         getColweights();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
-        passModel(alp_);
+        passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
@@ -2442,7 +2442,7 @@ HighsStatus Highs::run() {
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = primalCrossover(interior_point, alp_, alpColweights_);
+        call_status = primalCrossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -2656,7 +2656,7 @@ HighsStatus Highs::run() {
         getColweights();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
-        passModel(alp_);
+        passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
@@ -2667,7 +2667,7 @@ HighsStatus Highs::run() {
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = primalCrossover(interior_point, alp_, alpColweights_);
+        call_status = primalCrossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -2868,7 +2868,7 @@ HighsStatus Highs::run() {
         getColweights();
         // major_iter = info_.major_iteration_count;
         // minor_iter = info_.orbital_crossover_minor_iteration_count;
-        passModel(alp_);
+        passModel(ealp_);
         zeroIterationCounts();
         // writeModel("../../debugBuild/testLpFiles/EALP.lp");
         // Update the major and minor orbital crossover iterations
@@ -2879,7 +2879,7 @@ HighsStatus Highs::run() {
         aggregator_.buildSolution(partition_, alpSolution_);
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.crossover_clock);
-        call_status = primalCrossover(interior_point, alp_, alpColweights_);
+        call_status = primalCrossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
         return_status = interpretCallStatus(options_.log_options, call_status,
@@ -7003,6 +7003,7 @@ void Highs::buildOCALP(){
   aggregator_.buildLp(partition_, alpBasis_, alpSolution_, ekk_instance_.basis_.basicIndex_, 1);
   // alp_ = aggregator_.getAggLp();
   alp_ = aggregator_.getAggLp();
+  ealp_ = aggregator_.getLp();
 }
 
 void Highs::buildPEALP(){
@@ -8203,7 +8204,7 @@ HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp) {
   return HighsStatus::kOk;
 }
 
-HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, std::vector<int>& colweights) {
+HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, std::vector<double>& colweights) {
 #ifdef IPX_ON
   std::cout << "Loading crossover...\n";
   HighsBasis basis;
@@ -8237,7 +8238,7 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, std::vector<i
   return HighsStatus::kOk;
 }
 
-HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp, std::vector<int>& colweights) {
+HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp, std::vector<double>& colweights) {
 #ifdef IPX_ON
   std::cout << "Loading primal crossover only...\n";
   HighsBasis basis;
