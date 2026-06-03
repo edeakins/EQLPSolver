@@ -1320,8 +1320,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        if (!discrete) continue;
+        // TODO (MIPLIB): add `if (change < N) continue;` threshold here when
+        // stabilizers produce only small orbit changes, to avoid crossover overhead
+        // on iterations where partition barely moved.
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -1768,8 +1769,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        if (!discrete) continue;
+        // TODO (MIPLIB): add `if (change < N) continue;` threshold here when
+        // stabilizers produce only small orbit changes, to avoid crossover overhead
+        // on iterations where partition barely moved.
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -2185,8 +2187,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        if (!discrete) continue;
+        // TODO (MIPLIB): add `if (change < N) continue;` threshold here when
+        // stabilizers produce only small orbit changes, to avoid crossover overhead
+        // on iterations where partition barely moved.
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -2636,8 +2639,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        if (!discrete) continue;
+        // TODO (MIPLIB): add `if (change < N) continue;` threshold here when
+        // stabilizers produce only small orbit changes, to avoid crossover overhead
+        // on iterations where partition barely moved.
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -3861,8 +3865,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        if (!discrete) continue;
+        // TODO (MIPLIB): add `if (change < N) continue;` threshold here when
+        // stabilizers produce only small orbit changes, to avoid crossover overhead
+        // on iterations where partition barely moved.
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
@@ -4086,8 +4091,9 @@ HighsStatus Highs::run() {
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
         timer_.stop(timer_.equitable_partition_clock);
-        // change = equitablePartition_.getNumBasicParts();
-        if (!discrete) continue;
+        // TODO (MIPLIB): add `if (change < N) continue;` threshold here when
+        // stabilizers produce only small orbit changes, to avoid crossover overhead
+        // on iterations where partition barely moved.
         // time_to_lift += timer_.readRunHighsClock() - start;
         // start = in_timer_.readRunHighsClock();
         // std::cout << "time_to_lift clock: " << time_to_lift << std::endl;
