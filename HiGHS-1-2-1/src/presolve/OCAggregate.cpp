@@ -890,13 +890,8 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
         }
     }
     for (iCol = colCnt; iCol < elp.num_col_; ++iCol){
-        // if (degenerate_basic_residuals.at(iCol)){
-        //     elp.col_lower_[iCol] = -kHighsInf;
-        //     elp.col_upper_[iCol] = kHighsInf;
-        //     continue;
-        // }
         elp.col_lower_[iCol] = 0;
-        elp.col_upper_[iCol] = 0;
+        elp.col_upper_[iCol] = kHighsInf;
     }
 }  
 
@@ -1256,7 +1251,7 @@ void HighsOCAggregate::buildRowCrashBasisWeights(){
 void HighsOCAggregate::buildResidualRowCrashBasisWeights(){
     int rowOffset = colCnt + numResiduals + rowCnt;
     for (int iRes = 0; iRes < numResiduals; ++iRes){
-        colweights.at(rowOffset + iRes) = 5;
+        colweights.at(rowOffset + iRes) = 0;
     }
 }
 
