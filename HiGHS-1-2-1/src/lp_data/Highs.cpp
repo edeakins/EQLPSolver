@@ -17,6 +17,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <chrono>
+#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -8170,10 +8172,12 @@ HighsStatus Highs::primalCrossover(HighsSolution& solution, HighsLp& lp) {
 
 HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, std::vector<double>& colweights) {
 #ifdef IPX_ON
-  std::cout << "Loading crossover...\n";
   HighsBasis basis;
   solution.dual_valid = true;
+  auto t_ipx_start = std::chrono::steady_clock::now();
   bool x_status = callCrossoverForOrbital(lp, options_, solution, colweights, basis, info_);
+  double ipx_wall = std::chrono::duration<double>(
+      std::chrono::steady_clock::now() - t_ipx_start).count();
   if (!x_status) return HighsStatus::kError;
   info_.basis_validity = kBasisValidityValid;
 
@@ -8190,18 +8194,47 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, std::vector<d
   alpSolution_ = solution;
   solution_ = solution;
 
-  // Pivot any remaining nonbasic r-variables into the basis using the
-  // specialized orbital crossover simplex, which only considers r-variables
-  // as entering columns.  Force simplex solver so callSolveLp doesn't
-  // re-invoke IPX (options_.solver may still be kIpmString from the caller).
-  scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
-  model_status_ = HighsModelStatus::kPreOrbitalCrossover;
-  const std::string saved_solver = options_.solver;
-  options_.solver = kSimplexString;
-  options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
-  HighsStatus orbital_status = callSolveLp(lp, "Orbital crossover: pivot NB r-variables into basis");
-  options_.solver = saved_solver;
-  if (orbital_status != HighsStatus::kOk) return orbital_status;
+  // Count nonbasic r-variables after IPX; skip orbital crossover if none remain
+  HighsInt nb_r_after_ipx = 0;
+  for (HighsInt i = lp.num_aggregate_cols_; i < lp.num_col_; ++i)
+    if (basis_.col_status.at(i) != HighsBasisStatus::kBasic) nb_r_after_ipx++;
+
+  double oc_wall = 0.0;
+  if (nb_r_after_ipx > 0) {
+    scaled_model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    model_status_ = HighsModelStatus::kPreOrbitalCrossover;
+    const std::string saved_solver = options_.solver;
+    options_.solver = kSimplexString;
+    options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
+    auto t_oc_start = std::chrono::steady_clock::now();
+    HighsStatus orbital_status = callSolveLp(lp, "Orbital crossover: pivot NB r-variables into basis");
+    oc_wall = std::chrono::duration<double>(
+        std::chrono::steady_clock::now() - t_oc_start).count();
+    options_.solver = saved_solver;
+    if (orbital_status != HighsStatus::kOk) return orbital_status;
+  }
+
+  // crash time = IPX wall time minus IPX crossover time
+  double crash_t = ipx_wall - info_.crossover_time;
+  double ipx_t   = info_.crossover_time;
+  info_.orbital_crossover_time = oc_wall;
+  std::cout << std::fixed << std::setprecision(3)
+            << "  [iter timing]  crash=" << crash_t
+            << "s  ipx=" << ipx_t
+            << "s  oc=" << oc_wall << "s"
+            << "  (nb_r_post_ipx=" << nb_r_after_ipx << ")\n";
+
+  // Assert all r-variables are basic after orbital crossover
+  {
+    HighsInt num_agg = lp.num_aggregate_cols_;
+    HighsInt num_r   = lp.num_col_ - num_agg;
+    HighsInt nb_r = 0;
+    for (HighsInt i = num_agg; i < lp.num_col_; ++i)
+      if (basis_.col_status.at(i) != HighsBasisStatus::kBasic) nb_r++;
+    if (nb_r > 0)
+      std::cout << "WARNING: " << nb_r << "/" << num_r
+                << " r-variables still nonbasic after orbital crossover\n";
+  }
 
 #else
   // No IPX available so end here at approximate solve.
