@@ -8214,15 +8214,19 @@ HighsStatus Highs::crossover(HighsSolution& solution, HighsLp& lp, std::vector<d
     if (orbital_status != HighsStatus::kOk) return orbital_status;
   }
 
-  // crash time = IPX wall time minus IPX crossover time
+  HighsInt total_r  = lp.num_col_ - lp.num_aggregate_cols_;
+  HighsInt crash_r  = info_.crash_r_vars_basic;
+  HighsInt ipx_r    = (total_r - nb_r_after_ipx) - crash_r;
+  HighsInt oc_r     = nb_r_after_ipx; // only nonzero if OC ran
   double crash_t = ipx_wall - info_.crossover_time;
   double ipx_t   = info_.crossover_time;
   info_.orbital_crossover_time = oc_wall;
   std::cout << std::fixed << std::setprecision(3)
-            << "  [iter timing]  crash=" << crash_t
-            << "s  ipx=" << ipx_t
-            << "s  oc=" << oc_wall << "s"
-            << "  (nb_r_post_ipx=" << nb_r_after_ipx << ")\n";
+            << "  [iter timing]"
+            << "  crash=" << crash_t << "s(" << crash_r << "r)"
+            << "  ipx="   << ipx_t   << "s(" << ipx_r   << "r)"
+            << "  oc="    << oc_wall << "s(" << oc_r    << "r)"
+            << "\n";
 
   // Assert all r-variables are basic after orbital crossover
   {

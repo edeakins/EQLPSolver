@@ -174,6 +174,7 @@ struct HighsInfoStruct {
   HighsInt original_rows;
   HighsInt num_degen_pivots = 0;
   HighsInt num_total_pivots = 0;
+  HighsInt crash_r_vars_basic = 0;
   double row_reduct_percent;
   double col_reduct_percent;
   std::string instance_name;

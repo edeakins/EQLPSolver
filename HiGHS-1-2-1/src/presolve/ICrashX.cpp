@@ -343,6 +343,7 @@ bool callCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
   }
   ipx::Info info = lps.GetInfo();
   highs_info.crossover_time = info.time_crossover;
+  highs_info.crash_r_vars_basic = (HighsInt)info.crash_r_vars_basic;
   if (info.status_crossover != IPX_STATUS_optimal &&
       info.status_crossover != IPX_STATUS_imprecise) {
     std::cout << "IPX crossover failed: status = " << info.status_crossover
@@ -380,8 +381,6 @@ bool callCrossoverForOrbital(const HighsLp& lp, const HighsOptions& options,
   highs_info.primal_crossover_iteration_count += (HighsInt)info.primal_pushes;
   highs_info.dual_crossover_iteration_count += (HighsInt)info.dual_pushes;
   highs_info.crossover_iteration_count += (HighsInt)info.total_pushes;
-
-  std::cout << "Crossover basic solution >>>" << std::endl;
 
   return true;
 }

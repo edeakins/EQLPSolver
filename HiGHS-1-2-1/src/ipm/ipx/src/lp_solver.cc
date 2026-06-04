@@ -516,8 +516,7 @@ Int LpSolver::CrossoverFromPartialOrbitalBasis(const double* x_start,
         }
         info_.crash_dual_superbasics  = dual_sup;
         info_.crash_primal_superbasics = primal_sup;
-        std::cout << "Crash r-vars: " << r_col_basic << "/" << (r_col_basic + r_col_nonbasic)
-                  << " in basis\n";
+        info_.crash_r_vars_basic = r_col_basic;
     }
 
     RunCrossover();

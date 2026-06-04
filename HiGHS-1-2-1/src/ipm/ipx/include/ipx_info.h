@@ -64,6 +64,7 @@ struct ipx_info {
     ipxint total_pushes;
     ipxint crash_dual_superbasics;   /* dual superbasics after crash basis */
     ipxint crash_primal_superbasics; /* primal superbasics after crash basis */
+    ipxint crash_r_vars_basic;       /* r-variables (INFINITY weight) in basis after crash */
 
     /* major computation times */
     double time_total;          /* total runtime (wallclock) */
