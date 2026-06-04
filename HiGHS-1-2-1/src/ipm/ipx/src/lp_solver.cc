@@ -498,33 +498,26 @@ Int LpSolver::CrossoverFromPartialOrbitalBasis(const double* x_start,
             return 0;
         }
 
-        // Count superbasics and r-variable basis status after crash.
-        // R-variables are identified by orbital_colweights[j] == 5.0 among
-        // structural columns (j < n); their row-slack counterparts (j >= n)
-        // also have weight 5 but are tracked separately.
+        // Count r-variable basis status after crash.
+        // R-variables have INFINITY weight among structural columns (j < n).
+        // Aggregate columns have weight 5 (interior) or 0 (at-bound).
         Int dual_sup = 0, primal_sup = 0;
         Int r_col_basic = 0, r_col_nonbasic = 0;
-        Int r_row_basic = 0, r_row_nonbasic = 0;
         for (Int j = 0; j < n+m; j++) {
             if (basis_->IsBasic(j) && z_crossover_[j] != 0.0)
                 dual_sup++;
             else if (basis_->IsNonbasic(j) &&
                      x_crossover_[j] != lb[j] && x_crossover_[j] != ub[j])
                 primal_sup++;
-            // Track r-variable (weight==5) basis status
-            if (orbital_colweights.at(j) == 5.0) {
-                if (j < n) {
-                    basis_->IsBasic(j) ? r_col_basic++ : r_col_nonbasic++;
-                } else {
-                    basis_->IsBasic(j) ? r_row_basic++ : r_row_nonbasic++;
-                }
+            // R-variable structural columns are identified by INFINITY weight
+            if (j < n && std::isinf(orbital_colweights.at(j))) {
+                basis_->IsBasic(j) ? r_col_basic++ : r_col_nonbasic++;
             }
         }
         info_.crash_dual_superbasics  = dual_sup;
         info_.crash_primal_superbasics = primal_sup;
         std::cout << "Crash r-vars: " << r_col_basic << "/" << (r_col_basic + r_col_nonbasic)
-                  << " col-basic, " << r_row_basic << "/" << (r_row_basic + r_row_nonbasic)
-                  << " row-basic\n";
+                  << " in basis\n";
     }
 
     RunCrossover();

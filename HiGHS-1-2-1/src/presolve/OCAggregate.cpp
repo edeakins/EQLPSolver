@@ -890,7 +890,7 @@ void HighsOCAggregate::buildBndsFromSolutionExtended(){
         }
     }
     for (iCol = colCnt; iCol < elp.num_col_; ++iCol){
-        elp.col_lower_[iCol] = 0;
+        elp.col_lower_[iCol] = -kHighsInf;
         elp.col_upper_[iCol] = kHighsInf;
     }
 }  
@@ -1203,9 +1203,9 @@ void HighsOCAggregate::buildColCrashBasisWeights(){
         if (status == nonbasic || status == lower || status == upper){
             colweights.at(iCol) = 0;
         } else if (degen){
-            colweights.at(iCol) = 4;
+            colweights.at(iCol) = 0;
         } else {
-            colweights.at(iCol) = INFINITY;
+            colweights.at(iCol) = 5;
         }
         if (mark_degenerate.at(pCol) && pCol != iCol){
             lpBasis.col_status.at(iCol) = nonbasic;
@@ -1217,7 +1217,7 @@ void HighsOCAggregate::buildColCrashBasisWeights(){
 
 void HighsOCAggregate::buildResidualCrashBasisWeights(){
     for (int iRes = 0; iRes < numResiduals; ++iRes){
-        colweights.at(colCnt + iRes) = 5;
+        colweights.at(colCnt + iRes) = INFINITY;
     }
 }
 
@@ -1240,9 +1240,9 @@ void HighsOCAggregate::buildRowCrashBasisWeights(){
         if (status == nonbasic || status == lower || status == upper){
             colweights.at(iRow + rowOffset) = 0;
         } else if (degen){
-            colweights.at(iRow + rowOffset) = 4;
+            colweights.at(iRow + rowOffset) = 0;
         } else {
-            colweights.at(iRow + rowOffset) = INFINITY;
+            colweights.at(iRow + rowOffset) = 5;
         }
         lpBasis.row_status[iRow] = basis.row_status[iRow];
     }

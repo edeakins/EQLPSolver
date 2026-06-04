@@ -5156,9 +5156,10 @@ HighsStatus Highs::run() {
       // double time_to_lift = 0;
       // in_timer_.startRunHighsClock();
       // double start = in_timer_.readRunHighsClock();
+      double iter1_obj = kHighsInf;
       while (!discrete){
         options_.simplex_strategy = kSimplexStrategyOrbitalCrossover;
-        // Refine partition 
+        // Refine partition
         OCPartition old_partition = equitablePartition_.getPartition();
         timer_.start(timer_.equitable_partition_clock);
         refinePartition();
@@ -5185,19 +5186,19 @@ HighsStatus Highs::run() {
         call_status = crossover(interior_point, ealp_, alpColweights_);
         timer_.stop(timer_.solve_clock);
         timer_.stop(timer_.crossover_clock);
+        // Objective consistency check: solution value must not change across iterations
+        double iter_obj = info_.objective_function_value;
+        if (iter1_obj == kHighsInf) {
+          iter1_obj = iter_obj;
+        } else {
+          double obj_diff = std::fabs(iter_obj - iter1_obj);
+          double obj_tol = 1e-6 * (std::fabs(iter1_obj) + 1e-10);
+          if (obj_diff > obj_tol)
+            std::cout << "WARNING obj changed: iter1=" << iter1_obj
+                      << " current=" << iter_obj << " diff=" << obj_diff << "\n";
+        }
         return_status = interpretCallStatus(options_.log_options, call_status,
                                         return_status, "callSolveLp");
-        // Pass the lifted initial ealp basis to highs to build a simplex
-        // basis for the lp.
-        // setBasis(ealpBasis_);
-        // writeBasis("../../debugBuild/beforeBasis.txt");
-        // Do orbital crossvoer
-        // timer_.start(timer_.orbital_crossover_clock);
-        // call_status =
-        //     callSolveLp(ealp_, "Solving LP with Orbital Crossover");
-        // timer_.stop(timer_.orbital_crossover_clock);
-        // return_status = interpretCallStatus(options_.log_options, call_status,
-        //                                     return_status, "callSolveLp");
         if (return_status == HighsStatus::kError){
           stop_highs_run_clock = true;
           called_return_from_run = false;
@@ -5214,31 +5215,12 @@ HighsStatus Highs::run() {
                       "ALP solve reached timeout\n");
           return returnFromRun(HighsStatus::kWarning);
         }
-        // writeBasis("../../debugBuild/afterBasis.txt");
-        // Grab the solution and lp basis from orbital crossover completion
-        // setBasisValidity();
         getAggregateBasis();
         getAggregateSolution();
         std::vector<int>& front_col = aggregator_.getFrontCol();
         equitablePartition_.intakeFrontCol(front_col);
         equitablePartition_.intakeHighsBasis(alpBasis_);
         equitablePartition_.storeCurrentFronts();
-        // if (info_.ready_for_crash_basis_construction){
-        //   trimOrbitalCrossoverSolution();
-        //   passModel(alp_);
-        //   solution_ = alpSolution_;
-        //   crossover(solution_, alp_);
-        //   alpBasis_ = crashBasis_;
-        //   alpSolution_ = crashSolution_;
-        // }
-        int numRBasic = 0;
-        // for (int i = ealp_.num_aggregate_cols_; i < ealp_.num_col_; ++i){
-        //   if (alpBasis_.col_status[i] == HighsBasisStatus::kBasic)
-        //     numRBasic++;
-        //   else{
-        //     std::cout << "bad_col: " << i << std::endl;
-        //   }
-        // }
       }
       // time_to_lift = in_timer_.readRunHighsClock() - start;
       // std::cout << "loop_time: " << time_to_lift << std::endl;
