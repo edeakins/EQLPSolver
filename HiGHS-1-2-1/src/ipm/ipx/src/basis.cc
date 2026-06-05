@@ -395,6 +395,7 @@ void Basis::ConstructBasisFromWeights(const double* colscale, Info* info) {
     } else {
         SetToSlackBasis();
     }
+
     PivotFreeVariablesIntoBasis(colscale, info);
     if (info->errflag)
         return;
