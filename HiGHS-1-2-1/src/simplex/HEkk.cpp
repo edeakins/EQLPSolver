@@ -1370,6 +1370,30 @@ void HEkk::deletePivotedResiduals(const HighsInt col_start, const HighsInt row_s
   const HighsInt to_col = this->lp_.num_col_ - 1;
   const HighsInt from_row = row_start;
   const HighsInt to_row = this->lp_.num_row_ - 1;
+  const HighsInt num_deleted_cols = to_col - from_col + 1;
+  const HighsInt old_num_col = this->lp_.num_col_;
+  // Check whether all deleted residuals landed at their linking rows
+  // (i.e., none appear in basicIndex_[0..from_row-1]).
+  // When this holds (e.g. sts729_c), save the post-pivot basicIndex_ ordering
+  // before setBasis() overwrites it with col-first order. Col-first order can
+  // be numerically near-singular for tight-symmetry instances; the
+  // factorizer's post-pivot ordering is not. For instances where pivots place
+  // residuals at non-linking rows, leave the original code path unchanged.
+  bool all_at_linking_rows = true;
+  for (HighsInt i = 0; i < from_row && all_at_linking_rows; i++) {
+    const HighsInt var = this->basis_.basicIndex_[i];
+    if (var >= from_col && var < old_num_col)
+      all_at_linking_rows = false;
+  }
+  vector<HighsInt> pivot_basis_index;
+  if (all_at_linking_rows) {
+    pivot_basis_index.resize(from_row);
+    for (HighsInt i = 0; i < from_row; i++) {
+      HighsInt var = this->basis_.basicIndex_[i];
+      if (var >= old_num_col) var -= num_deleted_cols;
+      pivot_basis_index[i] = var;
+    }
+  }
   HighsBasis highs_basis = deleteResidualBasis(from_col, from_row);
   deleteColsFromMatrix(from_col, to_col, to_col + 1);
   deleteRowsFromMatrix(from_row, to_row, to_row + 1);
@@ -1378,6 +1402,8 @@ void HEkk::deletePivotedResiduals(const HighsInt col_start, const HighsInt row_s
   clearNlaStatus();
   invalidateBasisMatrix();
   setBasis(highs_basis);
+  if (all_at_linking_rows)
+    this->basis_.basicIndex_ = pivot_basis_index;
 }
 
 void HEkk::deleteColsFromVectors(const HighsInt to_col){
