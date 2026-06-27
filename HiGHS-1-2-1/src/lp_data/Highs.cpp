@@ -6986,6 +6986,7 @@ void Highs::refinePartition(){
 
 void Highs::initializeAggregator(HighsLp& original_lp){
   aggregator_.passLpAndPartition(original_lp, partition_);
+  aggregator_.match_degenerate = options_.oc_match_degenerate;
   aggregator_.buildLp();
 }
 

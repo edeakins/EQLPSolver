@@ -1,5 +1,7 @@
 #include "OCAggregate.h"
 
+#include "OCMatching.h"
+
 void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     olp = lp;
     ep = partition;
@@ -52,6 +54,8 @@ void HighsOCAggregate::passLpAndPartition(HighsLp& lp, OCPartition& partition){
     childRow.resize(numCol);
     residualCol.resize(numCol);
     residualRow.resize(numCol);
+    residualChildCol.resize(numCol + numTotResiduals);
+    residualParentCol.resize(numCol + numTotResiduals);
     mark_degenerate.resize(numCol + numRow);
     zero_step_pivots.resize(numCol + numTotResiduals);
     max_front_len_pCol_check.resize(numCol);
@@ -137,6 +141,9 @@ void HighsOCAggregate::buildLp(OCPartition& partition, HighsBasis& b,
     buildAmatrixExtended();
     buildRhsExtended();
     buildBndsExtended();
+    // Additive degenerate-matching pass on top of the basis just built. Leaves
+    // buildBasis untouched; only flips matched residual/counterpart statuses.
+    if (match_degenerate) matchDegenerateResiduals();
     buildRowNames();
     buildColNames();
     copyPartition();
@@ -1005,6 +1012,11 @@ void HighsOCAggregate::buildResidualLinks(){
             residual_cols_.push_back(elpNumCol);
             elp.residual_cols_.push_back(elpNumCol);
             residual_to_old.at(elpNumCol) = split.first;
+            // Record the current-level aggregate columns this residual links:
+            // child x_i (iCol) and its representative/parent x_j (split.first,
+            // whose representative child reuses the parent column index).
+            residualChildCol[numResiduals] = iCol;
+            residualParentCol[numResiduals] = split.first;
             residualCol[numResiduals] = elpNumCol++;
             residualRow[numResiduals++] = elpNumRow++;
         }
@@ -1115,6 +1127,124 @@ void HighsOCAggregate::buildBasis(bool finish, bool extended){
     buildColBasis();
     buildRowBasis();
     elpBasis.alien = false;
+}
+
+// matching.pdf: generalize the single-variable degenerate swap to a bipartite
+// maximum matching. Right nodes are the nonbasic residual (r) variables built
+// for this lifting iteration; left nodes are degenerate variables (structural
+// columns and slacks, parents and children) plus children of nonbasic slacks.
+// A matched (residual, variable) pair is a degenerate crossover pivot that can
+// be applied combinatorially: the residual enters the basis and its matched
+// counterpart leaves to the nonbasis, both at value 0. This runs on top of the
+// basis produced by buildBasis without altering buildColBasis/buildRowBasis.
+void HighsOCAggregate::matchDegenerateResiduals(){
+    all_residuals_matched = false;
+    if (!numResiduals) return;
+    const double tol = 1e-7;
+    const HighsBasisStatus kBasic = HighsBasisStatus::kBasic;
+
+    // Coefficient of a current-level aggregate column in a constraint row
+    auto aggCoeff = [&](int col, int row) -> double {
+        for (int e = agglp.a_matrix_.start_[col];
+             e < agglp.a_matrix_.start_[col + 1]; ++e)
+            if (agglp.a_matrix_.index_[e] == row)
+                return agglp.a_matrix_.value_[e];
+        return 0.0;
+    };
+
+    // 1. Degeneracy of parent (previous ALP) columns and slacks. A basic
+    // structural variable at a bound is degenerate; a basic slack with zero
+    // dual is degenerate; a nonbasic slack flags its children.
+    std::vector<char> parentColDegen(pcolCnt, 0);
+    std::vector<char> parentColAtUpper(pcolCnt, 0);
+    for (int p = 0; p < pcolCnt; ++p){
+        if (basis.col_status[p] != kBasic) continue;
+        int rep = pcolrep[p];
+        double v = solution.col_value[p];
+        double lb = olp.col_lower_[rep];
+        double ub = olp.col_upper_[rep];
+        if (std::fabs(v - lb) < tol) parentColDegen[p] = 1;
+        else if (std::fabs(v - ub) < tol){
+            parentColDegen[p] = 1;
+            parentColAtUpper[p] = 1;
+        }
+    }
+    std::vector<char> parentSlackDegen(prowCnt, 0);
+    std::vector<char> parentSlackNB(prowCnt, 0);
+    for (int pr = 0; pr < prowCnt; ++pr){
+        if (basis.row_status[pr] != kBasic){ parentSlackNB[pr] = 1; continue; }
+        if (std::fabs(solution.row_dual[pr]) < tol) parentSlackDegen[pr] = 1;
+    }
+
+    // 2. Build bipartite graph. Map each current aggregate column to the
+    // residuals that touch it, so structural degenerate variables can wire to
+    // all r_{i,*} and r_{*,i}.
+    std::vector<std::vector<int> > colResiduals(colCnt);
+    for (int k = 0; k < numResiduals; ++k){
+        colResiduals[residualChildCol[k]].push_back(k);
+        colResiduals[residualParentCol[k]].push_back(k);
+    }
+
+    std::vector<std::vector<int> > adj;  // adj[u] -> residual (right) indices
+    std::vector<int> leftType;           // 0 = column, 1 = slack (row)
+    std::vector<int> leftIdx;            // current aggregate col / row index
+    std::vector<int> leftBound;          // for columns: 1 if at upper bound
+
+    // 2a. Degenerate structural columns (parents and inheriting children),
+    // adjacent to every residual touching the column.
+    for (int c = 0; c < colCnt; ++c){
+        if (colResiduals[c].empty()) continue;
+        // Only a currently-basic variable can be swapped out for a residual
+        if (elpBasis.col_status[c] != kBasic) continue;
+        int pCol = pFrontCol[epMinusOne.front[colrep[c]]];
+        if (pCol >= pcolCnt || !parentColDegen[pCol]) continue;
+        adj.push_back(colResiduals[c]);
+        leftType.push_back(0);
+        leftIdx.push_back(c);
+        leftBound.push_back(parentColAtUpper[pCol]);
+    }
+
+    // 2b. Slack vertices: degenerate slacks and children of nonbasic slacks.
+    // Edge to r_{i,j} when child x_i and parent x_j differ in coefficient in
+    // this slack's constraint row.
+    for (int r = 0; r < rowCnt; ++r){
+        // Only a currently-basic slack can be swapped out for a residual
+        if (elpBasis.row_status[r] != kBasic) continue;
+        int pRow = pFrontRow[epMinusOne.front[rowrep[r]]];
+        if (pRow >= prowCnt) continue;
+        if (!parentSlackDegen[pRow] && !parentSlackNB[pRow]) continue;
+        std::vector<int> nbrs;
+        for (int k = 0; k < numResiduals; ++k){
+            if (std::fabs(aggCoeff(residualChildCol[k], r) -
+                          aggCoeff(residualParentCol[k], r)) > tol)
+                nbrs.push_back(k);
+        }
+        if (nbrs.empty()) continue;
+        adj.push_back(nbrs);
+        leftType.push_back(1);
+        leftIdx.push_back(r);
+        leftBound.push_back(0);
+    }
+
+    if (adj.empty()) return;
+
+    // 3. Maximum matching
+    std::vector<int> matchRight;
+    int matched = OCBipartiteMatching::solve(adj, numResiduals, matchRight);
+
+    // 4. Apply each matched pair as a degenerate swap: residual -> basis,
+    // counterpart -> nonbasis (at its bound). Net basic count is preserved.
+    for (int k = 0; k < numResiduals; ++k){
+        int u = matchRight[k];
+        if (u == -1) continue;
+        elpBasis.col_status[residualCol[k]] = kBasic;
+        if (leftType[u] == 0)
+            elpBasis.col_status[leftIdx[u]] = leftBound[u]
+                ? HighsBasisStatus::kUpper : HighsBasisStatus::kLower;
+        else
+            elpBasis.row_status[leftIdx[u]] = HighsBasisStatus::kLower;
+    }
+    all_residuals_matched = (matched == numResiduals);
 }
 
 void HighsOCAggregate::buildCrashBasisWeights(){

@@ -309,6 +309,7 @@ set(headers
     util/stringutil.h
     util/OCGraph.h
     util/OCPartition.h
+    util/OCMatching.h
     Highs.h
     interfaces/highs_c_api.h
 )

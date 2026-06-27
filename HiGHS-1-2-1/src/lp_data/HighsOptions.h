@@ -347,6 +347,7 @@ struct HighsOptionsStruct {
   // Advanced options
   HighsInt log_dev_level;
   bool run_crossover;
+  bool oc_match_degenerate;
   bool allow_unbounded_or_infeasible;
   bool use_implied_bounds_from_presolve;
   bool lp_presolve_requires_basis_postsolve;
@@ -797,6 +798,13 @@ class HighsOptions : public HighsOptionsStruct {
     record_bool = new OptionRecordBool("run_crossover",
                                        "Run the crossover routine for IPX",
                                        advanced, &run_crossover, true);
+    records.push_back(record_bool);
+
+    record_bool = new OptionRecordBool(
+        "oc_match_degenerate",
+        "Orbital crossover: apply the bipartite degenerate-matching pass "
+        "(matching.pdf) on top of the lifted basis",
+        advanced, &oc_match_degenerate, false);
     records.push_back(record_bool);
 
     record_bool =

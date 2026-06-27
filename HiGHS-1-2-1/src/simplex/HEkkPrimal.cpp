@@ -1342,6 +1342,11 @@ void HEkkPrimal::chooseColumn(const bool hyper_sparse, const bool choose_residua
       }
     }
   } else if (local_use_residual_chuzc){
+    // Skip residual columns that are already basic (e.g. pre-placed by the
+    // degenerate-matching pass, matching.pdf); they need no crossover pivot.
+    while (residual_col > num_aggregate_col - 1 &&
+           ekk_instance_.basis_.nonbasicFlag_[residual_col] == kNonbasicFlagFalse)
+      residual_col--;
     variable_in = residual_col == num_aggregate_col - 1 ? -1 : residual_col--;
     // residual_col++;
     // if (residual_col < ekk_instance_.lp_.num_residual_cols_){

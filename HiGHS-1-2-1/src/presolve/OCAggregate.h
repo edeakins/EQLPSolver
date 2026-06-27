@@ -72,6 +72,9 @@ public:
     void markDegenerate();
     void findLargestDegeneratePart();
     void buildBasis(bool finish, bool extended);
+    // Bipartite-matching pass (matching.pdf): identify degenerate crossover
+    // swaps and apply them on top of the basis built by buildBasis
+    void matchDegenerateResiduals();
     void buildCrashBasisWeights();
     void buildColBasis();
     void buildColCrashBasisWeights();
@@ -125,6 +128,11 @@ public:
     HFactor degenerate_factor;
     HighsSparseMatrix degenerate_matrix;
     int discrete = 0;
+    // Enable the bipartite degenerate-matching pass (gated by option
+    // oc_match_degenerate). When all residuals are matched in a lifting
+    // iteration, all_residuals_matched is set so the solve can be skipped.
+    bool match_degenerate = false;
+    bool all_residuals_matched = false;
     int level = 0;
     int numTot;
     int numCol; 
@@ -168,6 +176,10 @@ public:
     std::vector<int> childRow;
     std::vector<int> residualCol;
     std::vector<int> residualRow;
+    // Current-level aggregate columns linked by each residual (child x_i and
+    // its representative/parent x_j), used by the degenerate-matching pass
+    std::vector<int> residualChildCol;
+    std::vector<int> residualParentCol;
     std::vector<int> degenSlack;
     std::vector<bool> degenRow;
     std::vector<int> colweights;
