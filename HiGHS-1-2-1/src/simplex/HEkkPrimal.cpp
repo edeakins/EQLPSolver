@@ -1209,6 +1209,18 @@ void HEkkPrimal::iterate() {
   // rebuild_reason = kRebuildReasonSyntheticClockSaysInvert is
   // set in updateFactor() if it is considered to be more efficient to
   // reinvert.
+  // DEBUG: log orbital-crossover pivots (entering / leaving / pivot row).
+  if (solve_phase == kSolvePhaseOrbitalCrossover && row_out >= 0) {
+    HighsInt nc = ekk_instance_.lp_.num_col_;
+    HighsInt vin = variable_in;
+    HighsInt vout = ekk_instance_.basis_.basicIndex_.at(row_out);
+    printf("[OC-PIVOT] iter=%d  IN=%d(%s%d)  OUT=%d(%s%d)  row_out=%d\n",
+           (int)ekk_instance_.iteration_count_,
+           (int)vin,  vin < nc ? "col" : "row",  (int)(vin < nc ? vin : vin - nc),
+           (int)vout, vout < nc ? "col" : "row", (int)(vout < nc ? vout : vout - nc),
+           (int)row_out);
+    fflush(stdout);
+  }
   update();
   // Force rebuild if there are no infeasibilities in phase 1
   if (!ekk_instance_.info_.num_primal_infeasibilities &&

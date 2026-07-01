@@ -602,6 +602,115 @@ HighsStatus Highs::writeBasis(const std::string filename) {
   return returnFromHighs(return_status);
 }
 
+// ---------------------------------------------------------------------------
+// DEBUG/VERIFICATION: orbital-crossover starting-basis singularity check.
+//
+// Independently of HiGHS's own LU factorization, build the dense basis matrix
+// B (num_row x num_basic) implied by `basis` for `lp` and compute its rank by
+// Gaussian elimination with partial pivoting. Reports:
+//   - the basic-variable count vs num_row (cardinality check),
+//   - the numerical rank, the rank deficiency, and whether B is singular,
+//   - the smallest surviving pivot magnitude (conditioning hint).
+// Columns of B are: every structural column whose col_status == kBasic (taken
+// from lp.a_matrix_), followed by a unit column e_i for every row whose
+// row_status == kBasic (a basic logical/slack). This mirrors exactly the
+// columns the simplex would put in its basis. Purely diagnostic; no state is
+// modified.
+static void ocVerifyBasisSingularity(const HighsLp& lp,
+                                     const HighsBasis& basis,
+                                     const HighsLogOptions& log_options,
+                                     const char* tag) {
+  const HighsInt num_row = lp.num_row_;
+  const HighsInt num_col = lp.num_col_;
+
+  // Collect basic structural columns and basic logical (slack) rows.
+  std::vector<HighsInt> basic_struct;
+  for (HighsInt j = 0; j < num_col; ++j)
+    if (j < (HighsInt)basis.col_status.size() &&
+        basis.col_status[j] == HighsBasisStatus::kBasic)
+      basic_struct.push_back(j);
+  std::vector<HighsInt> basic_slack;
+  for (HighsInt i = 0; i < num_row; ++i)
+    if (i < (HighsInt)basis.row_status.size() &&
+        basis.row_status[i] == HighsBasisStatus::kBasic)
+      basic_slack.push_back(i);
+
+  const HighsInt num_basic =
+      (HighsInt)basic_struct.size() + (HighsInt)basic_slack.size();
+
+  highsLogUser(log_options, HighsLogType::kInfo,
+               "[OC-VERIFY %s] num_row=%d  basic: struct=%d slack=%d total=%d "
+               "(%s)\n",
+               tag, (int)num_row, (int)basic_struct.size(),
+               (int)basic_slack.size(), (int)num_basic,
+               num_basic == num_row ? "cardinality OK"
+                                    : "CARDINALITY MISMATCH");
+
+  if (num_basic == 0 || num_row == 0) return;
+
+  // Dense B: num_row rows, num_basic columns. Column-major storage.
+  const HighsInt m = num_row;
+  const HighsInt n = num_basic;
+  std::vector<std::vector<double> > B(n, std::vector<double>(m, 0.0));
+
+  // Structural columns from the colwise matrix.
+  HighsLp colwise = lp;
+  colwise.ensureColwise();
+  const std::vector<HighsInt>& Astart = colwise.a_matrix_.start_;
+  const std::vector<HighsInt>& Aindex = colwise.a_matrix_.index_;
+  const std::vector<double>& Avalue = colwise.a_matrix_.value_;
+  for (HighsInt c = 0; c < (HighsInt)basic_struct.size(); ++c) {
+    HighsInt j = basic_struct[c];
+    for (HighsInt e = Astart[j]; e < Astart[j + 1]; ++e)
+      B[c][Aindex[e]] = Avalue[e];
+  }
+  // Unit columns for basic slacks.
+  for (HighsInt s = 0; s < (HighsInt)basic_slack.size(); ++s)
+    B[(HighsInt)basic_struct.size() + s][basic_slack[s]] = 1.0;
+
+  // Gaussian elimination with partial pivoting over the m x n matrix
+  // (work on a copy laid out row-major for elimination).
+  std::vector<std::vector<double> > A(m, std::vector<double>(n, 0.0));
+  for (HighsInt c = 0; c < n; ++c)
+    for (HighsInt r = 0; r < m; ++r) A[r][c] = B[c][r];
+
+  const double piv_tol = 1e-9;
+  HighsInt rank = 0;
+  double min_pivot = kHighsInf;
+  HighsInt prow = 0;
+  for (HighsInt col = 0; col < n && prow < m; ++col) {
+    // Find largest-magnitude pivot in this column at/below prow.
+    HighsInt sel = -1;
+    double best = piv_tol;
+    for (HighsInt r = prow; r < m; ++r) {
+      double a = std::fabs(A[r][col]);
+      if (a > best) { best = a; sel = r; }
+    }
+    if (sel == -1) continue;  // column is dependent on earlier ones
+    std::swap(A[prow], A[sel]);
+    double pv = A[prow][col];
+    if (std::fabs(pv) < min_pivot) min_pivot = std::fabs(pv);
+    for (HighsInt r = 0; r < m; ++r) {
+      if (r == prow) continue;
+      double f = A[r][col] / pv;
+      if (f == 0.0) continue;
+      for (HighsInt cc = col; cc < n; ++cc) A[r][cc] -= f * A[prow][cc];
+    }
+    ++rank;
+    ++prow;
+  }
+
+  const HighsInt deficiency = num_basic - rank;
+  const bool singular = (rank < num_basic) || (num_basic != num_row);
+  highsLogUser(log_options, HighsLogType::kInfo,
+               "[OC-VERIFY %s] dense rank(B)=%d of %d  deficiency=%d  "
+               "min|pivot|=%.3e  ==> %s\n",
+               tag, (int)rank, (int)num_basic, (int)deficiency,
+               (double)min_pivot,
+               singular ? "B IS SINGULAR (not invertible)"
+                        : "B is nonsingular");
+}
+
 // Checks the options calls presolve and postsolve if needed. Solvers are called
 // with callSolveLp(..)
 HighsStatus Highs::run() {
@@ -911,6 +1020,11 @@ HighsStatus Highs::run() {
         // basis for the lp.
         setBasis(ealpBasis_);
         // writeBasis("../../debugBuild/beforeBasis.txt");
+        // DEBUG: independently verify the starting basis is nonsingular before
+        // handing it to the OC simplex (catches matchDegenerateResiduals bugs).
+        if (options_.oc_match_degenerate)
+          ocVerifyBasisSingularity(ealp_, ealpBasis_, options_.log_options,
+                                   "after-match");
         // Do orbital crossvoer
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.orbital_crossover_clock);
@@ -1143,6 +1257,11 @@ HighsStatus Highs::run() {
         // basis for the lp.
         setBasis(ealpBasis_);
         // writeBasis("../../debugBuild/beforeBasis.txt");
+        // DEBUG: independently verify the starting basis is nonsingular before
+        // handing it to the OC simplex (catches matchDegenerateResiduals bugs).
+        if (options_.oc_match_degenerate)
+          ocVerifyBasisSingularity(ealp_, ealpBasis_, options_.log_options,
+                                   "after-match");
         // Do orbital crossvoer
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.orbital_crossover_clock);
@@ -3890,6 +4009,11 @@ HighsStatus Highs::run() {
         // basis for the lp.
         setBasis(ealpBasis_);
         // writeBasis("../../debugBuild/beforeBasis.txt");
+        // DEBUG: independently verify the starting basis is nonsingular before
+        // handing it to the OC simplex (catches matchDegenerateResiduals bugs).
+        if (options_.oc_match_degenerate)
+          ocVerifyBasisSingularity(ealp_, ealpBasis_, options_.log_options,
+                                   "after-match");
         // Do orbital crossvoer
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.orbital_crossover_clock);
@@ -4115,6 +4239,11 @@ HighsStatus Highs::run() {
         // basis for the lp.
         setBasis(ealpBasis_);
         // writeBasis("../../debugBuild/beforeBasis.txt");
+        // DEBUG: independently verify the starting basis is nonsingular before
+        // handing it to the OC simplex (catches matchDegenerateResiduals bugs).
+        if (options_.oc_match_degenerate)
+          ocVerifyBasisSingularity(ealp_, ealpBasis_, options_.log_options,
+                                   "after-match");
         // Do orbital crossvoer
         timer_.start(timer_.solve_clock);
         timer_.start(timer_.orbital_crossover_clock);
